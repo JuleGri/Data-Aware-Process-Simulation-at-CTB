@@ -1,0 +1,91 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass{Dissertate}
+%Subsection spacing
+\titlespacing*{\subsection}{0pt}{2.5ex plus 1ex minus .2ex}{1ex plus .2ex}
+\titlespacing*{\subsubsection}{0pt}{1ex plus 1ex minus .2ex}{.2ex plus .1ex}
+\titlespacing*{\paragraph}{0pt}{1ex plus 1ex minus .2ex}{5pt}
+%Links
+\usepackage{hyperref}
+%Graphs
+\usepackage{tikz}
+\usepackage[RPvoltages]{circuitikz}
+%Space between paragraphs
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+\usepackage{enumitem}
+
+% To reduce the space ONLY after the list:
+\setlist{after=\vspace{-1ex}} 
+
+% Or, to tighten up the space BOTH before and after the list:
+\setlist{topsep=2pt}
+%Notes
+\usepackage{amsthm}
+
+% 1. Define a custom style with tighter spacing
+\newtheoremstyle{compactnote}% Name of the style
+  {0.5ex plus 0.2ex minus 0.2ex}% Space above (shrink this to reduce top space)
+  {0.5ex plus 0.2ex minus 0.2ex}% Space below (shrink this to reduce bottom space)
+  {\normalfont}% Body font (keeps text standard rather than italicized)
+  {}% Indent amount
+  {\bfseries}% Theorem head font (makes "Note" bold)
+  {.}% Punctuation after theorem head
+  {.5em}% Space after theorem head
+  {}% Theorem head spec
+
+% 2. Apply your new style
+\theoremstyle{compactnote}
+
+% 3. Define your note environment
+\newtheorem{note}{Note}[chapter]
+\newtheorem{example}{Example}[chapter]
+%Norm
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\usepackage{pgfplots} 
+\usetikzlibrary{arrows.meta}
+\usepackage{makecell}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{wrapfig}
+\usepackage{placeins}
+\usepackage{footmisc}
+%------------------------------------------------------------------------%
+\begin{document}
+    % the front matter
+    \input{frontmatter/personalize}
+    \frontmatter
+    \setstretch{\dnormalspacing}
+    
+    % chapters
+    \setcounter{chapter}{0}
+    
+    \include{chapters/1.introduction}
+    
+    \include{chapters/2.background}
+    
+    \include{chapters/3.experiments_and_framework}
+    
+    \include{chapters/4.results}
+    
+    \include{chapters/5.conclusion}
+
+    %\include{chapters/6.results}
+
+    %\include{chapters/7.discussion}
+    
+    %\include{chapters/8.conclusion}
+    
+    % afterword
+    \cleardoublepage
+    \phantomsection
+    \addcontentsline{toc}{chapter}{References}
+    \bibliography{references.bib}
+    
+    \cleardoublepage
+    \phantomsection
+    \addcontentsline{toc}{chapter}{Acknowledgments}
+    \acknowledgments
+
+\end{document}
