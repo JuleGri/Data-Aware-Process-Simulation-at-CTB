@@ -2,12 +2,12 @@
 
 ## Repository overview
 - This repository is a LaTeX dissertation project, not an application codebase.
-- The main entrypoint is `/home/runner/work/Data-Aware-Process-Simulation-at-CTB/Data-Aware-Process-Simulation-at-CTB/dissertation.tex`.
-- The custom document class is `/home/runner/work/Data-Aware-Process-Simulation-at-CTB/Data-Aware-Process-Simulation-at-CTB/Dissertate.cls`.
-- Chapter content lives in `/home/runner/work/Data-Aware-Process-Simulation-at-CTB/Data-Aware-Process-Simulation-at-CTB/chapters/`.
-- Front matter is stored in `/home/runner/work/Data-Aware-Process-Simulation-at-CTB/Data-Aware-Process-Simulation-at-CTB/frontmatter/`.
-- Bibliography entries are in `/home/runner/work/Data-Aware-Process-Simulation-at-CTB/Data-Aware-Process-Simulation-at-CTB/references.bib`.
-- Figures and static assets are in `/home/runner/work/Data-Aware-Process-Simulation-at-CTB/Data-Aware-Process-Simulation-at-CTB/figures/`, `/home/runner/work/Data-Aware-Process-Simulation-at-CTB/Data-Aware-Process-Simulation-at-CTB/resources/`, and `/home/runner/work/Data-Aware-Process-Simulation-at-CTB/Data-Aware-Process-Simulation-at-CTB/fonts/`.
+- The main entrypoint is `dissertation.tex`.
+- The custom document class is `Dissertate.cls`.
+- Chapter content lives in `chapters/`.
+- Front matter is stored in `frontmatter/`.
+- Bibliography entries are in `references.bib`.
+- Figures and static assets are in `figures/`, `resources/`, and `fonts/`.
 
 ## Editing guidance
 - Prefer editing existing `.tex` sources instead of changing document structure unless the task requires it.
