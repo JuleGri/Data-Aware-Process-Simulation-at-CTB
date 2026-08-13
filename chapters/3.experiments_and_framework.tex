@@ -852,121 +852,121 @@ The baseline replay experiment simulates the truck process under normal operatio
             \item \textbf{Event Log Generation}: The simulation produces a synthetic event log in the same format as the real event log, including lifecycle timestamps (\texttt{enabled:timestamp}, \texttt{start:timestamp}, \texttt{time:timestamp}).
         \end{enumerate}
 
-\subsubsection{Baseline Simulation Output}
+        \subsubsection{Baseline Simulation Output}
+        
+        The baseline simulation generates a simulated event log (\texttt{sim\_log\_s6\_sample\_24.000\_depth10\_maxConc\_2.csv}) containing:
+        
+        \begin{itemize}
+            \item 24,000 cases
+            \item 72,000 events (3 per case)
+            \item All case and event attributes replicated from the training schema
+        \end{itemize}
+        
+        This log serves as the reference for evaluating simulation quality in the evaluation stage (Section~\ref{sec:evaluation}).
+        
+    \subsection{Block Closure Scenario Experiments}
+    
+    To assess the simulation model's utility for operational decision support, three scenario-based experiments are conducted, each simulating the impact of ASC block closures due to maintenance, equipment failure, or capacity restrictions.
 
-The baseline simulation generates a simulated event log (\texttt{sim\_log\_s6\_sample\_24.000\_depth10\_maxConc\_2.csv}) containing:
+        \subsubsection{Scenario Design Rationale}
+        
+        Block closures represent realistic disruptions in terminal operations:
+        
+        \begin{itemize}
+            \item \textbf{Planned Maintenance}: ASC cranes require periodic maintenance, necessitating temporary block closures.
+            \item \textbf{Equipment Failures}: Unexpected crane breakdowns force immediate block unavailability.
+            \item \textbf{Capacity Management}: High yard utilization may require closing blocks to prevent congestion [JUSTIFICATION].
+        \end{itemize}
+        
+        These scenarios enable terminal operators to answer questions such as:
+        
+        \begin{itemize}
+            \item How will closing block T20 affect overall turnaround time?
+            \item Which other blocks will experience increased load if T20 is unavailable?
+            \item What is the expected increase in truck waiting time under the disruption?
+        \end{itemize}
 
-\begin{itemize}
-    \item 24,000 cases
-    \item 72,000 events (3 per case)
-    \item All case and event attributes replicated from the training schema
-\end{itemize}
+        \subsubsection{Scenario A: Single Block Closure (T20)}
+        
+        \textbf{Scenario Description:}
+        
+        Block T20 is removed from service, simulating a planned maintenance event. All cases originally destined for T20 must be redistributed to other ASC blocks.
+        
+        \textbf{Model Modification:}
+        
+        \begin{itemize}
+            \item \textbf{Resource Removal}: Block \texttt{T20} is removed from the \texttt{act\_to\_resources} mapping for all ASC activities (\texttt{ASC\_receive}, \texttt{ASC\_delivery}, \texttt{ASC\_mixed}).
+            \item \textbf{Calendar Update}: The availability calendar for \texttt{T20} is deleted.
+            \item \textbf{Concurrency Limit Update}: The concurrency limit for \texttt{T20} is removed.
+        \end{itemize}
+        
+        This modification is implemented by loading the baseline simulation parameters and programmatically removing T20:
+        
+        \begin{verbatim}
+        for activity in ["ASC_receive", "ASC_delivery", "ASC_mixed"]:
+            scenario_params.act_to_resources[activity] = [
+                r for r in scenario_params.act_to_resources[activity]
+                if r != "T20"
+            ]
+        scenario_params.max_concurrency.pop("T20", None)
+        scenario_params.calendars.pop("T20", None)
+        \end{verbatim}
+        
+        \textbf{Simulation Execution:}
+        
+        24,000 cases are simulated under the modified resource configuration. The simulation redistributes T20's workload according to the learned resource allocation rules, which dynamically assign cases to alternative blocks based on utilization and demand [JUSTIFICATION].
+        
+        \textbf{Output:}
+        
+        Simulated event log: \texttt{sim\_log\_24.000\_T20\_closed.csv}.
 
-This log serves as the reference for evaluating simulation quality in the evaluation stage (Section~\ref{sec:evaluation}).
+        \subsubsection{Scenario B: Three-Block Closure (T20, T21, T22)}
+        
+        \textbf{Scenario Description:}
+        
+        Three adjacent blocks (T20, T21, T22) are simultaneously closed, simulating a more severe disruption such as a zone-wide infrastructure failure or coordinated maintenance.
+        
+        \textbf{Model Modification:}
+        
+        Blocks \texttt{T20}, \texttt{T21}, and \texttt{T22} are removed from all resource pools using the same procedure as Scenario A.
+        
+        \textbf{Simulation Execution:}
+        
+        24,000 cases simulated with 18 available ASC blocks (reduced from 22).
+        
+        \textbf{Output:}
+        
+        Simulated event log: \texttt{sim\_log\_24.000\_T20-T22\_closed.csv}.
 
-\subsection{Block Closure Scenario Experiments}
+        \subsubsection{Scenario C: Five-Block Closure (T20, T21, T22, T23, T24)}
+        
+        \textbf{Scenario Description:}
+        
+        Five blocks are closed, representing an extreme disruption scenario that tests the robustness of the simulation model and the terminal's operational resilience.
+        
+        \textbf{Model Modification:}
+        
+        Blocks \texttt{T20}, \texttt{T21}, \texttt{T22}, \texttt{T23}, and \texttt{T24} are removed.
+        
+        \textbf{Simulation Execution:}
+        
+        20,000 cases simulated with 16 available ASC blocks (reduced from 22).
+        
+        \textbf{Output:}
+        
+        Simulated event log: \texttt{scenario\_B\_5\_blocks\_closed\_sim\_log.csv}.
 
-To assess the simulation model's utility for operational decision support, three scenario-based experiments are conducted, each simulating the impact of ASC block closures due to maintenance, equipment failure, or capacity restrictions.
-
-\subsubsection{Scenario Design Rationale}
-
-Block closures represent realistic disruptions in terminal operations:
-
-\begin{itemize}
-    \item \textbf{Planned Maintenance}: ASC cranes require periodic maintenance, necessitating temporary block closures.
-    \item \textbf{Equipment Failures}: Unexpected crane breakdowns force immediate block unavailability.
-    \item \textbf{Capacity Management}: High yard utilization may require closing blocks to prevent congestion [JUSTIFICATION].
-\end{itemize}
-
-These scenarios enable terminal operators to answer questions such as:
-
-\begin{itemize}
-    \item How will closing block T20 affect overall turnaround time?
-    \item Which other blocks will experience increased load if T20 is unavailable?
-    \item What is the expected increase in truck waiting time under the disruption?
-\end{itemize}
-
-\subsubsection{Scenario A: Single Block Closure (T20)}
-
-\textbf{Scenario Description:}
-
-Block T20 is removed from service, simulating a planned maintenance event. All cases originally destined for T20 must be redistributed to other ASC blocks.
-
-\textbf{Model Modification:}
-
-\begin{itemize}
-    \item \textbf{Resource Removal}: Block \texttt{T20} is removed from the \texttt{act\_to\_resources} mapping for all ASC activities (\texttt{ASC\_receive}, \texttt{ASC\_delivery}, \texttt{ASC\_mixed}).
-    \item \textbf{Calendar Update}: The availability calendar for \texttt{T20} is deleted.
-    \item \textbf{Concurrency Limit Update}: The concurrency limit for \texttt{T20} is removed.
-\end{itemize}
-
-This modification is implemented by loading the baseline simulation parameters and programmatically removing T20:
-
-\begin{verbatim}
-for activity in ["ASC_receive", "ASC_delivery", "ASC_mixed"]:
-    scenario_params.act_to_resources[activity] = [
-        r for r in scenario_params.act_to_resources[activity]
-        if r != "T20"
-    ]
-scenario_params.max_concurrency.pop("T20", None)
-scenario_params.calendars.pop("T20", None)
-\end{verbatim}
-
-\textbf{Simulation Execution:}
-
-24,000 cases are simulated under the modified resource configuration. The simulation redistributes T20's workload according to the learned resource allocation rules, which dynamically assign cases to alternative blocks based on utilization and demand [JUSTIFICATION].
-
-\textbf{Output:}
-
-Simulated event log: \texttt{sim\_log\_24.000\_T20\_closed.csv}.
-
-\subsubsection{Scenario B: Three-Block Closure (T20, T21, T22)}
-
-\textbf{Scenario Description:}
-
-Three adjacent blocks (T20, T21, T22) are simultaneously closed, simulating a more severe disruption such as a zone-wide infrastructure failure or coordinated maintenance.
-
-\textbf{Model Modification:}
-
-Blocks \texttt{T20}, \texttt{T21}, and \texttt{T22} are removed from all resource pools using the same procedure as Scenario A.
-
-\textbf{Simulation Execution:}
-
-24,000 cases simulated with 18 available ASC blocks (reduced from 22).
-
-\textbf{Output:}
-
-Simulated event log: \texttt{sim\_log\_24.000\_T20-T22\_closed.csv}.
-
-\subsubsection{Scenario C: Five-Block Closure (T20, T21, T22, T23, T24)}
-
-\textbf{Scenario Description:}
-
-Five blocks are closed, representing an extreme disruption scenario that tests the robustness of the simulation model and the terminal's operational resilience.
-
-\textbf{Model Modification:}
-
-Blocks \texttt{T20}, \texttt{T21}, \texttt{T22}, \texttt{T23}, and \texttt{T24} are removed.
-
-\textbf{Simulation Execution:}
-
-20,000 cases simulated with 16 available ASC blocks (reduced from 22).
-
-\textbf{Output:}
-
-Simulated event log: \texttt{scenario\_B\_5\_blocks\_closed\_sim\_log.csv}.
-
-\subsubsection{Resource Redistribution Analysis}
-
-For each scenario, the redistribution of workload from closed blocks to remaining blocks is analyzed by comparing resource utilization between baseline and scenario simulations. The analysis quantifies:
-
-\begin{itemize}
-    \item \textbf{Workload Shift}: Number of additional cases handled by each remaining block.
-    \item \textbf{Utilization Increase}: Percentage increase in utilization rate for each block.
-    \item \textbf{Congestion Hotspots}: Blocks that experience disproportionately high load increases.
-\end{itemize}
-
-This analysis is performed in notebooks \texttt{02\_resource\_redistribution\_scen\_X\_to\_baseline.ipynb}.
+        \subsubsection{Resource Redistribution Analysis}
+        
+        For each scenario, the redistribution of workload from closed blocks to remaining blocks is analyzed by comparing resource utilization between baseline and scenario simulations. The analysis quantifies:
+        
+        \begin{itemize}
+            \item \textbf{Workload Shift}: Number of additional cases handled by each remaining block.
+            \item \textbf{Utilization Increase}: Percentage increase in utilization rate for each block.
+            \item \textbf{Congestion Hotspots}: Blocks that experience disproportionately high load increases.
+        \end{itemize}
+        
+        This analysis is performed in notebooks \texttt{02\_resource\_redistribution\_scen\_X\_to\_baseline.ipynb}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -975,111 +975,111 @@ This analysis is performed in notebooks \texttt{02\_resource\_redistribution\_sc
 
 The final stage of the experimental pipeline concerns the evaluation of simulation quality. Evaluation is performed along multiple dimensions to provide a comprehensive assessment of the model's fidelity and usefulness.
 
-\subsection{Evaluation Dimensions}
+    \subsection{Evaluation Dimensions}
+    
+    Simulation quality is assessed across three primary dimensions:
+    
+    \begin{enumerate}
+        \item \textbf{Control-Flow Conformance}: Does the simulation produce process execution sequences that align with real process behavior?
+        \item \textbf{Temporal Accuracy}: Does the simulation accurately reproduce activity durations, waiting times, and turnaround times?
+        \item \textbf{Resource Fidelity}: Does the simulation correctly allocate resources and replicate resource utilization patterns?
+    \end{enumerate}
 
-Simulation quality is assessed across three primary dimensions:
+    \subsection{Control-Flow Conformance Metrics}
 
-\begin{enumerate}
-    \item \textbf{Control-Flow Conformance}: Does the simulation produce process execution sequences that align with real process behavior?
-    \item \textbf{Temporal Accuracy}: Does the simulation accurately reproduce activity durations, waiting times, and turnaround times?
-    \item \textbf{Resource Fidelity}: Does the simulation correctly allocate resources and replicate resource utilization patterns?
-\end{enumerate}
+        \subsubsection{Variant Similarity}
+        
+        Process variants (unique activity sequences) are compared between the real event log and simulated logs. The following metrics are computed:
+        
+        \begin{itemize}
+            \item \textbf{Variant Coverage}: Percentage of real variants reproduced in the simulation.
+            \item \textbf{Variant Frequency Distribution}: Similarity between the frequency distributions of variants (measured using cosine similarity or KL divergence) [JUSTIFICATION].
+        \end{itemize}
+        
+        \textbf{Expected Outcome:}
+        
+        Given the simplicity of the truck process (only 3 main variants), the simulation should achieve near-perfect variant coverage (95--100\%).
 
-\subsection{Control-Flow Conformance Metrics}
+        \subsubsection{Trace Alignment}
+        
+        Individual simulated traces are aligned with real traces using edit distance or token-based replay to quantify conformance at the case level [JUSTIFICATION].
 
-\subsubsection{Variant Similarity}
+    \subsection{Temporal Accuracy Metrics}
 
-Process variants (unique activity sequences) are compared between the real event log and simulated logs. The following metrics are computed:
+        \subsubsection{Distribution Similarity Tests}
+        
+        The distributions of waiting time, service time, and turnaround time are compared between real and simulated logs using statistical tests:
+        
+        \textbf{1. Kolmogorov-Smirnov (KS) Test:}
+        
+        The KS test measures the maximum distance between cumulative distribution functions (CDFs) of two samples. A low KS statistic and high p-value (e.g., $p > 0.05$) indicate that the distributions are statistically indistinguishable.
+        
+        \begin{equation}
+            D_{KS} = \max_x |F_{\text{real}}(x) - F_{\text{sim}}(x)|
+        \end{equation}
+        
+        \textbf{2. Earth Mover's Distance (EMD):}
+        
+        EMD (also known as Wasserstein distance) quantifies the "cost" of transforming one distribution into another, providing an intuitive measure of distribution similarity.
+        
+        \begin{equation}
+            \text{EMD}(P, Q) = \inf_{\gamma \in \Gamma(P, Q)} \mathbb{E}_{(x, y) \sim \gamma} [|x - y|]
+        \end{equation}
+        
+        where $\Gamma(P, Q)$ is the set of all joint distributions with marginals $P$ and $Q$.
+        
+        \textbf{Expected Outcome:}
+        
+        For high-quality simulations, EMD should be small (typically $<$ 10\% of the mean duration), and KS tests should not reject the null hypothesis of distributional equality.
 
-\begin{itemize}
-    \item \textbf{Variant Coverage}: Percentage of real variants reproduced in the simulation.
-    \item \textbf{Variant Frequency Distribution}: Similarity between the frequency distributions of variants (measured using cosine similarity or KL divergence) [JUSTIFICATION].
-\end{itemize}
+        \subsubsection{Descriptive Statistics Comparison}
+        
+        Summary statistics (mean, median, standard deviation, quartiles) are compared between real and simulated durations. Relative errors are computed as:
+        
+        \begin{equation}
+            \text{Relative Error} = \frac{|\text{Metric}_{\text{sim}} - \text{Metric}_{\text{real}}|}{\text{Metric}_{\text{real}}} \times 100\%
+        \end{equation}
+        
+        \textbf{Acceptable Thresholds:}
+        
+        \begin{itemize}
+            \item Mean turnaround time: $<$ 5\% relative error.
+            \item Median waiting time: $<$ 10\% relative error.
+            \item Standard deviation: $<$ 15\% relative error [JUSTIFICATION].
+        \end{itemize}
+        
+    \subsection{Resource Fidelity Metrics}
 
-\textbf{Expected Outcome:}
+        \subsubsection{Resource Utilization Distribution}
+        
+        The distribution of cases across ASC blocks is compared between real and simulated logs. Metrics include:
+        
+        \begin{itemize}
+            \item \textbf{Per-Block Frequency}: Number of cases handled by each block.
+            \item \textbf{Utilization Balance}: Gini coefficient measuring the evenness of workload distribution across blocks [JUSTIFICATION].
+            \item \textbf{Block-Specific Performance}: Mean turnaround time per block to detect resource-specific bottlenecks.
+        \end{itemize}
 
-Given the simplicity of the truck process (only 3 main variants), the simulation should achieve near-perfect variant coverage (95--100\%).
+        \subsubsection{Resource Allocation Accuracy}
+        
+        For cases with known target blocks in the real log, the simulation's resource allocation predictions are evaluated as a classification task:
+        
+        \begin{itemize}
+            \item \textbf{Accuracy}: Percentage of cases assigned to the correct block.
+            \item \textbf{Top-3 Accuracy}: Percentage of cases where the correct block is in the top 3 predicted blocks [JUSTIFICATION].
+        \end{itemize}
 
-\subsubsection{Trace Alignment}
-
-Individual simulated traces are aligned with real traces using edit distance or token-based replay to quantify conformance at the case level [JUSTIFICATION].
-
-\subsection{Temporal Accuracy Metrics}
-
-\subsubsection{Distribution Similarity Tests}
-
-The distributions of waiting time, service time, and turnaround time are compared between real and simulated logs using statistical tests:
-
-\textbf{1. Kolmogorov-Smirnov (KS) Test:}
-
-The KS test measures the maximum distance between cumulative distribution functions (CDFs) of two samples. A low KS statistic and high p-value (e.g., $p > 0.05$) indicate that the distributions are statistically indistinguishable.
-
-\begin{equation}
-    D_{KS} = \max_x |F_{\text{real}}(x) - F_{\text{sim}}(x)|
-\end{equation}
-
-\textbf{2. Earth Mover's Distance (EMD):}
-
-EMD (also known as Wasserstein distance) quantifies the "cost" of transforming one distribution into another, providing an intuitive measure of distribution similarity.
-
-\begin{equation}
-    \text{EMD}(P, Q) = \inf_{\gamma \in \Gamma(P, Q)} \mathbb{E}_{(x, y) \sim \gamma} [|x - y|]
-\end{equation}
-
-where $\Gamma(P, Q)$ is the set of all joint distributions with marginals $P$ and $Q$.
-
-\textbf{Expected Outcome:}
-
-For high-quality simulations, EMD should be small (typically $<$ 10\% of the mean duration), and KS tests should not reject the null hypothesis of distributional equality.
-
-\subsubsection{Descriptive Statistics Comparison}
-
-Summary statistics (mean, median, standard deviation, quartiles) are compared between real and simulated durations. Relative errors are computed as:
-
-\begin{equation}
-    \text{Relative Error} = \frac{|\text{Metric}_{\text{sim}} - \text{Metric}_{\text{real}}|}{\text{Metric}_{\text{real}}} \times 100\%
-\end{equation}
-
-\textbf{Acceptable Thresholds:}
-
-\begin{itemize}
-    \item Mean turnaround time: $<$ 5\% relative error.
-    \item Median waiting time: $<$ 10\% relative error.
-    \item Standard deviation: $<$ 15\% relative error [JUSTIFICATION].
-\end{itemize}
-
-\subsection{Resource Fidelity Metrics}
-
-\subsubsection{Resource Utilization Distribution}
-
-The distribution of cases across ASC blocks is compared between real and simulated logs. Metrics include:
-
-\begin{itemize}
-    \item \textbf{Per-Block Frequency}: Number of cases handled by each block.
-    \item \textbf{Utilization Balance}: Gini coefficient measuring the evenness of workload distribution across blocks [JUSTIFICATION].
-    \item \textbf{Block-Specific Performance}: Mean turnaround time per block to detect resource-specific bottlenecks.
-\end{itemize}
-
-\subsubsection{Resource Allocation Accuracy}
-
-For cases with known target blocks in the real log, the simulation's resource allocation predictions are evaluated as a classification task:
-
-\begin{itemize}
-    \item \textbf{Accuracy}: Percentage of cases assigned to the correct block.
-    \item \textbf{Top-3 Accuracy}: Percentage of cases where the correct block is in the top 3 predicted blocks [JUSTIFICATION].
-\end{itemize}
-
-\subsection{Scenario-Specific Evaluation}
-
-For block closure scenarios, evaluation focuses on comparative metrics rather than absolute fidelity:
-
-\begin{itemize}
-    \item \textbf{Turnaround Time Increase}: Percentage change in mean turnaround time relative to baseline.
-    \item \textbf{Workload Redistribution}: Quantification of case redistribution from closed blocks to active blocks.
-    \item \textbf{Congestion Prediction}: Identification of blocks that become bottlenecks under disruption.
-\end{itemize}
-
-These metrics enable operational insights such as: "Closing block T20 increases average turnaround time by 8.3\% and shifts 1,200 cases to block T22, increasing its utilization by 15\%."
+    \subsection{Scenario-Specific Evaluation}
+    
+    For block closure scenarios, evaluation focuses on comparative metrics rather than absolute fidelity:
+    
+    \begin{itemize}
+        \item \textbf{Turnaround Time Increase}: Percentage change in mean turnaround time relative to baseline.
+        \item \textbf{Workload Redistribution}: Quantification of case redistribution from closed blocks to active blocks.
+        \item \textbf{Congestion Prediction}: Identification of blocks that become bottlenecks under disruption.
+    \end{itemize}
+    
+    These metrics enable operational insights such as: "Closing block T20 increases average turnaround time by 8.3\% and shifts 1,200 cases to block T22, increasing its utilization by 15\%."
 
 \subsection{Evaluation Implementation}
         
@@ -1095,15 +1095,15 @@ These metrics enable operational insights such as: "Closing block T20 increases 
         
         These metrics serve as ground truth for comparing simulated process behavior against real observations. They are calculated in script \texttt{11\_calc\_s6\_eventlog\_with\_performance\_targets.py}.
 
-Evaluation is implemented in Python notebooks located in the \texttt{scenarios/} directory:
-
-\begin{itemize}
-    \item \texttt{02\_resource\_redistribution\_scen\_X\_to\_baseline.ipynb}: Resource utilization analysis.
-    \item \texttt{03\_time\_shifts\_scen\_X\_to\_baseline.ipynb}: Temporal metric comparison.
-    \item \texttt{03\_standard\_kpi\_results.py}: KPI extraction and reporting.
-\end{itemize}
-
-Results are exported as CSV tables and visualized using matplotlib and seaborn for inclusion in the results chapter (Chapter~\ref{chp:results}).
+        Evaluation is implemented in Python notebooks located in the \texttt{scenarios/} directory:
+        
+        \begin{itemize}
+            \item \texttt{02\_resource\_redistribution\_scen\_X\_to\_baseline.ipynb}: Resource utilization analysis.
+            \item \texttt{03\_time\_shifts\_scen\_X\_to\_baseline.ipynb}: Temporal metric comparison.
+            \item \texttt{03\_standard\_kpi\_results.py}: KPI extraction and reporting.
+        \end{itemize}
+        
+        Results are exported as CSV tables and visualized using matplotlib and seaborn for inclusion in the results chapter (Chapter~\ref{chp:results}).
 
 \subsection{Summary of Experimental Pipeline}
 
