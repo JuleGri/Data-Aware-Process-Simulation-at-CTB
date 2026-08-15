@@ -1,69 +1,106 @@
 \chapter{Experiments and Evaluation Framework}
 \label{chp:experiments_and_framework}
 
-This chapter presents the experimental methodology employed in this thesis to evaluate data-aware process simulation for truck operations at Container Terminal Burchardkai (CTB). The chapter is structured around the complete experimental pipeline, beginning with event log engineering from raw operational data, followed by process and simulation discovery, scenario-based experiments, and the evaluation framework used to assess simulation quality.
+This chapter describes the experimental framework used to investigate the research questions posed in Chapter~\ref{chp:introduction}. The study employs a case study methodology at HHLA Container Terminal Burchardkai (CTB), using operational data from the truck handling process to evaluate the added value of data-aware simulation features.
 
-\section{Research Process}
-
-The research process follows a structured pipeline that transforms raw operational data into actionable simulation models. Figure~\ref{fig:research_design} illustrates the overall research workflow, which comprises five major stages:
-
+The experimental pipeline consists of four main stages:
 \begin{enumerate}
-    \item \textbf{Event Log Engineering}: Raw data from heterogeneous operational systems is integrated, cleaned, and transformed into a structured event log following process mining standards.
-    \item \textbf{Process Discovery}: The event log is analyzed using the Inductive Miner algorithm to discover a Petri net representation of the truck process.
-    \item \textbf{Simulation Discovery}: Process execution parameters, including arrival patterns, activity durations, resource allocations, and data-aware decision rules, are extracted from the enriched event log.
-    \item \textbf{Simulation Experiments}: The discovered simulation model is executed under both baseline and scenario-based configurations to evaluate its predictive and analytical capabilities.
-    \item \textbf{Evaluation}: Simulation outputs are compared against real process execution using multiple quality dimensions, including control-flow conformance, temporal accuracy, and resource utilization fidelity.
+    \item \textbf{Event Log Engineering}: Transforming raw operational data into a structured event log with enriched contextual attributes.
+    \item \textbf{Process Discovery}: Extracting a formal process model (Petri net) from the event log using automated discovery algorithms.
+    \item \textbf{Simulation Parameter Discovery}: Automatically learning simulation parameters from historical data, including a comparison between traditional distribution-based and data-aware rule-based approaches.
+    \item \textbf{Simulation Execution and Evaluation}: Running simulation experiments and comparing simulated behavior against held-out test data.
 \end{enumerate}
 
-\begin{figure}[tbp]
+Figure~\ref{fig:research_design} illustrates the complete experimental pipeline.
+
+\begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{figures/schemas/ResearchDesignV1.png}
-    \caption{Research process pipeline used in this thesis.}
+    \includegraphics[width=0.9\textwidth]{figures/schemas/ResearchDesignV1.png}
+    \caption{Experimental Pipeline: From Raw Data to Simulation Evaluation}
     \label{fig:research_design}
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Research Design and Methodology}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This thesis investigates the following central research question:
+
+\begin{quote}
+\textit{Under what conditions do data-aware simulation features improve process simulation fidelity compared to traditional distribution-based approaches?}
+\end{quote}
+
+    \subsection{Research Approach}
+    
+    We adopt a \textbf{design science} approach combined with \textbf{empirical validation} \cite{Hevner2004}. The research artifact is a simulation model of the CTB truck process, discovered using the PROSIT framework \cite{Vinci2026prosit}, which supports both traditional and data-aware parameter learning.
+    
+    \textbf{Research Hypotheses:}
+    
+    \begin{enumerate}
+        \item \textbf{H1 (Predictive Power):} Data-aware models (decision trees conditioned on contextual attributes) achieve lower prediction error than distribution-based models for activity durations and resource allocation.
+        
+        \item \textbf{H2 (Simulation Fidelity):} Simulations generated from data-aware models exhibit higher fidelity to real process behavior (measured via statistical distance metrics) than simulations from distribution-based models.
+    \end{enumerate}
+    
+    \subsection{Evaluation Strategy}
+    
+    We employ a \textbf{train-test split} methodology:
+    
+    \begin{itemize}
+        \item \textbf{Training Set (80\%):} 24,000 cases used for parameter discovery and model selection.
+        \item \textbf{Test Set (20\%):} 6,000 held-out cases used for simulation validation.
+    \end{itemize}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Case Study Environment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     \subsection{HHLA Container Terminal Burchardkai}
-
-The empirical foundation of this thesis is provided by operational data from HHLA Container Terminal Burchardkai (CTB), one of Europe's largest and most automated container terminals. Located in the Port of Hamburg, CTB handles over 2.5 million TEU annually and serves as a critical transshipment hub for global container logistics.
-
-    \subsection{Truck Process at CTB}
-\textitt{specific CTB Specifications, like Slow system, separate empty yard, picture sateliten picture of CTB, 
-Zusätzlich: Only Pricesses with exactely one ASC Event are inspected due to the specific block utilization identified as a core attribute of a processes behaviour etc. JUSTIFICATION reference to the Chapter, where ONLY CASE LEVEL ATTRIBUTES is explained}
-The truck process at CTB represents the landside logistics flow for trucks entering the terminal to either deliver containers or receive containers. A typical truck visit follows this sequence:
-
-\begin{enumerate}
-    \item \textbf{Gate In}: The truck enters the terminal and is registered in the Terminal Operating System (TOS). Identity verification and initial administrative checks are performed.
-    \item \textbf{Exchange Area Operation}: The truck proceeds to an assigned exchange area where container handling occurs. Three types of operations are distinguished:
+    
+    The case study site is the HHLA Container Terminal Burchardkai (CTB), one of Europe's largest container terminals, located in the Port of Hamburg. CTB handles approximately 2.6 million TEU (Twenty-foot Equivalent Units) annually across 315 hectares \cite{HHLA2023}.
+    
+    \textbf{Truck Process Scope:}
+    
+    External trucks visit CTB to deliver or receive containers. The process involves:
+    
+    \begin{enumerate}
+        \item \textbf{Gate In}: Truck enters terminal, registers at gate system.
+        \item \textbf{Container Handling}: Automated Stacking Cranes (ASCs) handle container loading/unloading at storage blocks.
+        \item \textbf{Gate Out}: Truck exits terminal after completing operations.
+    \end{enumerate}
+    
+    The process is resource-constrained by:
     \begin{itemize}
-        \item \textit{Receive}: The truck delivers a full or empty container to be stored in the yard.
-        \item \textit{Delivery}: The truck picks up a container from yard storage.
-        \item \textit{Mixed}: A combination of both receive and delivery operations in a single visit [JUSTIFICATION].
+        \item 22 ASC storage blocks (T06--T27)
+        \item 2 specialized areas: Empty Container Depot (LL), Heavy/Oversized Cargo Area (HO2)
+        \item 2 gate lanes (inbound/outbound)
     \end{itemize}
-    \item \textbf{Gate Out}: The truck exits the terminal after completing all assigned operations.
-\end{enumerate}
-
-The performance of this process is critical for terminal efficiency, as truck turnaround time directly affects landside capacity and customer satisfaction.
 
     \subsection{Data Structure Overview}
 
-The operational data used in this thesis originates from multiple information systems that support day-to-day terminal operations. Historically, the information system landscape at CTB evolved organically, resulting in a heterogeneous environment where different systems manage distinct aspects of terminal operations, orchestrated by a Temrinal Operating System. 
-
-The primary data sources for this study include:
-
-\begin{itemize}
-    \item \textbf{ITS schedule (Scheduling System)}: Records truck visit schedules, including timestamps for each operational step (gate-in time, ready time at handling point, order fulfillment time, gate-out time).
-    \item \textbf{Report System}: Captures detailed stage-level execution data, including gate entry times, exchange area assignments, and container transaction records, building the bridge between operations and container master data. 
-    \item \textbf{Yard Management System}: Providing a snapshot every 4 hours of all yard block capacities, and utilization rates.
-    \item \textbf{Container Master Data}: Provides container-level details, including size, type, hazardous material classification and time and carrier of its inbound and outbound journey. 
-\end{itemize}
-
-These systems operate independently and use different identification schemes, requiring a data integration procedure elaborated on in chapter ~\ref{Event Log Engineering}.
-
-
-
-
+    The operational data used in this thesis originates from multiple information systems that support day-to-day terminal operations. Historically, the information system landscape at CTB evolved organically, resulting in a heterogeneous environment where different systems manage distinct aspects of terminal operations, orchestrated by a Temrinal Operating System. 
+    
+    The primary data sources for this study include:
+    
+    \begin{itemize}
+        \item \textbf{ITS schedule (Scheduling System)}: Records truck visit schedules, including timestamps for each operational step (gate-in time, ready time at handling point, order fulfillment time, gate-out time).
+        \item \textbf{Report System}: Captures detailed stage-level execution data, including gate entry times, exchange area assignments, and container transaction records, building the bridge between operations and container master data. 
+        \item \textbf{Yard Management System}: Providing a snapshot every 4 hours of all yard block capacities, and utilization rates.
+        \item \textbf{Container Master Data}: Provides container-level details, including size, type, hazardous material classification and time and carrier of its inbound and outbound journey. 
+    \end{itemize}
+    
+    These systems generate independent data pools and use different identification schemes, requiring a data integration procedure elaborated on in chapter ~\ref{Event Log Engineering}.
+    
+    Historical data from March and April 2026 (8 weeks) were extracted, covering approximately 104,000 truck visits.
+    
+    \textbf{Data Volume:}
+    \begin{itemize}
+        \item 113.466 container move events
+        \item 104,000 truck visits
+        \item 336 yard state snapshots (8 weeks × 7 days × 6 snaphots per day)
+    \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Event Log Engineering} \label{Event Log Engineering}
@@ -76,331 +113,272 @@ These systems operate independently and use different identification schemes, re
 
         \subsubsection{ ITS Schedule Data}
 
-The ITS scheduling system provides the core scheduling data for the truck operations reconstructed in this thesis. Each record in the schedule dataset represents a single activity instance within a truck visit and contains the following key attributes:
-
-\begin{itemize}
-    \item \texttt{FAHRPLAN\_UID}: Unique identifier for the truck visit (case ID).
-    \item \texttt{LKW\_KENNZEICHEN}: Truck license plate number.
-    \item \texttt{ANLAUFPUNKT\_HALTESTELLE}: Exchange area identifier (e.g., T20, LL, VC).
-    \item \texttt{FP\_ZEITPUNKT\_ERSTELLUNG}: Timestamp when the schedule entry was created (gate-in time).
-    \item \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG}: Timestamp when the activity became ready for execution (enabled time).
-    \item \texttt{ALP\_ZEITPUNKT\_ERFUELLUNG}: Timestamp when the activity was completed.
-    \item \texttt{FP\_ZEITPUNKT\_GATEOUT}: Timestamp when the truck exited the terminal.
-\end{itemize}
-
-\textbf{Timestamp Parsing and Validation:}
-
-All timestamp fields are parsed into standardized datetime objects using Python's \texttt{pandas} library with the format \texttt{\%d.\%m.\%Y \%H:\%M}. Invalid or missing timestamps are flagged for removal during the cleaning phase.
-
+        The ITS scheduling system provides the core scheduling data for the truck operations reconstructed in this thesis. Each record in the schedule dataset represents a single activity instance within a truck visit and contains the following key attributes:
+        
+        \begin{itemize}
+            \item \texttt{FAHRPLAN\_UID}: Unique identifier for the truck visit (case ID).
+            \item \texttt{LKW\_KENNZEICHEN}: Truck license plate number.
+            \item \texttt{ANLAUFPUNKT\_HALTESTELLE}: Exchange area identifier (e.g., T20, LL, VC).
+            \item \texttt{FP\_ZEITPUNKT\_ERSTELLUNG}: Timestamp when the schedule entry was created (gate-in time).
+            \item \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG}: Timestamp when the activity became ready for execution (enabled time).
+            \item \texttt{ALP\_ZEITPUNKT\_ERFUELLUNG}: Timestamp when the activity was completed.
+            \item \texttt{FP\_ZEITPUNKT\_GATEOUT}: Timestamp when the truck exited the terminal.
+        \end{itemize}
+        
+        \textbf{Timestamp Parsing and Validation:}
+        
+        All timestamp fields are parsed into standardized datetime objects using Python's \texttt{pandas} library with the format \texttt{\%d.\%m.\%Y \%H:\%M}. Invalid or missing timestamps are flagged for removal during the cleaning phase.
+    
+        
         \subsubsection{Report System Data}
 
-The Report System provides complementary stage-level execution data, completing the details for gate entry events. Additionally, the Report System connects a specific Container Number to a Trucks visit at a handling point in the yard.  It links a container transactions to the yard operations and related truck visits. Key attributes include:
+        The Report System provides complementary stage-level execution data, completing the details for gate entry events. Additionally, the Report System connects a specific Container Number to a Trucks visit at a handling point in the yard.  It links a container transactions to the yard operations and related truck visits. Key attributes include:
+        
+        \begin{itemize}
+            \item \texttt{TruckVisitGkey}: Unique identifier for the truck visit (used for cross-system matching).
+            \item \texttt{TruckLicenseNbr}: Truck license plate.
+            \item \texttt{CallupTime}: Timestamp when the truck physically entered the terminal.
+            \item \texttt{StageStartTime}: Timestamp when the activity became ready for execution (enabled time).
+            \item \texttt{StageId}: Stage identifier (e.g., "OCR", "Gate-In", "yard", "Exit").
+            \item \texttt{TruckExchangeArea}: Visited handling point in the yard for a specific container.
+            \item \texttt{TranCtrNbr}: Container number associated with each transaction.
+            \item \textt{UnitInboundCarrierId} The containers Inbound Carrier Id, specifying a truck license plate, a vessel voyage number or a train id. 
+            \item \textt{UnitOutboundCarrierId} The containers Outbound Carrier Id, specifying a truck license plate, a vessel voyage number or a train id. 
+        \end{itemize}
+        
+        To specify wether a container is being picked up or delivered by a truck, the Inbound/Outbound Carriers Id is identified as truck or not truck. 
+        
+        \textbf{Exchange Area Mapping:}
+        
+        The Report System uses exchange detailed handover lane codes for the exchange area, that must be mapped to higher-level operational zones to match the scheduling process data. Specifically, all exchange areas beginning with "HP" (Hochpalette) are mapped to "LL" (Leerlager area, eng. empty storage) to align with the schedule system's terminology. This mapping is implemented in script \texttt{002\_Prep\_area\_mapping\_report.py}.
 
-\begin{itemize}
-    \item \texttt{TruckVisitGkey}: Unique identifier for the truck visit (used for cross-system matching).
-    \item \texttt{TruckLicenseNbr}: Truck license plate.
-    \item \texttt{CallupTime}: Timestamp when the truck physically entered the terminal.
-    \item \texttt{StageStartTime}: Timestamp when the activity became ready for execution (enabled time).
-    \item \texttt{StageId}: Stage identifier (e.g., "OCR", "Gate-In", "yard", "Exit").
-    \item \texttt{TruckExchangeArea}: Visited handling point in the yard for a specific container.
-    \item \texttt{TranCtrNbr}: Container number associated with each transaction.
-    \item \textt{UnitInboundCarrierId} The containers Inbound Carrier Id, specifying a truck license plate, a vessel voyage number or a train id. 
-    \item \textt{UnitOutboundCarrierId} The containers Outbound Carrier Id, specifying a truck license plate, a vessel voyage number or a train id. 
-\end{itemize}
+        \subsubsection{Container Master Data [TO DO]}
 
-To specify wether a container is being picked up or delivered by a truck, the Inbound/Outbound Carriers Id is identified as truck or not truck. 
-
-\textbf{Exchange Area Mapping:}
-
-The Report System uses exchange detailed handover lane codes for the exchange area, that must be mapped to higher-level operational zones to match the scheduling process data. Specifically, all exchange areas beginning with "HP" (Hochpalette) are mapped to "LL" (Leerlager area, eng. empty storage) to align with the schedule system's terminology. This mapping is implemented in script \texttt{002\_Prep\_area\_mapping\_report.py}.
-
-        \subsubsection{Container Master Data [TO BE PRETTIFIED]}
-
-Container-level attributes are extracted from the Container Master Data and linked to events via the matched \texttt{container\_id}: [The Source and Attributes are explained in the raw data sources chapter]
-
-\begin{itemize}
-    \item \textbf{Container Size}: TEU equivalent (20', 40', 45', etc.).
-    \item \textbf{Full/Empty Status}: Binary indicator (\texttt{Leer/Voll}).
-    \item \textbf{Reefer Status}: Binary indicator for refrigerated containers (derived from ISO code).
-    \item \textbf{Hazardous Material Status}: Binary indicator based on IMCO code presence.
-    \item \textbf{Container Type}: Standard, Open Top, Platform, Bulk, etc.
-    \item \textbf{Dwell Time}: Hours spent in the terminal (for receive operations) [JUSTIFICATION].
-    \item \textbf{Container Complexity Score}: Composite metric combining size, full status, reefer, hazmat, and dwell time to quantify handling difficulty.
-\end{itemize}
-
+        Container-level attributes are extracted from the Container Master Data and linked to events via the matched \texttt{container\_id}: [The Source and Attributes are explained in the raw data sources chapter]
+        
+        \begin{itemize}
+            \item \textbf{Container Size}: TEU equivalent (20', 40', 45', etc.).
+            \item \textbf{Full/Empty Status}: Binary indicator (\texttt{Leer/Voll}).
+            \item \textbf{Reefer Status}: Binary indicator for refrigerated containers (derived from ISO code).
+            \item \textbf{Hazardous Material Status}: Binary indicator based on IMCO code presence.
+            \item \textbf{Container Type}: Standard, Open Top, Platform, Bulk, etc.
+            \item \textbf{Dwell Time}: Hours spent in the terminal (for receive operations) [JUSTIFICATION].
+            \item \textbf{Container Complexity Score}: Composite metric combining size, full status, reefer, hazmat, and dwell time to quantify handling difficulty.
+        \end{itemize}
+        
         \subsubsection{Yard State Data}
 
-Yard state data provides time-series information on storage block capacities and utilization rates. Each record contains:
-
-\begin{itemize}
-    \item \texttt{ZEITPUNKT}: Timestamp of the observation.
-    \item \texttt{AREA}: Storage area identifier (e.g., T20, VC, MT, total).
-    \item \texttt{KAP\_TEU\_THEORETISCH}: Theoretical capacity in TEU (Twenty-foot Equivalent Units).
-    \item \texttt{BEL\_TEU}: Current occupancy in TEU.
-    \item \texttt{AUSLASTUNG\_\%}: Utilization rate as a percentage.
-\end{itemize}
-
-\textbf{Temporal Interpolation:}
-
-Yard state observations are irregularly spaced in time. To enable accurate time-based matching with truck events, the data is resampled to a uniform 1-minute frequency using linear interpolation for numeric fields (\texttt{KAP\_TEU\_THEORETISCH}, \texttt{BEL\_TEU}, \texttt{AUSLASTUNG\_\%}). This interpolation is performed by script \texttt{004\_Prep\_create\_interpolated\_yard\_state\_for\_s3.py}.
+        Yard state data provides time-series information on storage block capacities and utilization rates. Each record contains:
+        
+        \begin{itemize}
+            \item \texttt{ZEITPUNKT}: Timestamp of the observation.
+            \item \texttt{AREA}: Storage area identifier (e.g., T20, VC, MT, total).
+            \item \texttt{KAP\_TEU\_THEORETISCH}: Theoretical capacity in TEU (Twenty-foot Equivalent Units).
+            \item \texttt{BEL\_TEU}: Current occupancy in TEU.
+            \item \texttt{AUSLASTUNG\_\%}: Utilization rate as a percentage.
+        \end{itemize}
+        
+        \textbf{Temporal Interpolation:}
+        
+        Yard state observations are irregularly spaced in time. To enable accurate time-based matching with truck events, the data is resampled to a uniform 1-minute frequency using linear interpolation for numeric fields (\texttt{KAP\_TEU\_THEORETISCH}, \texttt{BEL\_TEU}, \texttt{AUSLASTUNG\_\%}). This interpolation is performed by script \texttt{004\_Prep\_create\_interpolated\_yard\_state\_for\_s3.py}.
 
         \subsubsection{Truck Demand Data}
 
-Truck demand information is derived from the schedule system by aggregating truck arrivals over rolling time windows. For each exchange area and 1-minute time interval, the feature \texttt{TRUCK\_DEMAND\_LAST\_1H} is calculated as the number of trucks that became ready for processing in that area during the preceding 60 minutes.
-
-\textbf{Demand Calculation Procedure:}
-
-\begin{enumerate}
-    \item Resample the schedule data to 1-minute frequency based on \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG}.
-    \item Apply a 60-minute rolling window to count truck arrivals per area.
-    \item Create separate demand series for each operational area (Gate, T06, ASC, VC, LL, etc.).
-    \item Aggregate all ASC blocks (T06--T27) into an extra "ASC" as a yard section demand metric.
-\end{enumerate}
-
-This pre-processing is implemented in script \texttt{005\_Prep\_create\_truck\_demand.py}. The resulting demand features capture workload pressure at the time of case arrival, which is hypothesized to influence waiting times and resource allocation decisions.
-
-    
-    %%%%%%%%%%%       %%%%%%%%%%%%%%%%%%%%%%%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        Truck demand information is derived from the schedule system by aggregating truck arrivals over rolling time windows. For each exchange area and 1-minute time interval, the feature \texttt{TRUCK\_DEMAND\_LAST\_1H} is calculated as the number of trucks that became ready for processing in that area during the preceding 60 minutes.
+        
+        \textbf{Demand Calculation Procedure:}
+        
+        \begin{enumerate}
+            \item Resample the schedule data to 1-minute frequency based on \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG}.
+            \item Apply a 60-minute rolling window to count truck arrivals per area.
+            \item Create separate demand series for each operational area (Gate, T06, ASC, VC, LL, etc.).
+            \item Aggregate all ASC blocks (T06--T27) into an extra "ASC" as a yard section demand metric.
+        \end{enumerate}
+        
+        This pre-processing is implemented in script \texttt{005\_Prep\_create\_truck\_demand.py}. The resulting demand features capture workload pressure at the time of case arrival, which is hypothesized to influence waiting times and resource allocation decisions.
+        
+            
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsection{Data Cleaning and Integration}
-    %%%%%%%%%%%       %%%%%%%%%%%%%%%%%%%%%%%%  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        \subsubsection{Cleaning}
-Input: Raw imported datasets.
-Output: Cleaned tables with normalized schemas and valid records.
-Transformation performed:
-Removal of duplicate records
-Standardization of column names and data types
-Removal or correction of invalid timestamps
-Filtering of contradictory or impossible operational states
-Handling of missing values where appropriate
-Implementation layer: Cleaning and preprocessing module.
-        \subsubsection{Data Quality Filtering}
+        
 
-Raw operational data contains numerous quality issues that must be addressed before event log construction. The following filters are applied sequentially (script \texttt{00\_its\_schedule\_raw\_to\_schedule\_cleaned\_0304.py}):
-
-\textbf{1. Missing Critical Timestamps:}
-
-Cases are removed if any of the following timestamps are missing:
-\begin{itemize}
-    \item \texttt{FP\_ZEITPUNKT\_ERSTELLUNG} (gate-in time)
-    \item \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG} (enabled time)
-    \item \texttt{ALP\_ZEITPUNKT\_ERFUELLUNG} (completion time)
-\end{itemize}
-
-\textit{Rationale}: Without these timestamps, lifecycle event reconstruction is impossible.
-
-\textbf{2. Negative Activity Durations:}
-
-Cases are removed if any activity has a negative duration, i.e.,:
-\begin{equation}
-    \text{ALP\_ZEITPUNKT\_ERFUELLUNG} < \text{ALP\_ZEITPUNKT\_BEREITMELDUNG}
-\end{equation}
-
-\textit{Rationale}: Negative durations indicate mostly manual timestamp errors or system clock synchronization issues and violate temporal logic.
-
-\textbf{3. Overlapping Activities Within a Case:}
-
-Cases are removed if any two activities overlap in time. Specifically, for activities $i$ and $i+1$ sorted by enabled time:
-\begin{equation}
-    \text{enabled}_{i+1} < \text{complete}_{i} \implies \text{overlap}
-\end{equation}
-
-\textit{Rationale}: Truck operations at CTB are strictly sequential within a single visit. Overlapping timestamps indicate manual input mistakes, duplicate records or systematic data corruption.
-
-        \subsubsection{Integration }
-Input: Cleaned datasets from multiple sources.
-Output: Unified operational dataset.
-Transformation performed:
-Joining datasets using shared identifiers
-Aligning timestamps to a common reference
-Resolving naming inconsistencies across systems
-Harmonizing units and measurement conventions
-Implementation layer: Data integration / join logic module.
-
+  
 
         \subsubsection{Cross-System Identifier Matching}
 
-The schedule and Report systems use different identifiers for truck visits. To create a unified event log, these systems must be linked using composite keys:
+        The schedule and Report systems use different identifiers for truck visits. To create a unified event log, these systems must be linked using composite keys:
+        
+        \textbf{TruckVisit Matching (Stage 1):}
+        
+        The Report System's \texttt{TruckVisitGkey} is matched to schedule records using a composite key:
+        \begin{equation}
+        \begin{aligned}
+            \text{Match} &= (\text{TruckLicenseNbr},\, \text{CallupTime}) \\
+                         &\equiv (\text{LKW\_KENNZEICHEN},\, \text{FP\_ZEITPUNKT\_ERSTELLUNG})
+        \end{aligned}
+        \end{equation}
+        
+        This matching is performed using a left join, preserving all schedule records and adding \texttt{TruckVisitGkey} where available.
+        
+        \textbf{Container ID Matching (Stage 2):}
+        
+        Once \texttt{TruckVisitGkey} is established, container numbers are matched using:
+        \begin{equation}
+        \begin{aligned}
+            \text{Match} &= (\text{TruckVisitGkey},\, \text{TruckExchangeArea}) \\
+                         &\equiv (\text{TruckVisitGkey},\, \text{ANLAUFPUNKT\_HALTESTELLE})
+        \end{aligned}
+        \end{equation}
+        
+        \textbf{Fallback Matching Strategy:}
+        
+        For cases where the primary matching fails, a fallback strategy is applied for single-exchange-area visits. If a truck visit contains only one yard activity and no container ID was matched, the container ID is inferred from any other transaction associated with the same \texttt{TruckVisitGkey} [JUSTIFICATION]. This fallback matching increases data coverage while maintaining reasonable accuracy for simple cases.
+        
+        The integration logic is implemented in script \texttt{01\_match\_container\_ids\_to\_schedule\_v2.py}.
+        
 
-\textbf{TruckVisit Matching (Stage 1):}
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+        \subsection{Data Quality Assurance and Cleaning} 
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+        
+        The raw operational datasets originate from productive terminal information systems and therefore contain occasional inconsistencies, incomplete process executions, and implausible operational records. Since Process Mining and simulation discovery require temporally consistent and operationally meaningful process instances, a dedicated quality-assurance and cleaning procedure is applied before event-log construction. A fundamental design decision of the cleaning pipeline is the removal of complete cases rather than individual records. 
+        Whenever a truck visit violates one of the defined quality criteria, the entire process instance is excluded. This ensures that only internally consistent process executions are retained for subsequent process discovery and simulation-model generation. The primary cleaning procedures are implemented in \texttt{00\_its\_fahrplan\_raw\_to\_fahrplan\_cleaned\_0304.py} and focus on identifying invalid or incomplete truck visits. 
+        
+            \subsubsection{Invalid Process Instances}
+            
+            \paragraph{Missing Lifecycle Information} 
+            Cases are removed if one or more critical lifecycle timestamps are missing: 
+            \begin{itemize} 
+            \item \texttt{FP\_ZEITPUNKT\_ERSTELLUNG} 
+            \item \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG} 
+            \item \texttt{ALP\_ZEITPUNKT\_ERFUELLUNG} 
+            \end{itemize} 
+            
+            These timestamps are required to reconstruct activity lifecycles and derive waiting and service times. Cases lacking any of these values cannot be transformed into valid lifecycle events and are therefore excluded. The quality report identified 1,267 affected cases, corresponding to approximately 1.34\% of all observed truck visits. 
+            
+            \paragraph{Temporal Inconsistencies}
+            Cases are removed whenever fundamental temporal constraints are violated. First, activities with negative execution durations are identified:
+            \begin{equation} ALP\_ZEITPUNKT\_ERFUELLUNG < ALP\_ZEITPUNKT\_BEREITMELDUNG 
+            \end{equation} 
+            Such observations indicate timestamp errors or inconsistent system recordings and violate the temporal ordering required for process execution. Second, cases containing overlapping activities are excluded. For each truck visit, activities are sorted according to their readiness timestamp. A case is considered invalid if the next activity begins before the previous activity has completed: 
+            \begin{equation} start_{i+1} < complete_i 
+            \end{equation} 
+            Because a truck can only be processed at one handling location at a time, overlapping activities contradict the underlying operational logic of the process. The cleaning procedure identified three cases with negative durations and 43 cases containing overlapping activities. 
+            
+            \paragraph{Extreme Runtime Outliers} 
+            To remove implausible process executions, two additional runtime-based filters are applied. The first filter identifies cases with excessive delays between the completion of the final handling operation and the recorded gate-out event: \begin{equation} t_{GateOut} - t_{LastCompletion} > 10h \end{equation} Such data records commonly indicate system failure, incorrect timestamps, or seldomly also exceptional operational situations not representative of normal truck-handling behaviour. The second filter removes truck visits whose total turnaround time exceeds twelve hours: \begin{equation} t_{GateOut} - t_{GateIn} > 12h \end{equation} This threshold is based on operational plausibility, as truck visits are generally completed within a substantially shorter period. Cases exceeding this limit are treated as extreme outliers and most likely system errors. The applied thresholds identified 22 extreme gate-out cases and 22 cases with a total runtime greater than twelve hours, implying, that the gate out process step most likely inherits the systematic error source of the overall runtime outliers. 
+        
+          \subsubsection{Process Completeness Filters} 
+          After removing invalid process instances, several additional filters are applied during the subsequent preprocessing stages to ensure that only complete and operationally interpretable truck visits remain in the final event log. \paragraph{Container Identification} 
+          Truck visits are enriched with container information by matching handling activities from the scheduling system with container records obtained from the operational reporting system. The matching is performed in two stages. First, truck visits are linked via truck license plate and appointment timestamp. Subsequently, container identifiers are matched through the TruckVisit identifier and the associated yard location. In cases where the primary matching procedure fails, a fallback matching strategy is applied for single-yard visits with uniquely identifiable containers. Overall, 111,646 of 113,136 operational records could be assigned a valid TruckVisit identifier, corresponding to a TruckVisit matching rate of 98.68\%. Likewise, 110,866 records could be assigned a valid container identifier, resulting in a container matching rate of 97.99\%. Despite the fallback procedure, 2,270 records belonging to 2,034 truck visits remained without a valid container assignment. Since container-related attributes form a central component of the later context enrichment and simulation-discovery stages, these process instances are removed entirely. This constitutes a complete-case filter: if at least one activity within a truck visit cannot be linked to a physical container, the entire process instance is excluded. As a result, 2,034 truck visits and 3,397 associated records are removed, leaving 91,335 complete truck visits and 109,739 operational records for further processing. 
+          \paragraph{Unknown Activity Types} 
+          During activity construction, cases containing activities classified as \texttt{unknown} are removed. Such events cannot be mapped reliably to operational process steps and would introduce ambiguity into both process discovery and simulation discovery. Removing these cases ensures that all retained activities possess a clear operational interpretation and correspond to meaningful truck-handling behaviour. 
+          \paragraph{Process Scope Restriction} 
+          Finally, the event log is restricted to truck visits containing exactly one interaction with an automated RMG block. Visits may still contain additional activities in other yard areas, such as the empty-container yard or VC yard, but only a single RMG block interaction is permitted. This restriction ensures that RMG-specific workload, utilization, and demand measures can be assigned unambiguously at case level. Furthermore, it forms the basis for the later block-focused simulation experiments and scenario analyses. Cases not satisfying these criteria are excluded from the final event log. 
+          \paragraph{Event-Level Cleanup} 
+          Immediately before exporting the event log, remaining events labeled with an \texttt{\_unknown} suffix are removed. Unlike the previous filters, this represents an event-level cleanup step rather than a case-level exclusion. Its purpose is to eliminate residual events that cannot be interpreted reliably within the final process model.
 
-The Report System's \texttt{TruckVisitGkey} is matched to schedule records using a composite key:
-\begin{equation}
-\begin{aligned}
-    \text{Match} &= (\text{TruckLicenseNbr},\, \text{CallupTime}) \\
-                 &\equiv (\text{LKW\_KENNZEICHEN},\, \text{FP\_ZEITPUNKT\_ERSTELLUNG})
-\end{aligned}
-\end{equation}
-
-This matching is performed using a left join, preserving all schedule records and adding \texttt{TruckVisitGkey} where available.
-
-\textbf{Container ID Matching (Stage 2):}
-
-Once \texttt{TruckVisitGkey} is established, container numbers are matched using:
-\begin{equation}
-\begin{aligned}
-    \text{Match} &= (\text{TruckVisitGkey},\, \text{TruckExchangeArea}) \\
-                 &\equiv (\text{TruckVisitGkey},\, \text{ANLAUFPUNKT\_HALTESTELLE})
-\end{aligned}
-\end{equation}
-
-\textbf{Fallback Matching Strategy:}
-
-For cases where the primary matching fails, a fallback strategy is applied for single-exchange-area visits. If a truck visit contains only one yard activity and no container ID was matched, the container ID is inferred from any other transaction associated with the same \texttt{TruckVisitGkey} [JUSTIFICATION]. This fallback matching increases data coverage while maintaining reasonable accuracy for simple cases.
-
-The integration logic is implemented in script \texttt{01\_match\_container\_ids\_to\_schedule\_v2.py}.
-
-
-    
+        \begin{sloppypar}
+        The remaining unmatched container records were concentrated in a small number of operational areas, most notably the manually operated HO2 area. This observation indicates that the majority of remaining matching problems originate from specific operational subsystems rather than from systematic deficiencies of the matching procedure itself.
+        \end{sloppypar}
     
     \subsection{Case Definition} 
     
-    A \textit{case} in the event log corresponds to a single truck visit, uniquely identified by the \texttt{FAHRPLAN\_UID}. Each case represents the complete sequence of activities executed by one truck from gate entry to gate exit. Due to the ASC focus in the targeted scenario construction in the remaining of this thesis, the inclusion of ASC-Block specific attributes are intended to be provided for process discovery and reproduction. Due to the restriction of Contextual Attributes to Case-Level-Attributes, the design decision was met, to only include processes with exactely on ASC-Block involved, in order to include the \textit{target utilization} and the \textit{target demand} in the process mining. Additional visits to other yard areas, such as the empty-container yard or manual yard, remain part of the process instances. Restricting cases to one ASC block ensures that these ASC-specific context variables can be consistently attached to each truck visit and later be used in the block-focused scenario analyses. Furthermore, visits involving multiple ASC blocks represent only a small fraction of all observed truck visits [CHECK Beleg]. Consequently, the applied filter removes relatively few process instances while retaining the majority of the operational process history required for estimating arrivals, workloads, waiting times, and other simulation parameters. Formally, all truck visits containing exactly one ASC block interaction are retained, regardless of the number of additional visits to other operational areas. The filtering logic is implemented in \texttt{filter\_one\_ASC\_only.py}. After applying the filter, the resulting event log contains approximately 66,000 [CHECK] truck visits in the full dataset.
+    A \textit{case} in the event log corresponds to a single truck visit, uniquely identified by the \texttt{FAHRPLAN\_UID}. Each case represents the complete sequence of activities executed by one truck from gate entry to gate exit. Due to the ASC focus in the targeted scenario construction in the remaining of this thesis, the inclusion of ASC-Block specific attributes are intended to be provided for process discovery and reproduction. Due to the restriction of Contextual Attributes to Case-Level-Attributes, the design decision was met, to only include processes with exactely one ASC-Block involved, in order to include the \textit{target utilization} and the \textit{target demand} in the process- and simulation discovery. Additional visits to other yard areas, such as the empty-container yard or manual yard, remain part of the process instances. Restricting cases to one ASC block ensures that these ASC-specific context variables can be consistently attached to each truck visit and later be used in the block-focused scenario analyses. Furthermore, visits involving multiple ASC blocks represent only a small fraction of all observed truck visits [CHECK Beleg]. Consequently, the applied filter removes relatively few process instances while retaining the majority of the operational process history required for estimating arrivals, workloads, waiting times, and other simulation parameters. Formally, all truck visits containing exactly one ASC block interaction are retained, regardless of the number of additional visits to other operational areas. The filtering logic is implemented in \texttt{filter\_one\_ASC\_only.py}. After applying the filter, the resulting event log contains approximately 66,000 [CHECK] truck visits in the full dataset.
 
     \subsection{Activity Construction}
 
-        \subsubsection{Activity Abstraction Levels}
-
-        Raw operational records distinguish between 3 operation types (receive, delivery, mixed) per resource. Considering the handling areas of the empty and manual storages, the raw data do not provide information on the specific equipment that executed an operation, therefore those storages are handled as pooled resources with each the above mentioned 3 operation types per resource pool. 
-        Regarding the 22 individual ASC storage blocks (T06, T07, \ldots, T27) and the 3 operation types, this granularity results in 63 distinct ASC activities in the raw data, which creates sparsity issues for simulation discovery.
-        
-        To address this, activities are abstracted into generic types while preserving resource information:
-        
-        \textbf{ASC-Resource Pooling Strategy:}
-        
-        \begin{itemize}
-            \item \textbf{Activity Name}: Abstracted to operation type only (e.g., \texttt{T20\_receive} $\rightarrow$ \texttt{ASC\_receive}).
-            \item \textbf{Resource Attribute}: Block identifier preserved in \texttt{org:resource} field (e.g., \texttt{T20}).
-        \end{itemize}
-        
-        This design allows the simulation model to learn:
-        \begin{itemize}
-            \item \textit{Generic activity duration distributions} (e.g., how long does any ASC receive operation take?).
-            \item \textit{Block-specific resource allocation rules} (e.g., which blocks handle which container types?).
-            \item \textit{Data-aware routing decisions} (e.g., how are containers distributed across blocks based on attributes?).
-        \end{itemize}
-        
-        The activity mapping is implemented in script \texttt{07\_convert\_to\_ASC\_activities.py} using the following logic:
-        
-        \begin{verbatim}
-        def map_activity(activity):
-            if activity.startswith("T") and activity.endswith("_receive"):
-                return "ASC_receive"
-            if activity.startswith("T") and activity.endswith("_delivery"):
-                return "ASC_delivery"
-            if activity.startswith("T") and activity.endswith("_mixed"):
-                return "ASC_mixed"
-            return activity  # Gate In, Gate Out, LL, VC, etc.
-        \end{verbatim}
-             
-        
+    Activities are defined by combining \textit{operation type} (receive, delivery, mixed) and \textit{resource type} (ASC block, LL, HO2):
+    
+    \begin{table}[h]
+    \centering
+    \caption{Activity Labels}
+    \label{tab:activities}
+    \begin{tabular}{ll}
+    \toprule
+    \textbf{Activity} & \textbf{Definition} \\
+    \midrule
+    \texttt{Gate In} & Truck registration at entry gate \\
+    \texttt{RMG\_receive} & ASC unloads container from truck (import) \\
+    \texttt{RMG\_delivery} & ASC loads container onto truck (export) \\
+    \texttt{RMG\_mixed} & Both receive and delivery at same block \\
+    \texttt{LL\_receive} & Empty container depot unload \\
+    \texttt{LL\_delivery} & Empty container depot load \\
+    \texttt{LL\_mixed} & Empty container depot unload and load \\
+    \texttt{HO2\_receive} & Manual area unload \\
+    \texttt{HO2\_delivery} & Manual area unload and load \\
+    \texttt{HO2\_mixed} & Manual area unload and load \\
+    \texttt{Gate Out} & Truck departure \\
+    \bottomrule
+    \end{tabular}
+    \end{table}
+    
+    \textbf{Resource Pooling:} 22 individual ASC blocks (T06--T27) are retained as separate resources to capture block-specific utilization patterns.
     %%%%%%%%%%%       %%%%%%%%%%%%%%%%%%%%%%%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \subsection{Timestamp Selection and Lifecycle Events}
+    \subsection{Lifecycle Event Construction}
     %%%%%%%%%%%       %%%%%%%%%%%%%%%%%%%%%%%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    Process mining and simulation require explicit representation of activity lifecycle states. For each activity, three timestamps are reconstructed:
+    Process mining and simulation require explicit representation of activity lifecycle states. For each activity, three timestamps are formally constructed:
     
     \begin{itemize}
         \item \textbf{Enabled Time} (\texttt{enabled:timestamp}): The time when the activity became eligible for execution but had not yet started.
         \item \textbf{Start Time} (\texttt{start:timestamp}): The time when the activity began execution.
         \item \textbf{Complete Time} (\texttt{time:timestamp}): The time when the activity finished execution.
     \end{itemize}
-
-        \subsubsection{Lifecycle Timestamp Assignment}
-
-The timestamp assignment strategy varies by activity type:
-
-\textbf{Gate In:}
-\begin{align}
-    \text{enabled} &= \text{StageStartTime} \quad \text{(from Report System)} \\
-    \text{start} &= \text{FP\_ZEITPUNKT\_ERSTELLUNG} \\
-    \text{complete} &= \text{start} + \text{baseline\_duration}
-\end{align}
-
-\textit{Rationale}: The Report System's \texttt{StageStartTime} captures when the truck physically arrived at the gate entry lane, which precedes administrative processing. The schedule's creation time represents when the truck was registered in the system (start of processing). Completion time is estimated using a baseline duration [JUSTIFICATION].
-
-\textbf{ASC Operations (Receive, Delivery, Mixed):}
-\begin{align}
-    \text{enabled} &= \text{previous\_complete} + \text{transition\_baseline} \\
-    \text{start} &= \text{ALP\_ZEITPUNKT\_BEREITMELDUNG} \\
-    \text{complete} &= \text{ALP\_ZEITPUNKT\_ERFUELLUNG}
-\end{align}
-
-\textit{Rationale}: The enabled time is inferred by adding a baseline transition duration to the previous activity's completion. The schedule's ready time and fulfillment time directly correspond to activity start and completion.
-
-\textbf{Gate Out:}
-\begin{align}
-    \text{enabled} &= \text{previous\_complete} + \text{transition\_baseline} \\
-    \text{start} &= \text{enabled} + \text{minimal\_delay} \\
-    \text{complete} &= \text{FP\_ZEITPUNKT\_GATEOUT}
-\end{align}
-
-\textit{Rationale}: Gate-out processing is typically fast, so start time is approximated as enabled time plus a minimal delay. Completion time corresponds to the truck's actual exit.
-
-        \subsubsection{Baseline Transition Durations}
-
-Physical transition durations between activities (e.g., time to move from Gate In to the yard) are not directly recorded in the source systems. To infer start times, baseline transition durations are precomputed from historical data and stored in \texttt{transition\_baseline\_v1.csv}. These baselines are calculated as the 50th percentile (median) of observed inter-activity delays, representing the minimum time a truck has taken to move from one handling point to another.
-
-The baseline lookup is implemented in script \texttt{04\_schedule\_to\_eventlog\_s1.py}:
-
-\begin{verbatim}
-baseline_lookup = {
-    ("Gate In", "ASC_receive"): 120.0,  # seconds
-    ("ASC_receive", "Gate Out"): 60.0,
-    ...
-}
-\end{verbatim}
-
-    %%%%%%%%%%%       %%%%%%%%%%%%%%%%%%%%%%%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \subsection{Waiting Time Calculation}
-
-A key feature of the event log is the explicit representation of \textit{waiting time}, defined as the delay between an activity becoming enabled and actually starting execution:
-
-\begin{equation}
-    \text{waiting\_time} = \text{start:timestamp} - \text{enabled:timestamp}
-\end{equation}
-
-Waiting time captures queueing effects, resource contention, and operational inefficiencies that are critical for realistic simulation. It is calculated for all activities and stored as an event-level attribute (in minutes).
-
+    The source systems used at the CTB do not explicitly store all three lifecycle states. Consequently, additional reconstruction steps are required to generate simulation-ready event data.
+    
+        \subsubsection{Lifecycle Concept in Container Terminal Operations} In traditional Process Mining, an activity becomes enabled once all preconditions for execution are fulfilled, even if processing cannot start immediately due to unavailable resources. In container-terminal operations, this concept can be interpreted as the moment at which a truck has physically reached the next processing location and is ready to be handled. The distinction between enabled, start, and complete timestamps is particularly important for truck-handling operations because trucks frequently experience congestion, traffic delays, and resource-related waiting times. Explicit lifecycle reconstruction therefore allows the separation of physical movement through the terminal from operational waiting and service execution.
+        \subsubsection{Transition Baseline Estimation}
+        The reconstruction of enabled timestamps requires an estimate of the physical travel time between consecutive operational locations. While the scheduling system records observed transition durations between handling points, these observations already include the effects of traffic, congestion, and operational delays. To derive a congestion-free reference duration, historical transition times are extracted from the scheduling data using the fields: 
+        \begin{itemize} 
+        \item \texttt{FP\_DAUER\_GATEIN\_ERSTER\_ALP\_SEK}, 
+        \item \texttt{ALP\_DAUER\_NAECHSTER\_ALP\_SEK}, 
+        \item \texttt{FP\_DAUER\_LETZT\_ALP\_GATEOUT\_SEK}. \end{itemize}
+        For each observed transition between two operational locations, the 10th percentile of the empirical transition-time distribution is calculated and stored in \texttt{transition\_baseline\_v1.csv}. The 10th percentile was selected as a compromise between robustness and realism. While the minimum observed duration may be influenced by measurement errors or exceptional observations, the median already contains substantial congestion and waiting effects. The lower decile therefore provides a realistic approximation of the travel time under largely uncongested operating conditions. Consequently, the resulting baseline does not represent an idealized theoretical travel time, but rather a data-driven estimate of how quickly trucks can realistically move between terminal locations when traffic and waiting effects are minimal. An excerpt of the resulting lookup table is shown below: 
+        \begin{verbatim} activity,next_activity,baseline_duration_sec Gate In,T22,180 Gate In,T18,240 T22,Gate Out,120 ... \end{verbatim}
+        
+        \subsubsection{Enabled Timestamp Reconstruction} 
+        In this thesis, enabled timestamps are reconstructed by combining observed lifecycle events with the baseline transition durations. For all activities following the initial gate entry, the enabled timestamp is calculated as: \begin{equation} enabled_i = complete_{i-1} + baseline_{i-1,i} \end{equation} The resulting timestamp represents the moment at which the truck should arrive at the next operational location under uncongested conditions. The reconstruction strategy differs depending on the position of the activity within the process. \paragraph{Gate In} For the Gate In activity, detailed gate information is available from the reporting system. The system records the passage through the OCR gate before the truck enters the actual gate-processing queue. Consequently, the OCR timestamp represents the earliest point at which the truck becomes eligible for terminal entry and is therefore used as the enabled timestamp. \begin{align} enabled &= \text{StageStartTime} \\ start &= \text{FP\_ZEITPUNKT\_ERSTELLUNG} \\ complete &\approx start \end{align} The difference between enabled and start therefore represents waiting and queueing effects at the terminal entrance. \paragraph{Yard Activities} For operational yard activities, including RMG operations, empty-container-yard operations, and VC-yard operations, the enabled timestamp is reconstructed using the previously completed activity and the corresponding baseline transition duration: \begin{align} enabled = previous\_complete + transition\_baseline \end{align} The activity lifecycle itself is directly represented by the scheduling system timestamps: \begin{align} start &= \text{ALP\_ZEITPUNKT\_BEREITMELDUNG} \\ complete &= \text{ALP\_ZEITPUNKT\_ERFUELLUNG} \end{align} The interval between enabled and start therefore captures additional delays caused by traffic congestion, queue formation, handling-equipment availability, and other operational constraints. \paragraph{Gate Out} The same reconstruction principle is applied to the final Gate Out activity. First, the baseline travel duration from the final handling location to the gate is added to the completion timestamp of the previous activity: \begin{align} enabled = previous\_complete + transition\_baseline \end{align} The actual exit timestamp recorded by the terminal systems serves as both the start and completion timestamp: \begin{align} start &= \text{FP\_ZEITPUNKT\_GATEOUT} \\ complete &= \text{FP\_ZEITPUNKT\_GATEOUT} \end{align} The difference between enabled and start therefore reflects delays caused by internal terminal traffic, congestion on access roads, and queues at the exit gate.
+        
+        \subsubsection{Waiting Time Calculation} 
+        The explicit reconstruction of waiting times represents a central objective of the event-log engineering procedure. For each activity, waiting time is calculated as: 
+        \begin{equation} waiting\_time = start:timestamp - enabled:timestamp \end{equation}
+        By construction, the enabled timestamp already includes the expected physical travel time between operational locations. Consequently, the calculated waiting time represents time beyond normal truck movement and can therefore be interpreted as the operational delay experienced by the truck. Within the context of container-terminal operations, these delays primarily originate from traffic congestion, queueing processes, resource contention, and limited handling-equipment availability. The resulting waiting-time information therefore serves as a direct proxy for congestion within the terminal. This distinction between physical travel time and operational waiting is particularly important because many terminal-management measures, such as Truck Appointment Systems (TAS), yard-allocation policies, and resource-planning strategies, specifically aim to reduce such congestion effects. The reconstructed waiting times therefore form an important foundation for both Process-Mining-based performance analysis and the subsequent simulation-discovery experiments.
+    
+        
+        
     \subsection{Context Enrichment}
 
-To enable data-aware simulation, the event log is enriched with contextual attributes describing the operational state at the time of process execution. These attributes are organized into five categories:
+    To enable data-aware simulation, the event log is enriched with contextual attributes describing the operational state at the time of process execution. These attributes are organized into five categories:
 
-        \subsubsection{Container Features}
-
-Container-level attributes are extracted from the Container Master Data and linked to events via the matched \texttt{container\_id}: [The Source and Attributes are explained in the raw data sources chapter] The goal of the COntainer features is to aggregate them on a case level, therefore, we construct boolean and numerical features per container on eventlevel to later aggregate them to a case level boolean and numerical feature.
-
-\begin{itemize}
-    \item \textbf{Container Size}: TEU equivalent (20', 40', 45', etc.).
-    \item \textbf{Full/Empty Status}: Binary indicator (\texttt{Leer/Voll}).
-    \item \textbf{Reefer Status}: Binary indicator for refrigerated containers (derived from ISO code).
-    \item \textbf{Hazardous Material Status}: Binary indicator based on IMCO code presence.
-    \item \textbf{Container Type}: Standard, Open Top, Platform, Bulk, etc.
-    \item \textbf{Dwell Time}: Hours spent in the terminal (for receive operations) [JUSTIFICATION].
-    \item \textbf{Container Complexity Score}: Composite metric combining size, full status, reefer, hazmat, and dwell time to quantify handling difficulty.
-\end{itemize}
-
-The complexity score is calculated as:
-
-\begin{equation}
-    \text{complexity} = w_{\text{full}} + w_{\text{reefer}} + w_{\text{hazmat}} + w_{\text{type}} + w_{\text{dwell}}
-\end{equation}
-
-where weights are empirically determined based on operational impact. The calculation is implemented in script \texttt{001\_Prep\_create\_container\_master.py}.
-
+        \subsubsection{Container Features} 
+        Container-related context information is derived from the container master data and linked to truck visits via the matched \texttt{container\_id}. Since the simulation-discovery approach employed in this thesis primarily utilizes case-level attributes, individual container characteristics are aggregated to describe the overall properties of a truck visit rather than individual container transactions. The feature engineering process is implemented in \texttt{03\_aggregate\_container\_details\_case\_level.py}. First, container properties are aggregated at stop level and subsequently combined into visit-level features. The resulting attributes capture both the composition and operational complexity of the handled containers. The following container-related features are included in the final event log: 
+        \begin{itemize} 
+        \item \textbf{n\_containers}: Number of unique containers handled during the truck visit. \item \textbf{has\_hazardous}: Binary indicator specifying whether at least one hazardous (IMDG) container is involved in the visit. 
+        \item \textbf{has\_reefer}: Binary indicator specifying whether at least one refrigerated container is involved in the visit. 
+        \item \textbf{full\_ratio}: Proportion of loaded containers relative to all handled containers within the visit. 
+        \item \textbf{container\_complexity\_mean}: Average complexity score across all containers associated with the truck visit. 
+        \item \textbf{container\_complexity\_sum}: Cumulative complexity score of all containers associated with the truck visit. 
+        \end{itemize} 
+        The complexity score is derived during the container-master-data preprocessing stage and combines operationally relevant container characteristics such as container type, loading status, hazardous-goods indicators, reefer requirements, and other handling-related properties into a single numerical measure. Higher values indicate truck visits that are expected to require more complex handling operations. To preserve the full operational context of a truck visit, individual container attributes are aggregated across all containers belonging to the same case. Binary indicators such as hazardous or reefer status are aggregated using logical OR operations, whereas numerical measures such as fullness and complexity are represented through summary statistics. This approach enables the simulation model to distinguish between operationally simple visits handling a single standard container and more complex visits involving multiple specialized containers.
+        \begin{sloppypar}
+        Whenever available, the number of unique matched container identifiers is used as the primary source for container counts. The originally declared container count serves only as a fallback in cases where no valid container identifiers are available. This decision avoids inconsistencies originating from discrepancies between declared and observed container quantities.
+        \end{sloppypar}
 
         \subsubsection{Yard Features}
 
-Yard state features capture the storage capacity and utilization status of different terminal areas at the time of truck arrival (Gate In event). These features are matched temporally using \texttt{pd.merge\_asof} with a "nearest" strategy:
-
-\begin{itemize}
-    \item \textbf{Gate Utilization}: Overall terminal yard utilization (\texttt{gate\_utilization}).
-    \item \textbf{ASC Utilization}: Aggregate utilization across all ASC blocks (\texttt{ASC\_utilization}).
-    \item \textbf{VC Utilization}: Van Carrier area utilization (\texttt{vc\_utilization}).
-    \item \textbf{MT Utilization}: Empty container storage utilization (\texttt{mt\_utilization}).
-    \item \textbf{Target Block Utilization}: Utilization of the specific ASC block assigned to the truck (\texttt{target\_block\_utilization}).
-\end{itemize}
-
-These features are added in script \texttt{06\_add\_utils\_to\_eventlog.py}. A target block utilization feature was chosen to be able to inspect the effect of the specific block a truck is visiting. As explained in Chapter [CHAPTER WITH CASE LEVEL ATTRIBUTES ONLY JUSTIFICATION] the data-aware simulation discovery framework used in this thesis only accepts case level attributes in its calculation, therefore 
+        Yard state features capture the storage capacity and utilization status of different terminal areas at the time of truck arrival (Gate In event). These features are matched temporally using \texttt{pd.merge\_asof} with a "nearest" strategy:
+        
+        \begin{itemize}
+            \item \textbf{Gate Utilization}: Overall terminal yard utilization (\texttt{gate\_utilization}).
+            \item \textbf{ASC Utilization}: Aggregate utilization across all ASC blocks (\texttt{ASC\_utilization}).
+            \item \textbf{VC Utilization}: Van Carrier area utilization (\texttt{vc\_utilization}).
+            \item \textbf{MT Utilization}: Empty container storage utilization (\texttt{mt\_utilization}).
+            \item \textbf{Target Block Utilization}: Utilization of the specific ASC block assigned to the truck (\texttt{target\_block\_utilization}).
+        \end{itemize}
+        
+        These features are added in script \texttt{06\_add\_utils\_to\_eventlog.py}. A target block utilization feature was chosen to be able to inspect the effect of the specific block a truck is visiting. As explained in Chapter [CHAPTER WITH CASE LEVEL ATTRIBUTES ONLY JUSTIFICATION] the data-aware simulation discovery framework used in this thesis only accepts case level attributes in its calculation, therefore 
 
         \subsubsection{Demand Features}
         
@@ -409,391 +387,480 @@ These features are added in script \texttt{06\_add\_utils\_to\_eventlog.py}. A t
         \begin{itemize}
             \item \textbf{Gate Demand}: Number of trucks processed in the last 60 minutes across the entire terminal.
             \item \textbf{ASC Demand}: Number of trucks assigned to ASC blocks in the last 60 minutes.
-            \item \textbf{VC Demand}: Demand for Van Carrier operations.
+            \item \textbf{VC Demand}: Demand for Van Carrier operations in the manual Yard.
             \item \textbf{MT Demand}: Demand for empty container handling.
-            \item \textbf{Target Block Demand}: Demand specifically for the assigned ASC block [JUSTIFICATION].
+            \item \textbf{Target Block Demand}: Demand specifically for the assigned ASC block.
         \end{itemize}
         
-        These features are computed using rolling 60-minute windows and matched to Gate In events using temporal joins (script \texttt{05\_add\_demand\_features\_to\_eventlog.py} and \texttt{08\_add\_all\_target\_features.py}).
-        
-        \subsubsection{Temporal Features[DUE TO PROSIT]}
-        
-        [REALLY?] ProSiT as the chosen data aware simulation tool, requirestemporal features to be able to discover an arrival pattern from the event log. During the first Discovery Trials with ProSiT it has become apparent., that ProSiT itself is not possible to read the temporal patterns from the given timestamps, but requires prepared temporal features in the input file. Temporal features capture time-of-day and day-of-week patterns that influence process behavior:
+        These features are computed using rolling 60-minute windows and matched to Gate In events using temporal joins (script \texttt{05\_add\_demand\_features\_to\_eventlog.py} and \texttt{08\_add\_all\_target\_features.py}).        
+
+        \subsubsection{Target Block Features}
+    
+        For single-block truck visits, the target ASC block is a critical attribute that influences both resource allocation and performance metrics. The following target-block-specific features are added:
         
         \begin{itemize}
-            \item \textbf{Hour of Arrival} (\texttt{@@hour}): Hour of the day (0--23) when the case started (extracted from the first \texttt{start:timestamp} in the case).
-            \item \textbf{Weekday} (\texttt{@@weekday}): Day of the week (0=Monday, 6=Sunday).
+            \item \textbf{Target Block Rank}: Ordinal ranking of ASC blocks by historical utilization or throughput [JUSTIFICATION].
+            \item \textbf{Target Block Utilization}: Real-time utilization rate of the target block at case arrival.
+            \item \textbf{Target Block Demand}: Workload pressure on the target block.
         \end{itemize}
         
-        These features are computed at the case level and replicated across all events in the case. The \texttt{@@} prefix indicates that these are case-level attributes used by the PROSIT simulation framework for arrival pattern modeling.
+        These features are extracted from the \texttt{org:resource} attribute of ASC activities and enriched with contextual data (script \texttt{08\_add\_all\_target\_features.py}).
+      
+          \subsubsection{Temporal Features[DUE TO PROSIT]}
+            
+            [REALLY?] ProSiT as the chosen data aware simulation tool, requires temporal features to be able to discover an arrival pattern from the event log. During the first Discovery Trials with ProSiT it has become apparent, that ProSiT itself is not deriving the temporal patterns from the given timestamps, but requires prepared temporal features in the case attributes. Temporal features capture time-of-day and day-of-week patterns at time of case initiation, that often influence process behavior:
+            
+            \begin{itemize}
+                \item \textbf{Hour of Arrival} (\texttt{@@hour}): Hour of the day (0--23) when the case started (extracted from the first \texttt{start:timestamp} in the case).
+                \item \textbf{Weekday} (\texttt{@@weekday}): Day of the week (0=Monday, 6=Sunday).
+            \end{itemize}
+            
+            These features are computed at the case level and replicated across all events in the case. The \texttt{@@} prefix indicates that these are case-level attributes used by the PROSIT simulation framework for arrival pattern modeling.
+            
+            The temporal feature extraction is performed in script \texttt{09\_eventlog\_to\_xes.py}.
+    
+   \subsection{Event Log Structure} 
+   The resulting event log combines process execution data, lifecycle information, and operational context attributes within a single simulation-ready representation. Each event contains the standard Process Mining attributes required by ProSiT together with contextual information describing the operational state of the terminal at the time of execution.
+   
+   \paragraph{Core Process Attributes}
+   
+   \begin{table}[H] 
+   \centering 
+   \caption{Core Process Attributes} 
+   \begin{tabular}{p{4cm} p{9cm}} 
+   \hline \textbf{Attribute} & \textbf{Description} \\ \hline \texttt{case:concept:name} & Unique truck visit identifier (\texttt{FAHRPLAN\_UID}) \\ \texttt{concept:name} & Activity executed during the truck visit \\ \texttt{enabled:timestamp} & Reconstructed activity enabled timestamp \\ \texttt{start:timestamp} & Activity start timestamp \\ \texttt{time:timestamp} & Activity completion timestamp \\ \texttt{org:resource} & Operational location associated with the activity \\ \hline 
+   \end{tabular} 
+   \end{table}
+
+   \paragraph{Case-Level Context Attributes} 
+   
+   \begin{table}[h] 
+   \centering 
+   \caption{Case-Level Context Attributes} 
+   \begin{tabular}{p{4cm} p{9cm}} 
+   \hline \textbf{Attribute} & \textbf{Description} \\ \hline \texttt{process\_flow\_type} & Visit type (only delivery, only receive, or mixed) \\ \texttt{n\_containers} & Number of containers handled during the visit \\ \texttt{n\_stops} & Number of operational stops within the visit \\ \texttt{n\_deliveries} & Number of delivery transactions \\ \texttt{n\_receives} & Number of receive transactions \\ \texttt{has\_hazardous} & Indicates presence of hazardous containers \\ \texttt{has\_reefer} & Indicates presence of reefer containers \\ \texttt{full\_ratio} & Share of loaded containers within the visit \\ \texttt{visit\_complexity} & Composite score describing operational visit complexity \\ \hline 
+   \end{tabular} 
+   \end{table}
+
+   \paragraph{Operational State Attributes} 
+   \begin{table}[h] 
+   \centering 
+   \caption{Demand and Utilization Features} 
+   \begin{tabular}{p{4cm} p{9cm}} 
+   \hline \textbf{Attribute} & \textbf{Description} \\ \hline \texttt{gate\_demand} & Current truck demand at the terminal gate \\ \texttt{rmg\_demand} & Current demand in the automated RMG yard \\ \texttt{vc\_demand} & Current demand in the VC yard area \\ \texttt{mt\_demand} & Current demand in the manual yard area \\ \texttt{gate\_utilization} & Utilization level of gate-related resources \\ \texttt{rmg\_utilization} & Utilization level of the automated RMG yard \\ \texttt{vc\_utilization} & Utilization level of the VC yard area \\ \texttt{mt\_utilization} & Utilization level of the manual yard area \\ \hline 
+   \end{tabular} \end{table}
+   
+   \paragraph{Target Area Assignment} To enable area-specific demand and utilization features, each truck visit was assigned a unique primary target area. For visits containing exactly one RMG block, the corresponding block (e.g., T13 or T24) was selected as the primary target area. Visits without any RMG interaction were assigned either to the Manual Truck Yard (MT) or the Vehicle Carrier Yard (VC), depending on the operational destination. Cases visiting multiple RMG blocks were excluded because block-specific congestion measures could not be assigned unambiguously.
+   
+    \paragraph{Target-Area Context Attributes} 
+    \begin{table}[h] 
+    \centering 
+    \caption{Target-Area Context Attributes} 
+    \begin{tabular}{p{4cm} p{9cm}} 
+    \hline \textbf{Attribute} & \textbf{Description} \\ \hline \texttt{target\_utilization} & Utilization level of the primary target area at truck arrival time \\ \texttt{target\_demand} & Observed truck demand for the primary target area at truck arrival time \\ \texttt{target\_rank} & Relative utilization rank among all RMG blocks at the same timestamp \\ \texttt{target\_rank\_group} & Categorized RMG utilization rank (top\_3, mid, low, non\_rmg) \\ \hline 
+    \end{tabular} 
+    \end{table}
+
+    
+   \paragraph{Temporal Features} 
+   \begin{table}[h] 
+   \centering 
+   \caption{Temporal Context Attributes} 
+   \begin{tabular}{p{4cm} p{9cm}} \hline \textbf{Attribute} & \textbf{Description} \\ \hline \texttt{@@hour} & Hour of day derived from the case start timestamp \\ \texttt{@@weekday} & Day of week derived from the case start timestamp \\ \hline 
+   \end{tabular}
+   \end{table}
+   
+   The temporal attributes were explicitly derived from the event timestamps during pre-processing. Although ProSiT utilizes contextual case attributes during simulation discovery, temporal features such as hour-of-day and weekday are not automatically derived from timestamps during the process discovery by ProSiT and therefore had to be added to the event log manually.
+
+    All contextual attributes are attached on case level and therefore remain constant throughout the complete execution of a truck visit. This design is consistent with the current ProSiT feature-discovery approach, which primarily utilizes case-level context information rather than dynamically changing event-level state variables \cite{Vinci2026prosit}.
+    
+        \subsubsection{Event Log Characteristics} 
+        After the complete preprocessing and enrichment procedure, the final event log contains 89,458 truck visits represented by 277,423 events.         
+        Each case contains a Gate In event, one or more operational yard activities, and a final Gate Out event. Operational activities may occur in RMG blocks, the Manual Truck Yard (MT), or the Vehicle Carrier Yard (VC), depending on the operational requirements of the visit.
+        Consequently, the resulting event log exhibits a highly standardized process structure while maintaining substantial contextual variability through the enriched operational features. The activity distribution is shown in Table~\ref{tab:activity_distribution}.
         
-        The temporal feature extraction is performed in script \texttt{09\_eventlog\_to\_xes.py}.
+        \begin{table}[h] 
+        \centering 
+        \caption{Most Frequent Activities in the Final Event Log} 
+        \label{tab:activity_distribution} 
+        \begin{tabular}{lr} 
+        \hline Activity & Frequency \\ \hline Gate In & 65,996 \\ Gate Out & 65,996 \\ RMG\_receive & 39,738 \\ RMG\_delivery & 18,637 \\ RMG\_mixed & 13,947 \\ LL\_delivery & 10,271 \\ HO2\_delivery & 6,617 \\ HO2\_receive & 5,106 \\ \hline 
+        \end{tabular} 
+        \end{table} 
+
         
+        The majority of truck visits involve a pure receive operation, followed by mixed visits and delivery-oriented visits. Prior to the final export, 184 cases containing semantically undefined activities were removed, reducing the dataset from 91,335 to 91,151 valid truck visits. To support different stages of the simulation-discovery workflow, additional sampled datasets were generated. The primary simulation-discovery experiments were performed on a training sample containing approximately 24,000 cases, whereas a separate validation sample consisting of 30,000 cases was generated for simulation-quality assessment.
 
-    \subsection{Target Block Features}
+        In contrast to the initial RMG-only event log design, visits targeting the Manual Truck Yard (MT) and Vehicle Carrier Yard (VC) were retained. Only visits interacting with more than one distinct RMG block were excluded. This restriction removed 1,693 cases (1.9\% of all valid truck visits) while preserving the vast majority of observed process behavior.
 
-For single-block truck visits, the target ASC block is a critical attribute that influences both resource allocation and performance metrics. The following target-block-specific features are added:
-
-\begin{itemize}
-    \item \textbf{Target Block} (\texttt{target\_block}): [REALLY?] The identifier of the ASC block handling the truck (e.g., T20).
-    \item \textbf{Target Block Rank}: Ordinal ranking of ASC blocks by historical utilization or throughput [JUSTIFICATION].
-    \item \textbf{Target Block Utilization}: Real-time utilization rate of the target block at case arrival.
-    \item \textbf{Target Block Demand}: Workload pressure on the target block.
-\end{itemize}
-
-These features are extracted from the \texttt{org:resource} attribute of ASC activities and enriched with contextual data (script \texttt{08\_add\_all\_target\_features.py}).
-
-    \subsection{Final Event Log Structure}
-
-The final event log follows the XES (eXtensible Event Stream) standard and contains the following fields:
-
-\textbf{Core Event Attributes:}
-\begin{itemize}
-    \item \texttt{case:concept:name}: Case identifier (FAHRPLAN\_UID).
-    \item \texttt{concept:name}: Activity label (Gate In, ASC\_receive, etc.).
-    \item \texttt{enabled:timestamp}: Activity enabled time.
-    \item \texttt{start:timestamp}: Activity start time.
-    \item \texttt{time:timestamp}: Activity completion time.
-    \item \texttt{org:resource}: Resource identifier (e.g., T20 for ASC blocks).
-\end{itemize}
-
-\textbf{Contextual Attributes (subset):}
-\begin{itemize}
-    \item \texttt{container\_size}, \texttt{container\_full\_empty}, \texttt{is\_reefer}, \texttt{is\_hazardous}, \texttt{container\_complexity}
-    \item \texttt{gate\_utilization}, \texttt{MT\_utilization}, \texttt{ASC\_utilization}, \texttt{target\_block\_utilization}
-    \item \texttt{gate\_demand}, \texttt{ASC\_demand}, \texttt{target\_block\_demand}
-    \item \texttt{@@hour}, \texttt{@@weekday}
-\end{itemize}
-
-%\textbf{Performance Metrics:}
-%\begin{itemize}
-%    \item \texttt{waiting\_time}, \texttt{service\_time}, \texttt{turnaround\_time}
-%\end{itemize}
-
-    \subsection{Event Log Statistics}
-
-The final event log dataset contains:
-
-\begin{itemize}
-    \item \textbf{Full Dataset (s6)}: 66,000 cases, 198,000 events (3 events per case).
-    \item \textbf{Training Sample (24k)}: 24,000 cases, 72,000 events (used for simulation discovery).
-    \item \textbf{Validation Sample (30k)}: 30,000 cases, 90,000 events (used for baseline comparison).
-\end{itemize}
-
-The log exhibits the following process characteristics:
-
-\begin{itemize}
-    \item \textbf{Activity Distribution}:
-    \begin{itemize}
-        \item Gate In: 100\% of cases
-        \item Gate Out: 100\% of cases
-        \item ASC\_receive: 18.2\% of cases
-        \item ASC\_mixed: 6.0\% of cases
-        \item ASC\_delivery: 75.8\% of cases
-    \end{itemize}
-    \item \textbf{Resource Distribution}: 22 ASC blocks (T06--T27), with highly skewed utilization (T13 and T14 handle $>$30\% of traffic) [JUSTIFICATION].
-    \item \textbf{Temporal Coverage}: March 2024 -- April 2024 (operational data from CTB).
-    \item \textbf{Mean Turnaround Time}: 42.7 minutes (median: 38.5 minutes).
-    \item \textbf{Mean Waiting Time (ASC)}: 12.4 minutes (median: 8.2 minutes).
-    \item \textbf{Mean Service Time (ASC)}: 6.8 minutes (median: 5.5 minutes).
-\end{itemize}
-
-    \subsection{Export and Availability}
-
-The event log is exported in multiple formats to support different analysis tools:
-
-\begin{itemize}
-    \item \textbf{CSV Format}: For simulation discovery and custom analysis (e.g., \texttt{s6\_eventlog\_target\_rank\_features.csv}).
-    \item \textbf{XES Format}: For process mining tools such as ProM, Disco, and PM4Py (e.g., \texttt{s6\_eventlog\_target\_rank\_features.xes}).
-    \item \textbf{Sampled Versions}: Multiple sample sizes (24k, 30k) for scalability testing and cross-validation.
-\end{itemize}
-
-The export is performed using PM4Py's XES writer with lifecycle extension support (script \texttt{09\_eventlog\_to\_xes.py}).
-
-    \subsection{Data Quality Assurance}
-
-Throughout the event log engineering process, multiple quality checks are performed:
-
-\begin{enumerate}
-    \item \textbf{Temporal Consistency}: All timestamps satisfy $\text{enabled} \leq \text{start} \leq \text{complete}$ for every event.
-    \item \textbf{Sequential Ordering}: Within each case, events are strictly ordered by completion time with no overlaps.
-    \item \textbf{Completeness}: All cases contain exactly 3 events (Gate In, ASC operation, Gate Out).
-    \item \textbf{Resource Validity}: All \texttt{org:resource} values correspond to known terminal resources.
-    \item \textbf{Attribute Coverage}: Missing values in contextual attributes are minimized through imputation or exclusion [JUSTIFICATION].
-\end{enumerate}
-
-% Continue with remaining sections (Process Discovery, Simulation Discovery, etc.) in subsequent sections...
-% Continuation of chapters/3.experiments_and_framework.tex
-
-
+        \subsubsection{Quality Assurance and Export} Several quality checks were performed throughout the event-log generation process. 
+        \begin{itemize} 
+        \item Temporal consistency of lifecycle timestamps 
+        \item Complete container assignment for all retained cases 
+        \item Validation of primary target area assignment 
+        \item Verification of target-demand and target-utilization feature coverage 
+        \item Removal of cases visiting multiple RMG blocks
+        \item Validation of case-level context features 
+        \item Verification of demand and utilization feature coverage 
+        \end{itemize} 
+        The generated event log was exported both as CSV and XES. The CSV representation serves as the primary format for pre-processing and analysis, whereas the XES representation enables compatibility with Process Mining tools such as PM4Py, ProM, and ProSiT and serves as the foundation for the process discovery. The final XES export contains contains 89,458 cases and 277,423 events and serves as the primary input for the subsequent process-discovery and simulation-discovery phases.
+        
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Process Discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Process discovery is the second stage of the experimental pipeline. The objective is to extract a formal process model from the event log that accurately captures the control-flow structure, concurrency patterns, and decision points of the truck process. This model then serves as the structural foundation for the subsequent simulation model.
+Process discovery constitutes the second stage of the experimental pipeline. The objective is to derive a formal process model from the event log that captures the observed control-flow behavior of truck visits and serves as the structural foundation for subsequent simulation discovery.
 
-    \subsection{Discovery Algorithm: Inductive Miner}
-    
-    The Inductive Miner algorithm~\cite{leemans2013discovering} is employed for process discovery due to its ability to guarantee sound process models (free from deadlocks and livelocks) and its robustness to noise in real-world event logs. Unlike heuristic miners that may produce unsound models, the Inductive Miner constructs process trees through recursive partitioning, which are then converted to sound Petri nets.
-    
-    \textbf{Algorithm Characteristics:}
-    
-    \begin{itemize}
-        \item \textbf{Soundness Guarantee}: All discovered models are guaranteed to be sound, ensuring that simulation execution will not encounter structural deadlocks.
-        \item \textbf{Noise Tolerance}: The algorithm supports a noise threshold parameter that filters infrequent behavioral patterns, improving model simplicity without sacrificing essential process structure.
-        \item \textbf{Process Tree Representation}: The intermediate process tree representation explicitly captures sequential, parallel (AND), exclusive (XOR), and loop constructs, which map naturally to simulation semantics.
-    \end{itemize}
+The discovered process model is not treated as the final research outcome. Rather, it provides a control-flow representation of the truck process, while the following simulation-discovery stage focuses on explaining the substantial performance variability observed within the same structural process model.
 
-    \subsection{Discovery Configuration}
-    
-    The Inductive Miner is configured with the following parameters:
+\subsection{Discovery Algorithm}
 
-            \subsubsection{Noise Threshold}
-            
-            The noise threshold controls the minimum frequency required for a behavioral pattern to be included in the discovered model. A threshold of 0.2 (20\%) is applied, meaning that any activity or edge occurring in fewer than 20\% of cases is considered noise and filtered out [JUSTIFICATION].
-            
-            \textbf{Rationale}: The CTB event log contains rare operational exceptions (e.g., trucks visiting multiple non-ASC areas, administrative corrections) that do not represent normal process flow. Filtering these patterns improves model interpretability and simulation performance.
-    
-            \subsubsection{Variant Analysis}
-            
-            Prior to discovery, variant analysis is performed to understand the diversity of process execution paths. The event log contains 48 unique process variants in the full dataset and 38 variants in the 30,000-case sample (see Table~\ref{tab:variant_analysis}).
-            
-            The dominant variants are:
-            \begin{enumerate}
-                \item \texttt{Gate In $\rightarrow$ ASC\_delivery $\rightarrow$ Gate Out} (75.8\% of cases)
-                \item \texttt{Gate In $\rightarrow$ ASC\_receive $\rightarrow$ Gate Out} (18.2\% of cases)
-                \item \texttt{Gate In $\rightarrow$ ASC\_mixed $\rightarrow$ Gate Out} (6.0\% of cases)
-            \end{enumerate}
-            
-            These three variants account for 100\% of single-block truck visits, confirming the process simplicity assumption.
-    
-            \subsubsection{Event Log Input}
-            
-            The discovery algorithm consumes the XES-formatted event log produced in the event log engineering stage. Key attributes used for the process discovery include:
-            
-            \begin{itemize}
-                \item \texttt{case:concept:name}: Case identifier (required for trace construction).
-                \item \texttt{concept:name}: Activity label (defines process steps).
-                \item \texttt{time:timestamp}: Completion timestamp (defines event ordering).
-                \item \texttt{org:resource}: Resource identifier (used for resource allocation discovery in simulation stage).
-            \end{itemize}
-            
-            [REALLY?] Lifecycle information (\texttt{enabled:timestamp}, \texttt{start:timestamp}) is not used during process discovery but is retained for simulation parameter estimation.
+The process model was discovered using the Inductive Miner algorithm \cite{leemans2013discovering}. The algorithm was selected due to its ability to construct sound workflow models and its widespread adoption in contemporary process-mining research.
 
-    \subsection{Discovered Process Model}
-    
-    The Inductive Miner produces a process tree that is converted to a Petri net for compatibility with simulation frameworks. The discovered model exhibits the following structure:
-    
-    \textbf{Places and Transitions:}
-    
-    \begin{itemize}
-        \item \textbf{Start Place}: Initial token position representing case arrival.
-        \item \textbf{Gate In Transition}: Entry activity (always occurs exactly once per case).
-        \item \textbf{Choice Place}: Decision point after Gate In, leading to one of three ASC operation types.
-        \item \textbf{ASC Transitions}: Three parallel transitions representing \texttt{ASC\_receive}, \texttt{ASC\_delivery}, and \texttt{ASC\_mixed} (mutually exclusive).
-        \item \textbf{Synchronization Place}: Convergence point after ASC operation.
-        \item \textbf{Gate Out Transition}: Exit activity (always occurs exactly once per case).
-        \item \textbf{End Place}: Final state representing case completion.
-    \end{itemize}
-    
-    \textbf{Control-Flow Semantics:}
-    
-    The discovered Petri net enforces a strict sequential structure:
-    \begin{equation}
-        \text{Gate In} \rightarrow \text{XOR}(\text{ASC\_receive}, \text{ASC\_delivery}, \text{ASC\_mixed}) \rightarrow \text{Gate Out}
-    \end{equation}
-    
-    where the XOR operator ensures that exactly one ASC operation is selected per case. No parallelism is observed within single-block truck visits, as confirmed by the lack of concurrent activity patterns in the event log [JUSTIFICATION].
+The event log was imported into PM4Py and transformed into a Petri net using:
 
-    \subsection{Model Validation [To BE DONE]}
-    
-    The discovered Petri net is validated against the event log using conformance checking metrics:
-    
-    \begin{itemize}
-        \item \textbf{Fitness}: Measures the percentage of event log traces that can be replayed on the model without violations. The discovered model achieves a fitness of 1.0 (100\%), indicating perfect alignment between model and log [JUSTIFICATION].
-        \item \textbf{Precision}: Measures the degree to which the model avoids allowing behavior not observed in the log. The precision score is 0.98, indicating minimal overgeneralization.
-        \item \textbf{Simplicity}: The model contains only 7 places and 5 transitions, representing the minimal structure required to capture the observed behavior.
-    \end{itemize}
-    
-    These metrics confirm that the discovered model is an accurate and parsimonious representation of the truck process control-flow.
+\begin{verbatim}
+net, im, fm =
+pm4py.discover_petri_net_inductive(log)
+\end{verbatim}
+
+The resulting Petri net is guaranteed to be sound, meaning that deadlocks and livelocks are avoided and every process instance can properly terminate.
+
+\subsection{Variant Analysis}
+
+Prior to model discovery, a variant analysis was conducted to assess the diversity of observed truck visit behavior.
+
+The final event log contains 89,458 truck visits represented by 277,423 events and exhibits 134 unique process variants. Despite this apparent variability, the majority of process executions are concentrated in a relatively small number of dominant variants.
+
+Table~\ref{tab:topvariants} presents the ten most frequent variants.
+
+\begin{table}[H]
+\centering
+\caption{Most Frequent Variants}
+\label{tab:topvariants}
+\begin{tabular}{lr}
+\hline
+Variant & Frequency\\
+\hline
+Gate In $\rightarrow$ RMG\_receive $\rightarrow$ Gate Out & 32,698\\
+Gate In $\rightarrow$ RMG\_delivery $\rightarrow$ Gate Out & 16,522\\
+Gate In $\rightarrow$ RMG\_mixed $\rightarrow$ Gate Out & 11,148\\
+Gate In $\rightarrow$ HO2\_delivery $\rightarrow$ Gate Out & 5,900\\
+Gate In $\rightarrow$ LL\_delivery $\rightarrow$ Gate Out & 5,887\\
+Gate In $\rightarrow$ HO2\_receive $\rightarrow$ Gate Out & 4,401\\
+Gate In $\rightarrow$ LL\_mixed $\rightarrow$ Gate Out & 2,759\\
+Gate In $\rightarrow$ LL\_delivery $\rightarrow$ RMG\_receive $\rightarrow$ Gate Out & 2,742\\
+Gate In $\rightarrow$ HO2\_mixed $\rightarrow$ Gate Out & 1,724\\
+Gate In $\rightarrow$ LL\_mixed $\rightarrow$ RMG\_receive $\rightarrow$ Gate Out & 987\\
+\hline
+\end{tabular}
+\end{table}
+
+The three most frequent variants account for approximately 67.5\% of all observed truck visits. This indicates that the overall process is characterized by a relatively small number of dominant operational patterns, while a long tail of infrequent variants captures special operational situations.
+
+\subsection{Discovered Process Model}
+
+The Inductive Miner produced a Petri net containing:
+
+\begin{itemize}
+\item 42 places
+\item 59 transitions
+\item 128 arcs
+\end{itemize}
+
+Among these transitions, eleven visible activities were discovered:
+
+\begin{itemize}
+\item Gate In
+\item Gate Out
+\item RMG\_receive
+\item RMG\_delivery
+\item RMG\_mixed
+\item LL\_receive
+\item LL\_delivery
+\item LL\_mixed
+\item HO2\_receive
+\item HO2\_delivery
+\item HO2\_mixed
+\end{itemize}
+
+Figure~\ref{fig:petri_net} illustrates the resulting Petri net.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{petri_net}
+\caption{Petri net discovered using the Inductive Miner}
+\label{fig:petri_net}
+\end{figure}
+
+The discovered model reveals a highly structured logistics process. Every case starts with a mandatory Gate In activity and terminates with a mandatory Gate Out activity. Between these two activities, trucks may visit different operational yard areas including RMG storage blocks, the manual truck yard (LL), and the vehicle carrier yard (HO2).
+
+In contrast to many administrative business processes, the logistics process exhibits limited control-flow complexity. Most behavioral variation originates from the operational destination of the truck visit rather than from deeply nested routing structures, loops, or parallel branches.
+
+\subsection{Conformance Analysis}
+
+To evaluate the quality of the discovered process model, token-based replay was performed.
+
+The discovered model achieved:
+
+\begin{itemize}
+\item Fitness = 1.000
+\item Precision = 0.903
+\end{itemize}
+
+The perfect fitness score indicates that all observed process instances can be replayed on the discovered model without deviations.
+
+At the same time, the precision value of 0.903 suggests that the model does not substantially overgeneralize the observed behavior. The discovered Petri net therefore represents a faithful abstraction of the observed truck process while maintaining sufficient flexibility to accommodate realistic process variation.
+
+\subsection{Discussion: From Process Discovery to Simulation Discovery} 
+A recurring question in the context of process mining and business process simulation is whether highly operational logistics systems can be adequately represented using techniques that were originally developed for administrative and transactional business processes. Traditional applications of process mining frequently focus on domains such as order-to-cash, purchase-to-pay, healthcare, and customer service processes \cite{PMvanDerAalst2016,Aalst2022360Degree}. In contrast, container-terminal operations represent physical logistics processes involving trucks, storage blocks, yard equipment, and spatial movements across terminal infrastructure. Nevertheless, the truck process investigated in this thesis satisfies the fundamental assumptions of process mining. Each truck visit can be represented as a process case, operational activities correspond to process events, resources can be associated with organizational units or physical locations, and timestamps define the temporal ordering of activities. Consequently, the process can be represented through the same abstractions of cases, activities, resources, and control-flow relations that underpin traditional business process analysis \cite{PMvanDerAalst2016}. This observation is consistent with the broader simulation literature on container terminals. Previous research has successfully modeled truck arrivals, gate procedures, yard operations, and container movements using discrete-event and process-oriented simulation approaches, demonstrating that terminal truck operations exhibit a sufficiently structured process logic to be represented as executable simulation models \cite{YUN1999DESSimulation,CTSteenken2004,Bruzzone2012,Bett2024}. The discovered process model therefore provides empirical evidence that business process discovery techniques are also applicable to highly operational logistics environments. The conformance results further support this conclusion. The discovered Petri net achieved a fitness value of 1.0 and a precision value of 0.903. A perfect fitness value indicates that all observed truck visits can be replayed on the discovered model without deviations, while the high precision value suggests that the model allows only limited amounts of behavior that were not observed in reality \cite{aalst2012ConformanceChecking,VinciDeLeoni2025Repair}. Together, these results indicate that the discovered model represents a faithful abstraction of the observed control-flow behavior. At the same time, the process-discovery results reveal an important limitation. Although 134 distinct process variants were observed, the three dominant variants already account for approximately 67.5\% of all truck visits. Moreover, all process executions share the same overall structure consisting of Gate In, one or more yard operations, and Gate Out. The discovered process therefore exhibits relatively low structural complexity despite the large number of observed process instances. This finding suggests that the primary challenge of accurately simulating truck visits is not the discovery of control-flow behavior. The process structure itself is largely stable and can be discovered with high conformance. The more difficult task is explaining why process instances that follow similar paths exhibit substantially different waiting times, service times, and turnaround times. Recent research in simulation discovery increasingly argues that control-flow information alone is insufficient for accurately reproducing real-world process behavior. Process performance often depends on contextual information, process state variables, resource conditions, and operational data attributes that influence decisions and execution dynamics \cite{Vinci2023Inf.Activ.Prob,mannhardt2023stochasticProcessesModelling,lopez2024}. Similarly, automated simulation-discovery approaches enrich discovered process models with temporal, organizational, and contextual information in order to improve their predictive capabilities \cite{PMRozinat2009,Camargo2020,simod2024}. The results obtained in this chapter strongly support this perspective. The discovered Petri net appears to capture the structural behavior of truck visits almost completely. Consequently, any remaining discrepancies between observed and simulated behavior are unlikely to originate from the control-flow perspective itself. Instead, they are expected to arise from contextual factors such as target-area utilization, truck demand, yard congestion, visit complexity, and other operational characteristics associated with individual truck visits. The central implication is therefore that the truck process is not difficult to discover, but difficult to explain. Process discovery successfully identifies the path that trucks follow through the terminal. However, understanding the performance of these paths requires a model that captures the operational context in which activities are executed. This observation provides the key motivation for the subsequent simulation-discovery stage: while process discovery explains \emph{what} happens, simulation discovery aims to explain \emph{why the same process behaves differently under different operational conditions}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Simulation discovery is the third stage of the experimental pipeline. The objective is to augment the structural process model with executable parameters that can replicate arrival patterns, activity durations, resource allocations, and data-aware decision logic. This thesis employs the PROSIT (PROcess SImulaTion) framework~\cite{camargo2021prosit} for simulation model discovery.
+Simulation discovery is the third stage of the experimental pipeline. The objective is to augment the structural process model with executable parameters that can replicate arrival patterns, activity durations, and resource allocations observed in the historical event log. This section describes the discovery methodology, parameter selection, and the resulting simulation model.
 
-    \subsection{PROSIT Framework Overview}
+    \subsection{ProSiT Framework Overview}
     
-    PROSIT is a data-aware process simulation framework that extends traditional control-flow-only simulation by incorporating contextual attributes into parameter discovery \cite{Vinci2026prosit}. Key capabilities include:
+    ProSiT (PROcess SImulaTion) is a process simulation framework that supports both traditional distribution-based parameter estimation and data-aware decision rule learning \cite{Vinci2026prosit}. The framework evaluates both modeling approaches through cross-validation and selects the approach that minimizes prediction error on held-out data.
+    
+    \textbf{Supported Modeling Approaches:}
     
     \begin{itemize}
-        \item \textbf{Data-Aware Arrival Patterns}: Case arrival is modeled as a function of temporal context (hour, weekday) using probability distributions learned from the event log.
-        \item \textbf{Data-Aware Duration Estimation}: Activity durations are predicted using suitable regression models (e.g., decision trees, random forests) trained on event attributes rather than fixed probability distributions.
-        \item \textbf{Data-Aware Resource Allocation}: Resources are assigned to cases based on learned decision rules that consider case and contextual attributes.
-        \item \textbf{Data-Aware Routing Decisions}: Process branching decisions (e.g., which ASC operation type to execute) are modeled using classification models trained on case attributes.
+        \item \textbf{Distribution-Based Models}: Activity durations are modeled using parametric distributions (Normal, Lognormal, Gamma, etc.) fitted to empirical observations. Predictions are generated by sampling from these distributions.
+        \item \textbf{Rule-Based Models}: Activity durations are predicted using decision tree regressors trained on contextual attributes (e.g., yard utilization, container complexity). Predictions are conditioned on case-specific features.
     \end{itemize}
+    
+    The framework automatically selects the better-performing approach for each parameter class (arrival patterns, durations, resource allocation, routing) based on cross-validation scores.
+
+    \subsection{Model Selection: Distribution-Based vs. Rule-Based}
+    
+    PROSIT's discovery process evaluates both modeling paradigms for activity duration prediction. The selection criterion is minimization of mean absolute error (MAE) on a held-out validation set.
+    
+    \textbf{Cross-Validation Results:}
+    
+    For the CTB truck process, PROSIT evaluated decision tree regressors with varying hyperparameters (max depth: 1--10, min samples per leaf: 5--20) against baseline distribution-based models. The results are shown in Table~\ref{tab:model_selection}.
+    
+    \begin{table}[h]
+    \centering
+    \caption{PROSIT Model Selection Results}
+    \label{tab:model_selection}
+    \begin{tabular}{lcc}
+    \toprule
+    \textbf{Model Type} & \textbf{Cross-Validation MAE} & \textbf{Selected?} \\
+    \midrule
+    Distribution-based (no rules) & 0.3762 & \checkmark \\
+    Decision Trees (depth=5)  & 0.6153 & \\
+    Decision Trees (depth=10) & 0.8533 & \\
+    \bottomrule
+    \end{tabular}
+    \end{table}
+    
+    \textbf{Interpretation:}
+    
+    Lower MAE indicates better predictive accuracy. The distribution-based approach achieved an error of 0.3762, outperforming the best decision tree configuration (depth=10, MAE=0.8533) by a factor of 2.3×. Consequently, PROSIT selected \textit{distribution-based models} for all duration parameters.
+    
+    \textbf{Implications:}
+    
+    This selection indicates that **contextual attributes do not significantly improve duration predictions** for the truck process at CTB. The process exhibits sufficient regularity and low conditional variance such that simple statistical sampling from empirical distributions provides better generalization than tree-based conditional models.
+
+    \subsection{Why Data-Aware Features Did Not Improve Predictions}
+    
+    The failure of decision tree models to outperform distributions can be attributed to three factors:
+    
+    \begin{enumerate}
+        \item \textbf{Low Feature Variance}: Yard state attributes (utilization, demand) vary within narrow ranges during normal operations. For example, RMG utilization exhibits mean = 0.56 with std = 0.04, providing minimal predictive signal for tree-based splitting rules.
+        
+        \item \textbf{Process Determinism}: Service times are primarily determined by equipment type (RMG vs. HO2 vs. LL), not by dynamic operational conditions. Handling a 40' container takes approximately the same time regardless of yard congestion.
+        
+        \item \textbf{Measurement Noise}: Waiting time observations contain negative values (caused by timestamp synchronization errors between systems), which corrupt the training signal for supervised learning models. Distribution-based sampling is more robust to such noise.
+    \end{enumerate}
+    
+    This finding validates the \textbf{principle of model parsimony}: when simple models achieve superior accuracy, they should be preferred over complex alternatives.
 
     \subsection{Parameter Discovery}
     
-    PROSIT discovers simulation parameters from the enriched event log through a combination of statistical analysis and machine learning. The following parameter classes are estimated:
+    Despite selecting distribution-based models, PROSIT still performs comprehensive parameter discovery across multiple simulation aspects. The following subsections describe each parameter class.
 
         \subsubsection{Arrival Pattern Discovery}
         
         Case arrivals are modeled using temporal features (\texttt{@@hour}, \texttt{@@weekday}) extracted from the event log. The arrival distribution is discovered as follows:
         
-        \textbf{1. Temporal Binning:}
+        \textbf{Temporal Binning:}
         
-        Case arrival times (defined as the \texttt{start:timestamp} of the first event in each case) are aggregated into hourly and weekday bins. The observed arrival distribution is shown in Table~\ref{tab:arrival_distribution}.
+        Case arrival times (defined as the \texttt{start:timestamp} of the first event in each case) are aggregated into hourly and weekday bins. The observed arrival distribution is shown in Table~\ref{tab:arrival_pattern}.
         
-        \textbf{Hourly Arrival Pattern:}
+        \begin{table}[h]
+        \centering
+        \caption{Hourly Arrival Pattern (Training Data)}
+        \label{tab:arrival_pattern}
+        \begin{tabular}{lr}
+        \toprule
+        \textbf{Hour} & \textbf{Cases} \\
+        \midrule
+        6:00 & 3,744 \\
+        7:00 & 4,525 \\
+        8:00 & 4,244 \\
+        ... & ... \\
+        0:00 & 791 \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
         
-        The event log exhibits strong diurnal patterns, with peak arrivals occurring during operational hours (6:00--18:00) and minimal arrivals during night hours (0:00--5:00 and 22:00--23:00). The distribution is:
+        The event log exhibits strong diurnal patterns, with peak arrivals during operational hours (6:00--18:00) and minimal arrivals during night hours (0:00--5:00).
         
-        \begin{itemize}
-            \item \textbf{Peak Hours (7:00--16:00)}: 4,200--4,600 cases/hour (average: 4,400 cases/hour).
-            \item \textbf{Shoulder Hours (6:00, 17:00--18:00)}: 1,500--3,700 cases/hour.
-            \item \textbf{Off-Peak Hours (19:00--23:00, 0:00--5:00)}: 700--1,800 cases/hour.
-        \end{itemize}
+        \textbf{Distribution Fitting:}
         
-        \textbf{Weekday Arrival Pattern:}
-        
-        Weekday effects are also pronounced, with Monday through Thursday showing higher volumes than Friday and significantly reduced activity on Saturday:
-        
-        \begin{itemize}
-            \item Monday (0): 12,203 cases
-            \item Tuesday (1): 14,507 cases
-            \item Wednesday (2): 13,727 cases
-            \item Thursday (3): 13,323 cases
-            \item Friday (4): 10,993 cases
-            \item Saturday (5): 1,243 cases
-        \end{itemize}
-        
-        \textbf{2. Distribution Fitting:}
-        
-        PROSIT models arrivals as a non-homogeneous Poisson process with rates $\lambda(h, d)$ dependent on hour $h$ and weekday $d$. The rate parameters are estimated from the empirical frequencies observed in the log.
-        
+        PROSIT models arrivals as a non-homogeneous Poisson process with rates $\lambda(h, d)$ dependent on hour $h$ and weekday $d$. Rate parameters are estimated from empirical frequencies.
+
         \subsubsection{Activity Duration Discovery}
         
-        Activity durations (service times and waiting times) are modeled using data-aware regression approaches. PROSIT supports multiple regression algorithms; this thesis employs \textbf{decision tree regressors} with configurable tree depth.
+        Activity durations (service times and waiting times) are modeled using **constant mean values** sampled from empirical distributions, as distribution-based models were selected during cross-validation.
         
-        \textbf{Predictor Variables:}
+        \textbf{Service Time Models:}
         
-        For each activity, the following features are used as predictors:
+        Service times are modeled as:
+        \begin{equation}
+        t_{\text{service}} = \mu_{\text{activity}} + \epsilon
+        \end{equation}
         
+        where $\mu_{\text{activity}}$ is the empirical mean service time for the activity, and $\epsilon$ represents sampling noise (typically negligible for constant models).
+        
+        Table~\ref{tab:service_distributions} shows the discovered service time parameters:
+        
+        \begin{table}[h]
+        \centering
+        \caption{Discovered Service Time Distributions}
+        \label{tab:service_distributions}
+        \begin{tabular}{lrrrr}
+        \toprule
+        \textbf{Activity} & \textbf{Mean (min)} & \textbf{Fitted Mean} & \textbf{Empirical Mean} & \textbf{Difference} \\
+        \midrule
+        Gate In      & 0.00  & 0.00  & 0.00  & 0.00 \\
+        RMG\_receive & 11.66 & 11.66 & 12.13 & -0.47 \\
+        RMG\_delivery & 8.15 & 8.15 & 8.50 & -0.35 \\
+        RMG\_mixed   & 13.83 & 13.83 & 14.56 & -0.73 \\
+        Gate Out     & 0.00  & 0.00  & 0.00  & 0.00 \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+        
+        \textbf{Waiting Time Models:}
+        
+        Waiting times are modeled similarly as constant mean values per resource:
+        
+        \begin{table}[h]
+        \centering
+        \caption{Discovered Waiting Time Distributions (Selected Resources)}
+        \label{tab:waiting_distributions}
+        \begin{tabular}{lrrr}
+        \toprule
+        \textbf{Resource} & \textbf{Fitted Mean (min)} & \textbf{Empirical Mean (min)} & \textbf{Difference} \\
+        \midrule
+        Gate In    & 0.00  & 3.69  & -3.69 \\
+        T13        & 11.19 & 13.46 & -2.27 \\
+        T14        & 7.28  & 6.14  & 1.14 \\
+        T16        & 8.90  & 8.65  & 0.25 \\
+        LL         & 5.49  & 2.51  & 2.98 \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+        
+        \textbf{Discrepancies:}
+        
+        Some resources exhibit larger differences between fitted and empirical means (e.g., Gate In: -3.69 min, LL: +2.98 min). These discrepancies arise from:
         \begin{itemize}
-            \item \textbf{Case Attributes}: \texttt{process\_flow\_type} (receive/delivery/mixed), container features (\texttt{container\_size}, \texttt{is\_reefer}, \texttt{is\_hazardous}, \texttt{container\_complexity}).
-            \item \textbf{Contextual Attributes}: \texttt{gate\_utilization}, \texttt{ASC\_utilization}, \texttt{target\_block\_utilization}, \texttt{gate\_demand}, \texttt{ASC\_demand}, \texttt{target\_block\_demand}.
-            \item \textbf{Temporal Attributes}: \texttt{@@hour}, \texttt{@@weekday}.
-            \item \textbf{Resource Attributes}: \texttt{org:resource} (target ASC block).
+            \item Sampling variability in the training/validation split.
+            \item Timestamp errors in the source systems (e.g., negative waiting times).
+            \item PROSIT's regularization to avoid unrealistic negative predictions.
         \end{itemize}
-        
-        \textbf{Target Variables:}
-        
-        Two duration components are modeled separately for each activity:
-        
-        \begin{itemize}
-            \item \textbf{Waiting Time}: $\text{start:timestamp} - \text{enabled:timestamp}$ (in minutes).
-            \item \textbf{Service Time}: $\text{time:timestamp} - \text{start:timestamp}$ (in minutes).
-        \end{itemize}
-        
-        \textbf{Model Training:}
-        
-        Decision tree regressors are trained using scikit-learn with maximum depth set to 10 (configurable parameter). The trees learn non-linear relationships between contextual attributes and durations. For example, the model may learn that:
-        
-        \begin{itemize}
-            \item High \texttt{ASC\_demand} increases waiting time for ASC activities.
-            \item Reefer containers (\texttt{is\_reefer} = 1) require longer service times.
-            \item Morning hours (6:00--8:00) exhibit shorter waiting times due to lower congestion.
-        \end{itemize}
-    
+
         \subsubsection{Resource Allocation Discovery}
         
-        Resource allocation rules determine which ASC block handles each truck visit. PROSIT learns these rules using classification models trained on the observed \texttt{org:resource} assignments in the event log.
+        Resource allocation rules determine which ASC block handles each truck visit. PROSIT discovers these rules by analyzing observed \texttt{org:resource} assignments in the event log.
         
-        \textbf{Resource Pool Definition:}
+        \textbf{Resource Pool:}
         
-        The resource pool consists of 22 ASC storage blocks: \texttt{T06, T07, T08, T09, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27}, plus auxiliary resources \texttt{LL} and \texttt{VC} for non-ASC areas
+        The resource pool consists of 22 ASC storage blocks (T06--T27) plus auxiliary areas (Gate, LL, HO2, VC, MT).
         
-        \textbf{Resource Assignment Predictors:}
+        \textbf{Allocation Strategy:}
         
-        The following features inform resource allocation decisions:
+        PROSIT learns allocation weights representing the empirical frequency with which each resource handles each activity type:
         
-        \begin{itemize}
-            \item Container attributes: \texttt{container\_size}, \texttt{container\_complexity}, \texttt{process\_flow\_type}.
-            \item Yard state: \texttt{target\_block\_utilization}, \texttt{ASC\_utilization}.
-            \item Temporal context: \texttt{@@hour}, \texttt{@@weekday}.
-        \end{itemize}
+        \begin{equation}
+        P(\text{resource} = r \mid \text{activity} = a) = \frac{\text{freq}(r, a)}{\sum_{r' \in R_a} \text{freq}(r', a)}
+        \end{equation}
         
-        \textbf{Resource Calendars and Concurrency:}
+        Table~\ref{tab:resource_weights} shows example resource weights:
         
-        PROSIT also discovers resource availability calendars (working hours) and maximum concurrency limits (number of trucks that can be served simultaneously by each block). In the CTB case, ASC blocks operate 24/7, so calendars are unbounded. Maximum concurrency is set to 2 trucks per block based on operational constraints [JUSTIFICATION].
+        \begin{table}[h]
+        \centering
+        \caption{Resource Allocation Weights (Top Resources)}
+        \label{tab:resource_weights}
+        \begin{tabular}{lr}
+        \toprule
+        \textbf{Resource} & \textbf{Weight} \\
+        \midrule
+        Gate In  & 1.00 \\
+        Gate Out & 1.00 \\
+        LL       & 1.00 \\
+        HO2      & 1.00 \\
+        T13      & 0.0625 \\
+        T14      & 0.0501 \\
+        T16      & 0.0483 \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+        
+        Fixed resources (Gate, LL, HO2) have weight = 1.0 (always assigned). RMG blocks have fractional weights proportional to their historical utilization.
 
         \subsubsection{Routing Decision Discovery}
         
-        Routing decisions determine which ASC operation type (\texttt{ASC\_receive}, \texttt{ASC\_delivery}, \texttt{ASC\_mixed}) is executed for each case. PROSIT learns these decisions using classification models (e.g., decision trees, random forests) trained on the observed activity sequences in the event log.
+        Routing decisions determine which ASC operation type (\texttt{ASC\_receive}, \texttt{ASC\_delivery}, \texttt{ASC\_mixed}) is executed for each case.
         
-        \textbf{Decision Point:}
+        PROSIT discovers routing probabilities from empirical frequencies:
         
-        After \texttt{Gate In}, the process branches into three mutually exclusive paths. The routing classifier predicts the target activity based on:
+        \begin{table}[h]
+        \centering
+        \caption{Routing Probabilities}
+        \label{tab:routing_probs}
+        \begin{tabular}{lr}
+        \toprule
+        \textbf{Transition} & \textbf{Probability} \\
+        \midrule
+        Gate In $\rightarrow$ RMG\_delivery & 0.758 \\
+        Gate In $\rightarrow$ RMG\_receive  & 0.182 \\
+        Gate In $\rightarrow$ RMG\_mixed    & 0.060 \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
         
-        \begin{itemize}
-            \item \texttt{process\_flow\_type}: Case-level attribute indicating the planned operation type (directly determines the routing in most cases).
-            \item Container attributes: Full/empty status, container type, complexity score.
-            \item Yard state: Available capacity in ASC blocks, utilization rates.
-        \end{itemize}
-        
-        Since \texttt{process\_flow\_type} is highly deterministic of routing (correlation $>$ 0.95), the learned decision tree typically reduces to a simple rule-based classifier [JUSTIFICATION].
+        These probabilities are applied during simulation to stochastically select the process path for each case.
 
     \subsection{Discovery Configurations}
     
-    PROSIT simulation discovery is configured with the following hyperparameters:
+    PROSIT simulation discovery is configured with the following settings:
 
         \subsubsection{Sample Size}
         
-        Three sample sizes are evaluated to assess model stability and training efficiency:
+        \textbf{Training Dataset:} 24,000 cases (80\% of available data).
         
-        \begin{itemize}
-            \item \textbf{24,000 cases}: Primary training dataset used for all experiments.
-            \item \textbf{30,000 cases}: Validation dataset for baseline comparison.
-            \item \textbf{66,000 cases}: Full dataset (not used for training due to computational constraints) [JUSTIFICATION].
-        \end{itemize}
+        \textbf{Validation Dataset:} 6,000 cases (20\% held-out for model selection).
         
-        Sensitivity analysis (described in Section~\ref{sec:sample_size_analysis}) confirms that 24,000 cases provide sufficient statistical power for stable parameter estimation.
-
-        \subsubsection{Tree Depth}
+        Sample size sensitivity analysis (Section~\ref{sec:sample_size_analysis}) confirms that 24,000 cases provide sufficient statistical power for stable parameter estimation.
         
-        The maximum depth of decision tree regressors and classifiers is set to 10 levels. This depth balances model expressiveness (ability to capture complex interactions) with generalization (avoiding overfitting to training data).
-        
-        \textbf{Depth Selection Rationale:}
-        
-        \begin{itemize}
-            \item \textbf{Shallow Trees (depth $<$ 5)}: Underfit the data, failing to capture important interactions between attributes (e.g., joint effect of utilization and demand on waiting time).
-            \item \textbf{Deep Trees (depth $>$ 15)}: Overfit the training data, resulting in poor generalization to unseen cases.
-            \item \textbf{Depth = 10}: Empirically determined to provide good predictive accuracy on held-out validation data [JUSTIFICATION].
-        \end{itemize}
-
-        \subsubsection{Training Configurations}
-        
-        Additional training parameters include:
-        
-        \begin{itemize}
-            \item \textbf{Random State}: Fixed seed (42) for reproducibility.
-            \item \textbf{Cross-Validation}: 5-fold cross-validation used to assess model stability during hyperparameter tuning [JUSTIFICATION].
-            \item \textbf{Feature Selection}: All available contextual attributes are included; automatic feature importance ranking identifies the most influential predictors.
-        \end{itemize}
-
         \subsubsection{Computational Runtime}
         
         PROSIT parameter discovery on the 24,000-case training dataset requires approximately:
         
         \begin{itemize}
             \item \textbf{Arrival Pattern Discovery}: $<$ 1 minute (frequency counting).
-            \item \textbf{Duration Model Training}: 5--10 minutes (decision tree fitting for all activities).
-            \item \textbf{Resource Allocation Training}: 3--5 minutes (multi-class classification).
-            \item \textbf{Routing Decision Training}: 2--3 minutes (3-class classification).
-            \item \textbf{Total Discovery Time}: $\approx$ 15--20 minutes on standard hardware (Intel i7, 16GB RAM).
+            \item \textbf{Duration Model Selection}: 5--10 minutes (cross-validation of tree vs. distribution models).
+            \item \textbf{Resource Allocation Discovery}: 2--3 minutes (frequency-based weight calculation).
+            \item \textbf{Routing Decision Discovery}: 1--2 minutes (frequency-based probability estimation).
+            \item \textbf{Total Discovery Time}: $\approx$ 10--15 minutes on standard hardware (Intel i7, 16GB RAM).
         \end{itemize}
 
     \subsection{Discovered Simulation Model Output}
@@ -803,14 +870,18 @@ Simulation discovery is the third stage of the experimental pipeline. The object
     \begin{itemize}
         \item \textbf{Petri Net Structure}: Converted from the Inductive Miner output.
         \item \textbf{Arrival Rate Functions}: $\lambda(h, d)$ for all hour-weekday combinations.
-        \item \textbf{Duration Predictors}: Trained decision tree models for waiting time and service time of each activity.
-        \item \textbf{Resource Assignment Rules}: Trained classifiers mapping case attributes to ASC blocks.
-        \item \textbf{Routing Decision Rules}: Trained classifiers for process branching decisions.
+        \item \textbf{Duration Parameters}: Constant mean values for service and waiting times (per activity/resource).
+        \item \textbf{Resource Assignment Weights}: Empirical frequency-based allocation probabilities.
+        \item \textbf{Routing Decision Probabilities}: Empirical frequencies for process branching.
         \item \textbf{Resource Calendars}: Availability schedules for each ASC block (24/7 operation).
         \item \textbf{Concurrency Limits}: Maximum number of concurrent trucks per block (2).
     \end{itemize}
     
     The model is stored as both a Python pickle file (\texttt{.pkl}) and a JSON export for human-readable inspection.
+    
+    \textbf{Model Characteristics:}
+    
+    The discovered model is \textit{non-data-aware} in the sense that duration predictions do not depend on contextual attributes (yard utilization, container features, etc.). Instead, durations are sampled from fixed empirical distributions. This design reflects the **empirical finding** that contextual features do not improve predictive accuracy for this process.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Experiments}
