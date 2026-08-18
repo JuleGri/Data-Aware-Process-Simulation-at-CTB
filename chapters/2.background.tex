@@ -228,7 +228,47 @@ Process discovery is the most prominent branch of Process Mining. Its objective 
 \item \textbf{Inductive Miner}: A modern discovery algorithm that recursively decomposes event logs and guarantees the production of sound process models. It is widely used due to its robustness and ability to balance precision and simplicity. 
 \end{itemize} 
 
-Process discovery enables organizations to obtain an objective representation of how their processes are actually executed rather than how they are presumed to operate \cite{PMvanDerAalst2016}. 
+Process discovery enables organizations to obtain an objective representation of how their processes are actually executed rather than how they are presumed to operate \cite{PMvanDerAalst2016}.
+
+Figure~\ref{fig:model_representations} illustrates the two most common
+output representations of a modern discovery algorithm on the same
+event log. The process tree in Figure~\ref{fig:model_tree_theory}
+decomposes the process into hierarchically nested operators
+(\emph{seq} for sequence, \emph{xor} for exclusive choice, \emph{and}
+for concurrency, \emph{loop} for cyclic behaviour). The BPMN model in
+Figure~\ref{fig:model_bpmn_theory} is the industry-standard graphical
+notation for the same behaviour and is derived from the process tree
+by mapping each operator to a BPMN construct
+(exclusive gateway, parallel gateway, task). Petri-net representations
+of the same behaviour are structurally equivalent but use a different
+graphical vocabulary (places and transitions); a concrete Petri-net
+example on the CTB event log is discussed in
+Section~\ref{sec:results_process_discovery}.
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/discovery/process_tree.png}
+    \subcaption{Process tree.}
+    \label{fig:model_tree_theory}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/discovery/bpmn.png}
+    \subcaption{BPMN translation of the same process tree.}
+    \label{fig:model_bpmn_theory}
+\end{minipage}
+\caption{Two representations of the same discovered control flow
+(inductive miner on the CTB training log). The process tree exposes
+the hierarchical operator structure; the BPMN translation preserves
+the same behaviour using the industry-standard graphical vocabulary.
+Both models describe an identical set of allowed traces and are used
+interchangeably in the process mining literature
+\cite{PMvanDerAalst2016}.}
+\label{fig:model_representations}
+\end{figure}
 
 \subsubsection{Conformance Checking} While process discovery focuses on constructing process models, conformance checking focuses on comparing observed process executions with an existing process model \cite{aalst2012ConformanceChecking}. The objective is to identify deviations between the model and reality. Such deviations may indicate compliance violations, process inefficiencies, exceptional cases, or outdated process documentation. The quality of discovered and analyzed process models is commonly evaluated using four criteria \cite{aalst2012ConformanceChecking,PMvanDerAalst2016}: 
 
@@ -324,6 +364,39 @@ Early simulation-discovery approaches typically represent decision-making behavi
 
 The most recent developments extend this idea beyond control-flow decisions. In the Prosit framework, Vinci et al. \cite{Vinci2026prosit} propose Decision-Aware Business Process Simulation models that discover control-flow decisions, execution times, waiting times, and resource behaviour using probabilistic decision trees. These models condition simulation parameters on contextual features such as trace attributes, process history, resource assignments, and workload-related information. An important distinction must be made between trace-level attributes and dynamically changing process-state information. The current Prosit framework primarily utilizes trace attributes, trace history, resource information, and workload-related features for simulation parameter discovery \cite{Vinci2026prosit}. Arbitrary event-level contextual attributes that change continuously during process execution are not explicitly included in the published feature definitions. Nevertheless, the process-state perspective introduced by recent research suggests that richer operational context information may further improve simulation realism, particularly in complex operational environments such as container terminals. The evolution from frequency-based branching probabilities towards context-dependent and process-state-aware simulation models represents one of the most significant developments in simulation discovery research and provides the foundation for modern explainable and white-box simulation approaches \cite{Vinci2023Inf.Activ.Prob,Vinci2026prosit}.
 
+\paragraph{Configurable expressiveness in ProSiT.} At the API level,
+ProSiT exposes the expressiveness of the discovered simulator through
+two configuration parameters that will be used to design the three
+experimental configurations in Section~\ref{sec:simulation_discovery_methodology}:
+
+\begin{itemize}
+\item \texttt{max\_depth\_tree} controls the maximum depth of the
+      probabilistic decision trees fitted for each simulation dimension
+      (arrival time, execution time, waiting time, routing, resource
+      selection). Setting \texttt{max\_depth\_tree}$=0$ disables the
+      trees entirely and reduces the framework to a distribution-based
+      simulator that samples every parameter from a single fitted
+      distribution. Higher values allow deeper conditional partitions
+      of the case-attribute space, at the cost of overfitting risk that
+      ProSiT counteracts through a cross-validated leaf-size grid and
+      a fall-back to the unconditional distribution when no tree beats
+      the marginal baseline on held-out CRPS.
+\item \texttt{use\_workload\_features} decides whether the waiting-time
+      and resource-selection models receive two additional
+      queue-oriented features (current workload and queue length at
+      the enabling time of the event). When enabled, the fitted trees
+      can condition on the local queueing state and not only on the
+      case attributes.
+\end{itemize}
+
+The interplay of these two knobs defines a natural comparison ladder
+between a distribution-only simulator, a context-aware simulator and a
+context-plus-workload-aware simulator. This ladder is exploited in
+Chapters~\ref{chp:experiments_and_framework}
+and~\ref{chap:results} to test whether the additional modelling
+machinery of ProSiT translates into higher held-out fidelity on the
+CTB truck process.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Explainable and White-Box Simulation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -359,6 +432,17 @@ As simulation models increasingly become automatically generated from event data
 
         \subsubsection{Wasserstein Distance} 
         Many similarity metrics used in simulation validation are based on the Wasserstein Distance, which originated in optimal transport theory. The Wasserstein Distance measures the minimum effort required to transform one probability distribution into another. Intuitively, it can be interpreted as the amount of work required to relocate probability mass between distributions. Earth Mover's Distance represents a discrete formulation of the Wasserstein Distance and is particularly well suited for comparing trace distributions and temporal distributions in Process Mining applications \cite{leeman2013EarthMovers}. Due to its ability to compare complete distributions rather than only summary statistics, Wasserstein-based metrics have become a central component of modern simulation validation frameworks.
+
+        \subsubsection{Kolmogorov--Smirnov Statistic}
+        The two-sample Kolmogorov--Smirnov (KS) statistic is a complementary distributional distance that measures the maximum vertical gap between two empirical cumulative distribution functions
+        $F_{\text{sim}}$ and $F_{\text{real}}$:
+        \begin{equation}
+            \text{KS} = \sup_{x} \, \bigl| F_{\text{sim}}(x) - F_{\text{real}}(x) \bigr|.
+        \end{equation}
+        The KS statistic is unitless, bounded in $[0, 1]$ and can be paired with a two-sample significance test to decide whether the sim/real samples could plausibly originate from the same underlying distribution. In practical simulation-validation work, the KS statistic is often reported \emph{alongside} the Wasserstein distance: Wasserstein carries the operational units (minutes for a duration) while the KS statistic normalises across scales and makes distributional similarity comparable between activities of very different mean duration.
+
+        \subsubsection{Monte-Carlo Replication and Confidence Intervals}
+        Even a fully specified discovered simulator produces a different sample every time it is run, because every parameter is sampled from a fitted distribution. Reporting the outcome of a single simulation run is therefore not sufficient to conclude that one configuration is more faithful than another: the observed distance between two configurations may lie within the intrinsic Monte-Carlo variance of the simulator itself. A principled evaluation therefore repeats every simulation $N$ times with independent random seeds and aggregates the resulting distances into a confidence interval, typically a Student-$t$ interval on the mean or a bootstrap percentile interval. This practice is standard in discrete-event simulation \cite{BPSAalst2015} but is often omitted in reports of simulation-discovery evaluations. Chapter~\ref{chp:experiments_and_framework} therefore specifies an explicit multi-seed replication protocol so that every fidelity claim in the results chapter can be qualified by its 95\,\% confidence interval.
 
     \subsection{Trustworthiness of Automatically Discovered Simulation Models} 
 
