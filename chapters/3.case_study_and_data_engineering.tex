@@ -8,7 +8,7 @@ dedicated to only outline the design, therefore no models are fitted, no hypothe
 and no experimental parameters are chosen yet. Its prpose is to establish the
 data foundation on which every subsequent claim in
 Chapters~\ref{chp:experiments_and_framework}
-and~\ref{chap:results} builds on, so that these later claims and results can be analysed against the exact input they consume.
+and~\ref{chap:results} builds on, so that these later claims and results can be analysed against their exact input.
 
 Section~\ref{sec:cs_environment} introduces the HHLA Container Terminal
 Burchardkai (CTB) in Hamburg, Germany, the truck-handling scope of the study and the data
@@ -18,7 +18,7 @@ transformation that produces the final event log, including
 lifecycle-timestamp reconstruction and the derivation of case-level
 context attributes required by the ProSiT simulation framework
 \cite{Vinci2026prosit}. The chapter closes with a summary of the final
-event-log characteristics that are used verbatim as input to the
+event-log characteristics that are used as input to the
 train/test split defined in
 Section~\ref{sec:train_test_split}.
 
@@ -29,11 +29,11 @@ Section~\ref{sec:train_test_split}.
 
     \subsection{HHLA Container Terminal Burchardkai}
 
-    The case study site is the HHLA Container Terminal Burchardkai
+    The case studys envorinment is the HHLA Container Terminal Burchardkai
     (CTB), one of Europe's largest container terminals, located in the
     Port of Hamburg. CTB handles approximately 2.6 million TEU
     (Twenty-foot Equivalent Units) annually across 315 hectares
-    \cite{HHLA2023}.
+    \cite{hhla2025}.
 
     \textbf{Truck Process Scope:} External trucks visit CTB to deliver
     or receive containers. The process comprises:
@@ -45,14 +45,8 @@ Section~\ref{sec:train_test_split}.
         \item \textbf{Gate Out}: Truck exits the terminal.
     \end{enumerate}
 
-    The process is resource-constrained by:
-    \begin{itemize}
-        \item 22 RMG storage blocks (T06--T27),
-        \item two specialised areas: an empty-container depot (LL) and a
-              heavy/oversized cargo area (HO2),
-        \item two gate lanes (inbound and outbound).
-    \end{itemize}
-
+    The CTB environment in this project comes with several resource-constrains. Located between the waterside and the landside, 22 RMG storage blocks (T06--T27) are operating and serving both ends simulataniously with a maximum of 3 automatic Gantry Cranes in parallel. Additionally the CTB has two specialised areas. An empty-container depot (In operational terms also called "MT" or "LL" - in German for "Leerlager") and a manually operated yard area (In operational terms also called HO2). The Terminal Gate consists of 16 lanes half of which built for incoming trucks, the other half for outgoing trucks. The amount of operated gates per day and shift differs, depending on the resource planing by the terminal management. 
+   
     \subsection{Data Sources}
     \label{sec:cs_data_sources}
 
@@ -90,7 +84,7 @@ Section~\ref{sec:train_test_split}.
     \begin{itemize}
         \item 113,466 container move events,
         \item 104,000 truck visits,
-        \item 336 yard-state snapshots (8 weeks $\times$ 7 days $\times$
+        \item 336 yard-state snapshots for (8 weeks $\times$ 7 days $\times$
               6 snapshots per day).
     \end{itemize}
 
