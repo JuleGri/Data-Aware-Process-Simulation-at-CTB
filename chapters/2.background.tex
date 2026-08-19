@@ -109,12 +109,19 @@ An \textit{activity} describes a type of work or operational action within a pro
 \paragraph{Case} 
 A \textit{case} represents a single process instance whose execution is followed through the event log \cite{PMRozinat2009}. Events belonging to the same process instance are linked through a unique case identifier. Depending on the process that's being analysed, a case may correspond, for example, to an order, a patient, a container movement, or for the purpose of this thesis, one case corresponds to one truck visit to the terminal. Each truck visit is uniquely identified by its \texttt{FAHRPLAN\_UID} and comprises the activities recorded between the truck's entry into and departure from the terminal. 
 
-\paragraph{Trace} 
-The ordered sequence of events belonging to one case constitutes its \textit{trace}. An event log can therefore be considered as a collection of event sequences, each describing one observed execution of the process \cite{PMRozinat2009}. For example, a simplified trace of a truck visit may be represented as 
-\begin{quote} 
-Gate In $\rightarrow$ RMG Delivery $\rightarrow$ RMG Receive $\rightarrow$ Gate Out. 
-\end{quote} 
-Different truck visits may follow different traces depending on the number and type of container transactions and the terminal areas involved. 
+In the context of this thesis, a truck visit serves as the primary process instance and therefore represents the case thats being investigated in.
+
+In traditional event logs, events are often represented by a single timestamp, typically indicating the completion of an activity. For performance-oriented Process Mining and simulation applications, richer temporal information is required. Two directly observable lifecycle states are commonly distinguished:
+
+\begin{itemize} 
+    \item \textbf{Start Timestamp}: The moment execution of the activity actually begins. 
+    \item \textbf{Complete Timestamp}: The moment execution of the activity finishes. 
+\end{itemize} 
+
+The duration between these two timestamps is the \textit{service time} (or execution time) of the activity. A third temporal concept, \textit{enablement}, describes the moment at which an activity becomes executable according to the process-model state. In process-mining-based simulation approaches, enablement is typically not an observed input-log attribute but is derived by replaying the event log against the discovered process model \cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The interval between model-derived enablement and the observed start timestamp is referred to as \textit{waiting time} in the ProSiT framework \cite{Vinci2026prosit} and corresponds to a pre-service delay that may include resource contention, queueing effects, and — in domains with spatial separation between activities — physical movement time. 
+
+\paragraph{Attributes} 
+In addition to the mandatory process information, events may contain supplementary attributes that provide further context about the execution of the process. Examples of event attributes in container terminal operations include: 
 
 \paragraph{Timestamps and Activity Lifecycle} 
 Events generally contain temporal information that allows their ordering and the analysis of process performance. Depending on the information system, only one lifecycle transition of an activity may be recorded, while other systems record several lifecycle events such as the scheduling, start, and completion of an activity \cite{PMRozinat2009}. This distinction becomes particularly important for simulation, where activity durations and waiting caused by unavailable resources or queueing influence process performance \cite{BPSAalst2015}. Rozinat et al. distinguish the execution time of an activity as the interval between its start and completion, while waiting occurs before the execution actually begins \cite{PMRozinat2009}. For the simulation-oriented event log constructed in this thesis, each activity occurrence is represented by three temporal attributes: 
@@ -140,11 +147,18 @@ An event log is the central data structure used in Process Mining. It consists o
 \begin{itemize} 
 \item Case Identifier, 
 \item Activity, 
-\item Enabled Timestamp,
-\item Start Timestamp
-\item Complete Timestamp
-\item Resource
+\item Timestamp (at least one temporal ordering attribute).
 \end{itemize} 
+
+For simulation-oriented process mining, richer event information is required:
+\begin{itemize} 
+\item Start Timestamp,
+\item Complete Timestamp,
+\item Resource,
+\item Contextual attributes (e.g.\ container type, yard utilisation).
+\end{itemize} 
+
+The CTB input log used in this thesis provides start and completion timestamps required for execution-time modelling, while activity enablement is reconstructed during process-model alignment by the simulation-discovery framework (Section~\ref{sec:simulation_discovery_methodology}).
 
 Additional attributes are usually included to enrich the event data with operational context. Table~\ref{tab:eventlogexample} illustrates a simplified event log. 
 

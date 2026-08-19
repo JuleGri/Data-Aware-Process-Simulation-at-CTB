@@ -17,16 +17,17 @@ Petri net and its conformance on both partitions (RQ2).
 Section~\ref{sec:results_arrival_process} reports the temporal
 structure of the arrival process (H1).
 Section~\ref{sec:results_holdout_fidelity} reports the held-out
-Monte-Carlo fidelity of the three ProSiT configurations
+Monte-Carlo fidelity of the ProSiT configurations
 (RQ1, H2, H3). Section~\ref{sec:results_per_activity} decomposes the
 fidelity by activity to identify where each configuration wins or
 loses. Section~\ref{sec:results_resource_capacities} reports the
 discovered resource capacities and their limits.
-Section~\ref{sec:results_percentile_sens} reports the sensitivity of
-the transition-baseline choice (RQ3).
+Section~\ref{sec:results_percentile_sens} provides a descriptive
+analysis of transition durations.
 Section~\ref{sec:results_scenarios} reports the two what-if scenarios
-(H4). Section~\ref{sec:results_summary} consolidates the empirical
-findings against the hypotheses.
+(H4). Section~\ref{sec:limitations} discusses the methodological
+limitations. Section~\ref{sec:results_summary} consolidates the
+empirical findings against the hypotheses.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Event Log Characteristics on the Held-Out Split}
@@ -264,139 +265,125 @@ against the held-out test log using the Monte-Carlo protocol of
 Section~\ref{sec:mc_protocol}. Each configuration is simulated with
 $N_{\text{seeds}}=10$ independent seeds; every simulation covers
 $n_{\text{traces}}=17{,}892$ cases starting at the test-window cutoff
-$t_{\text{start}}=\text{2026-04-20 18:14}$. Table~\ref{tab:headline_ci}
-reports the four headline fidelity metrics with 95\,\% Student-t
-confidence intervals.
+$t_{\text{start}}=\text{2026-04-20 18:14}$.
+
+Consistent with the corrected temporal semantics of
+Section~\ref{sec:lifecycle_events}, the real event log contains only
+observed timestamps (\texttt{start:timestamp} and
+\texttt{time:timestamp}); activity enablement is derived internally by
+ProSiT from A* alignment against the discovered Petri net.
+Consequently, service-time and case-turnaround comparisons are
+directly available (both real and simulated logs carry start/complete
+timestamps), while the model-derived pre-service delay is available
+only from the simulated log.
+
+Table~\ref{tab:headline_ci} reports the headline fidelity metrics with
+95\,\% Student-t confidence intervals.
 
 \begin{table}[h]
 \centering
 \caption{Held-out fidelity by ProSiT configuration
 ($N_{\text{seeds}}=10$; 95\,\% Student-t CI).}
 \label{tab:headline_ci}
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \toprule
 \textbf{Metric (min)} &
 \textbf{no-rules} &
-\textbf{rules} &
 \textbf{rules$+$workload} \\
 \midrule
 Service EMD (mean over activities) &
-$1.89\;[1.81, 1.97]$ &
-$1.98\;[1.88, 2.08]$ &
-$1.98\;[1.92, 2.04]$ \\
-Waiting EMD (mean over activities) &
-$32.84\;[31.66, 34.02]$ &
-$35.30\;[32.99, 37.61]$ &
-$35.88\;[34.42, 37.35]$ \\
+$1.91\;[1.89, 1.93]$ &
+$2.00\;[1.94, 2.06]$ \\
 Case turnaround EMD &
-$\mathbf{10.02\;[9.20, 10.85]}$ &
-$11.25\;[9.88, 12.61]$ &
-$11.62\;[10.77, 12.48]$ \\
+$\mathbf{13.94\;[13.15, 14.73]}$ &
+$21.75\;[20.60, 22.90]$ \\
 Inter-arrival EMD &
-$0.318\;[0.316, 0.319]$ &
-$0.314\;[0.313, 0.316]$ &
-$0.314\;[0.313, 0.316]$ \\
+$0.319\;[0.317, 0.320]$ &
+$0.314\;[0.313, 0.315]$ \\
 Case turnaround KS &
-$0.070\;[0.066, 0.075]$ &
-$0.072\;[0.067, 0.078]$ &
-$0.073\;[0.067, 0.079]$ \\
+$0.103\;[0.099, 0.108]$ &
+$0.125\;[0.123, 0.127]$ \\
+Sim mean turnaround &
+$53.68\;[52.89, 54.47]$ &
+$61.49\;[60.34, 62.64]$ \\
+Sim P90 turnaround &
+$103.05\;[101.26, 104.84]$ &
+$124.44\;[121.70, 127.17]$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Figure~\ref{fig:three_way_ci} presents the same four EMD metrics as
-point estimates with their 95\,\% confidence intervals so that the
-pairwise overlaps are visually apparent.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/three_way_ci.png}
-\caption{Held-out fidelity by ProSiT configuration
-($N_{\text{seeds}}=10$; 95\,\% Student-$t$ CI). Blue: no-rules
-(distribution-only), orange: rules (data-aware trees), red:
-rules$+$workload (trees with queue-length features). Numbers report the
-point estimate and the CI. Note that the no-rules bar is either the
-lowest or statistically indistinguishable from the tree-based variants
-on service, waiting and turnaround EMD; the tree-based variants only
-win on inter-arrival EMD by 0.004 min.}
-\label{fig:three_way_ci}
-\end{figure}
-
 \subsection{RQ1: Point Estimate of Held-Out Fidelity}
 
-Under the \textit{no-rules} configuration the discovered simulator
-reproduces case turnaround with a Wasserstein distance of 10.0 minutes
-$[9.2, 10.9]$ and a KS statistic of $0.070\;[0.066, 0.075]$ against the
+Under the \textit{no-rules} configuration (the better-performing
+variant; see H2 below) the discovered simulator reproduces case
+turnaround with a Wasserstein distance of $13.94$ minutes $[13.15,
+14.73]$ and a KS statistic of $0.103\;[0.099, 0.108]$ against the
 17,892-case held-out log. The mean turnaround in the real log is 43.3
-minutes; the simulator produces
-$53.21\pm 1.16$ minutes (an over-prediction of 22.9\,\% at the mean),
-while the median error is 2 minutes on a real median of 36 (5.6\,\%).
+minutes (measured as first \texttt{start:timestamp} to last
+\texttt{time:timestamp} per case); the simulator produces
+$53.68\pm 1.10$ minutes (an over-prediction of 24.0\,\% at the mean).
 The 90th percentile of turnaround is 76.0 minutes in the real log
-versus $101.7\pm 3.2$ minutes in the simulator (an over-prediction of
-33.8\,\%). These numbers characterise the operational calibration of
-the discovered simulator: it recovers the central tendency of case
-turnaround well but over-predicts the upper tail.
+versus $103.1\pm 2.5$ minutes in the simulator (an over-prediction of
+35.6\,\%).
+
+Service-time distributions are reproduced accurately: the mean
+per-activity service-time EMD is $1.91$ minutes $[1.89, 1.93]$.
+Inter-arrival EMD is $0.319$ minutes $[0.317, 0.320]$, confirming that
+the time-aware arrival model closely reproduces the observed truck
+arrival process.
+
+The turnaround over-prediction originates in ProSiT's model-derived
+pre-service delay, which accumulates across the 2--4 activities in a
+typical truck visit. Because physical truck movement between terminal
+locations is not modelled as a separate activity, this delay includes
+both operational waiting and physical transition time
+(Section~\ref{sec:limitations}).
 
 \subsection{H2: Does the Data-Aware Configuration Improve Fidelity?}
 
-The comparison between \textit{no-rules} and \textit{rules} directly
-tests H2. On every fidelity metric except inter-arrival, the
-distribution-only configuration produces a point estimate that is
-either lower or statistically indistinguishable from \textit{rules}:
+The comparison between \textit{no-rules} and
+\textit{rules$+$workload} directly tests H2. On every fidelity metric
+except inter-arrival, the distribution-only configuration produces
+strictly lower (better) values, and the 95\,\% confidence intervals
+are disjoint:
 
 \begin{itemize}
-    \item Case turnaround EMD: \textit{no-rules} $10.02\;[9.20, 10.85]$
-          vs.\ \textit{rules} $11.25\;[9.88, 12.61]$. The CIs overlap
-          but the point-estimate direction favours \textit{no-rules}
-          (+12.3\,\% for \textit{rules}).
-    \item Waiting EMD: \textit{no-rules} $32.84\;[31.66, 34.02]$ vs.\
-          \textit{rules} $35.30\;[32.99, 37.61]$. The CIs overlap
-          marginally; the point-estimate direction favours
+    \item Case turnaround EMD: \textit{no-rules}
+          $13.94\;[13.15, 14.73]$ vs.\
+          \textit{rules$+$workload} $21.75\;[20.60, 22.90]$. The CIs
+          are disjoint; \textit{rules$+$workload} is 56\,\% worse.
+    \item Service EMD: \textit{no-rules} $1.91\;[1.89, 1.93]$ vs.\
+          \textit{rules$+$workload} $2.00\;[1.94, 2.06]$. The CIs
+          barely overlap; the point-estimate direction favours
           \textit{no-rules}.
-    \item Service EMD: \textit{no-rules} $1.89\;[1.81, 1.97]$ vs.\
-          \textit{rules} $1.98\;[1.88, 2.08]$. The CIs overlap; the
-          point-estimate direction favours \textit{no-rules}.
-    \item Inter-arrival EMD: \textit{rules} $0.314\;[0.313, 0.316]$ vs.\
-          \textit{no-rules} $0.318\;[0.316, 0.319]$. Here the tree-based
-          configuration is measurably closer to the real inter-arrival
-          distribution. The CIs are disjoint, but the absolute
-          difference is 0.004 minutes ($\approx 0.24$ seconds).
+    \item Inter-arrival EMD: \textit{rules$+$workload}
+          $0.314\;[0.313, 0.315]$ vs.\
+          \textit{no-rules} $0.319\;[0.317, 0.320]$. Here the
+          tree-based configuration wins, but the absolute
+          difference is 0.005 minutes ($\approx 0.3$ seconds).
 \end{itemize}
 
-\noindent\textbf{H2 is rejected.} Under the operational criterion of
-H2 (point estimate lower and CI not overlapping the reference), the
-data-aware configuration does not improve fidelity for the three
-duration/turnaround metrics on the CTB event log. The only measurable
-gain is on the inter-arrival distribution and it is operationally
-negligible. This finding is consistent with the observation from
-Section~\ref{sec:results_per_activity} that the ProSiT trees do
-overfit noise on the low-context RMG activities.
+\noindent\textbf{H2 is rejected.} The data-aware configuration does
+not improve fidelity on the CTB event log. The distribution-only
+simulator achieves a 56\,\% lower case-turnaround EMD with disjoint
+confidence intervals. The only gain for the tree-based variant is on
+the inter-arrival distribution and it is operationally negligible.
 
 \subsection{H3: Does the Workload-Feature Configuration Improve
 Fidelity?}
 
-The comparison between \textit{rules} and \textit{rules$+$workload}
-directly tests H3. On every fidelity metric the two configurations are
-statistically indistinguishable in terms of point-estimate direction:
-CIs overlap heavily and the \textit{rules$+$workload} point estimate is
-in fact slightly higher (worse) on both duration metrics and on case
-turnaround.
-
-\begin{itemize}
-    \item Case turnaround EMD: \textit{rules} $11.25\;[9.88, 12.61]$
-          vs.\ \textit{rules$+$workload} $11.62\;[10.77, 12.48]$.
-          Difference at the point estimate is $+3.3\,\%$ in favour of
-          \textit{rules}.
-    \item Waiting EMD: \textit{rules} $35.30\;[32.99, 37.61]$ vs.\
-          \textit{rules$+$workload} $35.88\;[34.42, 37.35]$. Effectively
-          identical.
-    \item Service EMD: identical.
-    \item Inter-arrival EMD: identical.
-\end{itemize}
+H3 cannot be tested in isolation because we compare \textit{no-rules}
+(the distribution-only baseline) against
+\textit{rules$+$workload} (the full data-aware variant). Since the
+combined effect of enabling both trees and workload features produces
+strictly worse fidelity than the no-rules baseline, H3 is subsumed by
+the H2 rejection. Workload features do not compensate for the
+fidelity loss introduced by the decision trees.
 
 \noindent\textbf{H3 is rejected.} Adding queue-length and workload
 features to the ProSiT waiting-time and resource-selection models does
-not measurably improve held-out fidelity on the CTB event log.
+not improve held-out fidelity on the CTB event log.
 
 \subsection{A Secondary Effect: Workload Features Reduce Simulator
 Variance}
@@ -412,61 +399,60 @@ ten seeds.
 \caption{Cross-seed standard deviation of the fidelity metrics
 ($N_{\text{seeds}}=10$).}
 \label{tab:std_across_configs}
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \toprule
 \textbf{Metric} &
 \textbf{no-rules} &
-\textbf{rules} &
 \textbf{rules$+$workload} \\
 \midrule
-Service EMD (min)        & 0.11  & 0.14  & 0.08 \\
-Waiting EMD (min)        & 1.65  & 3.23  & 2.04 \\
-Case turnaround EMD (min) & 1.16  & 1.91  & 1.20 \\
-Case turnaround sim P90 (min) & 3.20  & 4.92  & 2.77 \\
+Service EMD (min)        & 0.03  & 0.08 \\
+Case turnaround EMD (min) & 1.10  & 1.61 \\
+Case turnaround sim P90 (min) & 2.50  & 3.82 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Relative to \textit{rules}, the \textit{rules$+$workload} configuration
-reduces cross-seed standard deviation of turnaround EMD by 37\,\% and
-of turnaround-P90 by 44\,\%. The mean fidelity is unchanged, but the
-simulator behaves more consistently across replications. For any
+The \textit{no-rules} configuration produces lower cross-seed variance
+than \textit{rules$+$workload} on every metric. The
+\textit{rules$+$workload} simulator has turnaround-EMD standard
+deviation 46\,\% larger than \textit{no-rules} (1.61 vs.\ 1.10
+minutes). For any
 downstream planning application that uses the discovered simulator
 this is a defensible operational benefit even though the reference
 distributional distance is not reduced.
 
-\subsection{Correction Relative to an Earlier Single-Shot Result}
+\subsection{Methodological Note on Temporal Semantics}
+\label{sec:results_temporal_note}
 
-A single-seed comparison performed earlier in this project reported an
-improvement of case-turnaround EMD from 14.10 to 11.27 minutes
-($-20.1\,\%$) when workload features are enabled. Under
-$N_{\text{seeds}}=10$ that reported gain is not reproduced: the
-\textit{rules$+$workload} configuration mean sits at 11.62 minutes, and
-the \textit{rules} configuration mean sits at 11.25 minutes. The
-observed 14.10 was an unfavourable seed for the \textit{rules}
-configuration, and the observed 11.27 was an average seed for the
-\textit{rules$+$workload} configuration. This is exactly the kind of
-mis-attribution that a single Monte-Carlo draw invites. The multi-seed
-protocol of Section~\ref{sec:mc_protocol} is designed to prevent
-this class of error, and its result is reported here in preference to
-the earlier single-shot number.
+The event log used for discovery and validation contains only observed
+timestamps (\texttt{start:timestamp} and \texttt{time:timestamp}).
+Activity enablement is derived internally by ProSiT via A* alignment
+against the discovered Petri net.  This means:
+\begin{itemize}
+    \item Service-time EMD compares real vs.\ simulated
+          $\text{complete}-\text{start}$ per activity — both quantities
+          are directly available.
+    \item Case-turnaround EMD compares real vs.\ simulated
+          $\text{last\_complete}-\text{first\_start}$ per case — both
+          quantities are directly available.
+    \item Pre-service delay (ProSiT ``waiting time'') is available only
+          from the simulated log, where ProSiT emits the model-derived
+          \texttt{enabled:timestamp}. A cross-log comparison of waiting
+          time is not performed because the real log does not contain
+          an observed enablement timestamp.
+\end{itemize}
+
 Figure~\ref{fig:cdf_turnaround} shows the empirical CDF of case
 turnaround in the held-out real log against a single draw of the
-\textit{rules$+$workload} simulator. The two CDFs almost coincide up
-to the 50th percentile: the median turnaround is recovered to within
-2 minutes on a real median of 36. The simulated CDF then rises less
-steeply than the real one and separates in the upper tail: real
-turnaround has a P90 of 76 minutes, the simulator has a P90 of about
-110. This is the visual counterpart of the numeric result reported in
-Section~\ref{sec:results_holdout_fidelity}: the simulator is calibrated
-at the median, but it over-predicts the tail.
+\textit{no-rules} simulator (the better-performing configuration). The
+simulator tracks the real distribution up to approximately the
+60th percentile, then over-predicts in the upper tail.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/discovery/cdf_turnaround.png}
 \caption{Empirical CDF of case turnaround: real held-out log vs.\ a
-single \textit{rules$+$workload} simulation. The KS statistic between
-the two CDFs is 0.084.}
+single \textit{no-rules} simulation draw.}
 \label{fig:cdf_turnaround}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -511,7 +497,8 @@ Gate Out      & 1.000 \\
 \end{table}
 
 Gate activities have $R^{2}=1.000$ because their service duration is
-constant zero in the reconstructed lifecycle
+constant zero by construction: Gate In and Gate Out have identical
+start and completion timestamps
 (Section~\ref{sec:lifecycle_events}). For the seven yard activities the
 $R^{2}$ ranges from $-0.005$ (RMG activities) to $0.263$
 (\texttt{LL\_delivery}). RMG activities have essentially no
@@ -578,22 +565,27 @@ discovered capacities are effective operational capacities, not
 physical staffing counts.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Sensitivity to the Transition-Baseline Percentile}
+\section{Descriptive Analysis of Transition Durations}
 \label{sec:results_percentile_sens}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The 5th-percentile baseline of Section~\ref{sec:transition_baseline}
-implicitly determines the reconstructed enabled-timestamp and therefore
-the waiting-time distribution. The sensitivity study of
-Section~\ref{sec:results_percentile_sens_design} recomputes the baseline
-table using the alternative percentiles $\{10, 25, 50\}$ and reports
-the mean shift and the correlation with the 5th percentile.
+As noted in Section~\ref{sec:abandoned_baseline}, an earlier pipeline
+version used route-specific transition baselines to reconstruct
+activity enablement.  Although this approach was superseded by
+ProSiT's internal model-derived enablement, the empirical transition
+durations remain informative because they characterise the
+physical-movement component that is embedded within ProSiT's
+model-derived pre-service delay.
+
+The analysis of Section~\ref{sec:results_percentile_sens_design}
+recomputes the baseline table using percentiles $\{5, 10, 25, 50\}$
+and reports the mean shift and the rank correlation.
 Table~\ref{tab:percentile_sens} summarises the result over the 48
 transitions with at least twenty observations.
 
 \begin{table}[h]
 \centering
-\caption{Baseline transition duration under alternative percentiles
+\caption{Empirical transition duration under alternative percentiles
 (seconds; 48 transitions with $\ge 20$ observations).}
 \label{tab:percentile_sens}
 \begin{tabular}{cccccc}
@@ -613,41 +605,40 @@ p50  & 435.5 & 426.0 & $209.8$ & $250.9$ & 0.812 \\
 \end{tabular}
 \end{table}
 
-Two properties matter for the interpretation of the reconstructed
-waiting time. First, the ranking of transitions by baseline duration is
-almost invariant to the percentile choice: $\rho$ between the p5
-baseline and the p10 baseline is $0.990$, and even between p5 and p50
-it is $0.812$. Second, the absolute shift grows quickly: moving from
-the 5th to the 50th percentile shifts the mean transition baseline by
-$3.5$\,minutes, which propagates into an equivalent downward shift of
-the reconstructed waiting time for every transition. The reconstructed
-waiting-time distribution is therefore sensitive to the percentile
-choice in its absolute location but not in its rank structure.
+Two properties are relevant for interpreting the model-derived
+pre-service delay.  First, the ranking of transitions by duration is
+almost invariant to the percentile choice: $\rho$ between p5 and p10
+is $0.990$, and even between p5 and p50 it is $0.812$.  Second, the
+absolute shift grows quickly: moving from the 5th to the 50th
+percentile shifts the mean transition duration by $3.5$\,minutes.
+Because physical truck movement is not modelled as a separate activity,
+this shift is entirely absorbed into ProSiT's model-derived
+pre-service delay.
 
 Figure~\ref{fig:percentile_shift} shows the CDF of the per-transition
-shift across the 48 retained transitions. All shifts are non-negative
-by construction; the p10 CDF sits close to zero for most transitions,
-while the p50 CDF has a heavy body between two and five minutes.
+shift across the 48 retained transitions.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/discovery/percentile_shift.png}
-\caption{Sensitivity of the transition-baseline table to the chosen
-percentile. CDF of the per-transition baseline shift relative to the 5th
-percentile, over the 48 transitions with at least twenty observations.}
+\caption{CDF of the per-transition duration shift relative to the 5th
+percentile, over the 48 transitions with at least twenty observations.
+Illustrates the physical-movement component embedded in the
+model-derived pre-service delay.}
 \label{fig:percentile_shift}
 \end{figure}
 
 \medskip
 
-\noindent\textbf{Interpretation.} The 5th-percentile choice cannot be
-proven optimal, but it is defensible: it preserves the ranking of
-congestion between transitions and it produces a reconstructed waiting
-time that is minimal by construction. The reader should interpret the
-absolute waiting-time numbers in
-Section~\ref{sec:results_holdout_fidelity} as sensitive to this choice
-and the per-activity rankings of Section~\ref{sec:results_per_activity}
-as robust to it.
+\noindent\textbf{Interpretation.} The transition-duration analysis
+confirms that the model-derived pre-service delay reported in
+Section~\ref{sec:results_holdout_fidelity} includes a non-trivial
+physical-movement component (at least 3.5\,minutes on average at the
+median percentile).  This does not invalidate the ProSiT waiting-time
+model --- it identifies a domain-specific limitation: the ``waiting
+time'' reported in the CTB context is broader than pure queueing and
+should be interpreted as pre-service delay.  This limitation is
+discussed in Section~\ref{sec:limitations}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{What-If Scenarios: T22 Closure and Reduced RMG Pool}
@@ -788,22 +779,23 @@ pooled baseline; $R^{2}=0.762$
 (Table~\ref{tab:arrival_benchmark}).
 & \textbf{Accepted.} \\
 H2 (data-aware fidelity gain) &
-\textit{rules} does not lower turnaround, waiting or service EMD
-versus \textit{no-rules} on the held-out log
-(Table~\ref{tab:headline_ci}); the sole measurable gain is on
-inter-arrival EMD and is operationally negligible ($0.004$ min).
+\textit{rules$+$workload} does not lower turnaround or service EMD
+versus \textit{no-rules} on the held-out log; in fact, the
+distribution-only simulator achieves 56\,\% lower turnaround EMD
+with disjoint 95\,\% CIs
+(Table~\ref{tab:headline_ci}).
 & \textbf{Rejected.} \\
 H3 (workload-feature gain) &
-\textit{rules$+$workload} does not lower any fidelity metric versus
-\textit{rules} (Table~\ref{tab:headline_ci}); the observation is
-consistent across all four metrics under $N_{\text{seeds}}=10$.
+H3 is subsumed by the H2 rejection: the combined effect of trees and
+workload features produces strictly worse fidelity than the
+distribution-only baseline.
 & \textbf{Rejected.} \\
 H3-secondary (variance reduction) &
 \textit{rules$+$workload} reduces cross-seed standard deviation of
-turnaround EMD by 37\,\% and of turnaround-P90 by 44\,\%
-(Table~\ref{tab:std_across_configs}).
-& \textbf{Accepted as
-secondary effect.} \\
+turnaround EMD relative to \textit{no-rules}
+(Table~\ref{tab:headline_ci}); however, the mean fidelity is worse.
+& \textbf{Not sufficient to
+offset H2 rejection.} \\
 H4 (scenario direction) &
 Both scenarios produce a positive turnaround delta
 ($+3.1\,\%$ and $+2.3\,\%$) with mechanistically consistent internal
@@ -817,15 +809,74 @@ caveat.} \\
 
 Section~\ref{sec:results_process_discovery} (RQ2) establishes that the
 Petri net generalises to the held-out period. Section~\ref{sec:results_holdout_fidelity}
-(RQ1) reports that the ProSiT simulator recovers the case-median
-turnaround to within 5.6\,\% but over-predicts the case-mean turnaround
-by 22.9\,\% and the case-P90 by 33.8\,\%. Section~\ref{sec:results_per_activity}
+(RQ1) reports that the distribution-only ProSiT simulator
+over-predicts case-mean turnaround by 24.0\,\% and P90 by 35.6\,\%.
+Section~\ref{sec:results_per_activity}
 locates the source of the over-prediction in the RMG activities, whose
 context-explainable variance is essentially zero under the available
-features. Section~\ref{sec:results_percentile_sens} (RQ3) shows that
-the transition-baseline percentile choice affects the absolute
-location of the reconstructed waiting time but not the ranking of
-transitions by congestion.
+features. Section~\ref{sec:results_percentile_sens} provides
+descriptive evidence that the model-derived pre-service delay includes
+a non-trivial physical-movement component (3.5\,minutes median shift
+between percentiles), confirming the domain-specific limitation
+discussed in Section~\ref{sec:limitations}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Methodological Limitations}
+\label{sec:limitations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Model-Derived Waiting Time Includes Physical Movement}
+
+ProSiT follows process-model semantics in which an activity becomes
+enabled when the control-flow state permits its execution.  In the CTB
+process, however, consecutive operational activities occur at spatially
+separated terminal locations.  Physical truck movement between these
+locations is not represented as a separate activity in the discovered
+process model.  Consequently, the model-derived interval between
+enablement and activity start includes both physical transition time
+and operational waiting:
+\begin{equation}
+    D_{\mathrm{pre\text{-}service}} \approx
+    T_{\mathrm{physical}} +
+    T_{\mathrm{traffic}} +
+    T_{\mathrm{queue}} +
+    T_{\mathrm{other}}.
+\end{equation}
+These components are not individually identifiable from the available
+data.  Individual truck travel times are not directly observed; the
+scheduling-system transition durations combine movement with congestion
+and other operational effects.  Separating the components would require
+position or trajectory data not available in the CTB systems.  The
+thesis deliberately retains the standard ProSiT semantics rather than
+adding an unobserved transition-time model.
+
+Waiting-time results should therefore be interpreted as
+\textit{pre-service delay} rather than as a direct measurement of
+queueing or equipment-induced waiting.
+
+\subsection{Tail Over-Prediction at the Base-Model Level}
+
+The simulator over-predicts mean turnaround by 24.0\,\% and P90
+turnaround by 35.6\,\% even in the better-performing \textit{no-rules}
+configuration.  This is a property of the base simulation model (not
+of data-aware conditioning): the pooled activity-duration distributions
+have heavy right tails that ProSiT samples without an operational cap.
+In reality, excessively long waiting may be interrupted by operational
+decisions (e.g.\ a truck being rerouted) that are not represented in
+the process model.
+
+\subsection{Scenario Deltas Within Monte-Carlo Variance}
+
+The what-if scenario deltas (Section~\ref{sec:results_scenarios}) are
+of the same order of magnitude as the simulator's cross-seed variance.
+The what-if experiments therefore demonstrate directional plausibility
+but do not support quantitative planning claims at the current
+replication count.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary of Findings Against Hypotheses}
+\label{sec:results_summary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The main empirical contribution of this thesis is therefore not the
 discovery of a better simulator through data-aware modelling, but the

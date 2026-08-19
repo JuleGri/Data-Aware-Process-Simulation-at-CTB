@@ -74,9 +74,7 @@ reported as such in Chapter~\ref{chap:results}.
       on the training period?
 \item[RQ3 (Modelling choices).] How sensitive is simulation fidelity to
       three plausible ProSiT configurations
-      (\textit{no-rules}, \textit{rules}, \textit{rules$+$workload})
-      and to the 5th-percentile choice used in the transition-baseline
-      reconstruction of Section~\ref{sec:transition_baseline}?
+      (\textit{no-rules}, \textit{rules}, \textit{rules$+$workload})?
 \item[RQ4 (Scenario support).] Does the discovered simulator produce
       operationally plausible KPI shifts under two concrete
       disruptions: closing a single RMG block, and closing the block
@@ -139,7 +137,7 @@ in the final event log. For each case $c_i$ let $\tau(c_i)$ denote its
 earliest event timestamp:
 \begin{equation}
     \tau(c_i)=\min\bigl\{
-      \text{enabled}(e),\text{start}(e),\text{time}(e)
+      \text{start}(e),\text{time}(e)
       \mid e\in c_i \bigr\}.
 \end{equation}
 Sort the cases by $\tau$ and define the cutoff timestamp
@@ -262,7 +260,7 @@ The \textit{rules$+$workload} configuration is identical to
 ProSiT README this enables two extra features on the waiting-time and
 resource-selection models: current workload (number of concurrent
 tasks) and queue length (number of tasks scheduled but not yet started)
-at the time each event is enabled. The intention behind including this
+at the time each event is enabled in the process model. The intention behind including this
 configuration is to let ProSiT see the queueing state that its
 distribution family alone would otherwise ignore. This configuration is
 compared against \textit{rules} to test H3.
@@ -374,13 +372,15 @@ For each activity $a$ the service-time EMD is
 \end{equation}
 where $F_{a}^{\text{sim,svc}}$ and $F_{a}^{\text{real,svc}}$ are the
 empirical CDFs of $\text{time}-\text{start}$ for activity $a$ in the
-simulated and real log, respectively. The waiting-time EMD is defined
-analogously on $\text{start}-\text{enabled}$. The per-activity means
+simulated and real log, respectively. The pre-service-delay EMD is defined
+analogously on $\text{start}-\text{enabled}_{\text{model}}$ using the
+model-derived enablement timestamps from ProSiT's simulated log. The per-activity means
 are the ``mean service-time EMD'' and ``mean waiting-time EMD''
 reported in Chapter~\ref{chap:results}. The case-level turnaround EMD
 is $W_1(F^{\text{sim,ttot}}, F^{\text{real,ttot}})$ where
-$\text{ttot}$ is the total elapsed time per case. The inter-arrival
-EMD is $W_1(F^{\text{sim,iat}}, F^{\text{real,iat}})$ where
+$\text{ttot}$ is the total elapsed time per case (first start to last
+complete). The inter-arrival EMD is
+$W_1(F^{\text{sim,iat}}, F^{\text{real,iat}})$ where
 $\text{iat}$ is the time between consecutive case-arrival timestamps.
 All EMDs are reported in minutes.
 
@@ -456,21 +456,29 @@ $t_{\text{start}}=\text{2026-04-20 18:14}$ so that scenario and
 baseline are matched to the held-out validation window used elsewhere.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Transition-Baseline Sensitivity Study}
+\section{Descriptive Transition-Duration Analysis}
 \label{sec:results_percentile_sens_design}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Section~\ref{sec:transition_baseline} uses the 5th percentile of
-observed transition times as the congestion-free baseline. To evaluate
-whether this choice materially affects the subsequent waiting-time
-reconstruction, the same baseline table is recomputed with the 10th,
-25th and 50th percentiles as alternative choices. For each transition
-$(a,b)$ with at least twenty observations the resulting baseline
-duration is reported together with the shift relative to the 5th
-percentile and the rank correlation between the p5 baseline and each
-alternative. The sensitivity is implemented in
-\texttt{validation/04\_baseline\_percentile\_sensitivity.py} and is
-reported in Section~\ref{sec:results_percentile_sens}.
+As discussed in Section~\ref{sec:abandoned_baseline}, an earlier
+pipeline version reconstructed activity enablement from route-specific
+transition baselines. Although this approach was abandoned in favour of
+ProSiT's internal model-derived enablement, the empirical transition
+durations remain informative as descriptive evidence of the physical
+separation between terminal activities.
+
+To characterise this physical component, the same baseline table is
+recomputed with the 5th, 10th, 25th and 50th percentiles as
+alternative choices. For each transition $(a,b)$ with at least twenty
+observations the resulting baseline duration is reported together with
+the shift relative to the 5th percentile and the rank correlation
+between percentiles. This analysis is implemented in
+\texttt{validation/04\_baseline\_percentile\_sensitivity.py} and
+reported in Section~\ref{sec:results_percentile_sens}. It does
+\textbf{not} affect ProSiT's simulation-parameter discovery; its
+purpose is to illustrate that the model-derived pre-service delay
+includes a non-trivial physical-movement component that cannot be
+separated from operational waiting with the available data.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{ProSiT Implementation Notes and Workarounds}
@@ -520,8 +528,9 @@ by both \texttt{baseline/07\_run\_prosit\_discovery.py} and
 ProSiT 1.0.3 writes case-level attributes into the event-level frame
 returned by \texttt{SimulatorEngine.apply()}. When a case-level
 attribute has the same name as an event attribute (in the CTB log this
-happens for \texttt{enabled:timestamp} because the temporal features are
-attached at case level), the resulting \texttt{pandas.DataFrame}
+happens for \texttt{enabled:timestamp} because ProSiT writes case-level
+attributes into the event-level frame), the resulting
+\texttt{pandas.DataFrame}
 carries duplicate column labels. Standard operations such as
 \texttt{pd.to\_datetime(df[col])} then return a \texttt{DataFrame} slice
 instead of a \texttt{Series} and fail. The workaround is a single
