@@ -143,15 +143,14 @@ A case represents a single process instance. It is defined by the object whose p
 
 In the context of this thesis, a truck visit serves as the primary process instance and therefore represents the case thats being investigated in.
 
-In traditional event logs, events are often represented by a single timestamp, typically indicating the completion of an activity. However, for performance-oriented Process Mining and simulation applications, additional lifecycle information is required. A process activity can generally be associated with three relevant temporal states:
+In traditional event logs, events are often represented by a single timestamp, typically indicating the completion of an activity. For performance-oriented Process Mining and simulation applications, richer temporal information is required. Two directly observable lifecycle states are commonly distinguished:
 
 \begin{itemize} 
-    \item \textbf{Enabled Timestamp}: The moment an activity becomes executable and starts waiting for the required resource. 
     \item \textbf{Start Timestamp}: The moment execution of the activity actually begins. 
     \item \textbf{Complete Timestamp}: The moment execution of the activity finishes. 
 \end{itemize} 
 
-The distinction between these timestamps enables the separation of waiting time and service time. Waiting time corresponds to the duration between the enabled and start timestamps, whereas service time corresponds to the duration between the start and completion timestamps. Such lifecycle information is particularly important for Process Mining-based simulation approaches, as it allows resource contention and queueing effects to be represented explicitly. 
+The duration between these two timestamps is the \textit{service time} (or execution time) of the activity. A third temporal concept, \textit{enablement}, describes the moment at which an activity becomes executable according to the process-model state. In process-mining-based simulation approaches, enablement is typically not an observed input-log attribute but is derived by replaying the event log against the discovered process model \cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The interval between model-derived enablement and the observed start timestamp is referred to as \textit{waiting time} in the ProSiT framework \cite{Vinci2026prosit} and corresponds to a pre-service delay that may include resource contention, queueing effects, and — in domains with spatial separation between activities — physical movement time. 
 
 \paragraph{Attributes} 
 In addition to the mandatory process information, events may contain supplementary attributes that provide further context about the execution of the process. Examples of event attributes in container terminal operations include: 
@@ -180,12 +179,18 @@ An event log is the central data structure used in Process Mining. It consists o
 \begin{itemize} 
 \item Case Identifier, 
 \item Activity, 
-\item Enabled Timestamp,
-\item Start Timestamp
-\item Complete Timestamp
-\item Resource
-\item Truck Type
+\item Timestamp (at least one temporal ordering attribute).
 \end{itemize} 
+
+For simulation-oriented process mining, richer event information is required:
+\begin{itemize} 
+\item Start Timestamp,
+\item Complete Timestamp,
+\item Resource,
+\item Contextual attributes (e.g.\ container type, yard utilisation).
+\end{itemize} 
+
+The CTB input log used in this thesis provides start and completion timestamps required for execution-time modelling, while activity enablement is reconstructed during process-model alignment by the simulation-discovery framework (Section~\ref{sec:simulation_discovery_methodology}).
 
 Additional attributes are usually included to enrich the event data with operational context. Table~\ref{tab:eventlogexample} illustrates a simplified event log. 
 

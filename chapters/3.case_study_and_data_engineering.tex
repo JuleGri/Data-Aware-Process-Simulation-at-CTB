@@ -383,118 +383,107 @@ labels.
 The 22 individual RMG blocks (T06--T27) are retained as distinct
 resources to preserve block-specific utilisation patterns.
 
-\subsection{Lifecycle Event Construction}
+\subsection{Activity Timestamps and Temporal Semantics}
 \label{sec:lifecycle_events}
 
-Process mining and simulation require an explicit representation of
-activity lifecycle states. For each activity, three timestamps are
-constructed:
+The CTB operational systems provide timestamps from which two observed
+lifecycle states are constructed for each activity:
 
 \begin{itemize}
-    \item \textbf{Enabled time} (\texttt{enabled:timestamp}) — the moment
-          the activity became eligible for execution but had not yet
-          started.
     \item \textbf{Start time} (\texttt{start:timestamp}) — the moment
-          execution began.
+          execution began, mapped from the scheduling or report system.
     \item \textbf{Complete time} (\texttt{time:timestamp}) — the moment
           execution finished.
 \end{itemize}
 
-The source systems do not explicitly record all three lifecycle states,
-so additional reconstruction is required.
-
-\subsubsection{Lifecycle Concept in Terminal Operations}
-
-In traditional process mining an activity becomes enabled once all
-preconditions for execution are fulfilled, even if execution cannot
-start immediately due to unavailable resources. In container-terminal
-operations this concept translates to the moment when a truck has
-physically reached the next processing location and is ready to be
-handled. The distinction between enabled, start and complete
-timestamps is particularly relevant because trucks frequently
-experience congestion, traffic delays and resource-related waiting;
-explicit lifecycle reconstruction lets us separate physical movement
-from operational waiting and service execution.
-
-\subsubsection{Transition Baseline Estimation}
-\label{sec:transition_baseline}
-
-Reconstructing enabled timestamps requires an estimate of the physical
-travel time between consecutive operational locations. The scheduling
-system records observed transition durations
-(\texttt{FP\_DAUER\_GATEIN\_ERSTER\_ALP\_SEK},
-\texttt{ALP\_DAUER\_NAECHSTER\_ALP\_SEK} and
-\texttt{FP\_DAUER\_LETZT\_ALP\_GATEOUT\_SEK}), but these observations
-already include the effects of traffic, congestion and operational
-delays.
-
-To derive a congestion-free reference duration, historical transition
-times are extracted from the scheduling data and grouped by
-$(\text{origin}, \text{destination})$. For each transition, the 5th
-percentile of the empirical transition-time distribution is used as
-the baseline and stored in \texttt{transition\_baseline.csv} (script
-\texttt{preparation/010\_generate\_transition\_baseline.ipynb}).
-
-The 5th percentile is a compromise between robustness and realism.
-While the minimum observed duration may be influenced by measurement
-errors, the median already contains substantial congestion. The lower
-tail therefore provides a realistic approximation of travel time under
-uncongested conditions. The sensitivity of this choice to alternative
-percentiles is evaluated in Section~\ref{sec:results_percentile_sens}.
-
-\subsubsection{Enabled Timestamp Reconstruction}
-
-Enabled timestamps are reconstructed by combining observed lifecycle
-events with the baseline transition durations. For all activities
-following gate entry:
+The \textit{service time} (or execution time) is the directly
+identifiable temporal quantity:
 \begin{equation}
-    \text{enabled}_i = \text{complete}_{i-1} + \text{baseline}_{i-1,i}.
+    ET_i = t_{\mathrm{complete},i} - t_{\mathrm{start},i}.
 \end{equation}
-The resulting timestamp represents the moment at which the truck should
-arrive at the next operational location under uncongested conditions.
 
-For the \textbf{Gate In} activity, detailed gate information is
-available from the report system. The OCR gate scans the truck before
-it enters the gate-processing queue; the OCR timestamp is therefore
-used as the enabled timestamp:
-$\text{enabled}=\text{StageStartTime}$,
-$\text{start}=\text{FP\_ZEITPUNKT\_ERSTELLUNG}$ and
-$\text{complete}\approx\text{start}$.
+An explicit \texttt{enabled:timestamp} is \textbf{not} reconstructed
+in the input event log.  Consistent with ProSiT
+\cite{Vinci2026prosit} and earlier simulation-discovery work
+\cite{Camargo2020,PMRozinat2009}, activity enablement is obtained from
+process-model alignment during the simulation-parameter discovery
+phase (Section~\ref{sec:simulation_discovery_methodology}).  ProSiT
+uses A* alignment to determine when each transition becomes enabled in
+the discovered Petri net, then computes a model-derived pre-service
+delay relative to both the enablement time and the resource's
+availability schedule.
 
-For \textbf{yard activities}
-$\text{enabled}=\text{previous\_complete}+\text{transition\_baseline}$,
-$\text{start}=\text{ALP\_ZEITPUNKT\_BEREITMELDUNG}$ and
-$\text{complete}=\text{ALP\_ZEITPUNKT\_ERFUELLUNG}$. The interval
-between enabled and start captures additional delays caused by traffic
-congestion, queue formation, handling-equipment availability and other
-operational constraints.
+\subsubsection{Timestamp Mapping by Activity Type}
 
-For \textbf{Gate Out} the same reconstruction principle is applied:
-$\text{enabled}=\text{last\_yard\_complete}+\text{baseline}$,
-$\text{start}=\text{complete}=\text{FP\_ZEITPUNKT\_GATEOUT}$.
+\begin{itemize}
+    \item \textbf{Gate In.}
+          $\text{start}=\text{FP\_ZEITPUNKT\_ERSTELLUNG}$,
+          $\text{complete}\approx\text{start}$.
+          The OCR gate timestamp (\texttt{StageStartTime}) from the
+          report system is retained as the auxiliary column
+          \texttt{ocr\_timestamp} for diagnostic purposes but is not
+          mapped to an enablement concept.
+    \item \textbf{Yard activities.}
+          $\text{start}=\text{ALP\_ZEITPUNKT\_BEREITMELDUNG}$,
+          $\text{complete}=\text{ALP\_ZEITPUNKT\_ERFUELLUNG}$.
+    \item \textbf{Gate Out.}
+          $\text{start}=\text{complete}=\text{FP\_ZEITPUNKT\_GATEOUT}$.
+\end{itemize}
 
-\subsubsection{Waiting Time Calculation}
+\subsubsection{Model-Derived Pre-Service Delay}
 
-For each activity waiting time is defined as
+Because activity enablement is derived from the process model, the
+resulting quantity
 \begin{equation}
-    \text{waiting\_time}=\text{start:timestamp}-\text{enabled:timestamp}.
+    D_{\mathrm{pre\text{-}service},i}
+    = t_{\mathrm{start},i} - t_{\mathrm{enabled,model},i}
 \end{equation}
-By construction the enabled timestamp already includes the expected
-physical travel time between operational locations. The calculated
-waiting time therefore represents time beyond normal truck movement and
-can be interpreted as operational delay caused primarily by traffic
-congestion, queueing, resource contention and limited handling
-equipment.
+is a \textit{model-derived pre-service delay}.  In ProSiT terminology
+this is called ``waiting time,'' but in the CTB application it must
+not be interpreted as pure queueing or resource-induced waiting.
+Physical truck movement between consecutive terminal locations is not
+represented as a separate activity in the discovered process model.
+Therefore the model-derived interval may include:
+\begin{itemize}
+    \item physical movement between operational locations,
+    \item internal traffic and congestion effects,
+    \item resource availability and queue waiting,
+    \item other delays not explicitly represented in the control-flow
+          model.
+\end{itemize}
+This is a domain-specific limitation when transferring
+business-process simulation semantics to physical terminal operations
+and constitutes an important methodological boundary of this thesis
+(discussed further in Section~\ref{sec:limitations}).
 
-\medskip
+\subsubsection{Methodological Note: The Abandoned Transition-Baseline Approach}
+\label{sec:abandoned_baseline}
 
-\noindent\textbf{Methodological caveat.} The 5th percentile is an
-empirical choice; the reconstructed waiting time therefore inherits its
-uncertainty. The sensitivity analysis in
-Section~\ref{sec:results_percentile_sens} quantifies how strongly the
-reconstructed baselines shift under the alternative percentile choices
-$\{5, 10, 25, 50\}$ so that this design decision is explicit in the
-final results.
+An earlier version of the event-log pipeline estimated lower-tail
+route-specific transition durations from the scheduling data (5th
+percentile of the empirical distribution per transition pair,
+\texttt{transition\_baseline.csv}) and used these to reconstruct an
+explicit \texttt{enabled:timestamp} in the input event log.  Closer
+inspection revealed two issues:
+\begin{enumerate}
+    \item The statistical route baselines are not event-specific
+          observations of physical arrival; they are aggregate quantiles
+          that vary substantially with the chosen percentile
+          (Section~\ref{sec:results_percentile_sens}).
+    \item In some cases the estimated readiness timestamp occurs after
+          the observed start timestamp, producing negative waiting
+          times that had to be clipped to zero.
+\end{enumerate}
+Furthermore, ProSiT does not require an externally constructed
+enabled timestamp — it derives enablement internally from the aligned
+process model \cite{Vinci2026prosit}.  The final methodology therefore
+retains only the observed start and completion timestamps and delegates
+enablement reconstruction to the process-model alignment, improving
+consistency between data semantics and simulation semantics.
+
+The transition-baseline data is preserved in the repository as
+diagnostic material and may be useful for future work that introduces
+an explicit spatial-transition model.
 
 \subsection{Context Enrichment}
 \label{sec:context_enrichment}
@@ -625,9 +614,8 @@ context attributes attached to every event.
 \texttt{case:concept:name} & Unique truck-visit identifier
                              (\texttt{FAHRPLAN\_UID}). \\
 \texttt{concept:name}      & Activity executed during the visit. \\
-\texttt{enabled:timestamp} & Reconstructed activity enabled timestamp. \\
-\texttt{start:timestamp}   & Activity start timestamp. \\
-\texttt{time:timestamp}    & Activity completion timestamp. \\
+\texttt{start:timestamp}   & Observed/reconstructed activity start timestamp. \\
+\texttt{time:timestamp}    & Observed/reconstructed activity completion timestamp. \\
 \texttt{org:resource}      & Operational location of the activity. \\
 \hline
 \end{tabular}
