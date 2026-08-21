@@ -76,9 +76,9 @@ reported as such in Chapter~\ref{chap:results}.
       three plausible ProSiT configurations
       (\textit{no-rules}, \textit{rules}, \textit{rules$+$workload})?
 \item[RQ4 (Scenario support).] Does the discovered simulator produce
-      operationally plausible KPI shifts under two concrete
-      disruptions: closing a single RMG block, and closing the block
-      while removing its capacity from the RMG resource pool?
+      operationally plausible KPI shifts under two transparent
+      interventions: closing a single RMG block and increasing truck
+      demand by 20\,\%?
 \end{description}
 
 \subsection{Hypotheses}
@@ -99,10 +99,11 @@ reported as such in Chapter~\ref{chap:results}.
       waiting-time models (\textit{rules$+$workload}) further reduces
       distributional distance versus \textit{rules} on the held-out
       test log.
-\item[H4 (Scenario direction).] Closing an RMG block increases mean
-      case turnaround, and closing an RMG block plus removing that
-      block from the RMG resource pool increases turnaround by at
-      least as much.
+\item[H4 (Scenario response).] Closing T22 eliminates assignments to
+      that resource and increases RMG pre-service delay, while a
+      20\,\% increase in working-time arrival intensity measurably
+      increases the observed truck-arrival rate. Downstream
+      turnaround effects are estimated rather than assumed.
 \end{description}
 
 Every hypothesis is intended to be falsifiable. In particular H2 and H3
@@ -132,7 +133,7 @@ consume unchanged.
 \subsection{Split Definition}
 \label{sec:split_definition}
 
-Let $\mathcal{L}=(c_1,c_2,\dots,c_N)$ be the set of $N=89{,}458$ cases
+Let $\mathcal{L}=(c_1,c_2,\dots,c_N)$ be the set of $N=89{,}460$ cases
 in the final event log. For each case $c_i$ let $\tau(c_i)$ denote its
 earliest event timestamp:
 \begin{equation}
@@ -140,17 +141,15 @@ earliest event timestamp:
       \text{start}(e),\text{time}(e)
       \mid e\in c_i \bigr\}.
 \end{equation}
-Sort the cases by $\tau$ and define the cutoff timestamp
-$\tau^{\star}$ as the 80\,\% quantile of the sorted arrivals. Cases with
-$\tau(c_i)\le\tau^{\star}$ form the training set, cases with
-$\tau(c_i)>\tau^{\star}$ form the test set. Cases whose earliest event
-timestamp is missing are dropped from both. Ties are broken with a
-seeded deterministic tiebreaker so that identical arrival timestamps do
-not oscillate between train and test.
+Sort the cases by $\tau$ and a deterministic case-identifier
+tiebreaker. The first 80\,\% form the training set and the remaining
+20\,\% form the test set. The cutoff $\tau^{\star}$ is recorded as the
+earliest arrival in the test set. Cases whose earliest event timestamp
+is missing are dropped from both.
 
 On the CTB event log the cutoff is
-$\tau^{\star}=\text{2026-04-20 18:14:00}$. The split produces 71,566
-training cases (221,559 events) and 17,892 testing cases (55,864
+$\tau^{\star}=\text{2026-04-20 18:17:00}$. The split produces 71,568
+training cases (220,048 events) and 17,892 testing cases (55,360
 events); no events are dropped. The split is realised by
 \texttt{validation/01\_train\_test\_split.py} and is documented in
 \texttt{validation/results/split\_manifest.json}, which also records
@@ -169,7 +168,7 @@ the discovery scripts were pointed at the full event log. All discovery
 scripts are now routed through
 \texttt{baseline/\_eventlog\_source.py}, which prefers the persisted
 \texttt{s6\_train.csv} and skips the legacy subsample when a train log
-is detected. The correct partitioning is therefore 71,566/17,892 as
+is detected. The correct partitioning is therefore 71,568/17,892 as
 recorded in the split manifest.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -179,18 +178,27 @@ recorded in the split manifest.
 
 \subsection{Algorithm}
 
-The Petri net that ProSiT uses as the control-flow skeleton is
-discovered from the training partition only. The discovery uses the
-inductive miner from pm4py 2.7.22
-(\texttt{pm4py.discover\_petri\_net\_inductive}) with default noise
-threshold. The choice follows Vinci et al.\ \cite{Vinci2026prosit} and
-preserves guaranteed fitness on the training log. In parallel a process
-tree (\texttt{pm4py.discover\_process\_tree\_inductive}) is discovered
-so that a BPMN translation is available for visualisation.
+The Petri net that ProSiT uses as the authoritative control-flow
+skeleton is constructed from the observed training variants as a
+sequential prefix trie. Every accepted path has the form
+\texttt{Gate In}$\rightarrow$one or more yard activities
+$\rightarrow$\texttt{Gate Out}. Shared prefixes are represented once,
+and a separate transition encodes each observed continuation. This
+prevents an inductive-miner concurrency cut from enabling two yard
+activities inside the same truck visit. It does \emph{not} disable
+multitasking between trucks: different cases still compete for and can
+use resources concurrently according to the discovered capacities.
+
+An inductive process tree is retained as a diagnostic visualisation,
+but it is not passed to the final simulator. The authoritative trie is
+implemented by \texttt{\_eventlog\_contract.py} and injected by
+\texttt{baseline/07\_run\_prosit\_discovery.py}. It contains 76 places
+and 144 transitions for the 70 variants observed in the frozen training
+partition.
 
 \subsection{Conformance Protocol}
 
-Four control-flow conformance metrics are computed against
+Control-flow conformance metrics are computed against
 \emph{both} the training and the held-out testing partition:
 
 \begin{itemize}
@@ -203,12 +211,15 @@ Four control-flow conformance metrics are computed against
     \item \textbf{Simplicity} via \texttt{pm4py.simplicity\_petri\_net}.
 \end{itemize}
 
-Reporting all four on both partitions addresses the reviewer concern
-that a fitness of $1.0$ is a design property of the inductive miner and
-not evidence of process representativeness. A drop of precision or
-generalisation between train and test would indicate an over-fitted
-control-flow model. The full protocol is implemented in
-\texttt{baseline/07\_run\_prosit\_discovery.py}.
+They are supplemented by an explicit case-language audit: exactly one
+initial Gate In, at least one yard activity, exactly one final Gate Out,
+no within-case activity overlap and monotonically non-decreasing
+completion timestamps. This separates two questions that aggregate
+fitness alone cannot answer: whether the net replays held-out variants
+and whether the generated traces obey the physical truck-visit order.
+The full protocol is implemented in
+\texttt{baseline/07\_run\_prosit\_discovery.py} and
+\texttt{\_eventlog\_contract.py}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Parameter Discovery Configurations}
@@ -325,7 +336,7 @@ the following procedure is executed:
                     \texttt{numpy.random} with $\text{base}+i$.
               \item Simulate $n_{\text{traces}}=17{,}892$ cases starting
                     at
-                    $t_{\text{start}}=\text{2026-04-20 18:14:00}$, i.e.\
+                    $t_{\text{start}}=\text{2026-04-20 18:17:00}$, i.e.\
                     the test-window cutoff read from
                     \texttt{split\_manifest.json}.
               \item Compute the fidelity metrics of
@@ -387,7 +398,7 @@ All EMDs are reported in minutes.
 \subsection{Kolmogorov--Smirnov Statistic}
 
 For each distribution pair the two-sample KS statistic is computed by
-\texttt{scipy.stats.ks\_2samp}. Because the CTB test log contains 55,864
+\texttt{scipy.stats.ks\_2samp}. Because the CTB test log contains 55,360
 events, sub-sampling is applied so that each side contributes at most
 $10{,}000$ observations to the test. This keeps the $p$-value
 informative and prevents the null from being rejected mechanically by
@@ -401,7 +412,7 @@ For each activity and each case-level KPI the mean, median and 90th
 percentile of the simulated and real distributions are compared as
 absolute and relative errors. This complements the distributional
 metrics with operationally interpretable point statistics
-(e.g.\ ``the simulator over-predicts mean turnaround by $X$ minutes'').
+(e.g.\ ``the simulator under-predicts mean turnaround by $X$ minutes'').
 
 \subsection{Implementation}
 
@@ -415,45 +426,81 @@ single-shot and multi-seed numbers are directly comparable.
 \label{sec:what_if_design}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Two operational disruptions are evaluated to test H4. Both are executed
-starting from the \textit{rules$+$workload} configuration, which is
-adopted as the default after the sensitivity analysis of
-Chapter~\ref{chap:results}.
+Two independent interventions are evaluated to test H4. Both are
+derived by deep copy from the frozen, training-only calibrated
+\textit{rules$+$workload} baseline. No held-out observation is used to
+select or fit a scenario parameter.
 
 \subsection{Scenario A: T22 Closure}
 
 Scenario A models a full closure of RMG block T22. The scenario is
 constructed by (i) removing T22 from every
-\texttt{params.act\_to\_resources} entry that references it, replacing
-it with the first available fallback block if the entry would become
-empty; and (ii) setting the calendar of T22 to unavailable across every
-weekday and every hour. All other parameters are unchanged. The
-resulting scenario \texttt{SimulatorEngine} is executed with the same
-$n_{\text{traces}}$ and $t_{\text{start}}$ as the baseline simulation so
-that scenario and baseline are directly comparable. The scenario is
-implemented in \texttt{what\_if\_T22\_closed/01\_run\_experiment.py}.
+\texttt{params.act\_to\_resources} entry that references it, after
+verifying that each affected activity retains at least one eligible
+resource; and (ii) setting all 168 weekly calendar slots of T22 to
+unavailable. All other parameters are unchanged.
 
-\subsection{Scenario B: T22 Closure Plus Reduced RMG Pool}
+This is a capacity-eligibility intervention, not a spatial yard model.
+The discovered selector may use target-area attributes as statistical
+predictors, but ProSiT does not impose a hard constraint that binds a
+container to its actually observed storage block. A truck whose
+historical target was T22 can therefore be assigned to another eligible
+block without an explicit container-relocation operation or a
+location-dependent travel-time adjustment. This boundary is evaluated
+explicitly in Section~\ref{sec:limitations}.
 
-Scenario B combines the T22 closure with a reduction of the RMG
-resource pool: the RMG activities
-$\{\text{RMG\_receive},\text{RMG\_delivery},\text{RMG\_mixed}\}$ are
-restricted to a fixed subset of retained blocks
-(the blocks $\{T13, T14, T16\text{--}T21, T23\text{--}T27\}$).
-This tests whether the simulator produces a stronger congestion effect
-when both a block is offline and the pool absorbing its workload is
-smaller than in Scenario~A. The scenario is implemented in
-\texttt{what\_if\_reduced\_rmg\_resources/01\_run\_experiment.py}.
+\subsection{Scenario B: 20\,\% Higher Truck Demand}
+
+Scenario B changes only the empirical working-time inter-arrival
+distribution. For demand multiplier $m=1.20$, every empirical
+inter-arrival sample $x_i$ is replaced by $x_i/m$. This preserves the
+zero mass and the empirical distribution shape while increasing the
+modelled arrival intensity by exactly 20\,\%. The gate-admission
+calendar, process model, duration models, routing, resource mappings,
+resource calendars and case-attribute schema remain unchanged. The
+scenario is independent of the T22 closure.
+
+\subsection{Domain-Constrained RMG Capacity Sensitivity}
+
+The serialized baseline assigns maximum concurrency four to ten RMG
+block identifiers and five to twelve, for an aggregate effective upper
+bound of 100. This exceeds the operational limit of at most three cranes
+per block. A separate sensitivity baseline is therefore derived by
+replacing every RMG value $c_r$ with
+$\min(c_r,3)$. The aggregate bound becomes $22\times3=66$. No resource
+mapping, calendar, selection rule, timing model, arrival model or
+control-flow parameter is changed. The T22 and demand interventions are
+then independently re-derived from this capped baseline.
+
+This is a robustness test rather than a recalibration: the discovered
+baseline remains frozen and authoritative. It asks whether conclusions
+conditional on effective capacity 100 persist under the stated physical
+upper bound. Both sets of replications use identical seeds, trace counts
+and start time. In addition to direct cap effects, the analysis reports
+the interaction
+\begin{equation}
+\Delta_{\mathrm{interaction}}=
+(Y_{\mathrm{scenario}}-Y_{\mathrm{baseline}})_{c\leq3}
+-(Y_{\mathrm{scenario}}-Y_{\mathrm{baseline}})_{\mathrm{discovered}},
+\end{equation}
+so that changes in scenario response are not confused with a general
+level shift caused by the cap.
 
 \subsection{Reporting}
 
-For each scenario the mean, median and 90th percentile of case
-turnaround, RMG service time and RMG waiting time are reported for the
-baseline and the perturbed run. All numbers in
-Chapter~\ref{chap:results} come from simulations with the same
-$n_{\text{traces}}=17{,}892$ and
-$t_{\text{start}}=\text{2026-04-20 18:14}$ so that scenario and
-baseline are matched to the held-out validation window used elsewhere.
+The unified driver \texttt{validation/09\_multi\_seed\_scenarios.py}
+executes baseline and both interventions with ten matched seeds
+(42--51), $n_{\text{traces}}=17{,}892$ and
+$t_{\text{start}}=\text{2026-04-20 18:17}$. Thus all paired deltas use
+common random numbers. Mean, median and 90th percentile of turnaround,
+RMG service and RMG pre-service delay are reported together with the
+observed arrival KPIs. Every one of the 30 generated logs is subjected
+to the sequential case contract of
+Section~\ref{sec:process_discovery_methodology}; any violation aborts
+the run. The same driver executes the additional 30 capped replications.
+\texttt{validation/10\_compare\_rmg\_capacity\_sensitivity.py} verifies
+identical source hashes and settings before computing the paired direct
+effects and interactions. Thus 60 scenario logs are audited in total.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Descriptive Transition-Duration Analysis}

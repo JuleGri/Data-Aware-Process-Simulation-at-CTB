@@ -45,7 +45,15 @@ Section~\ref{sec:train_test_split}.
         \item \textbf{Gate Out}: Truck exits the terminal.
     \end{enumerate}
 
-    The CTB environment in this project comes with several resource-constrains. Located between the waterside and the landside, 22 RMG storage blocks (T06--T27) are operating and serving both ends simulataniously with a maximum of 3 automatic Gantry Cranes in parallel. Additionally the CTB has two specialised areas. An empty-container depot (In operational terms also called "MT" or "LL" - in German for "Leerlager") and a manually operated yard area (In operational terms also called HO2). The Terminal Gate consists of 16 lanes half of which built for incoming trucks, the other half for outgoing trucks. The amount of operated gates per day and shift differs, depending on the resource planing by the terminal management. 
+    The CTB environment in this project has several resource constraints.
+    Located between the waterside and the landside, 22 RMG storage
+    blocks (T06--T27) serve both sides. Operationally, at most three
+    automated gantry cranes can work in parallel at one block. The CTB
+    also has two specialised areas: an empty-container depot (called
+    ``MT'' or ``LL'', from the German \textit{Leerlager}) and the
+    manually operated HO2 yard area. The terminal gate consists of 16
+    lanes, split between incoming and outgoing trucks. The number of
+    operated gate lanes varies by day, shift and terminal resource plan.
    
     \subsection{Data Sources}
     \label{sec:cs_data_sources}
@@ -705,7 +713,7 @@ case-level context information rather than event-level dynamic state
 \label{sec:eventlog_characteristics}
 
 After the full preprocessing pipeline the final event log contains
-89,458 truck visits represented by 277,423 events. The activity
+89,460 truck visits represented by 275,408 events. The activity
 distribution is shown in Table~\ref{tab:activity_distribution}.
 Table~\ref{tab:eventlog_stats} summarises the overall event log.
 
@@ -717,17 +725,17 @@ Table~\ref{tab:eventlog_stats} summarises the overall event log.
 \toprule
 \textbf{Activity} & \textbf{Frequency} \\
 \midrule
-Gate In       & 89,458 \\
-Gate Out      & 89,458 \\
-RMG\_receive  & 38,334 \\
-RMG\_delivery & 17,524 \\
-RMG\_mixed    & 13,522 \\
-LL\_delivery  & 9,589  \\
-HO2\_delivery & 6,689  \\
-HO2\_receive  & 4,762  \\
-LL\_mixed     & 4,451  \\
-HO2\_mixed    & 2,254  \\
-LL\_receive   & 910    \\
+Gate In       & 89,460 \\
+Gate Out      & 89,460 \\
+RMG\_receive  & 39,965 \\
+RMG\_delivery & 22,504 \\
+LL\_delivery  & 13,230 \\
+HO2\_delivery & 7,224  \\
+HO2\_receive  & 5,464  \\
+RMG\_mixed    & 4,939  \\
+LL\_receive   & 2,073  \\
+HO2\_mixed    & 1,025  \\
+LL\_mixed     & 64     \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -740,13 +748,13 @@ LL\_receive   & 910    \\
 \toprule
 \textbf{Statistic} & \textbf{Value} \\
 \midrule
-Cases                  & 89,458 \\
-Events                 & 277,423 \\
+Cases                  & 89,460 \\
+Events                 & 275,408 \\
 Distinct activities    & 11 \\
-Observation start      & 2026-03-02 05:25 \\
-Observation end        & 2026-05-01 (approx.) \\
+Observation start      & 2026-03-02 05:27 \\
+Observation end        & 2026-04-30 11:54 \\
 Distinct RMG resources & 22 (T06--T27) \\
-Additional pools       & LL, HO2, VC, Gate In, Gate Out \\
+Additional pools       & LL, HO2, Gate In, Gate Out \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -756,14 +764,14 @@ yard activities and a final \texttt{Gate Out} event. Operational
 activities may occur at an RMG block, the LL area, HO2 or the VC area,
 depending on the operational requirements of the visit.
 
-The generated event log is exported both as CSV
-(\texttt{s6\_eventlog\_target\_rank\_features.csv}) and XES
-(\texttt{s6\_eventlog\_target\_rank\_features.xes}). The CSV
-representation serves as the primary format for the pipeline; the XES
-representation enables compatibility with pm4py, ProM and ProSiT and
-serves as the foundation for the process discovery in
-Chapter~\ref{chp:experiments_and_framework}. The final XES export
-contains 89,458 cases and 277,423 events.
+The generated event log is exported as the full CSV
+\texttt{s6\_eventlog\_target\_rank\_features.csv}. The frozen temporal
+partitions are exported as \texttt{s6\_train.csv},
+\texttt{s6\_test.csv} and the corresponding
+\texttt{xes\_files/s6\_train.xes} and
+\texttt{xes\_files/s6\_test.xes}. The CSV representation serves as the
+primary pipeline format; XES enables compatibility with pm4py, ProM
+and ProSiT for process discovery and conformance analysis.
 
 The chronological character of the log is preserved end to end: every
 case carries the same monotone timeline from Gate In to Gate Out. This
