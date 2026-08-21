@@ -201,51 +201,63 @@ Additional attributes are usually included to enrich the event data with operati
 \begin{tabular}{llll} 
 \hline Case ID & Activity & Timestamp & Yard Block 
 \\ \hline T001 & Gate In & 09:13:04 & - 
-\\ T001 & Yard Arrival & 09:21:46 & B04 
+\\ T001 & Yard Operation & 09:21:46 & B06 
 \\ T001 & Gate Out & 09:42:18 & - 
 \\ T002 & Gate In & 09:17:12 & - 
-\\ T002 & Yard Arrival & 09:30:51 & B08 
+\\ T002 & Yard Operation & 09:30:51 & B08 
 \\ T002 & Gate Out & 09:58:33 & - 
 \\ \hline \end{tabular} 
 \end{table} 
 
-For data exchange between Process Mining tools, event logs are commonly stored in standardized formats. The most widely adopted standard is the eXtensible Event Stream (XES) format. XES was specifically developed for Process Mining applications and enables the storage of events, cases, timestamps, and additional attributes in a structured and tool-independent way. Event logs provide the link between operational information systems and Process Mining techniques. By organizing recorded events into cases and traces, they transform raw operational data into a representation that makes process discovery, conformance checking, and performance analysis possible.
+For information and data exchange between Process Mining tools, event logs can be stored in standardized formats. The most widely adopted standard is the eXtensible Event Stream (XES) format. XES was specifically developed for Process Mining applications and enables the storage of events, cases, timestamps, and additional attributes in a structured and tool-independent way [SOURCE]. Event logs form the bridge between operational information systems and Process Mining techniques. By organizing and collecting recorded events into cases and traces, they represent the transformation from  raw operational data into a representation that makes process discovery, conformance checking, and performance analysis generally possible [SOURCE]Seed.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Process Mining Foundations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Definitions} 
-Organizations increasingly collect large volumes of operational data through enterprise systems such as Enterprise Resource Planning (ERP), Customer Relationship Management (CRM), and Workflow Management Systems (WfMS). Various analytical disciplines have emerged to exploit these data sources. Among the most relevant are Business Intelligence, Data Mining, and Process Mining. Business Intelligence (BI) focuses primarily on descriptive analytics and the monitoring of organizational performance through dashboards, reports, and key performance indicators (KPIs). The goal of BI is to provide decision makers with aggregated information about past and current business performance \cite{PMvanDerAalst2016}. Data Mining aims to identify patterns, correlations, classifications, or predictive relationships within large datasets. Traditional data-mining approaches treat observations largely as independent records and often disregard the ordering and dependencies between events \cite{PMvanDerAalst2016}. Process Mining bridges the gap between traditional model-based process analysis and data-driven analytics. It exploits event data recorded by information systems to discover, monitor, and improve business processes. Instead of focusing on isolated records, Process Mining explicitly considers the sequence of events that constitute process executions. Van der Aalst defines Process Mining as a discipline that aims to improve operational processes through the systematic use of event data and process models \cite{PMvanDerAalst2016}. A central characteristic of Process Mining is that it combines process models with observed execution data. This enables analysts to discover actual process behaviour, compare observed executions with expected behaviour, identify bottlenecks, and derive insights for process improvement \cite{PMvanDerAalst2016}. 
+As an effect of the ongoing digitalisation of our society, companies and organisations naturally collect increasingly larger and faster growing volumes of operational data through enterprise systems such as Enterprise Resource Planning (ERP), Customer Relationship Management (CRM), and Workflow Management Systems (WfMS) [SOURCE]. A variety of analytical disciplines have been developed to exploit these growing data sources. Disciplines like Business Intelligence, Data Mining, and Process Mining are among the most prominent and increasingly established fields. Business Intelligence (BI) focuses mainly on descriptive analytics and the monitoring of organizational performance through dashboards, reports, and the calculation and provision of key performance indicators (KPIs). The goal of BI is to provide decision makers with aggregated information about past and current business performances \cite{PMvanDerAalst2016}.
+\begin{sloppypar}
+Data Mining focuses on identifying patterns, correlations, classifications, or predictive relationships within datasets. Traditional data-mining approaches treat observations as independent records and often disregard the ordering and dependencies between events \cite{PMvanDerAalst2016}. Process Mining serves as the bridge between traditional model-based process analysis and data-driven analytics. It exploits event data recorded by information systems to discover, monitor, and therefore provide a data based foundation to improve business processes. Instead of focusing on isolated records, Process Mining explicitly considers the sequence of events that constitutes a processes executions. Van der Aalst, as a main contributor to the research field, defines Process Mining as a discipline that aims to improve operational processes through the systematic use of event data and process models \cite{PMRozinat2009}. A central characteristic of Process Mining is that it combines process models with historically observed execution data. This enables analysts to discover actual process behaviour, compare observed executions with expected behaviour, identify bottlenecks, and gain insights for plannable process improvement \cite{PMvanDerAalst2016}. 
+\end{sloppypar}
 
-\subsubsection{Process Perspectives} Business processes can be analysed from different perspectives. Early Process Mining research distinguished four primary perspectives that together provide a comprehensive view of process execution \cite{PMRozinat2009}. 
+
+\subsubsection{Process Perspectives} Business processes can be analysed from different perspectives. Early Process Mining research distinguishes four root perspectives, that together provide a comprehensive view of process executions \cite{PMRozinat2009}. 
 
 \paragraph{Control-Flow Perspective} 
-The control-flow perspective describes the ordering relations between activities and captures how process instances progress through a process. It focuses on questions such as which activities occur, in which order, and which alternative execution paths exist. \paragraph{Time Perspective} The time perspective focuses on temporal process characteristics such as activity durations, waiting times, throughput times, and bottlenecks. The analysis of timestamps contained in event logs enables the identification of performance issues and delays. 
-\paragraph{Resource Perspective} The resource perspective investigates the organizational dimension of a process. It considers which resources execute activities, how work is distributed among employees, and how organizational structures influence process behaviour. 
-\paragraph{Data Perspective} The data perspective analyzes process-related attributes and case characteristics. Examples include customer types, product categories, order volumes, or risk classes. Such attributes often influence process decisions and execution paths \cite{PMRozinat2009}. Together, these perspectives provide a multidimensional view of business processes and form the foundation of advanced process analysis techniques. 
+The control-flow perspective describes the ordering relations between activities and captures how process instances progress through a process. It focuses on questions such as which activities occur, in which order, and which alternative execution paths exist. 
+\paragraph{Time Perspective} 
+The time perspective focuses on temporal process characteristics such as activity durations, waiting times, throughput times, and bottlenecks. The analysis of timestamps contained in event logs enables the identification of performance issues and delays. 
+\paragraph{Resource Perspective} 
+The resource perspective provides the organizational dimension of a process. It considers which resources execute certain activities, how work is distributed among employees or other resource types, and how organizational structures influence process behavior. 
+\paragraph{Data Perspective}
+The data perspective analyzes process-related attributes and case characteristics. Depending on the type of case, attributes can include customer types, object categories or risk classes. Such attributes often influence process decisions and execution paths \cite{PMRozinat2009}. 
+
+\begin{sloppypar}
+Together, these perspectives provide a multidimensional view of business processes and form the foundation of advanced process analysis techniques.
+\end{sloppypar} 
 
 \subsubsection{Process Discovery}
-Process discovery is the most prominent branch of Process Mining. Its objective is to automatically construct a process model solely from recorded event data without prior process knowledge \cite{PMvanDerAalst2016}. The input to process discovery is an event log containing historical process executions. The output is a process model that aims to reproduce the observed behaviour. Depending on the chosen discovery algorithm, the resulting model may be represented as a Petri net, process tree, BPMN model, or directly-follows graph. Over the years, numerous discovery algorithms have been proposed. Three classical examples are: 
+A process discoveries objective is to automatically construct a process model solely from recorded event data without prior process knowledge \cite{PMvanDerAalst2016}. The input to process discovery is an event log containing historical process executions. The output is a process model that as accurately as possible reproduces the observed behavior. Depending on the chosen discovery algorithm, the resulting model can be represented as a Petri net, process tree, BPMN model, or directly-follows graph \cite{PMRozinat2009}. Over the years, numerous discovery algorithms have been proposed. Three classic examples are [SOURCES]: 
 
 \begin{itemize} 
-\item \textbf{Alpha Miner}: One of the earliest process discovery algorithms, capable of identifying causal dependencies and parallel behaviour from event logs. 
-\item \textbf{Heuristic Miner}: An extension of Alpha Miner that incorporates frequency information and is more robust towards noise and infrequent behaviour. 
-\item \textbf{Inductive Miner}: A modern discovery algorithm that recursively decomposes event logs and guarantees the production of sound process models. It is widely used due to its robustness and ability to balance precision and simplicity. 
+\item \textbf{Alpha Miner}: One of the earliest process discovery algorithms, capable of identifying causal dependencies and parallel behavior from event logs [SOURCE]. 
+\item \textbf{Heuristic Miner}: An extension of Alpha Miner that additionally incorporates frequency information and is more robust regarding noise and generally infrequent behavior, due to [REASON AND SOURCE] 
+\item \textbf{Inductive Miner}: A modern discovery algorithm that recursively decomposes event logs and guarantees the generation of sound process models. It is widely used due to its robustness and ability to balance precision and simplicity [SOURCES that use it]. 
 \end{itemize} 
 
-Process discovery enables organizations to obtain an objective representation of how their processes are actually executed rather than how they are presumed to operate \cite{PMvanDerAalst2016}.
+Process discovery enables organizations to retreive an objective representation of how their processes are actually executed rather than how they are commonly assumed to be executed and operated, making Process Mining an interesting alternative for the analysis of especially complex and confusing process executions \cite{PMvanDerAalst2016}.
 
 Figure~\ref{fig:model_representations} illustrates the two most common
 output representations of a modern discovery algorithm on the same
 event log. The process tree in Figure~\ref{fig:model_tree_theory}
 decomposes the process into hierarchically nested operators
 (\emph{seq} for sequence, \emph{xor} for exclusive choice, \emph{and}
-for concurrency, \emph{loop} for cyclic behaviour). The BPMN model in
+for concurrency, \emph{loop} for cyclic behavior). The BPMN model in
 Figure~\ref{fig:model_bpmn_theory} is the industry-standard graphical
-notation for the same behaviour and is derived from the process tree
+notation for the same behavior and is derived from the process tree
 by mapping each operator to a BPMN construct
 (exclusive gateway, parallel gateway, task). Petri-net representations
-of the same behaviour are structurally equivalent but use a different
+of the same behavior are structurally equivalent but use a different
 graphical vocabulary (places and transitions); a concrete Petri-net
 example on the CTB event log is discussed in
 Section~\ref{sec:results_process_discovery}.
@@ -275,13 +287,14 @@ interchangeably in the process mining literature
 \label{fig:model_representations}
 \end{figure}
 
-\subsubsection{Conformance Checking} While process discovery focuses on constructing process models, conformance checking focuses on comparing observed process executions with an existing process model \cite{aalst2012ConformanceChecking}. The objective is to identify deviations between the model and reality. Such deviations may indicate compliance violations, process inefficiencies, exceptional cases, or outdated process documentation. The quality of discovered and analyzed process models is commonly evaluated using four criteria \cite{aalst2012ConformanceChecking,PMvanDerAalst2016}: 
+\subsubsection{Conformance Checking}
+While process discovery focuses on constructing process models, conformance checking focuses on comparing observed process executions with an existing process model \cite{aalst2012ConformanceChecking}. The objective is to identify deviations between the model and observed reality. Resulting deviations can indicate compliance violations, process inefficiencies, exceptional cases, or outdated process documentation. The quality of discovered and analyzed process models is commonly evaluated using four criterias\cite{aalst2012ConformanceChecking,PMvanDerAalst2016}: 
 
 \begin{itemize} 
-\item \textbf{Fitness}: Measures the extent to which observed process executions can be replayed by the process model. 
-\item \textbf{Precision}: Evaluates whether the model avoids allowing excessive behaviour that was not observed in reality. 
+\item \textbf{Fitness}: A measure, to assess the extend, to which observed process executions can be replayed by the process model. 
+\item \textbf{Precision}: Evaluates whether the model avoids allowing excessive behavior that was not observed in reality.
 \item \textbf{Generalization}: Assesses whether the model captures underlying process behaviour beyond the specific instances present in the event log. 
-\item \textbf{Simplicity}: Favours models that explain observed behaviour with minimal complexity while remaining understandable. 
+\item \textbf{Simplicity}: Favors models that explain observed behavior with minimal complexity while  understandable. 
 \end{itemize} 
 
 These criteria provide a balanced framework for evaluating process model quality and form the basis of many process-mining evaluation approaches. 
