@@ -405,17 +405,19 @@ Container terminals operate in very dynamic environments characterized by fluctu
 
 A core advantage of simulation is its ability to support what-if analyses. Alternative operational scenarios can be evaluated under identical conditions, allowing direct comparison of performance measures such as truck turnaround times, resource utilization, throughput, waiting times, and service levels. This capability is particularly valuable in container terminals because small operational changes frequently generate system-wide effects due to the strong interdependencies between gate operations, yard processes, and vessel handling activities \cite{CTSteenken2004,Bruzzone2012,Kastner2021}. For truck operations, simulation has been extensively applied to study the effects of Truck Appointment Systems (TAS), gate capacities, yard utilization, and equipment allocation strategies. Such analyses are usually terminal specific, but can support terminal operators in balancing efficiency improvements with operational robustness under uncertain workloads and changing operating conditions \cite{Bett2024,CTprocessMiningTAS2020}. 
 
-\subsection{Simulation Model Verification, Calibration and Validation} 
-The usefulness of a simulation model depends not only on its structure but also on its ability to represent real-world behavior with sufficient accuracy. Consequently, simulation projects typically include activities related to verification, calibration, and validation \cite{BPSAalst2015}.
-
-\paragraph{Verification} 
-The objective of verification is to ensure that the executable simulation model correctly reflects the conceptual model and contains no implementation errors. Verification therefore focuses on the internal consistency of the model rather than its correspondence with reality \cite{BPSAalst2015}. 
-
-\paragraph{Calibration} 
-Calibration concerns the estimation and adjustment of simulation parameters so that the model accurately reflects observed operational conditions. Typical calibration tasks include fitting arrival distributions, activity durations, resource capacities, and routing probabilities using historical observations. Calibration therefore links the conceptual model with empirical process data \cite{PMRozinat2009,Camargo2020}. 
-
-\paragraph{Validation} 
-Validation evaluates whether simulation outputs correspond sufficiently well with the observed process behavior. This often involves comparing simulated and real performance measures such as throughput times, waiting times, resource utilization, or process paths. The successfull validation of a model provides the confidence that the simulation results can be applied for decision support and process analysis \cite{BPSAalst2015,PMRozinat2009}. Historically, these activities have been performed manually as part of traditional simulation studies. However, the advances in simulation discovery and Process Mining have increasingly shifted verification, calibration, and validation towards data-driven approaches. Automatically discovered simulation models can also use historical event data both for parameter estimation and for systematic comparisons between simulated and observed process behavior \cite{PMRozinat2009,Camargo2020,simod2024}.
+\subsection{Simulation Model Calibration}
+Calibration estimates or adjusts simulation parameters so that the
+model represents the observed operating conditions. Typical tasks
+include fitting arrival and duration distributions, estimating resource
+capacities, and learning routing probabilities or context-dependent
+decision rules from historical observations
+\cite{PMRozinat2009,Camargo2020}. In simulation discovery, many of these
+steps form part of the automated discovery procedure itself. Calibration
+must nevertheless be distinguished from validation: agreement with the
+data used to fit a model demonstrates in-sample fit, whereas an
+independent assessment requires data that did not determine those
+parameters. Section~\ref{sec:simulation_validation_background} develops
+the corresponding verification and validation concepts.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -521,65 +523,354 @@ The concept of white-box simulation emerged as a response to the increasing reli
 The ProSiT framework currently represents one of the most comprehensive realizations of this vision and serves as the methodological foundation for the simulation approach investigated in this thesis \cite{Vinci2026prosit}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Simulation Quality, Validation/Assessment, and Trustworthiness}
+For terminological precision, the relationships exposed by such learned
+rules are statistical associations conditional on the training data and
+model specification. Their visibility supports inspection and deliberate
+configuration, but does not by itself establish causal effects.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\textit{This part is suppose to answer the question: How do we know whether these automatically discovered simulation models are actually good enough to support decisions?}
+\section{Simulation Verification, Validation, and Trustworthiness}
+\label{sec:simulation_validation_background}
+The central validation question is not whether a simulator is merely
+executable, but whether it is sufficiently credible for its intended
+use. This qualification is essential: a model may be adequate for
+reproducing historical truck turnaround distributions while remaining
+inadequate for predicting the effect of an intervention outside the
+range of the observed data \cite{Sargent2013Validation,BPSAalst2015}.
+Automatically discovered simulation models do not remove this
+requirement. They replace some manual assumptions with assumptions about
+event-log semantics, discovery algorithms, data attributes and fitted
+distributions, all of which require examination.
 
-The automatic generation from event data arises important questions regarding their quality, reliability, and practical usefulness. The assessment of simulation quality, of directly from event logs derived model structures and parameters, has evolved into an active research area, sitting between traditional Process Mining and Business Process Simulation. Ultimately, the objective of a simulation model is not merely to reproduce historical data, but to support operational decision making. Therefore, simulation quality must be evaluated from multiple perspectives, including behavioral realism, temporal accuracy, resource representation, and decision-support capability.
+\subsection{Foundational Distinction Between Verification and Validation}
 
-\subsection{Dimensions of Simulation Quality} 
-    Simulation models are multi-dimensional representations of real-world processes, therefore simulation quality cannot be reduced to a single performance indicator. Instead, different aspects of process behavior have to be evaluated separately.
-    
-    \paragraph{Control-Flow Quality} 
-    The control-flow perspective describes if the simulation model reproduces the observed behavioral structure from the Event Log. A high-quality model should generate process variants and activity sequences that resemble the execution behavior recorded in the event log. Deviations in the models control-flow indicate e.g. missing process paths, unrealistic routing behavior or overly generalized models, allowing plausible but unobserved process paths \cite{PMRozinat2009,Chapela2025SimQuality}. 
-    \paragraph{Temporal Quality} 
-    Temporal quality of a simulation model measures how accurately the simulation reproduces timing-related process characteristics like activity durations, waiting times, throughput times and overall case durations. Decision-support applications, as a common goal of simulation models often focus on performance improvement, temporal realism is an important component of a simulations quality, that has to be critically assessed before implementation \cite{BPSAalst2015,Chapela2025SimQuality}. 
-    \paragraph{Resource Quality} 
-    Resource quality evaluates how accurately simulation models represent resource behavior. That includes resource assignments, individual workloads, utilization patterns, and learned capacity constraints. Resource related inaccuracies of a model can heavily affect simulation outcomes because waiting times and bottlenecks are often produced by resource contention rather than control-flow decisions alone \cite{BPSAalst2015,Vinci2026prosit}. 
-    \paragraph{Decision-Support Capability} 
-    The Decision-Support Quality of a Simulation model defines the its ability to remain sufficiently realistic under changed conditions and alternative scenarios defined by the developers. That also includes the ability of a model to support unobserved what-if analyses and generate trustworthy recommendations for operational decision making \cite{Chapela2025SimQuality,runtimeIntegration2024}.
+Sargent separates several questions that are often conflated under the
+single term \emph{validation} \cite{Sargent2013Validation}.
+\emph{Conceptual-model validity} asks whether the theories, assumptions
+and logical relationships in the conceptual model are reasonable for
+the intended purpose. \emph{Computerized-model verification} asks
+whether that conceptual model has been implemented correctly.
+\emph{Data validity} concerns whether the data used to construct,
+calibrate and evaluate the model are adequate. Finally,
+\emph{operational validity} asks whether the computerized model's
+output behaviour is sufficiently accurate over the domain in which the
+model is intended to be used. Historical-data validation---running the
+model under historical input conditions and comparing its output with
+observed system data---is one technique for assessing operational
+validity \cite{Sargent2013Validation}.
 
-    \subsection{Simulation Validation} 
-    Traditional simulation validation typically compares selected performance indicators between observed and simulated systems. However, modern simulation-discovery approaches require more comprehensive evaluation techniques because behavioral realism, timing characteristics, and workload dynamics must all be assessed simultaneously. Recent Process Mining research therefore introduced a variety of similarity metrics designed to compare event logs generated by simulation models with real-world event logs \cite{Chapela2025SimQuality}.
+Table~\ref{tab:validation_evidence_types} maps these distinctions to the
+type of evidence needed in an automatically discovered BPS study. The
+categories are complementary rather than interchangeable. For example,
+a low event-log distance is evidence of operational fidelity, but it
+cannot show that a timestamp proxy has the correct physical meaning or
+that the simulator implemented a resource constraint as intended.
 
-        \subsubsection{Control-Flow Similarity Metrics}
-        Control-flow similarity focuses on comparing the behavioral structure of simulated and observed process executions. One of the most widely used techniques is the Earth Mover's Distance (EMD), originally introduced for stochastic conformance checking by Leemans et al. \cite{leeman2013EarthMovers}. EMD measures how much probability mass must be moved between two trace distributions to transform one distribution into another. A lower EMD indicates stronger behavioral similarity. Building upon this idea, simulation-specific evaluation frameworks frequently employ Control-Flow Log Distance (CFLD) metrics. CFLD compares the frequencies of process variants generated by a simulation model against the variants observed in reality. This enables the assessment of behavioral realism at the process level \cite{Chapela2025SimQuality}. Another common family of control-flow measures is based on N-Gram analysis. Rather than comparing complete traces, N-Gram methods compare local activity patterns consisting of consecutive activity sequences of length $n$. This allows behavioral similarities to be identified even when complete process variants differ \cite{Chapela2025SimQuality}.
+\begin{table}[htbp]
+\centering
+\caption{Validation questions and corresponding evidence in an
+event-log-discovered simulation study, based on Sargent's framework
+\cite{Sargent2013Validation}.}
+\label{tab:validation_evidence_types}
+\begin{tabular}{p{0.23\textwidth}p{0.29\textwidth}p{0.39\textwidth}}
+\toprule
+\textbf{Question} & \textbf{Validity concept} & \textbf{Typical evidence} \\
+\midrule
+Is the abstraction defensible? & Conceptual-model validity &
+Domain review of case boundaries, event semantics, resource meanings
+and physical constraints \\
+Was the abstraction implemented correctly? & Computerized-model
+verification & Unit and integration tests, structural contracts,
+reproducible seeds and parameter-provenance checks \\
+Are discovery and evaluation data suitable? & Data validity &
+Event-log quality checks, timestamp semantics, leakage prevention and a
+training/test separation \\
+Does the model reproduce observed behaviour? & Operational validity &
+Comparison of simulated and held-out real logs across multiple process
+perspectives and stochastic replications \\
+Does a scenario predict the true intervention effect? & Predictive
+validity outside the historical regime & Intervention observations,
+controlled field evidence or additional domain-supported sensitivity
+analysis \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-        \subsubsection{Temporal Similarity Metrics} 
-        Control-flow similarity alone is insufficient because simulation models are frequently used to predict temporal process performance. Case Throughput Distance (CTD) compares throughput time distributions between simulated and real event logs. The metric evaluates how accurately a simulation reproduces the overall duration of process instances \cite{Chapela2025SimQuality}. Absolute Error Distance (AED) and Relative Error Distance (RED) quantify the discrepancy between observed and simulated temporal characteristics. These metrics are commonly used to assess waiting times, service times, and throughput times at different levels of aggregation \cite{Chapela2025SimQuality}. Temporal metrics are particularly relevant in operational environments where process performance directly affects service quality. In container terminal operations, for example, accurate prediction of truck turnaround times and waiting times represents a central requirement for practical simulation-based decision support.
+This distinction also clarifies the scope of this thesis. The
+real-versus-simulated event-log comparison is a form of held-out
+historical-data or operational validation. The event-log construction
+and the physical RMG capacity constraint contribute data- and
+conceptual-validity evidence, while executable case contracts and
+provenance checks contribute verification evidence. None of these alone
+proves that every what-if response is the true causal response of the
+terminal.
 
-        \subsubsection{Arrival and Congestion Metrics} 
-        In many operational systems, process performance is strongly influenced by workload levels and arrival dynamics. Consequently, simulation accuracy must also be evaluated with respect to congestion behavior and workload generation. The Case Arrival Rate (CAR) metric compares the arrival patterns of process instances between simulated and observed event logs. Accurate arrival modelling is essential because unrealistic workload generation can distort resource utilization, queue lengths, and waiting times \cite{Chapela2025SimQuality}. For container terminal operations, arrival behavior is particularly important because truck arrivals and yard workloads directly influence congestion levels throughout the terminal. A simulation model that accurately reproduces individual process traces but fails to replicate realistic truck arrival dynamics may still generate misleading decision-support results.
+\subsection{From Historical Logs to Operational Validation}
 
-        \subsubsection{Wasserstein Distance} 
-        Many similarity metrics used in simulation validation are based on the Wasserstein Distance, which originated in optimal transport theory. The Wasserstein Distance measures the minimum effort required to transform one probability distribution into another. Intuitively, it can be interpreted as the amount of work required to relocate probability mass between distributions. Earth Mover's Distance represents a discrete formulation of the Wasserstein Distance and is particularly well suited for comparing trace distributions and temporal distributions in Process Mining applications \cite{leeman2013EarthMovers}. Due to its ability to compare complete distributions rather than only summary statistics, Wasserstein-based metrics have become a central component of modern simulation validation frameworks.
+Process Mining provides a natural representation for historical-data
+validation because both the observed system and the simulator can be
+represented by event logs. Rozinat et al. established an early version
+of this principle: they discover control-flow, data, performance and
+resource perspectives, integrate them into a coloured Petri-net
+simulation model, simulate a second event log, and analyse how well that
+generated log approximates the characteristics of the original log
+\cite{PMRozinat2009}. This is stronger than checking whether the
+discovered model can execute; it evaluates whether its generated
+behaviour resembles recorded behaviour.
 
-        \subsubsection{Kolmogorov--Smirnov Statistic}
-        The two-sample Kolmogorov--Smirnov (KS) statistic is a complementary distributional distance that measures the maximum vertical gap between two empirical cumulative distribution functions
-        $F_{\text{sim}}$ and $F_{\text{real}}$:
-        \begin{equation}
-            \text{KS} = \sup_{x} \, \bigl| F_{\text{sim}}(x) - F_{\text{real}}(x) \bigr|.
-        \end{equation}
-        The KS statistic is unitless, bounded in $[0, 1]$ and can be paired with a two-sample significance test to decide whether the sim/real samples could plausibly originate from the same underlying distribution. In practical simulation-validation work, the KS statistic is often reported \emph{alongside} the Wasserstein distance: Wasserstein carries the operational units (minutes for a duration) while the KS statistic normalises across scales and makes distributional similarity comparable between activities of very different mean duration.
+Camargo et al. formalise the same idea as an optimisation objective.
+Candidate BPS configurations generate event logs and hyperparameter
+optimisation searches for the configuration that maximises similarity
+to observed log behaviour \cite{Camargo2020}. Their later comparison of
+data-driven simulation and deep generative models further demonstrates
+why quality must not be inferred from trace frequencies alone:
+conventional data-driven simulators may reproduce activity sequences
+and their frequencies while performing worse on temporal dynamics
+\cite{Camargo2021}.
 
-        \subsubsection{Monte-Carlo Replication and Confidence Intervals}
-        Even a fully specified discovered simulator produces a different sample every time it is run, because every parameter is sampled from a fitted distribution. Reporting the outcome of a single simulation run is therefore not sufficient to conclude that one configuration is more faithful than another: the observed distance between two configurations may lie within the intrinsic Monte-Carlo variance of the simulator itself. A principled evaluation therefore repeats every simulation $N$ times with independent random seeds and aggregates the resulting distances into a confidence interval, typically a Student-$t$ interval on the mean or a bootstrap percentile interval. This practice is standard in discrete-event simulation \cite{BPSAalst2015} but is often omitted in reports of simulation-discovery evaluations. Chapter~\ref{chp:experiments_and_framework} therefore specifies an explicit multi-seed replication protocol so that every fidelity claim in the results chapter can be qualified by its 95\,\% confidence interval.
+The implication is that operational fidelity is multi-dimensional.
+Relevant perspectives include control flow, activity and case timing,
+case arrivals, congestion and resource behaviour. A model can be close
+to the real log in one perspective and far away in another; collapsing
+all discrepancies into one number can therefore hide the mechanism
+that is incorrectly represented
+\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}.
 
-    \subsection{Trustworthiness of Automatically Discovered Simulation Models} 
+\subsection{Multi-Perspective Event-Log Comparison}
 
-As simulation models become increasingly data-driven and automatically generated, simulation quality alone is no longer sufficient. Decision makers must also be able to trust the simulation model and understand its limitations. Recent research therefore increasingly focuses on the trustworthiness of simulation-discovery approaches. Trustworthiness encompasses multiple dimensions, including behavioral accuracy, robustness, explainability, reproducibility, and decision-support reliability \cite{runtimeIntegration2024,Vinci2026prosit}. The framework proposed by Chapela-Campa et al. represents one of the first systematic efforts to measure simulation quality across multiple dimensions simultaneously \cite{Chapela2025SimQuality}. Their work highlights that simulation accuracy depends on different behavioral perspectives and that no single validation metric is sufficient to judge model quality comprehensively. Similarly, recent healthcare studies using the ProSiT framework demonstrate that improved behavioral realism can positively influence simulation-based resource-allocation decisions \cite{Hospital2026Vinci}. However, these studies remain largely confined to healthcare and administrative business processes. Although promising results have been reported, empirical evidence regarding the robustness and trustworthiness of automatically discovered simulation models remains limited. Most evaluations focus on reproducing historical behavior rather than assessing simulation performance under substantially changed operational conditions. Consequently, important questions regarding model stability and decision-support reliability remain only partially addressed.
+Chapela-Campa et al. provide the validation framework that most closely
+matches the evaluation problem of this thesis
+\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. Their starting point
+is that the true BPS model is normally unavailable and that different
+simulation engines use incomparable internal formats. They therefore
+evaluate a model indirectly as a generator: multiple logs generated by
+the BPS model are compared with an actual event log that was not used
+to construct the model. The framework separates control-flow, temporal
+and congestion perspectives and reports a measure for each instead of
+claiming that one aggregate score represents overall model quality.
+The measures are evaluated using controlled perturbations and by
+comparing alternative automatically discovered BPS models, showing that
+perspective-specific measures can identify the source of a discrepancy
+\cite{Chapela2025SimQuality}.
 
-    	\subsection{Research Gap} 
+\subsubsection{Control-Flow Perspective}
 
-Container terminals represent highly dynamic and resource-constrained operational environments characterized by complex interactions between truck processes, yard operations, storage systems, and handling equipment. As a result, simulation has become one of the most widely used analytical methods for supporting operational decision making in container terminal management \cite{Bruzzone2012,Kastner2021,Carboni2025}. Despite this extensive use of simulation, most container terminal simulation models continue to be developed manually. Model construction, calibration, and maintenance require substantial modelling effort and domain expertise, limiting scalability and practical applicability in rapidly changing operational environments \cite{PMRozinat2009}. Simulation discovery addresses this limitation by automatically generating simulation models from event logs. Over the past decade, significant advances have been achieved in the discovery of simulation parameters, data-aware decision logic, and automated model construction \cite{Camargo2020,simod2024,Vinci2026prosit}. More recently, data-aware simulation approaches demonstrated that contextual information and process-state representations can substantially improve simulation accuracy compared to traditional branching probabilities \cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}. In parallel, white-box simulation approaches such as ProSiT introduced interpretable probabilistic decision models that aim to improve transparency and configurability while maintaining strong predictive performance \cite{Vinci2026prosit}. However, existing empirical evaluations have primarily been conducted in healthcare, administrative, and generic business-process environments. To date, there is limited evidence regarding the applicability and behavior of simulation-discovery approaches within large-scale container terminal operations. Furthermore, the increasing complexity of data-aware and decision-aware simulation models raises unresolved questions concerning: 
+Control-flow output quality asks whether the simulator generates
+activity sequences and sequence frequencies resembling the observed
+process. It is distinct from replay fitness of a control-flow model:
+fitness asks whether real traces are allowed by the model, whereas
+output validation asks which traces the stochastic simulator actually
+generates and with what frequency.
 
-\begin{itemize} 
-\item the robustness of automatically discovered simulation models, 
-\item their trustworthiness for operational decision support, 
-\item their ability to reproduce congestion effects and workload dynamics, 
-\item the practical value of white-box simulation in complex logistics environments. \end{itemize} 
+Stochastic conformance work applies transport distances to probability
+distributions over traces or other behavioural abstractions
+\cite{leeman2013EarthMovers}. Chapela-Campa et al. instead define two
+simulation-oriented log distances \cite{ChapelaCampa2023Trust,
+Chapela2025SimQuality}. Control-Flow Log Distance (CFLD) computes the
+normalised Damerau--Levenshtein distance between trace pairs and uses
+the Hungarian algorithm to find the minimum-cost one-to-one matching
+between the two logs. CFLD therefore compares complete traces; it is not
+merely a comparison of variant-frequency vectors. Because this matching
+is computationally expensive, N-Gram Distance (NGD) compares normalised
+frequencies of local activity subsequences. NGD is scalable and detects
+local ordering differences, although it deliberately loses some
+complete-trace information.
 
-This thesis does not aim to provide a general answer to these broader research challenges. Rather, it contributes an empirical case study within the context of truck-handling operations at the HHLA Container Terminal Burchardkai (CTB). By evaluating simulation-discovery approaches in a real-world container terminal environment, the thesis provides evidence regarding their applicability, strengths, and limitations in a domain that has received comparatively little attention within the existing simulation-discovery literature.
+This thesis does not claim to implement the full Chapela-Campa metric
+suite. Its structural evidence combines held-out Petri-net conformance,
+explicit case-language contracts and yard-activity frequency error.
+These measures answer the CTB-specific structural questions, while the
+Chapela-Campa framework supplies the rationale for keeping structural
+evidence separate from temporal fidelity.
 
-\textit{does this give of: I am not solving trustworthiness of simulation discovery here!
-I am providing a container-terminal case study that contributes evidence toward that larger research question.}
+\subsubsection{Temporal Perspective}
+
+Identical or similar traces do not imply similar process performance.
+Temporal validation considers whether the simulator reproduces when
+events occur, how cases progress after arrival and how long activities
+and complete cases take. Camargo et al. show empirically that a
+generative model may represent control-flow frequencies adequately yet
+miss temporal dynamics \cite{Camargo2021}.
+
+The Chapela-Campa framework distinguishes three event-distribution
+measures \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}.
+\emph{Absolute Event Distribution} (AED) compares event counts across
+absolute calendar-time bins; \emph{Circadian Event Distribution} (CED)
+compares recurring weekday and hour-of-day patterns; and
+\emph{Relative Event Distribution} (RED) offsets timestamps by each
+case's arrival and compares its temporal progression. Thus AED and RED
+mean \emph{event distribution}, not absolute or relative error
+distance. For end-to-end performance, Cycle Time Distribution (CTD)
+compares the empirical distributions of complete case durations.
+
+The CTB evaluation uses more directly interpretable distributions at
+the level of its research questions: inter-arrival time, per-activity
+yard service time, model-derived pre-service delay and case turnaround
+time. Reporting complete distributions rather than only their means is
+important because equal averages can conceal differences in dispersion,
+skewness or tails. Per-activity results additionally prevent common RMG
+events from concealing weaker fidelity for less frequent yard
+activities.
+
+\subsubsection{Arrival and Congestion Perspectives}
+
+Congestion is a system-level consequence of the interaction between
+demand, service requirements and resource availability. It cannot be
+validated from activity-duration marginals alone. Chapela-Campa et al.
+use Case Arrival Rate (CAR) to compare binned arrival counts and shapes,
+and CTD to compare the second major congestion component, the length of
+time cases remain in the system
+\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. An arrival model can
+therefore be temporally unrealistic even if it generates the correct
+total number of cases.
+
+This issue is central at CTB: truck demand determines competition for
+yard resources, and simultaneous arrivals are meaningful consequences
+of the minute-resolved source data. The evaluation consequently reports
+inter-arrival distance, simultaneous-arrival share and arrivals per
+elapsed hour alongside turnaround and yard-service distributions.
+These measures do not directly observe a physical queue; they assess
+whether the generated workload and its resulting temporal behaviour
+match what the available event log can identify.
+
+\subsubsection{Wasserstein Distance}
+
+For two one-dimensional distributions $F$ and $G$ with finite first
+moments, the first Wasserstein distance can be written as
+\begin{equation}
+    W_1(F,G)=\int_{-\infty}^{\infty}|F(x)-G(x)|\,\mathrm{d}x .
+\end{equation}
+It has the optimal-transport interpretation of the minimum cost of
+moving probability mass from one distribution to the other. For
+durations measured in minutes, $W_1$ is also expressed in minutes,
+which gives the discrepancy an operational scale.
+
+Earth Mover's Distance (EMD) is closely related, but the terms should
+not be treated as universally interchangeable. In the formulation used
+by Chapela-Campa et al., EMD may compare time series with unequal total
+mass and penalise the creation of missing mass, whereas first
+Wasserstein distance assumes equal normalised mass
+\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. For empirical
+probability distributions with unit mass, the formulations coincide.
+In Process Mining, related transport distances have also been used for
+stochastic conformance checking over behavioural distributions
+\cite{leeman2013EarthMovers}. In this thesis, the term \emph{EMD} for
+service, inter-arrival and turnaround samples denotes the
+one-dimensional $W_1$ distance between empirical distributions.
+
+\subsubsection{Kolmogorov--Smirnov Statistic}
+
+The two-sample Kolmogorov--Smirnov (KS) statistic is the maximum
+vertical difference between the empirical cumulative distribution
+functions of the simulated and observed samples
+\cite{Massey1951KS}:
+\begin{equation}
+    D_{n,m}=\sup_x
+    \left|F_{n,\mathrm{sim}}(x)-F_{m,\mathrm{real}}(x)\right|.
+\end{equation}
+Unlike $W_1$, it is dimensionless and bounded by zero and one. The two
+statistics are complementary: $W_1$ measures integrated displacement
+on the operational scale, while KS reports the largest local CDF gap.
+The KS statistic can be accompanied by a hypothesis-test $p$-value, but
+that $p$-value answers a different question from practical fidelity.
+With large event logs, small and operationally unimportant differences
+can be statistically significant. The magnitude of the statistic and
+the distributional plots must therefore be interpreted separately from
+null-hypothesis rejection.
+
+\subsubsection{Additional Requirements for Data-Aware Discovery}
+
+A data-aware simulator conditions behaviour on case attributes, process
+state or workload information rather than using only global
+distributions and branching frequencies
+\cite{Vinci2023Inf.Activ.Prob,lopez2024,Vinci2026prosit}. This adds a
+validation layer. First, every predictor used at a simulated decision
+point must be available at that point; attributes computed from a later
+outcome create target leakage even if aggregate log similarity is high.
+Second, discovery and model selection must be separated from the final
+test log. Third, the generated log must satisfy process and domain
+invariants that aggregate distances may overlook.
+
+White-box rules help because their split conditions and leaf
+distributions can be inspected and deliberately modified
+\cite{Vinci2026prosit}. Interpretability, however, is not equivalent to
+validity or causality. A readable rule may encode a spurious association,
+and two differently specified models may reproduce the same marginal
+distribution. Validation should therefore combine held-out output
+fidelity with rule inspection, leakage checks, structural contracts,
+domain constraints and sensitivity analysis. This is particularly
+important for the CTB application, where timestamp fields are
+operational proxies and a resource label does not necessarily denote a
+physically interchangeable crane or storage position.
+
+\subsubsection{Stochastic Replication and Confidence Intervals}
+
+A BPS model is a stochastic generator. One fixed model can generate
+many possible event logs, whereas the real test log is only one observed
+realisation. A single simulated log therefore confounds model fidelity
+with the random draws of that run. Chapela-Campa et al. address this
+problem directly: they generate $K$ logs from $K$ simulation runs,
+match their case count and start point to an actual test log that was
+not used for model construction, compare every generated log with that
+test log, and construct confidence intervals for each perspective-
+specific distance \cite{ChapelaCampa2023Trust}. Their controlled
+evaluation uses $K=10$ replications and reports means and 95\,\%
+intervals.
+
+This design is consistent with classical simulation-output analysis,
+where independent replications with different random-number streams
+provide observations for estimating a mean and its Monte-Carlo
+uncertainty \cite{Law2015Simulation}. For replication-level values
+$x_1,\ldots,x_N$, a two-sided Student-$t$ interval is
+\begin{equation}
+    \bar{x}\ \pm\
+    t_{0.975,N-1}\frac{s}{\sqrt{N}},
+\end{equation}
+where $s$ is the sample standard deviation across replications.
+
+The interpretation of this interval must remain narrow. Conditional on
+one frozen discovered parameter bundle and one fixed real test log, it
+quantifies the variability caused by simulation sampling. It does not
+include event-log sampling uncertainty, input-distribution estimation
+uncertainty, alternative discovery outcomes, measurement error or
+uncertainty about the correctness of a what-if response. Those require
+additional resampling, repeated discovery, sensitivity experiments or
+external domain evidence. Chapter~\ref{chp:experiments_and_framework}
+uses this conditional Monte-Carlo interpretation for its ten-seed
+protocol.
+
+\subsection{Trustworthiness and the Boundary of Historical Validation}
+
+Historical fidelity is necessary for a simulator that claims to
+represent an existing process, but it is not sufficient for unrestricted
+decision support. Chapela-Campa et al. explicitly identify this limit:
+comparison with an original event log assesses replication of the
+\emph{as-is} process, not the accuracy of predictions after a process
+change \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. Similarly,
+Sargent's purpose-relative view implies that evidence collected in one
+operating region cannot automatically validate use in another
+\cite{Sargent2013Validation}.
+
+Trustworthiness is therefore an evidence bundle rather than another
+single metric. It includes data and conceptual validity, verified
+implementation, held-out multi-perspective fidelity, reproducibility,
+transparent assumptions, stochastic robustness, domain review and
+clear limits on extrapolation. ProSiT contributes inspectable and
+configurable probabilistic rules \cite{Vinci2026prosit}; recent applied
+work shows how discovered simulation models can be connected to a real
+resource-allocation problem \cite{Hospital2026Vinci}. These properties
+make validation and scenario discussion more accessible, but neither
+white-box structure nor a successful application substitutes for
+intervention-specific evidence.
+
+Accordingly, this thesis does not claim to solve the general
+trustworthiness problem of simulation discovery. It contributes a
+container-terminal case study: the model is tested against an unseen
+historical period, across structural, temporal and arrival perspectives,
+with repeated stochastic runs and explicit domain constraints. Scenario
+results are interpreted as conditional consequences of the documented
+model assumptions, not as experimentally established causal effects.
+
+\subsection{Research Gap}
+
+Container terminals represent highly dynamic and resource-constrained operational environments characterized by complex interactions between truck processes, yard operations, storage systems, and handling equipment. As a result, simulation has become one of the most widely used analytical methods for supporting operational decision making in container terminal management \cite{Bruzzone2012,Kastner2021,Carboni2025}. Despite this extensive use of simulation, most container terminal simulation models continue to be developed manually. Model construction, calibration, and maintenance require substantial modelling effort and domain expertise, limiting scalability and practical applicability in rapidly changing operational environments \cite{PMRozinat2009}. Simulation discovery addresses this limitation by automatically generating simulation models from event logs. Over the past decade, significant advances have been achieved in the discovery of simulation parameters, data-aware decision logic, and automated model construction \cite{Camargo2020,simod2024,Vinci2026prosit}. More recently, data-aware simulation approaches demonstrated that contextual information and process-state representations can substantially improve simulation accuracy compared to traditional branching probabilities \cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}. In parallel, white-box simulation approaches such as ProSiT introduced interpretable probabilistic decision models that aim to improve transparency and configurability while maintaining strong predictive performance \cite{Vinci2026prosit}. However, existing empirical evaluations have primarily been conducted in healthcare, administrative, and generic business-process environments. To date, there is limited evidence regarding the applicability and behavior of simulation-discovery approaches within large-scale container terminal operations. Furthermore, the increasing complexity of data-aware and decision-aware simulation models raises unresolved questions concerning: \begin{itemize} \item the robustness of automatically discovered simulation models, \item their trustworthiness for operational decision support, \item their ability to reproduce congestion effects and workload dynamics, \item the practical value of white-box simulation in complex logistics environments. \end{itemize} This thesis does not aim to provide a general answer to these broader research challenges. Rather, it contributes an empirical case study within the context of truck-handling operations at the HHLA Container Terminal Burchardkai (CTB). By evaluating simulation-discovery approaches in a real-world container terminal environment, the thesis provides evidence regarding their applicability, strengths, and limitations in a domain that has received comparatively little attention within the existing simulation-discovery literature.

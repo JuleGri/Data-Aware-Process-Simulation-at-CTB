@@ -394,8 +394,12 @@ Every ProSiT simulation includes stochastic draws from the fitted
 distributions. Reporting a single Monte-Carlo draw is therefore
 insufficient to conclude that one configuration is more faithful than
 another: the observed difference may be within the sampling variance
-of the simulator itself. This thesis therefore reports every fidelity
-metric with a Monte-Carlo confidence interval.
+of the simulator itself. This is the same many-possible-realisations
+problem addressed by the multi-log validation design of
+Chapela-Campa et al. and by classical independent-replication output
+analysis \cite{ChapelaCampa2023Trust,Law2015Simulation}. This thesis
+therefore reports every fidelity metric with a Monte-Carlo confidence
+interval.
 
 \subsection{Replication Design}
 
@@ -429,10 +433,13 @@ the following procedure is executed:
 
 The protocol is implemented in
 \texttt{validation/06\_multi\_seed\_ci.py}. \(N_{\text{seeds}}=10\) is
-used for every configuration, following the sample-size heuristic that
-a Student-t interval on four KPIs is meaningful at $N=10$ while
-remaining computationally affordable at $\sim$50\,seconds per
-simulation. The base seed is 42.
+used for every configuration. This mirrors the $K=10$ design used by
+Chapela-Campa et al. while remaining computationally feasible for the
+17,892-case CTB test window \cite{ChapelaCampa2023Trust}. The resulting
+Student-$t$ intervals quantify simulation sampling uncertainty
+conditional on one frozen model and one fixed test log; with only ten
+replications, they are not estimates of discovery or input-model
+uncertainty. The base seed is 42.
 
 The choice to seed Python's \texttt{random} and \texttt{numpy.random}
 before each \texttt{engine.apply()} rather than the ProSiT engine
@@ -493,11 +500,12 @@ simulation tail cannot be hidden.
 For each distribution pair the two-sample KS statistic is computed by
 \texttt{scipy.stats.ks\_2samp}. Because the CTB test log contains 55,360
 events, sub-sampling is applied so that each side contributes at most
-$10{,}000$ observations to the test. This keeps the $p$-value
-informative and prevents the null from being rejected mechanically by
-sample size. The KS statistic (magnitude of the maximum vertical CDF
-gap) is reported alongside the EMD; the $p$-value is retained for the
-appendix.
+$10{,}000$ observations to the test. This limits computational cost and
+the extreme sample-size sensitivity of the associated hypothesis test;
+it does not turn the $p$-value into a fidelity effect size. The KS
+statistic (magnitude of the maximum vertical CDF gap) is reported
+alongside the EMD as the primary quantity; the $p$-value is retained
+only as a secondary diagnostic.
 
 \subsection{Point-Statistic Errors}
 
