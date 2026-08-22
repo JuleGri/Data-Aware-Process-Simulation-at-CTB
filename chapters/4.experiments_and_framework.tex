@@ -180,17 +180,47 @@ recorded in the split manifest.
 
 The Petri net that ProSiT uses as the authoritative control-flow
 skeleton is constructed from the observed training variants as a
-sequential prefix trie. Every accepted path has the form
+sequential prefix trie, following the definition in
+Chapter~\ref{chp:background}. Every accepted path has the form
 \texttt{Gate In}$\rightarrow$one or more yard activities
 $\rightarrow$\texttt{Gate Out}. Shared prefixes are represented once,
-and a separate transition encodes each observed continuation. This
-prevents an inductive-miner concurrency cut from enabling two yard
-activities inside the same truck visit. It does \emph{not} disable
-multitasking between trucks: different cases still compete for and can
-use resources concurrently according to the discovered capacities.
+and a separate transition encodes each observed continuation
+\cite{FahrenkrogPetersen2019PRETSA,DeLaBriandais1959Trie}. In the Petri-net
+encoding, each prefix state becomes a place and each observed continuation
+becomes a labelled transition to the successor prefix state. All complete
+paths terminate in the common sink after \texttt{Gate Out}. The resulting
+net is acyclic and has one token per truck case.
 
-An inductive process tree is retained as a diagnostic visualisation,
-but it is not passed to the final simulator. The authoritative trie is
+\subsection{Why the Inductive-Miner Net Is Diagnostic Only}
+
+The Inductive Miner is not rejected as a discovery method: its sound,
+block-structured models and abstraction from infrequent variants are
+valuable when behavioural generalisation is the objective
+\cite{Leemans2014InductiveMiner}. It is retained here as a diagnostic
+process tree and BPMN visualisation. It is not passed to the final
+simulator because its discovered semantics conflict with the CTB case
+contract. In particular, the diagnostic tree in
+Figure~\ref{fig:model_tree_theory} contains parallel (\texttt{and}) cuts,
+including a cut that places \texttt{Gate Out} in parallel with the yard
+subtree. Executing this model could therefore permit Gate Out before all
+yard work is complete or enable multiple yard activities within one truck
+visit. These behaviours may be sound in the formal workflow-net sense,
+but they are not valid truck-process semantics in this application.
+
+The trie makes this domain constraint explicit: exactly one Gate In is
+followed by one or more sequential yard activities and exactly one final
+Gate Out. This does \emph{not} disable resource multitasking between
+trucks. Different Petri-net instances still compete for and can use the
+same resources concurrently according to the discovered capacities; only
+the activities within a single truck case remain sequential. In the final
+CTB baseline these cross-case RMG capacities are subject to the domain cap
+of three described below.
+
+This choice is deliberately conservative. A raw observed-variant trie
+does not generalise to every unseen activity combination and is less
+compact than an Inductive-Miner model. The held-out conformance protocol
+below therefore tests whether this loss of permissiveness is material.
+The authoritative trie is
 implemented by \texttt{\_eventlog\_contract.py} and injected by
 \texttt{baseline/07\_run\_prosit\_discovery.py}. It contains 76 places
 and 144 transitions for the 70 variants observed in the frozen training
@@ -308,6 +338,53 @@ The full pipeline is executed by
 in the paramset folder
 \path{baseline/discovery_params/params_<utc>_train80/prosit_discovery_no_rules|_workload|/}.
 
+\subsection{Authoritative Parameter Bundle and Serialization Contract}
+\label{sec:authoritative_parameter_bundle}
+
+In this thesis, \emph{authoritative parameter bundle} is an operational
+reproducibility term: it denotes the exact executable
+\texttt{SimulatorParameters} state loaded by the validation and scenario
+scripts. If a derived table, JSON summary and executable state disagree,
+the serialized object that actually generated the reported simulations is
+the source of truth. Two provenance layers are distinguished. The frozen,
+training-only calibrated \textit{rules$+$workload}
+\texttt{prosit\_params.pkl} is authoritative for the freely discovered and
+calibrated source model. The final CTB baseline is a deep-copied effective
+bundle in which the RMG concurrency values are capped at the domain maximum
+of three; it is stored as
+\texttt{params\_baseline\_rmg\_max\_concurrency\_3.pkl} in the final
+scenario result directory and is authoritative for the final validation
+and scenario results. Thus the discovered overlap capacities remain
+auditable without being mistaken for physically feasible capacities. Both
+objects contain the Petri net and markings, routing and
+resource-selection rules, resource mappings and capacities, calendars,
+distribution objects, calibration metadata and the empirical sample arrays
+used for stochastic draws.
+
+The ProSiT JSON export is retained as a portable, human-inspectable
+companion, but it is not an execution-equivalent serialization of the
+calibrated object. In particular, the JSON rule nodes preserve fitted
+distribution names, parameters and representative values but do not
+serialize all empirical \texttt{sampled} arrays held in the Python
+object. This matters because the CTB calibration modifies those arrays
+and ProSiT samples from them at runtime. Consequently, reconstructing the
+final simulator from JSON alone can change its stochastic behaviour. The
+pickle is therefore authoritative because the JSON does not fully
+represent all empirical sample arrays; this statement concerns the actual
+ProSiT serialization schema used here, not an intrinsic superiority of
+the pickle format.
+
+The companion files \texttt{prosit\_run\_summary.json},
+\texttt{control\_flow\_contract.json} and
+\texttt{ctb\_calibration.json} document provenance and intended changes.
+Validation and scenario scripts record SHA-256 hashes of their source
+pickles, and scenario bundles are produced by deep copy rather than by
+mutating the frozen baseline. Pickle is Python- and class-version-specific
+and must never be loaded from an untrusted source; reproducibility therefore
+also requires the recorded software environment. These limitations are the
+reason for retaining the JSON companions even though they are not the
+authoritative runtime state.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Monte-Carlo Replication Protocol}
 \label{sec:mc_protocol}
@@ -376,24 +453,40 @@ attached to the point estimate.
 
 \subsection{Wasserstein Distance (EMD)}
 
-For each activity $a$ the service-time EMD is
+For each yard activity $a$ the service-time EMD is
 \begin{equation}
     \text{EMD}_a^{\text{svc}} = W_1
     \bigl(F_{a}^{\text{sim,svc}}, F_{a}^{\text{real,svc}}\bigr),
 \end{equation}
 where $F_{a}^{\text{sim,svc}}$ and $F_{a}^{\text{real,svc}}$ are the
 empirical CDFs of $\text{time}-\text{start}$ for activity $a$ in the
-simulated and real log, respectively. The pre-service-delay EMD is defined
-analogously on $\text{start}-\text{enabled}_{\text{model}}$ using the
-model-derived enablement timestamps from ProSiT's simulated log. The per-activity means
-are the ``mean service-time EMD'' and ``mean waiting-time EMD''
-reported in Chapter~\ref{chap:results}. The case-level turnaround EMD
+simulated and real log, respectively. Gate In and Gate Out are excluded
+from the service-fidelity aggregation because both have zero-duration
+timestamp constructions and would mechanically improve the score without
+representing terminal handling. Let $\mathcal A_Y$ be the set of yard
+activities and $n_a^{\mathrm{real}}$ the number of valid held-out
+observations. This thesis reports all per-activity values and two yard-level
+aggregates:
+\begin{align}
+ \overline{\mathrm{EMD}}_{Y}
+   &= \frac{1}{|\mathcal A_Y|}\sum_{a\in\mathcal A_Y}
+      \mathrm{EMD}^{\mathrm{svc}}_a,\\
+ \overline{\mathrm{EMD}}_{Y,w}
+   &= \frac{\sum_{a\in\mathcal A_Y} n_a^{\mathrm{real}}
+      \mathrm{EMD}^{\mathrm{svc}}_a}
+      {\sum_{a\in\mathcal A_Y} n_a^{\mathrm{real}}}.
+\end{align}
+The first gives every yard-activity class equal influence; the second
+describes the error experienced by the empirical mix of yard events. The
+case-level turnaround EMD
 is $W_1(F^{\text{sim,ttot}}, F^{\text{real,ttot}})$ where
 $\text{ttot}$ is the total elapsed time per case (first start to last
 complete). The inter-arrival EMD is
 $W_1(F^{\text{sim,iat}}, F^{\text{real,iat}})$ where
 $\text{iat}$ is the time between consecutive case-arrival timestamps.
-All EMDs are reported in minutes.
+All EMDs are reported in minutes. The primary view retains durations up to
+24 hours and is accompanied by an uncapped raw view so that an artificial
+simulation tail cannot be hidden.
 
 \subsection{Kolmogorov--Smirnov Statistic}
 
@@ -431,16 +524,17 @@ derived by deep copy from the frozen, training-only calibrated
 \textit{rules$+$workload} baseline. No held-out observation is used to
 select or fit a scenario parameter.
 
-\subsection{Scenario A: T22 Closure}
+\subsection{Scenario A: T22 Resource-Pool Reallocation}
 
-Scenario A models a full closure of RMG block T22. The scenario is
+Scenario A removes T22 from the simulated RMG resource pool. The scenario is
 constructed by (i) removing T22 from every
 \texttt{params.act\_to\_resources} entry that references it, after
 verifying that each affected activity retains at least one eligible
 resource; and (ii) setting all 168 weekly calendar slots of T22 to
 unavailable. All other parameters are unchanged.
 
-This is a capacity-eligibility intervention, not a spatial yard model.
+This is explicitly a resource-pool reallocation experiment, not a complete
+spatial yard-closure model.
 The discovered selector may use target-area attributes as statistical
 predictors, but ProSiT does not impose a hard constraint that binds a
 container to its actually observed storage block. A truck whose
@@ -458,25 +552,34 @@ zero mass and the empirical distribution shape while increasing the
 modelled arrival intensity by exactly 20\,\%. The gate-admission
 calendar, process model, duration models, routing, resource mappings,
 resource calendars and case-attribute schema remain unchanged. The
-scenario is independent of the T22 closure.
+scenario is independent of the T22 resource-pool reallocation.
 
-\subsection{Domain-Constrained RMG Capacity Sensitivity}
+\subsection{Final Domain-Constrained RMG Capacity}
 
-The serialized baseline assigns maximum concurrency four to ten RMG
-block identifiers and five to twelve, for an aggregate effective upper
-bound of 100. This exceeds the operational limit of at most three cranes
-per block. A separate sensitivity baseline is therefore derived by
-replacing every RMG value $c_r$ with
-$\min(c_r,3)$. The aggregate bound becomes $22\times3=66$. No resource
+The freely discovered serialized source assigns maximum concurrency four
+to ten RMG block identifiers and five to twelve, for an aggregate effective
+upper bound of 100. ProSiT obtains these numbers from overlapping timestamps;
+they are empirical concurrency proxies rather than equipment counts. They
+exceed the hard physical upper bound of three cranes and the three lanes in
+which trucks can wait after announcing readiness at a block. The final
+effective baseline is therefore derived by replacing every RMG value $c_r$
+with $\min(c_r,3)$. The aggregate upper bound becomes $22\times3=66$. This
+does not assert that three cranes normally serve landside trucks: in regular
+operation two cranes may serve the waterside and at most one may serve the
+landside, but that allocation depends on ship operations and is not observed
+in this event log. Three is therefore a defensible physical ceiling, not an
+estimated landside staffing level. No resource
 mapping, calendar, selection rule, timing model, arrival model or
 control-flow parameter is changed. The T22 and demand interventions are
 then independently re-derived from this capped baseline.
 
-This is a robustness test rather than a recalibration: the discovered
-baseline remains frozen and authoritative. It asks whether conclusions
-conditional on effective capacity 100 persist under the stated physical
-upper bound. Both sets of replications use identical seeds, trace counts
-and start time. In addition to direct cap effects, the analysis reports
+This is a transparent domain constraint rather than a data-driven
+recalibration: the freely discovered source remains frozen as discovery
+evidence, whereas the cap-three copy is the authoritative effective CTB
+baseline. An uncapped run is retained only as a diagnostic sensitivity to
+show what the overlap-derived parameter would imply. Both sets of
+replications use identical seeds, trace counts and start time. In addition
+to direct cap effects, the diagnostic comparison reports
 the interaction
 \begin{equation}
 \Delta_{\mathrm{interaction}}=
@@ -494,13 +597,19 @@ executes baseline and both interventions with ten matched seeds
 $t_{\text{start}}=\text{2026-04-20 18:17}$. Thus all paired deltas use
 common random numbers. Mean, median and 90th percentile of turnaround,
 RMG service and RMG pre-service delay are reported together with the
-observed arrival KPIs. Every one of the 30 generated logs is subjected
+observed arrival KPIs. For the T22 experiment, service and pre-service
+effects are additionally reported separately for
+\texttt{RMG\_receive} and \texttt{RMG\_delivery}. Every one of the 30
+generated logs is subjected
 to the sequential case contract of
 Section~\ref{sec:process_discovery_methodology}; any violation aborts
-the run. The same driver executes the additional 30 capped replications.
+the run. A separate diagnostic invocation with \texttt{--no-rmg-cap}
+reproduces the 30 uncapped overlap-capacity replications.
 \texttt{validation/10\_compare\_rmg\_capacity\_sensitivity.py} verifies
 identical source hashes and settings before computing the paired direct
-effects and interactions. Thus 60 scenario logs are audited in total.
+effects and interactions. These uncapped results are diagnostic only and
+are excluded from the authoritative final result table; the 30 cap-three
+scenario logs form the final scenario evidence.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Descriptive Transition-Duration Analysis}

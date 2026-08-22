@@ -81,15 +81,39 @@
 \Urlmuskip = 0mu plus 1mu
 \RequirePackage{amssymb}
 \RequirePackage{mathspec}
-\setmathsfont(Digits,Latin,Greek)[Numbers={Proportional}]{EB Garamond}
-\setmathrm{EB Garamond}
+% Load the font files shipped with this repository instead of relying on an
+% operating-system font installation. This keeps local and CI builds
+% reproducible across machines.
+\setmathsfont(Digits,Latin,Greek)[Path={fonts/EB Garamond/},Numbers={Proportional}]{EBGaramond12-Regular.otf}
+\setmathrm[Path={fonts/EB Garamond/},ItalicFont={EBGaramond12-Italic.otf}]{EBGaramond12-Regular.otf}
 \AtBeginEnvironment{tabular}{\addfontfeature{RawFeature=+tnum}}
 \widowpenalty=300
 \clubpenalty=300
-\setromanfont[Numbers=OldStyle, Ligatures={Common, TeX}, Scale=1.0]{EB Garamond}
-\newfontfamily{\smallcaps}[RawFeature={+c2sc,+scmp}]{EB Garamond}
-\setsansfont[Scale=MatchLowercase, BoldFont={Lato Bold}]{Lato Regular}
-\setmonofont[Scale=MatchLowercase]{Source Code Pro}
+\setromanfont[
+  Path={fonts/EB Garamond/},
+  ItalicFont={EBGaramond12-Italic.otf},
+  BoldFont={EBGaramond12-Regular.otf},
+  BoldItalicFont={EBGaramond12-Italic.otf},
+  Numbers=OldStyle,
+  Ligatures={Common, TeX},
+  Scale=1.0
+]{EBGaramond12-Regular.otf}
+\newfontfamily{\smallcaps}[
+  Path={fonts/EB Garamond/},
+  RawFeature={+c2sc,+scmp}
+]{EBGaramond12-Regular.otf}
+\setsansfont[
+  Path={fonts/Lato/},
+  ItalicFont={Lato-RegIta.ttf},
+  BoldFont={Lato-Bol.ttf},
+  BoldItalicFont={Lato-BolIta.ttf},
+  Scale=MatchLowercase
+]{Lato-Reg.ttf}
+\setmonofont[
+  Path={fonts/Source Code Pro/},
+  BoldFont={SourceCodePro-Bold.ttf},
+  Scale=MatchLowercase
+]{SourceCodePro-Regular.ttf}
 %\RequirePackage[labelfont={bf,sf,footnotesize,singlespacing},
                 %textfont={sf,footnotesize,singlespacing},
                 %justification={justified,RaggedRight},

@@ -416,8 +416,10 @@ in the input event log.  Consistent with ProSiT
 \cite{Camargo2020,PMRozinat2009}, activity enablement is obtained from
 process-model alignment during the simulation-parameter discovery
 phase (Section~\ref{sec:simulation_discovery_methodology}).  ProSiT
-uses A* alignment to determine when each transition becomes enabled in
-the discovered Petri net, then computes a model-derived pre-service
+uses an A*-based optimal alignment as defined in
+Section~\ref{sec:astar_alignment_definition} to relate each observed
+event to a transition and determine when that transition becomes enabled
+in the discovered Petri net, then computes a model-derived pre-service
 delay relative to both the enablement time and the resource's
 availability schedule.
 
@@ -501,6 +503,31 @@ contextual attributes describing the operational state at the time of
 process execution. These attributes are organised into five
 categories.
 
+\subsubsection{Information Available at Truck Entry}
+\label{sec:entry_known_attributes}
+
+The scheduling record contains the complete planned visit manifest before
+the truck enters the terminal. Consequently, the number of planned stops,
+the numbers of delivery and receive transactions, the planned target area
+and the resulting final visit-complexity score are known at Gate In. The
+pipeline reproduces this entry-time information by aggregating all rows of
+the same \texttt{FAHRPLAN\_UID}; it does not infer these attributes from
+subsequently realised durations or completion outcomes. In particular,
+\texttt{visit\_complexity} is a deterministic summary of the planned
+stop/container manifest (visit size, container-handling complexity and
+mixed-flow complexity), not an ex-post performance measure. Using these
+variables as case attributes therefore does not leak the simulated future
+provided that the same planned manifest is supplied for a prospective run.
+
+The implementation detail that the target block is reconstructed from the
+planned stop's area-specific activity label can otherwise look like
+look-ahead: after genericising \texttt{T06--T27} activities, the reconstructed
+block is copied into \texttt{primary\_target\_area}. Semantically, however,
+the source is the planned \texttt{ANLAUFPUNKT\_HALTESTELLE} attached to the
+visit order and available at entry, not the later activity-completion
+timestamp. This distinction defines the deployment contract for all
+entry-known case attributes.
+
 \subsubsection{Container Features}
 
 Container-related context is aggregated to case level so that visit
@@ -576,8 +603,14 @@ the log carries:
           block identifier assigned to the case.
 \end{itemize}
 
-These features are extracted from the \texttt{org:resource} attribute
-of RMG activities (\texttt{08\_add\_all\_target\_features.py}).
+These features are reconstructed from the planned, area-specific stop
+labels before the RMG activities are genericised and are then carried as
+case attributes (scripts
+\texttt{07\_convert\_to\_RMG\_filter\_LL+HO2\_only.py} and
+\texttt{08\_add\_all\_target\_features.py}). Their information time is
+Gate In as specified in Section~\ref{sec:entry_known_attributes}; the
+later \texttt{org:resource} assignment is not used as an execution outcome
+to be predicted.
 
 \subsubsection{Temporal Features Required by ProSiT}
 \label{sec:temporal_features}
@@ -639,13 +672,13 @@ context attributes attached to every event.
 \hline
 \texttt{process\_flow\_type} & Visit type (delivery, receive, mixed). \\
 \texttt{n\_containers}       & Number of containers in the visit. \\
-\texttt{n\_stops}            & Number of operational stops. \\
-\texttt{n\_deliveries}       & Number of delivery transactions. \\
-\texttt{n\_receives}         & Number of receive transactions. \\
+\texttt{n\_stops}            & Number of planned operational stops, known at Gate In. \\
+\texttt{n\_deliveries}       & Number of planned delivery transactions, known at Gate In. \\
+\texttt{n\_receives}         & Number of planned receive transactions, known at Gate In. \\
 \texttt{has\_hazardous}      & IMDG indicator. \\
 \texttt{has\_reefer}         & Reefer indicator. \\
 \texttt{full\_ratio}         & Share of loaded containers. \\
-\texttt{visit\_complexity}   & Composite complexity score. \\
+\texttt{visit\_complexity}   & Final composite score of the complete planned visit manifest, known at Gate In. \\
 \hline
 \end{tabular}
 \end{table}
@@ -685,6 +718,8 @@ context attributes attached to every event.
 \texttt{target\_rank\_group} & Categorised rank
                                 (\texttt{top\_3}, \texttt{mid},
                                 \texttt{low}). \\
+\texttt{primary\_target\_area} / \texttt{target\_area} & Planned target
+                                area known at Gate In. \\
 \hline
 \end{tabular}
 \end{table}

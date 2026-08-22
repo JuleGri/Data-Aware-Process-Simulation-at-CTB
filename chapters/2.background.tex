@@ -230,10 +230,39 @@ Process discovery is the most prominent branch of Process Mining. Its objective 
 \begin{itemize} 
 \item \textbf{Alpha Miner}: One of the earliest process discovery algorithms, capable of identifying causal dependencies and parallel behaviour from event logs. 
 \item \textbf{Heuristic Miner}: An extension of Alpha Miner that incorporates frequency information and is more robust towards noise and infrequent behaviour. 
-\item \textbf{Inductive Miner}: A modern discovery algorithm that recursively decomposes event logs and guarantees the production of sound process models. It is widely used due to its robustness and ability to balance precision and simplicity. 
+\item \textbf{Inductive Miner}: A modern discovery algorithm that recursively decomposes event logs using sequence, exclusive-choice, parallel and loop cuts and guarantees a sound block-structured result. Its treatment of infrequent behaviour and its balance between fitness, precision, generalisation and simplicity make it a strong general-purpose discovery method \cite{Leemans2014InductiveMiner}.
 \end{itemize} 
 
 Process discovery enables organizations to obtain an objective representation of how their processes are actually executed rather than how they are presumed to operate \cite{PMvanDerAalst2016}.
+
+\paragraph{Prefix trees and the observed trace language.}
+A prefix tree, or \emph{trie}, is a rooted tree representation of a set
+of sequences \cite{DeLaBriandais1959Trie}. Let an event log
+$L$ be a multiset of traces over activities $\mathcal{A}$. The trie has
+one node for every observed prefix
+\begin{equation}
+\operatorname{Pref}(L)=\{\epsilon\}\cup
+\{\langle a_1,\ldots,a_k\rangle \mid
+\exists\langle a_1,\ldots,a_n\rangle\in L,\;1\leq k\leq n\},
+\end{equation}
+where $\epsilon$ denotes the empty prefix. An edge labelled $a$ connects
+prefix $p$ to $p\cdot\langle a\rangle$ whenever that continuation occurs
+in the log. Thus, traces with the same history share exactly one path up
+to their first different activity; nodes and edges may additionally be
+annotated with occurrence frequencies or data distributions. PRETSA
+uses precisely this property in process mining: each node groups events
+of the same activity whose traces share the same activity prefix
+\cite{FahrenkrogPetersen2019PRETSA}.
+
+Without pruning or smoothing, a prefix trie accepts exactly the observed
+sequence variants. It therefore maximises replay fitness and precision
+on its construction log, but it does not infer unseen combinations,
+loops or concurrency. An Inductive-Miner model makes the opposite
+trade-off: its block-structured cuts deliberately abstract from individual
+variants and can admit behaviour not present verbatim in the log
+\cite{Leemans2014InductiveMiner}. Neither representation is universally
+superior. The appropriate choice depends on whether the application
+requires controlled generalisation or a strict, auditable trace language.
 
 Figure~\ref{fig:model_representations} illustrates the two most common
 output representations of a modern discovery algorithm on the same
@@ -285,6 +314,35 @@ interchangeably in the process mining literature
 \end{itemize} 
 
 These criteria provide a balanced framework for evaluating process model quality and form the basis of many process-mining evaluation approaches. 
+
+\paragraph{A*-based optimal alignment.}
+\label{sec:astar_alignment_definition}
+An alignment relates an observed trace to an executable run of a process
+model. Formally, it is a sequence of three move types: a
+\emph{synchronous move} consumes an event and fires a transition with the
+same visible label; a \emph{log move} consumes an event without a
+corresponding model transition; and a \emph{model move} fires a model
+transition without consuming an observed event. A cost function normally
+assigns zero cost to synchronous moves and positive, configurable costs
+to deviations. An optimal alignment $\lambda^{\star}$ is therefore
+\begin{equation}
+\lambda^{\star}=\arg\min_{\lambda\in\Lambda(\sigma,N)} c(\lambda),
+\end{equation}
+where $\Lambda(\sigma,N)$ is the set of legal alignments between trace
+$\sigma$ and process model $N$ \cite{aalst2012ConformanceChecking,
+Adriansyah2011CostFitness}.
+
+The qualifier ``A*-based'' refers to the search procedure, not to a
+different kind of alignment. A* explores the product state space of the
+current trace position and the current model state (for a Petri net, its
+marking). It orders candidates by $f=g+h$, where $g$ is accumulated move
+cost and $h$ is an admissible lower bound on the remaining cost. With an
+admissible heuristic, the first complete solution is cost-optimal
+\cite{Adriansyah2011CostFitness}. The resulting event--transition
+correspondence supports conformance diagnostics and timestamp replay for
+performance analysis \cite{aalst2012ConformanceChecking}; it does not
+turn a model-derived enablement instant into an independently observed
+timestamp.
 
 \subsubsection{Process Enhancement} The Process Mining literature commonly distinguishes three major categories of process mining techniques: process discovery, conformance checking, and process enhancement \cite{PMvanDerAalst2016}. Whereas discovery creates a process model from event logs and conformance checking compares observed behaviour with existing models, process enhancement aims to improve existing process models using information extracted from event data. Enhancement may take different forms. For example, performance information such as waiting times or activity durations can be projected onto a process model. Likewise, resource assignments, bottlenecks, and workload information can be incorporated to create richer process representations. Process enhancement therefore enables organizations not only to understand how processes operate, but also to identify opportunities for process improvement and optimization \cite{PMvanDerAalst2016}.
 

@@ -200,9 +200,11 @@ After that comparison, the workload-aware model was given the
 training-only CTB calibrations required by the application semantics:
 the sequential observed-variant control-flow contract, calibrated
 training marginals for routing, an empirical minute-resolved arrival
-model and non-pre-emptive completion after admission. This calibrated
-bundle is the frozen baseline used for the final validation and the
-scenarios. Its authoritative KPIs are consolidated in
+model and non-pre-emptive completion after admission. The freely
+discovered RMG overlap capacities were then clamped to the physical
+upper bound of three per block. This cap-three bundle is the frozen
+effective baseline used for the final validation and the scenarios. Its
+authoritative KPIs are consolidated in
 Table~\ref{tab:final_kpis}.
 
 Consistent with the corrected temporal semantics of
@@ -231,9 +233,6 @@ calibrated-baseline values in Table~\ref{tab:final_kpis}.
 \textbf{no-rules} &
 \textbf{rules$+$workload} \\
 \midrule
-Service EMD (mean over activities) &
-$1.91\;[1.89, 1.93]$ &
-$2.00\;[1.94, 2.06]$ \\
 Case turnaround EMD &
 $\mathbf{13.94\;[13.15, 14.73]}$ &
 $21.75\;[20.60, 22.90]$ \\
@@ -257,13 +256,15 @@ $124.44\;[121.70, 127.17]$ \\
 
 The frozen calibrated simulator is evaluated in ten replications of
 17,892 cases using seeds 42--51 and the final cutoff
-$t_{\text{start}}=\text{2026-04-20 18:17}$. Its mean service-time EMD
-is $2.581\;[2.447,2.715]$ minutes, case-turnaround EMD is
-$9.400\;[9.296,9.504]$ minutes and inter-arrival EMD is
+$t_{\text{start}}=\text{2026-04-20 18:17}$. Its yard-only unweighted
+service-time EMD is $2.999\;[2.888,3.110]$ minutes and its
+real-frequency-weighted yard EMD is
+$2.340\;[2.279,2.402]$ minutes. Gate In and Gate Out are excluded. The
+case-turnaround EMD is $9.306\;[9.229,9.384]$ minutes and inter-arrival EMD is
 $0.0724\;[0.0674,0.0774]$ minutes. Real mean turnaround is 39.742
-minutes compared with a simulated $30.343\;[30.239,30.447]$ minutes;
+minutes compared with a simulated $30.436\;[30.359,30.514]$ minutes;
 real P90 is 71.0 minutes compared with a simulated
-$51.300\;[50.954,51.646]$ minutes. The residual error is therefore a
+$51.800\;[51.498,52.102]$ minutes. The residual error is therefore a
 systematic \emph{under-prediction}, not an upper-tail explosion.
 
 All ten runs contain zero gate-only cases, zero within-case overlaps,
@@ -286,10 +287,6 @@ are disjoint:
           $13.94\;[13.15, 14.73]$ vs.\
           \textit{rules$+$workload} $21.75\;[20.60, 22.90]$. The CIs
           are disjoint; \textit{rules$+$workload} is 56\,\% worse.
-    \item Service EMD: \textit{no-rules} $1.91\;[1.89, 1.93]$ vs.\
-          \textit{rules$+$workload} $2.00\;[1.94, 2.06]$. The CIs
-          barely overlap; the point-estimate direction favours
-          \textit{no-rules}.
     \item Inter-arrival EMD: \textit{rules$+$workload}
           $0.314\;[0.313, 0.315]$ vs.\
           \textit{no-rules} $0.319\;[0.317, 0.320]$. Here the
@@ -336,7 +333,6 @@ standard deviation of the headline metrics across the ten seeds.
 \textbf{no-rules} &
 \textbf{rules$+$workload} \\
 \midrule
-Service EMD (min)        & 0.03  & 0.08 \\
 Case turnaround EMD (min) & 1.10  & 1.61 \\
 Case turnaround sim P90 (min) & 2.50  & 3.82 \\
 \bottomrule
@@ -359,8 +355,10 @@ calibrated using training data only.
 
 The event log used for discovery and validation contains only observed
 timestamps (\texttt{start:timestamp} and \texttt{time:timestamp}).
-Activity enablement is derived internally by ProSiT via A* alignment
-against the discovered Petri net.  This means:
+Activity enablement is derived internally by ProSiT via the A*-based
+optimal alignment defined in
+Section~\ref{sec:astar_alignment_definition} against the discovered
+Petri net.  This means:
 \begin{itemize}
     \item Service-time EMD compares real vs.\ simulated
           $\text{complete}-\text{start}$ per activity — both quantities
@@ -440,21 +438,24 @@ variance) dominate the LL activities (small weight, meaningful
 context-explainable variance).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Final Discovered Resource Representation}
+\section{Freely Discovered Resource Representation and Final Domain Cap}
 \label{sec:results_resource_capacities}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The frozen parameter bundle contains 26 resource identifiers and the
-maximum-concurrency values in Table~\ref{tab:capacities_train80}. These
-are the parameters actually used by the final validation and scenario
-runs. The earlier pool-level report produced by
+The frozen, freely discovered source bundle contains 26 resource
+identifiers and the maximum-concurrency values in
+Table~\ref{tab:capacities_train80}. These source values are retained as
+discovery provenance. The final validation and scenario runs load a
+derived executable copy in which every RMG block is capped at three;
+all other discovered parameters remain unchanged. The earlier pool-level report produced by
 \texttt{baseline/04\_resource\_concurrency\_discovery.py} is an
 exploratory diagnostic and is not the authoritative simulator
 configuration.
 
 \begin{table}[h]
 \centering
-\caption{Resource representation in the frozen calibrated baseline.}
+\caption{Resource representation in the freely discovered calibrated
+source bundle before applying the final RMG cap.}
 \label{tab:capacities_train80}
 \begin{tabular}{llll}
 \toprule
@@ -479,11 +480,11 @@ All 168 weekly slots of every final resource calendar are available;
 temporal gate closure is represented separately by the arrival
 calendar. Each RMG activity can select all 22 block identifiers, and the
 resource-selection rules supply statistical weights. Closing T22 thus
-leaves 21 eligible identifiers and removes five units of maximum
-concurrency. The comparatively high aggregate RMG upper bound also helps
-motivate the domain-constrained capacity sensitivity reported in
-Section~\ref{sec:results_scenarios}; that experiment tests rather than
-assumes whether the upper bound explains the absent congestion effect.
+leaves 21 eligible identifiers and removes three units of maximum
+concurrency from the final cap-three baseline. The freely discovered
+aggregate bound of 100 motivates the domain constraint reported in
+Section~\ref{sec:results_scenarios}: the source object remains frozen for
+audit, while the executable final baseline clamps every block to three.
 
 These values are learned effective server capacities, not verified
 numbers of cranes, workers or physically interchangeable storage
@@ -579,17 +580,17 @@ discussed in Section~\ref{sec:limitations}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The authoritative scenario baseline is the final sequential,
-training-only calibrated \textit{rules$+$workload} parameter bundle.
-The hold-out was used only for validation. Ten matched seeds (42--51)
-were run for the baseline, the T22 closure and the independent
+training-only calibrated \textit{rules$+$workload} parameter bundle with
+every RMG resource capped at the physical upper bound of three concurrent
+tasks. The freely discovered values of four or five are retained as
+diagnostic provenance, not used as the final operational baseline. The
+hold-out was used only for validation. Ten matched seeds (42--51) were run
+for the baseline, the T22 resource-pool reallocation and the independent
 20\,\% demand increase, giving 30 complete simulations of 17,892 cases
-each. The same design was repeated after capping all RMG resources at
-three concurrent tasks, giving another 30 simulations. Table~\ref{tab:final_kpis}
-is the single authoritative numerical summary of the final model, both
-scenarios and this capacity sensitivity. For held-out validation rows,
-the last column is the 95\,\% Student-t interval of the estimate; for
-scenario and sensitivity rows it is the 95\,\% interval of the paired
-change.
+each. Table~\ref{tab:final_kpis} is the single authoritative numerical
+summary of the final model and both scenarios. For held-out validation
+rows, the last column is the 95\,\% Student-t interval of the estimate; for
+scenario rows it is the 95\,\% interval of the paired change.
 
 \begin{table}[p]
 \centering
@@ -607,26 +608,28 @@ use the minute-resolved simulated event log and elapsed calendar time.}
 \textbf{Analysis} & \textbf{KPI} & \textbf{Reference} &
 \textbf{Outcome} & \textbf{Change} & \textbf{95\,\% CI} \\
 \midrule
-\multicolumn{6}{@{}l}{\textit{Held-out fidelity of the frozen calibrated baseline}} \\
-Validation & Mean service-time EMD (min) & -- & 2.581 & -- & [2.447, 2.715] \\
-Validation & Case-turnaround EMD (min) & -- & 9.400 & -- & [9.296, 9.504] \\
-Validation & Case-turnaround KS & -- & 0.1570 & -- & [0.1514, 0.1625] \\
+\multicolumn{6}{@{}l}{\textit{Held-out fidelity of the final cap-three baseline}} \\
+Validation & Yard service EMD, unweighted (min) & -- & 2.999 & -- & [2.888, 3.110] \\
+Validation & Yard service EMD, real-frequency-weighted (min) & -- & 2.340 & -- & [2.279, 2.402] \\
+Validation & Case-turnaround EMD (min) & -- & 9.306 & -- & [9.229, 9.384] \\
+Validation & Case-turnaround KS & -- & 0.1554 & -- & [0.1517, 0.1591] \\
 Validation & Inter-arrival EMD (min) & -- & 0.0724 & -- & [0.0674, 0.0774] \\
 Validation & Inter-arrival KS & -- & 0.0254 & -- & [0.0215, 0.0292] \\
-Validation & Mean turnaround: real / simulated (min) & 39.742 & 30.343 & $-9.400$ & [30.239, 30.447]$^{a}$ \\
-Validation & P90 turnaround: real / simulated (min) & 71.000 & 51.300 & $-19.700$ & [50.954, 51.646]$^{a}$ \\
+Validation & Mean turnaround: real / simulated (min) & 39.742 & 30.436 & $-9.306$ & [30.359, 30.514]$^{a}$ \\
+Validation & P90 turnaround: real / simulated (min) & 71.000 & 51.800 & $-19.200$ & [51.498, 52.102]$^{a}$ \\
 Validation & Simultaneous-arrival share: real / simulated (\%) & 56.660 & 54.221 & $-2.439$ pp & [54.035, 54.407]$^{a}$ \\
-Validation & Yard-activity-rate L1 error & -- & 0.1863 & -- & [0.1832, 0.1893] \\
+Validation & Yard-activity-rate L1 error & -- & 0.1866 & -- & [0.1838, 0.1893] \\
 \midrule
-\multicolumn{6}{@{}l}{\textit{Scenario A: T22 closed (scenario minus matched baseline)}} \\
-T22 closure & Mean turnaround (min) & 30.396 & 30.488 & $+0.092$ & [$-0.032$, $+0.216$] \\
-T22 closure & Median turnaround (min) & 27.000 & 27.000 & 0.000 & [0.000, 0.000] \\
-T22 closure & P90 turnaround (min) & 51.600 & 51.700 & $+0.100$ & [$-0.306$, $+0.506$] \\
-T22 closure & Mean RMG service (min) & 11.054 & 11.071 & $+0.017$ & [$-0.064$, $+0.098$] \\
-T22 closure & Median / P90 RMG service (min) & 8.000 / 22.000 & 8.000 / 22.000 & 0.000 / 0.000 & [0, 0] / [0, 0] \\
-T22 closure & Mean RMG pre-service (min) & 6.433 & 6.502 & $+0.070$ & [$+0.012$, $+0.128$] \\
-T22 closure & Median / P90 RMG pre-service (min) & 4.000 / 15.000 & 4.000 / 15.000 & 0.000 / 0.000 & [0, 0] / [0, 0] \\
-T22 closure & Mean T22 assignments per run & 613.2 & 0.0 & $-613.2$ & exact \\
+\multicolumn{6}{@{}l}{\textit{Scenario A: T22 resource-pool reallocation (scenario minus matched baseline)}} \\
+T22 pool & Mean turnaround (min) & 30.443 & 30.456 & $+0.012$ & [$-0.102$, $+0.127$] \\
+T22 pool & P90 turnaround (min) & 51.700 & 51.900 & $+0.200$ & [$-0.364$, $+0.764$] \\
+T22 pool & Mean RMG service (min) & 11.069 & 11.059 & $-0.010$ & [$-0.064$, $+0.045$] \\
+T22 pool & Mean RMG pre-service (min) & 6.475 & 6.479 & $+0.003$ & [$-0.034$, $+0.040$] \\
+T22 pool & RMG receive service (min) & 11.362 & 11.319 & $-0.043$ & [$-0.110$, $+0.024$] \\
+T22 pool & RMG receive pre-service (min) & 6.480 & 6.496 & $+0.016$ & [$-0.039$, $+0.071$] \\
+T22 pool & RMG delivery service (min) & 8.794 & 8.829 & $+0.035$ & [$-0.078$, $+0.147$] \\
+T22 pool & RMG delivery pre-service (min) & 6.487 & 6.451 & $-0.036$ & [$-0.087$, $+0.015$] \\
+T22 pool & Mean T22 assignments per run & 604.8 & 0.0 & $-604.8$ & exact \\
 \midrule
 \multicolumn{6}{@{}l}{\textit{Scenario B: 20\,\% higher working-time arrival intensity (scenario minus matched baseline)}} \\
 Demand $+20\,\%$ & Model mean working inter-arrival (min) & 0.6830 & 0.5692 & $-0.1138$ & exact \\
@@ -634,69 +637,82 @@ Demand $+20\,\%$ & Model arrivals per working hour & 87.842 & 105.411 & $+20.000
 Demand $+20\,\%$ & Observed mean inter-arrival (min) & 0.8282 & 0.7145 & $-0.1137$ & [$-0.1145$, $-0.1128$] \\
 Demand $+20\,\%$ & Observed arrivals per elapsed hour & 72.452 & 83.979 & $+11.527$ ($+15.910\,\%$) & [$+11.478$, $+11.577$] \\
 Demand $+20\,\%$ & Observed simultaneous-arrival share (\%) & 54.221 & 60.015 & $+5.795$ pp & [$+5.736$, $+5.853$] pp \\
-Demand $+20\,\%$ & Mean turnaround (min) & 30.396 & 30.409 & $+0.012$ & [$-0.120$, $+0.145$] \\
-Demand $+20\,\%$ & Median / P90 turnaround (min) & 27.000 / 51.600 & 27.000 / 51.800 & 0.000 / $+0.200$ & [0, 0] / [$-0.252$, $+0.652$] \\
-Demand $+20\,\%$ & Mean RMG service (min) & 11.054 & 11.068 & $+0.014$ & [$-0.031$, $+0.059$] \\
-Demand $+20\,\%$ & Median / P90 RMG service (min) & 8.000 / 22.000 & 8.000 / 22.000 & 0.000 / 0.000 & [0, 0] / [0, 0] \\
-Demand $+20\,\%$ & Mean RMG pre-service (min) & 6.433 & 6.450 & $+0.017$ & [$-0.048$, $+0.083$] \\
-Demand $+20\,\%$ & Median / P90 RMG pre-service (min) & 4.000 / 15.000 & 4.000 / 15.000 & 0.000 / 0.000 & [0, 0] / [0, 0] \\
+Demand $+20\,\%$ & Mean turnaround (min) & 30.443 & 30.411 & $-0.033$ & [$-0.128$, $+0.063$] \\
+Demand $+20\,\%$ & Mean RMG service (min) & 11.069 & 11.063 & $-0.006$ & [$-0.067$, $+0.056$] \\
+Demand $+20\,\%$ & Mean RMG pre-service (min) & 6.475 & 6.429 & $-0.046$ & [$-0.094$, $+0.001$] \\
+Demand $+20\,\%$ & RMG receive service / pre-service (min) & 11.362 / 6.480 & 11.332 / 6.461 & $-0.030$ / $-0.020$ & [$-0.101$, $+0.041$] / [$-0.074$, $+0.035$] \\
+Demand $+20\,\%$ & RMG delivery service / pre-service (min) & 8.794 / 6.487 & 8.796 / 6.397 & $+0.002$ / $-0.090$ & [$-0.083$, $+0.087$] / [$-0.157$, $-0.022$] \\
 \midrule
-Structure & Aggregate RMG maximum concurrency & $\leq 66$ nominal physical & 100 effective & $+34$ & structural, no CI \\
-\multicolumn{6}{@{}l}{\textit{Domain-constrained sensitivity: every RMG resource capped at concurrency three}} \\
-Cap 3 & Aggregate RMG maximum concurrency & 100 & 66 & $-34$ & exact \\
-Cap 3 & Mean turnaround: original / capped baseline (min) & 30.396 & 30.380 & $-0.016$ & [$-0.123$, $+0.090$] \\
-Cap 3 + T22 & Mean turnaround (min) & 30.380 & 30.457 & $+0.077$ & [$-0.071$, $+0.225$] \\
-Cap 3 + T22 & Mean RMG pre-service (min) & 6.457 & 6.449 & $-0.008$ & [$-0.076$, $+0.060$] \\
-Cap 3 + demand & Mean turnaround (min) & 30.380 & 30.450 & $+0.070$ & [$-0.038$, $+0.179$] \\
-Interaction & Demand effect: original / cap 3 (min) & $+0.012$ & $+0.070$ & $+0.058$ & [$-0.120$, $+0.236$] \\
-Interaction & T22 pre-service effect: original / cap 3 (min) & $+0.070$ & $-0.008$ & $-0.078$ & [$-0.166$, $+0.010$] \\
-Contract & Invalid generated cases / duration tails & 60 scenario runs & 0 & 0 & all checks passed \\
+Structure & Aggregate RMG maximum concurrency & 100 discovered & 66 final & $-34$ & exact domain cap \\
+Contract & Invalid cases / duration tails & 40 final logs & 0 & 0 & all checks passed \\
 \bottomrule
 \end{tabular}
 \parbox{0.97\textwidth}{\scriptsize $^{a}$For these rows the interval
 refers to the simulated outcome; the signed change is outcome minus the
 fixed real-holdout statistic. Scenario intervals refer to paired
-seed-wise changes. Interaction rows report the paired difference between
-the capped and discovered scenario effects.}
+seed-wise changes. Gate In and Gate Out are excluded from both yard-service
+EMD aggregates.}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Held-out service-time EMD by yard activity for the final
+cap-three baseline ($N_{\mathrm{seeds}}=10$). Gate In and Gate Out are
+excluded.}
+\label{tab:yard_activity_emd}
+\small
+\begin{tabular}{lrr}
+\toprule
+\textbf{Yard activity} & \textbf{Mean EMD (min)} & \textbf{95\,\% CI} \\
+\midrule
+\texttt{HO2\_delivery} & 2.119 & [2.013, 2.225] \\
+\texttt{HO2\_mixed}    & 4.255 & [3.853, 4.656] \\
+\texttt{HO2\_receive}  & 2.024 & [1.768, 2.280] \\
+\texttt{LL\_delivery}  & 1.353 & [1.286, 1.420] \\
+\texttt{LL\_mixed}     & 3.857 & [3.019, 4.695] \\
+\texttt{LL\_receive}   & 4.203 & [4.000, 4.406] \\
+\texttt{RMG\_delivery} & 2.519 & [2.426, 2.612] \\
+\texttt{RMG\_mixed}    & 4.200 & [3.971, 4.429] \\
+\texttt{RMG\_receive}  & 2.463 & [2.374, 2.551] \\
+\bottomrule
+\end{tabular}
 \end{table}
 
 \subsection{Held-Out Baseline Interpretation}
 
-The final baseline reproduces service distributions with a mean
-activity-level EMD of 2.581 minutes and arrivals with an EMD of 0.072
-minutes. Its case-turnaround EMD is 9.400 minutes. This discrepancy is
+The final baseline reproduces the nine yard-service distributions with
+an unweighted EMD of 2.999 minutes. Weighting the same per-activity
+distances by real held-out frequency reduces the value to 2.340 minutes,
+because the rarer mixed and LL-receive activities have the largest
+distances (Table~\ref{tab:yard_activity_emd}). Arrivals have an EMD of
+0.072 minutes. Case-turnaround EMD is 9.306 minutes. This discrepancy is
 systematic rather than Monte-Carlo noise: mean turnaround is
-under-predicted by 9.400 minutes and P90 by 19.700 minutes. The narrow
+under-predicted by 9.306 minutes and P90 by 19.200 minutes. The narrow
 confidence intervals quantify simulation sampling uncertainty for this
 one frozen model; they do not quantify model-discovery uncertainty.
 Crucially, all ten validation replications satisfy the sequential case
 contract and contain no service event or turnaround above 24 hours.
 
-\subsection{Scenario A: T22 Closure}
+\subsection{Scenario A: T22 Resource-Pool Reallocation}
 
-T22 handles on average 613.2 events per baseline replication, or
-4.47\,\% of RMG events. The intervention reduces this count to zero.
-Under the discovered capacities, mean RMG pre-service delay increases by 0.070 minutes
-($+1.09\,\%$), with a paired 95\,\% interval of
-$[+0.012,+0.128]$ minutes. The corresponding mean-turnaround change
-is only $+0.092$ minutes and its interval crosses zero. Thus the
-simulator detects a small capacity-substitution effect in this
-configuration, but it does not support a quantitatively material
-turnaround claim.
+T22 handles on average 604.8 assignments per final-baseline replication,
+or 4.41\,\% of RMG events. The intervention reduces this count to zero.
+With every remaining block capped at three, neither the mean-turnaround
+change of $+0.012\;[-0.102,+0.127]$ minutes nor the overall RMG
+service/pre-service changes exclude zero.
 
-The pre-service result is not robust to the physical capacity cap. With
-all RMG resources limited to three, the pre-service change is
-$-0.008\;[-0.076,+0.060]$ minutes and the turnaround change is
-$+0.077\;[-0.071,+0.225]$ minutes. The pre-service interaction between
-capacity model and T22 response is
-$-0.078\;[-0.166,+0.010]$ minutes. Its interval still crosses zero, but
-the sign reversal means the small original pre-service effect must not
-be treated as a stable operational prediction.
+Separating operation types does not reveal a hidden material effect.
+Receive service changes by $-0.043\;[-0.110,+0.024]$ minutes and receive
+pre-service by $+0.016\;[-0.039,+0.071]$ minutes. Delivery service changes
+by $+0.035\;[-0.078,+0.147]$ minutes and delivery pre-service by
+$-0.036\;[-0.087,+0.015]$ minutes. All four intervals cross zero. The
+model therefore supports the conclusion that removing T22 from its
+abstract RMG resource pool has no statistically resolved differential
+effect on receive or delivery operations in this experiment.
 
 The effect must not be interpreted as a physically complete yard-block
-closure study. All three RMG activities retain 21 eligible blocks, with
-maximum concurrency four or five in the discovered model and three in
-the sensitivity model. More importantly, the
+closure study. All three RMG activities retain 21 eligible blocks, each
+with maximum concurrency three. More importantly, the
 resource selector is not a container-location state model: removal of
 T22 causes statistical reassignment to another eligible resource even
 when the historical target area was T22. Container relocation, block
@@ -717,14 +733,17 @@ flooring maps additional sub-minute positive intervals to simultaneous
 observations, raising the observed zero-inter-arrival share while the
 zero mass of the input distribution itself remains unchanged.
 
-Despite the higher demand, neither mean turnaround nor RMG service or
-pre-service delay changes significantly. Within the discovered model,
-the resource pool therefore has enough parallel capacity to absorb this
-increase. Reducing aggregate RMG capacity from 100 to 66 does not change
-that conclusion: capped mean turnaround changes by only
-$+0.070\;[-0.038,+0.179]$ minutes. The cap-by-demand interaction is
-$+0.058\;[-0.120,+0.236]$ minutes. Hence the excessive discovered
-capacity alone does not explain the missing congestion response.
+Despite the higher demand, neither mean turnaround nor overall RMG service
+or pre-service delay changes significantly in the final cap-three model:
+mean turnaround changes by $-0.033\;[-0.128,+0.063]$ minutes. Receive
+service and pre-service also remain unresolved. Delivery pre-service
+decreases by $-0.090\;[-0.157,-0.022]$ minutes (approximately 5.4 seconds),
+while delivery service is unchanged. This small counter-intuitive effect
+is compatible with a changed routing/resource-selection mix, but it is not
+evidence of causal delivery prioritisation: ship-side crane allocation,
+physical container locations and explicit queue states are absent. The
+result instead shows that a cap of three alone does not create the expected
+congestion response in the current abstraction.
 
 This is a legitimate scenario result, but also a warning:
 because spatial container constraints and explicit equipment movements
@@ -736,11 +755,10 @@ would absorb 20\,\% more demand without congestion.
 \noindent\textbf{H4 is partially supported.} Both direct interventions
 are executed as specified: T22 assignments fall to zero and the demand
 parameter increases working-time arrival intensity by exactly 20\,\%.
-The T22 closure produces a small statistically detectable increase in
-mean RMG pre-service delay only under the discovered capacity model; the
-effect disappears and reverses sign under the physical cap. Neither
-intervention produces a statistically detectable mean-turnaround effect
-under either capacity abstraction, so H4 does not support a strong
+The T22 resource-pool reallocation produces no statistically resolved
+overall or receive-versus-delivery effect. The demand experiment yields a
+small delivery pre-service reduction but no statistically detectable
+mean-turnaround effect. H4 therefore does not support a strong
 operational decision recommendation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -765,7 +783,7 @@ pooled baseline; $R^{2}=0.777$
 (Table~\ref{tab:arrival_benchmark}).
 & \textbf{Accepted.} \\
 H2 (data-aware fidelity gain) &
-\textit{rules$+$workload} does not lower turnaround or service EMD
+\textit{rules$+$workload} does not lower turnaround EMD
 versus \textit{no-rules} on the held-out log; in fact, the
 distribution-only simulator achieves 56\,\% lower turnaround EMD
 with disjoint 95\,\% CIs
@@ -782,12 +800,11 @@ deviation of turnaround EMD than \textit{no-rules} (1.61 vs.\ 1.10
 minutes; Table~\ref{tab:std_across_configs}).
 & \textbf{Does not offset H2 rejection.} \\
 H4 (scenario response) &
-T22 assignments fall to zero and mean RMG pre-service rises by
-$0.070\;[0.012,0.128]$ minutes only under discovered capacities; the
-effect becomes $-0.008\;[-0.076,0.060]$ under the physical cap. The
-demand parameter increases working-time intensity by exactly 20\,\%,
-but neither intervention has a significant mean-turnaround effect under
-either capacity model (Table~\ref{tab:final_kpis}).
+T22 assignments fall to zero, but none of its overall or
+receive-versus-delivery timing effects exclude zero. The demand parameter
+increases working-time intensity by exactly 20\,\%; only the small delivery
+pre-service reduction excludes zero, and neither intervention has a
+significant mean-turnaround effect (Table~\ref{tab:final_kpis}).
 & \textbf{Partially supported; no strong decision claim.} \\
 \bottomrule
 \end{tabular}
@@ -796,8 +813,8 @@ either capacity model (Table~\ref{tab:final_kpis}).
 Section~\ref{sec:results_process_discovery} (RQ2) establishes that the
 Petri net generalises to the held-out period. Section~\ref{sec:results_holdout_fidelity}
 (RQ1) reports that the final calibrated ProSiT simulator
-under-predicts case-mean turnaround by 9.400 minutes (23.65\,\%) and
-P90 by 19.700 minutes (27.75\,\%).
+under-predicts case-mean turnaround by 9.306 minutes (23.42\,\%) and
+P90 by 19.200 minutes (27.04\,\%).
 Section~\ref{sec:results_per_activity}
 decomposes the remaining error across activities, whose
 context-explainable variance is essentially zero under the available
@@ -844,15 +861,15 @@ queueing or equipment-induced waiting.
 \subsection{Resource Assignment Is Not Spatial Container Relocation}
 
 The RMG resource selected by ProSiT is an abstract capacity assignment.
-Its aggregate learned maximum concurrency is 100, whereas the stated
-physical maximum of three cranes per block implies at most 66 across 22
-blocks. This mismatch is evidence that the discovered overlap capacity
-also absorbs event-log and process abstractions; it is not a physical
-crane count. The cap-3 sensitivity nevertheless shows no significant
-direct baseline shift and no significant cap-by-demand interaction.
-Therefore the excessive discovered capacity is not, by itself, an
-empirically supported explanation for the absence of congestion in the
-20\,\% demand scenario.
+Its freely discovered aggregate overlap capacity is 100, whereas the
+stated physical maximum of three cranes per block implies at most 66
+across 22 blocks. This mismatch is evidence that timestamp overlap also
+absorbs event-log and process abstractions; it is not a physical crane
+count. The final executable baseline therefore applies the cap of three.
+Even under that bound, the 20\,\% demand scenario produces no significant
+mean-turnaround increase. Thus excessive overlap capacity is not the only
+missing mechanism; spatial state and waterside/landside equipment
+allocation remain unmodelled.
 
 Although target-area attributes can enter a discovered decision tree,
 they are predictors rather than a hard container-inventory constraint.
@@ -868,8 +885,8 @@ of the physical closure of yard block T22.
 
 \subsection{Systematic Turnaround Under-Prediction}
 
-The final calibrated model under-predicts mean turnaround by 9.400
-minutes and P90 by 19.700 minutes. The narrow cross-seed intervals show
+The final calibrated model under-predicts mean turnaround by 9.306
+minutes and P90 by 19.200 minutes. The narrow cross-seed intervals show
 that this is systematic model bias rather than simulation noise. The
 available event log cannot identify how much of the missing time is
 physical movement, traffic, queueing or an unrecorded operational
@@ -881,10 +898,10 @@ case order and duration tails satisfy the formal validation contract.
 The matched-seed intervals in Table~\ref{tab:final_kpis} quantify random
 simulation variation conditional on one frozen discovered model. They
 do not cover uncertainty from repeating discovery on another training
-window or adding the missing spatial container state. The cap-3
-sensitivity explicitly tests one alternative resource-capacity
-abstraction, but not resource-location feasibility or equipment
-movement. Increasing the number of seeds would narrow sampling intervals
+window or adding the missing spatial container state. The cap-three
+domain constraint enforces a physical ceiling, but does not represent
+resource-location feasibility or waterside/landside equipment movement.
+Increasing the number of seeds would narrow sampling intervals
 but would not resolve those remaining structural sources of uncertainty.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -897,5 +914,5 @@ discovery of a better simulator through data-aware modelling, but the
 demonstration that on this specific dataset the additional modelling
 machinery of ProSiT does not translate into higher fidelity. The
 observation, together with the multi-seed protocol that reveals it and
-the workload-feature variance-reduction result, is the operational
+the absence of workload-feature variance reduction, is the operational
 finding that Chapter~\ref{chp:conclusion} builds upon.
