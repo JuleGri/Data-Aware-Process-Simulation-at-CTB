@@ -512,10 +512,8 @@ variability that a user would observe in production.
 \label{sec:evaluation_metrics}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The comparison of a simulated event log against the real held-out log
-uses four distributional distance metrics. Each metric is computed once
-per Monte-Carlo replication so that a confidence interval can be
-attached to the point estimate.
+The comparison of a simulated event log against the real held-out log uses complementary distributional and point-statistic measures.
+Each metric is computed once per Monte-Carlo replication so that a confidence interval can be attached to the point estimate.
 
 \subsection{Wasserstein Distance (EMD)}
 
@@ -792,6 +790,4 @@ constitute the technical adaptation of ProSiT to the CTB case study. They are
 listed here so that a reader can distinguish the contribution of this
 thesis (case-study specific data engineering, held-out validation
 methodology, multi-seed replication, sensitivity analysis, what-if
-scenario protocol) from the contribution of ProSiT itself
-(automatic simulation-parameter discovery from event logs
-\cite{Vinci2026prosit}).
+scenario protocol) from the contribution of ProSiT itself (automatic simulation-parameter discovery from event logs \cite{Vinci2026prosit}).
