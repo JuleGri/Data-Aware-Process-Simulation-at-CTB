@@ -86,6 +86,21 @@ process mining and data-aware simulation while retaining as much
 operational context as possible. This section describes the pipeline
 stage by stage.
 
+Figure~\ref{fig:event_log_engineering_pipeline} summarises how the four
+operational data sources are transformed into the final simulation-ready
+event log.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/schemas/event_log_engineering_pipeline.png}
+\caption{Event-log engineering pipeline. The ITS schedule, report-system
+records, yard snapshots and container master data are cleaned and integrated.
+Truck visits are then represented as cases with lifecycle events and
+case-level context. The final checks produce the CSV and XES event logs used
+for discovery and evaluation.}
+\label{fig:event_log_engineering_pipeline}
+\end{figure}
+
 \subsection{Raw Data Sources and Preparation}
 
 \subsubsection{ITS Schedule Data}
