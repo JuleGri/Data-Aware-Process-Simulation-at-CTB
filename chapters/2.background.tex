@@ -56,7 +56,7 @@ has three areas:
     yard and can stack containers up to six high.
     
 \end{enumerate}
-hhla wEBSEITE bILD VOM bURCHARDKAI 
+
 
 
 Trucks can pick up or deliver containers in all three yard areas. At each area,
@@ -83,11 +83,9 @@ exceed the capacity of gates, yard equipment, and storage areas. This increases
 waiting times and reduces terminal performance
 \cite{Bett2024,CTprocessMiningTAS2020}.
 
-\subsubsection{A [Typical] Truck Visit Process} 
+\subsubsection{A Truck Visit Process} 
 Many container terminals use a Truck Appointment System (TAS) to regulate
-arrivals and reduce congestion. [Thats importnant as a decsion support
-resulting tool!] A trucking company reserves a time slot before the visit and
-states which container transactions it will perform
+arrivals and reduce congestion. A trucking company reserves a time slot before the visit and states which container transactions it will perform
 \cite{Bett2024,CTprocessMiningTAS2020}. At the automated pre-gate, Optical
 Character Recognition (OCR) systems identify the container and vehicle and
 match this information with the booking. [Despite the hourly booking slots,
@@ -96,14 +94,13 @@ have Referr to Poisson later in the arrival distribution section] The truck may
 then wait before the physical gate admits it to the terminal \cite{Bett2024}.
 It drives to the assigned yard location and performs one or more transactions:
 
-\begin{itemize}
+\begin{enumerate}
     \item delivering an export container, 
     \item receiving an import container, 
     \item delivering or receiving  multiple containers while at the same yard location, 
-\end{itemize} 
+\end{enumerate}
 
-An efficient pattern is the \textit{multi move}. A truck delivers one or more
-export containers and collects one or more import containers during the same
+An efficient pattern is the \textit{multi move}. A truck delivers one or more export containers and collects one or more import containers during the same
 visit. This reduces empty trips, emissions, and congestion, but requires good
 terminal routing \cite{CTprocessMiningTAS2020}. After all transactions, the
 truck passes the exit gate and leaves the terminal. The time between entry and
@@ -217,10 +214,7 @@ Creating, updating, processing, or completing an order leaves information
 about parts of the process execution.
 In container terminals, the TOS, Gate Operating System (GOS), and Yard
 Management System (YMS) record operational transactions. Examples include a
-truck arrival, a storage assignment, and a container-handling operation. Each
-record provides information about what happened, when it happened, and which
-object was involved.
-Because business processes are executed step by step, recorded transactions
+truck arrival, a storage assignment, and a container-handling operation. Each record provides information about what happened, when it happened, and which object was involved. Because business processes are executed step by step, recorded transactions
 form event sequences. These data are the basis for Process Mining, which
 reconstructs process behaviour from information systems. At HHLA CTB, the
 systems have grown over time. They do not all record the same level of detail
@@ -229,7 +223,7 @@ engineering section discusses this issue.
 
 \subsection{Events, Cases and Traces}
 
-Explanaiton of Event
+Explanation of Event
 Case
 Trace
 Activity
@@ -486,8 +480,8 @@ interchangeably in the process mining literature
 \subsubsection{Conformance Checking}
 While process discovery focuses on constructing process models, conformance checking focuses on comparing observed process executions with an existing process model \cite{aalst2012ConformanceChecking}. The objective is to identify deviations between the discovered model and the observed reality. Resulting deviations can indicate compliance violations, process inefficiencies, exceptional cases, or outdated process documentation. The quality of discovered process models is commonly evaluated using four criterias \cite{aalst2012ConformanceChecking,PMvanDerAalst2016}: 
 
-\begin{itemize} \item \textbf{Fitness}: 
-Measures how well the process model can reproduce the observed behavior in the event log. A model with high fitness allows most observed traces to be replayed without deviations.
+\begin{itemize} 
+\item \textbf{Fitness}: Measures how well the process model can reproduce the observed behavior in the event log. A model with high fitness allows most observed traces to be replayed without deviations.
 \item \textbf{Precision}:
 Measures how much additional behavior the model allows beyond the behavior observed in the event log. A precise model avoids allowing many unrealistic or unobserved execution paths. 
 \item \textbf{Generalization}: 
