@@ -774,7 +774,7 @@ current ProSiT implementation.
 
 ProSiT is useful for this thesis because its level of contextual conditioning
 can be changed. This allows a comparison of model expressiveness and held-out
-fidelity in the CTB truck process.
+accuracy in the CTB truck process.
 
 
 \paragraph{Configurable expressiveness in ProSiT.}
@@ -790,7 +790,7 @@ Two ProSiT configuration parameters are especially relevant for the experimental
 These parameters define the later comparison between a distribution-based
 configuration, a data-aware configuration, and a data-aware configuration with
 workload information. The evaluation tests whether the added model detail
-improves simulation fidelity.
+improves simulation accuracy.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Explainable and White-Box Simulation}
@@ -801,22 +801,10 @@ improves simulation fidelity.
 Business Process Simulation supports decisions about resources, process
 design, capacity, and investments. Decision makers need to understand why a
 model produces an outcome and how that outcome changes when parameters are
-modified. Traditional BPS models are transparent because their control flow,
-routing probabilities, resources, and timing assumptions are defined by hand
-\cite{BPSAalst2015}.
-
-Machine-learning models can learn behaviour from historical event data and may
-improve prediction \cite{Camargo2020,Camargo2021}. However, their internal
-logic can be difficult to inspect. A model may reproduce historical behaviour
-without showing why it selected a route, waiting time, or resource. This makes
-validation and what-if analysis harder \cite{runtimeIntegration2024}. For
-what-if analysis, users must be able to change parameters or rules and judge
-whether the model response is reasonable. Explainable simulation tries to
-combine data-driven prediction with visible decision logic.
+modified. Traditional BPS models are transparent because their control flow, routing probabilities, resources, and timing assumptions are defined by hand \cite{BPSAalst2015}. Machine-learning models can learn behaviour from historical event data and may improve prediction \cite{Camargo2020,Camargo2021}. However, their internal logic can be difficult to inspect. A model may reproduce historical behaviour without showing why it selected a route, waiting time, or resource. This makes validation and what-if analysis harder \cite{runtimeIntegration2024}. For what-if analysis, users must be able to change parameters or rules and judge whether the model response is reasonable. Explainable simulation tries to combine data-driven prediction with visible decision logic.
 
 \subsection{Probabilistic White-Box Simulation Models}
-White-box simulation makes learned decisions visible and editable. The RIMS
-framework combines a discrete-event simulation with predictive models at
+The Goal of White-box simulation is making learned decisions visible and especially editable. The RIMS framework combines a discrete-event simulation with predictive models at
 runtime while keeping an inspectable simulation model
 \cite{runtimeIntegration2024}.
 
@@ -853,11 +841,7 @@ configuration, but does not by itself establish causal effects.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Verification, Validation, and Trustworthiness}
 \label{sec:simulation_validation_background}
-Validation asks whether a simulator is accurate enough for its intended use,
-not only whether it runs. A model may reproduce
-historical truck turnaround distributions but still fail to predict an
-intervention outside the
-range of the observed data \cite{Sargent2013Validation,BPSAalst2015}.
+Validation measures, wether a simulaton model is accurate enough for its intended purpose. A generated model may reproduce historical truck turnaround distributions but still fail to predict an intervention not seen in the observed data \cite{Sargent2013Validation,BPSAalst2015}.
 Automatically discovered simulation models do not remove this
 requirement. They replace some manual assumptions with assumptions about
 event-log semantics, discovery algorithms, data attributes and fitted
@@ -883,7 +867,7 @@ validity \cite{Sargent2013Validation}.
 Table~\ref{tab:validation_evidence_types} maps these distinctions to the
 type of evidence needed in an automatically discovered BPS study. The
 categories are complementary rather than interchangeable. For example,
-a low event-log distance is evidence of operational fidelity, but it
+a low event-log distance is evidence of operational accuracy, but it
 cannot show that a timestamp proxy has the correct physical meaning or
 that the simulator implemented a resource constraint as intended.
 
@@ -949,7 +933,7 @@ conventional data-driven simulators may reproduce activity sequences
 and their frequencies while performing worse on temporal dynamics
 \cite{Camargo2021}.
 
-The implication is that operational fidelity is multi-dimensional.
+The implication is that operational accuracy is multi-dimensional.
 Relevant perspectives include control flow, activity and case timing,
 case arrivals, congestion and resource behaviour. A model can be close
 to the real log in one perspective and far away in another; collapsing
@@ -1002,7 +986,7 @@ suite. Its structural evidence combines held-out Petri-net conformance,
 explicit case-language contracts and yard-activity frequency error.
 These measures answer the CTB-specific structural questions, while the
 Chapela-Campa framework supplies the rationale for keeping structural
-evidence separate from temporal fidelity.
+evidence separate from temporal accuracy.
 
 \subsubsection{Temporal Perspective}
 
@@ -1030,7 +1014,7 @@ yard service time, model-derived pre-service delay and case turnaround
 time. Reporting complete distributions rather than only their means is
 useful because equal averages can conceal differences in dispersion,
 skewness or tails. Per-activity results prevent common RMG
-events from concealing weaker fidelity for less frequent yard
+events from concealing weaker accuracy for less frequent yard
 activities.
 
 \subsubsection{Arrival and Congestion Perspectives}
@@ -1056,28 +1040,45 @@ match what the available event log can identify.
 
 \subsubsection{Wasserstein Distance}
 
-For two one-dimensional distributions $F$ and $G$ with finite first
-moments, the first Wasserstein distance can be written as
-\begin{equation}
-    W_1(F,G)=\int_{-\infty}^{\infty}|F(x)-G(x)|\,\mathrm{d}x .
-\end{equation}
-It has the optimal-transport interpretation of the minimum cost of
-moving probability mass from one distribution to the other. For
-durations measured in minutes, $W_1$ is expressed in minutes,
-which gives the discrepancy an operational scale.
+The Wasserstein Distance is a metric for comparing probability
+distributions that originates from optimal transport theory
+\cite{Panaretos2019Wasserstein}. Intuitively, it quantifies the minimum
+amount of work required to transform one probability distribution into
+another by transporting probability mass between their respective
+locations. For one-dimensional probability distributions $F$ and $G$
+with finite first moments, the first Wasserstein distance can be
+expressed as
 
-Earth Mover's Distance (EMD) is related, but it is not always the same
-measure. In the formulation used
-by Chapela-Campa et al., EMD may compare time series with unequal total
-mass and penalise the creation of missing mass, whereas first
-Wasserstein distance assumes equal normalised mass
-\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. For empirical
-probability distributions with unit mass, the formulations coincide.
-In Process Mining, related transport distances have been used for
-stochastic conformance checking over behavioural distributions
-\cite{leeman2013EarthMovers}. In this thesis, the term \emph{EMD} for
-service, inter-arrival and turnaround samples denotes the
-one-dimensional $W_1$ distance between empirical distributions.
+\begin{equation}
+    W_1(F,G)
+    =
+    \int_{-\infty}^{\infty}
+    |F(x)-G(x)|\,dx.
+\end{equation}
+
+A value of zero indicates identical distributions, while larger values
+indicate increasing distributional dissimilarity
+\cite{Panaretos2019Wasserstein}. An important property for the present
+study is that the first Wasserstein distance retains the unit of the
+underlying variable. Thus, when comparing observed and simulated
+duration distributions measured in minutes, the resulting distance is
+also expressed in minutes.
+
+The Earth Mover's Distance (EMD) is closely related to the Wasserstein
+distance, but the terms are not universally interchangeable. EMD is
+commonly used for discrete mass-transport measurements, whereas the
+Wasserstein distance is defined between probability measures more
+generally. In the formulation used by Chapela-Campa et al., EMD may
+also compare time series with unequal total mass and penalise the
+creation of missing mass. The first Wasserstein distance
+assumes only probability distributions with equal normalised mass
+\cite{leeman2013EarthMovers,ChapelaCampa2023Trust,Chapela2025SimQuality}. When both empirical
+samples are normalised to probability distributions, the corresponding
+one-dimensional transport distance is equivalent to the first
+Wasserstein distance.
+
+Related optimal-transport distances have also been applied in Process
+Mining for stochastic conformance checking \cite{leeman2013EarthMovers}. Although the thesis uses the term EMD, the numerical quantity actually calculated for service times, inter-arrival times and turnaround times is the first Wasserstein distance between two normalized empirical one-dimensional distributions.
 
 \subsubsection{Kolmogorov--Smirnov Statistic}
 
@@ -1085,15 +1086,15 @@ The two-sample Kolmogorov--Smirnov (KS) statistic is the maximum
 vertical difference between the empirical cumulative distribution
 functions of the simulated and observed samples
 \cite{Massey1951KS}:
-\begin{equation}
-    D_{n,m}=\sup_x
-    \left|F_{n,\mathrm{sim}}(x)-F_{m,\mathrm{real}}(x)\right|.
-\end{equation}
-Unlike $W_1$, it is dimensionless and bounded by zero and one. The two
-statistics are complementary: $W_1$ measures integrated displacement
-on the operational scale, while KS reports the largest local CDF gap.
+ [EQUATION]
+%\begin{equation}
+  % D_{n,m}=\sup_x
+   % \left|F_{n,\mathrm{sim}}(x)-F_{m,\mathrm{real}}(x)\right|.
+%\end{equation}
+Unlike $W_1$, it is dimensionless and lays between zero and one. The two
+statistics are complementary: $W_1$ measures the area between the two CDFs on the operational scale, while KS reports the single maxmimum vertical distance between two distributions.
 The KS statistic can be accompanied by a significance-test $p$-value, but
-that $p$-value answers a different question from practical fidelity.
+that $p$-value answers a different question from practical accuracy.
 With large event logs, small and operationally unimportant differences
 can be statistically significant. The magnitude of the statistic and
 the distributional plots must be interpreted separately from
@@ -1118,7 +1119,7 @@ distributions can be inspected and modified
 validity or causality. A readable rule may encode a spurious association,
 and two differently specified models may reproduce the same marginal
 distribution. Validation should combine held-out output
-fidelity with rule inspection, leakage checks, structural contracts,
+accuracy with rule inspection, leakage checks, structural contracts,
 domain constraints and sensitivity analysis. This matters in the CTB
 application because timestamp fields are operational proxies and a resource
 label does not always denote a
@@ -1128,7 +1129,7 @@ physically interchangeable crane or storage position.
 
 A BPS model is a stochastic generator. One fixed model can generate
 many possible event logs, whereas the real test log is only one observed
-realisation. A single simulated log mixes model fidelity
+realisation. A single simulated log mixes model accuracy
 with the random draws of that run. Chapela-Campa et al. address this
 problem directly: they generate $K$ logs from $K$ simulation runs,
 match their case count and start point to an actual test log that was
@@ -1162,7 +1163,7 @@ protocol.
 
 \subsection{Trustworthiness and the Boundary of Historical Validation}
 
-Historical fidelity is necessary for a simulator that claims to
+Historical accuracy is necessary for a simulator that claims to
 represent an existing process, but it is not sufficient for unrestricted
 decision support. Chapela-Campa et al. identify this limit:
 comparison with an original event log assesses replication of the
@@ -1173,7 +1174,7 @@ operating region cannot automatically validate use in another
 \cite{Sargent2013Validation}.
 
 Trustworthiness cannot be measured with one metric. Evidence is needed for
-data and conceptual validity, implementation, held-out fidelity,
+data and conceptual validity, implementation, held-out accuracy,
 reproducibility, assumptions, stochastic robustness, domain review, and the
 limits of extrapolation. ProSiT provides probabilistic rules that can be
 inspected and configured \cite{Vinci2026prosit}. Applied work shows how a

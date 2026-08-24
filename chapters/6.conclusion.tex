@@ -1,76 +1,94 @@
 \chapter{Conclusion}
 \label{chp:conclusion}
 
-The research objective was to evaluate the fidelity, structural applicability,
-and limitations of automatically discovered data-aware process simulation for
-container-terminal truck operations. The CTB case study shows that these
-aspects must be assessed together. The simulator is reproducible, transparent,
-and structurally stable. However, historical fidelity and executable scenarios
-do not prove that the model can predict physical effects.
+This thesis investigated the applicability, historical fidelity, and
+limitations of automatically discovered data-aware process simulation for container-terminal truck operations. The work was motivated by the increasing availability of operational event data in container terminals and by recent advances in simulation discovery, which make it possible to derive executable simulation models directly from recorded process behavior. While these approaches have been studied primarily in conventional business-process settings, their applicability to physical logistics systems with spatial constraints, congestion effects, and resource dependencies has not yet been researches in depth.
 
-\section{Answer to the Research Objective}
+\begin{sloppypar}
+To investigate this problem, the thesis developed a simulation-ready event log from two months of continuous operational truck-handling data of the HHLA Container Terminal Burchardkai and applied the ProSiT simulation-discovery framework. The resulting models were evaluated on a temporally held-out test period resembling unseen future from the perspective of the simulation models development. The evaluation combined control-flow conformance, distributional quality measures, repeated Monte-Carlo simulation, and explicit structural checks. Different levels of contextual model expressiveness were compared, and the final data-aware model
+was subsequently used in two transparent what-if experiments concerning an RMG resource-pool intervention and increased truck demand.
+\end{sloppypar}
 
-The approach can be applied to CTB truck operations as a transparent model,
-but its use for decision support is limited. The final model reproduces the
-yard-service and arrival distributions with some remaining error and keeps the
-physical order of a truck visit. However, it under-predicts turnaround time,
-and more contextual features do not improve held-out fidelity in the available
-data. The what-if experiments can be reproduced, but their weak congestion
-response shows that spatial container state, equipment movement, and queue
-mechanisms are missing. The model can be used to study its process abstraction
-and identify modelling limits. It is not yet enough for direct recommendations
-about the physical terminal.
+The implementation and empirical evaluation answer the four research questions
+introduced in Chapter~1.
 
-\section{Answers to the Research Questions}
+\textbf{RQ1} questions, to what extent a ProSiT simulation model discovered from historical CTB truck-operation data can reproduce the behaviour observed in an unseen temporal hold-out. The evaluation showed that the model reproduces some patterns of activities and process characteristics of the observed temporal behavior considerably better than others. The
+final baseline achieves an unweighted yard-service Wasserstein distance of 2.99 minutes and a real-frequency-weighted distance of 2.34 minutes, while the inter-arrival distribution differs from the held-out log by only 0.072 minutes. Dispite these fairly acurate statistical results, the model systematically under-predicts complete truck turnaround time. Mean turnaround is 30.44 minutes in the simulation compared with 39.74 minutes in the held-out data, corresponding to an under-prediction
+of 9.31 minutes. [Add confidence Intervall Results and interpretation]
 
-\begin{description}
-\item[RQ1 (Fidelity).] The final calibrated simulator is structurally stable
-      across ten seeds and reproduces yard-service and arrival distributions,
-      but it under-predicts mean turnaround by 9.306 minutes and P90 by 19.200
-      minutes. The model reproduces parts of the observed behaviour but not
-      the full turnaround-time distribution.
-\item[RQ2 (Structural applicability).] The sequential observed-variant trie
-      replays 99.944\,\% of held-out traces without deviations and satisfies the
-      required Gate In--yard--Gate Out sequence. Its strict case language is a
-      suitable simulation contract, with reduced behavioural generality as
-      an explicit trade-off.
-\item[RQ3 (Contextual expressiveness).] Increasing contextual expressiveness
-      from \textit{no-rules} to \textit{rules$+$workload} does not improve
-      held-out fidelity. The more expressive endpoint has higher turnaround
-      distance and higher cross-seed variation. More context only helps when
-      the available attributes explain the relevant operational variation.
-\item[RQ4 (What-if decision support).] The T22 and demand interventions are
-      transparent and reproducible, but they do not yield a resolved
-      mean-turnaround response. Their behaviour reveals that scenario
-      executability is not equivalent to counterfactual validity when
-      physical locations, relocation feasibility, equipment movements, and
-      explicit queues are absent from the abstraction.
-\end{description}
+\textbf{RQ2} investigated the suitability of automatically discovered
+control flow for the CTB truck process. An Inductive-Miner model was
+initially discovered in line with the ProSiT methodology, but its
+generalised structure introduced concurrency and ordering behaviour that conflicted with known physical constraints of a single truck visit. Consequently, the discovered model could not be used unchanged as the simulation backbone. The final implementation therefore replaced it with a deliberately restrictive prefix-trie Petri net derived from the observed training variants. This representation covered 99.944\,\% of held-out traces, but its high coverage should not be interpreted as superior process discovery because the model intentionally sacrifices generalisation. The main finding of RQ2 is therefore that transferring process-discovery-based simulation to the CTB setting required explicit domain constraints on the control-flow model; automatic process discovery alone did not produce a sufficiently suitable simulation
+structure.
 
+\textbf{RQ3} asked how increasing the contextual expressiveness of the
+simulation model affects held-out fidelity. The comparison between the
+distribution-only \textit{no-rules} configuration and the full
+\textit{rules$+$workload} configuration shows that additional data-aware
+modelling does not automatically improve simulation fidelity. The more
+expressive configuration produces a 56\,\% higher turnaround-distance measure
+and greater variation across simulation seeds, while its improvement in
+inter-arrival fidelity is operationally negligible. A subsequent
+per-activity analysis shows that the available contextual attributes explain
+little of the service-time variation of the dominant RMG activities. The
+results therefore indicate that increasing model expressiveness is only useful
+when the available contextual information captures variation that is
+relevant to the simulated outcome. In the CTB event log examined here,
+additional contextual conditioning introduces modelling complexity without
+producing a corresponding improvement in overall held-out fidelity.
+
+\textbf{RQ4} asked how the discovered simulation model responds to transparent
+operational interventions and what these responses reveal about its suitability
+for what-if decision support. Both interventions can be implemented,
+inspected, and reproduced consistently. Removing T22 from the simulated RMG
+resource pool eliminates all assignments to that resource, while increasing
+the working-time arrival intensity by 20\,\% produces the intended change in
+the underlying arrival parameter. Nevertheless, neither intervention produces
+a statistically resolved change in mean truck turnaround time. More
+importantly, the scenario analysis exposes limitations of the underlying
+process abstraction. RMG resources represent statistical capacity assignments
+rather than physical container locations, and the model does not represent
+container relocation, equipment movement, waterside and landside crane
+allocation, or explicit spatial queue states. Consequently, the scenarios are
+valid experiments on the discovered simulation model, but their results cannot
+be interpreted as experimentally established counterfactual effects of the
+physical terminal.
+
+Overall, the thesis shows that automatically discovered data-aware process
+simulation can be transferred to container-terminal truck operations and can
+produce a transparent, reproducible, and structurally consistent simulation
+model from operational event data. At the same time, the case study
+demonstrates that successful process discovery, historical fidelity, and
+scenario executability are different requirements. High control-flow
+conformance does not guarantee accurate temporal behaviour, additional
+contextual features do not necessarily improve simulation fidelity, and an
+executable what-if intervention does not establish that the corresponding
+physical effect is represented correctly.
+
+The contribution of this thesis is therefore not a demonstration that the
+discovered model is already sufficient for unrestricted operational decision
+support. Rather, it provides empirical evidence about where a recent
+white-box simulation-discovery approach transfers successfully to a complex
+logistics environment and where the abstraction reaches its limits. For the
+CTB truck process, the results indicate that further progress towards
+trustworthy operational decision support requires richer representations of
+spatial process state, physical resource constraints, equipment movement, and
+queueing mechanisms in addition to the event-log-based behavioural information
+captured by the current simulation model.
 \section{Future Work}
-The framework can be extended in the following areas:
+[TBD]
+\textit{Researching alternative simulation approaches to the classical manual simulation of container terminal logistics is an interesting and in my opinion fruitful field. Due to the 24/7 operations in logistics, the resources for development and research in advanced technologies is very limited and I see  great potential in digital start ups or tech companies to get in a foot on that 
+
+For port applications, alternative eventlog structure with different aggregation logic or Event specific attributes kept and a vessel and rail arrival logic implemented}
+
+The framework developed and applied in this Thesis can be extended in the following areas:
 
 \begin{itemize}  
-    \item \textbf{Different Terminal Setting:} A structural difference between SG
-    
+    \item \textbf{Alternative Terminal Setting:} An alternative simulation scenario to be analysed, like the Quaysides workload effects. 
+    \item \textbf{Different Simulation Tool} Due to the physical component, the application of a business process tool has its limits in logistics application. 
+    \item \textbf{Alternative Event log Structure} The Attribute selection and aggregation affect the results heavily. An alternative engineering or retainig attributes on the event level could also affect simulation outcomes, which could be investigated in future simulation scenarios. 
      
 \end{itemize}
 
-\section{Personal Takeaways}
-The project led to the following personal takeaways:
 
-\begin{enumerate}
-    \item \textbf{Independent Project Management:} I learned to organise my
-    work, manage deadlines, and complete a large project independently.
-
-    \item \textbf{Learning from Setbacks:} Failed attempts, unexpected results,
-    and debugging were part of the research process and helped improve the work.
-
-    \item \textbf{First Principles Thinking:} When a problem became difficult, it helped to return to the basic mathematics and logic before continuing.
-
-    \item \textbf{Reproducibility Over Complexity:} A tested and documented
-    framework is more useful than a system that cannot be managed. Small and
-    tested scripts made the codebase easier to handle.
-
-    \item \textbf{Working with Others:} Discussions and feedback from the research group improved the final work.
-\end{enumerate}
