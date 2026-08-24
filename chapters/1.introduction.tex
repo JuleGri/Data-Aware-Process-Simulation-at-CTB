@@ -27,7 +27,7 @@ It uses context attributes, case information, process states, resource
 characteristics, and decision logic
 \cite{DaSLeno2019,mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob,lopez2024}.
 
-Machine-learning and deep-learning methods can learn complicated behaviour,
+Machine-learning and deep-learning methods can learn complicated behavior,
 but their results are often difficult to inspect, modify, and validate. Hybrid
 and white-box approaches combine interpretable models with data-driven
 behaviour discovery \cite{runtimeIntegration2024,Vinci2026prosit}. ProSiT uses
@@ -66,70 +66,104 @@ with congestion, competing resources, and context-dependent behaviour is less
 clear. This thesis evaluates the model's fidelity, use, and limitations for
 container-terminal truck operations.
 
-\section{Research Objective} The research objective of this thesis is to
-evaluate the fidelity, structural applicability, and limitations of an
-automatically discovered data-aware process simulation model for container
-terminal truck operations. Trustworthiness motivates the study, but one
-historical case study cannot establish it as a general property. The thesis
-aims to:
+\section{Research Objective and Contributions}
 
-\begin{itemize} 
-\item quantify how well a discovered ProSiT model reproduces unseen CTB truck-handling behaviour;
-\item evaluate whether the deliberately restrictive training trace language covers held-out cases while respecting the physical sequence of a truck visit;
-\item determine how increasing the contextual expressiveness of the simulation configuration affects held-out fidelity; and
-\item examine how the model responds to transparent operational interventions and what those responses reveal about the limits of what-if decision support.
-\end{itemize} 
+The objective of this thesis is to evaluate the fidelity, structural
+applicability, and limitations of data-aware process simulation for container terminal truck operations. The study investigates how far a simulation model derived from historical event data using ProSiT can reproduce unseen truck-handling behaviour at the Container Terminal Burchardkai (CTB), and where the transfer of process-simulation discovery to a physical logistics environment reaches its limits. Trustworthiness motivates this evaluation, but it is not treated as a property that can be established from a single historical case study.
 
-The study uses event data from container terminal truck operations for process
-discovery and simulation model generation.
+More specifically, the thesis evaluates whether the control-flow
+representation derived from the training data remains applicable to a later
+held-out period while respecting the physical sequence of a truck visit. It
+then assesses the historical fidelity of the resulting simulator, examines
+whether increasing the contextual expressiveness of the ProSiT configuration
+improves this fidelity, and investigates how the data-aware model responds to
+transparent operational interventions. Together, these analyses are intended
+to distinguish between reproducing historical behaviour, constructing an
+executable simulation model, and supporting credible what-if reasoning.
 
-\subsection{Research Contributions} The contributions of this thesis are:
+The thesis contributes an empirical evaluation of data-aware process
+simulation in container terminal truck operations. First, it examines the
+transfer of a recent process-simulation discovery approach to a logistics
+setting characterised by physical sequencing, shared resources, temporal
+variation, and congestion. Second, it identifies methodological challenges
+that arise when automatically inferred process and resource abstractions do
+not fully correspond to known physical constraints, requiring explicit
+domain-constrained adaptations. Third, it compares different levels of
+contextual model expressiveness on unseen temporal data rather than assuming
+that additional data awareness necessarily improves simulation quality.
+Finally, two operational interventions are used to investigate both the
+capabilities and the boundaries of the resulting white-box model for what-if
+analysis and decision support.
 
-\begin{enumerate} 
-\item \textbf{Domain evaluation}\\ The thesis provides one of the first
-evaluations of data-aware process simulation for container terminal truck
-operations.
-\item \textbf{Method}\\ It identifies challenges that arise when data-aware
-simulation is transferred from business processes to logistics systems with
-physical constraints and congestion.
-\item \textbf{Model comparison}\\ It measures how different levels of context
-affect held-out simulation fidelity and variation across seeds.
-\item \textbf{Decision-support limits}\\ It uses operational interventions to
-identify what the discovered model can and cannot represent in what-if
-analysis.
-\end{enumerate} 
+The empirical study is based on operational CTB truck-event data and combines
+process analysis, simulation-model generation, temporal hold-out validation,
+multi-seed simulation, and controlled scenario experiments. The corresponding
+research questions specify how these objectives are evaluated in the
+remainder of the thesis.
 
 \section{Research Questions} To achieve the research objective, the thesis addresses the following research questions:
 
 \begin{enumerate} 
-\item \textbf{RQ1 (Fidelity):} To what extent can a ProSiT simulation model discovered from historical CTB truck-operation data reproduce the observed behaviour of an unseen temporal hold-out?
-\item \textbf{RQ2 (Structural applicability):} To what extent can the discovered process structure represent held-out CTB truck-handling behaviour while respecting the physical sequential constraints of a truck visit?
-\item \textbf{RQ3 (Contextual expressiveness):} How does increasing the contextual expressiveness of the simulation model affect held-out simulation fidelity in the CTB truck process?
-\item \textbf{RQ4 (What-if decision support):} How does the discovered simulation model respond to transparent operational interventions, and what do these responses reveal about its suitability and limitations for what-if decision support?
+\item \textbf{RQ1:} To what extent can a ProSiT simulation model discovered from historical CTB truck-operation data reproduce the observed behaviour of an unseen temporal hold-out?
+\item \textbf{RQ2:} To what extent can the discovered process structure represent held-out CTB truck-handling behaviour while respecting the physical sequential constraints of a truck visit?
+\item \textbf{RQ3:} How does increasing the contextual expressiveness of the simulation model affect held-out simulation fidelity in the CTB truck process?
+\item \textbf{RQ4:} How does the discovered simulation model respond to transparent operational interventions, and what do these responses reveal about its suitability and limitations for what-if decision support?
 \end{enumerate} 
 
-\section{Thesis Outline} 
-\label{sec:thesis_outline} 
+\section{Thesis Outline}
+\label{sec:thesis_outline}
 
-Chapter~\ref{chp:background} introduces container-terminal operations, Process
-Mining, Business Process Simulation, data-aware and white-box simulation, and
-methods for simulation validation.
+Chapter~\ref{chp:background} establishes the theoretical and methodological
+background of the thesis. It first introduces container-terminal operations
+and truck handling as the application domain before explaining how operational
+information systems can be transformed into event logs for Process Mining.
+The chapter then reviews Process Mining, Business Process Simulation,
+simulation discovery, and the development towards data-aware and white-box
+simulation approaches. Particular attention is given to ProSiT and to the
+validation of automatically derived simulation models. The chapter concludes
+by defining the research gap concerning the transfer of these approaches to
+physical logistics systems with spatial and resource constraints.
 
-Chapter~\ref{chp:case_study_and_data} describes HHLA Container Terminal
-Burchardkai, the data sources, and the pipeline that turns raw records into the
-simulation event log.
+Chapter~\ref{chp:case_study_and_data} introduces the HHLA Container Terminal
+Burchardkai as the empirical case study and describes the operational data
+used in the analysis. It explains how records from several terminal systems
+are cleaned, matched, and transformed into a process-oriented truck event log.
+The chapter defines the case and activity structure, the lifecycle timestamps
+used for service-time modelling, and the contextual attributes required for
+data-aware simulation, including demand, utilisation, container, and
+target-area information. It concludes with the structure and descriptive
+characteristics of the final simulation-ready event log.
 
-Chapter~\ref{chp:experiments_and_framework} defines the train/test split,
-process and simulation discovery, Monte-Carlo replications, fidelity measures,
-two what-if scenarios, the transition-duration analysis, and the required
-ProSiT workarounds.
+Chapter~\ref{chp:experiments_and_framework} defines the experimental and
+evaluation framework used to answer the research questions. It introduces the
+temporal train/test split and describes the control-flow discovery procedure,
+including the initial Inductive-Miner model, the subsequent domain check, and
+the domain-constrained prefix-trie representation used by the final simulator.
+The chapter then defines the ProSiT parameter-discovery configurations with
+different levels of contextual expressiveness and documents the executable
+parameter bundles used in the experiments. In addition, it specifies the
+Monte-Carlo replication protocol, the distributional fidelity measures, the
+two what-if interventions, and the transition-duration sensitivity analysis.
+The final section documents the technical adaptations required to apply
+ProSiT to the CTB event log reproducibly.
 
-Chapter~\ref{chap:results} reports the event-log characteristics, Petri-net
-conformance, arrival process, held-out fidelity of the ProSiT configurations,
-per-activity results, discovered resource capacities, transition durations, and
-what-if results. Confidence intervals or stated uncertainty accompany the
-empirical results.
+Chapter~\ref{chap:results} presents the empirical findings following the logic
+of the four research questions. It first examines the temporal train/test
+split and the stability of the observed control-flow language in the held-out
+period. It then evaluates the historical fidelity of the final simulation
+baseline and compares the retained ProSiT configurations to assess the effect
+of additional contextual expressiveness. Further diagnostic analyses examine
+the predictive signal contained in the available context attributes, the
+strong temporal structure of truck arrivals, the discovered resource
+capacities, and the interpretation of model-derived pre-service delays. The
+chapter finally reports the two what-if experiments and discusses the
+methodological limitations that constrain their interpretation.
 
-Chapter~\ref{chp:conclusion} answers the research questions, discusses the
-limitations, and gives directions for future work.
-
+Chapter~\ref{chp:conclusion} brings together the empirical findings and answers
+the four research questions. It evaluates what the case study demonstrates
+about the transfer of data-aware process simulation to container-terminal truck
+operations and distinguishes historical fidelity and model executability from
+the stronger requirements of physical what-if decision support. The chapter
+concludes by outlining directions for future work, particularly concerning
+richer spatial and resource-state representations, alternative event-log
+designs, and further validation in other operational settings.
