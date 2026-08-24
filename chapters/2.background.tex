@@ -1238,30 +1238,28 @@ model assumptions, not as experimentally established causal effects.
 
 \subsection{Research Gap}
 
-Container terminals are dynamic systems with limited resources and connected
-truck, yard, storage, and equipment processes. Simulation is used to
-support decisions in this setting \cite{Bruzzone2012,Kastner2021,Carboni2025}.
-However, most terminal simulation models are built by hand. Their construction,
-calibration, and maintenance require time and domain knowledge
-\cite{PMRozinat2009}.
-
-Simulation discovery creates models from event logs. Recent work covers
-simulation parameters, data-aware decision logic, and automated model building
-\cite{Camargo2020,simod2024,Vinci2026prosit}. Data-aware approaches can use
-context and process state instead of only fixed branching probabilities
-\cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}.
-ProSiT adds visible probabilistic decision models
-\cite{Vinci2026prosit}.
-
-Most evaluations come from healthcare, administration, and standard business
-processes. Evidence from large container terminals is limited. Open questions
-include:
-\begin{itemize}
-    \item the robustness of automatically discovered models,
-    \item their use for operational decision support,
-    \item their ability to reproduce congestion and workload, and
-    \item the value of white-box simulation in logistics.
-\end{itemize}
-This thesis studies these questions for truck handling at HHLA Container
-Terminal Burchardkai (CTB). It provides evidence about the strengths and
-limits of simulation discovery in this setting.
+Container terminals are dynamic logistics systems in which truck, yard,
+storage, and equipment processes interact under limited resource capacities.
+Simulation is therefore widely used to support operational and tactical
+decision making in this environment
+\cite{Bruzzone2012,Kastner2021,Carboni2025}. Most existing terminal
+simulation models, however, are developed manually, which requires substantial
+modelling effort, calibration, maintenance, and domain knowledge
+\cite{PMRozinat2009}. Simulation-discovery research offers an alternative by
+deriving simulation models and parameters directly from event logs. Recent
+approaches increasingly incorporate data-aware decision logic, contextual
+information, process state, and automated model construction
+\cite{Camargo2020,simod2024,mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob,Vinci2026prosit}.
+ProSiT extends this development through probabilistic white-box models whose
+decision logic remains inspectable and configurable
+\cite{Vinci2026prosit}. Despite these advances, empirical evaluations have
+largely focused on healthcare, administration, and conventional business
+processes, while evidence from large-scale physical logistics environments
+such as container terminals remains limited. It is therefore still unclear how
+robustly automatically derived simulation models transfer to settings
+characterised by congestion, shared physical resources, spatial dependencies,
+and changing operational workloads, and to what extent such models can support
+credible what-if analysis and decision support. This thesis addresses this gap
+through a case study of truck-handling operations at HHLA Container Terminal
+Burchardkai (CTB), evaluating both the strengths and the limitations of
+data-aware simulation discovery in this setting.
