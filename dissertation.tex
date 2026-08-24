@@ -16,15 +16,19 @@
 \setlength{\parindent}{0pt}
 \usepackage{enumitem}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{etoolbox}
 
-% Consistent table style: compact body, thin framed columns and captions below.
+% Consistent table style: compact body, breakable identifiers and captions below.
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\let\tableunderscore\_
 \AtBeginEnvironment{table}{%
-  \small
-  \renewcommand{\arraystretch}{1.12}%
-  \setlength{\tabcolsep}{5pt}%
+  \footnotesize
+  \renewcommand{\arraystretch}{1.08}%
+  \setlength{\tabcolsep}{4pt}%
   \setlength{\arrayrulewidth}{0.4pt}%
+  \renewcommand{\_}{\tableunderscore\allowbreak}%
 }
 \captionsetup[table]{position=bottom,skip=5pt}
 

@@ -47,7 +47,7 @@ Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs 
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{4.1cm}|L{8.9cm}|}
+\begin{tabularx}{\textwidth}{|L{4.4cm}|Y|}
 \hline
 \textbf{Data source} & \textbf{Data provided} \\
 \hline
@@ -60,7 +60,7 @@ occupancy and utilisation. \\
 Container master data & Container size, type, loading status, hazardous and
 reefer indicators, dwell time and inbound/outbound carriers. \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{Operational data sources used for event-log engineering.}
 \label{tab:ctb_data_sources}
 \end{table}
@@ -111,7 +111,7 @@ pipeline are listed in Table~\ref{tab:its_source_attributes}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{5.2cm}|L{7.8cm}|}
+\begin{tabularx}{\textwidth}{|L{5.9cm}|Y|}
 \hline
 \textbf{Attribute} & \textbf{Description} \\
 \hline
@@ -128,7 +128,7 @@ completed. \\
 FP\_ZEITPUNKT\_GATEOUT & Time at which the truck exited the
 terminal. \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{ITS schedule attributes used in the event-log pipeline.}
 \label{tab:its_source_attributes}
 \end{table}
@@ -148,7 +148,7 @@ Table~\ref{tab:report_source_attributes}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{5.2cm}|L{7.8cm}|}
+\begin{tabularx}{\textwidth}{|L{5.9cm}|Y|}
 \hline
 \textbf{Attribute} & \textbf{Description} \\
 \hline
@@ -168,7 +168,7 @@ truck plate, vessel voyage number or train ID. \\
 UnitOutboundCarrierId & Outbound carrier identifier, recorded as a
 truck plate, vessel voyage number or train ID. \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{Report-system attributes used in the event-log pipeline.}
 \label{tab:report_source_attributes}
 \end{table}
@@ -192,7 +192,7 @@ derived measures.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{4.4cm}|L{8.6cm}|}
+\begin{tabularx}{\textwidth}{|L{4.6cm}|Y|}
 \hline
 \textbf{Attribute} & \textbf{Description} \\
 \hline
@@ -207,7 +207,7 @@ Dwell time & Hours already spent in the terminal for a receive operation. \\
 Container complexity score & Composite measure based on size, loading status,
 reefer and hazardous-goods requirements, container type and dwell time. \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{Container-master attributes used for context enrichment.}
 \label{tab:container_master_attributes}
 \end{table}
@@ -377,7 +377,7 @@ labels.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|l|L{8.2cm}|}
+\begin{tabularx}{\textwidth}{|L{4.2cm}|Y|}
 \hline
 \textbf{Activity} & \textbf{Definition} \\
 \hline
@@ -393,7 +393,7 @@ HO2\_delivery & Manual area: load \\
 HO2\_mixed    & Manual area: unload and load \\
 Gate Out      & Truck departure \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{Activity labels used in the final event log.}
 \label{tab:activities}
 \end{table}
@@ -410,7 +410,7 @@ Table~\ref{tab:observed_lifecycle_attributes}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{4.2cm}|L{8.8cm}|}
+\begin{tabularx}{\textwidth}{|L{4.6cm}|Y|}
 \hline
 \textbf{Attribute} & \textbf{Description} \\
 \hline
@@ -419,7 +419,7 @@ of the activity began. \\
 time:timestamp & Observed or reconstructed time at which execution
 of the activity finished. \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{Observed lifecycle timestamp attributes in the final event log.}
 \label{tab:observed_lifecycle_attributes}
 \end{table}
@@ -450,7 +450,7 @@ are mapped for each activity type.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{2.2cm}|L{5.3cm}|L{5.3cm}|}
+\begin{tabularx}{\textwidth}{|L{2.2cm}|Y|Y|}
 \hline
 \textbf{Activity type} & \textbf{Start timestamp} &
 \textbf{Complete timestamp} \\
@@ -461,7 +461,7 @@ Yard activity & ALP\_ZEITPUNKT\_BEREITMELDUNG &
 ALP\_ZEITPUNKT\_ERFUELLUNG \\
 Gate Out & FP\_ZEITPUNKT\_GATEOUT & FP\_ZEITPUNKT\_GATEOUT \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{Lifecycle timestamp mapping by activity type.}
 \label{tab:activity_timestamp_mapping}
 \end{table}
@@ -619,9 +619,7 @@ case-level attributes used by the simulation.
 
 \begin{table}[p]
 \centering
-\small
-\renewcommand{\arraystretch}{0.92}
-\begin{tabular}{@{}L{4cm}L{9cm}@{}}
+\begin{tabularx}{\textwidth}{@{}L{4.4cm}Y@{}}
 \toprule
 \textbf{Attribute} & \textbf{Description} \\
 \midrule
@@ -669,7 +667,7 @@ target\_rank & Utilisation rank of the target among all RMG blocks. \\
 target\_rank\_group & Categorised target rank: top\_3, mid or low. \\
 primary\_target\_area / target\_area & Planned target area known at Gate In. \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{Process and contextual attributes passed to ProSiT.}
 \label{tab:eventlog_attributes}
 \end{table}

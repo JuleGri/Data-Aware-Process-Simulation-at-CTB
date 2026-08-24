@@ -367,8 +367,7 @@ defaults.
 
 \begin{table}[htbp]
 \centering
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{|l|c|c|c|}
+\begin{tabularx}{\textwidth}{|Y|c|c|c|}
 \hline
 \textbf{Hyperparameter} & \textbf{no-rules} & \textbf{rules} & \textbf{rules$+$workload} \\
 \hline
@@ -380,7 +379,7 @@ multitasking\_thr         & 0.05          & 0.05          & 0.05 \\
 attribute\_mode           & empirical     & empirical     & empirical \\
 random\_state             & 42            & 42            & 42 \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{ProSiT discovery hyperparameters by configuration.}
 \label{tab:prosit_hyperparams}
 \end{table}
