@@ -1,17 +1,15 @@
 \chapter{Experiments and Evaluation Framework}
 \label{chp:experiments_and_framework}
 
-This chapter defines what is being evaluated, how it is evaluated, and
-what evidence the reader should expect in Chapter~\ref{chap:results}. It
-is structured so that every experimental choice can be traced to a
-concrete question and a concrete artefact in the repository.
+This chapter defines the evaluation. It links each experimental choice to a
+research question and an artefact in the repository.
 
-Section~\ref{sec:rq_h} restates the research questions and derives
-falsifiable hypotheses that Chapter~\ref{chap:results} will accept or
-reject. Section~\ref{sec:train_test_split} defines the held-out
+Section~\ref{sec:research_questions_framing} operationalises the research
+objective and the four research questions that organise the empirical
+evaluation. Section~\ref{sec:train_test_split} defines the held-out
 train/test split that separates discovery from evaluation.
 Section~\ref{sec:process_discovery_methodology} describes the
-control-flow discovery procedure and its conformance
+control-flow encoding and its held-out coverage
 protocol. Section~\ref{sec:simulation_discovery_methodology} defines
 the three ProSiT configurations that will be compared:
 distribution-based (no-rules), data-aware with decision trees
@@ -23,14 +21,12 @@ Section~\ref{sec:evaluation_metrics} defines the evaluation metrics.
 Section~\ref{sec:what_if_design} defines the two operational what-if
 scenarios. Section~\ref{sec:results_percentile_sens_design} defines the
 transition-baseline sensitivity study.
-Section~\ref{sec:prosit_workarounds} documents the deviations from a
-clean ProSiT invocation that were required to complete the experiments
-on the CTB event log.
+Section~\ref{sec:prosit_workarounds} documents the ProSiT workarounds required
+for the CTB event log.
 
-Figure~\ref{fig:research_design} gives an overview of the full
-experimental pipeline. Every stage in the diagram is realised by a
-script in the code repository; the section-level cross-references in
-the caption identify the concrete implementation.
+Figure~\ref{fig:research_design} shows the experimental pipeline. Each stage is
+implemented by a script in the repository, and the caption links it to the
+corresponding section.
 
 \begin{figure}[htbp]
 \centering
@@ -51,66 +47,71 @@ the adopted-default configuration under operational disruption.}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Research Questions, Hypotheses and Framing}
-\label{sec:rq_h}
+\section{Research Objective, Research Questions and Experimental Framing}
+\label{sec:research_questions_framing}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Chapter~\ref{chp:introduction} formulated the overarching research
-questions. To make them empirically tractable, they are here refined
-into testable claims. The claims deliberately admit rejection: an
-outcome that contradicts a hypothesis is a valid contribution and is
-reported as such in Chapter~\ref{chap:results}.
+Chapter~\ref{chp:introduction} defined the research objective as
+evaluating the fidelity, structural applicability, and limitations of
+automatically discovered data-aware process simulation for decision
+support in CTB truck operations. The evaluative case study is organised around
+the research questions. It does not assume that more data awareness improves
+simulation quality. Instead, it compares modelling choices on unseen CTB data
+and examines the resulting model under controlled interventions.
 
-\subsection{Refined Research Questions}
+\subsection{Operational Research Questions}
 \label{sec:refined_rq}
 
 \begin{description}
-\item[RQ1 (Fidelity).] To what extent does a ProSiT simulator
-      discovered from historical CTB truck data reproduce case-level
-      turnaround, activity durations, waiting times and arrivals on a
-      held-out temporal test window?
-\item[RQ2 (Structural quality).] Does the discovered Petri net
-      generalise to the held-out period, or is fitness only preserved
-      on the training period?
-\item[RQ3 (Modelling choices).] How sensitive is simulation fidelity to
-      three plausible ProSiT configurations
-      (\textit{no-rules}, \textit{rules}, \textit{rules$+$workload})?
-\item[RQ4 (Scenario support).] Does the discovered simulator produce
-      operationally plausible KPI shifts under two transparent
-      interventions: closing a single RMG block and increasing truck
-      demand by 20\,\%?
+\item[RQ1 (Fidelity).] To what extent can a ProSiT simulation model
+      discovered from historical CTB truck-operation data reproduce the
+      observed behaviour of an unseen temporal hold-out?
+\item[RQ2 (Structural applicability).] To what extent can the discovered
+      process structure represent held-out CTB truck-handling behaviour
+      while respecting the physical sequential constraints of a truck visit?
+\item[RQ3 (Contextual expressiveness).] How does increasing the contextual
+      expressiveness of the simulation model affect held-out simulation
+      fidelity in the CTB truck process?
+\item[RQ4 (What-if decision support).] How does the discovered simulation
+      model respond to transparent operational interventions, and what do
+      these responses reveal about its suitability and limitations for
+      what-if decision support?
 \end{description}
 
-\subsection{Hypotheses}
-\label{sec:data_aware_hypotheses}
+\subsection{Operationalisation of the Research Objective}
 
-\begin{description}
-\item[H1 (Time dependence of arrivals).] A time-aware arrival model
-      (decision tree over hour, weekday, weekend indicator) reduces
-      inter-arrival prediction error against a pooled-rate baseline on
-      cross-validated hold-out slices from the training log.
-\item[H2 (Data-aware fidelity gain).] Enabling ProSiT decision-tree
-      rules (\textit{rules}) produces lower distributional distance to
-      the held-out test log than the distribution-only ProSiT
-      (\textit{no-rules}) for at least one of case-turnaround EMD,
-      waiting-time EMD or service-time EMD.
-\item[H3 (Workload-feature gain).] Adding queue-length and
-      workload-history features to the ProSiT resource-selection and
-      waiting-time models (\textit{rules$+$workload}) further reduces
-      distributional distance versus \textit{rules} on the held-out
-      test log.
-\item[H4 (Scenario response).] Closing T22 eliminates assignments to
-      that resource and increases RMG pre-service delay, while a
-      20\,\% increase in working-time arrival intensity measurably
-      increases the observed truck-arrival rate. Downstream
-      turnaround effects are estimated rather than assumed.
-\end{description}
+Table~\ref{tab:rq_operationalisation} maps each question to the evidence
+used to answer it. The arrival-rate benchmark is treated as a modelling
+diagnosis within the fidelity analysis. Exact changes to scenario inputs,
+such as removing T22 assignments or increasing the arrival-intensity
+parameter, are verification checks; the resulting KPI responses provide
+the evidence for RQ4.
 
-Every hypothesis is intended to be falsifiable. In particular H2 and H3
-are treated as claims of \emph{practical} benefit: the point estimate
-must be lower and the 95\,\% confidence interval derived in
-Section~\ref{sec:mc_protocol} must not overlap the reference configuration
-entirely for the improvement to be reported as a fidelity gain.
+\begin{table}[htbp]
+\centering
+\caption{Operationalisation of the research questions.}
+\label{tab:rq_operationalisation}
+\small
+\begin{tabular}{p{2.4cm} p{6.7cm} p{4.0cm}}
+\toprule
+\textbf{Question} & \textbf{Empirical evidence} & \textbf{Evaluation focus} \\
+\midrule
+RQ1: Fidelity & Service-time, turnaround and inter-arrival EMD and KS;
+mean, median and P90 errors; ten-seed confidence intervals & Reproduction
+of unseen operational behaviour and remaining bias \\
+RQ2: Structural applicability & Train/test fitness, precision,
+generalisation and simplicity; explicit sequential case-contract audit &
+Recurrence of the memorised trace language and physically valid truck-visit
+semantics \\
+RQ3: Contextual expressiveness & Held-out configuration screening,
+per-activity explanatory power and cross-seed variation & Effect of
+additional context on fidelity and robustness \\
+RQ4: What-if decision support & Matched-seed T22 and demand interventions,
+input verification checks and KPI shifts & Scenario response and limits
+created by the simulation abstraction \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Held-Out Train/Test Split}
@@ -119,14 +120,14 @@ entirely for the improvement to be reported as a fidelity gain.
 
 \subsection{Rationale}
 
-A held-out validation set is required to test H1--H3. In simulation
+A held-out validation set is needed to answer RQ1--RQ3. In simulation
 discovery it is not sufficient to report the fit of parameters on the
 data used to discover them: a well-fit ProSiT bundle can memorise the
 training distribution while over-fitting the operational dynamics. The
 ProSiT reference implementation \cite{Vinci2026prosit} describes an
 in-memory split in its \textit{Advanced Usage} example, but does not
 persist the split, does not commit to a case-level boundary and does
-not report validation metrics. This thesis therefore uses a persistent,
+not report validation metrics. This thesis uses a persistent,
 case-level, temporally ordered split that any downstream script can
 consume unchanged.
 
@@ -152,7 +153,7 @@ $\tau^{\star}=\text{2026-04-20 18:17:00}$. The split produces 71,568
 training cases (220,048 events) and 17,892 testing cases (55,360
 events); no events are dropped. The split is realised by
 \texttt{validation/01\_train\_test\_split.py} and is documented in
-\texttt{validation/results/split\_manifest.json}, which also records
+\texttt{validation/results/split\_manifest.json}, which records
 the seed, the cutoff and the per-activity coverage in both partitions.
 The manifest is loaded by every downstream simulation script so that
 $n_{\text{traces}}$ and $t_{\text{start}}$ match the test window
@@ -168,20 +169,21 @@ the discovery scripts were pointed at the full event log. All discovery
 scripts are now routed through
 \texttt{baseline/\_eventlog\_source.py}, which prefers the persisted
 \texttt{s6\_train.csv} and skips the legacy subsample when a train log
-is detected. The correct partitioning is therefore 71,568/17,892 as
+is detected. The correct partitioning is 71,568/17,892 as
 recorded in the split manifest.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Process Discovery Protocol}
+\section{Control-Flow Encoding and Held-Out Coverage Protocol}
 \label{sec:process_discovery_methodology}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Algorithm}
+\subsection{Raw Prefix-Trie Encoding}
 
-The Petri net that ProSiT uses as the authoritative control-flow
-skeleton is constructed from the observed training variants as a
-sequential prefix trie, following the definition in
-Chapter~\ref{chp:background}. Every accepted path has the form
+The Petri net that ProSiT uses as the authoritative control-flow skeleton is
+constructed from the observed training variants as a raw sequential prefix
+trie, following the definition in Chapter~\ref{chp:background}. This is not a
+classical process-discovery abstraction: it stores the observed activity
+language and does not infer additional behaviour. Every accepted path has the form
 \texttt{Gate In}$\rightarrow$one or more yard activities
 $\rightarrow$\texttt{Gate Out}. Shared prefixes are represented once,
 and a separate transition encodes each observed continuation
@@ -195,14 +197,14 @@ net is acyclic and has one token per truck case.
 
 The Inductive Miner is not rejected as a discovery method: its sound,
 block-structured models and abstraction from infrequent variants are
-valuable when behavioural generalisation is the objective
+useful when behavioural generalisation is the objective
 \cite{Leemans2014InductiveMiner}. It is retained here as a diagnostic
 process tree and BPMN visualisation. It is not passed to the final
 simulator because its discovered semantics conflict with the CTB case
-contract. In particular, the diagnostic tree in
+contract. The diagnostic tree in
 Figure~\ref{fig:model_tree_theory} contains parallel (\texttt{and}) cuts,
 including a cut that places \texttt{Gate Out} in parallel with the yard
-subtree. Executing this model could therefore permit Gate Out before all
+subtree. Executing this model could permit Gate Out before all
 yard work is complete or enable multiple yard activities within one truck
 visit. These behaviours may be sound in the formal workflow-net sense,
 but they are not valid truck-process semantics in this application.
@@ -216,26 +218,33 @@ the activities within a single truck case remain sequential. In the final
 CTB baseline these cross-case RMG capacities are subject to the domain cap
 of three described below.
 
-This choice is deliberately conservative. A raw observed-variant trie
-does not generalise to every unseen activity combination and is less
-compact than an Inductive-Miner model. The held-out conformance protocol
-below therefore tests whether this loss of permissiveness is material.
+This choice is deliberately restrictive. A raw observed-variant trie does not
+generalise to unseen activity combinations and is less compact than an
+Inductive-Miner model. Its perfect construction-log fitness is guaranteed and
+is not treated as a result. The held-out conformance protocol instead tests
+whether the memorised training language remains representative in a later
+period. High held-out coverage would be evidence of a repetitive and stable
+CTB trace language, not of generalisation by the trie. Accordingly, the final
+control-flow component is best described as a domain-constrained encoding of
+observed variants. Automatic discovery remains responsible for the other
+ProSiT parameters, but the trie itself does not support a claim that a general
+CTB process structure was discovered.
 The authoritative trie is
 implemented by \texttt{\_eventlog\_contract.py} and injected by
 \texttt{baseline/07\_run\_prosit\_discovery.py}. It contains 76 places
 and 144 transitions for the 70 variants observed in the frozen training
 partition.
 
-\subsection{Conformance Protocol}
+\subsection{Held-Out Coverage and Contract Protocol}
 
-Control-flow conformance metrics are computed against
-\emph{both} the training and the held-out testing partition:
+Control-flow conformance metrics are computed against \emph{both} the training
+and the held-out testing partition:
 
 \begin{itemize}
     \item Token-based replay \textbf{fitness}, i.e.\ the fraction of
           traces that the Petri net can replay without token deficit.
     \item Token-based replay \textbf{precision}, the share of behaviour
-          allowed by the model that is also observed in the log.
+          allowed by the model and observed in the log.
     \item \textbf{Generalisation} via
           \texttt{pm4py.generalization\_tbr}.
     \item \textbf{Simplicity} via \texttt{pm4py.simplicity\_petri\_net}.
@@ -247,6 +256,11 @@ no within-case activity overlap and monotonically non-decreasing
 completion timestamps. This separates two questions that aggregate
 fitness alone cannot answer: whether the net replays held-out variants
 and whether the generated traces obey the physical truck-visit order.
+For this model class, training fitness and precision are construction checks.
+Held-out fitting traces are interpreted as the share of later cases whose
+complete activity sequence already occurred during training. Generalisation
+and simplicity remain useful descriptors of the cost of memorisation, but are
+not combined into an overall process-discovery quality claim.
 The full protocol is implemented in
 \texttt{baseline/07\_run\_prosit\_discovery.py} and
 \texttt{\_eventlog\_contract.py}.
@@ -259,9 +273,12 @@ The full protocol is implemented in
 ProSiT is used unchanged as the discovery and simulation engine
 \cite{Vinci2026prosit}. All simulation parameters are learned by
 \texttt{SimulatorParameters.discover\_from\_eventlog} from the training
-partition only. Three configurations are evaluated. They are chosen so
-that H2 (data-aware fidelity gain) and H3 (workload-feature gain) each
-correspond to exactly one comparison.
+partition only. Three configurations define an increasing contextual-
+expressiveness ladder. The retained screening results compare the two
+endpoints, \textit{no-rules} and \textit{rules$+$workload}. This measures
+the combined effect of the additional modelling machinery. Because
+the intermediate \textit{rules} result is not retained in that comparison,
+the separate contribution of workload features is not inferred.
 
 \subsection{Configuration \textit{no-rules}}
 \label{sec:cfg_no_rules}
@@ -273,7 +290,7 @@ distribution or a marginal frequency: one arrival-rate distribution,
 one execution-time distribution per activity, one waiting-time
 distribution per resource, one categorical distribution over routing
 choices at each Petri-net decision point. This configuration is the
-distribution-based baseline against which H2 is tested.
+distribution-based reference point for RQ3.
 
 \subsection{Configuration \textit{rules}}
 \label{sec:cfg_rules}
@@ -303,15 +320,15 @@ resource-selection models: current workload (number of concurrent
 tasks) and queue length (number of tasks scheduled but not yet started)
 at the time each event is enabled in the process model. The intention behind including this
 configuration is to let ProSiT see the queueing state that its
-distribution family alone would otherwise ignore. This configuration is
-compared against \textit{rules} to test H3.
+distribution family alone would otherwise ignore. It forms the more
+expressive endpoint of the retained RQ3 comparison.
 
 \subsection{Discovery Hyperparameters}
 
 Table~\ref{tab:prosit_hyperparams} lists the ProSiT hyperparameters
 that differ across configurations. All other arguments are the ProSiT
 defaults except \texttt{attribute\_mode}, which is set to
-\texttt{'empirical'} for reasons detailed in
+\texttt{'empirical'} for reasons given in
 Section~\ref{sec:prosit_workarounds}.
 
 \begin{table}[h]
@@ -345,7 +362,7 @@ In this thesis, \emph{authoritative parameter bundle} is an operational
 reproducibility term: it denotes the exact executable
 \texttt{SimulatorParameters} state loaded by the validation and scenario
 scripts. If a derived table, JSON summary and executable state disagree,
-the serialized object that actually generated the reported simulations is
+the serialized object that generated the reported simulations is
 the source of truth. Two provenance layers are distinguished. The frozen,
 training-only calibrated \textit{rules$+$workload}
 \texttt{prosit\_params.pkl} is authoritative for the freely discovered and
@@ -354,7 +371,7 @@ bundle in which the RMG concurrency values are capped at the domain maximum
 of three; it is stored as
 \texttt{params\_baseline\_rmg\_max\_concurrency\_3.pkl} in the final
 scenario result directory and is authoritative for the final validation
-and scenario results. Thus the discovered overlap capacities remain
+and scenario results. The discovered overlap capacities remain
 auditable without being mistaken for physically feasible capacities. Both
 objects contain the Petri net and markings, routing and
 resource-selection rules, resource mappings and capacities, calendars,
@@ -363,13 +380,13 @@ used for stochastic draws.
 
 The ProSiT JSON export is retained as a portable, human-inspectable
 companion, but it is not an execution-equivalent serialization of the
-calibrated object. In particular, the JSON rule nodes preserve fitted
+calibrated object. The JSON rule nodes preserve fitted
 distribution names, parameters and representative values but do not
 serialize all empirical \texttt{sampled} arrays held in the Python
 object. This matters because the CTB calibration modifies those arrays
-and ProSiT samples from them at runtime. Consequently, reconstructing the
+and ProSiT samples from them at runtime. Reconstructing the
 final simulator from JSON alone can change its stochastic behaviour. The
-pickle is therefore authoritative because the JSON does not fully
+pickle is authoritative because the JSON does not fully
 represent all empirical sample arrays; this statement concerns the actual
 ProSiT serialization schema used here, not an intrinsic superiority of
 the pickle format.
@@ -380,8 +397,8 @@ The companion files \texttt{prosit\_run\_summary.json},
 Validation and scenario scripts record SHA-256 hashes of their source
 pickles, and scenario bundles are produced by deep copy rather than by
 mutating the frozen baseline. Pickle is Python- and class-version-specific
-and must never be loaded from an untrusted source; reproducibility therefore
-also requires the recorded software environment. These limitations are the
+and must never be loaded from an untrusted source. Reproducibility
+requires the recorded software environment. These limitations are the
 reason for retaining the JSON companions even though they are not the
 authoritative runtime state.
 
@@ -391,14 +408,14 @@ authoritative runtime state.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Every ProSiT simulation includes stochastic draws from the fitted
-distributions. Reporting a single Monte-Carlo draw is therefore
-insufficient to conclude that one configuration is more faithful than
+distributions. One Monte-Carlo draw is not enough to conclude that one
+configuration is more faithful than
 another: the observed difference may be within the sampling variance
 of the simulator itself. This is the same many-possible-realisations
 problem addressed by the multi-log validation design of
 Chapela-Campa et al. and by classical independent-replication output
 analysis \cite{ChapelaCampa2023Trust,Law2015Simulation}. This thesis
-therefore reports every fidelity metric with a Monte-Carlo confidence
+reports every fidelity metric with a Monte-Carlo confidence
 interval.
 
 \subsection{Replication Design}
@@ -491,7 +508,7 @@ $\text{ttot}$ is the total elapsed time per case (first start to last
 complete). The inter-arrival EMD is
 $W_1(F^{\text{sim,iat}}, F^{\text{real,iat}})$ where
 $\text{iat}$ is the time between consecutive case-arrival timestamps.
-All EMDs are reported in minutes. The primary view retains durations up to
+All EMDs are reported in minutes. The main view retains durations up to
 24 hours and is accompanied by an uncapped raw view so that an artificial
 simulation tail cannot be hidden.
 
@@ -501,10 +518,10 @@ For each distribution pair the two-sample KS statistic is computed by
 \texttt{scipy.stats.ks\_2samp}. Because the CTB test log contains 55,360
 events, sub-sampling is applied so that each side contributes at most
 $10{,}000$ observations to the test. This limits computational cost and
-the extreme sample-size sensitivity of the associated hypothesis test;
+the extreme sample-size sensitivity of the associated significance test;
 it does not turn the $p$-value into a fidelity effect size. The KS
 statistic (magnitude of the maximum vertical CDF gap) is reported
-alongside the EMD as the primary quantity; the $p$-value is retained
+alongside the EMD as the main measure; the $p$-value is retained
 only as a secondary diagnostic.
 
 \subsection{Point-Statistic Errors}
@@ -527,7 +544,7 @@ single-shot and multi-seed numbers are directly comparable.
 \label{sec:what_if_design}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Two independent interventions are evaluated to test H4. Both are
+Two independent interventions are evaluated to address RQ4. Both are
 derived by deep copy from the frozen, training-only calibrated
 \textit{rules$+$workload} baseline. No held-out observation is used to
 select or fit a scenario parameter.
@@ -541,15 +558,15 @@ verifying that each affected activity retains at least one eligible
 resource; and (ii) setting all 168 weekly calendar slots of T22 to
 unavailable. All other parameters are unchanged.
 
-This is explicitly a resource-pool reallocation experiment, not a complete
+This is a resource-pool reallocation experiment, not a complete
 spatial yard-closure model.
 The discovered selector may use target-area attributes as statistical
 predictors, but ProSiT does not impose a hard constraint that binds a
-container to its actually observed storage block. A truck whose
-historical target was T22 can therefore be assigned to another eligible
+container to its historical storage block. A truck whose
+historical target was T22 can be assigned to another eligible
 block without an explicit container-relocation operation or a
-location-dependent travel-time adjustment. This boundary is evaluated
-explicitly in Section~\ref{sec:limitations}.
+location-dependent travel-time adjustment. This boundary is discussed in
+Section~\ref{sec:limitations}.
 
 \subsection{Scenario B: 20\,\% Higher Truck Demand}
 
@@ -570,12 +587,12 @@ upper bound of 100. ProSiT obtains these numbers from overlapping timestamps;
 they are empirical concurrency proxies rather than equipment counts. They
 exceed the hard physical upper bound of three cranes and the three lanes in
 which trucks can wait after announcing readiness at a block. The final
-effective baseline is therefore derived by replacing every RMG value $c_r$
+effective baseline replaces every RMG value $c_r$
 with $\min(c_r,3)$. The aggregate upper bound becomes $22\times3=66$. This
 does not assert that three cranes normally serve landside trucks: in regular
 operation two cranes may serve the waterside and at most one may serve the
 landside, but that allocation depends on ship operations and is not observed
-in this event log. Three is therefore a defensible physical ceiling, not an
+in this event log. Three is a reasonable physical ceiling, not an
 estimated landside staffing level. No resource
 mapping, calendar, selection rule, timing model, arrival model or
 control-flow parameter is changed. The T22 and demand interventions are
@@ -602,11 +619,11 @@ level shift caused by the cap.
 The unified driver \texttt{validation/09\_multi\_seed\_scenarios.py}
 executes baseline and both interventions with ten matched seeds
 (42--51), $n_{\text{traces}}=17{,}892$ and
-$t_{\text{start}}=\text{2026-04-20 18:17}$. Thus all paired deltas use
+$t_{\text{start}}=\text{2026-04-20 18:17}$. All paired deltas use
 common random numbers. Mean, median and 90th percentile of turnaround,
 RMG service and RMG pre-service delay are reported together with the
 observed arrival KPIs. For the T22 experiment, service and pre-service
-effects are additionally reported separately for
+effects are reported separately for
 \texttt{RMG\_receive} and \texttt{RMG\_delivery}. Every one of the 30
 generated logs is subjected
 to the sequential case contract of
@@ -711,13 +728,13 @@ event-log engineering pipeline of
 Section~\ref{sec:temporal_features} adds
 \texttt{@@hour} and \texttt{@@weekday} at case level. Without them,
 ProSiT's arrival-time and duration models cannot condition on the
-strong day/night pattern that Section~\ref{sec:results_arrival_process}
+day/night pattern that Section~\ref{sec:results_arrival_process}
 documents.
 
 \subsection{Non-Deterministic Simulation Engine}
 
-\texttt{SimulatorEngine.apply()} does not accept an explicit seed. The
-Monte-Carlo protocol of Section~\ref{sec:mc_protocol} therefore seeds
+\texttt{SimulatorEngine.apply()} does not accept a seed argument. The
+Monte-Carlo protocol of Section~\ref{sec:mc_protocol} seeds
 Python's \texttt{random} and \texttt{numpy.random} before every call to
 \texttt{apply()}. Two consecutive calls with different seeds produce
 different logs; two consecutive calls with the same seed produce the

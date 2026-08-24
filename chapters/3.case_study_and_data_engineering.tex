@@ -1,26 +1,18 @@
 \chapter{Case Study and Data Engineering}
 \label{chp:case_study_and_data}
 
-This chapter documents the operational context in which the data-aware
-simulation is discovered and the execution pipeline that turns raw
-operational records into a simulation-ready event log. The chapter is
-dedicated to only outline the design, therefore no models are fitted, no hypotheses are tested,
-and no experimental parameters are chosen yet. Its prpose is to establish the
-data foundation on which every subsequent claim in
-Chapters~\ref{chp:experiments_and_framework}
-and~\ref{chap:results} builds on, so that these later claims and results can be analysed against their exact input.
+This chapter describes the operational context and the pipeline that turns raw
+records into a simulation-ready event log. It covers the data design but does
+not fit models, evaluate results, or choose experimental parameters. The event
+log is the input for Chapters~\ref{chp:experiments_and_framework}
+and~\ref{chap:results}.
 
-Section~\ref{sec:cs_environment} introduces the HHLA Container Terminal
-Burchardkai (CTB) in Hamburg, Germany, the truck-handling scope of the study and the data
-sources that feed the event-log engineering pipeline.
-Section~\ref{sec:event_log_engineering} describes the multi-stage
-transformation that produces the final event log, including
-lifecycle-timestamp reconstruction and the derivation of case-level
-context attributes required by the ProSiT simulation framework
-\cite{Vinci2026prosit}. The chapter closes with a summary of the final
-event-log characteristics that are used as input to the
-train/test split defined in
-Section~\ref{sec:train_test_split}.
+Section~\ref{sec:cs_environment} introduces HHLA Container Terminal
+Burchardkai (CTB), the truck-handling scope, and the data sources.
+Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs
+lifecycle timestamps and derives the case-level context required by ProSiT
+\cite{Vinci2026prosit}. The final section describes the event log used for the
+train/test split in Section~\ref{sec:train_test_split}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Case Study Environment}
@@ -29,8 +21,7 @@ Section~\ref{sec:train_test_split}.
 
     \subsection{HHLA Container Terminal Burchardkai}
 
-    The case studys envorinment is the HHLA Container Terminal Burchardkai
-    (CTB), one of Europe's largest container terminals, located in the
+    The case study concerns HHLA Container Terminal Burchardkai (CTB) in the
     Port of Hamburg. CTB handles approximately 2.6 million TEU
     (Twenty-foot Equivalent Units) annually across 315 hectares
     \cite{hhla2025}.
@@ -49,7 +40,7 @@ Section~\ref{sec:train_test_split}.
     Located between the waterside and the landside, 22 RMG storage
     blocks (T06--T27) serve both sides. Operationally, at most three
     automated gantry cranes can work in parallel at one block. The CTB
-    also has two specialised areas: an empty-container depot (called
+    has two specialised areas: an empty-container depot (called
     ``MT'' or ``LL'', from the German \textit{Leerlager}) and the
     manually operated HO2 yard area. The terminal gate consists of 16
     lanes, split between incoming and outgoing trucks. The number of
@@ -58,13 +49,10 @@ Section~\ref{sec:train_test_split}.
     \subsection{Data Sources}
     \label{sec:cs_data_sources}
 
-    The operational data used in this thesis originates from several
-    information systems that support day-to-day terminal operations.
-    Historically, the information-system landscape at CTB evolved
-    organically, resulting in a heterogeneous environment in which
-    different systems manage distinct aspects of terminal operations,
-    orchestrated by a Terminal Operating System. The primary data
-    sources for this study are:
+    The data come from several systems used in daily terminal operations.
+    These systems were developed over time and record different parts of the
+    process. A Terminal Operating System coordinates them. This study uses the
+    following data sources:
 
     \begin{itemize}
         \item \textbf{ITS schedule (scheduling system)} — records truck
@@ -112,10 +100,10 @@ stage by stage.
 
 \subsubsection{ITS Schedule Data}
 
-The ITS scheduling system provides the core scheduling data for the
+    The ITS scheduling system provides the scheduling data for the
 truck operations reconstructed in this thesis. Each record represents
 one activity instance within a truck visit and carries the following
-key attributes:
+    attributes:
 
 \begin{itemize}
     \item \texttt{FAHRPLAN\_UID} — unique identifier for the truck visit
@@ -143,7 +131,7 @@ for removal during the cleaning phase.
 The report system provides complementary stage-level execution data,
 completing the details for gate-entry events, and it links each
 container number to the specific truck visit at a yard handling point.
-Key attributes are:
+    The used attributes are:
 
 \begin{itemize}
     \item \texttt{TruckVisitGkey} — unique truck-visit identifier used
@@ -170,7 +158,7 @@ A container is considered ``picked up'' or ``delivered'' by a truck if
 the corresponding inbound or outbound carrier identifier resolves to a
 truck. The report system uses detailed handover-lane codes for the
 exchange area; these must be mapped to the higher-level operational
-zones used by the scheduling system. Specifically, all exchange areas
+zones used by the scheduling system. All exchange areas
 beginning with ``HP'' (\textit{Hochpalette}) are mapped to ``LL''
 (\textit{Leerlager}) to align with the schedule system's terminology.
 The mapping is implemented in
@@ -238,9 +226,10 @@ sixty minutes. The demand pipeline (script
 \end{enumerate}
 
 The resulting demand features capture workload pressure at the time of
-case arrival, which is hypothesised in
-Section~\ref{sec:data_aware_hypotheses} to influence waiting times and
-resource-allocation decisions.
+case arrival. They are included as contextual predictors because such
+pressure may influence waiting times and resource-allocation decisions;
+their empirical contribution is evaluated under RQ3 in
+Section~\ref{sec:simulation_discovery_methodology}.
 
 \subsection{Data Cleaning and Integration}
 \label{sec:data_cleaning}
@@ -258,7 +247,7 @@ numbers are then matched via
 $(\texttt{TruckVisitGkey}, \texttt{TruckExchangeArea})\equiv
 (\texttt{TruckVisitGkey}, \texttt{ANLAUFPUNKT\_HALTESTELLE})$.
 
-For cases where the primary matching fails, a fallback strategy is
+When the first matching step fails, a fallback is
 applied to single-exchange-area visits: if a truck visit contains only
 one yard activity and no container identifier was matched, the
 container ID is inferred from any other transaction associated with the
@@ -271,20 +260,20 @@ same \texttt{TruckVisitGkey}. The integration logic is implemented in
 The cleaning pipeline removes complete cases rather than individual
 records: whenever a truck visit violates one of the defined quality
 criteria the entire process instance is excluded, so that only
-internally consistent process executions are retained. The primary
+internally consistent process executions are retained. The
 cleaning procedures are implemented in
 \texttt{00\_its\_fahrplan\_raw\_to\_fahrplan\_cleaned\_0304.py}.
 
 \paragraph{Missing lifecycle information.} Cases are removed if one or
-more critical lifecycle timestamps are missing:
+more required lifecycle timestamps are missing:
 \texttt{FP\_ZEITPUNKT\_ERSTELLUNG},
 \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG} or
 \texttt{ALP\_ZEITPUNKT\_ERFUELLUNG}. Such records cannot be transformed
 into valid lifecycle events. The quality report identified 1,267
 affected cases ($\approx 1.34\%$ of all truck visits).
 
-\paragraph{Temporal inconsistencies.} Cases are removed whenever
-fundamental temporal constraints are violated. First, activities with
+\paragraph{Temporal inconsistencies.} Cases are removed when
+temporal constraints are violated. First, activities with
 negative execution durations
 ($\texttt{ALP\_ZEITPUNKT\_ERFUELLUNG}<\texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG}$)
 indicate timestamp errors and are excluded. Second, overlapping
@@ -309,7 +298,7 @@ cases and 22 twelve-hour outliers.
 \texttt{TruckVisitGkey} (98.68\%), and 110,866 records could be assigned
 a valid container identifier (97.99\%). Despite the fallback procedure,
 2,270 records belonging to 2,034 truck visits remained without a valid
-container assignment. Since container-related attributes are central to
+container assignment. Since container-related attributes are needed for
 the later context enrichment and simulation-discovery stages, these
 process instances are removed entirely (a complete-case filter). This
 removes 2,034 truck visits and 3,397 associated records, leaving 91,335
@@ -317,25 +306,24 @@ complete truck visits and 109,739 operational records.
 
 \paragraph{Unknown activity types.} During activity construction, cases
 containing activities classified as \texttt{unknown} are removed. Such
-events cannot be reliably mapped to operational process steps and would
-introduce ambiguity into both process discovery and simulation
-discovery.
+events cannot be mapped to operational process steps with enough confidence.
+They would introduce ambiguity into process discovery and simulation discovery.
 
 \paragraph{Process scope restriction.} The event log is restricted to
 truck visits containing exactly one interaction with an automated RMG
 block. Visits may still contain additional activities in other yard
 areas (empty-container yard or VC yard), but only a single RMG block
 interaction is permitted. This restriction ensures that RMG-specific
-workload, utilisation and demand measures can be assigned
-unambiguously at case level. It also forms the basis for the
+workload, utilisation and demand measures can be assigned one value per case.
+It forms the basis for the
 block-focused what-if experiments in
 Section~\ref{sec:what_if_design}.
 
 \paragraph{Event-level cleanup.} Immediately before exporting the event
 log, remaining events with an \texttt{\_unknown} suffix are removed.
 Unlike the previous filters, this is an event-level cleanup rather than
-a case-level exclusion; its purpose is to eliminate residual events
-that cannot be interpreted reliably within the final process model.
+a case-level exclusion; its purpose is to remove residual events
+that cannot be interpreted within the final process model.
 
 \subsection{Case Definition}
 \label{sec:case_definition}
@@ -351,9 +339,9 @@ To attach block-specific context features
 (\texttt{target\_utilization}, \texttt{target\_demand},
 \texttt{target\_rank}) consistently, the design decision was made to
 include only process instances that interact with exactly one RMG block.
-Visits involving multiple RMG blocks are excluded because block-specific
-congestion measures could not be assigned unambiguously. Visits to
-other yard areas (VC or LL) that also involve exactly one RMG block are
+Visits involving multiple RMG blocks are excluded because a single value could
+not be assigned to their block-specific congestion measures. Visits to
+other yard areas (VC or LL) that involve exactly one RMG block are
 retained. The filtering logic is implemented in
 \texttt{filter\_one\_rmg\_only.py}.
 
@@ -453,17 +441,16 @@ this is called ``waiting time,'' but in the CTB application it must
 not be interpreted as pure queueing or resource-induced waiting.
 Physical truck movement between consecutive terminal locations is not
 represented as a separate activity in the discovered process model.
-Therefore the model-derived interval may include:
+The model-derived interval may include:
 \begin{itemize}
     \item physical movement between operational locations,
     \item internal traffic and congestion effects,
     \item resource availability and queue waiting,
-    \item other delays not explicitly represented in the control-flow
-          model.
+    \item other delays that the control-flow model does not represent.
 \end{itemize}
 This is a domain-specific limitation when transferring
 business-process simulation semantics to physical terminal operations
-and constitutes an important methodological boundary of this thesis
+and is a methodological limit of this thesis
 (discussed further in Section~\ref{sec:limitations}).
 
 \subsubsection{Methodological Note: The Abandoned Transition-Baseline Approach}
@@ -478,18 +465,18 @@ inspection revealed two issues:
 \begin{enumerate}
     \item The statistical route baselines are not event-specific
           observations of physical arrival; they are aggregate quantiles
-          that vary substantially with the chosen percentile
+          that depend on the chosen percentile
           (Section~\ref{sec:results_percentile_sens}).
     \item In some cases the estimated readiness timestamp occurs after
           the observed start timestamp, producing negative waiting
           times that had to be clipped to zero.
 \end{enumerate}
-Furthermore, ProSiT does not require an externally constructed
-enabled timestamp — it derives enablement internally from the aligned
-process model \cite{Vinci2026prosit}.  The final methodology therefore
-retains only the observed start and completion timestamps and delegates
-enablement reconstruction to the process-model alignment, improving
-consistency between data semantics and simulation semantics.
+ProSiT does not require an externally constructed enabled timestamp.
+It derives enablement from the aligned process model
+\cite{Vinci2026prosit}. The final method keeps only the observed start and
+completion timestamps and leaves enablement reconstruction to the
+process-model alignment. This keeps the data and simulation semantics
+consistent.
 
 The transition-baseline data is preserved in the repository as
 diagnostic material and may be useful for future work that introduces
@@ -507,16 +494,16 @@ categories.
 \label{sec:entry_known_attributes}
 
 The scheduling record contains the complete planned visit manifest before
-the truck enters the terminal. Consequently, the number of planned stops,
+the truck enters the terminal. The number of planned stops,
 the numbers of delivery and receive transactions, the planned target area
 and the resulting final visit-complexity score are known at Gate In. The
 pipeline reproduces this entry-time information by aggregating all rows of
 the same \texttt{FAHRPLAN\_UID}; it does not infer these attributes from
-subsequently realised durations or completion outcomes. In particular,
+later realised durations or completion outcomes.
 \texttt{visit\_complexity} is a deterministic summary of the planned
 stop/container manifest (visit size, container-handling complexity and
 mixed-flow complexity), not an ex-post performance measure. Using these
-variables as case attributes therefore does not leak the simulated future
+variables as case attributes does not leak the simulated future
 provided that the same planned manifest is supplied for a prospective run.
 
 The implementation detail that the target block is reconstructed from the
@@ -590,8 +577,8 @@ terminal areas over a rolling 60-minute window (scripts
 
 \subsubsection{Target Block Features}
 
-For single-block truck visits the assigned target RMG block is a
-critical attribute. Beyond the target-specific utilisation and demand,
+For single-block truck visits, the assigned target RMG block is required for
+the context model. Beyond the target-specific utilisation and demand,
 the log carries:
 
 \begin{itemize}
@@ -617,8 +604,8 @@ to be predicted.
 
 ProSiT 1.0.3 does not derive temporal features (hour of day, day of
 week) directly from event timestamps during simulation-parameter
-discovery. Time-dependent case attributes must be provided explicitly at
-case level. Two features are therefore added at the case level:
+discovery. Time-dependent attributes must be provided at case level. The
+pipeline adds two features:
 
 \begin{itemize}
     \item \texttt{@@hour} — hour of day (0--23) extracted from the
@@ -626,7 +613,7 @@ case level. Two features are therefore added at the case level:
     \item \texttt{@@weekday} — day of week (0=Mon, 6=Sun).
 \end{itemize}
 
-The \texttt{@@} prefix indicates that these are case-level attributes
+The \texttt{@@} prefix shows that these are case-level attributes
 used by ProSiT. The temporal-feature extraction is performed in
 \texttt{09\_eventlog\_to\_xes.py}. This explicit encoding of the
 temporal signal is not an option in ProSiT but a requirement, and it
@@ -639,14 +626,14 @@ Section~\ref{sec:prosit_workarounds}.
 
 The final event log combines process-execution data, lifecycle
 information and operational context within a single simulation-ready
-representation. Table~\ref{tab:core_attrs} lists the core process
+representation. Table~\ref{tab:core_attrs} lists the required process
 attributes;
 Tables~\ref{tab:case_attrs}--\ref{tab:temporal_attrs} list the case-level
 context attributes attached to every event.
 
 \begin{table}[H]
 \centering
-\caption{Core process attributes.}
+\caption{Required process attributes.}
 \label{tab:core_attrs}
 \begin{tabular}{p{4cm} p{9cm}}
 \hline
@@ -738,9 +725,9 @@ context attributes attached to every event.
 \end{tabular}
 \end{table}
 
-All contextual attributes are attached at case level and therefore
-remain constant throughout the case. This design is consistent with the
-current ProSiT feature-discovery approach, which primarily utilises
+All contextual attributes are attached at case level and remain constant
+throughout the case. This design is consistent with the
+current ProSiT feature-discovery approach, which mainly utilises
 case-level context information rather than event-level dynamic state
 \cite{Vinci2026prosit}.
 
@@ -804,8 +791,7 @@ The generated event log is exported as the full CSV
 partitions are exported as \texttt{s6\_train.csv},
 \texttt{s6\_test.csv} and the corresponding
 \texttt{xes\_files/s6\_train.xes} and
-\texttt{xes\_files/s6\_test.xes}. The CSV representation serves as the
-primary pipeline format; XES enables compatibility with pm4py, ProM
+\texttt{xes\_files/s6\_test.xes}. CSV is the pipeline format; XES enables compatibility with pm4py, ProM
 and ProSiT for process discovery and conformance analysis.
 
 The chronological character of the log is preserved end to end: every
