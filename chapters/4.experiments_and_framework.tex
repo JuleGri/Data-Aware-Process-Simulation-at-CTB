@@ -142,11 +142,8 @@ earliest event timestamp:
       \text{start}(e),\text{time}(e)
       \mid e\in c_i \bigr\}.
 \end{equation}
-Sort the cases by $\tau$ and a deterministic case-identifier
-tiebreaker. The first 80\,\% form the training set and the remaining
-20\,\% form the test set. The cutoff $\tau^{\star}$ is recorded as the
-earliest arrival in the test set. Cases whose earliest event timestamp
-is missing are dropped from both.
+Sort the cases by $\tau$ and a deterministic case-identifier. The first 80\,\% form the training set and the remaining
+20\,\% form the test set. The cutoff $\tau^{\star}$ is recorded as the earliest arrival in the test set.
 
 On the CTB event log the cutoff is
 $\tau^{\star}=\text{2026-04-20 18:17:00}$. The split produces 71,568
@@ -159,30 +156,15 @@ The manifest is loaded by every downstream simulation script so that
 $n_{\text{traces}}$ and $t_{\text{start}}$ match the test window
 exactly.
 
-\subsection{Correction Relative to Earlier Drafts}
-
-Earlier versions of this thesis referenced a training set of 24,000
-cases and a test set of 6,000 cases. Those numbers were an artefact of
-a legacy random-subsample step in
-\texttt{baseline/export\_empirical\_durations.py} that only fired when
-the discovery scripts were pointed at the full event log. All discovery
-scripts are now routed through
-\texttt{baseline/\_eventlog\_source.py}, which prefers the persisted
-\texttt{s6\_train.csv} and skips the legacy subsample when a train log
-is detected. The correct partitioning is 71,568/17,892 as
-recorded in the split manifest.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Control-Flow Encoding and Held-Out Coverage Protocol}
 \label{sec:process_discovery_methodology}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Process Discovery}
 
 \subsection{Raw Prefix-Trie Encoding}
 
-The Petri net that ProSiT uses as the authoritative control-flow skeleton is
-constructed from the observed training variants as a raw sequential prefix
-trie, following the definition in Chapter~\ref{chp:background}. This is not a
-classical process-discovery abstraction: it stores the observed activity
+The Petri net that ProSiT uses as the authoritative control-flow backbone is constructed from the observed training variants as a raw sequential prefix trie, following the definition in Chapter~\ref{chp:background}. This is not a classical process-discovery abstraction: it stores the observed activity
 language and does not infer additional behaviour. Every accepted path has the form
 \texttt{Gate In}$\rightarrow$one or more yard activities
 $\rightarrow$\texttt{Gate Out}. Shared prefixes are represented once,
