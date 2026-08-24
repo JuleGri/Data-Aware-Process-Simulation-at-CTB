@@ -1,18 +1,13 @@
 \chapter{Case Study and Data Engineering}
 \label{chp:case_study_and_data}
 
-This chapter describes the operational context and the pipeline that turns raw
-records into a simulation-ready event log. It covers the data design but does
-not fit models, evaluate results, or choose experimental parameters. The event
-log is the input for Chapters~\ref{chp:experiments_and_framework}
-and~\ref{chap:results}.
+This chapter describes the operational context and the pipeline that turns raw operational 
+records into a simulation-ready event log. It covers the data engineering but does not yet fit models, evaluate results, or choose experimental parameters. The resulting event log is the input for Chapters~\ref{chp:experiments_and_framework} and~\ref{chap:results}.
 
 Section~\ref{sec:cs_environment} introduces HHLA Container Terminal
-Burchardkai (CTB), the truck-handling scope, and the data sources.
-Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs
-lifecycle timestamps and derives the case-level context required by ProSiT
-\cite{Vinci2026prosit}. The final section describes the event log used for the
-train/test split in Section~\ref{sec:train_test_split}.
+Burchardkai (CTB), the truck-handling operations and the data sources.
+Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs lifecycle timestamps and derives the case-level context required by ProSiT
+\cite{Vinci2026prosit}. The final section describes the event log and its characteristics used for the train/test split in Section~\ref{sec:train_test_split}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Case Study Environment}
@@ -21,18 +16,16 @@ train/test split in Section~\ref{sec:train_test_split}.
 
     \subsection{HHLA Container Terminal Burchardkai}
 
-    The case study concerns HHLA Container Terminal Burchardkai (CTB) in the
-    Port of Hamburg. CTB handles approximately 2.6 million TEU
+    This case study concerns the HHLA Container Terminal Burchardkai (CTB) in the Port of Hamburg. CTB handles approximately 2.6 million TEU
     (Twenty-foot Equivalent Units) annually across 315 hectares
     \cite{hhla2025}.
 
-    \textbf{Truck Process Scope:} External trucks visit CTB to deliver
-    or receive containers. The process comprises:
+    \textbf{Truck Process:} External trucks visit the CTB to deliver
+    or receive containers. The general procecedure comprises:
     \begin{enumerate}
         \item \textbf{Gate In}: Truck registers at the entry gate.
-        \item \textbf{Container handling}: Rail-Mounted Gantry cranes
-              (RMGs), Van Carriers (VC) or manual operators (HO2) load
-              or unload containers at storage blocks.
+        \item \textbf{Container handling in Yard}: Rail-Mounted Gantry cranes
+              (RMGs) load or unload containers at storage blocks.
         \item \textbf{Gate Out}: Truck exits the terminal.
     \end{enumerate}
 
@@ -49,10 +42,7 @@ train/test split in Section~\ref{sec:train_test_split}.
     \subsection{Data Sources}
     \label{sec:cs_data_sources}
 
-    The data come from several systems used in daily terminal operations.
-    These systems were developed over time and record different parts of the
-    process. A Terminal Operating System coordinates them. This study uses the
-    following data sources:
+    The data come from several systems used in daily terminal operations. These systems were developed over time and record different parts of the process. A Terminal Operating System coordinates them. This study uses the following data sources:
 
     \begin{itemize}
         \item \textbf{ITS schedule (scheduling system)} — records truck
@@ -71,9 +61,9 @@ train/test split in Section~\ref{sec:train_test_split}.
     \end{itemize}
 
     These systems generate independent data pools with different
-    identifier schemes, requiring the data-integration procedure
+    identifier schemes, requiring a data-integration procedure
     described in Section~\ref{sec:event_log_engineering}. Historical
-    data from March and April 2026 (8 weeks) was extracted, covering
+    data from March and April 2026 (ca. 8 weeks) was extracted, covering
     approximately 104,000 truck visits.
 
     \textbf{Data volume:}
@@ -783,19 +773,16 @@ Additional pools       & LL, HO2, Gate In, Gate Out \\
 
 Every case contains a \texttt{Gate In} event, one or more operational
 yard activities and a final \texttt{Gate Out} event. Operational
-activities may occur at an RMG block, the LL area, HO2 or the VC area,
-depending on the operational requirements of the visit.
+activities can occur at an RMG block, the empty area or the manual area, depending on the operational requirements of the visit.
+
+[INSERT MOST COMMON VARIANTS?]
 
 The generated event log is exported as the full CSV
-\texttt{s6\_eventlog\_target\_rank\_features.csv}. The frozen temporal
-partitions are exported as \texttt{s6\_train.csv},
+\texttt{s6\_eventlog\_target\_rank\_features.csv}. The frozen temporal partitions are exported as \texttt{s6\_train.csv},
 \texttt{s6\_test.csv} and the corresponding
 \texttt{xes\_files/s6\_train.xes} and
 \texttt{xes\_files/s6\_test.xes}. CSV is the pipeline format; XES enables compatibility with pm4py, ProM
 and ProSiT for process discovery and conformance analysis.
 
-The chronological character of the log is preserved end to end: every
-case carries the same monotone timeline from Gate In to Gate Out. This
-property is exploited in Chapter~\ref{chp:experiments_and_framework} to
-define a temporal train/test split at case level (see
-Section~\ref{sec:train_test_split}).
+The chronological character of the log is preserved, as every
+case follows a increasing temporal behavior from Gate In to Gate Out. This property is further examined in Chapter~\ref{chp:experiments_and_framework} to define a temporal train/test split at case level (see Section~\ref{sec:train_test_split}).

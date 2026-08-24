@@ -78,12 +78,12 @@ also reports the held-out coverage and structural measures.
 \toprule
 \textbf{Metric} & \textbf{Train} & \textbf{Test} \\
 \midrule
-Log fitness                      & 1.0000 & 0.99985 \\
+Log fitness                      & 1.0000 & 0.9998 \\
 Fitting traces (\%)              & 100.000 & 99.944 \\
-Average trace fitness            & 1.0000 & 0.99990 \\
-Token-based precision            & 1.0000 & 0.96057 \\
-Generalisation                   & 0.57677 & 0.37327 \\
-Simplicity                       & 0.61798 & 0.61798 \\
+Average trace fitness            & 1.0000 & 0.9990 \\
+Token-based precision            & 1.0000 & 0.9605 \\
+Generalisation                   & 0.5767 & 0.3732 \\
+Simplicity                       & 0.6179 & 0.6179 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -94,25 +94,14 @@ variants cover 17,882 of 17,892 test cases. The other ten cases each follow a
 different unseen variant. Only 0.0559\,\% of test cases lie outside the stored
 training language.
 
-The high fitness is not the main result. The trie is designed to fit known
-variants. The main result is the repetition in the CTB data. A model that
-cannot create a new route still covers almost the full test period. Activity
-frequencies change between train and test, as shown in
-Section~\ref{sec:results_eventlog_char}. The complete activity orders hardly
-change.
+The high fitness is not the main result here. The trie is intentionally designed to fit known variants. The main result is the repetition in the CTB data. A model that
+cannot create a new route still covers almost the full test period. Activity frequencies change between train and test, as shown in
+Section~\ref{sec:results_eventlog_char}. The complete activity orders hardly change.
 
 This restriction has a clear cost. Test generalisation is 0.37327 and
-simplicity is 0.61798. The trie is not compact and cannot generate unseen
-combinations. It does provide a strict case-order contract: one Gate In, one or
-more sequential yard activities, and one final Gate Out. Different trucks can
-still use resources at the same time. The path of each case must have occurred
-in training.
+simplicity is 0.61798. The trie is not compact and cannot generate unseen combinations. It does provide a strict case-order contract: one Gate In, one or more sequential yard activities, and one final Gate Out. Different trucks can still use resources at the same time. The path of each case must have occurred in training.
 
-The model can test timing, resources, and arrivals on these historical paths.
-It cannot support a claim that a general CTB process model was discovered. It
-also cannot create a new exception path, handling step, or activity order. A
-structural response to a disruption is missing unless the same sequence already
-occurred in training.
+The model can test timing, resources, and arrivals on these historical paths. It cannot support a claim that a general CTB process model was discovered. It also cannot create a new exception path, handling step, or activity order. A structural response to a disruption is missing unless the same sequence already happened during training.
 
 \medskip
 
@@ -510,15 +499,10 @@ queueing time.
 \label{sec:results_scenarios}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The scenario baseline uses the calibrated \textit{rules$+$workload} bundle
-from RQ1 and the cap of three per RMG block. It is used because its rules can be
-inspected and changed. It was not the best screening configuration. Ten matched
-seeds (42--51) are run for the baseline, T22 removal, and the 20\,\% demand
-increase. This gives 30 simulations with 17,892 cases each.
+The scenario baseline uses the previously calibrated \textit{rules$+$workload} bundle from RQ1 and the cap of maxmimum three available resources per RMG block. It is used because its rules can be
+inspected and changed. It was not the best screening configuration. Ten matched seeds (42--51) are run for the baseline, T22 removal, and the 20\,\% demand increase. This gives 30 simulations with 17,892 cases each.
 
-Table~\ref{tab:scenario_kpis} uses the baseline from this matched runner. It is
-only the reference for paired changes. The RQ1 results still come from
-Table~\ref{tab:final_kpis}.
+Table~\ref{tab:scenario_kpis} uses the baseline from this matched runner. It is only the reference for paired changes. The RQ1 results still come from Table~\ref{tab:final_kpis}.
 
 The raw prefix trie also stays fixed. The experiments can change arrival
 timing, resource assignment, and model-derived delays. They cannot create a
@@ -526,53 +510,7 @@ new activity sequence. Extra moves, detours, exceptions, or a new operation
 order are outside the model. All scenario results are conditional on the
 historical paths.
 
-\begin{table}[p]
-\centering
-\caption{Paired what-if scenario KPIs
-($N_{\mathrm{seeds}}=10$, seeds 42--51; 17,892 cases per run).
-Pre-service denotes the model-derived interval from enablement to
-activity start, not pure queueing time. ``Observed'' arrival measures
-use the minute-resolved simulated event log and elapsed calendar time.}
-\label{tab:scenario_kpis}
-\scriptsize
-\setlength{\tabcolsep}{3.2pt}
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular}{@{}p{1.65cm}p{4.35cm}rrrr@{}}
-\toprule
-\textbf{Analysis} & \textbf{KPI} & \textbf{Reference} &
-\textbf{Outcome} & \textbf{Change} & \textbf{95\,\% CI} \\
-\midrule
-\multicolumn{6}{@{}l}{\textit{Scenario A: T22 resource-pool reallocation (scenario minus matched baseline)}} \\
-T22 pool & Mean turnaround (min) & 30.443 & 30.456 & $+0.012$ & [$-0.102$, $+0.127$] \\
-T22 pool & P90 turnaround (min) & 51.700 & 51.900 & $+0.200$ & [$-0.364$, $+0.764$] \\
-T22 pool & Mean RMG service (min) & 11.069 & 11.059 & $-0.010$ & [$-0.064$, $+0.045$] \\
-T22 pool & Mean RMG pre-service (min) & 6.475 & 6.479 & $+0.003$ & [$-0.034$, $+0.040$] \\
-T22 pool & RMG receive service (min) & 11.362 & 11.319 & $-0.043$ & [$-0.110$, $+0.024$] \\
-T22 pool & RMG receive pre-service (min) & 6.480 & 6.496 & $+0.016$ & [$-0.039$, $+0.071$] \\
-T22 pool & RMG delivery service (min) & 8.794 & 8.829 & $+0.035$ & [$-0.078$, $+0.147$] \\
-T22 pool & RMG delivery pre-service (min) & 6.487 & 6.451 & $-0.036$ & [$-0.087$, $+0.015$] \\
-T22 pool & Mean T22 assignments per run & 604.8 & 0.0 & $-604.8$ & exact \\
-\midrule
-\multicolumn{6}{@{}l}{\textit{Scenario B: 20\,\% higher working-time arrival intensity (scenario minus matched baseline)}} \\
-Demand $+20\,\%$ & Model mean working inter-arrival (min) & 0.6830 & 0.5692 & $-0.1138$ & exact \\
-Demand $+20\,\%$ & Model arrivals per working hour & 87.842 & 105.411 & $+20.000\,\%$ & exact \\
-Demand $+20\,\%$ & Observed mean inter-arrival (min) & 0.8282 & 0.7145 & $-0.1137$ & [$-0.1145$, $-0.1128$] \\
-Demand $+20\,\%$ & Observed arrivals per elapsed hour & 72.452 & 83.979 & $+11.527$ ($+15.910\,\%$) & [$+11.478$, $+11.577$] \\
-Demand $+20\,\%$ & Observed simultaneous-arrival share (\%) & 54.221 & 60.015 & $+5.795$ pp & [$+5.736$, $+5.853$] pp \\
-Demand $+20\,\%$ & Mean turnaround (min) & 30.443 & 30.411 & $-0.033$ & [$-0.128$, $+0.063$] \\
-Demand $+20\,\%$ & Mean RMG service (min) & 11.069 & 11.063 & $-0.006$ & [$-0.067$, $+0.056$] \\
-Demand $+20\,\%$ & Mean RMG pre-service (min) & 6.475 & 6.429 & $-0.046$ & [$-0.094$, $+0.001$] \\
-Demand $+20\,\%$ & RMG receive service / pre-service (min) & 11.362 / 6.480 & 11.332 / 6.461 & $-0.030$ / $-0.020$ & [$-0.101$, $+0.041$] / [$-0.074$, $+0.035$] \\
-Demand $+20\,\%$ & RMG delivery service / pre-service (min) & 8.794 / 6.487 & 8.796 / 6.397 & $+0.002$ / $-0.090$ & [$-0.083$, $+0.087$] / [$-0.157$, $-0.022$] \\
-\midrule
-Structure & Aggregate RMG maximum concurrency & 100 discovered & 66 final & $-34$ & exact domain cap \\
-Contract & Invalid cases / duration tails & 30 scenario logs & 0 & 0 & all checks passed \\
-\bottomrule
-\end{tabular}
-\parbox{0.97\textwidth}{\scriptsize Intervals refer to paired seed-wise
-scenario-minus-baseline changes. They quantify simulation-seed variation
-conditional on the frozen model.}
-\end{table}
+[Results Table to be finalised and included]
 
 \subsection{Scenario A: T22 Resource-Pool Reallocation}
 
@@ -631,11 +569,9 @@ counterfactual validity.
 \label{sec:limitations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Pre-Service Delay Cannot Be Decomposed}
+\subsection{Pre-Service Delay}
 
-ProSiT enables an activity when the process model allows it. Two consecutive
-CTB activities can occur at different locations. Truck movement is not a
-separate activity. The time from enablement to start can combine:
+ProSiT enables an activity when the process model allows it. Two consecutive CTB activities can occur at different locations. Truck movement in this Event log set up, is not a separate activity. The time from enablement (finishing a previous activity) to start can combine:
 \begin{equation}
     D_{\mathrm{pre\text{-}service}} \approx
     T_{\mathrm{physical}} +
@@ -699,55 +635,3 @@ systems. The 99.944\,\% trie coverage shows repeated paths in this period. It
 does not show transfer to another process. The results do not cover another
 terminal, season, gate regime, or infrastructure setup. That would require
 another full discovery and validation run.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Answers to the Research Questions}
-\label{sec:results_summary}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Table~\ref{tab:results_summary} gives the final answers with these limits.
-
-\begin{table}[htbp]
-\centering
-\caption{Answers to the research questions.}
-\label{tab:results_summary}
-\small
-\begin{tabular}{p{2.1cm} p{6.5cm} p{4.6cm}}
-\toprule
-\textbf{Research question} & \textbf{Main evidence} & \textbf{Supported answer} \\
-\midrule
-RQ1 (fidelity) & Yard-service EMD is 2.999 minutes unweighted and 2.340
-minutes frequency weighted; inter-arrival EMD is 0.072 minutes. Mean
-turnaround is 9.306 minutes too low and P90 is 19.200 minutes too low
-(Table~\ref{tab:final_kpis}). & The model reproduces some observed timing
-and activity behaviour, but not the full turnaround distribution. \\
-RQ2 (structural applicability) & The raw trie cannot generate unseen paths.
-Still, 17,882 of 17,892 held-out cases repeat a training variant and every
-generated case passes the order contract
-(Table~\ref{tab:conformance_train_test}). & The recorded CTB trace language is
-highly repetitive. The trie is a useful historical execution guardrail, not a
-general process-discovery result. \\
-RQ3 (contextual expressiveness) & The pre-calibration
-\textit{rules$+$workload} endpoint has 56\,\% higher turnaround EMD and higher
-cross-seed variation than \textit{no-rules}
-(Table~\ref{tab:configuration_screening}). & More contextual expressiveness
-does not improve fidelity in the retained endpoint comparison. The missing
-\textit{rules}-only result prevents a separate workload-effect claim. \\
-RQ4 (what-if decision support) & Both input changes execute exactly, but both
-mean-turnaround paired Monte-Carlo intervals include zero. The model has no
-hard container-location or equipment-movement state and cannot generate a new
-activity sequence
-(Table~\ref{tab:scenario_kpis}). & The model supports reproducible white-box
-experiments, but not direct physical recommendations from these scenarios. \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The CTB activity language is highly repetitive. Almost every held-out visit
-uses a full sequence seen during training. The trie records this stability but
-does not learn a general process structure. The simulator still has a clear
-turnaround bias. The available context does not remove it. The scenarios are
-easy to inspect and repeat, but they lack physical state and new process paths.
-For this case, data-aware process simulation is useful as an auditable model
-and diagnostic tool. The current model is not sufficient for direct
-operational decisions.
