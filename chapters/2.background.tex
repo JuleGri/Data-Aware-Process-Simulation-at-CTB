@@ -870,7 +870,7 @@ requirement. They replace some manual assumptions with assumptions about
 event-log semantics, discovery algorithms, data attributes and fitted
 distributions, all of which require examination.
 
-\subsection{Foundational Distinction Between Verification and Validation}
+\subsection{Distinction Between Verification and Validation}
 
 Sargent separates several questions that are often conflated under the
 single term \emph{validation} \cite{Sargent2013Validation}.
@@ -884,15 +884,12 @@ calibrate and evaluate the model are adequate. Finally,
 output behaviour is accurate enough over the domain in which the
 model is intended to be used. Historical-data validation---running the
 model under historical input conditions and comparing its output with
-observed system data---is one technique for assessing operational
+observed system data, is one technique for assessing operational
 validity \cite{Sargent2013Validation}.
 
 Table~\ref{tab:validation_evidence_types} maps these distinctions to the
 type of evidence needed in an automatically discovered BPS study. The
-categories are complementary rather than interchangeable. For example,
-a low event-log distance is evidence of operational fidelity, but it
-cannot show that a timestamp proxy has the correct physical meaning or
-that the simulator implemented a resource constraint as intended.
+categories work complementary, as for example a low event-log distance is evidence of operational fidelity, but it cannot show that a timestamp proxy has the correct physical meaning or that the simulator implemented a resource constraint as intended.
 
 \begin{table}[htbp]
 \centering
