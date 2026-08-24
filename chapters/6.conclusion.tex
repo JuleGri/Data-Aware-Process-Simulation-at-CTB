@@ -14,7 +14,7 @@ introduced in Chapter~1.
 
 \textbf{RQ1} questions, to what extent a ProSiT simulation model discovered from historical CTB truck-operation data can reproduce the behaviour observed in an unseen temporal hold-out. The evaluation showed that the model reproduces some patterns of activities and process characteristics of the observed temporal behavior considerably better than others. The
 final baseline achieves an unweighted yard-service Wasserstein distance of 2.99 minutes and a real-frequency-weighted distance of 2.34 minutes, while the inter-arrival distribution differs from the held-out log by only 0.072 minutes. Dispite these fairly acurate statistical results, the model systematically under-predicts complete truck turnaround time. Mean turnaround is 30.44 minutes in the simulation compared with 39.74 minutes in the held-out data, corresponding to an under-prediction
-of 9.31 minutes. [Add confidence Intervall Results and interpretation]
+of 9.31 minutes.
 
 \textbf{RQ2} investigated the suitability of automatically discovered
 control flow for the CTB truck process. An Inductive-Miner model was
@@ -55,6 +55,27 @@ valid experiments on the discovered simulation model, but their results cannot
 be interpreted as experimentally established counterfactual effects of the
 physical terminal.
 
+Read jointly, the findings reveal a consistent boundary between patterns that
+are present in the event log and mechanisms that are absent from the model.
+The stable trace language and strong calendar structure are relationships that
+the discovery pipeline can reproduce. By contrast, the weak duration signal
+for dominant RMG activities, the systematic turnaround deficit, and the lack
+of a congestion response under higher demand all point to missing event-level
+and spatial state. This agreement across independent diagnostics strengthens
+the interpretation, but it is not a causal proof: the analyses show which
+explanation is consistent with the evidence and which stronger claims the
+evidence cannot support.
+
+In relation to recent data-aware Process Mining, the main advance demonstrated
+here is therefore not an automatic increase in prediction accuracy. It is the
+ability to represent, inspect, and intervene on conditional relationships while
+retaining an event-log-based process model. The CTB case shows that this
+transparency is useful precisely when additional context fails: it allows the
+researcher to distinguish a weak or unstable association from an omitted
+physical mechanism. Data awareness expands what can be modelled, but the
+empirical content and information timing of the attributes determine whether
+that additional expressiveness improves a held-out simulation.
+
 Overall, the thesis shows that automatically discovered data-aware process
 simulation can be transferred to container-terminal truck operations and can
 produce a transparent, reproducible, and structurally consistent simulation
@@ -77,20 +98,15 @@ spatial process state, physical resource constraints, equipment movement, and
 queueing mechanisms in addition to the event-log-based behavioural information
 captured by the current simulation model.
 \section{Future Work}
-[TBD]
-{\itshape
 Researching alternative simulation approaches to the classical manual simulation of container terminal logistics is an interesting and in my opinion fruitful field. Due to the 24/7 operations in logistics, the resources for development and research in advanced technologies is very limited and I see  great potential in digital start ups or tech companies to get in a foot on that
 
 For port applications, alternative eventlog structure with different aggregation logic or Event specific attributes kept and a vessel and rail arrival logic implemented.
-}
 
 The framework developed and applied in this Thesis can be extended in the following areas:
 
-\begin{itemize}  
-      \item \textbf{Alternative Simulation Parametrisation:} Tbd
-    \item \textbf{Alternative Terminal Setting:} An alternative simulation scenario to be analysed, like the Quaysides workload effects. 
-    \item \textbf{Different Simulation Tool} Due to the physical component, the application of a business process tool has its limits in logistics application. 
-    \item \textbf{Alternative Event log Structure} The Attribute selection and aggregation affect the results heavily. An alternative engineering or retainig attributes on the event level could also affect simulation outcomes, which could be investigated in future simulation scenarios. 
-     
-\end{itemize}
+\begin{itemize}
+    \item \textbf{Alternative Terminal Setting:} An alternative simulation scenario to be analysed, like the Quaysides workload effects.
+    \item \textbf{Different Simulation Tool} Due to the physical component, the application of a business process tool has its limits in logistics application.
+    \item \textbf{Alternative Event log Structure} The Attribute selection and aggregation affect the results heavily. An alternative engineering or retainig attributes on the event level could also affect simulation outcomes, which could be investigated in future simulation scenarios.
 
+\end{itemize}

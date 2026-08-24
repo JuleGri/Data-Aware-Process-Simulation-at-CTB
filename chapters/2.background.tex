@@ -1,18 +1,18 @@
 \chapter{Background and Related Work}
 \label{chp:background}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Container Terminal Operations} 
+\section{Container Terminal Operations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Container terminals connecting maritime and hinterland transport networks are also called seaport Terminals. They link deep-sea vessels with road, rail, and inland waterway transport. Large container vessels can carry more than 20,000 containers, so terminals must handle large cargo volumes while keeping turnaround times short \cite{CTSteenken2004}.
 Since the 1960s, standardised containers have become the main unit of global freight transport. Container throughput is measured in Twenty-foot Equivalent Units (TEU): a 20-foot container equals one TEU and a 40-foot container equals two TEU \cite{Hartmann2005cenariosforCTSimulation}. Larger vessels and higher trade volumes place terminals under pressure because many processes and resources must be coordinated at the same time. Operational decisions affect vessel berth times, truck turnaround times, terminal throughput, and service quality \cite{CTSteenken2004,OptimizingCTs2023}. This thesis studies the HHLA
 Container Terminal Burchardkai (CTB) in Hamburg, which has an annual thoughput of averagely 3 mio TEU, with all HHLA Container Terminals in Hamburg having a total throughput of averagely 6.3 mio TEU annually.
 
-\subsection{Container Terminals as Complex Logistics Systems} 
+\subsection{Container-Terminal Systems and Truck Operations}
 Container terminals are complex logistics systems because many resources,
 transport modes, and operational processes interact during daily operations
 \cite{CTSteenken2004,OptimizingCTs2023}.
 
-\subsubsection{Container Flows} 
+\paragraph{Container Flows}
 Within a seaport terminal, containers move between transport modes and storage
 locations. A container may arrive by vessel, truck, or rail and later leave by
 one of these modes. The terminal coordinates flows
@@ -34,9 +34,9 @@ waterside, the yard, and hinterland transport.
     \label{fig:container_flows_hhla}
 \end{figure}
 
-And Explanation, that Hamburg is a convinient hub for the european Hinterland traffic, as its railway route to eastern europe is short thatn from other western european harbours like Rotterdam. 
+And Explanation, that Hamburg is a convinient hub for the european Hinterland traffic, as its railway route to eastern europe is short thatn from other western european harbours like Rotterdam.
 
-\subsubsection{Yard Components and Resources}
+\paragraph{Yard Components and Resources}
 Container terminals consist of several connected operational areas. Bett et
 al. distinguish the quayside, yard, and landside. The quayside includes berths
 and quay cranes for loading and unloading vessels. The yard stores containers
@@ -63,7 +63,7 @@ has three areas:
     Keeping them separate prevents them from blocking full containers that
     are linked to transport orders. Reach stackers operate the empty-container
     yard and can stack containers up to six high.
-    
+
 \end{enumerate}
 
 
@@ -73,17 +73,13 @@ they wait at a transfer point for the assigned handling resource. A resource
 shortage in one area can delay other terminal operations
 \cite{CTSteenken2004}.
 
-\subsubsection{Interdependencies Between Terminal Processes}
+\paragraph{Interdependencies Between Terminal Processes}
 Terminal processes are connected, so a local decision or disruption
-can affect other parts of the terminal. [For example, delayed vessel arrivals
-may postpone unloading and change yard occupancy. Yard congestion can reduce
-crane productivity and increase truck waiting times.] - Mit Fokus, was
-bedeutet das eigentlich tatsächlich für ein terminal?
+can affect other parts of the terminal
 \cite{CTSteenken2004,Bett2024}. These interactions are difficult to evaluate
 with analytical optimisation alone.
 
-\subsection{Truck Handling Processes} 
-\subsubsection{Importance of Truck Operations} 
+\paragraph{Importance of Truck Operations}
 Road transport is part of a container terminal's hinterland
 connection. Terminals must coordinate many truck arrivals while limiting queues
 inside the terminal and on public roads in the port area
@@ -92,21 +88,19 @@ exceed the capacity of gates, yard equipment, and storage areas. This increases
 waiting times and reduces terminal performance
 \cite{Bett2024,CTprocessMiningTAS2020}.
 
-\subsubsection{A Truck Visit Process} 
+\paragraph{A Truck Visit Process}
 Many container terminals use a Truck Appointment System (TAS) to regulate
 arrivals and reduce congestion. A trucking company reserves a time slot before the visit and states which container transactions it will perform
 \cite{Bett2024,CTprocessMiningTAS2020}. At the automated pre-gate, Optical
 Character Recognition (OCR) systems identify the container and vehicle and
-match this information with the booking. [Despite the hourly booking slots,
-the Depending on the current workload and gate queue lengths, the truck may
-have Referr to Poisson later in the arrival distribution section] The truck may
+match this information with the booking. The truck may
 then wait before the physical gate admits it to the terminal \cite{Bett2024}.
 It drives to the assigned yard location and performs one or more transactions:
 
 \begin{enumerate}
-    \item delivering an export container, 
-    \item receiving an import container, 
-    \item delivering or receiving  multiple containers while at the same yard location, 
+    \item delivering an export container,
+    \item receiving an import container,
+    \item delivering or receiving  multiple containers while at the same yard location,
 \end{enumerate}
 
 An efficient pattern is the \textit{multi move}. A truck delivers one or more export containers and collects one or more import containers during the same
@@ -116,7 +110,7 @@ truck passes the exit gate and leaves the terminal. The time between entry and
 exit is the \textit{Truck Turnaround Time (TTT)}, a performance indicator for
 truck operations \cite{Bett2024}.
 
-\subsubsection{Terminal Operating Systems}
+\paragraph{Terminal Operating Systems}
 Container terminals use several information systems to coordinate operations.
 The Order Management and Terminal Control System (TCS) manages container
 movements, storage locations, and operational orders. It is connected to other
@@ -130,21 +124,21 @@ thesis mainly uses the Order and Terminal Control System and adds data from
 other systems to build and check the event log. Chapter~\ref{chp:experiments_and_framework}
 describes this data integration.
 
-\subsubsection{Sources of Operational Delays} 
+\paragraph{Sources of Operational Delays}
 Truck turnaround time depends on several factors. Common reasons for delay
 include:
 
-\begin{itemize} 
+\begin{itemize}
     \item congestion at entry and exit gates, including effects from road
     traffic outside the terminal;
     \item pick-up containers that are blocked by other containers after a long
     dwell time;
     \item truck traffic congestion within container yard sections and main routes,
-    \item limited availability of container handling equipment (CHE), 
-    \item high occupancy levels within storage blocks, 
-    \item resource and priority conflicts between truck and vessel operations, 
-    \item unexpected equipment failures or maintenance activities 
-\end{itemize} 
+    \item limited availability of container handling equipment (CHE),
+    \item high occupancy levels within storage blocks,
+    \item resource and priority conflicts between truck and vessel operations,
+    \item unexpected equipment failures or maintenance activities
+\end{itemize}
 
 These factors are connected, so a local disruption can affect other terminal
 operations. For example, low yard-crane availability or vessel priority can
@@ -152,23 +146,21 @@ increase truck service and waiting times. Longer queues can then cause yard
 traffic, reduce gate throughput, and slow hinterland operations
 \cite{CTSteenken2004,Bett2024}.
 
-\subsubsection{Operational Performance Indicators} 
+\paragraph{Operational Performance Indicators}
 Truck operations are evaluated with operational key performance indicators
 (KPIs).
-\begin{itemize} 
-    \item \textbf{Truck Turnaround Time (TTT):} Total time a truck spends inside the terminal between entry and exit. 
-    \item \textbf{Waiting Time:} Time spent waiting for gate processing, yard equipment, or storage area access.  
+\begin{itemize}
+    \item \textbf{Truck Turnaround Time (TTT):} Total time a truck spends inside the terminal between entry and exit.
+    \item \textbf{Waiting Time:} Time spent waiting for gate processing, yard equipment, or storage area access.
     \item \textbf{Yard Utilization:} Degree to which storage areas are occupied and operational resources are utilized.
-\end{itemize} 
+\end{itemize}
 
 Among these indicators, Truck Turnaround Time is often the main measure of
 truck service quality because it reflects the time experienced by trucking
 companies and cargo owners. It is one of four main KPIs used by the HHLA
 container terminals \cite{Bett2024,CTprocessMiningTAS2020}.
 
-\subsection{Simulation-Based Decision Support in Container Terminals} 
-\textit{This is now trying to explain Why is there a need for better decision support in container terminals in general, why is simulation a common approach for that purpose, and why are traditional simulation approaches insufficient?}
-
+\subsection{Simulation-Based Decision Support in Container Terminals}
 Terminal managers make decisions about truck appointments, resources,
 equipment schedules, maintenance, and yard operations while the terminal
 remains active. Because terminal processes are connected, local decisions can
@@ -211,8 +203,7 @@ simulation models closer to the observed process.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Operational Data and Event Logs}
 
-\subsection{Transactional Information Systems}
-Woraus und warum entstehen überall überhaupt Everntlogs?
+\subsection{Information Systems and Event Semantics}
 Most business processes are supported by information systems. These systems
 document operational activities, but they are not always designed to analyse a
 complete process. Examples are Enterprise Resource Planning (ERP), Customer
@@ -230,8 +221,6 @@ systems have grown over time. They do not all record the same level of detail
 and sometimes use different names for the same facility. The event-log
 engineering section discusses this issue.
 
-\subsection{Events, Cases and Traces}
-
 Process Mining describes a process as a sequence of recorded events. The
 following terms define this event-log structure.
 
@@ -241,57 +230,57 @@ terminal are shown in Table~\ref{tab:background_event_examples}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{0.29\textwidth}|L{0.60\textwidth}|}
-\hline
+\begin{tabular}{L{0.29\textwidth}L{0.60\textwidth}}
+\toprule
 \textbf{Event} & \textbf{Description} \\
-\hline
+\midrule
 OCR gate entry & The truck passes the automatic identification system at the terminal entrance. \\
 Gate check completed & The administrative and security checks at the entry gate are completed. \\
 Yard position reached & The truck arrives at its assigned handling position in the yard. \\
 Container operation completed & The loading or unloading operation at the yard position is completed. \\
 Terminal exit & The truck leaves the terminal after its operations are completed. \\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Examples of events in a container terminal truck process.}
 \label{tab:background_event_examples}
 \end{table}
 
-\paragraph{Activity} 
+\paragraph{Activity}
 An activity describes the type of action that is executed. Multiple events can
 belong to the same activity while occurring at different times or for different
 process instances. Table~\ref{tab:background_activity_examples} gives examples.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{0.29\textwidth}|L{0.60\textwidth}|}
-\hline
+\begin{tabular}{L{0.29\textwidth}L{0.60\textwidth}}
+\toprule
 \textbf{Activity} & \textbf{Description} \\
-\hline
+\midrule
 Gate In & Entry checks and authorization of the truck visit. \\
 Container Delivery & Transfer of a container from the truck to the terminal yard. \\
 Container Receive & Transfer of a container from the terminal yard to the truck. \\
 Gate Out & Completion of the exit procedure before the truck leaves the terminal. \\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Examples of activities in a container terminal truck process.}
 \label{tab:background_activity_examples}
 \end{table}
 
-\paragraph{Case} 
+\paragraph{Case}
 A case represents a single process instance. It is defined by the object whose
 process execution is analyzed. Possible case objects are shown in
 Table~\ref{tab:background_case_examples}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{0.29\textwidth}|L{0.60\textwidth}|}
-\hline
+\begin{tabular}{L{0.29\textwidth}L{0.60\textwidth}}
+\toprule
 \textbf{Case object} & \textbf{Description} \\
-\hline
+\midrule
 Customer order & One order is followed from its creation to its completion. \\
 Container & The recorded handling process of one container forms the case. \\
 Truck visit & The recorded process from a truck's arrival to its departure forms the case. \\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Examples of objects that may define a process case.}
 \label{tab:background_case_examples}
@@ -307,19 +296,19 @@ observable lifecycle timestamps.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{0.29\textwidth}|L{0.60\textwidth}|}
-\hline
+\begin{tabular}{L{0.29\textwidth}L{0.60\textwidth}}
+\toprule
 \textbf{Attribute} & \textbf{Description} \\
-\hline
+\midrule
 Start timestamp & Time at which the execution of the activity begins. \\
 Complete timestamp & Time at which the execution of the activity ends. \\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Observable timestamp attributes of an event.}
 \label{tab:background_timestamp_attributes}
 \end{table}
 
-The duration between these two timestamps is the \textit{service time} (or execution time) of the activity. A third temporal concept, \textit{enablement}, describes the moment at which an activity becomes executable according to the process-model state. In process-mining-based simulation approaches, enablement is typically not an observed input-log attribute but is derived by replaying the event log against the discovered process model \cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The interval between model-derived enablement and the observed start timestamp is referred to as \textit{waiting time} in the ProSiT framework \cite{Vinci2026prosit} and corresponds to a pre-service delay that may include resource contention, queueing effects, and — in domains with spatial separation between activities — physical movement time. 
+The duration between these two timestamps is the \textit{service time} (or execution time) of the activity. A third temporal concept, \textit{enablement}, describes the moment at which an activity becomes executable according to the process-model state. In process-mining-based simulation approaches, enablement is typically not an observed input-log attribute but is derived by replaying the event log against the discovered process model \cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The interval between model-derived enablement and the observed start timestamp is referred to as \textit{waiting time} in the ProSiT framework \cite{Vinci2026prosit} and corresponds to a pre-service delay that may include resource contention, queueing effects, and — in domains with spatial separation between activities — physical movement time.
 
 \paragraph{Attributes}
 Events may contain attributes that describe the process context. Examples from
@@ -328,10 +317,10 @@ Table~\ref{tab:background_context_attributes}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{0.29\textwidth}|L{0.60\textwidth}|}
-\hline
+\begin{tabular}{L{0.29\textwidth}L{0.60\textwidth}}
+\toprule
 \textbf{Attribute} & \textbf{Description} \\
-\hline
+\midrule
 Truck ID & Identifier of the truck involved in the recorded operation. \\
 Container number & Identifier of the container handled during the visit. \\
 Shipping line & Shipping company associated with the container. \\
@@ -339,7 +328,7 @@ Yard block & Storage block in which the container operation takes place. \\
 Container type & Operational or physical category of the container. \\
 Equipment identifier & Identifier of the equipment used for the operation. \\
 Trucking company & Company responsible for the truck visit. \\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Examples of contextual event attributes in container terminal operations.}
 \label{tab:background_context_attributes}
@@ -348,29 +337,29 @@ Trucking company & Company responsible for the truck visit. \\
 Data-aware Process Mining and simulation methods can use these attributes as
 model inputs.
 \paragraph{Trace}
-A trace is the chronologically ordered sequence of all events belonging to a specific case. For a truck visit, a trace may appear as follows: 
+A trace is the chronologically ordered sequence of all events belonging to a specific case. For a truck visit, a trace may appear as follows:
 
-\begin{quote} OCR Gate Entry $\rightarrow$ Gate In $\rightarrow$ Yard Arrival $\rightarrow$ Container Delivery $\rightarrow$ Container Pick-Up $\rightarrow$ Gate Out 
-\end{quote} 
+\begin{quote} OCR Gate Entry $\rightarrow$ Gate In $\rightarrow$ Yard Arrival $\rightarrow$ Container Delivery $\rightarrow$ Container Pick-Up $\rightarrow$ Gate Out
+\end{quote}
 
 A trace describes the execution path of one process instance.
 
-\subsection{Event Logs} 
+\subsection{Event Logs}
 An event log groups events into cases and orders them by timestamp. Each event
 requires at least three attributes:
-\begin{itemize} 
-\item Case Identifier, 
-\item Activity, 
+\begin{itemize}
+\item Case Identifier,
+\item Activity,
 \item Timestamp (at least one temporal ordering attribute).
-\end{itemize} 
+\end{itemize}
 
 For simulation-oriented process mining, richer event information is required:
-\begin{itemize} 
+\begin{itemize}
 \item Start Timestamp,
 \item Complete Timestamp,
 \item Resource,
 \item Contextual attributes (e.g.\ container type, yard utilisation).
-\end{itemize} 
+\end{itemize}
 
 The CTB input log used in this thesis provides start and completion timestamps required for execution-time modelling, while activity enablement is reconstructed during process-model alignment by the simulation-discovery framework (Section~\ref{sec:simulation_discovery_methodology}).
 
@@ -379,17 +368,17 @@ shows a simplified event log.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|l|l|l|l|}
-\hline
+\begin{tabular}{llll}
+\toprule
 \textbf{Case ID} & \textbf{Activity} & \textbf{Timestamp} & \textbf{Yard block} \\
-\hline
+\midrule
 T001 & Gate In & 09:13:04 & -- \\
 T001 & Yard Operation & 09:21:46 & B06 \\
 T001 & Gate Out & 09:42:18 & -- \\
 T002 & Gate In & 09:17:12 & -- \\
 T002 & Yard Operation & 09:30:51 & B08 \\
 T002 & Gate Out & 09:58:33 & -- \\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Simplified event log example.}
 \label{tab:eventlogexample}
@@ -398,17 +387,17 @@ T002 & Gate Out & 09:58:33 & -- \\
 Event logs can be stored in standard formats for exchange between Process
 Mining tools. The eXtensible Event Stream (XES) format stores events, cases,
 timestamps, and other attributes in a structured and tool-independent form
-[SOURCE]. By organising database records into cases and traces, an event log
+\cite{PMvanDerAalst2016}. By organising database records into cases and traces, an event log
 turns raw operational data into input for process discovery, conformance
-checking, and performance analysis [SOURCE].
+checking, and performance analysis \cite{PMvanDerAalst2016}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Process Mining Foundations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Definitions} 
+\subsection{Core Concepts and Process Perspectives}
 Companies record growing amounts of operational data through systems such as
 Enterprise Resource Planning (ERP), Customer Relationship Management (CRM),
-and Workflow Management Systems (WfMS) [SOURCE]. Business Intelligence, Data
+and Workflow Management Systems (WfMS) \cite{PMvanDerAalst2016}. Business Intelligence, Data
 Mining, and Process Mining analyse these data in different ways. Business
 Intelligence (BI) uses dashboards, reports, and key performance indicators
 (KPIs) to describe past and current performance
@@ -424,38 +413,38 @@ behaviour and to identify bottlenecks or deviations
 \end{sloppypar}
 
 
-\subsubsection{Process Perspectives} Process Mining studies a process from four
+\paragraph{Process Perspectives} Process Mining studies a process from four
 perspectives \cite{PMRozinat2009}.
 
-\paragraph{Control-Flow Perspective} 
-The control-flow perspective describes the ordering relations between activities and captures how process instances progress through a process. It focuses on questions such as which activities occur, in which order, and which alternative execution paths exist. 
-\paragraph{Time Perspective} 
-The time perspective focuses on temporal process characteristics such as activity durations, waiting times, throughput times, and bottlenecks. The analysis of timestamps contained in event logs enables the identification of performance issues and delays. 
-\paragraph{Resource Perspective} 
-The resource perspective provides the organizational dimension of a process. It considers which resources execute certain activities, how work is distributed among employees or other resource types, and how organizational structures influence process behavior. 
+\paragraph{Control-Flow Perspective}
+The control-flow perspective describes the ordering relations between activities and captures how process instances progress through a process. It focuses on questions such as which activities occur, in which order, and which alternative execution paths exist.
+\paragraph{Time Perspective}
+The time perspective focuses on temporal process characteristics such as activity durations, waiting times, throughput times, and bottlenecks. The analysis of timestamps contained in event logs enables the identification of performance issues and delays.
+\paragraph{Resource Perspective}
+The resource perspective provides the organizational dimension of a process. It considers which resources execute certain activities, how work is distributed among employees or other resource types, and how organizational structures influence process behavior.
 \paragraph{Data Perspective}
-The data perspective analyzes process-related attributes and case characteristics. Depending on the type of case, attributes can include customer types, object categories or risk classes. Such attributes often influence process decisions and execution paths \cite{PMRozinat2009}. 
+The data perspective analyzes process-related attributes and case characteristics. Depending on the type of case, attributes can include customer types, object categories or risk classes. Such attributes often influence process decisions and execution paths \cite{PMRozinat2009}.
 
 \begin{sloppypar}
 Together, these perspectives describe the process structure, timing, resources,
 and data.
 \end{sloppypar}
 
-\subsubsection{Process Discovery}
+\paragraph{Process Discovery}
 The objective of process discovery is to construct a process model from an
 event log without a predefined process model \cite{PMvanDerAalst2016}. The
 output should reproduce the observed behaviour. Depending on the discovery
 algorithm, it can be a Petri net, process tree, BPMN model, or directly-follows
-graph \cite{PMRozinat2009}. Three common algorithms are [SOURCES]:
+graph \cite{PMRozinat2009}. Three common algorithms are:
 
-\begin{itemize} 
-\item \textbf{Alpha Miner}: One of the earliest process discovery algorithms, capable of identifying causal dependencies and parallel behaviour from event logs. 
-\item \textbf{Heuristic Miner}: An extension of Alpha Miner that incorporates frequency information and is more robust towards noise and infrequent behaviour. 
+\begin{itemize}
+\item \textbf{Alpha Miner}: One of the earliest process discovery algorithms, capable of identifying causal dependencies and parallel behaviour from event logs.
+\item \textbf{Heuristic Miner}: An extension of Alpha Miner that incorporates frequency information and is more robust towards noise and infrequent behaviour.
 \item \textbf{Inductive Miner}: Recursively decomposes event logs using
 sequence, exclusive-choice, parallel, and loop cuts. It produces a sound
 block-structured model and can filter infrequent behaviour
 \cite{Leemans2014InductiveMiner}.
-\end{itemize} 
+\end{itemize}
 
 Process discovery shows how a recorded process was executed, rather than how it
 was expected to operate \cite{PMvanDerAalst2016}.
@@ -536,24 +525,24 @@ interchangeably in the process mining literature
 \label{fig:model_representations}
 \end{figure}
 
-\subsubsection{Conformance Checking}
-While process discovery focuses on constructing process models, conformance checking focuses on comparing observed process executions with an existing process model \cite{aalst2012ConformanceChecking}. The objective is to identify deviations between the discovered model and the observed reality. Resulting deviations can indicate compliance violations, process inefficiencies, exceptional cases, or outdated process documentation. The quality of discovered process models is commonly evaluated using four criterias \cite{aalst2012ConformanceChecking,PMvanDerAalst2016}: 
+\paragraph{Conformance Checking}
+While process discovery focuses on constructing process models, conformance checking focuses on comparing observed process executions with an existing process model \cite{aalst2012ConformanceChecking}. The objective is to identify deviations between the discovered model and the observed reality. Resulting deviations can indicate compliance violations, process inefficiencies, exceptional cases, or outdated process documentation. The quality of discovered process models is commonly evaluated using four criterias \cite{aalst2012ConformanceChecking,PMvanDerAalst2016}:
 
-\begin{itemize} 
+\begin{itemize}
 \item \textbf{Fitness}: Measures how well the process model can reproduce the observed behavior in the event log. A model with high fitness allows most observed traces to be replayed without deviations.
 \item \textbf{Precision}:
-Measures how much additional behavior the model allows beyond the behavior observed in the event log. A precise model avoids allowing many unrealistic or unobserved execution paths. 
-\item \textbf{Generalization}: 
+Measures how much additional behavior the model allows beyond the behavior observed in the event log. A precise model avoids allowing many unrealistic or unobserved execution paths.
+\item \textbf{Generalization}:
 Measures whether the model captures the underlying process behaviour instead
 of only reproducing the traces in the event log. A model should allow
 plausible behaviour that was not observed in the available sample.
-\item \textbf{Simplicity}: 
+\item \textbf{Simplicity}:
 Measures the complexity of the process model. If several models describe the
 observed behaviour well enough, the simpler model is usually preferred because
 it is easier to interpret and analyse.
 \end{itemize}
 
-These criteria provide a balanced framework for evaluating process model quality and form the basis of many process-mining evaluation approaches. 
+These criteria provide a balanced framework for evaluating process model quality and form the basis of many process-mining evaluation approaches.
 
 \paragraph{A*-based optimal alignment.}
 \label{sec:astar_alignment_definition}
@@ -584,7 +573,7 @@ performance analysis \cite{aalst2012ConformanceChecking}; it does not
 turn a model-derived enablement instant into an independently observed
 timestamp.
 
-\subsubsection{Process Enhancement} Process Mining includes process discovery,
+\paragraph{Process Enhancement} Process Mining includes process discovery,
 conformance checking, and process enhancement \cite{PMvanDerAalst2016}.
 Discovery creates a process model from an event log. Conformance checking
 compares observed behaviour with a model. Process enhancement adds information
@@ -592,10 +581,10 @@ from event data to an existing model. Examples include waiting times, activity
 durations, resource assignments, bottlenecks, and workload. This helps users
 understand the process and find possible improvements.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\section{Business Process Simulation} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Business Process Simulation} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Fundamentals of Business Process Simulation} 
+\subsection{Fundamentals of Business Process Simulation}
 Business Process Simulation (BPS) uses executable models to study process
 behaviour in a virtual environment. Organisations can run these models under
 controlled conditions without disturbing live operations
@@ -615,29 +604,29 @@ A simulation model is a simplified representation of a process. Most Business
 Process Simulation models describe the following parts
 \cite{BPSAalst2015,PMRozinat2009}.
 
-\subsubsection*{Control Flow} 
+\paragraph{Control Flow}
 Control flow defines which activities exist, their possible order, and the
 alternative execution paths. It can be represented by Petri nets, BPMN models,
 process trees, or workflow graphs \cite{PMvanDerAalst2016,BPSAalst2015}.
 
-\subsubsection*{Arrival Process} 
+\paragraph{Arrival Process}
 The arrival process defines how new cases enter the system. Examples are
 customer requests, orders, applications, and service tickets. Statistical
 distributions often model the time between arrivals. Arrival volumes affect
 waiting times and resource use \cite{BPSAalst2015,PMRozinat2009}.
 
-\subsubsection*{Resources} 
+\paragraph{Resources}
 Resources execute process activities. They can be employees, machines,
 vehicles, cranes, or other equipment. Resource models describe availability,
 capacity, capabilities, schedules, and allocation rules. Limited resources can
 create competition between cases \cite{BPSAalst2015}.
 
-\subsubsection*{Activity Durations} 
+\paragraph{Activity Durations}
 The timing perspective describes processing times, waiting times, and case
 durations. Probability distributions fitted to historical observations can
 represent these durations \cite{BPSAalst2015,PMRozinat2009}.
 
-\subsubsection*{Decision Logic} 
+\paragraph{Decision Logic}
 Business processes contain decision points with alternative paths. A model's
 decision logic determines which path is selected during simulation. Traditional
 models use static branching probabilities. Data-aware approaches can instead
@@ -650,7 +639,7 @@ parts.
 \end{sloppypar}
 
 
-\subsection{Simulation-Based Decision Support} 
+\subsection{Decision Support and Model Calibration}
 Container terminal demand changes over time, resource capacity is limited, and
 operational processes depend on each other. Managers make decisions about
 equipment, workforce, storage, truck appointments, and capacity while the
@@ -658,15 +647,15 @@ terminal remains active. Tests in the live terminal can affect service quality
 and throughput. Simulation allows alternatives to be assessed before they are
 implemented \cite{Bruzzone2012,Kastner2021,Carboni2025}. Applications include:
 
-\begin{itemize} 
-    \item evaluation of truck appointment policies, 
-    \item resource and workforce planning, 
-    \item capacity planning and investment decisions, 
-    \item yard layout and storage strategies, 
-    \item yard crane allocation policies, 
-    \item congestion analysis and bottleneck identification, 
-    \item equipment scheduling and maintenance planning. 
-\end{itemize} 
+\begin{itemize}
+    \item evaluation of truck appointment policies,
+    \item resource and workforce planning,
+    \item capacity planning and investment decisions,
+    \item yard layout and storage strategies,
+    \item yard crane allocation policies,
+    \item congestion analysis and bottleneck identification,
+    \item equipment scheduling and maintenance planning.
+\end{itemize}
 
 Simulation supports what-if analysis by comparing scenarios under the same
 conditions. Measures can include truck turnaround time, resource use,
@@ -676,7 +665,7 @@ areas \cite{CTSteenken2004,Bruzzone2012,Kastner2021}. Truck-operation studies
 have assessed Truck Appointment Systems (TAS), gate capacity, yard use, and
 equipment allocation \cite{Bett2024,CTprocessMiningTAS2020}.
 
-\subsection{Simulation Model Calibration}
+\paragraph{Simulation Model Calibration}
 Calibration estimates or adjusts simulation parameters to describe the
 observed operating conditions. Typical tasks
 include fitting arrival and duration distributions, estimating resource
@@ -692,7 +681,7 @@ the corresponding verification and validation concepts.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Simulation Discovery and Data-Aware Simulation} 
+\section{Simulation Discovery and Data-Aware Simulation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The previous sections introduced Business Process Simulation and event logs.
@@ -702,7 +691,7 @@ executable process model \cite{PMRozinat2009,Camargo2020,simod2024}. Research
 has moved from basic stochastic parameters towards context-dependent and
 data-aware behaviour.
 
-\subsection{From Simulation Discovery to Data-Driven Simulation} 
+\paragraph{From Simulation Discovery to Data-Driven Simulation}
 
 Rozinat et al. proposed an early approach for deriving simulation models from
 event logs \cite{PMRozinat2009}. It extracts control flow, timing, resource
@@ -726,13 +715,13 @@ relations between process state and simulated behaviour
 \cite{PMRozinat2009,Camargo2020,Camargo2021}.
 
 
-\subsection{Discovery of Simulation behavior} 
+\subsection{Discovery of Simulation Behavior}
 
 Simulation discovery still models the parts introduced in
 Section~\ref{sec:bps_models}, but later methods represent them in different
 ways.
 
-\subsubsection{Control-Flow and Stochastic Routing}
+\paragraph{Control-Flow and Stochastic Routing}
 
 Early simulation-discovery approaches combined a discovered process model with
 stochastic information from observed executions \cite{PMRozinat2009}. The
@@ -747,7 +736,7 @@ implausible paths, while a restrictive model may miss valid process variation
 and precision defines the behavioural range of the simulator
 \cite{VinciDeLeoni2025Repair}.
 
-\subsubsection{Temporal and Resource Behavior}
+\paragraph{Temporal and Resource Behavior}
 
 Early simulation-discovery approaches estimate execution times, waiting
 behaviour, and resource characteristics from event-log distributions
@@ -762,7 +751,7 @@ activity-resource mapping \cite{BPSdifferentiatedResources2022,Vinci2026prosit}.
 Recent approaches model these aspects conditionally instead of using one
 global distribution per activity or resource.
 
-\subsubsection{Arrival behavior}
+\paragraph{Arrival behavior}
 
 Classical simulation-discovery approaches estimate inter-arrival times from
 historical case-start timestamps \cite{PMRozinat2009,Camargo2020}. Later
@@ -936,10 +925,10 @@ categories work complementary, as for example a low event-log distance is eviden
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|L{0.21\textwidth}|L{0.26\textwidth}|L{0.39\textwidth}|}
-\hline
+\begin{tabular}{L{0.21\textwidth}L{0.26\textwidth}L{0.39\textwidth}}
+\toprule
 \textbf{Question} & \textbf{Validity concept} & \textbf{Typical evidence} \\
-\hline
+\midrule
 Is the abstraction reasonable? & Conceptual-model validity &
 Domain review of case boundaries, event semantics, resource meanings
 and physical constraints \\
@@ -956,7 +945,7 @@ Does a scenario predict the true intervention effect? & Predictive
 validity outside the historical regime & Intervention observations,
 controlled field evidence or additional domain-supported sensitivity
 analysis \\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Validation questions and corresponding evidence in an
 event-log-discovered simulation study, based on Sargent's framework
@@ -1021,7 +1010,7 @@ comparing alternative automatically discovered BPS models, showing that
 perspective-specific measures can identify the source of a discrepancy
 \cite{Chapela2025SimQuality}.
 
-\subsubsection{Control-Flow Perspective}
+\paragraph{Control-Flow Perspective}
 
 Control-flow output quality asks whether the simulator generates
 activity sequences and sequence frequencies resembling the observed
@@ -1051,7 +1040,7 @@ These measures answer the CTB-specific structural questions, while the
 Chapela-Campa framework supplies the rationale for keeping structural
 evidence separate from temporal fidelity.
 
-\subsubsection{Temporal Perspective}
+\paragraph{Temporal Perspective}
 
 Identical or similar traces do not imply similar process performance.
 Temporal validation considers whether the simulator reproduces when
@@ -1080,7 +1069,7 @@ skewness or tails. Per-activity results prevent common RMG
 events from concealing weaker fidelity for less frequent yard
 activities.
 
-\subsubsection{Arrival and Congestion Perspectives}
+\paragraph{Arrival and Congestion Perspectives}
 
 Congestion is a system-level consequence of the interaction between
 demand, service requirements and resource availability. It cannot be
@@ -1101,7 +1090,7 @@ These measures do not directly observe a physical queue; they assess
 whether the generated workload and its resulting temporal behaviour
 match what the available event log can identify.
 
-\subsubsection{Wasserstein Distance}
+\paragraph{Wasserstein Distance}
 
 For two one-dimensional distributions $F$ and $G$ with finite first
 moments, the first Wasserstein distance can be written as
@@ -1126,7 +1115,7 @@ stochastic conformance checking over behavioural distributions
 service, inter-arrival and turnaround samples denotes the
 one-dimensional $W_1$ distance between empirical distributions.
 
-\subsubsection{Kolmogorov--Smirnov Statistic}
+\paragraph{Kolmogorov--Smirnov Statistic}
 
 The two-sample Kolmogorov--Smirnov (KS) statistic is the maximum
 vertical difference between the empirical cumulative distribution
@@ -1146,7 +1135,7 @@ can be statistically significant. The magnitude of the statistic and
 the distributional plots must be interpreted separately from
 binary significance decisions.
 
-\subsubsection{Additional Requirements for Data-Aware Discovery}
+\paragraph{Additional Requirements for Data-Aware Discovery}
 
 A data-aware simulator conditions behaviour on case attributes, process
 state or workload information rather than using only global
@@ -1171,7 +1160,7 @@ application because timestamp fields are operational proxies and a resource
 label does not always denote a
 physically interchangeable crane or storage position.
 
-\subsubsection{Stochastic Replication and Confidence Intervals}
+\paragraph{Stochastic Replication and Confidence Intervals}
 
 A BPS model is a stochastic generator. One fixed model can generate
 many possible event logs, whereas the real test log is only one observed
@@ -1207,7 +1196,7 @@ external domain evidence. Chapter~\ref{chp:experiments_and_framework}
 uses this conditional Monte-Carlo interpretation for its ten-seed
 protocol.
 
-\subsection{Trustworthiness and the Boundary of Historical Validation}
+\subsection{Trustworthiness, Limitations, and Research Gap}
 
 Historical fidelity is necessary for a simulator that claims to
 represent an existing process, but it is not sufficient for unrestricted
@@ -1236,7 +1225,7 @@ with repeated stochastic runs and explicit domain constraints. Scenario
 results are interpreted as conditional consequences of the documented
 model assumptions, not as experimentally established causal effects.
 
-\subsection{Research Gap}
+\paragraph{Research Gap}
 
 Container terminals are dynamic logistics systems in which truck, yard,
 storage, and equipment processes interact under limited resource capacities.

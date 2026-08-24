@@ -118,7 +118,7 @@ workarounds provide additional diagnostic evidence around the main pipeline.
 \label{sec:train_test_split}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Rationale}
+\paragraph{Rationale}
 
 A held-out validation set is needed to answer RQ1--RQ3. In simulation
 discovery it is not sufficient to report the fit of parameters on the
@@ -131,7 +131,7 @@ not report validation metrics. This thesis uses a persistent,
 case-level, temporally ordered split that any downstream script can
 consume unchanged.
 
-\subsection{Split Definition}
+\paragraph{Split Definition}
 \label{sec:split_definition}
 
 Let $\mathcal{L}=(c_1,c_2,\dots,c_N)$ be the set of $N=89{,}460$ cases
@@ -161,7 +161,7 @@ exactly.
 \label{sec:process_discovery_methodology}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Expected Process-Discovery}
+\subsection{Expected Process and Initial Discovery}
 
 In a data-aware process-simulation workflow, the control flow is normally
 discovered from the event log before the timing, routing, arrival, and resource
@@ -181,7 +181,7 @@ activities of one truck may not.
 The work started with the standard discovery step. The resulting model was
 then checked against this domain contract before it was passed to ProSiT.
 
-\subsection{Initial Inductive-Miner Discovery}
+\paragraph{Initial Inductive-Miner Discovery}
 
 An Inductive-Miner model was generated from the training log. This was the
 expected control-flow input for ProSiT. The Inductive Miner was selected
@@ -313,7 +313,8 @@ the combined effect of the additional modelling machinery. Because
 the intermediate \textit{rules} result is not retained in that comparison,
 the separate contribution of workload features is not inferred.
 
-\subsection{Configuration \textit{no-rules}}
+\subsection{Compared Configurations}
+\paragraph{Configuration \textit{no-rules}}
 \label{sec:cfg_no_rules}
 
 The \textit{no-rules} configuration uses
@@ -325,7 +326,7 @@ distribution per resource, one categorical distribution over routing
 choices at each Petri-net decision point. This configuration is the
 distribution-based reference point for RQ3.
 
-\subsection{Configuration \textit{rules}}
+\paragraph{Configuration \textit{rules}}
 \label{sec:cfg_rules}
 
 The \textit{rules} configuration uses the ProSiT default
@@ -342,7 +343,7 @@ the trees are the visit-related, demand, utilisation and target-area
 features listed in
 Section~\ref{sec:eventlog_structure}.
 
-\subsection{Configuration \textit{rules$+$workload}}
+\paragraph{Configuration \textit{rules$+$workload}}
 \label{sec:cfg_workload}
 
 The \textit{rules$+$workload} configuration is identical to
@@ -367,10 +368,10 @@ defaults.
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{|Y|c|c|c|}
-\hline
+\begin{tabularx}{\textwidth}{Yccc}
+\toprule
 \textbf{Hyperparameter} & \textbf{no-rules} & \textbf{rules} & \textbf{rules$+$workload} \\
-\hline
+\midrule
 max\_depth\_tree          & 0             & 3             & 3 \\
 min\_samples\_leaf\_cv   & --            & [50, 100, 200] & [50, 100, 200] \\
 use\_workload\_features  & False         & False         & True \\
@@ -378,7 +379,7 @@ enable\_multitasking      & True          & True          & True \\
 multitasking\_thr         & 0.05          & 0.05          & 0.05 \\
 attribute\_mode           & empirical     & empirical     & empirical \\
 random\_state             & 42            & 42            & 42 \\
-\hline
+\bottomrule
 \end{tabularx}
 \caption{ProSiT discovery hyperparameters by configuration.}
 \label{tab:prosit_hyperparams}
@@ -488,7 +489,7 @@ where $s_{m,c}$ is the sample standard deviation across the runs. This keeps
 the comparison identical across configurations and separates the reported
 mean from the simulator's run-to-run variation.
 
-\subsection{Implementation}
+\paragraph{Implementation}
 
 The protocol is implemented in
 \texttt{validation/06\_multi\_seed\_ci.py}. \(N_{\text{seeds}}=10\) is
@@ -515,7 +516,7 @@ variability that a user would observe in production.
 The comparison of a simulated event log against the real held-out log uses complementary distributional and point-statistic measures.
 Each metric is computed once per Monte-Carlo replication so that a confidence interval can be attached to the point estimate.
 
-\subsection{Wasserstein Distance (EMD)}
+\paragraph{Wasserstein Distance (EMD)}
 
 For each yard activity $a$ the service-time EMD is
 \begin{equation}
@@ -552,7 +553,7 @@ All EMDs are reported in minutes. The main view retains durations up to
 24 hours and is accompanied by an uncapped raw view so that an artificial
 simulation tail cannot be hidden.
 
-\subsection{Kolmogorov--Smirnov Statistic}
+\paragraph{Kolmogorov--Smirnov Statistic}
 
 For each distribution pair the two-sample KS statistic is computed by
 \texttt{scipy.stats.ks\_2samp}. Because the CTB test log contains 55,360
@@ -564,7 +565,7 @@ statistic (magnitude of the maximum vertical CDF gap) is reported
 alongside the EMD as the main measure; the $p$-value is retained
 only as a secondary diagnostic.
 
-\subsection{Point-Statistic Errors}
+\paragraph{Point-Statistic Errors}
 
 For each activity and each case-level KPI the mean, median and 90th
 percentile of the simulated and real distributions are compared as
@@ -572,7 +573,7 @@ absolute and relative errors. This complements the distributional
 metrics with operationally interpretable point statistics
 (e.g.\ ``the simulator under-predicts mean turnaround by $X$ minutes'').
 
-\subsection{Implementation}
+\paragraph{Implementation}
 
 The metric definitions are implemented in
 \texttt{validation/02\_validate\_simulation.py} and reused verbatim by
@@ -619,7 +620,7 @@ calendar, process model, duration models, routing, resource mappings,
 resource calendars and case-attribute schema remain unchanged. The
 scenario is independent of the T22 resource-pool reallocation.
 
-\subsection{Final Domain-Constrained RMG Capacity}
+\paragraph{Final Domain-Constrained RMG Capacity}
 
 The freely discovered serialized source assigns maximum concurrency four
 to ten RMG block identifiers and five to twelve, for an aggregate effective
@@ -654,7 +655,7 @@ the interaction
 so that changes in scenario response are not confused with a general
 level shift caused by the cap.
 
-\subsection{Reporting}
+\paragraph{Reporting}
 
 The unified driver \texttt{validation/09\_multi\_seed\_scenarios.py}
 executes baseline and both interventions with ten matched seeds
@@ -681,7 +682,7 @@ scenario logs form the final scenario evidence.
 \label{sec:results_percentile_sens_design}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-As discussed in Section~\ref{sec:abandoned_baseline}, an earlier
+As discussed in Section~\ref{sec:lifecycle_events}, an earlier
 pipeline version reconstructed activity enablement from route-specific
 transition baselines. Although this approach was abandoned in favour of
 ProSiT's internal model-derived enablement, the empirical transition
@@ -712,7 +713,7 @@ silent misbehaviour if not addressed. This section documents them so
 that the experiments can be reproduced deterministically and so that the
 downstream fidelity numbers can be interpreted correctly.
 
-\subsection{Data-Attribute Discovery on NaN Columns}
+\paragraph{Data-Attribute Discovery on NaN Columns}
 
 The default \texttt{attribute\_mode='distribution'} passes each case
 attribute through a per-attribute distribution fitter. In the CTB log,
@@ -729,7 +730,7 @@ correlations, and empirical sampling from the training distribution is
 the appropriate choice given the number of categorical attributes
 present in the CTB log.
 
-\subsection{Simulation in No-Rules Mode}
+\paragraph{Simulation in No-Rules Mode}
 
 In \textit{no-rules} mode ProSiT samples the routing choice via
 \texttt{random.choice(seq)} where \texttt{seq} is a
@@ -744,7 +745,7 @@ simulation call and is restored immediately afterwards. It is applied
 by both \texttt{baseline/07\_run\_prosit\_discovery.py} and
 \texttt{validation/06\_multi\_seed\_ci.py}.
 
-\subsection{Duplicated Columns in the Simulated Log}
+\paragraph{Duplicated Columns in the Simulated Log}
 
 ProSiT 1.0.3 writes case-level attributes into the event-level frame
 returned by \texttt{SimulatorEngine.apply()}. When a case-level
@@ -759,7 +760,7 @@ instead of a \texttt{Series} and fail. The workaround is a single
 start of every KPI-computation function. It is applied both in the
 what-if scripts and in the multi-seed CI driver.
 
-\subsection{Temporal Features Outside the ProSiT Input}
+\paragraph{Temporal Features Outside the ProSiT Input}
 
 The final discovery contract does not pass hour-of-day or day-of-week
 attributes to ProSiT. It keeps the five standard event-log columns and the
@@ -771,7 +772,7 @@ configurations therefore do not condition their timing rules directly on
 calendar features. This is an input-model boundary when interpreting the
 day/night differences reported in Section~\ref{sec:results_arrival_process}.
 
-\subsection{Non-Deterministic Simulation Engine}
+\paragraph{Non-Deterministic Simulation Engine}
 
 \texttt{SimulatorEngine.apply()} does not accept a seed argument. The
 Monte-Carlo protocol of Section~\ref{sec:mc_protocol} seeds
@@ -781,7 +782,7 @@ different logs; two consecutive calls with the same seed produce the
 same log up to floating-point noise. This is the reproducibility
 guarantee assumed throughout Chapter~\ref{chap:results}.
 
-\subsection{Contribution Boundary}
+\paragraph{Contribution Boundary}
 
 The ProSiT engine itself was not modified for these workarounds. The
 CTB pipeline patches its own callers so that ProSiT can be invoked

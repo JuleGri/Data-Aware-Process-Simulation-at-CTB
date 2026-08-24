@@ -1,7 +1,7 @@
 \chapter{Case Study and Data Engineering}
 \label{chp:case_study_and_data}
 
-This chapter describes the operational context and the pipeline that turns raw operational 
+This chapter describes the operational context and the pipeline that turns raw operational
 records into a simulation-ready event log. It covers the data engineering but does not yet fit models, evaluate results, or choose experimental parameters. The resulting event log is the input for Chapters~\ref{chp:experiments_and_framework} and~\ref{chap:results}.
 
 Section~\ref{sec:cs_environment} introduces HHLA Container Terminal
@@ -35,7 +35,7 @@ Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs 
     manually operated HO2 yard area. The terminal gate consists of 16
     lanes, split between incoming and outgoing trucks. The number of
     operated gate lanes varies by day, shift and terminal resource plan.
-   
+
     \subsection{Data Sources}
     \label{sec:cs_data_sources}
 
@@ -47,10 +47,10 @@ Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs 
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{|L{4.4cm}|Y|}
-\hline
+\begin{tabularx}{\textwidth}{L{4.4cm}Y}
+\toprule
 \textbf{Data source} & \textbf{Data provided} \\
-\hline
+\midrule
 ITS schedule & Truck-visit schedules and timestamps for gate entry,
 handling readiness, order completion and gate exit. \\
 Report system & Stage-level execution data, gate-entry records,
@@ -59,7 +59,7 @@ Yard management system & Four-hour snapshots of storage-block capacity,
 occupancy and utilisation. \\
 Container master data & Container size, type, loading status, hazardous and
 reefer indicators, dwell time and inbound/outbound carriers. \\
-\hline
+\bottomrule
 \end{tabularx}
 \caption{Operational data sources used for event-log engineering.}
 \label{tab:ctb_data_sources}
@@ -102,7 +102,7 @@ for discovery and evaluation.}
 
 \subsection{Raw Data Sources and Preparation}
 
-\subsubsection{ITS Schedule Data}
+\paragraph{ITS Schedule Data}
 
     The ITS scheduling system provides the scheduling data for the
 truck operations reconstructed in this thesis. Each record represents
@@ -111,10 +111,10 @@ pipeline are listed in Table~\ref{tab:its_source_attributes}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{|L{5.9cm}|Y|}
-\hline
+\begin{tabularx}{\textwidth}{L{5.9cm}Y}
+\toprule
 \textbf{Attribute} & \textbf{Description} \\
-\hline
+\midrule
 FAHRPLAN\_UID & Unique truck-visit identifier used as the case ID. \\
 LKW\_KENNZEICHEN & Truck licence plate number. \\
 ANLAUFPUNKT\_HALTESTELLE & Exchange-area identifier, such as T20,
@@ -127,7 +127,7 @@ ALP\_ZEITPUNKT\_ERFUELLUNG & Time at which the handling activity was
 completed. \\
 FP\_ZEITPUNKT\_GATEOUT & Time at which the truck exited the
 terminal. \\
-\hline
+\bottomrule
 \end{tabularx}
 \caption{ITS schedule attributes used in the event-log pipeline.}
 \label{tab:its_source_attributes}
@@ -138,7 +138,7 @@ objects using \texttt{pandas} with the format
 \texttt{\%d.\%m.\%Y~\%H:\%M}. Invalid or missing timestamps are flagged
 for removal during the cleaning phase.
 
-\subsubsection{Report System Data}
+\paragraph{Report System Data}
 
 The report system provides complementary stage-level execution data,
 completing the details for gate-entry events, and it links each
@@ -148,10 +148,10 @@ Table~\ref{tab:report_source_attributes}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{|L{5.9cm}|Y|}
-\hline
+\begin{tabularx}{\textwidth}{L{5.9cm}Y}
+\toprule
 \textbf{Attribute} & \textbf{Description} \\
-\hline
+\midrule
 TruckVisitGkey & Truck-visit identifier used for cross-system
 matching. \\
 TruckLicenseNbr & Truck licence plate number. \\
@@ -167,7 +167,7 @@ UnitInboundCarrierId & Inbound carrier identifier, recorded as a
 truck plate, vessel voyage number or train ID. \\
 UnitOutboundCarrierId & Outbound carrier identifier, recorded as a
 truck plate, vessel voyage number or train ID. \\
-\hline
+\bottomrule
 \end{tabularx}
 \caption{Report-system attributes used in the event-log pipeline.}
 \label{tab:report_source_attributes}
@@ -183,7 +183,7 @@ beginning with ``HP'' (\textit{Hochpalette}) are mapped to ``LL''
 The mapping is implemented in
 \texttt{002\_Prep\_area\_mapping\_report.py}.
 
-\subsubsection{Container Master Data}
+\paragraph{Container Master Data}
 
 Container-level attributes are extracted from the container master data
 and linked to events through the matched \texttt{container\_id}.
@@ -192,10 +192,10 @@ derived measures.
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{|L{4.6cm}|Y|}
-\hline
+\begin{tabularx}{\textwidth}{L{4.6cm}Y}
+\toprule
 \textbf{Attribute} & \textbf{Description} \\
-\hline
+\midrule
 Container size & TEU-equivalent size category (20, 40 or 45 feet). \\
 Full/empty status & Binary loading-status indicator (Leer/Voll). \\
 Reefer status & Indicator for refrigerated containers, derived from the ISO
@@ -206,7 +206,7 @@ bulk. \\
 Dwell time & Hours already spent in the terminal for a receive operation. \\
 Container complexity score & Composite measure based on size, loading status,
 reefer and hazardous-goods requirements, container type and dwell time. \\
-\hline
+\bottomrule
 \end{tabularx}
 \caption{Container-master attributes used for context enrichment.}
 \label{tab:container_master_attributes}
@@ -218,7 +218,7 @@ hazardous-goods indicators, reefer requirements and other
 handling-related properties into a single numerical measure. Higher
 values indicate visits expected to require more complex handling.
 
-\subsubsection{Yard State Data}
+\paragraph{Yard State Data}
 
 Yard state data provides time-series information on storage-block
 capacities and utilisation rates. Each record contains
@@ -230,7 +230,7 @@ the data is resampled to a uniform one-minute frequency using linear
 interpolation on the numeric fields (script
 \texttt{004\_Prep\_create\_interpolated\_yard\_state\_for\_s3.py}).
 
-\subsubsection{Truck Demand Data}
+\paragraph{Truck Demand Data}
 
 Truck demand information is derived from the scheduling system by
 aggregating truck arrivals over rolling time windows. For each exchange
@@ -256,7 +256,7 @@ Section~\ref{sec:simulation_discovery_methodology}.
 \subsection{Data Cleaning and Integration}
 \label{sec:data_cleaning}
 
-\subsubsection{Cross-System Identifier Matching}
+\paragraph{Cross-System Identifier Matching}
 
 The scheduling and report systems use different identifiers for truck
 visits. To create a unified event log they are linked through composite
@@ -276,7 +276,7 @@ container ID is inferred from any other transaction associated with the
 same \texttt{TruckVisitGkey}. The integration logic is implemented in
 \texttt{01\_match\_container\_ids\_to\_schedule.py}.
 
-\subsubsection{Invalid Process Instances}
+\paragraph{Invalid Process Instances}
 \label{sec:invalid_process_instances}
 
 The cleaning pipeline removes complete cases rather than individual
@@ -313,7 +313,7 @@ whose total turnaround time exceeds twelve hours
 operationally implausible. The filters identified 22 extreme gate-out
 cases and 22 twelve-hour outliers.
 
-\subsubsection{Process Completeness Filters}
+\paragraph{Process Completeness Filters}
 
 \paragraph{Container identification coverage.} Overall, 111,646 of
 113,136 operational records could be assigned a valid
@@ -347,7 +347,7 @@ Unlike the previous filters, this is an event-level cleanup rather than
 a case-level exclusion; its purpose is to remove residual events
 that cannot be interpreted within the final process model.
 
-\subsection{Case Definition}
+\subsection{Case and Activity Definition}
 \label{sec:case_definition}
 
 A \textit{case} in the event log corresponds to a single truck visit,
@@ -367,7 +367,7 @@ other yard areas (VC or LL) that involve exactly one RMG block are
 retained. The filtering logic is implemented in
 \texttt{filter\_one\_rmg\_only.py}.
 
-\subsection{Activity Construction}
+\paragraph{Activity Construction}
 \label{sec:activity_construction}
 
 Activities are defined by combining an \textit{operation type}
@@ -377,10 +377,10 @@ labels.
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{|L{4.2cm}|Y|}
-\hline
+\begin{tabularx}{\textwidth}{L{4.2cm}Y}
+\toprule
 \textbf{Activity} & \textbf{Definition} \\
-\hline
+\midrule
 Gate In       & Truck registration at entry gate \\
 RMG\_receive  & RMG unloads container from truck (import) \\
 RMG\_delivery & RMG loads container onto truck (export) \\
@@ -392,7 +392,7 @@ HO2\_receive  & Manual area: unload \\
 HO2\_delivery & Manual area: load \\
 HO2\_mixed    & Manual area: unload and load \\
 Gate Out      & Truck departure \\
-\hline
+\bottomrule
 \end{tabularx}
 \caption{Activity labels used in the final event log.}
 \label{tab:activities}
@@ -410,15 +410,15 @@ Table~\ref{tab:observed_lifecycle_attributes}.
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{|L{4.6cm}|Y|}
-\hline
+\begin{tabularx}{\textwidth}{L{4.6cm}Y}
+\toprule
 \textbf{Attribute} & \textbf{Description} \\
-\hline
+\midrule
 start:timestamp & Observed or reconstructed time at which execution
 of the activity began. \\
 time:timestamp & Observed or reconstructed time at which execution
 of the activity finished. \\
-\hline
+\bottomrule
 \end{tabularx}
 \caption{Observed lifecycle timestamp attributes in the final event log.}
 \label{tab:observed_lifecycle_attributes}
@@ -443,24 +443,24 @@ in the discovered Petri net, then computes a model-derived pre-service
 delay relative to both the enablement time and the resource's
 availability schedule.
 
-\subsubsection{Timestamp Mapping by Activity Type}
+\paragraph{Timestamp Mapping by Activity Type}
 
 Table~\ref{tab:activity_timestamp_mapping} shows how the lifecycle timestamps
 are mapped for each activity type.
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{|L{2.2cm}|Y|Y|}
-\hline
+\begin{tabularx}{\textwidth}{L{2.2cm}YY}
+\toprule
 \textbf{Activity type} & \textbf{Start timestamp} &
 \textbf{Complete timestamp} \\
-\hline
+\midrule
 Gate In & FP\_ZEITPUNKT\_ERSTELLUNG & Same value as the start
 timestamp. \\
 Yard activity & ALP\_ZEITPUNKT\_BEREITMELDUNG &
 ALP\_ZEITPUNKT\_ERFUELLUNG \\
 Gate Out & FP\_ZEITPUNKT\_GATEOUT & FP\_ZEITPUNKT\_GATEOUT \\
-\hline
+\bottomrule
 \end{tabularx}
 \caption{Lifecycle timestamp mapping by activity type.}
 \label{tab:activity_timestamp_mapping}
@@ -470,7 +470,7 @@ The OCR gate timestamp (\texttt{StageStartTime}) from the report system is
 retained in the auxiliary column \texttt{ocr\_timestamp} for diagnostic
 purposes. It is not mapped to activity enablement.
 
-\subsubsection{Model-Derived Pre-Service Delay}
+\paragraph{Model-Derived Pre-Service Delay}
 
 Because activity enablement is derived from the process model, the
 resulting quantity
@@ -491,7 +491,7 @@ business-process simulation semantics to physical terminal operations
 and is a methodological limit of this thesis
 (discussed further in Section~\ref{sec:limitations}).
 
-\subsubsection{Methodological Note: The Abandoned Transition-Baseline Approach}
+\paragraph{Methodological Note: The Abandoned Transition-Baseline Approach}
 \label{sec:abandoned_baseline}
 
 An earlier version of the event-log pipeline estimated lower-tail
@@ -526,7 +526,7 @@ contextual attributes describing the operational state at the time of
 process execution. These attributes are organised into five
 categories.
 
-\subsubsection{Information Available at Truck Entry}
+\paragraph{Information Available at Truck Entry}
 \label{sec:entry_known_attributes}
 
 The scheduling record contains the complete planned visit manifest before
@@ -551,7 +551,7 @@ visit order and available at entry, not the later activity-completion
 timestamp. This distinction defines the deployment contract for all
 entry-known case attributes.
 
-\subsubsection{Container Features}
+\paragraph{Container Features}
 
 Container-related context is aggregated to case level so that visit
 properties can serve as case-level attributes in ProSiT (script
@@ -564,7 +564,7 @@ while \texttt{container\_complexity\_mean} and
 \texttt{container\_complexity\_sum} describe the average and cumulative
 handling complexity of the visit.
 
-\subsubsection{Yard Features}
+\paragraph{Yard Features}
 
 Yard state features capture the storage capacity and utilisation status
 of different terminal areas at truck arrival (Gate In event). These
@@ -577,7 +577,7 @@ the assigned RMG block.
 
 These features are added in \texttt{06\_add\_utils\_to\_eventlog.py}.
 
-\subsubsection{Demand Features}
+\paragraph{Demand Features}
 
 Demand features quantify operational load pressure at different
 terminal areas over a rolling 60-minute window (scripts
@@ -589,7 +589,7 @@ preceding hour. The \texttt{rmg\_demand}, \texttt{vc\_demand} and
 For single-block visits, \texttt{target\_demand} records the demand for the
 assigned RMG block.
 
-\subsubsection{Target Block Features}
+\paragraph{Target Block Features}
 
 For single-block truck visits, the assigned target RMG block is required for
 the context model. Beyond the target-specific utilisation and demand,
@@ -605,11 +605,11 @@ labels before the RMG activities are genericised and are then carried as
 case attributes (scripts
 \texttt{07\_convert\_to\_RMG\_filter\_LL+HO2\_only.py} and
 \texttt{08\_add\_all\_target\_features.py}). Their information time is
-Gate In as specified in Section~\ref{sec:entry_known_attributes}; the
+Gate In as specified above under Information Available at Truck Entry; the
 later \texttt{org:resource} assignment is not used as an execution outcome
 to be predicted.
 
-\subsection{Final Event Log Structure}
+\subsection{Final Event Log and Characteristics}
 \label{sec:eventlog_structure}
 
 The final event log combines process-execution data, lifecycle
@@ -678,7 +678,7 @@ current ProSiT feature-discovery approach, which mainly utilises
 case-level context information rather than event-level dynamic state
 \cite{Vinci2026prosit}.
 
-\subsection{Event Log Characteristics}
+\paragraph{Event Log Characteristics}
 \label{sec:eventlog_characteristics}
 
 After the full preprocessing pipeline the final event log contains
@@ -688,51 +688,56 @@ Table~\ref{tab:eventlog_stats} summarises the overall event log.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|l|r|}
-\hline
-\textbf{Activity} & \textbf{Frequency} \\
-\hline
-Gate In       & 89,460 \\
-Gate Out      & 89,460 \\
-RMG\_receive  & 39,965 \\
-RMG\_delivery & 22,504 \\
-LL\_delivery  & 13,230 \\
-HO2\_delivery & 7,224  \\
-HO2\_receive  & 5,464  \\
-RMG\_mixed    & 4,939  \\
-LL\_receive   & 2,073  \\
-HO2\_mixed    & 1,025  \\
-LL\_mixed     & 64     \\
-\hline
-\end{tabular}
-\caption{Activity distribution in the final event log.}
-\label{tab:activity_distribution}
+\begin{subtable}[t]{.46\textwidth}
+  \centering
+  \begin{tabular}{@{}lr@{}}
+  \toprule
+  \textbf{Activity} & \textbf{Frequency} \\
+  \midrule
+  Gate In       & 89,460 \\
+  Gate Out      & 89,460 \\
+  RMG\_receive  & 39,965 \\
+  RMG\_delivery & 22,504 \\
+  LL\_delivery  & 13,230 \\
+  HO2\_delivery & 7,224  \\
+  HO2\_receive  & 5,464  \\
+  RMG\_mixed    & 4,939  \\
+  LL\_receive   & 2,073  \\
+  HO2\_mixed    & 1,025  \\
+  LL\_mixed     & 64     \\
+  \bottomrule
+  \end{tabular}
+  \caption{Activity distribution.}
+  \label{tab:activity_distribution}
+\end{subtable}
+\hfill
+\begin{subtable}[t]{.50\textwidth}
+  \centering
+  \begin{tabular}{@{}lr@{}}
+  \toprule
+  \textbf{Statistic} & \textbf{Value} \\
+  \midrule
+  Cases                  & 89,460 \\
+  Events                 & 275,408 \\
+  Distinct activities    & 11 \\
+  Observation start      & 2026-03-02 05:27 \\
+  Observation end        & 2026-04-30 11:54 \\
+  Distinct RMG resources & 22 (T06--T27) \\
+  Additional pools       & LL, HO2, Gate In, Gate Out \\
+  \bottomrule
+  \end{tabular}
+  \caption{Summary statistics.}
+  \label{tab:eventlog_stats}
+\end{subtable}
+\caption{Composition and scope of the final event log.}
+\label{tab:eventlog_overview}
 \end{table}
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{|l|r|}
-\hline
-\textbf{Statistic} & \textbf{Value} \\
-\hline
-Cases                  & 89,460 \\
-Events                 & 275,408 \\
-Distinct activities    & 11 \\
-Observation start      & 2026-03-02 05:27 \\
-Observation end        & 2026-04-30 11:54 \\
-Distinct RMG resources & 22 (T06--T27) \\
-Additional pools       & LL, HO2, Gate In, Gate Out \\
-\hline
-\end{tabular}
-\caption{Final event log summary.}
-\label{tab:eventlog_stats}
-\end{table}
+\FloatBarrier
 
 Every case contains a \texttt{Gate In} event, one or more operational
 yard activities and a final \texttt{Gate Out} event. Operational
 activities can occur at an RMG block, the empty area or the manual area, depending on the operational requirements of the visit.
 
-[INSERT MOST COMMON VARIANTS?]
 
 The generated event log is exported as the full CSV
 \texttt{s6\_eventlog\_target\_rank\_features.csv}. The frozen temporal partitions are exported as \texttt{s6\_train.csv},
