@@ -311,60 +311,95 @@ Complete timestamp & Time at which the execution of the activity ends. \\
 The duration between these two timestamps is the \textit{service time} (or execution time) of the activity. A third temporal concept, \textit{enablement}, describes the moment at which an activity becomes executable according to the process-model state. In process-mining-based simulation approaches, enablement is typically not an observed input-log attribute but is derived by replaying the event log against the discovered process model \cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The interval between model-derived enablement and the observed start timestamp is referred to as \textit{waiting time} in the ProSiT framework \cite{Vinci2026prosit} and corresponds to a pre-service delay that may include resource contention, queueing effects, and — in domains with spatial separation between activities — physical movement time.
 
 \paragraph{Attributes}
-Events may contain attributes that describe the process context. Examples from
-container terminal operations are shown in
-Table~\ref{tab:background_context_attributes}.
+An event record combines the information needed to identify, order and
+interpret an observed process step. Table~\ref{tab:background_context_attributes}
+organises this information into four layers. The case identifier, activity and
+timestamp form the core event-log structure; lifecycle, resource and operational
+attributes provide the additional detail needed for performance analysis and
+data-aware simulation.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{L{0.29\textwidth}L{0.60\textwidth}}
+\begin{tabularx}{\textwidth}{@{}L{2.8cm}L{4.8cm}Y@{}}
 \toprule
-\textbf{Attribute} & \textbf{Description} \\
+\textbf{Information layer} & \textbf{Representative fields} & \textbf{Purpose} \\
 \midrule
-Truck ID & Identifier of the truck involved in the recorded operation. \\
-Container number & Identifier of the container handled during the visit. \\
-Shipping line & Shipping company associated with the container. \\
-Yard block & Storage block in which the container operation takes place. \\
-Container type & Operational or physical category of the container. \\
-Equipment identifier & Identifier of the equipment used for the operation. \\
-Trucking company & Company responsible for the truck visit. \\
+Case and activity & Case identifier; activity & Associates the event with one process instance and states what occurred. \\
+Temporal & Ordering timestamp; start and completion timestamps & Orders events and supports service-time and throughput analysis. \\
+Execution & Resource; equipment identifier & Identifies where or by which operational resource the activity was executed. \\
+Operational context & Truck ID; container number and type; shipping line; yard block; trucking company & Describes the business and terminal state in which the event occurred. \\
 \bottomrule
-\end{tabular}
-\caption{Examples of contextual event attributes in container terminal operations.}
+\end{tabularx}
+\caption{Information layers of an event record, with container-terminal examples.}
 \label{tab:background_context_attributes}
 \end{table}
 
 Data-aware Process Mining and simulation methods can use these attributes as
-model inputs.
+model inputs, provided that their values are available at the simulated
+decision point.
+
 \paragraph{Trace}
-A trace is the chronologically ordered sequence of all events belonging to a specific case. For a truck visit, a trace may appear as follows:
+A trace is the ordered sequence of events associated with one case. Classic
+trace-variant visualisations use chevrons to make this ordering visible
+\cite{Schuster2022TraceVariants}. Figure~\ref{fig:background_trace_example}
+applies this notation to one illustrative truck visit; the chevrons represent
+events, while their left-to-right arrangement represents temporal order.
 
-\begin{quote} OCR Gate Entry $\rightarrow$ Gate In $\rightarrow$ Yard Arrival $\rightarrow$ Container Delivery $\rightarrow$ Container Pick-Up $\rightarrow$ Gate Out
-\end{quote}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  traceevent/.style={
+    single arrow,
+    single arrow head extend=1mm,
+    draw=SchoolColor!75!black,
+    fill=SchoolColor!6,
+    minimum width=21.5mm,
+    minimum height=10mm,
+    text width=14.5mm,
+    align=center,
+    font=\scriptsize\sffamily,
+    inner xsep=2.2mm
+  },
+  boundaryevent/.style={traceevent,fill=SchoolColor!14},
+  eventnumber/.style={font=\tiny\sffamily,text=midgrey}
+]
+\node[boundaryevent] (event1) {OCR gate\\entry};
+\node[traceevent,right=.5mm of event1] (event2) {Gate In};
+\node[traceevent,right=.5mm of event2] (event3) {Yard\\arrival};
+\node[traceevent,right=.5mm of event3] (event4) {Container\\delivery};
+\node[traceevent,right=.5mm of event4] (event5) {Container\\pick-up};
+\node[boundaryevent,right=.5mm of event5] (event6) {Gate Out};
 
-A trace describes the execution path of one process instance.
+\node[font=\footnotesize\sffamily\bfseries,anchor=south west]
+  at ([yshift=3mm]event1.north west) {Case T001};
+\node[eventnumber,below=1.4mm of event1] {$e_1$};
+\node[eventnumber,below=1.4mm of event2] {$e_2$};
+\node[eventnumber,below=1.4mm of event3] {$e_3$};
+\node[eventnumber,below=1.4mm of event4] {$e_4$};
+\node[eventnumber,below=1.4mm of event5] {$e_5$};
+\node[eventnumber,below=1.4mm of event6] {$e_6$};
+\end{tikzpicture}
+\caption{Illustrative trace of one truck-visit case. Each chevron denotes an
+event; the shared case identifier and temporal order connect the events into
+one trace.}
+\label{fig:background_trace_example}
+\end{figure}
+
+A trace therefore describes the observed execution path of one process
+instance, rather than the complete set of paths allowed by a process model.
 
 \subsection{Event Logs}
-An event log groups events into cases and orders them by timestamp. Each event
-requires at least three attributes:
-\begin{itemize}
-\item Case Identifier,
-\item Activity,
-\item Timestamp (at least one temporal ordering attribute).
-\end{itemize}
+An event log is a collection of such traces. In tabular form, each row
+represents one event, the case identifier links events that belong to the same
+process instance, and timestamps determine their order. Table~\ref{tab:eventlogexample}
+shows this storage-oriented view for two simplified truck visits, complementing
+the within-case view in Figure~\ref{fig:background_trace_example}.
 
-For simulation-oriented process mining, richer event information is required:
-\begin{itemize}
-\item Start Timestamp,
-\item Complete Timestamp,
-\item Resource,
-\item Contextual attributes (e.g.\ container type, yard utilisation).
-\end{itemize}
-
-The CTB input log used in this thesis provides start and completion timestamps required for execution-time modelling, while activity enablement is reconstructed during process-model alignment by the simulation-discovery framework (Section~\ref{sec:simulation_discovery_methodology}).
-
-Other attributes can add operational context. Table~\ref{tab:eventlogexample}
-shows a simplified event log.
+The CTB input log provides the start and completion timestamps required for
+execution-time modelling, together with resource and operational context.
+Activity enablement is not observed directly; it is reconstructed during
+process-model alignment by the simulation-discovery framework
+(Section~\ref{sec:simulation_discovery_methodology}).
 
 \begin{table}[htbp]
 \centering
