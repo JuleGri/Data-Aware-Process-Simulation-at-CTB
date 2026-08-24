@@ -296,7 +296,7 @@
 	\vfill
 	\begin{minipage}{.94\textwidth}
 	  \centering
-	  {\color{SchoolColor}\fontsize{19}{24}\selectfont\bfseries\thetitle\par}
+	  {\color{SchoolColor}\fontsize{17.5}{22}\selectfont\bfseries\thetitle\par}
 	\end{minipage}
 	\vfill
 
