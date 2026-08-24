@@ -181,15 +181,15 @@ Out never occurs before the last yard activity. No accepted duration exceeds
 \hline
 \textbf{Yard activity} & \textbf{Mean EMD (min)} & \textbf{95\,\% MC CI} \\
 \hline
-\texttt{HO2\_delivery} & 2.119 & [2.013, 2.225] \\
-\texttt{HO2\_mixed}    & 4.255 & [3.853, 4.656] \\
-\texttt{HO2\_receive}  & 2.024 & [1.768, 2.280] \\
-\texttt{LL\_delivery}  & 1.353 & [1.286, 1.420] \\
-\texttt{LL\_mixed}     & 3.857 & [3.019, 4.695] \\
-\texttt{LL\_receive}   & 4.203 & [4.000, 4.406] \\
-\texttt{RMG\_delivery} & 2.519 & [2.426, 2.612] \\
-\texttt{RMG\_mixed}    & 4.200 & [3.971, 4.429] \\
-\texttt{RMG\_receive}  & 2.463 & [2.374, 2.551] \\
+HO2\_delivery & 2.119 & [2.013, 2.225] \\
+HO2\_mixed    & 4.255 & [3.853, 4.656] \\
+HO2\_receive  & 2.024 & [1.768, 2.280] \\
+LL\_delivery  & 1.353 & [1.286, 1.420] \\
+LL\_mixed     & 3.857 & [3.019, 4.695] \\
+LL\_receive   & 4.203 & [4.000, 4.406] \\
+RMG\_delivery & 2.519 & [2.426, 2.612] \\
+RMG\_mixed    & 4.200 & [3.971, 4.429] \\
+RMG\_receive  & 2.463 & [2.374, 2.551] \\
 \hline
 \end{tabular}
 \caption{Held-out service-time EMD by yard activity for the final
@@ -393,11 +393,11 @@ diagnostic. It is not the simulator configuration.
 \textbf{Family} & \textbf{Identifiers} & \textbf{Eligible activities} &
 \textbf{Maximum concurrency} \\
 \hline
-Gate In  & \texttt{Res.GateIn}  & Gate In & 1 \\
-Gate Out & \texttt{Res.GateOut} & Gate Out & 1 \\
-HO2      & \texttt{HO2} & three HO2 activities & 15 \\
-LL       & \texttt{LL}  & three LL activities  & 22 \\
-RMG      & \texttt{T06}--\texttt{T27} (22 blocks) & three RMG activities & 4--5$^{a}$ \\
+Gate In  & Res.GateIn  & Gate In & 1 \\
+Gate Out & Res.GateOut & Gate Out & 1 \\
+HO2      & HO2 & three HO2 activities & 15 \\
+LL       & LL  & three LL activities  & 22 \\
+RMG      & T06--T27 (22 blocks) & three RMG activities & 4--5$^{a}$ \\
 \hline
 \end{tabular}
 \caption{Resource representation in the freely discovered calibrated
@@ -522,7 +522,7 @@ historical paths.
 \textbf{Analysis} & \textbf{KPI} & \textbf{Reference} &
 \textbf{Outcome} & \textbf{Change} & \textbf{95\,\% CI} \\
 \hline
-\multicolumn{6}{|l|}{\textit{Scenario A: T22 resource-pool reallocation (scenario minus matched baseline)}} \\
+\multicolumn{6}{|l|}{\textbf{Scenario A: T22 resource-pool reallocation (scenario minus matched baseline)}} \\
 \hline
 T22 pool & Mean turnaround (min) & 30.443 & 30.456 & $+0.012$ & [$-0.102$, $+0.127$] \\
 T22 pool & P90 turnaround (min) & 51.700 & 51.900 & $+0.200$ & [$-0.364$, $+0.764$] \\
@@ -534,7 +534,7 @@ T22 pool & RMG delivery service (min) & 8.794 & 8.829 & $+0.035$ & [$-0.078$, $+
 T22 pool & RMG delivery pre-service (min) & 6.487 & 6.451 & $-0.036$ & [$-0.087$, $+0.015$] \\
 T22 pool & Mean T22 assignments per run & 604.8 & 0.0 & $-604.8$ & exact \\
 \hline
-\multicolumn{6}{|l|}{\textit{Scenario B: 20\,\% higher working-time arrival intensity (scenario minus matched baseline)}} \\
+\multicolumn{6}{|l|}{\textbf{Scenario B: 20\,\% higher working-time arrival intensity (scenario minus matched baseline)}} \\
 \hline
 Demand $+20\,\%$ & Model mean working inter-arrival (min) & 0.6830 & 0.5692 & $-0.1138$ & exact \\
 Demand $+20\,\%$ & Model arrivals per working hour & 87.842 & 105.411 & $+20.000\,\%$ & exact \\

@@ -1,13 +1,15 @@
 \chapter{Experiments and Evaluation Framework}
 \label{chp:experiments_and_framework}
 
-This chapter defines the evaluation. It links each experimental choice to a
-research question and an artefact in the repository.
+This chapter describes how the simulation models are discovered, executed and
+evaluated. The experimental design starts from the event log constructed in
+Chapter~\ref{chp:case_study_and_data} and ends with the historical validation
+and operational scenario runs reported in Chapter~\ref{chap:results}.
 
-Section~\ref{sec:research_questions_framing} operationalises the research
-objective and the four research questions that organise the empirical
-evaluation. Section~\ref{sec:train_test_split} defines the held-out
-train/test split that separates discovery from evaluation.
+Section~\ref{sec:experiment_goals} defines the goals of the experiments.
+Section~\ref{sec:solution_architecture} describes the solution architecture
+and connects its processing blocks. Section~\ref{sec:train_test_split} defines
+the held-out train/test split that separates discovery from evaluation.
 Section~\ref{sec:process_discovery_methodology} describes the
 initial control-flow discovery, the domain check, the prefix-trie replacement,
 and its held-out validation. Section~\ref{sec:simulation_discovery_methodology} defines
@@ -24,94 +26,92 @@ transition-baseline sensitivity study.
 Section~\ref{sec:prosit_workarounds} documents the ProSiT workarounds required
 for the CTB event log.
 
-Figure~\ref{fig:research_design} shows the experimental pipeline. Each stage is
-implemented by a script in the repository, and the caption links it to the
-corresponding section.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Goals of the Experiments}
+\label{sec:experiment_goals}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The experiments assess whether a data-aware process simulation model can be
+constructed from historical CTB truck-operation data and used as a credible
+representation of the observed process. The aim is not to optimise the
+terminal or to show that a more complex model is automatically better. The
+aim is to test what the discovered model reproduces, where the discovery
+workflow requires domain intervention, and what can be learned from its
+responses to controlled operational changes.
+
+The first goal is to construct an executable simulation model from the event
+log while preserving the physical sequence of a truck visit. The expected
+workflow starts with automatic process discovery. Its output is checked not
+only through process-mining quality measures but also against the case
+contract of one Gate In, sequential yard handling, and one final Gate Out. If
+the discovered structure violates this contract, the experiment must make the
+required correction explicit instead of treating a formally valid model as an
+operationally valid simulation.
+
+The second goal is to measure how well the resulting simulation reproduces an
+unseen period of terminal operation. This includes the activity sequence,
+service times, truck turnaround times, and the arrival process. Three ProSiT
+configurations are compared to test whether additional routing and workload
+context improves held-out fidelity. This is tested directly. More context is
+treated as a modelling choice, not as an expected improvement.
+
+The third goal is to examine the model as a white-box tool for operational
+what-if analysis. The selected model is exposed to a resource-pool change at
+T22 and to a higher truck-arrival rate. These interventions test whether the
+specified input changes reach the simulation and whether the resulting KPI
+changes are interpretable within the model boundaries. They do not establish
+that the same effects would occur in the real terminal.
+
+Across these goals, robustness is assessed through a temporal hold-out,
+repeated simulation runs, model-quality diagnostics, and sensitivity checks.
+Together, these experiments provide the evidence required to answer the
+research questions introduced in Chapter~\ref{chp:introduction}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Solution Architecture}
+\label{sec:solution_architecture}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The solution architecture is organised as a sequence of persistent processing
+blocks. Each block produces an artefact that is used by the next block. This
+makes the split, model discovery, simulation, and evaluation reproducible and
+prevents information from the test period from entering model discovery.
+Figure~\ref{fig:research_design} gives an overview of the complete pipeline.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/schemas/experimental_pipeline.png}
-\caption{Experimental pipeline. \emph{Data engineering} produces
-\texttt{s6\_eventlog\_target\_rank\_features.csv} (Chapter~\ref{chp:case_study_and_data}).
-The \emph{split} of Section~\ref{sec:train_test_split} separates the
-log into training and held-out testing partitions. \emph{Process
-discovery} (Section~\ref{sec:process_discovery_methodology}) first yields an
-Inductive-Miner abstraction. The domain check then leads to the prefix-trie
-contract used as the ProSiT skeleton. Three
-\emph{simulation-parameter discovery} configurations
-(Section~\ref{sec:simulation_discovery_methodology}) are compared;
-each is evaluated against the held-out log through the
-\emph{Monte-Carlo protocol} of Section~\ref{sec:mc_protocol}. Two
-\emph{what-if} experiments (Section~\ref{sec:what_if_design}) exercise
-the adopted-default configuration under operational disruption.}
+\includegraphics[width=\textwidth]{figures/schemas/experimental_pipeline_bw.png}
+\caption{Solution architecture of the experimental pipeline.}
 \label{fig:research_design}
 \end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Research Objective, Research Questions and Experimental Framing}
-\label{sec:research_questions_framing}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The input is the simulation-ready event log from
+Chapter~\ref{chp:case_study_and_data}. It is divided chronologically into a
+training partition and an unseen test partition. Only the training data are
+used to discover the control flow and the ProSiT simulation parameters. The
+initial Inductive-Miner model is inspected against the physical truck-visit
+contract. Because this model permits parallel execution within one case, it
+is replaced by a prefix-trie Petri net that preserves the activity order of
+the observed training variants. This net becomes the common control-flow
+skeleton for the simulation configurations.
 
-Chapter~\ref{chp:introduction} defined the research objective as
-evaluating the fidelity, structural applicability, and limitations of
-automatically discovered data-aware process simulation for decision
-support in CTB truck operations. The evaluative case study is organised around
-the research questions. It does not assume that more data awareness improves
-simulation quality. Instead, it compares modelling choices on unseen CTB data
-and examines the resulting model under controlled interventions.
+ProSiT then discovers arrival, timing, routing, and resource parameters from
+the training partition. The three configurations differ in the amount of
+context made available to their decision models. Each discovered parameter
+bundle is stored separately and simulated over the same time window and case
+volume as the test partition. Repeated runs with different seeds produce the
+simulation logs used for the fidelity comparison and confidence intervals.
 
-\subsection{Operational Research Questions}
-\label{sec:refined_rq}
+The evaluation block compares the simulated logs with the held-out event log
+from several perspectives. It checks control-flow coverage, timing
+distributions, point statistics, arrival behaviour, and resource assumptions.
+After this historical evaluation, one transparent parameter bundle is used for
+the two what-if experiments. The scenario runner changes only the defined
+input parameters and compares each intervention with a matched-seed baseline.
+The transition-duration sensitivity study and the documented ProSiT
+workarounds provide additional diagnostic evidence around the main pipeline.
 
-\begin{description}
-\item[RQ1 (Fidelity).] To what extent can a ProSiT simulation model
-      discovered from historical CTB truck-operation data reproduce the
-      observed behaviour of an unseen temporal hold-out?
-\item[RQ2 (Structural applicability).] To what extent can the discovered
-      process structure represent held-out CTB truck-handling behaviour
-      while respecting the physical sequential constraints of a truck visit?
-\item[RQ3 (Contextual expressiveness).] How does increasing the contextual
-      expressiveness of the simulation model affect held-out simulation
-      fidelity in the CTB truck process?
-\item[RQ4 (What-if decision support).] How does the discovered simulation
-      model respond to transparent operational interventions, and what do
-      these responses reveal about its suitability and limitations for
-      what-if decision support?
-\end{description}
-
-\subsection{Operationalisation of the Research Objective}
-
-Table~\ref{tab:rq_operationalisation} maps each question to the evidence
-used to answer it. The arrival-rate benchmark is treated as a modelling
-diagnosis within the fidelity analysis. Exact changes to scenario inputs,
-such as removing T22 assignments or increasing the arrival-intensity
-parameter, are verification checks; the resulting KPI responses provide
-the evidence for RQ4.
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{|L{2.2cm}|L{6.1cm}|L{3.8cm}|}
-\hline
-\textbf{Question} & \textbf{Empirical evidence} & \textbf{Evaluation focus} \\
-\hline
-RQ1: Fidelity & Service-time, turnaround and inter-arrival EMD and KS;
-mean, median and P90 errors; ten-seed confidence intervals & Reproduction
-of unseen operational behaviour and remaining bias \\
-RQ2: Structural applicability & Train/test fitness, precision,
-generalisation and simplicity; explicit sequential case-contract audit &
-Recurrence of the memorised trace language and physically valid truck-visit
-semantics \\
-RQ3: Contextual expressiveness & Held-out configuration screening,
-per-activity explanatory power and cross-seed variation & Effect of
-additional context on fidelity and robustness \\
-RQ4: What-if decision support & Matched-seed T22 and demand interventions,
-input verification checks and KPI shifts & Scenario response and limits
-created by the simulation abstraction \\
-\hline
-\end{tabular}
-\caption{Operationalisation of the research questions.}
-\label{tab:rq_operationalisation}
-\end{table}
+\FloatBarrier
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Held-Out Train/Test Split}
@@ -338,8 +338,8 @@ selects the actual leaf size per model, and models that fail to beat
 the marginal distribution on held-out CRPS collapse to the pooled
 baseline (this is a ProSiT internal safeguard against overfitting to
 noise \cite{Vinci2026prosit}). Case-level attributes made available to
-the trees are the container, demand, utilisation, target-area and
-temporal features listed in
+the trees are the visit-related, demand, utilisation and target-area
+features listed in
 Section~\ref{sec:eventlog_structure}.
 
 \subsection{Configuration \textit{rules$+$workload}}
@@ -372,13 +372,13 @@ defaults.
 \hline
 \textbf{Hyperparameter} & \textbf{no-rules} & \textbf{rules} & \textbf{rules$+$workload} \\
 \hline
-\texttt{max\_depth\_tree}          & 0             & 3             & 3 \\
-\texttt{min\_samples\_leaf\_cv}    & --            & [50, 100, 200] & [50, 100, 200] \\
-\texttt{use\_workload\_features}   & False         & False         & True \\
-\texttt{enable\_multitasking}      & True          & True          & True \\
-\texttt{multitasking\_thr}         & 0.05          & 0.05          & 0.05 \\
-\texttt{attribute\_mode}           & \texttt{empirical} & \texttt{empirical} & \texttt{empirical} \\
-\texttt{random\_state}             & 42            & 42            & 42 \\
+max\_depth\_tree          & 0             & 3             & 3 \\
+min\_samples\_leaf\_cv   & --            & [50, 100, 200] & [50, 100, 200] \\
+use\_workload\_features  & False         & False         & True \\
+enable\_multitasking      & True          & True          & True \\
+multitasking\_thr         & 0.05          & 0.05          & 0.05 \\
+attribute\_mode           & empirical     & empirical     & empirical \\
+random\_state             & 42            & 42            & 42 \\
 \hline
 \end{tabular}
 \caption{ProSiT discovery hyperparameters by configuration.}
@@ -466,30 +466,28 @@ interval.
 
 \subsection{Replication Design}
 
-For each ProSiT configuration
-$\text{cfg}\in\{\textit{no-rules},\textit{rules},\textit{rules$+$workload}\}$
-the following procedure is executed:
+The same replication design is used for the three ProSiT configurations
+$c\in\mathcal{C}=\{\textit{no-rules},\textit{rules},
+\textit{rules$+$workload}\}$. For each configuration, the stored parameter
+bundle is loaded and a fresh simulation engine is created. Ten runs are then
+generated with the seeds $s_i=42+i$ for $i=0,\ldots,9$. Each run starts at the test cutoff
+$t_{\mathrm{start}}=\text{2026-04-20 18:17:00}$ and generates
+$n_{\mathrm{traces}}=17{,}892$ cases. The start time and case count are read
+from the split manifest so that every simulated log represents the same window
+as the held-out data.
 
-\begin{enumerate}
-    \item Load the corresponding \texttt{SimulatorParameters} bundle
-          from disk.
-    \item Instantiate a fresh \texttt{SimulatorEngine}.
-    \item For $i=0,\dots,N_{\text{seeds}}-1$:
-          \begin{enumerate}
-              \item Seed Python's \texttt{random} and
-                    \texttt{numpy.random} with $\text{base}+i$.
-              \item Simulate $n_{\text{traces}}=17{,}892$ cases starting
-                    at
-                    $t_{\text{start}}=\text{2026-04-20 18:17:00}$, i.e.\
-                    the test-window cutoff read from
-                    \texttt{split\_manifest.json}.
-              \item Compute the fidelity metrics of
-                    Section~\ref{sec:evaluation_metrics} against the
-                    held-out test log.
-          \end{enumerate}
-    \item Aggregate the $N_{\text{seeds}}$ replications into a Student-t
-          95\,\% confidence interval.
-\end{enumerate}
+Let $m_{c,i}$ be one fidelity metric for configuration $c$ and seed $s_i$.
+The reported value is the mean across the $N=10$ runs. Its 95\,\% Student-$t$
+confidence interval is calculated as
+\begin{equation}
+    \bar{m}_c=\frac{1}{N}\sum_{i=0}^{N-1}m_{c,i},
+    \qquad
+    \mathrm{CI}_{95\%}=\bar{m}_c \;\pm\;
+    t_{0.975,N-1}\frac{s_{m,c}}{\sqrt{N}},
+\end{equation}
+where $s_{m,c}$ is the sample standard deviation across the runs. This keeps
+the comparison identical across configurations and separates the reported
+mean from the simulator's run-to-run variation.
 
 \subsection{Implementation}
 
@@ -764,17 +762,17 @@ instead of a \texttt{Series} and fail. The workaround is a single
 start of every KPI-computation function. It is applied both in the
 what-if scripts and in the multi-seed CI driver.
 
-\subsection{Absence of Automatic Temporal Features}
+\subsection{Temporal Features Outside the ProSiT Input}
 
-ProSiT does not derive hour-of-day or day-of-week features from the
-event-log timestamps during simulation-parameter discovery: temporal
-features must be provided as explicit case attributes. This is why the
-event-log engineering pipeline of
-Section~\ref{sec:temporal_features} adds
-\texttt{@@hour} and \texttt{@@weekday} at case level. Without them,
-ProSiT's arrival-time and duration models cannot condition on the
-day/night pattern that Section~\ref{sec:results_arrival_process}
-documents.
+The final discovery contract does not pass hour-of-day or day-of-week
+attributes to ProSiT. It keeps the five standard event-log columns and the
+approved visit-related, demand, utilisation and target attributes from
+Table~\ref{tab:eventlog_attributes}. Other columns are removed before
+simulation-parameter discovery. Hour and weekday are derived from timestamps
+only in the separate arrival and explanatory analyses. The retained ProSiT
+configurations therefore do not condition their timing rules directly on
+calendar features. This is an input-model boundary when interpreting the
+day/night differences reported in Section~\ref{sec:results_arrival_process}.
 
 \subsection{Non-Deterministic Simulation Engine}
 
@@ -790,8 +788,8 @@ guarantee assumed throughout Chapter~\ref{chap:results}.
 
 The ProSiT engine itself was not modified for these workarounds. The
 CTB pipeline patches its own callers so that ProSiT can be invoked
-without source-code changes. All five workarounds together constitute
-the technical adaptation of ProSiT to the CTB case study and are
+without source-code changes. The workarounds and the documented input boundary
+constitute the technical adaptation of ProSiT to the CTB case study. They are
 listed here so that a reader can distinguish the contribution of this
 thesis (case-study specific data engineering, held-out validation
 methodology, multi-seed replication, sensitivity analysis, what-if

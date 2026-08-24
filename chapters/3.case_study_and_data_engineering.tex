@@ -91,7 +91,7 @@ event log.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/schemas/event_log_engineering_pipeline.png}
+\includegraphics[width=\textwidth]{figures/schemas/event_log_engineering_pipeline_bw.png}
 \caption{Event-log engineering pipeline. The ITS schedule, report-system
 records, yard snapshots and container master data are cleaned and integrated.
 Truck visits are then represented as cases with lifecycle events and
@@ -115,17 +115,17 @@ pipeline are listed in Table~\ref{tab:its_source_attributes}.
 \hline
 \textbf{Attribute} & \textbf{Description} \\
 \hline
-\texttt{FAHRPLAN\_UID} & Unique truck-visit identifier used as the case ID. \\
-\texttt{LKW\_KENNZEICHEN} & Truck licence plate number. \\
-\texttt{ANLAUFPUNKT\_HALTESTELLE} & Exchange-area identifier, such as T20,
+FAHRPLAN\_UID & Unique truck-visit identifier used as the case ID. \\
+LKW\_KENNZEICHEN & Truck licence plate number. \\
+ANLAUFPUNKT\_HALTESTELLE & Exchange-area identifier, such as T20,
 LL or VC. \\
-\texttt{FP\_ZEITPUNKT\_ERSTELLUNG} & Time at which the schedule entry was
+FP\_ZEITPUNKT\_ERSTELLUNG & Time at which the schedule entry was
 created; used as the Gate In timestamp. \\
-\texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG} & Time at which the handling activity
+ALP\_ZEITPUNKT\_BEREITMELDUNG & Time at which the handling activity
 was reported ready for execution. \\
-\texttt{ALP\_ZEITPUNKT\_ERFUELLUNG} & Time at which the handling activity was
+ALP\_ZEITPUNKT\_ERFUELLUNG & Time at which the handling activity was
 completed. \\
-\texttt{FP\_ZEITPUNKT\_GATEOUT} & Time at which the truck exited the
+FP\_ZEITPUNKT\_GATEOUT & Time at which the truck exited the
 terminal. \\
 \hline
 \end{tabular}
@@ -152,21 +152,20 @@ Table~\ref{tab:report_source_attributes}.
 \hline
 \textbf{Attribute} & \textbf{Description} \\
 \hline
-\texttt{TruckVisitGkey} & Truck-visit identifier used for cross-system
+TruckVisitGkey & Truck-visit identifier used for cross-system
 matching. \\
-\texttt{TruckLicenseNbr} & Truck licence plate number. \\
-\texttt{CallupTime} & Time at which the truck physically entered the
+TruckLicenseNbr & Truck licence plate number. \\
+CallupTime & Time at which the truck physically entered the
 terminal. \\
-\texttt{StageStartTime} & Start time recorded for the reported process
+StageStartTime & Start time recorded for the reported process
 stage. \\
-\texttt{StageId} & Stage identifier, such as \texttt{OCR},
-\texttt{Gate-In}, \texttt{yard} or \texttt{Exit}. \\
-\texttt{TruckExchangeArea} & Yard handling point visited for a specific
+StageId & Stage identifier, such as OCR, Gate-In, yard or Exit. \\
+TruckExchangeArea & Yard handling point visited for a specific
 container. \\
-\texttt{TranCtrNbr} & Container number associated with the transaction. \\
-\texttt{UnitInboundCarrierId} & Inbound carrier identifier, recorded as a
+TranCtrNbr & Container number associated with the transaction. \\
+UnitInboundCarrierId & Inbound carrier identifier, recorded as a
 truck plate, vessel voyage number or train ID. \\
-\texttt{UnitOutboundCarrierId} & Outbound carrier identifier, recorded as a
+UnitOutboundCarrierId & Outbound carrier identifier, recorded as a
 truck plate, vessel voyage number or train ID. \\
 \hline
 \end{tabular}
@@ -198,8 +197,7 @@ derived measures.
 \textbf{Attribute} & \textbf{Description} \\
 \hline
 Container size & TEU-equivalent size category (20, 40 or 45 feet). \\
-Full/empty status & Binary loading-status indicator
-(\texttt{Leer}/\texttt{Voll}). \\
+Full/empty status & Binary loading-status indicator (Leer/Voll). \\
 Reefer status & Indicator for refrigerated containers, derived from the ISO
 code. \\
 Hazardous-material status & Indicator derived from the IMCO code. \\
@@ -383,17 +381,17 @@ labels.
 \hline
 \textbf{Activity} & \textbf{Definition} \\
 \hline
-\texttt{Gate In}       & Truck registration at entry gate \\
-\texttt{RMG\_receive}  & RMG unloads container from truck (import) \\
-\texttt{RMG\_delivery} & RMG loads container onto truck (export) \\
-\texttt{RMG\_mixed}    & Both receive and delivery at same block \\
-\texttt{LL\_receive}   & Empty-container depot: unload \\
-\texttt{LL\_delivery}  & Empty-container depot: load \\
-\texttt{LL\_mixed}     & Empty-container depot: unload and load \\
-\texttt{HO2\_receive}  & Manual area: unload \\
-\texttt{HO2\_delivery} & Manual area: load \\
-\texttt{HO2\_mixed}    & Manual area: unload and load \\
-\texttt{Gate Out}      & Truck departure \\
+Gate In       & Truck registration at entry gate \\
+RMG\_receive  & RMG unloads container from truck (import) \\
+RMG\_delivery & RMG loads container onto truck (export) \\
+RMG\_mixed    & Both receive and delivery at same block \\
+LL\_receive   & Empty-container depot: unload \\
+LL\_delivery  & Empty-container depot: load \\
+LL\_mixed     & Empty-container depot: unload and load \\
+HO2\_receive  & Manual area: unload \\
+HO2\_delivery & Manual area: load \\
+HO2\_mixed    & Manual area: unload and load \\
+Gate Out      & Truck departure \\
 \hline
 \end{tabular}
 \caption{Activity labels used in the final event log.}
@@ -416,9 +414,9 @@ Table~\ref{tab:observed_lifecycle_attributes}.
 \hline
 \textbf{Attribute} & \textbf{Description} \\
 \hline
-\texttt{start:timestamp} & Observed or reconstructed time at which execution
+start:timestamp & Observed or reconstructed time at which execution
 of the activity began. \\
-\texttt{time:timestamp} & Observed or reconstructed time at which execution
+time:timestamp & Observed or reconstructed time at which execution
 of the activity finished. \\
 \hline
 \end{tabular}
@@ -457,12 +455,11 @@ are mapped for each activity type.
 \textbf{Activity type} & \textbf{Start timestamp} &
 \textbf{Complete timestamp} \\
 \hline
-Gate In & \texttt{FP\_ZEITPUNKT\_ERSTELLUNG} & Same value as the start
+Gate In & FP\_ZEITPUNKT\_ERSTELLUNG & Same value as the start
 timestamp. \\
-Yard activity & \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG} &
-\texttt{ALP\_ZEITPUNKT\_ERFUELLUNG} \\
-Gate Out & \texttt{FP\_ZEITPUNKT\_GATEOUT} &
-\texttt{FP\_ZEITPUNKT\_GATEOUT} \\
+Yard activity & ALP\_ZEITPUNKT\_BEREITMELDUNG &
+ALP\_ZEITPUNKT\_ERFUELLUNG \\
+Gate Out & FP\_ZEITPUNKT\_GATEOUT & FP\_ZEITPUNKT\_GATEOUT \\
 \hline
 \end{tabular}
 \caption{Lifecycle timestamp mapping by activity type.}
@@ -617,103 +614,64 @@ to be predicted.
 
 The final event log combines process-execution data, lifecycle
 information and operational context within a single simulation-ready
-representation. Table~\ref{tab:core_attrs} lists the required process
-attributes;
-Tables~\ref{tab:case_attrs}--\ref{tab:temporal_attrs} list the case-level
-context attributes attached to every event.
+representation. Table~\ref{tab:eventlog_attributes} groups the process and
+case-level attributes used by the simulation.
 
-\begin{table}[htbp]
+\begin{table}[p]
 \centering
-\begin{tabular}{|L{4cm}|L{9cm}|}
-\hline
+\small
+\renewcommand{\arraystretch}{0.92}
+\begin{tabular}{@{}L{4cm}L{9cm}@{}}
+\toprule
 \textbf{Attribute} & \textbf{Description} \\
-\hline
-\texttt{case:concept:name} & Unique truck-visit identifier
-                             (\texttt{FAHRPLAN\_UID}). \\
-\texttt{concept:name}      & Activity executed during the visit. \\
-\texttt{start:timestamp}   & Observed/reconstructed activity start timestamp. \\
-\texttt{time:timestamp}    & Observed/reconstructed activity completion timestamp. \\
-\texttt{org:resource}      & Operational location of the activity. \\
-\hline
+\midrule
+\multicolumn{2}{c}{\textbf{Baseline attributes}} \\
+\midrule
+case:concept:name & Unique truck-visit identifier (FAHRPLAN\_UID). \\
+concept:name & Activity executed during the visit. \\
+start:timestamp & Observed or reconstructed activity start timestamp. \\
+time:timestamp & Observed or reconstructed activity completion timestamp. \\
+org:resource & Operational location of the activity. \\
+\midrule
+\multicolumn{2}{c}{\textbf{Visit-related attributes}} \\
+\midrule
+process\_flow\_type & Visit type: delivery, receive or mixed. \\
+n\_containers & Number of containers in the visit. \\
+n\_stops & Number of planned operational stops known at Gate In. \\
+n\_deliveries & Number of planned delivery transactions known at Gate In. \\
+n\_receives & Number of planned receive transactions known at Gate In. \\
+has\_hazardous & Indicator for at least one IMDG container. \\
+has\_reefer & Indicator for at least one reefer container. \\
+full\_ratio & Share of loaded containers. \\
+visit\_complexity & Composite score of the complete planned visit manifest. \\
+\midrule
+\multicolumn{2}{c}{\textbf{Demand attributes}} \\
+\midrule
+gate\_demand & Truck demand across the terminal during the preceding hour. \\
+rmg\_demand & Truck demand in the RMG yard during the preceding hour. \\
+vc\_demand & Truck demand in the VC area during the preceding hour. \\
+mt\_demand & Truck demand in the manual yard during the preceding hour. \\
+\midrule
+\multicolumn{2}{c}{\textbf{Utilisation attributes}} \\
+\midrule
+gate\_utilization & Overall yard utilisation at truck arrival. \\
+rmg\_utilization & Aggregate RMG-yard utilisation at truck arrival. \\
+vc\_utilization & VC-area utilisation at truck arrival. \\
+mt\_utilization & Manual-yard utilisation at truck arrival. \\
+\midrule
+\multicolumn{2}{c}{\textbf{Target attributes}} \\
+\midrule
+target\_utilization & Utilisation of the primary target area at truck arrival. \\
+target\_demand & Demand for the primary target area during the preceding hour. \\
+target\_utilization\_bin & Quantile category of target-area utilisation. \\
+target\_demand\_bin & Quantile category of target-area demand. \\
+target\_rank & Utilisation rank of the target among all RMG blocks. \\
+target\_rank\_group & Categorised target rank: top\_3, mid or low. \\
+primary\_target\_area / target\_area & Planned target area known at Gate In. \\
+\bottomrule
 \end{tabular}
-\caption{Required process attributes.}
-\label{tab:core_attrs}
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{|L{4cm}|L{9cm}|}
-\hline
-\textbf{Attribute} & \textbf{Description} \\
-\hline
-\texttt{process\_flow\_type} & Visit type (delivery, receive, mixed). \\
-\texttt{n\_containers}       & Number of containers in the visit. \\
-\texttt{n\_stops}            & Number of planned operational stops, known at Gate In. \\
-\texttt{n\_deliveries}       & Number of planned delivery transactions, known at Gate In. \\
-\texttt{n\_receives}         & Number of planned receive transactions, known at Gate In. \\
-\texttt{has\_hazardous}      & IMDG indicator. \\
-\texttt{has\_reefer}         & Reefer indicator. \\
-\texttt{full\_ratio}         & Share of loaded containers. \\
-\texttt{visit\_complexity}   & Final composite score of the complete planned visit manifest, known at Gate In. \\
-\hline
-\end{tabular}
-\caption{Case-level container and process-shape attributes.}
-\label{tab:case_attrs}
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{|L{4cm}|L{9cm}|}
-\hline
-\textbf{Attribute} & \textbf{Description} \\
-\hline
-\texttt{gate\_demand}       & Current gate demand. \\
-\texttt{rmg\_demand}        & Current demand in the RMG yard. \\
-\texttt{vc\_demand}         & Current demand in the VC area. \\
-\texttt{mt\_demand}         & Current demand in the manual yard. \\
-\texttt{gate\_utilization}  & Current gate utilisation. \\
-\texttt{rmg\_utilization}   & Current RMG-yard utilisation. \\
-\texttt{vc\_utilization}    & Current VC-area utilisation. \\
-\texttt{mt\_utilization}    & Current manual-yard utilisation. \\
-\hline
-\end{tabular}
-\caption{Demand and utilisation features at case arrival.}
-\label{tab:util_attrs}
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{|L{4cm}|L{9cm}|}
-\hline
-\textbf{Attribute} & \textbf{Description} \\
-\hline
-\texttt{target\_utilization} & Utilisation of the primary target area
-                                at truck arrival. \\
-\texttt{target\_demand}      & Demand for the primary target area. \\
-\texttt{target\_rank}        & Utilisation rank among all RMG blocks. \\
-\texttt{target\_rank\_group} & Categorised rank
-                                (\texttt{top\_3}, \texttt{mid},
-                                \texttt{low}). \\
-\texttt{primary\_target\_area} / \texttt{target\_area} & Planned target
-                                area known at Gate In. \\
-\hline
-\end{tabular}
-\caption{Target-area context attributes.}
-\label{tab:target_attrs}
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{|L{4cm}|L{9cm}|}
-\hline
-\textbf{Attribute} & \textbf{Description} \\
-\hline
-\texttt{@@hour}    & Hour of day derived from the case-start timestamp. \\
-\texttt{@@weekday} & Day of week derived from the case-start timestamp. \\
-\hline
-\end{tabular}
-\caption{Temporal context attributes required by ProSiT.}
-\label{tab:temporal_attrs}
+\caption{Process and contextual attributes passed to ProSiT.}
+\label{tab:eventlog_attributes}
 \end{table}
 
 All contextual attributes are attached at case level and remain constant
