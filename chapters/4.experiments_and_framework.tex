@@ -9,8 +9,8 @@ objective and the four research questions that organise the empirical
 evaluation. Section~\ref{sec:train_test_split} defines the held-out
 train/test split that separates discovery from evaluation.
 Section~\ref{sec:process_discovery_methodology} describes the
-control-flow encoding and its held-out coverage
-protocol. Section~\ref{sec:simulation_discovery_methodology} defines
+initial control-flow discovery, the domain check, the prefix-trie replacement,
+and its held-out validation. Section~\ref{sec:simulation_discovery_methodology} defines
 the three ProSiT configurations that will be compared:
 distribution-based (no-rules), data-aware with decision trees
 (rules) and data-aware with additional queue-length features
@@ -35,8 +35,9 @@ corresponding section.
 \texttt{s6\_eventlog\_target\_rank\_features.csv} (Chapter~\ref{chp:case_study_and_data}).
 The \emph{split} of Section~\ref{sec:train_test_split} separates the
 log into training and held-out testing partitions. \emph{Process
-discovery} (Section~\ref{sec:process_discovery_methodology}) yields the
-Petri net used as the ProSiT skeleton. Three
+discovery} (Section~\ref{sec:process_discovery_methodology}) first yields an
+Inductive-Miner abstraction. The domain check then leads to the prefix-trie
+contract used as the ProSiT skeleton. Three
 \emph{simulation-parameter discovery} configurations
 (Section~\ref{sec:simulation_discovery_methodology}) are compared;
 each is evaluated against the held-out log through the
@@ -173,97 +174,147 @@ is detected. The correct partitioning is 71,568/17,892 as
 recorded in the split manifest.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Control-Flow Encoding and Held-Out Coverage Protocol}
+\section{Control-Flow Discovery, Domain-Constrained Encoding, and Validation}
 \label{sec:process_discovery_methodology}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Raw Prefix-Trie Encoding}
+\subsection{Expected Process-Discovery Step}
 
-The Petri net that ProSiT uses as the authoritative control-flow skeleton is
-constructed from the observed training variants as a raw sequential prefix
-trie, following the definition in Chapter~\ref{chp:background}. This is not a
-classical process-discovery abstraction: it stores the observed activity
-language and does not infer additional behaviour. Every accepted path has the form
-\texttt{Gate In}$\rightarrow$one or more yard activities
-$\rightarrow$\texttt{Gate Out}. Shared prefixes are represented once,
-and a separate transition encodes each observed continuation
-\cite{FahrenkrogPetersen2019PRETSA,DeLaBriandais1959Trie}. In the Petri-net
-encoding, each prefix state becomes a place and each observed continuation
-becomes a labelled transition to the successor prefix state. All complete
-paths terminate in the common sink after \texttt{Gate Out}. The resulting
-net is acyclic and has one token per truck case.
+In a data-aware process-simulation workflow, the control flow is normally
+discovered from the event log before the timing, routing, arrival, and resource
+parameters are fitted. The expected output is a process model that reproduces
+the recorded behaviour and also abstracts beyond individual traces. A useful
+discovered model balances fitness, precision, generalisation, and simplicity
+\cite{Leemans2014InductiveMiner,PMvanDerAalst2016}.
 
-\subsection{Why the Inductive-Miner Net Is Diagnostic Only}
+For ProSiT, this process model also has a practical role. Its Petri net becomes
+the executable backbone of the simulation. Formal soundness and good
+conformance are not enough for this role. Every execution allowed by the model
+must also make sense for one physical truck visit. The CTB contract is simple:
+one \texttt{Gate In}, one or more sequential yard activities, and one final
+\texttt{Gate Out}. Activities of different trucks may run in parallel. The
+activities of one truck may not.
 
-The Inductive Miner is not rejected as a discovery method: its sound,
-block-structured models and abstraction from infrequent variants are
-useful when behavioural generalisation is the objective
-\cite{Leemans2014InductiveMiner}. It is retained here as a diagnostic
-process tree and BPMN visualisation. It is not passed to the final
-simulator because its discovered semantics conflict with the CTB case
-contract. The diagnostic tree in
-Figure~\ref{fig:model_tree_theory} contains parallel (\texttt{and}) cuts,
-including a cut that places \texttt{Gate Out} in parallel with the yard
-subtree. Executing this model could permit Gate Out before all
-yard work is complete or enable multiple yard activities within one truck
-visit. These behaviours may be sound in the formal workflow-net sense,
-but they are not valid truck-process semantics in this application.
+The work started with the standard discovery step. The resulting model was
+then checked against this domain contract before it was passed to ProSiT.
 
-The trie makes this domain constraint explicit: exactly one Gate In is
-followed by one or more sequential yard activities and exactly one final
-Gate Out. This does \emph{not} disable resource multitasking between
-trucks. Different Petri-net instances still compete for and can use the
-same resources concurrently according to the discovered capacities; only
-the activities within a single truck case remain sequential. In the final
-CTB baseline these cross-case RMG capacities are subject to the domain cap
-of three described below.
+\subsection{Initial Inductive-Miner Discovery}
 
-This choice is deliberately restrictive. A raw observed-variant trie does not
-generalise to unseen activity combinations and is less compact than an
-Inductive-Miner model. Its perfect construction-log fitness is guaranteed and
-is not treated as a result. The held-out conformance protocol instead tests
-whether the memorised training language remains representative in a later
-period. High held-out coverage would be evidence of a repetitive and stable
-CTB trace language, not of generalisation by the trie. Accordingly, the final
-control-flow component is best described as a domain-constrained encoding of
-observed variants. Automatic discovery remains responsible for the other
-ProSiT parameters, but the trie itself does not support a claim that a general
-CTB process structure was discovered.
-The authoritative trie is
-implemented by \texttt{\_eventlog\_contract.py} and injected by
-\texttt{baseline/07\_run\_prosit\_discovery.py}. It contains 76 places
-and 144 transitions for the 70 variants observed in the frozen training
-partition.
+An Inductive-Miner model was first created from the training log. This was the
+expected control-flow input for ProSiT. The Inductive Miner was selected
+because it produces sound, block-structured models and turns individual traces
+into a more general behavioural model \cite{Leemans2014InductiveMiner}. The
+initial result was inspected as a process tree and as the equivalent BPMN model
+in Figure~\ref{fig:model_representations}.
 
-\subsection{Held-Out Coverage and Contract Protocol}
+This was also a check of the event-log representation. The initial PM4Py
+conversion ordered events by their completion timestamps. Some CTB timestamps
+overlap slightly. This can move \texttt{Gate Out} ahead of a yard event in the
+ordered trace, even though the truck operation has a fixed logical order. The
+miner then treats this ordering as process evidence. A sound process model can
+still be unsuitable for simulation when the event order does not match the
+physical control order.
 
-Control-flow conformance metrics are computed against \emph{both} the training
-and the held-out testing partition:
+\subsection{Domain Check and Parallel-Execution Problem}
+
+The first domain check found such a conflict. The process tree starts with
+\texttt{Gate In} and then contains an \texttt{and} cut. This cut places
+\texttt{Gate Out} in parallel with the yard subtree, as shown in
+Figure~\ref{fig:model_tree_theory}. Under the semantics of an \texttt{and} cut,
+the two branches may interleave. The model language admits an order such as
+\texttt{Gate In}$\rightarrow$\texttt{Gate Out}$\rightarrow$yard
+activity. Inner \texttt{and} cuts can also enable more than one yard branch for
+the same case.
+
+These executions violate the CTB contract. A truck cannot leave before its
+yard work is complete. It also cannot perform two yard activities at the same
+time. This finding comes from the operator structure of the discovered tree.
+It is not a conclusion from a low conformance score.
+
+The distinction matters. The Inductive-Miner model is formally valid for the
+event order presented to it. Its language is too permissive for the intended
+simulation. Process-discovery quality and domain-valid simulation behaviour
+are related, but they are not the same requirement. The initial
+Inductive-Miner model was kept as evidence of this problem. It was not used as
+the final ProSiT backbone.
+
+\subsection{Order Correction and Manual Prefix-Trie Implementation}
+
+The pipeline was changed in two places. First,
+\texttt{\_eventlog\_contract.py} creates a logical case order that keeps
+\texttt{Gate In} first, the recorded yard-event order in the middle, and
+\texttt{Gate Out} last. It converts this ordered table directly to a PM4Py
+event log. It does not call the formatter that sorts again by completion time.
+The original start and completion timestamps remain unchanged for timing and
+resource discovery.
+
+Second, the executable control flow was replaced with a raw sequential prefix
+trie. This was a manual modelling decision. The trie itself is built
+automatically from the 70 variants in the ordered training log; the variants
+were not entered by hand. The builder is also implemented in
+\texttt{\_eventlog\_contract.py} and is called by
+\texttt{baseline/07\_run\_prosit\_discovery.py}.
+
+Each observed prefix becomes a place in the Petri net. Each observed next
+activity becomes a labelled transition to the next prefix. Shared prefixes are
+stored once. Every complete path ends in one common sink after
+\texttt{Gate Out} \cite{FahrenkrogPetersen2019PRETSA,DeLaBriandais1959Trie}.
+The resulting net is acyclic and uses one case token. It contains 76 places and
+144 transitions.
+
+The implementation combines the observed training language with the explicit
+truck contract. It accepts only paths with one initial \texttt{Gate In}, at
+least one sequential yard activity, and one final \texttt{Gate Out}. This
+restriction applies inside one case. It does not prevent different trucks from
+using resources at the same time. Cross-case concurrency is handled by the
+resource models and the capacity constraints.
+
+Correcting the event order removes the timestamp-sorting problem. The trie adds
+a stricter guarantee: the executable model can only follow a full sequence
+seen in training. This solves the sequencing problem by giving up structural
+generalisation. The trie cannot create an unseen activity combination, loop,
+or exception path.
+
+The final control flow is not an automatically discovered general process
+model. It is a data-derived and domain-constrained execution contract. ProSiT
+still discovers the arrival, duration, routing, resource-selection, and other
+simulation parameters. The final simulator is only partially automatically
+discovered. Its valid case order comes from observed variants plus domain
+knowledge, not from automatic discovery alone.
+
+\subsection{Held-Out Coverage and Case-Contract Validation}
+
+The trie is evaluated as a simulation contract, not as a successful general
+process-discovery model. The standard quality measures are still reported for
+the training and test partitions:
 
 \begin{itemize}
-    \item Token-based replay \textbf{fitness}, i.e.\ the fraction of
-          traces that the Petri net can replay without token deficit.
-    \item Token-based replay \textbf{precision}, the share of behaviour
-          allowed by the model and observed in the log.
-    \item \textbf{Generalisation} via
-          \texttt{pm4py.generalization\_tbr}.
-    \item \textbf{Simplicity} via \texttt{pm4py.simplicity\_petri\_net}.
+    \item token-based replay \textbf{fitness};
+    \item token-based replay \textbf{precision} as implemented by PM4Py;
+    \item \textbf{generalisation} via
+          \texttt{pm4py.generalization\_tbr}; and
+    \item \textbf{simplicity} via \texttt{pm4py.simplicity\_petri\_net}.
 \end{itemize}
 
-They are supplemented by an explicit case-language audit: exactly one
-initial Gate In, at least one yard activity, exactly one final Gate Out,
-no within-case activity overlap and monotonically non-decreasing
-completion timestamps. This separates two questions that aggregate
-fitness alone cannot answer: whether the net replays held-out variants
-and whether the generated traces obey the physical truck-visit order.
-For this model class, training fitness and precision are construction checks.
-Held-out fitting traces are interpreted as the share of later cases whose
-complete activity sequence already occurred during training. Generalisation
-and simplicity remain useful descriptors of the cost of memorisation, but are
-not combined into an overall process-discovery quality claim.
-The full protocol is implemented in
+Their interpretation differs from a normal discovered model. Training fitness
+is trivial because each training variant is encoded. Precision,
+generalisation, and simplicity are reported as model descriptors. They are not
+used to claim that the trie is a high-quality discovery result.
+
+The main test is held-out sequence coverage. A fitting held-out case is a later
+truck visit whose complete activity sequence already occurs in the training
+trie. This test asks whether the restrictive language remains usable in the
+later period. High coverage would show repeated CTB paths in this dataset and
+time window. It would not show that the trie generalises.
+
+The generated logs are also checked against the case contract. Each case must
+contain one initial Gate In, at least one yard activity, and one final Gate Out.
+Activities inside one case may not overlap, and completion timestamps may not
+decrease. This separates replay coverage from physical sequence validity. The
+protocol is implemented in
 \texttt{baseline/07\_run\_prosit\_discovery.py} and
-\texttt{\_eventlog\_contract.py}.
+\texttt{\_eventlog\_contract.py}. Its results are reported in
+Section~\ref{sec:results_process_discovery}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Parameter Discovery Configurations}
@@ -325,11 +376,12 @@ expressive endpoint of the retained RQ3 comparison.
 
 \subsection{Discovery Hyperparameters}
 
-Table~\ref{tab:prosit_hyperparams} lists the ProSiT hyperparameters
-that differ across configurations. All other arguments are the ProSiT
-defaults except \texttt{attribute\_mode}, which is set to
-\texttt{'empirical'} for reasons given in
-Section~\ref{sec:prosit_workarounds}.
+Table~\ref{tab:prosit_hyperparams} lists the ProSiT settings used in the three
+configurations. It also includes multitasking because this setting changes the
+resource semantics, even though it is fixed across the comparison.
+\texttt{attribute\_mode} is set to \texttt{'empirical'} for the reasons given
+in Section~\ref{sec:prosit_workarounds}. All other arguments use the ProSiT
+defaults.
 
 \begin{table}[h]
 \centering
@@ -342,11 +394,22 @@ Section~\ref{sec:prosit_workarounds}.
 \texttt{max\_depth\_tree}          & 0             & 3             & 3 \\
 \texttt{min\_samples\_leaf\_cv}    & --            & [50, 100, 200] & [50, 100, 200] \\
 \texttt{use\_workload\_features}   & False         & False         & True \\
+\texttt{enable\_multitasking}      & True          & True          & True \\
+\texttt{multitasking\_thr}         & 0.05          & 0.05          & 0.05 \\
 \texttt{attribute\_mode}           & \texttt{empirical} & \texttt{empirical} & \texttt{empirical} \\
 \texttt{random\_state}             & 42            & 42            & 42 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+With \texttt{enable\_multitasking=True}, ProSiT can classify a resource as
+multitasking when at least 5\,\% of its observed events show concurrent work.
+It can then learn resource capacity from overlaps between different truck
+cases. This is separate from the control-flow problem above. The prefix trie
+keeps the activities of one truck sequential. Multitasking allows a resource
+to serve several trucks at the same time. It is also different from
+\texttt{use\_workload\_features}, which only adds workload and queue state as
+inputs to the decision trees.
 
 The full pipeline is executed by
 \texttt{baseline/07\_run\_prosit\_discovery.py}. The pickled
