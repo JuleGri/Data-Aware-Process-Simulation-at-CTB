@@ -1,3 +1,32 @@
 %!TEX root = ../dissertation.tex
 
-TBD
+Container terminals use simulation to test operational changes without
+disrupting live operations, but these models are usually built and calibrated
+by hand. Data-aware process simulation aims to learn executable models from
+event logs. Evidence from physical logistics systems is still limited.
+
+This thesis evaluates the approach for truck operations at HHLA Container
+Terminal Burchardkai. Two months of data were transformed into an event log
+with 89,460 truck visits and split temporally into training and test periods.
+The white-box ProSiT framework was used to compare a distribution-only model
+with a model using decision rules and workload features. The first
+Inductive-Miner model allowed impossible parallel behaviour within one truck
+visit. The final pipeline instead combines a manually implemented prefix-trie
+contract with automatically discovered timing, arrival, routing, and resource
+parameters.
+
+The prefix trie covered 99.944\,\% of the 17,892 held-out visits. This shows a
+highly repetitive activity language, not structural generalisation. The final
+model reproduced arrival spacing closely and parts of yard service times, but
+mean truck turnaround was 9.31 minutes too short and the 90th percentile was
+19.20 minutes too short. Before calibration, the model with rules and workload
+features produced a 56\,\% higher turnaround-distance error than the
+distribution-only model. Both control flow and RMG capacity required domain
+corrections. Two what-if experiments were transparent and repeatable, but
+their mean-turnaround confidence intervals included zero. The model also lacked
+the spatial state needed for physical counterfactual claims.
+
+Data-aware process simulation can provide an auditable historical model and a
+useful diagnostic tool for container-terminal operations. Direct operational
+decision support requires domain constraints and richer models of location,
+resources, and queueing.
