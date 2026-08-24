@@ -20,14 +20,11 @@ Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs 
     (Twenty-foot Equivalent Units) annually across 315 hectares
     \cite{hhla2025}.
 
-    \textbf{Truck Process:} External trucks visit the CTB to deliver
-    or receive containers. The general procecedure comprises:
-    \begin{enumerate}
-        \item \textbf{Gate In}: Truck registers at the entry gate.
-        \item \textbf{Container handling in Yard}: Rail-Mounted Gantry cranes
-              (RMGs) load or unload containers at storage blocks.
-        \item \textbf{Gate Out}: Truck exits the terminal.
-    \end{enumerate}
+    \textbf{Truck process.} External trucks visit CTB to deliver or receive
+    containers. At \textit{Gate In}, the truck is registered at the entry
+    gate. It then drives to the assigned yard position, where an RMG or other
+    handling equipment loads or unloads the container. After all planned
+    operations are completed, the truck leaves through \textit{Gate Out}.
 
     The CTB environment in this project has several resource constraints.
     Located between the waterside and the landside, 22 RMG storage
@@ -42,37 +39,39 @@ Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs 
     \subsection{Data Sources}
     \label{sec:cs_data_sources}
 
-    The data come from several systems used in daily terminal operations. These systems were developed over time and record different parts of the process. A Terminal Operating System coordinates them. This study uses the following data sources:
+    The data come from several systems used in daily terminal operations.
+    These systems were developed over time and record different parts of the
+    process. A Terminal Operating System coordinates them.
+    Table~\ref{tab:ctb_data_sources} summarises the four sources used in this
+    thesis.
 
-    \begin{itemize}
-        \item \textbf{ITS schedule (scheduling system)} — records truck
-              visit schedules, including timestamps for each operational
-              step (gate-in time, ready time at a handling point, order
-              fulfilment time, gate-out time).
-        \item \textbf{Report system} — captures stage-level execution
-              data, including gate entry times, exchange-area
-              assignments and container transaction records, bridging
-              yard operations and container master data.
-        \item \textbf{Yard management system} — snapshots every four
-              hours of all yard block capacities and utilisation rates.
-        \item \textbf{Container master data} — container-level details
-              (size, type, hazardous material, dwell time, inbound and
-              outbound carrier).
-    \end{itemize}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{4.1cm}|L{8.9cm}|}
+\hline
+\textbf{Data source} & \textbf{Data provided} \\
+\hline
+ITS schedule & Truck-visit schedules and timestamps for gate entry,
+handling readiness, order completion and gate exit. \\
+Report system & Stage-level execution data, gate-entry records,
+exchange-area assignments, container transactions and carrier identifiers. \\
+Yard management system & Four-hour snapshots of storage-block capacity,
+occupancy and utilisation. \\
+Container master data & Container size, type, loading status, hazardous and
+reefer indicators, dwell time and inbound/outbound carriers. \\
+\hline
+\end{tabular}
+\caption{Operational data sources used for event-log engineering.}
+\label{tab:ctb_data_sources}
+\end{table}
 
     These systems generate independent data pools with different
     identifier schemes, requiring a data-integration procedure
     described in Section~\ref{sec:event_log_engineering}. Historical
-    data from March and April 2026 (ca. 8 weeks) was extracted, covering
-    approximately 104,000 truck visits.
-
-    \textbf{Data volume:}
-    \begin{itemize}
-        \item 113,466 container move events,
-        \item 104,000 truck visits,
-        \item 336 yard-state snapshots for (8 weeks $\times$ 7 days $\times$
-              6 snapshots per day).
-    \end{itemize}
+    data from March and April 2026 (approximately eight weeks) were extracted.
+    The raw extract covers approximately 104,000 truck visits, 113,466
+    container move events and 336 yard-state snapshots
+    ($8$ weeks $\times 7$ days $\times 6$ snapshots per day).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Event Log Engineering}
@@ -107,24 +106,32 @@ for discovery and evaluation.}
 
     The ITS scheduling system provides the scheduling data for the
 truck operations reconstructed in this thesis. Each record represents
-one activity instance within a truck visit and carries the following
-    attributes:
+one activity instance within a truck visit. The attributes used by the
+pipeline are listed in Table~\ref{tab:its_source_attributes}.
 
-\begin{itemize}
-    \item \texttt{FAHRPLAN\_UID} — unique identifier for the truck visit
-          (case ID).
-    \item \texttt{LKW\_KENNZEICHEN} — truck license plate number.
-    \item \texttt{ANLAUFPUNKT\_HALTESTELLE} — exchange area identifier
-          (e.g.\ T20, LL, VC).
-    \item \texttt{FP\_ZEITPUNKT\_ERSTELLUNG} — timestamp when the
-          schedule entry was created (gate-in time).
-    \item \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG} — timestamp when the
-          activity became ready for execution (enabled time).
-    \item \texttt{ALP\_ZEITPUNKT\_ERFUELLUNG} — timestamp when the
-          activity was completed.
-    \item \texttt{FP\_ZEITPUNKT\_GATEOUT} — timestamp when the truck
-          exited the terminal.
-\end{itemize}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{5.2cm}|L{7.8cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+\texttt{FAHRPLAN\_UID} & Unique truck-visit identifier used as the case ID. \\
+\texttt{LKW\_KENNZEICHEN} & Truck licence plate number. \\
+\texttt{ANLAUFPUNKT\_HALTESTELLE} & Exchange-area identifier, such as T20,
+LL or VC. \\
+\texttt{FP\_ZEITPUNKT\_ERSTELLUNG} & Time at which the schedule entry was
+created; used as the Gate In timestamp. \\
+\texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG} & Time at which the handling activity
+was reported ready for execution. \\
+\texttt{ALP\_ZEITPUNKT\_ERFUELLUNG} & Time at which the handling activity was
+completed. \\
+\texttt{FP\_ZEITPUNKT\_GATEOUT} & Time at which the truck exited the
+terminal. \\
+\hline
+\end{tabular}
+\caption{ITS schedule attributes used in the event-log pipeline.}
+\label{tab:its_source_attributes}
+\end{table}
 
 All timestamp fields are parsed into standardised \texttt{datetime}
 objects using \texttt{pandas} with the format
@@ -136,28 +143,36 @@ for removal during the cleaning phase.
 The report system provides complementary stage-level execution data,
 completing the details for gate-entry events, and it links each
 container number to the specific truck visit at a yard handling point.
-    The used attributes are:
+The attributes used from this source are shown in
+Table~\ref{tab:report_source_attributes}.
 
-\begin{itemize}
-    \item \texttt{TruckVisitGkey} — unique truck-visit identifier used
-          for cross-system matching.
-    \item \texttt{TruckLicenseNbr} — truck license plate.
-    \item \texttt{CallupTime} — timestamp when the truck physically
-          entered the terminal.
-    \item \texttt{StageStartTime} — timestamp when the activity became
-          ready for execution (enabled time).
-    \item \texttt{StageId} — stage identifier
-          (e.g.\ \texttt{OCR}, \texttt{Gate-In}, \texttt{yard},
-          \texttt{Exit}).
-    \item \texttt{TruckExchangeArea} — visited handling point in the
-          yard for a specific container.
-    \item \texttt{TranCtrNbr} — container number associated with the
-          transaction.
-    \item \texttt{UnitInboundCarrierId} — inbound carrier identifier
-          (truck plate, vessel voyage number or train ID).
-    \item \texttt{UnitOutboundCarrierId} — outbound carrier identifier
-          (truck plate, vessel voyage number or train ID).
-\end{itemize}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{5.2cm}|L{7.8cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+\texttt{TruckVisitGkey} & Truck-visit identifier used for cross-system
+matching. \\
+\texttt{TruckLicenseNbr} & Truck licence plate number. \\
+\texttt{CallupTime} & Time at which the truck physically entered the
+terminal. \\
+\texttt{StageStartTime} & Start time recorded for the reported process
+stage. \\
+\texttt{StageId} & Stage identifier, such as \texttt{OCR},
+\texttt{Gate-In}, \texttt{yard} or \texttt{Exit}. \\
+\texttt{TruckExchangeArea} & Yard handling point visited for a specific
+container. \\
+\texttt{TranCtrNbr} & Container number associated with the transaction. \\
+\texttt{UnitInboundCarrierId} & Inbound carrier identifier, recorded as a
+truck plate, vessel voyage number or train ID. \\
+\texttt{UnitOutboundCarrierId} & Outbound carrier identifier, recorded as a
+truck plate, vessel voyage number or train ID. \\
+\hline
+\end{tabular}
+\caption{Report-system attributes used in the event-log pipeline.}
+\label{tab:report_source_attributes}
+\end{table}
 
 A container is considered ``picked up'' or ``delivered'' by a truck if
 the corresponding inbound or outbound carrier identifier resolves to a
@@ -172,24 +187,32 @@ The mapping is implemented in
 \subsubsection{Container Master Data}
 
 Container-level attributes are extracted from the container master data
-and linked to events via the matched \texttt{container\_id}:
+and linked to events through the matched \texttt{container\_id}.
+Table~\ref{tab:container_master_attributes} describes the retained fields and
+derived measures.
 
-\begin{itemize}
-    \item \textbf{Container size} — TEU equivalent (20', 40', 45').
-    \item \textbf{Full/empty status} — binary indicator
-          (\texttt{Leer}/\texttt{Voll}).
-    \item \textbf{Reefer status} — binary indicator for refrigerated
-          containers (derived from the ISO code).
-    \item \textbf{Hazardous-material status} — binary indicator based on
-          the IMCO code.
-    \item \textbf{Container type} — standard, open-top, platform, bulk,
-          etc.
-    \item \textbf{Dwell time} — hours the container has already spent in
-          the terminal (for receive operations).
-    \item \textbf{Container complexity score} — composite metric
-          combining size, full status, reefer, hazmat and dwell time to
-          quantify handling difficulty.
-\end{itemize}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{4.4cm}|L{8.6cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+Container size & TEU-equivalent size category (20, 40 or 45 feet). \\
+Full/empty status & Binary loading-status indicator
+(\texttt{Leer}/\texttt{Voll}). \\
+Reefer status & Indicator for refrigerated containers, derived from the ISO
+code. \\
+Hazardous-material status & Indicator derived from the IMCO code. \\
+Container type & Operational type, such as standard, open-top, platform or
+bulk. \\
+Dwell time & Hours already spent in the terminal for a receive operation. \\
+Container complexity score & Composite measure based on size, loading status,
+reefer and hazardous-goods requirements, container type and dwell time. \\
+\hline
+\end{tabular}
+\caption{Container-master attributes used for context enrichment.}
+\label{tab:container_master_attributes}
+\end{table}
 
 The complexity score is derived during the container-master-data
 preprocessing stage and combines container type, loading status,
@@ -217,24 +240,20 @@ area and one-minute time interval, the feature
 \texttt{TRUCK\_DEMAND\_LAST\_1H} is calculated as the number of trucks
 that became ready for processing in that area during the preceding
 sixty minutes. The demand pipeline (script
-\texttt{005\_Prep\_create\_truck\_demand.py}):
-
-\begin{enumerate}
-    \item Resamples the schedule data to one-minute frequency based on
-          \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG}.
-    \item Applies a sixty-minute rolling window to count truck arrivals
-          per area.
-    \item Produces a separate demand series for each operational area
-          (Gate, T06--T27, VC, LL, MT).
-    \item Aggregates the individual RMG blocks (T06--T27) into a single
-          yard-section demand metric.
-\end{enumerate}
+\texttt{005\_Prep\_create\_truck\_demand.py}) first resamples the schedule
+data to one-minute intervals based on
+\texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG}. It then applies a rolling
+60-minute window and counts truck arrivals separately for the Gate, the
+individual RMG blocks T06--T27, VC, LL and MT. The block-level RMG series are
+also aggregated into one yard-section demand measure.
 
 The resulting demand features capture workload pressure at the time of
 case arrival. They are included as contextual predictors because such
 pressure may influence waiting times and resource-allocation decisions;
 their empirical contribution is evaluated under RQ3 in
 Section~\ref{sec:simulation_discovery_methodology}.
+
+\FloatBarrier
 
 \subsection{Data Cleaning and Integration}
 \label{sec:data_cleaning}
@@ -388,14 +407,24 @@ resources to preserve block-specific utilisation patterns.
 \label{sec:lifecycle_events}
 
 The CTB operational systems provide timestamps from which two observed
-lifecycle states are constructed for each activity:
+lifecycle states are constructed for each activity. They are summarised in
+Table~\ref{tab:observed_lifecycle_attributes}.
 
-\begin{itemize}
-    \item \textbf{Start time} (\texttt{start:timestamp}) — the moment
-          execution began, mapped from the scheduling or report system.
-    \item \textbf{Complete time} (\texttt{time:timestamp}) — the moment
-          execution finished.
-\end{itemize}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{4.2cm}|L{8.8cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+\texttt{start:timestamp} & Observed or reconstructed time at which execution
+of the activity began. \\
+\texttt{time:timestamp} & Observed or reconstructed time at which execution
+of the activity finished. \\
+\hline
+\end{tabular}
+\caption{Observed lifecycle timestamp attributes in the final event log.}
+\label{tab:observed_lifecycle_attributes}
+\end{table}
 
 The \textit{service time} (or execution time) is the directly
 identifiable temporal quantity:
@@ -418,20 +447,31 @@ availability schedule.
 
 \subsubsection{Timestamp Mapping by Activity Type}
 
-\begin{itemize}
-    \item \textbf{Gate In.}
-          $\text{start}=\text{FP\_ZEITPUNKT\_ERSTELLUNG}$,
-          $\text{complete}\approx\text{start}$.
-          The OCR gate timestamp (\texttt{StageStartTime}) from the
-          report system is retained as the auxiliary column
-          \texttt{ocr\_timestamp} for diagnostic purposes but is not
-          mapped to an enablement concept.
-    \item \textbf{Yard activities.}
-          $\text{start}=\text{ALP\_ZEITPUNKT\_BEREITMELDUNG}$,
-          $\text{complete}=\text{ALP\_ZEITPUNKT\_ERFUELLUNG}$.
-    \item \textbf{Gate Out.}
-          $\text{start}=\text{complete}=\text{FP\_ZEITPUNKT\_GATEOUT}$.
-\end{itemize}
+Table~\ref{tab:activity_timestamp_mapping} shows how the lifecycle timestamps
+are mapped for each activity type.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{2.2cm}|L{5.3cm}|L{5.3cm}|}
+\hline
+\textbf{Activity type} & \textbf{Start timestamp} &
+\textbf{Complete timestamp} \\
+\hline
+Gate In & \texttt{FP\_ZEITPUNKT\_ERSTELLUNG} & Same value as the start
+timestamp. \\
+Yard activity & \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG} &
+\texttt{ALP\_ZEITPUNKT\_ERFUELLUNG} \\
+Gate Out & \texttt{FP\_ZEITPUNKT\_GATEOUT} &
+\texttt{FP\_ZEITPUNKT\_GATEOUT} \\
+\hline
+\end{tabular}
+\caption{Lifecycle timestamp mapping by activity type.}
+\label{tab:activity_timestamp_mapping}
+\end{table}
+
+The OCR gate timestamp (\texttt{StageStartTime}) from the report system is
+retained in the auxiliary column \texttt{ocr\_timestamp} for diagnostic
+purposes. It is not mapped to activity enablement.
 
 \subsubsection{Model-Derived Pre-Service Delay}
 
@@ -446,13 +486,9 @@ this is called ``waiting time,'' but in the CTB application it must
 not be interpreted as pure queueing or resource-induced waiting.
 Physical truck movement between consecutive terminal locations is not
 represented as a separate activity in the discovered process model.
-The model-derived interval may include:
-\begin{itemize}
-    \item physical movement between operational locations,
-    \item internal traffic and congestion effects,
-    \item resource availability and queue waiting,
-    \item other delays that the control-flow model does not represent.
-\end{itemize}
+The model-derived interval may therefore combine physical movement between
+locations, internal traffic and congestion, resource availability and queue
+waiting, and other delays not represented by the control-flow model.
 This is a domain-specific limitation when transferring
 business-process simulation semantics to physical terminal operations
 and is a methodological limit of this thesis
@@ -466,16 +502,12 @@ route-specific transition durations from the scheduling data (5th
 percentile of the empirical distribution per transition pair,
 \texttt{transition\_baseline.csv}) and used these to reconstruct an
 explicit \texttt{enabled:timestamp} in the input event log.  Closer
-inspection revealed two issues:
-\begin{enumerate}
-    \item The statistical route baselines are not event-specific
-          observations of physical arrival; they are aggregate quantiles
-          that depend on the chosen percentile
-          (Section~\ref{sec:results_percentile_sens}).
-    \item In some cases the estimated readiness timestamp occurs after
-          the observed start timestamp, producing negative waiting
-          times that had to be clipped to zero.
-\end{enumerate}
+inspection revealed two issues. First, the statistical route baselines are
+aggregate quantiles rather than event-specific observations of physical
+arrival. Their values therefore depend on the selected percentile
+(Section~\ref{sec:results_percentile_sens}). Second, the estimated readiness
+timestamp sometimes occurred after the observed start timestamp. This
+produced negative waiting times that had to be clipped to zero.
 ProSiT does not require an externally constructed enabled timestamp.
 It derives enablement from the aligned process model
 \cite{Vinci2026prosit}. The final method keeps only the observed start and
@@ -486,6 +518,8 @@ consistent.
 The transition-baseline data is preserved in the repository as
 diagnostic material and may be useful for future work that introduces
 an explicit spatial-transition model.
+
+\FloatBarrier
 
 \subsection{Context Enrichment}
 \label{sec:context_enrichment}
@@ -524,42 +558,25 @@ entry-known case attributes.
 
 Container-related context is aggregated to case level so that visit
 properties can serve as case-level attributes in ProSiT (script
-\texttt{03\_aggregate\_container\_details\_case\_level.py}):
-
-\begin{itemize}
-    \item \textbf{\texttt{n\_containers}} — number of unique containers
-          handled during the visit.
-    \item \textbf{\texttt{has\_hazardous}} — at least one IMDG container
-          involved.
-    \item \textbf{\texttt{has\_reefer}} — at least one reefer container
-          involved.
-    \item \textbf{\texttt{full\_ratio}} — share of loaded containers.
-    \item \textbf{\texttt{container\_complexity\_mean}} — mean container
-          complexity score.
-    \item \textbf{\texttt{container\_complexity\_sum}} — cumulative
-          complexity score.
-\end{itemize}
-
-Binary indicators are aggregated using logical OR, numerical measures
-through summary statistics.
+\texttt{03\_aggregate\_container\_details\_case\_level.py}). The resulting
+\texttt{n\_containers} attribute counts the unique containers handled during
+the visit. The binary attributes \texttt{has\_hazardous} and
+\texttt{has\_reefer} are aggregated using a logical OR across the complete
+manifest. The \texttt{full\_ratio} records the share of loaded containers,
+while \texttt{container\_complexity\_mean} and
+\texttt{container\_complexity\_sum} describe the average and cumulative
+handling complexity of the visit.
 
 \subsubsection{Yard Features}
 
 Yard state features capture the storage capacity and utilisation status
 of different terminal areas at truck arrival (Gate In event). These
 features are matched temporally using \texttt{pd.merge\_asof} with a
-\texttt{nearest} strategy:
-
-\begin{itemize}
-    \item \texttt{gate\_utilization} — overall terminal-yard utilisation.
-    \item \texttt{rmg\_utilization} — aggregate utilisation across all
-          RMG blocks.
-    \item \texttt{vc\_utilization} — VC-area utilisation.
-    \item \texttt{mt\_utilization} — empty-container storage
-          utilisation.
-    \item \texttt{target\_utilization} — utilisation of the specific
-          block assigned to the truck.
-\end{itemize}
+\texttt{nearest} strategy. The joined snapshot provides the overall
+\texttt{gate\_utilization}, the aggregated \texttt{rmg\_utilization}, and
+the area-level \texttt{vc\_utilization} and \texttt{mt\_utilization}. For
+single-block visits, \texttt{target\_utilization} gives the utilisation of
+the assigned RMG block.
 
 These features are added in \texttt{06\_add\_utils\_to\_eventlog.py}.
 
@@ -568,32 +585,23 @@ These features are added in \texttt{06\_add\_utils\_to\_eventlog.py}.
 Demand features quantify operational load pressure at different
 terminal areas over a rolling 60-minute window (scripts
 \texttt{05\_add\_demand\_features\_to\_eventlog.py} and
-\texttt{08\_add\_all\_target\_features.py}):
-
-\begin{itemize}
-    \item \texttt{gate\_demand} — trucks processed in the last hour
-          across the terminal.
-    \item \texttt{rmg\_demand} — trucks assigned to RMG blocks in the
-          last hour.
-    \item \texttt{vc\_demand} — demand for VC operations.
-    \item \texttt{mt\_demand} — demand for empty-container handling.
-    \item \texttt{target\_demand} — demand for the assigned RMG block.
-\end{itemize}
+\texttt{08\_add\_all\_target\_features.py}). The general
+\texttt{gate\_demand} counts trucks processed across the terminal during the
+preceding hour. The \texttt{rmg\_demand}, \texttt{vc\_demand} and
+\texttt{mt\_demand} attributes separate this load by operational area.
+For single-block visits, \texttt{target\_demand} records the demand for the
+assigned RMG block.
 
 \subsubsection{Target Block Features}
 
 For single-block truck visits, the assigned target RMG block is required for
 the context model. Beyond the target-specific utilisation and demand,
-the log carries:
-
-\begin{itemize}
-    \item \texttt{target\_rank} — ordinal ranking of RMG blocks by
-          real-time utilisation at case arrival.
-    \item \texttt{target\_rank\_group} — categorised rank
-          (\texttt{top\_3}, \texttt{mid}, \texttt{low}).
-    \item \texttt{primary\_target\_area} / \texttt{target\_area} — the
-          block identifier assigned to the case.
-\end{itemize}
+\texttt{target\_rank} gives its ordinal position among the RMG blocks based
+on utilisation at case arrival. The corresponding
+\texttt{target\_rank\_group} reduces this rank to \texttt{top\_3},
+\texttt{mid} or \texttt{low}. The attributes
+\texttt{primary\_target\_area} and \texttt{target\_area} retain the assigned
+block identifier.
 
 These features are reconstructed from the planned, area-specific stop
 labels before the RMG activities are genericised and are then carried as
