@@ -1,35 +1,76 @@
-\chapter{Conclusion (3)}
+\chapter{Conclusion}
 \label{chp:conclusion}
 
-This thesis addressed one of the most important open challenges in ...
+The research objective was to evaluate the fidelity, structural applicability,
+and limitations of automatically discovered data-aware process simulation for
+container-terminal truck operations. The CTB case study shows that these
+aspects must be assessed together. The simulator is reproducible, transparent,
+and structurally stable. However, historical fidelity and executable scenarios
+do not prove that the model can predict physical effects.
 
-The theoretical contribution of this research was ...
+\section{Answer to the Research Objective}
 
-Finally, we demonstrated how our new framework...
+The approach can be applied to CTB truck operations as a transparent model,
+but its use for decision support is limited. The final model reproduces the
+yard-service and arrival distributions with some remaining error and keeps the
+physical order of a truck visit. However, it under-predicts turnaround time,
+and more contextual features do not improve held-out fidelity in the available
+data. The what-if experiments can be reproduced, but their weak congestion
+response shows that spatial container state, equipment movement, and queue
+mechanisms are missing. The model can be used to study its process abstraction
+and identify modelling limits. It is not yet enough for direct recommendations
+about the physical terminal.
 
-Ultimately, this thesis provides both a...
+\section{Answers to the Research Questions}
+
+\begin{description}
+\item[RQ1 (Fidelity).] The final calibrated simulator is structurally stable
+      across ten seeds and reproduces yard-service and arrival distributions,
+      but it under-predicts mean turnaround by 9.306 minutes and P90 by 19.200
+      minutes. The model reproduces parts of the observed behaviour but not
+      the full turnaround-time distribution.
+\item[RQ2 (Structural applicability).] The sequential observed-variant trie
+      replays 99.944\,\% of held-out traces without deviations and satisfies the
+      required Gate In--yard--Gate Out sequence. Its strict case language is a
+      suitable simulation contract, with reduced behavioural generality as
+      an explicit trade-off.
+\item[RQ3 (Contextual expressiveness).] Increasing contextual expressiveness
+      from \textit{no-rules} to \textit{rules$+$workload} does not improve
+      held-out fidelity. The more expressive endpoint has higher turnaround
+      distance and higher cross-seed variation. More context only helps when
+      the available attributes explain the relevant operational variation.
+\item[RQ4 (What-if decision support).] The T22 and demand interventions are
+      transparent and reproducible, but they do not yield a resolved
+      mean-turnaround response. Their behaviour reveals that scenario
+      executability is not equivalent to counterfactual validity when
+      physical locations, relocation feasibility, equipment movements, and
+      explicit queues are absent from the abstraction.
+\end{description}
 
 \section{Future Work}
-While the proposed framework establishes a solid foundation for...
-To advance this framework, future efforts should be directed across the following key areas:
+The framework can be extended in the following areas:
 
 \begin{itemize}  
-    \item \textbf{Different TErminal  Setting):} A fundamental structural difference between SG
+    \item \textbf{Different Terminal Setting:} A structural difference between SG
     
      
 \end{itemize}
 
 \section{Personal Takeaways}
-Beyond the theoretical conclusions of this thesis, I would like to close by reflecting on the personal and professional insights I take away from this research project:
+The project led to the following personal takeaways:
 
 \begin{enumerate}
-    \item \textbf{Independent Project Management:} I learned how to self-organize, manage timelines effectively, and work independently to drive a large-scale project to completion.
+    \item \textbf{Independent Project Management:} I learned to organise my
+    work, manage deadlines, and complete a large project independently.
 
-    \item \textbf{Embracing Setbacks as Progress:} I understood firsthand that failure, unexpected results, and rigorous debugging are not roadblocks, but rather inherent and necessary steps in the scientific research process.
+    \item \textbf{Learning from Setbacks:} Failed attempts, unexpected results,
+    and debugging were part of the research process and helped improve the work.
 
-    \item \textbf{The Value of First Principles Thinking:} I learned that when facing complex challenges, the most effective strategy is often to step back, re-evaluate the fundamental mathematics and logic, and approach the problem from a renewed perspective.
+    \item \textbf{First Principles Thinking:} When a problem became difficult, it helped to return to the basic mathematics and logic before continuing.
 
-    \item \textbf{Prioritizing Reproducibility Over Complexity:} I realized that a tested, reproducible, and well-documented framework holds far more scientific value than a system that is overly complex but unmanageable. Furthermore, working in small, modular, and heavily tested scripts proved absolutely necessary when scaling up to a large codebase.
+    \item \textbf{Reproducibility Over Complexity:} A tested and documented
+    framework is more useful than a system that cannot be managed. Small and
+    tested scripts made the codebase easier to handle.
 
-    \item \textbf{Navigating Collaborative Research Dynamics:} I experienced the immense value of working within an active research group, where navigating open questions and integrating diverse feedback significantly enriched the final work.
+    \item \textbf{Working with Others:} Discussions and feedback from the research group improved the final work.
 \end{enumerate}

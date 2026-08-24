@@ -3,43 +3,108 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Container Terminal Operations} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Container terminals represent critical nodes within global supply chains and facilitate the transition between maritime and Hinterland transportation networks. [seaport erläuterung!] They serve as interfaces between deep-sea vessels and hinterland transportation systems including road, rail, and inland waterway transport. Modern container vessels have a capacity of more than 20,000 containers in a single voyage, requiring container terminals to process large cargo volumes efficiently while maintaining short turnaround times and high service quality [SOURCE]. Since their introduction in the 1960s, standardized containers have become the dominant unit for global freight transportation. To ensure comparability across different container sizes, container throughput is commonly measured in Twenty-foot Equivalent Units (TEU). A standard 20-foot container corresponds to one TEU, whereas a 40-foot container corresponds to two TEUs \cite{Hartmann2005cenariosforCTSimulation}. Container terminals operate under considerable operational pressure. Increasing international trade volumes, larger vessels, and growing demands for rapid cargo handling require terminal operators to coordinate numerous interdependent processes and resources simultaneously. As a result, operational decisions directly affect vessel berth times, truck turnaround times, a terminals throughput, and overall service quality \cite{CTSteenken2004,OptimizingCTs2023}. The empirical context of this thesis is the HHLA Container Terminal Burchardkai (CTB) located in the Port of Hamburg. The CTB is the largest container terminal in Hamburg and. The terminal handles large volumes of import, export, and transshipment containers while coordinating interactions between vessels, trucks, rail services, storage yards, and container handling equipment. [ACTUAL NUMBERS] 6.3 mio HHLA total 
+Container terminals connect
+maritime and hinterland transport networks. [seaport erläuterung!] They link
+deep-sea vessels with road, rail, and inland waterway transport. Large
+container vessels can carry more than 20,000 containers, so terminals must
+handle large cargo volumes while keeping turnaround times short [SOURCE].
+Since the 1960s, standardised containers have become the main unit of global
+freight transport. Container throughput is measured in Twenty-foot Equivalent
+Units (TEU): a 20-foot container equals one TEU and a 40-foot container equals
+two TEU \cite{Hartmann2005cenariosforCTSimulation}. Larger vessels and higher
+trade volumes place terminals under pressure because many processes and
+resources must be coordinated at the same time. Operational decisions affect
+vessel berth times, truck turnaround times, terminal throughput, and service
+quality \cite{CTSteenken2004,OptimizingCTs2023}. This thesis studies the HHLA
+Container Terminal Burchardkai (CTB) in Hamburg. [ACTUAL NUMBERS] 6.3 mio HHLA total
 [Abbildung Hinterland/ Wasserseite Abgrezung Bild von der HHLA]
 
 \subsection{Container Terminals as Complex Logistics Systems} 
-Container terminals are handled  as highly complex logistics systems due to the large number of interacting resources, transportation modes, and operational dependencies involved in the everyday operations.  \cite{CTSteenken2004,OptimizingCTs2023}. 
+Container terminals are complex logistics systems because many resources,
+transport modes, and operational processes interact during daily operations
+\cite{CTSteenken2004,OptimizingCTs2023}.
 
 \subsubsection{Container Flows} 
-Within a seaport container terminal, containers move between multiple transportation modes and storage locations. A container may arrive by deep-sea vessel, feeder vessel, truck, or rail and subsequently leave the terminal using any of these transport modes. [HINTERLAND ERWÄHNEN] Consequently, a terminal continuously coordinates container flows between the seaside and the landside of the supply chain \cite{Hartmann2005cenariosforCTSimulation}.  Hartmann distinguishes four primary transportation modes within container terminal operations: deep-sea vessels, feeder vessels, trucks, and rail services. Together, these modes create numerous possible transport paths through the terminal and generate highly dynamic container flows that must be coordinated efficiently \cite{Hartmann2005cenariosforCTSimulation}. Most containers entering a terminal undergo at least one temporary storage phase within the container yard before being transferred to their outbound transportation mode. Therefore, terminal operations must coordinate not only transportation processes but also inventory management and storage allocation decisions \cite{CTSteenken2004}. 
+Within a seaport terminal, containers move between transport modes and storage
+locations. A container may arrive by vessel, truck, or rail and later leave by
+one of these modes. [HINTERLAND ERWÄHNEN] The terminal coordinates flows
+between the seaside and landside \cite{Hartmann2005cenariosforCTSimulation}.
+Hartmann distinguishes deep-sea vessels, feeder vessels, trucks, and rail as
+the four main transport modes. Their combinations create many possible paths
+through the terminal \cite{Hartmann2005cenariosforCTSimulation}. Most
+containers are stored in the yard before they leave the terminal. Terminals
+must manage both transport processes and storage allocation
+\cite{CTSteenken2004}.
 Figure: Container Flow through a Container Terminal  [Wasserseite -> LAGER -> hINTERLAND Günstig in Bezug auf Hamburger Ladungsverteilung]
 
 \subsubsection{Yard Components and Resources}
-Container terminals consist of multiple operational subsystems that interact continuously. Bett et al. distinguish three primary terminal areas: the quayside, the yard area, and the landside. The quayside includes berths and quay cranes used for vessel loading and unloading. The yard acts as an intermediate storage area for containers, while the landside connects the terminal to trucks and rail operations\cite{Bett2024}. For this Thesis relevant is the terminals yard area, that splits into three seperate areas in the case of the CTB in Hamburg:
+Container terminals consist of several connected operational areas. Bett et
+al. distinguish the quayside, yard, and landside. The quayside includes berths
+and quay cranes for loading and unloading vessels. The yard stores containers
+between transport steps, while the landside connects the terminal to trucks
+and rail operations \cite{Bett2024}. This thesis focuses on the CTB yard, which
+has three areas:
 
 \begin{enumerate}
-    \item \textbf{Automatic storage Blocks:} The majority of containers is stored in the automatic storage blocks, operated by "Rail Mounted Gantry Cranes" - therefore often called RMG-Blocks. The CTB operates 22 RMG-Blocks with a total capacity of 2231 operative TEU slots and 3 RMGs per Block, operating between the waterside and the landside.[total of 40.000 operative TEU in Block]  up to 5 high due to operational moves. 
+    \item \textbf{Automatic storage Blocks:} Most containers are stored in
+    automatic blocks operated by Rail Mounted Gantry Cranes (RMGs). The CTB
+    operates 22 RMG blocks with 2,231 operational TEU slots and three RMGs per
+    block between the waterside and landside. [total of 40.000 operative TEU
+    in Block] up to 5 high due to operational moves.
 
-    \item \textbf{Manual Yard:} In addition to the automated storage area, containers can be stored in the manually operated yard. Due to its central location within the terminal, this area is frequently used for operationally flexible storage depending on the assigned vessel berth, yard workload, and equipment availability. Container movements are typically performed by manually operated handling equipment.
+    \item \textbf{Manual Yard:} Containers can be stored in a manually
+    operated yard. Its central location allows storage decisions to depend on
+    the assigned vessel berth, yard workload, and equipment availability.
+    Manual handling equipment moves the containers.
 
-    \item \textbf{Empty Container Yard:} Empty containers are primarily stored in a dedicated empty container yard. Unlike full containers, empty containers are generally not assigned to a specific customer order but are managed as interchangeable inventory within a shipping line's container fleet. 
-    We want containers whose auslieferung noz numerical is, we want to stroe them as dense as possible, different handling equipment, and up to 6 high. 
-    Storing empty containers separately prevents them from occupying or being stacked on top of storage positions of full containers that are linked to specific transport orders. The empty container yard is operated using reach stackers, allowing storage heights of up to six containers.
+    \item \textbf{Empty Container Yard:} Empty containers are stored in a
+    separate yard. They are often managed as interchangeable inventory within
+    a shipping line's container fleet instead of being assigned to one order.
+    Empty containers without a fixed delivery order can be stored densely.
+    Keeping them separate prevents them from blocking full containers that
+    are linked to transport orders. Reach stackers operate the empty-container
+    yard and can stack containers up to six high.
     
 \end{enumerate}
 hhla wEBSEITE bILD VOM bURCHARDKAI 
 
 
-Trucks can be ordered to pick up and deliver their cargo at all of these yard sections, waiting in transfer points to be operated by the respective resources. Resource shortages or inefficiencies within one subsystem often show effects throughout the whole terminal and negatively impact other operations \cite{CTSteenken2004}.
+Trucks can pick up or deliver containers in all three yard areas. At each area,
+they wait at a transfer point for the assigned handling resource. A resource
+shortage in one area can delay other terminal operations
+\cite{CTSteenken2004}.
 
 \subsubsection{Interdependencies Between Terminal Processes}
-An important characteristic of container terminals is the strong interdependency of their operational processes. Individual decisions rarely affect only one subsystem. Instead, local disturbances often propagate throughout the entire terminal. [For example, delayed vessel arrivals may postpone container unloading operations, which subsequently affects yard occupancy levels. Increased yard congestion can reduce crane productivity and generate longer waiting times for trucks arriving at the terminal. These delays may ultimately result in congestion at terminal gates and reduced service quality for trucking companies] - Mit Fokus, was bedeutet das eigentlich tatsächlich für ein terminal? \cite{CTSteenken2004,Bett2024}. The complexity of these interactions is one of the primary reasons why analytical optimization approaches alone are often insufficient for evaluating operational decisions in container terminals. 
+Terminal processes are connected, so a local decision or disruption
+can affect other parts of the terminal. [For example, delayed vessel arrivals
+may postpone unloading and change yard occupancy. Yard congestion can reduce
+crane productivity and increase truck waiting times.] - Mit Fokus, was
+bedeutet das eigentlich tatsächlich für ein terminal?
+\cite{CTSteenken2004,Bett2024}. These interactions are difficult to evaluate
+with analytical optimisation alone.
 
 \subsection{Truck Handling Processes} 
 \subsubsection{Importance of Truck Operations} 
-Road transportation is a major component of hinterland connectivity in modern container terminals.  As a consequence, terminals must coordinate large numbers of truck arrivals while maintaining acceptable service levels and avoiding excessive congestion and effects on public traffic in the port area \cite{CTSteenken2004,CTprocessMiningTAS2020}. Fluctuating truck arrival patterns can exceed the available processing capacity of gates, yard equipment, and storage areas, resulting in longer waiting times and reduced terminal efficiency \cite{Bett2024,CTprocessMiningTAS2020}. 
+Road transport is part of a container terminal's hinterland
+connection. Terminals must coordinate many truck arrivals while limiting queues
+inside the terminal and on public roads in the port area
+\cite{CTSteenken2004,CTprocessMiningTAS2020}. Changing arrival volumes can
+exceed the capacity of gates, yard equipment, and storage areas. This increases
+waiting times and reduces terminal performance
+\cite{Bett2024,CTprocessMiningTAS2020}.
 
 \subsubsection{A [Typical] Truck Visit Process} 
-To regulate truck arrivals and reduce congestion, many container terminals employ a Truck Appointment System (TAS). [Thats importnant as a decsion support resulting tool!] Within a TAS, trucking companies reserve a predefined time slot before visiting the terminal and specify the container transactions that will be executed during the visit \cite{Bett2024,CTprocessMiningTAS2020}. A typical truck visit begins with the reservation of an appointment slot and the submission of the corresponding transport order. When arriving at the terminal, the truck passes through an automated pre-gate area where Optical Character Recognition (OCR) systems identify containers, vehicle registration plates, and aggregates touring information with booking information. [Despite the hourly booking slots, the Depending on the current workload and gate queue lengths, the truck may have  Referr to Poisson later in the arrival distribution section]to wait before being processed at the physical gate and officially entering the terminal area \cite{Bett2024}. After entering the terminal, the truck drives to the assigned container yard location. Depending on the transport order, the truck can perform one or multiple container transactions. These transactions may include: 
+Many container terminals use a Truck Appointment System (TAS) to regulate
+arrivals and reduce congestion. [Thats importnant as a decsion support
+resulting tool!] A trucking company reserves a time slot before the visit and
+states which container transactions it will perform
+\cite{Bett2024,CTprocessMiningTAS2020}. At the automated pre-gate, Optical
+Character Recognition (OCR) systems identify the container and vehicle and
+match this information with the booking. [Despite the hourly booking slots,
+the Depending on the current workload and gate queue lengths, the truck may
+have Referr to Poisson later in the arrival distribution section] The truck may
+then wait before the physical gate admits it to the terminal \cite{Bett2024}.
+It drives to the assigned yard location and performs one or more transactions:
 
 \begin{itemize}
     \item delivering an export container, 
@@ -47,17 +112,37 @@ To regulate truck arrivals and reduce congestion, many container terminals emplo
     \item delivering or receiving  multiple containers while at the same yard location, 
 \end{itemize} 
 
-A particularly efficient operational pattern is referred to as a \textit{multi move}. In a multi move, a truck delivers one or more export containers and subsequently picks up one or more import containers during the same terminal visit. Multi moves reduce empty truck trips, improve truck utilization, lower emissions, and decrease congestion both inside and outside the terminal, but require efficient routing by the terminal \cite{CTprocessMiningTAS2020}. Following the completion of all assigned transactions, the truck proceeds to the exit gate, completes the required departure procedures, and leaves the terminal. The total time spent between entering and leaving the terminal is commonly referred to as the \textit{Truck Turnaround Time (TTT)}, which represents one of the most important performance indicators in truck and overall terminal operations \cite{Bett2024}. 
+An efficient pattern is the \textit{multi move}. A truck delivers one or more
+export containers and collects one or more import containers during the same
+visit. This reduces empty trips, emissions, and congestion, but requires good
+terminal routing \cite{CTprocessMiningTAS2020}. After all transactions, the
+truck passes the exit gate and leaves the terminal. The time between entry and
+exit is the \textit{Truck Turnaround Time (TTT)}, a performance indicator for
+truck operations \cite{Bett2024}.
 
 \subsubsection{Terminal Operating Systems}
-Modern container terminals rely on integrated information systems to coordinate operational activities. At the center of these systems are the Order Management and Terminal Control System (TCS), that orchestrate the movements and storage of containers across terminal subsystems and manages operational orders throughout the terminal lifecycle. The TOS is typically connected to specialized subsystems including a Gate Operating Systems (GOS), Yard Management Systems, Equipment Control Systems, and appointment management platforms. Together, these systems continuously generate and manage operational event data whenever trucks arrive, containers are handled, orders are updated, or terminal resources execute work instructions. Each subsystem stores a different subset of operational information. While gate systems primarily record arrival and departure events and details, yard management systems capture container movements, assign storage locations and and communicates with the equipment control system thats responsible for the equipment execution orders. Consequently, the complete reconstruction of truck visits often requires the integration of multiple operational data sources. For the purposes of this thesis, the Order and Terminal Control System serves as the primary data source. Additional information from other operational systems is subsequently used to enrich and validate the resulting event log. The employed data integration process is described in detail in Chapter~\ref{chp:experiments_and_framework}. 
+Container terminals use several information systems to coordinate operations.
+The Order Management and Terminal Control System (TCS) manages container
+movements, storage locations, and operational orders. It is connected to other
+systems, including a Gate Operating System (GOS), yard management systems,
+equipment control systems, and appointment platforms. Each system records a
+different part of the operation. Gate systems record arrivals and departures,
+while yard systems record container movements and storage assignments.
+Equipment control systems record the execution of handling orders. A complete
+truck visit must be reconstructed from several data sources. This
+thesis mainly uses the Order and Terminal Control System and adds data from
+other systems to build and check the event log. Chapter~\ref{chp:experiments_and_framework}
+describes this data integration.
 
 \subsubsection{Sources of Operational Delays} 
-Truck turnaround times are influenced by various operational factors that function individually or interdependent throughout the terminal processes. Common reasons for delay include:
+Truck turnaround time depends on several factors. Common reasons for delay
+include:
 
 \begin{itemize} 
-    \item congestion at entry and exit gates, also caused and affected by road traffic outside the terminal
-    \item pick up containers that are buried due to unexpected long dwell time on the terminal
+    \item congestion at entry and exit gates, including effects from road
+    traffic outside the terminal;
+    \item pick-up containers that are blocked by other containers after a long
+    dwell time;
     \item truck traffic congestion within container yard sections and main routes,
     \item limited availability of container handling equipment (CHE), 
     \item high occupancy levels within storage blocks, 
@@ -65,29 +150,66 @@ Truck turnaround times are influenced by various operational factors that functi
     \item unexpected equipment failures or maintenance activities 
 \end{itemize} 
 
-Because these factors are highly interdependent, local disruptions often affect the entire terminal operations. For example, insufficient yard crane availability and a prioritised vessel departure in time can increase truck service time, which affects the trucks waiting times in the yard, which subsequently results in traffic congestion on the terminal area, a lower gate throughput and overall slowed Hinterland performance \cite{CTSteenken2004,Bett2024}. 
+These factors are connected, so a local disruption can affect other terminal
+operations. For example, low yard-crane availability or vessel priority can
+increase truck service and waiting times. Longer queues can then cause yard
+traffic, reduce gate throughput, and slow hinterland operations
+\cite{CTSteenken2004,Bett2024}.
 
 \subsubsection{Operational Performance Indicators} 
-The performance of truck operations is commonly evaluated using a set of operational key performance indicators (KPIs). 
+Truck operations are evaluated with operational key performance indicators
+(KPIs).
 \begin{itemize} 
     \item \textbf{Truck Turnaround Time (TTT):} Total time a truck spends inside the terminal between entry and exit. 
     \item \textbf{Waiting Time:} Time spent waiting for gate processing, yard equipment, or storage area access.  
     \item \textbf{Yard Utilization:} Degree to which storage areas are occupied and operational resources are utilized.
 \end{itemize} 
 
-Among these indicators, Truck Turnaround Time is frequently considered the most important measure of truck service quality because it directly reflects the operational efficiency experienced by trucking companies and cargo owners and is therefore one out of four main KPIS for the HHLA Container Terminals.\cite{Bett2024,CTprocessMiningTAS2020}.
+Among these indicators, Truck Turnaround Time is often the main measure of
+truck service quality because it reflects the time experienced by trucking
+companies and cargo owners. It is one of four main KPIs used by the HHLA
+container terminals \cite{Bett2024,CTprocessMiningTAS2020}.
 
 \subsection{Simulation-Based Decision Support in Container Terminals} 
 \textit{This is now trying to explain Why is there a need for better decision support in container terminals in general, why is simulation a common approach for that purpose, and why are traditional simulation approaches insufficient?}
 
-The Management of Container Terminals continuously faces operational decision making challenges. Decisions regarding truck appointment policies, resource allocation, equipment scheduling, maintenance planning, and yard management need to be made while operations remain active. Because container terminal processes are very interconnected, local decisions can quickly affect other parts of the system and influence waiting times, resource utilization, throughput, and eventually customer service quality.
-Although terminal managers often possess extensive operational experience, many decisions involve considerable uncertainty. Changes to operational procedures or capacity allocations may have unintended consequences, create congestion, increase handling times, or reduce service reliability. As a result, decision-making in container terminals increasingly relies on analytical and digital decision-support approaches that allow operational alternatives to be assessed before implementation. Simulation as a decision support tool in container terminal management has become an interesting and widely adopted research field. The application is reality is still lacking though, due to high complexity, costs, and a missing technical expertise or priority in the terminal teams. Running a Simulation enables managers and researchers to evaluate operational scenarios in a virtual environment without affecting live terminal operations. By reproducing the interactions between trucks, handling equipment, storage areas, and gate processes, simulation can estimate the effects of operational changes before they are implemented in practice. Typical applications of simulation in container terminals include the evaluation of Truck Appointment Systems (TAS), equipment allocation strategies, resource planning, yard management and storage placement strategies. Simulation is especially valuable when analysing congestion effects, resource bottlenecks, and operational trade-offs that are difficult to evaluate based on purely critical analytical thinking. A variety of studies have demonstrated the usefulness of simulation for improving truck turnaround times, resource utilization, and overall terminal performance \cite{Kastner2021,Bett2024,Carboni2025}. 
+Terminal managers make decisions about truck appointments, resources,
+equipment schedules, maintenance, and yard operations while the terminal
+remains active. Because terminal processes are connected, local decisions can
+change waiting times, resource use, throughput, and service quality.
+Even experienced terminal managers face uncertainty. Changes to procedures or
+capacity can create congestion, increase handling times, or reduce service
+quality. Simulation allows managers and researchers to evaluate such changes
+without affecting live operations. Common applications include Truck
+Appointment Systems (TAS), equipment allocation, resource planning, yard
+management, and storage strategies. Simulation is useful for congestion,
+bottlenecks, and trade-offs that are difficult to analyse directly. Studies
+have shown its value for truck turnaround time, resource use, and terminal
+performance \cite{Kastner2021,Bett2024,Carboni2025}. Practical use is still
+limited by model complexity, costs, and missing technical expertise in
+terminal teams.
 
 \begin{sloppypar}
-Various simulation paradigms have been applied in terminal research. Discrete Event Simulation (DES) is the most frequently used approach because container terminal operations can naturally be represented as sequences of discrete operational events such as truck arrivals, gate processing, container handling, and equipment usage. Other approaches such as System Dynamics, Agent-Based Modeling, and microscopic traffic simulation have also been applied to investigate specific operational and strategic questions \cite{Muravev2019,Muravev2021,Carboni2025}. A more detailed discussion of simulation methodologies is provided in Section~2.3. Despite their widespread adoption, traditional simulation projects suffer from several limitations. Developing a simulation model typically requires extensive domain knowledge, detailed process understanding, and considerable modeling effort. The collection, formalization, implementation, calibration, and validation of process knowledge often represent the most time-consuming phases of a simulation project. Furthermore, manually developed simulation models most of the time rely on expert assumptions regarding process behavior. However, experts often describe how processes are intended to operate rather than how they are actually executed in practice, therefore, unintended discrepancies can appear between the simulation model and the real operational processes \cite{PMRozinat2009}.
+Different simulation approaches are used in terminal research. Discrete Event
+Simulation (DES) is the most common because terminal operations can be modelled
+as events such as truck arrivals, gate processing, container handling, and
+equipment use. System Dynamics, Agent-Based Modelling, and traffic simulation
+are used for other operational and strategic questions
+\cite{Muravev2019,Muravev2021,Carboni2025}. Traditional simulation projects
+have limits. Building a model requires domain knowledge, process
+understanding, and much manual work. Data collection, implementation,
+calibration, and validation take time. Manual models depend on expert
+assumptions, which may describe the intended process rather than its actual
+execution \cite{PMRozinat2009}.
 \end{sloppypar}
 
-In dynamic environments like container terminals, these differences can impact the quality of simulation results. Another challenge is the continuous maintenance and calibration effort required to keep simulation models aligned with changing operational conditions. As terminal processes, workloads, and operating rules evolve over time, manually maintaining simulation models becomes costly and requires technical suppoert. At the same time, modern container terminals continuously record large amounts of operational event data through Terminal Operating Systems, Gate Operating Systems, and related information systems. These data sources provide detailed information about actual process executions and operational behavior. Rather than relying mainly on expert knowledge, process knowledge could be extracted directly from operational data. Process Mining provides a methodological framework for discovering, analysing, and monitoring real processes based on historic operational data. By deriving process information directly from recorded datasets, Process Mining offers the potential to reduce modeling efforts, while improving the representation of real-world behavior. Consequently, it represents a promising foundation for data-driven simulation model construction and automated simulation model discovery.
+These differences can reduce the quality of simulation results. Manual models
+must be maintained and calibrated when processes, workloads, and operating
+rules change. This work is costly and requires technical support. At the same
+time, terminal information systems record large amounts of operational data.
+Process Mining can use these data to discover, analyse, and monitor processes
+from their recorded execution. This may reduce manual modelling work and make
+simulation models closer to the observed process.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,10 +217,25 @@ In dynamic environments like container terminals, these differences can impact t
 
 \subsection{Transactional Information Systems}
 Woraus und warum entstehen überall überhaupt Everntlogs?
-Today, most business processes are supported and documented through information systems. These systems are primarily designed to facilitate and document operational activities rather than to analyze whole process flows. Examples include Enterprise Resource Planning (ERP) systems, Customer Relationship Management (CRM) systems, Manufacturing Execution Systems (MES), and Terminal Operating Systems (TOS) used in container terminals. 
-Whenever users or objects interact with such systems, digital records are generated and stored. Activities such as creating, updating, processing, or completing an order leave traces in the underlying databases. While this information is mainly required for operational control, documentation, and basic analysis purposes, it simultaneously creates detailed records of (partial) process executions. 
-In container terminals, operational data are continuously generated by systems such as the Terminal Operating System (TOS), Gate Operating System (GOS), and Yard Management System (YMS). Typical examples include the registration of a truck arrival at a gate, the assignment of a container to a storage location, or the execution of a container handling operation. Each transaction recorded by these systems creates information about what happened, when it happened, and which operational object was involved. 
-As those kind of business processes are executed step by step, these recorded transactions form chronological sequences of events. Such event data provide the foundation for Process Mining techniques, which aim to reconstruct and analyze actual process behavior directly from system-generated data. Regarding the HHLA-CTB information systems it should be noted, that due to historical growth and development of the individual systems, not all systems collect the same level of detail or have alternating names for the same facilities, which will be elaborated on when discussing the event log engineeing. 
+Most business processes are supported by information systems. These systems
+document operational activities, but they are not always designed to analyse a
+complete process. Examples are Enterprise Resource Planning (ERP), Customer
+Relationship Management (CRM), Manufacturing Execution Systems (MES), and the
+Terminal Operating Systems (TOS) used in container terminals.
+User actions and object changes create records in the underlying databases.
+Creating, updating, processing, or completing an order leaves information
+about parts of the process execution.
+In container terminals, the TOS, Gate Operating System (GOS), and Yard
+Management System (YMS) record operational transactions. Examples include a
+truck arrival, a storage assignment, and a container-handling operation. Each
+record provides information about what happened, when it happened, and which
+object was involved.
+Because business processes are executed step by step, recorded transactions
+form event sequences. These data are the basis for Process Mining, which
+reconstructs process behaviour from information systems. At HHLA CTB, the
+systems have grown over time. They do not all record the same level of detail
+and sometimes use different names for the same facility. The event-log
+engineering section discusses this issue.
 
 \subsection{Events, Cases and Traces}
 
@@ -110,10 +247,12 @@ Timestamp
 Attribute
 Using HHLA Examples
 
-Process Mining views business processes as sequences of events recorded during one process execution. To describe these sequences, several fundamental concepts should be explained. 
+Process Mining describes a process as a sequence of recorded events. The
+following terms define this event-log structure.
 
 \paragraph{Event}
-An event represents the occurrence of a specific activity within a process at a particular point in time. Each event documents that something happened during the execution of a process. Examples of events in a container terminal include: 
+An event records an activity at a point in time. Examples from a container
+terminal include:
 \begin{itemize} 
     \item Truck drives through OCR gate, 
     \item Gate Check completed, 
@@ -141,7 +280,7 @@ A case represents a single process instance. It is defined by the object whose p
     \item a truck visit. 
 \end{itemize} 
 
-In the context of this thesis, a truck visit serves as the primary process instance and therefore represents the case thats being investigated in.
+In this thesis, one truck visit is one case.
 
 In traditional event logs, events are often represented by a single timestamp, typically indicating the completion of an activity. For performance-oriented Process Mining and simulation applications, richer temporal information is required. Two directly observable lifecycle states are commonly distinguished:
 
@@ -152,8 +291,9 @@ In traditional event logs, events are often represented by a single timestamp, t
 
 The duration between these two timestamps is the \textit{service time} (or execution time) of the activity. A third temporal concept, \textit{enablement}, describes the moment at which an activity becomes executable according to the process-model state. In process-mining-based simulation approaches, enablement is typically not an observed input-log attribute but is derived by replaying the event log against the discovered process model \cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The interval between model-derived enablement and the observed start timestamp is referred to as \textit{waiting time} in the ProSiT framework \cite{Vinci2026prosit} and corresponds to a pre-service delay that may include resource contention, queueing effects, and — in domains with spatial separation between activities — physical movement time. 
 
-\paragraph{Attributes} 
-In addition to the mandatory process information, events may contain supplementary attributes that provide further context about the execution of the process. Examples of event attributes in container terminal operations include: 
+\paragraph{Attributes}
+Events may contain attributes that describe the process context. Examples from
+container terminal operations include:
 
 \begin{itemize} 
     \item Truck ID,
@@ -165,17 +305,19 @@ In addition to the mandatory process information, events may contain supplementa
     \item Trucking Company. 
 \end{itemize} 
 
-These attributes enable more detailed analyses and are particularly important for data-aware Process Mining and simulation approaches. 
+Data-aware Process Mining and simulation methods can use these attributes as
+model inputs.
 \paragraph{Trace}
 A trace is the chronologically ordered sequence of all events belonging to a specific case. For a truck visit, a trace may appear as follows: 
 
 \begin{quote} OCR Gate Entry $\rightarrow$ Gate In $\rightarrow$ Yard Arrival $\rightarrow$ Container Delivery $\rightarrow$ Container Pick-Up $\rightarrow$ Gate Out 
 \end{quote} 
 
-A trace therefore describes the actual execution path followed by a single process instance.
+A trace describes the execution path of one process instance.
 
 \subsection{Event Logs} 
-An event log is the central data structure used in Process Mining. It consists of a collection of events that are grouped into cases and ordered according to their timestamps. At a minimum, each event in an event log contains three essential attributes: 
+An event log groups events into cases and orders them by timestamp. Each event
+requires at least three attributes:
 \begin{itemize} 
 \item Case Identifier, 
 \item Activity, 
@@ -192,7 +334,8 @@ For simulation-oriented process mining, richer event information is required:
 
 The CTB input log used in this thesis provides start and completion timestamps required for execution-time modelling, while activity enablement is reconstructed during process-model alignment by the simulation-discovery framework (Section~\ref{sec:simulation_discovery_methodology}).
 
-Additional attributes are usually included to enrich the event data with operational context. Table~\ref{tab:eventlogexample} illustrates a simplified event log. 
+Other attributes can add operational context. Table~\ref{tab:eventlogexample}
+shows a simplified event log.
 
 \begin{table}[h] 
 \centering 
@@ -209,19 +352,37 @@ Additional attributes are usually included to enrich the event data with operati
 \\ \hline \end{tabular} 
 \end{table} 
 
-For information and data exchange between Process Mining tools, event logs can be stored in standardized formats. The most widely adopted standard is the eXtensible Event Stream (XES) format. XES was specifically developed for Process Mining applications and enables the storage of events, cases, timestamps, and additional attributes in a structured and tool-independent way [SOURCE]. Event logs form the bridge between operational information systems and Process Mining techniques. By organizing and collecting recorded events into cases and traces, they represent the transformation from  raw operational data into a representation that makes process discovery, conformance checking, and performance analysis generally possible [SOURCE]Seed.
+Event logs can be stored in standard formats for exchange between Process
+Mining tools. The eXtensible Event Stream (XES) format stores events, cases,
+timestamps, and other attributes in a structured and tool-independent form
+[SOURCE]. By organising database records into cases and traces, an event log
+turns raw operational data into input for process discovery, conformance
+checking, and performance analysis [SOURCE].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Process Mining Foundations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Definitions} 
-As an effect of the ongoing digitalisation of our society, companies and organisations naturally collect increasingly larger and faster growing volumes of operational data through enterprise systems such as Enterprise Resource Planning (ERP), Customer Relationship Management (CRM), and Workflow Management Systems (WfMS) [SOURCE]. A variety of analytical disciplines have been developed to exploit these growing data sources. Disciplines like Business Intelligence, Data Mining, and Process Mining are among the most prominent and increasingly established fields. Business Intelligence (BI) focuses mainly on descriptive analytics and the monitoring of organizational performance through dashboards, reports, and the calculation and provision of key performance indicators (KPIs). The goal of BI is to provide decision makers with aggregated information about past and current business performances \cite{PMvanDerAalst2016}.
+Companies record growing amounts of operational data through systems such as
+Enterprise Resource Planning (ERP), Customer Relationship Management (CRM),
+and Workflow Management Systems (WfMS) [SOURCE]. Business Intelligence, Data
+Mining, and Process Mining analyse these data in different ways. Business
+Intelligence (BI) uses dashboards, reports, and key performance indicators
+(KPIs) to describe past and current performance
+\cite{PMvanDerAalst2016}.
 \begin{sloppypar}
-Data Mining focuses on identifying patterns, correlations, classifications, or predictive relationships within datasets. Traditional data-mining approaches treat observations as independent records and often disregard the ordering and dependencies between events \cite{PMvanDerAalst2016}. Process Mining serves as the bridge between traditional model-based process analysis and data-driven analytics. It exploits event data recorded by information systems to discover, monitor, and therefore provide a data based foundation to improve business processes. Instead of focusing on isolated records, Process Mining explicitly considers the sequence of events that constitutes a processes executions. Van der Aalst, as a main contributor to the research field, defines Process Mining as a discipline that aims to improve operational processes through the systematic use of event data and process models \cite{PMRozinat2009}. A central characteristic of Process Mining is that it combines process models with historically observed execution data. This enables analysts to discover actual process behavior, compare observed executions with expected behavior, identify bottlenecks, and gain insights for plannable process improvement \cite{PMvanDerAalst2016}. 
+Data Mining identifies patterns, correlations, classifications, and predictive
+relationships in datasets. Traditional methods often treat observations as
+independent records and ignore the order of events
+\cite{PMvanDerAalst2016}. Process Mining connects process models with recorded
+event data. It uses event sequences to discover and monitor actual process
+behaviour and to identify bottlenecks or deviations
+\cite{PMRozinat2009,PMvanDerAalst2016}.
 \end{sloppypar}
 
 
-\subsubsection{Process Perspectives} Business processes can be analysed from different perspectives. Early Process Mining research distinguishes four root perspectives, that together provide a comprehensive view of process executions \cite{PMRozinat2009}. 
+\subsubsection{Process Perspectives} Process Mining studies a process from four
+perspectives \cite{PMRozinat2009}.
 
 \paragraph{Control-Flow Perspective} 
 The control-flow perspective describes the ordering relations between activities and captures how process instances progress through a process. It focuses on questions such as which activities occur, in which order, and which alternative execution paths exist. 
@@ -233,19 +394,28 @@ The resource perspective provides the organizational dimension of a process. It 
 The data perspective analyzes process-related attributes and case characteristics. Depending on the type of case, attributes can include customer types, object categories or risk classes. Such attributes often influence process decisions and execution paths \cite{PMRozinat2009}. 
 
 \begin{sloppypar}
-Together, these perspectives provide a multidimensional view of business processes and form the foundation of advanced process analysis techniques.
-\end{sloppypar} 
+Together, these perspectives describe the process structure, timing, resources,
+and data.
+\end{sloppypar}
 
 \subsubsection{Process Discovery}
-A process discoveries objective is to automatically construct a process model solely from recorded event data without prior process knowledge \cite{PMvanDerAalst2016}. The input to process discovery is an event log containing historical process executions. The output is a process model that as accurately as possible reproduces the observed behavior. Depending on the chosen discovery algorithm, the resulting model can be represented as a Petri net, process tree, BPMN model, or directly-follows graph \cite{PMRozinat2009}. Over the years, numerous discovery algorithms have been proposed. Three classic examples are [SOURCES]: 
+The objective of process discovery is to construct a process model from an
+event log without a predefined process model \cite{PMvanDerAalst2016}. The
+output should reproduce the observed behaviour. Depending on the discovery
+algorithm, it can be a Petri net, process tree, BPMN model, or directly-follows
+graph \cite{PMRozinat2009}. Three common algorithms are [SOURCES]:
 
 \begin{itemize} 
 \item \textbf{Alpha Miner}: One of the earliest process discovery algorithms, capable of identifying causal dependencies and parallel behaviour from event logs. 
 \item \textbf{Heuristic Miner}: An extension of Alpha Miner that incorporates frequency information and is more robust towards noise and infrequent behaviour. 
-\item \textbf{Inductive Miner}: A modern discovery algorithm that recursively decomposes event logs using sequence, exclusive-choice, parallel and loop cuts and guarantees a sound block-structured result. Its treatment of infrequent behaviour and its balance between fitness, precision, generalisation and simplicity make it a strong general-purpose discovery method \cite{Leemans2014InductiveMiner}.
+\item \textbf{Inductive Miner}: Recursively decomposes event logs using
+sequence, exclusive-choice, parallel, and loop cuts. It produces a sound
+block-structured model and can filter infrequent behaviour
+\cite{Leemans2014InductiveMiner}.
 \end{itemize} 
 
-Process discovery enables organizations to obtain an objective representation of how their processes are actually executed rather than how they are presumed to operate \cite{PMvanDerAalst2016}.
+Process discovery shows how a recorded process was executed, rather than how it
+was expected to operate \cite{PMvanDerAalst2016}.
 
 \paragraph{Prefix trees and the observed trace language.}
 A prefix tree, or \emph{trie}, is a rooted tree representation of a set
@@ -259,20 +429,20 @@ one node for every observed prefix
 \end{equation}
 where $\epsilon$ denotes the empty prefix. An edge labelled $a$ connects
 prefix $p$ to $p\cdot\langle a\rangle$ whenever that continuation occurs
-in the log. Thus, traces with the same history share exactly one path up
-to their first different activity; nodes and edges may additionally be
+in the log. Traces with the same history share one path up
+to their first different activity; nodes and edges may be
 annotated with occurrence frequencies or data distributions. PRETSA
 uses precisely this property in process mining: each node groups events
 of the same activity whose traces share the same activity prefix
 \cite{FahrenkrogPetersen2019PRETSA}.
 
 Without pruning or smoothing, a prefix trie accepts exactly the observed
-sequence variants. It therefore maximises replay fitness and precision
+sequence variants. It maximises replay fitness and precision
 on its construction log, but it does not infer unseen combinations,
 loops or concurrency. An Inductive-Miner model makes the opposite
-trade-off: its block-structured cuts deliberately abstract from individual
+trade-off: its block-structured cuts abstract from individual
 variants and can admit behaviour not present verbatim in the log
-\cite{Leemans2014InductiveMiner}. Neither representation is universally
+\cite{Leemans2014InductiveMiner}. Neither representation is always
 superior. The appropriate choice depends on whether the application
 requires controlled generalisation or a strict, auditable trace language.
 
@@ -324,9 +494,13 @@ Measures how well the process model can reproduce the observed behavior in the e
 \item \textbf{Precision}:
 Measures how much additional behavior the model allows beyond the behavior observed in the event log. A precise model avoids allowing many unrealistic or unobserved execution paths. 
 \item \textbf{Generalization}: 
-Measures whether the model captures the underlying process behavior rather than only reproducing the exact traces contained in the event log. A model should therefore allow plausible behavior that was not necessarily observed in the available sample. 
+Measures whether the model captures the underlying process behaviour instead
+of only reproducing the traces in the event log. A model should allow
+plausible behaviour that was not observed in the available sample.
 \item \textbf{Simplicity}: 
-Measures the complexity of the process model. Among models that describe the observed behavior sufficiently well, simpler models with fewer unnecessary elements and relations are generally preferred because they are easier to be interpreted and analysed. 
+Measures the complexity of the process model. If several models describe the
+observed behaviour well enough, the simpler model is usually preferred because
+it is easier to interpret and analyse.
 \end{itemize}
 
 These criteria provide a balanced framework for evaluating process model quality and form the basis of many process-mining evaluation approaches. 
@@ -340,7 +514,7 @@ same visible label; a \emph{log move} consumes an event without a
 corresponding model transition; and a \emph{model move} fires a model
 transition without consuming an observed event. A cost function normally
 assigns zero cost to synchronous moves and positive, configurable costs
-to deviations. An optimal alignment $\lambda^{\star}$ is therefore
+to deviations. An optimal alignment $\lambda^{\star}$ is
 \begin{equation}
 \lambda^{\star}=\arg\min_{\lambda\in\Lambda(\sigma,N)} c(\lambda),
 \end{equation}
@@ -360,38 +534,79 @@ performance analysis \cite{aalst2012ConformanceChecking}; it does not
 turn a model-derived enablement instant into an independently observed
 timestamp.
 
-\subsubsection{Process Enhancement} The Process Mining literature distinguishes three major categories of process mining techniques: process discovery, conformance checking, and process enhancement \cite{PMvanDerAalst2016}. The discovery creates a process model from event logs, conformance checking compares observed behavior with existing models and process enhancement then aims to improve existing process models using information extracted from event data. Enhancement includes different approaches. For example, performance information such as waiting times or activity durations can be projected onto a process model. Resource assignments, bottlenecks, and workload information can be incorporated to create richer process representations. Process enhancement can therefore enable process responsibles not only to understand how processes operate, but also identify opportunities for process improvement and optimization \cite{PMvanDerAalst2016}.
+\subsubsection{Process Enhancement} Process Mining includes process discovery,
+conformance checking, and process enhancement \cite{PMvanDerAalst2016}.
+Discovery creates a process model from an event log. Conformance checking
+compares observed behaviour with a model. Process enhancement adds information
+from event data to an existing model. Examples include waiting times, activity
+durations, resource assignments, bottlenecks, and workload. This helps users
+understand the process and find possible improvements.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \section{Business Process Simulation} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 \subsection{Fundamentals of Business Process Simulation} 
-Business Process Simulation (BPS) is an established analytical technique used to reproduce and analyze the dynamic behavior of business processes within a virtual environment. Rather than having to experiment directly on operational systems, organizations can build executable models that represent required process characteristics and repeatedly execute these models under controlled conditions. This allows process behavior to be observed without disturbing live operations \cite{BPSAalst2015}. Van der Aalst defines simulation as a flexible approach for analysing business processes and evaluating alternative operational scenarios. By recreating process executions under varying conditions, simulation can estimate process performance indicators such as throughput times, waiting times, resource utilization, service levels, and operational costs before changes have to be implemented in practice \cite{BPSAalst2015}. The primary purpose of simulation is the decision support. Business processes often run under uncertainty, dynamic resource interactions, and complex dependencies that make standard analytical evaluation difficult. Simulation provides a safe and cost-efficient environment for assessing operational modifications, while avoiding all the risks associated with real-world experimentation \cite{BPSAalst2015}. One of the most important applications of simulation is the so called \textit{what-if analysis}. What-if analyses evaluate how process performance changes under alternating assumptions or operational configurations. Typical examples include increasing the number of available resources, modifying routing rules, changing workload levels, or introducing new operational policies. By comparing simulation outcomes from different scenarios, decision makers can assess the expected consequences of proposed changes before implementation \cite{BPSAalst2015}. Because of its ability to represent dynamic process behavior and operational dependencies, simulation has become an established decision-support tool in fields such as manufacturing, healthcare, logistics, supply-chain management, and business process management. More recently, Process Mining research has increasingly integrated simulation based on observed event data, enabling simulation models to be discovered and calibrated directly from recorded process executions \cite{PMRozinat2009,Camargo2020}. 
+Business Process Simulation (BPS) uses executable models to study process
+behaviour in a virtual environment. Organisations can run these models under
+controlled conditions without disturbing live operations
+\cite{BPSAalst2015}. Simulation can estimate throughput times, waiting times,
+resource use, service levels, and costs before a change is implemented. It is
+often used for \textit{what-if analysis}. Examples include changing the number
+of resources, routing rules, workload, or operational policies. The results of
+different scenarios can then be compared \cite{BPSAalst2015}. BPS is used in
+manufacturing, healthcare, logistics, supply chains, and business-process
+management. Process Mining allows such models to be discovered and
+calibrated from recorded process executions
+\cite{PMRozinat2009,Camargo2020}.
 
-\subsection{Business Process Simulation Models} 
-A simulation model serves as a simplified representation of a real-world process. Although modeling approaches can vary, most business process simulation models consist of several fundamental perspectives that determine process behavior during simulation runs \cite{BPSAalst2015,PMRozinat2009}. 
+\subsection{Business Process Simulation Models}
+\label{sec:bps_models}
+A simulation model is a simplified representation of a process. Most Business
+Process Simulation models describe the following parts
+\cite{BPSAalst2015,PMRozinat2009}.
 
 \subsubsection*{Control Flow} 
-The control-flow perspective describes the general behavioral structure of the process. It determines which activities exist, in which order they may occur, and which alternative execution paths are possible. In simulation models, the control-flow model serves as the structural backbone that governs the process execution. Commonly used representations include Petri nets, BPMN models, process trees, and workflow graphs \cite{PMvanDerAalst2016,BPSAalst2015}. 
+Control flow defines which activities exist, their possible order, and the
+alternative execution paths. It can be represented by Petri nets, BPMN models,
+process trees, or workflow graphs \cite{PMvanDerAalst2016,BPSAalst2015}.
 
 \subsubsection*{Arrival Process} 
-The arrival process defines how new process instances enter the system. In business processes, this typically corresponds to customer requests, orders, applications, service tickets, or other incoming work items. Arrival behavior is commonly represented through statistical distributions that describe the time between consecutive process initiations or arrivals. Since the incoming workload levels directly influence waiting times and resource utilization, realistic arrival modeling is essential for acurate simulation results \cite{BPSAalst2015,PMRozinat2009}. 
+The arrival process defines how new cases enter the system. Examples are
+customer requests, orders, applications, and service tickets. Statistical
+distributions often model the time between arrivals. Arrival volumes affect
+waiting times and resource use \cite{BPSAalst2015,PMRozinat2009}.
 
 \subsubsection*{Resources} 
-Resources represent the entities that execute process activities. Depending on the application domain, resources may correspond to employees, machines, vehicles, cranes or other terminal equipment. Resource models typically include information about availability, capacities, execution capabilities and multitasking abilities, working schedules, and allocation policies. Resource constraints are often important determinants of process performance because multiple process instances compete for limited resource capacity \cite{BPSAalst2015}. 
+Resources execute process activities. They can be employees, machines,
+vehicles, cranes, or other equipment. Resource models describe availability,
+capacity, capabilities, schedules, and allocation rules. Limited resources can
+create competition between cases \cite{BPSAalst2015}.
 
 \subsubsection*{Activity Durations} 
-The timing perspective describes how long activities require for their execution. Typical simulation models distinguish between processing times, waiting times, and overall case durations. Activity durations can be represented through probability distributions derived from historical observations. These temporal characteristics largely determine process performance and throughput behavior \cite{BPSAalst2015,PMRozinat2009}. 
+The timing perspective describes processing times, waiting times, and case
+durations. Probability distributions fitted to historical observations can
+represent these durations \cite{BPSAalst2015,PMRozinat2009}.
 
 \subsubsection*{Decision Logic} 
-Business processes usually contain decision points where alternative execution paths can be selected. A Models learned decision logic determines how these routing decisions are made during simulation. Traditional simulation models employ static branching probabilities that specify how often a particular path is chosen. More advanced approaches model decisions as functions of contextual information, process attributes, or operational conditions at certain points in the path \cite{PMRozinat2009,mannhardt2023stochasticProcessesModelling}. 
+Business processes contain decision points with alternative paths. A model's
+decision logic determines which path is selected during simulation. Traditional
+models use static branching probabilities. Data-aware approaches can instead
+condition the decision on context, process attributes, or the current
+operational state \cite{PMRozinat2009,mannhardt2023stochasticProcessesModelling}.
 \begin{sloppypar}
-Together, control flow, arrivals, resources, timing information, and decision logic define the behavior of a simulation model. These perspectives form the foundation of both traditional manually developed simulation models and modern simulation-discovery approaches discussed later in this chapter. 
+Together, control flow, arrivals, resources, timing, and decision logic define
+the simulation model. Both manual modelling and simulation discovery use these
+parts.
 \end{sloppypar}
 
 
 \subsection{Simulation-Based Decision Support} 
-Container terminals operate in very dynamic environments characterized by fluctuating demand, limited resource capacity, and strong interdependencies between operational processes. Managers must continuously make decisions regarding equipment allocation, workforce planning, storage relocation strategies, truck appointment policies, and capacity utilization while maintaining uninterrupted terminal operations. Direct experimentation in a live terminal environment is often impractical because operational changes may negatively affect service quality, throughput, or customer satisfaction. As a consequence, simulation has become one of the most widely applied decision-support approaches in container terminal research \cite{Bruzzone2012,Kastner2021,Carboni2025}. By providing a virtual representation of terminal operations, simulation enables decision makers to evaluate operational alternatives before implementation. Typical applications include: 
+Container terminal demand changes over time, resource capacity is limited, and
+operational processes depend on each other. Managers make decisions about
+equipment, workforce, storage, truck appointments, and capacity while the
+terminal remains active. Tests in the live terminal can affect service quality
+and throughput. Simulation allows alternatives to be assessed before they are
+implemented \cite{Bruzzone2012,Kastner2021,Carboni2025}. Applications include:
 
 \begin{itemize} 
     \item evaluation of truck appointment policies, 
@@ -403,18 +618,24 @@ Container terminals operate in very dynamic environments characterized by fluctu
     \item equipment scheduling and maintenance planning. 
 \end{itemize} 
 
-A core advantage of simulation is its ability to support what-if analyses. Alternative operational scenarios can be evaluated under identical conditions, allowing direct comparison of performance measures such as truck turnaround times, resource utilization, throughput, waiting times, and service levels. This capability is particularly valuable in container terminals because small operational changes frequently generate system-wide effects due to the strong interdependencies between gate operations, yard processes, and vessel handling activities \cite{CTSteenken2004,Bruzzone2012,Kastner2021}. For truck operations, simulation has been extensively applied to study the effects of Truck Appointment Systems (TAS), gate capacities, yard utilization, and equipment allocation strategies. Such analyses are usually terminal specific, but can support terminal operators in balancing efficiency improvements with operational robustness under uncertain workloads and changing operating conditions \cite{Bett2024,CTprocessMiningTAS2020}. 
+Simulation supports what-if analysis by comparing scenarios under the same
+conditions. Measures can include truck turnaround time, resource use,
+throughput, waiting time, and service levels. This is useful in container
+terminals because a change in gate, yard, or vessel operations can affect other
+areas \cite{CTSteenken2004,Bruzzone2012,Kastner2021}. Truck-operation studies
+have assessed Truck Appointment Systems (TAS), gate capacity, yard use, and
+equipment allocation \cite{Bett2024,CTprocessMiningTAS2020}.
 
 \subsection{Simulation Model Calibration}
-Calibration estimates or adjusts simulation parameters so that the
-model represents the observed operating conditions. Typical tasks
+Calibration estimates or adjusts simulation parameters to describe the
+observed operating conditions. Typical tasks
 include fitting arrival and duration distributions, estimating resource
 capacities, and learning routing probabilities or context-dependent
 decision rules from historical observations
 \cite{PMRozinat2009,Camargo2020}. In simulation discovery, many of these
 steps form part of the automated discovery procedure itself. Calibration
-must nevertheless be distinguished from validation: agreement with the
-data used to fit a model demonstrates in-sample fit, whereas an
+must still be distinguished from validation: agreement with the
+data used to fit a model shows in-sample fit, whereas an
 independent assessment requires data that did not determine those
 parameters. Section~\ref{sec:simulation_validation_background} develops
 the corresponding verification and validation concepts.
@@ -424,49 +645,98 @@ the corresponding verification and validation concepts.
 \section{Simulation Discovery and Data-Aware Simulation} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The previous sections established the main components of Business Process Simulation and the role of event logs in Process Mining. Simulation discovery connects these two perspectives by deriving executable simulation behavior directly from recorded process executions. Rather than introducing simulation parameters as manually specified assumptions, simulation-discovery approaches estimate them from event logs and integrate them into an executable process model \cite{PMRozinat2009,Camargo2020,simod2024}. The development of this research stream has progressively moved from the discovery of classical stochastic simulation parameters toward context-dependent and data-aware process behavior.
+The previous sections introduced Business Process Simulation and event logs.
+Simulation discovery connects both by estimating simulation behaviour from
+recorded process executions. The estimated parameters are integrated into an
+executable process model \cite{PMRozinat2009,Camargo2020,simod2024}. Research
+has moved from basic stochastic parameters towards context-dependent and
+data-aware behaviour.
 
 \subsection{From Simulation Discovery to Data-Driven Simulation} 
 
-One of the foundational approaches to automatically derive simulation models from event logs was proposed by Rozinat et al. \cite{PMRozinat2009}. Their framework combines Process Mining and simulation by extracting several behavioral perspectives from historical executions, including control flow, temporal behavior, resource assignments, arrival characteristics, and routing probabilities.
+Rozinat et al. proposed an early approach for deriving simulation models from
+event logs \cite{PMRozinat2009}. It extracts control flow, timing, resource
+assignments, arrivals, and routing probabilities from historical executions.
 
-Subsequent research extended this idea by refining the stochastic representation of process behavior. Solti et al. \cite{stochastikPetriNets2013Solti} investigate the discovery of stochastic Petri nets with arbitrary delay distributions, thereby integrating richer temporal behavior into formally discovered process models. Later, Camargo et al. \cite{Camargo2020} proposed a more automated framework for discovering executable Business Process Simulation models from event logs, including process structure, activity durations, resource pools, calendars, and arrival behavior. More recent frameworks such as Simod further systematise the automated discovery and calibration of simulation models from event data \cite{simod2024}.
+Later research extended this idea. Solti et al.
+\cite{stochastikPetriNets2013Solti} study stochastic Petri nets with flexible
+delay distributions. Camargo et al. \cite{Camargo2020} proposed a framework
+that discovers process structure, activity durations, resource pools,
+calendars, and arrival behaviour from event logs. Simod further automates the
+discovery and calibration of simulation models \cite{simod2024}.
 
-A parallel branch researches uprising expressive generative models of process behavior. Camargo et al. \cite{Camargo2021} compare conventional data-driven process simulation with deep-learning-based generative models, illustrating that simulation discovery can move beyond separately fitted marginal distributions and toward models capable of learning more complex behavioral dependencies. This increased expressiveness, but at the same time also raises questions about transparency and configurability, which are discussed in Section~\ref{sec:explainable_simulation}.
+Another research branch studies generative process models. Camargo et al.
+\cite{Camargo2021} compare conventional data-driven simulation with
+deep-learning models. These models can learn dependencies beyond separately
+fitted distributions, but they are harder to inspect and configure. This issue
+is discussed in Section~\ref{sec:explainable_simulation}.
 
-The development can therefore be understood as a shift from extracting conventional simulation parameters from event logs towards learning increasingly enabled stochastic relationships between process state and simulated behavior \cite{PMRozinat2009,Camargo2020,Camargo2021}.
+Research has moved from extracting standard simulation parameters to learning
+relations between process state and simulated behaviour
+\cite{PMRozinat2009,Camargo2020,Camargo2021}.
 
 
 \subsection{Discovery of Simulation behavior} 
 
-The simulation perspectives introduced in Section~\ref{sec:bps_models} remain the core objects of discovery, but the way they are represented has evolved considerably.
+Simulation discovery still models the parts introduced in
+Section~\ref{sec:bps_models}, but later methods represent them in different
+ways.
 
 \subsubsection{Control-Flow and Stochastic Routing}
 
-Early simulation-discovery approaches combined process discovery with stochastic information derived from observed executions \cite{PMRozinat2009}. While a discovered process model determines which activities may occur, stochastic weights determine how likely alternative paths actually are. Stochastic process discovery therefore extends purely structural process models with estimating the relative likelihood of alternative transitions \cite{stochastikPetriNets2013Solti,burke2020stochasticPD}.
+Early simulation-discovery approaches combined a discovered process model with
+stochastic information from observed executions \cite{PMRozinat2009}. The
+process model defines which activities may occur, while stochastic weights
+estimate the probability of alternative paths
+\cite{stochastikPetriNets2013Solti,burke2020stochasticPD}.
 
-The quality of the discovered control-flow structure stays important for simulation because the model defines the behavior that can be generated. Excessive generalisation may enable execution paths that were not observed or that are operationally implausible, whereas overly restrictive models may fail to represent legitimate process variability \cite{PMvanDerAalst2016,VinciDeLeoni2025Repair}. The balance between fitness and precision is therefore not only relevant for process discovery but also directly affects the behavioral space of the resulting simulator \cite{VinciDeLeoni2025Repair}.
+The discovered control-flow structure defines the behaviour that the simulator
+can generate. Too much generalisation may allow
+implausible paths, while a restrictive model may miss valid process variation
+\cite{PMvanDerAalst2016,VinciDeLeoni2025Repair}. The balance between fitness
+and precision defines the behavioural range of the simulator
+\cite{VinciDeLeoni2025Repair}.
 
 \subsubsection{Temporal and Resource Behavior}
 
-Simulation-discovery research has progressively moved from globally fitted distributions toward more differentiated temporal and resource models. Early approaches estimate execution times, waiting behavior, and resource characteristics from observed event-log distributions \cite{PMRozinat2009,stochastikPetriNets2013Solti}. More recent approaches additionally represent calendars, resource pools, allocation rules and heterogeneous resource behavior \cite{Camargo2020,BPSdifferentiatedResources2022}.
+Early simulation-discovery approaches estimate execution times, waiting
+behaviour, and resource characteristics from event-log distributions
+\cite{PMRozinat2009,stochastikPetriNets2013Solti}. Later approaches model
+calendars, resource pools, allocation rules, and differences between resources
+\cite{Camargo2020,BPSdifferentiatedResources2022}.
 
-This development is particularly relevant because temporal behavior is rarely independent of the operational context. Execution and waiting times may vary with workload, resource availability, case characteristics or previous process behavior. Similarly, the probability of selecting a particular resource may depend on more than a static activity-resource mapping \cite{BPSdifferentiatedResources2022,Vinci2026prosit}. Recent simulation-discovery approaches therefore increasingly model these dimensions conditionally rather than as one global distribution per activity or resource.
+Timing often depends on operational context. Execution and waiting times may
+change with workload, resource availability, case characteristics, or earlier
+process behaviour. Resource selection may depend on more than a fixed
+activity-resource mapping \cite{BPSdifferentiatedResources2022,Vinci2026prosit}.
+Recent approaches model these aspects conditionally instead of using one
+global distribution per activity or resource.
 
 \subsubsection{Arrival behavior}
 
-Arrival processes have likewise evolved from globally fitted inter-arrival distributions toward context-dependent representations. Classical simulation-discovery approaches estimate inter-arrival times from historical case-start timestamps \cite{PMRozinat2009,Camargo2020}. More recent approaches can condition arrival behavior on temporal or contextual information, allowing the simulator to represent non-stationary workload patterns rather than assuming a single pooled arrival process \cite{Vinci2026prosit}. This distinction is important in operational settings where demand varies systematically across hours, weekdays, or operating periods.
+Classical simulation-discovery approaches estimate inter-arrival times from
+historical case-start timestamps \cite{PMRozinat2009,Camargo2020}. Later
+approaches condition arrivals on time or context. This allows the simulator to
+model demand that changes across hours, weekdays, or operating periods instead
+of using one pooled arrival process \cite{Vinci2026prosit}.
 
 
 \subsection{Data-Aware and Process-State-Aware Simulation}
 
-A central limitation of classical stochastic simulation models is that routing probabilities and other behavioral parameters are often estimated globally. For example, if two alternative process paths occur with frequencies of 70\,\% and 30\,\%, a conventional stochastic model may assign these probabilities independently of the characteristics of the particular case. Such a representation captures how often alternatives occurred, but not why different process instances followed different paths \cite{PMRozinat2009,burke2020stochasticPD}.
+Classical stochastic simulation models often estimate one set of routing
+probabilities for all cases. For example, if two paths occur with frequencies
+of 70\,\% and 30\,\%, the model may use these probabilities for every case.
+This describes how often each path occurred, but not why cases followed
+different paths \cite{PMRozinat2009,burke2020stochasticPD}.
 
-Data-aware simulation addresses this limitation by conditioning stochastic behavior on process data. Mannhardt et al. \cite{mannhardt2023stochasticProcessesModelling} extend stochastic Petri nets with data-dependent transition weights, so that the probability of an enabled transition can depend on process variables instead of being represented by one global value. The resulting model therefore captures systematic differences between cases with different characteristics.
+Data-aware simulation conditions stochastic behaviour on process data.
+Mannhardt et al. \cite{mannhardt2023stochasticProcessesModelling} extend
+stochastic Petri nets with transition weights that depend on process variables.
+The model can then capture differences between types of cases.
 
 De Leoni et al. \cite{Vinci2023Inf.Activ.Prob} extend this idea through the concept of the \textit{process state}. Rather than conditioning decisions only on static case attributes, the process state may also describe information accumulated during the execution of the case, including process-variable values and the history of previously executed activities. Their results show that incorporating this richer representation of the current process state can improve the estimation of activity-firing probabilities compared with basic frequency-based branching probabilities.
 
-The conceptual development can therefore be represented as:
+The development can be summarised as:
 
 \begin{center}
 Static Branching Probabilities \\
@@ -483,18 +753,33 @@ Recent work extends data awareness beyond routing behavior. López-Pintado et al
 
 \subsection{ProSiT as a Probabilistic Data-Aware Simulation Framework}
 
-The ProSiT framework represents a recent development within this research direction \cite{Vinci2026prosit}. Instead of applying data awareness only to routing decisions, ProSiT models several simulation dimensions through probabilistic white-box predictors, including control-flow decisions, execution times, waiting times, resource selection, and arrival behavior.
+ProSiT applies data awareness to several simulation dimensions
+\cite{Vinci2026prosit}. Its probabilistic white-box predictors model
+control-flow decisions, execution times, waiting times, resource selection, and
+arrival behaviour.
 
-The framework uses probabilistic decision trees to partition the available feature space and associates each resulting leaf with a local probability distribution. Simulation behavior can therefore differ between process contexts while remaining stochastic. This is conceptually different from both a conventional simulation model with one global distribution per parameter and a deterministic predictive model that returns a single point estimate.
+The framework uses probabilistic decision trees to split the feature space.
+Each leaf contains a local probability distribution. Simulation behaviour can
+vary by context while remaining stochastic. This differs from both a model
+with one global distribution per parameter and a deterministic model that
+returns one value.
 
-An important distinction is required between different forms of contextual information. In the published ProSiT framework, simulation-parameter discovery can use trace attributes, execution history, resource information, temporal information, and workload-related features \cite{Vinci2026prosit}. This does not imply unrestricted support for arbitrary event-level attributes that change continuously during execution. The more general process-state perspective described by Mannhardt et al. \cite{mannhardt2023stochasticProcessesModelling} and de Leoni et al. \cite{Vinci2023Inf.Activ.Prob} therefore provides a broader conceptual framework than the particular feature representation currently implemented in ProSiT.
+ProSiT can use trace attributes, execution history, resource information,
+temporal information, and workload features \cite{Vinci2026prosit}. It does
+not support every event-level attribute that changes during execution. The
+process-state approach of Mannhardt et al.
+\cite{mannhardt2023stochasticProcessesModelling} and de Leoni et al.
+\cite{Vinci2023Inf.Activ.Prob} covers a broader range of context than the
+current ProSiT implementation.
 
-For this thesis, ProSiT is particularly useful because its level of contextual conditioning can be varied experimentally. The framework therefore makes it possible to test whether increasing model expressiveness actually translates into improved held-out simulation fidelity in the CTB truck process.
+ProSiT is useful for this thesis because its level of contextual conditioning
+can be changed. This allows a comparison of model expressiveness and held-out
+fidelity in the CTB truck process.
 
 
 \paragraph{Configurable expressiveness in ProSiT.}
 
-Two ProSiT configuration parameters are particularly relevant for the experimental design in Section~\ref{sec:simulation_discovery_methodology} \cite{Vinci2026prosit}:
+Two ProSiT configuration parameters are especially relevant for the experimental design in Section~\ref{sec:simulation_discovery_methodology} \cite{Vinci2026prosit}:
 
 \begin{itemize}
     \item \texttt{max\_depth\_tree} controls the maximum depth of the probabilistic decision trees used for conditional simulation behavior. Setting \texttt{max\_depth\_tree}$=0$ disables conditional tree-based modelling and yields an unconditional distribution-based configuration. Increasing the depth allows the model to distinguish more detailed combinations of contextual features, while also increasing model complexity and potential overfitting.
@@ -502,17 +787,62 @@ Two ProSiT configuration parameters are particularly relevant for the experiment
     \item \texttt{use\_workload\_features} determines whether workload-related features are made available to the waiting-time and resource-selection models. When enabled, these models can condition their behavior on the current operational workload and queue state in addition to the remaining contextual attributes.
 \end{itemize}
 
-These parameters define the comparison used later in this thesis between a distribution-based configuration, a data-aware configuration, and a data-aware configuration additionally enriched with workload information. Whether this increased expressiveness improves simulation fidelity is treated as an empirical question rather than assumed in advance.
+These parameters define the later comparison between a distribution-based
+configuration, a data-aware configuration, and a data-aware configuration with
+workload information. The evaluation tests whether the added model detail
+improves simulation fidelity.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Explainable and White-Box Simulation}
+\label{sec:explainable_simulation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Explainability in Simulation-Based Decision Support}
-Business Process Simulation is becoming increasingly popular to support operational and strategic decision making. Simulation results are often the basis for resource-allocation strategies ans decisions, process redesign initiatives, capacity planning, and investment evaluations. Therefore decision makers have to be able to understand why a simulation model produces a particular outcome and how simulation behavior changes when process parameters are modified. Traditional Business Process Simulation models are transparent from design \cite{BPSAalst2015}. Their control-flow structures, routing probabilities, resource allocations, and time assumptions are manually specified and can therefore be analysed and modified by developers and domain experts. That way, simulation users can directly understand the assumptions underlying the generated simulation results \cite{BPSAalst2015}. Recent advances in simulation discovery increasingly employ machine-learning and deep-learning techniques to improve the simulation accuracy. These approaches learn behavioral patterns directly from historical event data and often outperform manually calibrated models in terms of predictive capabilities \cite{Camargo2020, Camargo2021}. However, the resulting models frequently behave as black-box systems. While they can generate more accurate predictions, the internal decision mechanisms that govern the simulation behavior, are not readily interpretable by developers or human analysts. This creates a tension between predictive accuracy and explainability. Black-box simulation models therefore may successfully reproduce historical process behavior while simultaneously limiting the analyst's ability to understand why particular routing decisions, waiting times, or resource allocations are generated. Consequently, the simulation model becomes difficult to inspect, configure, validate, and trust for operational decision support \cite{runtimeIntegration2024}. The explainability problem becomes especially relevant for what-if analyses. Business Process Simulation is not only intended to reproduce observed behavior but also to evaluate hypothetical future scenarios. Devlopers have to be able to intentionally modify process parameters, resource settings or decision rules. In black-box simulation approaches, the underlying behavioral logic is often inaccessible, making it difficult to assess whether the simulated reactions to process changes are realistic and trustworthy \cite{runtimeIntegration2024}. To address these limitations, recent research has started investigating explainable simulation models that combine the predictive capabilities of machine-learning approaches with transparent and interpretable decision logic. The goal is not only to reproduce process behavior accurately but also to expose the reasoning mechanisms that determine simulation outcomes. Explainability therefore becomes an important prerequisite for trustworthiness, configurability, and practical adoption of data-driven simulation models.
+Business Process Simulation supports decisions about resources, process
+design, capacity, and investments. Decision makers need to understand why a
+model produces an outcome and how that outcome changes when parameters are
+modified. Traditional BPS models are transparent because their control flow,
+routing probabilities, resources, and timing assumptions are defined by hand
+\cite{BPSAalst2015}.
 
-\subsection{Probabilistic White-Box Simulation Models} 
-The concept of white-box simulation emerged as a response to the increasing reliance on opaque machine-learning models for simulation parameter discovery. White-box simulation models aim to make behavioral decisions explicitly visible and interpretable while maintaining a high degree of simulation accuracy. A key motivation behind white-box simulation is that business analysts must be able to inspect, understand, and modify the simulation behavior that drives decision-support outcomes. Unlike black-box predictors, white-box approaches expose the discovered decision rules and allow analysts to evaluate the causal relationships that influence simulation parameters. An important step towards explainable simulation is represented by the Runtime Integration of Machine Learning and Simulation (RIMS) framework proposed by Meneghello et al. \cite{runtimeIntegration2024}. RIMS combines traditional discrete-event simulation with predictive machine-learning models at runtime. The authors explicitly argue that purely deep-learning-based simulation approaches suffer from limited explainability and restricted support for what-if analyses. By maintaining an explicit simulation model while integrating learned predictions during execution, RIMS seeks to combine simulation transparency with data-driven prediction capabilities \cite{runtimeIntegration2024}. More recently, Vinci et al. introduced the ProSiT framework (\textit{PROcess SImulation Tool}), which represents one of the first dedicated white-box simulation-discovery approaches \cite{Vinci2026prosit}. ProSiT extends data-aware simulation discovery by replacing opaque prediction mechanisms with probabilistic decision trees. These trees are used to represent multiple simulation dimensions including: \begin{itemize} \item control-flow decisions, \item activity execution times, \item waiting times, \item resource assignment behavior, \item arrival processes. \end{itemize} The central idea of ProSiT is that simulation behavior should remain directly interpretable. Instead of producing predictions through hidden neural-network representations, behavioral rules are exposed explicitly in the form of decision-tree structures. Analysts can therefore inspect, understand, and modify the conditions influencing simulation behavior \cite{Vinci2026prosit}. An additional contribution of ProSiT is the integration of uncertainty through probabilistic decision trees. Traditional decision trees often generate deterministic predictions. In contrast, probabilistic decision trees capture distributions of possible outcomes and thereby preserve the stochastic nature required for realistic process simulation \cite{Vinci2026prosit}. This is particularly important because simulation models aim not only to reproduce average behavior but also the variability observed in real operational environments. Experimental evaluations presented by Vinci et al. indicate that probabilistic white-box models can achieve simulation accuracy comparable to, and in some cases exceeding, alternative black-box approaches while simultaneously improving interpretability and configurability \cite{Vinci2026prosit}. Furthermore, the framework enables process analysts to directly edit discovered rules and evaluate modified decision scenarios without retraining complex machine-learning models. Despite these promising results, research on white-box simulation remains at an early stage. Current evidence is largely limited to benchmark datasets and business-process environments investigated by the authors themselves. Large-scale empirical evaluations across different domains remain scarce. In particular, little evidence currently exists regarding the behavior of white-box simulation models in highly dynamic cyber-physical systems such as container terminals. Moreover, explainability itself remains difficult to quantify. While decision trees are generally considered more transparent than neural networks, there is currently no universally accepted framework for measuring the practical interpretability of simulation-discovery models. Existing evaluations primarily focus on simulation accuracy, leaving questions related to user trust, decision-support quality, and operational usefulness largely unexplored. Consequently, white-box simulation should not yet be regarded as a mature solution to the explainability challenge. Rather, it represents an emerging research direction that attempts to balance three competing objectives: \begin{enumerate} \item simulation accuracy, \item simulation explainability, \item simulation configurability. \end{enumerate} The ProSiT framework currently represents one of the most comprehensive realizations of this vision and serves as the methodological foundation for the simulation approach investigated in this thesis \cite{Vinci2026prosit}.
+Machine-learning models can learn behaviour from historical event data and may
+improve prediction \cite{Camargo2020,Camargo2021}. However, their internal
+logic can be difficult to inspect. A model may reproduce historical behaviour
+without showing why it selected a route, waiting time, or resource. This makes
+validation and what-if analysis harder \cite{runtimeIntegration2024}. For
+what-if analysis, users must be able to change parameters or rules and judge
+whether the model response is reasonable. Explainable simulation tries to
+combine data-driven prediction with visible decision logic.
+
+\subsection{Probabilistic White-Box Simulation Models}
+White-box simulation makes learned decisions visible and editable. The RIMS
+framework combines a discrete-event simulation with predictive models at
+runtime while keeping an inspectable simulation model
+\cite{runtimeIntegration2024}.
+
+Vinci et al. introduced ProSiT (\textit{PROcess SImulation Tool}) as a
+white-box simulation-discovery framework \cite{Vinci2026prosit}. ProSiT uses
+probabilistic decision trees for several parts of the simulation:
+\begin{itemize}
+    \item control-flow decisions,
+    \item activity execution times,
+    \item waiting times,
+    \item resource assignments, and
+    \item arrival processes.
+\end{itemize}
+The tree conditions are visible, and each leaf contains a probability
+distribution. Users can inspect and change these rules without retraining a
+deep-learning model. The distributions keep the stochastic variation
+needed for simulation \cite{Vinci2026prosit}.
+
+Published evaluations show that probabilistic white-box models can reach
+similar accuracy to black-box alternatives while being easier to inspect and
+configure \cite{Vinci2026prosit}. However, the evidence mainly comes from
+benchmarks and business-process settings. There is little evidence from
+physical logistics systems such as container terminals. Explainability is
+difficult to measure. A decision tree is easier to read than a neural network,
+but this does not prove that its rules are correct or useful. White-box
+simulation must balance accuracy, explainability, and configurability.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 For terminological precision, the relationships exposed by such learned
@@ -523,11 +853,10 @@ configuration, but does not by itself establish causal effects.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Verification, Validation, and Trustworthiness}
 \label{sec:simulation_validation_background}
-The central validation question is not whether a simulator is merely
-executable, but whether it is sufficiently credible for its intended
-use. This qualification is essential: a model may be adequate for
-reproducing historical truck turnaround distributions while remaining
-inadequate for predicting the effect of an intervention outside the
+Validation asks whether a simulator is accurate enough for its intended use,
+not only whether it runs. A model may reproduce
+historical truck turnaround distributions but still fail to predict an
+intervention outside the
 range of the observed data \cite{Sargent2013Validation,BPSAalst2015}.
 Automatically discovered simulation models do not remove this
 requirement. They replace some manual assumptions with assumptions about
@@ -544,8 +873,8 @@ the intended purpose. \emph{Computerized-model verification} asks
 whether that conceptual model has been implemented correctly.
 \emph{Data validity} concerns whether the data used to construct,
 calibrate and evaluate the model are adequate. Finally,
-\emph{operational validity} asks whether the computerized model's
-output behaviour is sufficiently accurate over the domain in which the
+\emph{operational validity} asks whether the computerised model's
+output behaviour is accurate enough over the domain in which the
 model is intended to be used. Historical-data validation---running the
 model under historical input conditions and comparing its output with
 observed system data---is one technique for assessing operational
@@ -568,7 +897,7 @@ event-log-discovered simulation study, based on Sargent's framework
 \toprule
 \textbf{Question} & \textbf{Validity concept} & \textbf{Typical evidence} \\
 \midrule
-Is the abstraction defensible? & Conceptual-model validity &
+Is the abstraction reasonable? & Conceptual-model validity &
 Domain review of case boundaries, event semantics, resource meanings
 and physical constraints \\
 Was the abstraction implemented correctly? & Computerized-model
@@ -588,7 +917,7 @@ analysis \\
 \end{tabular}
 \end{table}
 
-This distinction also clarifies the scope of this thesis. The
+This distinction clarifies the scope of this thesis. The
 real-versus-simulated event-log comparison is a form of held-out
 historical-data or operational validation. The event-log construction
 and the physical RMG capacity constraint contribute data- and
@@ -614,7 +943,7 @@ Camargo et al. formalise the same idea as an optimisation objective.
 Candidate BPS configurations generate event logs and hyperparameter
 optimisation searches for the configuration that maximises similarity
 to observed log behaviour \cite{Camargo2020}. Their later comparison of
-data-driven simulation and deep generative models further demonstrates
+data-driven simulation and deep generative models further shows
 why quality must not be inferred from trace frequencies alone:
 conventional data-driven simulators may reproduce activity sequences
 and their frequencies while performing worse on temporal dynamics
@@ -624,22 +953,22 @@ The implication is that operational fidelity is multi-dimensional.
 Relevant perspectives include control flow, activity and case timing,
 case arrivals, congestion and resource behaviour. A model can be close
 to the real log in one perspective and far away in another; collapsing
-all discrepancies into one number can therefore hide the mechanism
+all discrepancies into one number can hide the mechanism
 that is incorrectly represented
 \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}.
 
 \subsection{Multi-Perspective Event-Log Comparison}
 
-Chapela-Campa et al. provide the validation framework that most closely
-matches the evaluation problem of this thesis
+Chapela-Campa et al. provide a validation framework that matches the
+evaluation problem of this thesis
 \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. Their starting point
 is that the true BPS model is normally unavailable and that different
-simulation engines use incomparable internal formats. They therefore
-evaluate a model indirectly as a generator: multiple logs generated by
+simulation engines use incomparable internal formats. They evaluate a model
+indirectly as a generator: multiple logs generated by
 the BPS model are compared with an actual event log that was not used
 to construct the model. The framework separates control-flow, temporal
 and congestion perspectives and reports a measure for each instead of
-claiming that one aggregate score represents overall model quality.
+using one aggregate score for overall model quality.
 The measures are evaluated using controlled perturbations and by
 comparing alternative automatically discovered BPS models, showing that
 perspective-specific measures can identify the source of a discrepancy
@@ -661,11 +990,11 @@ simulation-oriented log distances \cite{ChapelaCampa2023Trust,
 Chapela2025SimQuality}. Control-Flow Log Distance (CFLD) computes the
 normalised Damerau--Levenshtein distance between trace pairs and uses
 the Hungarian algorithm to find the minimum-cost one-to-one matching
-between the two logs. CFLD therefore compares complete traces; it is not
+between the two logs. CFLD compares complete traces; it is not
 merely a comparison of variant-frequency vectors. Because this matching
 is computationally expensive, N-Gram Distance (NGD) compares normalised
 frequencies of local activity subsequences. NGD is scalable and detects
-local ordering differences, although it deliberately loses some
+local ordering differences, although it loses some
 complete-trace information.
 
 This thesis does not claim to implement the full Chapela-Campa metric
@@ -681,8 +1010,8 @@ Identical or similar traces do not imply similar process performance.
 Temporal validation considers whether the simulator reproduces when
 events occur, how cases progress after arrival and how long activities
 and complete cases take. Camargo et al. show empirically that a
-generative model may represent control-flow frequencies adequately yet
-miss temporal dynamics \cite{Camargo2021}.
+generative model may reproduce control-flow frequencies but still miss
+temporal dynamics \cite{Camargo2021}.
 
 The Chapela-Campa framework distinguishes three event-distribution
 measures \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}.
@@ -690,7 +1019,7 @@ measures \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}.
 absolute calendar-time bins; \emph{Circadian Event Distribution} (CED)
 compares recurring weekday and hour-of-day patterns; and
 \emph{Relative Event Distribution} (RED) offsets timestamps by each
-case's arrival and compares its temporal progression. Thus AED and RED
+case's arrival and compares its temporal progression. AED and RED
 mean \emph{event distribution}, not absolute or relative error
 distance. For end-to-end performance, Cycle Time Distribution (CTD)
 compares the empirical distributions of complete case durations.
@@ -699,8 +1028,8 @@ The CTB evaluation uses more directly interpretable distributions at
 the level of its research questions: inter-arrival time, per-activity
 yard service time, model-derived pre-service delay and case turnaround
 time. Reporting complete distributions rather than only their means is
-important because equal averages can conceal differences in dispersion,
-skewness or tails. Per-activity results additionally prevent common RMG
+useful because equal averages can conceal differences in dispersion,
+skewness or tails. Per-activity results prevent common RMG
 events from concealing weaker fidelity for less frequent yard
 activities.
 
@@ -710,15 +1039,15 @@ Congestion is a system-level consequence of the interaction between
 demand, service requirements and resource availability. It cannot be
 validated from activity-duration marginals alone. Chapela-Campa et al.
 use Case Arrival Rate (CAR) to compare binned arrival counts and shapes,
-and CTD to compare the second major congestion component, the length of
+and CTD to compare another congestion component, the length of
 time cases remain in the system
 \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. An arrival model can
-therefore be temporally unrealistic even if it generates the correct
+be temporally unrealistic even if it generates the correct
 total number of cases.
 
-This issue is central at CTB: truck demand determines competition for
-yard resources, and simultaneous arrivals are meaningful consequences
-of the minute-resolved source data. The evaluation consequently reports
+This issue matters at CTB: truck demand determines competition for
+yard resources, and simultaneous arrivals result from the minute-resolved
+source data. The evaluation reports
 inter-arrival distance, simultaneous-arrival share and arrivals per
 elapsed hour alongside turnaround and yard-service distributions.
 These measures do not directly observe a physical queue; they assess
@@ -734,17 +1063,17 @@ moments, the first Wasserstein distance can be written as
 \end{equation}
 It has the optimal-transport interpretation of the minimum cost of
 moving probability mass from one distribution to the other. For
-durations measured in minutes, $W_1$ is also expressed in minutes,
+durations measured in minutes, $W_1$ is expressed in minutes,
 which gives the discrepancy an operational scale.
 
-Earth Mover's Distance (EMD) is closely related, but the terms should
-not be treated as universally interchangeable. In the formulation used
+Earth Mover's Distance (EMD) is related, but it is not always the same
+measure. In the formulation used
 by Chapela-Campa et al., EMD may compare time series with unequal total
 mass and penalise the creation of missing mass, whereas first
 Wasserstein distance assumes equal normalised mass
 \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. For empirical
 probability distributions with unit mass, the formulations coincide.
-In Process Mining, related transport distances have also been used for
+In Process Mining, related transport distances have been used for
 stochastic conformance checking over behavioural distributions
 \cite{leeman2013EarthMovers}. In this thesis, the term \emph{EMD} for
 service, inter-arrival and turnaround samples denotes the
@@ -763,12 +1092,12 @@ functions of the simulated and observed samples
 Unlike $W_1$, it is dimensionless and bounded by zero and one. The two
 statistics are complementary: $W_1$ measures integrated displacement
 on the operational scale, while KS reports the largest local CDF gap.
-The KS statistic can be accompanied by a hypothesis-test $p$-value, but
+The KS statistic can be accompanied by a significance-test $p$-value, but
 that $p$-value answers a different question from practical fidelity.
 With large event logs, small and operationally unimportant differences
 can be statistically significant. The magnitude of the statistic and
-the distributional plots must therefore be interpreted separately from
-null-hypothesis rejection.
+the distributional plots must be interpreted separately from
+binary significance decisions.
 
 \subsubsection{Additional Requirements for Data-Aware Discovery}
 
@@ -784,22 +1113,22 @@ test log. Third, the generated log must satisfy process and domain
 invariants that aggregate distances may overlook.
 
 White-box rules help because their split conditions and leaf
-distributions can be inspected and deliberately modified
+distributions can be inspected and modified
 \cite{Vinci2026prosit}. Interpretability, however, is not equivalent to
 validity or causality. A readable rule may encode a spurious association,
 and two differently specified models may reproduce the same marginal
-distribution. Validation should therefore combine held-out output
+distribution. Validation should combine held-out output
 fidelity with rule inspection, leakage checks, structural contracts,
-domain constraints and sensitivity analysis. This is particularly
-important for the CTB application, where timestamp fields are
-operational proxies and a resource label does not necessarily denote a
+domain constraints and sensitivity analysis. This matters in the CTB
+application because timestamp fields are operational proxies and a resource
+label does not always denote a
 physically interchangeable crane or storage position.
 
 \subsubsection{Stochastic Replication and Confidence Intervals}
 
 A BPS model is a stochastic generator. One fixed model can generate
 many possible event logs, whereas the real test log is only one observed
-realisation. A single simulated log therefore confounds model fidelity
+realisation. A single simulated log mixes model fidelity
 with the random draws of that run. Chapela-Campa et al. address this
 problem directly: they generate $K$ logs from $K$ simulation runs,
 match their case count and start point to an actual test log that was
@@ -835,7 +1164,7 @@ protocol.
 
 Historical fidelity is necessary for a simulator that claims to
 represent an existing process, but it is not sufficient for unrestricted
-decision support. Chapela-Campa et al. explicitly identify this limit:
+decision support. Chapela-Campa et al. identify this limit:
 comparison with an original event log assesses replication of the
 \emph{as-is} process, not the accuracy of predictions after a process
 change \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. Similarly,
@@ -843,19 +1172,16 @@ Sargent's purpose-relative view implies that evidence collected in one
 operating region cannot automatically validate use in another
 \cite{Sargent2013Validation}.
 
-Trustworthiness is therefore an evidence bundle rather than another
-single metric. It includes data and conceptual validity, verified
-implementation, held-out multi-perspective fidelity, reproducibility,
-transparent assumptions, stochastic robustness, domain review and
-clear limits on extrapolation. ProSiT contributes inspectable and
-configurable probabilistic rules \cite{Vinci2026prosit}; recent applied
-work shows how discovered simulation models can be connected to a real
-resource-allocation problem \cite{Hospital2026Vinci}. These properties
-make validation and scenario discussion more accessible, but neither
-white-box structure nor a successful application substitutes for
-intervention-specific evidence.
+Trustworthiness cannot be measured with one metric. Evidence is needed for
+data and conceptual validity, implementation, held-out fidelity,
+reproducibility, assumptions, stochastic robustness, domain review, and the
+limits of extrapolation. ProSiT provides probabilistic rules that can be
+inspected and configured \cite{Vinci2026prosit}. Applied work shows how a
+discovered simulation model can be connected to a resource-allocation problem
+\cite{Hospital2026Vinci}. These properties support validation and scenario
+analysis, but they do not replace evidence for each intervention.
 
-Accordingly, this thesis does not claim to solve the general
+This thesis does not claim to solve the general
 trustworthiness problem of simulation discovery. It contributes a
 container-terminal case study: the model is tested against an unseen
 historical period, across structural, temporal and arrival perspectives,
@@ -865,4 +1191,30 @@ model assumptions, not as experimentally established causal effects.
 
 \subsection{Research Gap}
 
-Container terminals represent highly dynamic and resource-constrained operational environments characterized by complex interactions between truck processes, yard operations, storage systems, and handling equipment. As a result, simulation has become one of the most widely used analytical methods for supporting operational decision making in container terminal management \cite{Bruzzone2012,Kastner2021,Carboni2025}. Despite this extensive use of simulation, most container terminal simulation models continue to be developed manually. Model construction, calibration, and maintenance require substantial modelling effort and domain expertise, limiting scalability and practical applicability in rapidly changing operational environments \cite{PMRozinat2009}. Simulation discovery addresses this limitation by automatically generating simulation models from event logs. Over the past decade, significant advances have been achieved in the discovery of simulation parameters, data-aware decision logic, and automated model construction \cite{Camargo2020,simod2024,Vinci2026prosit}. More recently, data-aware simulation approaches demonstrated that contextual information and process-state representations can substantially improve simulation accuracy compared to traditional branching probabilities \cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}. In parallel, white-box simulation approaches such as ProSiT introduced interpretable probabilistic decision models that aim to improve transparency and configurability while maintaining strong predictive performance \cite{Vinci2026prosit}. However, existing empirical evaluations have primarily been conducted in healthcare, administrative, and generic business-process environments. To date, there is limited evidence regarding the applicability and behavior of simulation-discovery approaches within large-scale container terminal operations. Furthermore, the increasing complexity of data-aware and decision-aware simulation models raises unresolved questions concerning: \begin{itemize} \item the robustness of automatically discovered simulation models, \item their trustworthiness for operational decision support, \item their ability to reproduce congestion effects and workload dynamics, \item the practical value of white-box simulation in complex logistics environments. \end{itemize} This thesis does not aim to provide a general answer to these broader research challenges. Rather, it contributes an empirical case study within the context of truck-handling operations at the HHLA Container Terminal Burchardkai (CTB). By evaluating simulation-discovery approaches in a real-world container terminal environment, the thesis provides evidence regarding their applicability, strengths, and limitations in a domain that has received comparatively little attention within the existing simulation-discovery literature.
+Container terminals are dynamic systems with limited resources and connected
+truck, yard, storage, and equipment processes. Simulation is used to
+support decisions in this setting \cite{Bruzzone2012,Kastner2021,Carboni2025}.
+However, most terminal simulation models are built by hand. Their construction,
+calibration, and maintenance require time and domain knowledge
+\cite{PMRozinat2009}.
+
+Simulation discovery creates models from event logs. Recent work covers
+simulation parameters, data-aware decision logic, and automated model building
+\cite{Camargo2020,simod2024,Vinci2026prosit}. Data-aware approaches can use
+context and process state instead of only fixed branching probabilities
+\cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}.
+ProSiT adds visible probabilistic decision models
+\cite{Vinci2026prosit}.
+
+Most evaluations come from healthcare, administration, and standard business
+processes. Evidence from large container terminals is limited. Open questions
+include:
+\begin{itemize}
+    \item the robustness of automatically discovered models,
+    \item their use for operational decision support,
+    \item their ability to reproduce congestion and workload, and
+    \item the value of white-box simulation in logistics.
+\end{itemize}
+This thesis studies these questions for truck handling at HHLA Container
+Terminal Burchardkai (CTB). It provides evidence about the strengths and
+limits of simulation discovery in this setting.

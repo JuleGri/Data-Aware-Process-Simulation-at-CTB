@@ -1,13 +1,11 @@
 \chapter{Results}
 \label{chap:results}
 
-This chapter reports the empirical evidence produced by the pipeline
-defined in Chapter~\ref{chp:experiments_and_framework}. Every number in
-this chapter is traceable to a script and an artefact in the
-repository; every claim is qualified by its confidence interval or its
-inherent uncertainty. The chapter is organised so that the reader
-encounters the evidence in the same order in which the hypotheses of
-Section~\ref{sec:data_aware_hypotheses} depend on it.
+This chapter reports the results of the pipeline defined in
+Chapter~\ref{chp:experiments_and_framework}. The reported values can be traced
+to scripts and artefacts in the repository. Confidence intervals or stated
+uncertainty are included where needed. The sections follow the four research
+questions and the research objective.
 
 Section~\ref{sec:results_eventlog_char} reports the descriptive
 characteristics of the training and testing partitions produced by the
@@ -15,19 +13,19 @@ split of Section~\ref{sec:train_test_split}.
 Section~\ref{sec:results_process_discovery} reports the discovered
 Petri net and its conformance on both partitions (RQ2).
 Section~\ref{sec:results_arrival_process} reports the temporal
-structure of the arrival process (H1).
+structure of the arrival process as a modelling diagnosis for RQ1.
 Section~\ref{sec:results_holdout_fidelity} reports the held-out
-Monte-Carlo fidelity of the ProSiT configurations
-(RQ1, H2, H3). Section~\ref{sec:results_per_activity} decomposes the
+Monte-Carlo fidelity of the ProSiT configurations (RQ1 and RQ3).
+Section~\ref{sec:results_per_activity} decomposes the
 fidelity by activity to identify where each configuration wins or
 loses. Section~\ref{sec:results_resource_capacities} reports the
 discovered resource capacities and their limits.
 Section~\ref{sec:results_percentile_sens} provides a descriptive
 analysis of transition durations.
 Section~\ref{sec:results_scenarios} reports the two what-if scenarios
-(H4). Section~\ref{sec:limitations} discusses the methodological
-limitations. Section~\ref{sec:results_summary} consolidates the
-empirical findings against the hypotheses.
+(RQ4). Section~\ref{sec:limitations} discusses the methodological
+limitations. Section~\ref{sec:results_summary} consolidates the answers
+to all four research questions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Event Log Characteristics on the Held-Out Split}
@@ -111,7 +109,7 @@ The test partition contains 53 variants. Ten cases follow ten variants
 that were not observed in training, corresponding to only 0.0559\,\%
 of the 17,892 test cases. This accounts for the small fitness deviation
 from one. The lower generalisation score is expected from a strict
-variant trie: the design intentionally trades permissiveness for an
+variant trie: the design trades permissiveness for an
 auditable case language of exactly one Gate In, one or more sequential
 yard activities and exactly one final Gate Out. It does not imply that
 yard resources cannot work on different trucks simultaneously.
@@ -119,11 +117,11 @@ yard resources cannot work on different trucks simultaneously.
 \medskip
 
 \noindent\textbf{RQ2 (structural quality).} The authoritative net
-replays 99.944\,\% of held-out traces perfectly and achieves log fitness
-0.99985 while enforcing the required within-case sequence. It is
-therefore a defensible simulation skeleton for this application. Its
+replays 99.944\,\% of held-out traces without deviations and achieves log fitness
+0.99985 while enforcing the required within-case sequence. This makes it
+a suitable simulation skeleton for this application. Its
 strict variant representation, and the resulting generalisation score,
-remain an explicit modelling trade-off.
+remain a modelling trade-off.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Temporal Structure of the Arrival Process}
@@ -180,12 +178,14 @@ Night & 4.71  & 12.7   & 7,810  \\
 
 \medskip
 
-\noindent\textbf{H1 (time dependence of arrivals) is accepted.} The
+\noindent\textbf{Arrival-model implication.} The
 time-aware arrival model reduces MAE by 68.8\,\% and RMSE by 52.8\,\%
 relative to a pooled baseline on a chronological within-training
-hold-out. This is a substantial and interpretable effect. The
+hold-out. This difference can be interpreted directly. The
 day/night contrast (Table~\ref{tab:day_night}) is the operational
-mechanism that the tree captures.
+mechanism that the tree captures. The result justifies representing
+arrivals as time-dependent within the model evaluated under RQ1; it is
+not treated as a separate research question.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Held-Out Simulation Fidelity (Multi-Seed)}
@@ -195,7 +195,7 @@ mechanism that the tree captures.
 The ProSiT configurations of
 Section~\ref{sec:simulation_discovery_methodology} were first screened
 against a temporal hold-out. The endpoint comparison is retained in
-Table~\ref{tab:configuration_screening} as evidence for H2 and H3.
+Table~\ref{tab:configuration_screening} as evidence for RQ3.
 After that comparison, the workload-aware model was given the
 training-only CTB calibrations required by the application semantics:
 the sequential observed-variant control-flow contract, calibrated
@@ -212,7 +212,7 @@ Section~\ref{sec:lifecycle_events}, the real event log contains only
 observed timestamps (\texttt{start:timestamp} and
 \texttt{time:timestamp}); activity enablement is derived internally by
 ProSiT from A* alignment against the discovered Petri net.
-Consequently, service-time and case-turnaround comparisons are
+Service-time and case-turnaround comparisons are
 directly available (both real and simulated logs carry start/complete
 timestamps), while the model-derived pre-service delay is available
 only from the simulated log.
@@ -264,20 +264,20 @@ case-turnaround EMD is $9.306\;[9.229,9.384]$ minutes and inter-arrival EMD is
 $0.0724\;[0.0674,0.0774]$ minutes. Real mean turnaround is 39.742
 minutes compared with a simulated $30.436\;[30.359,30.514]$ minutes;
 real P90 is 71.0 minutes compared with a simulated
-$51.800\;[51.498,52.102]$ minutes. The residual error is therefore a
+$51.800\;[51.498,52.102]$ minutes. The residual error is a
 systematic \emph{under-prediction}, not an upper-tail explosion.
 
 All ten runs contain zero gate-only cases, zero within-case overlaps,
 zero invalid case boundaries, zero decreasing completion sequences and
 zero cases in which Gate Out precedes the final yard activity. No
 service event or case turnaround exceeds 24 hours. The final model is
-thus structurally valid and stable, while its duration bias remains an
-explicit limitation.
+structurally valid and stable, but its duration bias remains a limitation.
 
-\subsection{H2: Does the Data-Aware Configuration Improve Fidelity?}
+\subsection{RQ3: Effect of Contextual Expressiveness on Fidelity}
 
 The comparison between \textit{no-rules} and
-\textit{rules$+$workload} directly tests H2. On every fidelity metric
+\textit{rules$+$workload} evaluates the two endpoints of the contextual-
+expressiveness ladder. On every fidelity metric
 except inter-arrival, the distribution-only configuration produces
 strictly lower (better) values, and the 95\,\% confidence intervals
 are disjoint:
@@ -294,26 +294,23 @@ are disjoint:
           difference is 0.005 minutes ($\approx 0.3$ seconds).
 \end{itemize}
 
-\noindent\textbf{H2 is rejected.} The data-aware configuration does
-not improve fidelity on the CTB event log. The distribution-only
+\noindent\textbf{RQ3 answer.} Increasing contextual expressiveness from
+the distribution-only endpoint to the full data-aware endpoint does not
+improve held-out fidelity on the CTB event log. The distribution-only
 simulator achieves a 56\,\% lower case-turnaround EMD with disjoint
 confidence intervals. The only gain for the tree-based variant is on
 the inter-arrival distribution and it is operationally negligible.
 
-\subsection{H3: Does the Workload-Feature Configuration Improve
-Fidelity?}
+\subsection{Interpretive Limit of the Configuration Comparison}
 
-H3 cannot be tested in isolation because we compare \textit{no-rules}
-(the distribution-only baseline) against
-\textit{rules$+$workload} (the full data-aware variant). Since the
-combined effect of enabling both trees and workload features produces
-strictly worse fidelity than the no-rules baseline, H3 is subsumed by
-the H2 rejection. Workload features do not compensate for the
-fidelity loss introduced by the decision trees.
-
-\noindent\textbf{H3 is rejected.} Adding queue-length and workload
-features to the ProSiT waiting-time and resource-selection models does
-not improve held-out fidelity on the CTB event log.
+The retained endpoint comparison does not isolate the contribution of
+queue-length and workload features from the contribution of the decision
+trees, because a corresponding \textit{rules}-only result is not available.
+No separate effect is attributed to workload features. The
+supported interpretation is narrower: the combined increase in contextual
+expressiveness produces worse fidelity than the distribution-only baseline,
+so the added workload features do not compensate for the loss observed in
+the full data-aware endpoint.
 
 \subsection{Cross-Seed Variance Does Not Favour the Workload Variant}
 
@@ -343,11 +340,11 @@ The \textit{no-rules} configuration produces lower cross-seed variance
 than \textit{rules$+$workload} on every listed metric. The
 \textit{rules$+$workload} simulator has turnaround-EMD standard
 deviation 46\,\% larger than \textit{no-rules} (1.61 vs.\ 1.10
-minutes). Consequently, neither mean fidelity nor sampling variance
+minutes). Neither mean fidelity nor sampling variance
 provides evidence for a workload-feature advantage in this screening
 experiment. The workload-aware bundle is retained for the final
 white-box case study because it exposes the context-dependent parameter
-logic required for scenario intervention, and is subsequently
+logic required for scenario intervention, and is later
 calibrated using training data only.
 
 \subsection{Methodological Note on Temporal Semantics}
@@ -374,7 +371,7 @@ Petri net.  This means:
 \end{itemize}
 
 The configuration-screening result is not the final baseline result.
-In particular, its single-run tail behaviour must not be transferred to
+its single-run tail behaviour must not be transferred to
 the calibrated model, whose ten-seed validation instead shows systematic
 turnaround under-prediction (Table~\ref{tab:final_kpis}).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -423,18 +420,18 @@ constant zero by construction: Gate In and Gate Out have identical
 start and completion timestamps
 (Section~\ref{sec:lifecycle_events}). For the seven yard activities the
 $R^{2}$ ranges from $-0.005$ (RMG activities) to $0.263$
-(\texttt{LL\_delivery}). RMG activities have essentially no
+(\texttt{LL\_delivery}). RMG activities have almost no
 context-explainable variance under the available features, and yet the
 grand mean of the CTB event log is dominated by RMG (over 60\,\% of all
-yard events). This explains the H2 result of
+yard events). This explains the RQ3 result of
 Section~\ref{sec:results_holdout_fidelity}: the ProSiT trees are asked
 to predict activities whose duration variance is not explained by the
 available case-level attributes, and the resulting leaf-level
 distribution fits are noisier than the empirical marginal fit that
 \textit{no-rules} uses. The overall fidelity metric of
-Section~\ref{sec:results_holdout_fidelity} is therefore an aggregate in
+Section~\ref{sec:results_holdout_fidelity} is an aggregate in
 which the RMG activities (large weight, no context-explainable
-variance) dominate the LL activities (small weight, meaningful
+variance) dominate the LL activities (small weight, non-zero
 context-explainable variance).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -471,7 +468,7 @@ RMG      & \texttt{T06}--\texttt{T27} (22 blocks) & three RMG activities & 4--5$
 \end{tabular}
 \parbox{0.94\textwidth}{\footnotesize $^{a}$Ten RMG block identifiers
 have maximum concurrency four and twelve have maximum concurrency five;
-their aggregate upper bound is therefore 100 simultaneous RMG tasks.
+their aggregate upper bound is 100 simultaneous RMG tasks.
 This exceeds the nominal physical upper bound of 66 implied by at most
 three cranes at each of 22 blocks.}
 \end{table}
@@ -479,7 +476,7 @@ three cranes at each of 22 blocks.}
 All 168 weekly slots of every final resource calendar are available;
 temporal gate closure is represented separately by the arrival
 calendar. Each RMG activity can select all 22 block identifiers, and the
-resource-selection rules supply statistical weights. Closing T22 thus
+resource-selection rules supply statistical weights. Closing T22
 leaves 21 eligible identifiers and removes three units of maximum
 concurrency from the final cap-three baseline. The freely discovered
 aggregate bound of 100 motivates the domain constraint reported in
@@ -488,15 +485,14 @@ audit, while the executable final baseline clamps every block to three.
 
 These values are learned effective server capacities, not verified
 numbers of cranes, workers or physically interchangeable storage
-positions. The 100-versus-66 discrepancy demonstrates that concurrent
+positions. The 100-versus-66 discrepancy shows that concurrent
 event intervals assigned to a block cannot be interpreted one-to-one as
-simultaneously operating cranes. In addition, an RMG block label
+simultaneously operating cranes. An RMG block label
 functions as a selectable resource; it does not create
-container-location state. Consequently, the T22 reassignment is
+container-location state. The T22 reassignment is
 independent of whether the corresponding container could physically be
-stored or reached at the replacement block. These are central
-boundaries for interpreting Scenario~A and are carried forward
-explicitly in Section~\ref{sec:limitations}.
+stored or reached at the replacement block. These are main
+limits of Scenario~A and are discussed in Section~\ref{sec:limitations}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Descriptive Analysis of Transition Durations}
@@ -690,7 +686,7 @@ systematic rather than Monte-Carlo noise: mean turnaround is
 under-predicted by 9.306 minutes and P90 by 19.200 minutes. The narrow
 confidence intervals quantify simulation sampling uncertainty for this
 one frozen model; they do not quantify model-discovery uncertainty.
-Crucially, all ten validation replications satisfy the sequential case
+all ten validation replications satisfy the sequential case
 contract and contain no service event or turnaround above 24 hours.
 
 \subsection{Scenario A: T22 Resource-Pool Reallocation}
@@ -706,18 +702,18 @@ Receive service changes by $-0.043\;[-0.110,+0.024]$ minutes and receive
 pre-service by $+0.016\;[-0.039,+0.071]$ minutes. Delivery service changes
 by $+0.035\;[-0.078,+0.147]$ minutes and delivery pre-service by
 $-0.036\;[-0.087,+0.015]$ minutes. All four intervals cross zero. The
-model therefore supports the conclusion that removing T22 from its
+results show that removing T22 from its
 abstract RMG resource pool has no statistically resolved differential
 effect on receive or delivery operations in this experiment.
 
 The effect must not be interpreted as a physically complete yard-block
 closure study. All three RMG activities retain 21 eligible blocks, each
-with maximum concurrency three. More importantly, the
+with maximum concurrency three. The
 resource selector is not a container-location state model: removal of
 T22 causes statistical reassignment to another eligible resource even
 when the historical target area was T22. Container relocation, block
 compatibility and the additional physical travel caused by relocation
-are not represented. The result therefore measures robustness of the
+are not represented. The result measures robustness of the
 \emph{abstract discovered resource pool}, not the full operational
 consequence of closing the physical T22 storage block.
 
@@ -736,7 +732,7 @@ zero mass of the input distribution itself remains unchanged.
 Despite the higher demand, neither mean turnaround nor overall RMG service
 or pre-service delay changes significantly in the final cap-three model:
 mean turnaround changes by $-0.033\;[-0.128,+0.063]$ minutes. Receive
-service and pre-service also remain unresolved. Delivery pre-service
+service and pre-service remain unresolved. Delivery pre-service
 decreases by $-0.090\;[-0.157,-0.022]$ minutes (approximately 5.4 seconds),
 while delivery service is unchanged. This small counter-intuitive effect
 is compatible with a changed routing/resource-selection mix, but it is not
@@ -745,29 +741,31 @@ physical container locations and explicit queue states are absent. The
 result instead shows that a cap of three alone does not create the expected
 congestion response in the current abstraction.
 
-This is a legitimate scenario result, but also a warning:
+This is a valid scenario result, but it is also a warning:
 because spatial container constraints and explicit equipment movements
 are absent, it cannot by itself establish that the physical terminal
 would absorb 20\,\% more demand without congestion.
 
 \medskip
 
-\noindent\textbf{H4 is partially supported.} Both direct interventions
-are executed as specified: T22 assignments fall to zero and the demand
+\noindent\textbf{RQ4 answer.} Both direct interventions are executed as
+specified: T22 assignments fall to zero and the demand
 parameter increases working-time arrival intensity by exactly 20\,\%.
 The T22 resource-pool reallocation produces no statistically resolved
 overall or receive-versus-delivery effect. The demand experiment yields a
 small delivery pre-service reduction but no statistically detectable
-mean-turnaround effect. H4 therefore does not support a strong
-operational decision recommendation.
+mean-turnaround effect. The scenarios show transparent and
+reproducible model manipulation, but the weak congestion response and the
+abstract RMG resource representation prevent an operational decision
+recommendation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Summary of Empirical Findings}
 \label{sec:results_summary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Table~\ref{tab:results_summary} consolidates the empirical results
-against the hypotheses of Section~\ref{sec:data_aware_hypotheses}.
+Table~\ref{tab:results_summary} consolidates the empirical answers to the
+research questions of Section~\ref{sec:refined_rq}.
 
 \begin{table}[h]
 \centering
@@ -775,37 +773,29 @@ against the hypotheses of Section~\ref{sec:data_aware_hypotheses}.
 \label{tab:results_summary}
 \begin{tabular}{p{2.2cm} p{6.5cm} p{4.5cm}}
 \toprule
-\textbf{Hypothesis} & \textbf{Evidence} & \textbf{Outcome} \\
+\textbf{Research question} & \textbf{Evidence} & \textbf{Answer} \\
 \midrule
-H1 (arrival time-dependence) &
-Time-aware tree reduces MAE by 68.8\,\% and RMSE by 52.8\,\% versus
-pooled baseline; $R^{2}=0.777$
-(Table~\ref{tab:arrival_benchmark}).
-& \textbf{Accepted.} \\
-H2 (data-aware fidelity gain) &
-\textit{rules$+$workload} does not lower turnaround EMD
-versus \textit{no-rules} on the held-out log; in fact, the
-distribution-only simulator achieves 56\,\% lower turnaround EMD
-with disjoint 95\,\% CIs
-(Table~\ref{tab:configuration_screening}).
-& \textbf{Rejected.} \\
-H3 (workload-feature gain) &
-H3 is subsumed by the H2 rejection: the combined effect of trees and
-workload features produces strictly worse fidelity than the
-distribution-only baseline.
-& \textbf{Rejected.} \\
-H3-secondary (sampling variance) &
-\textit{rules$+$workload} has larger, not smaller, cross-seed standard
-deviation of turnaround EMD than \textit{no-rules} (1.61 vs.\ 1.10
-minutes; Table~\ref{tab:std_across_configs}).
-& \textbf{Does not offset H2 rejection.} \\
-H4 (scenario response) &
-T22 assignments fall to zero, but none of its overall or
-receive-versus-delivery timing effects exclude zero. The demand parameter
-increases working-time intensity by exactly 20\,\%; only the small delivery
-pre-service reduction excludes zero, and neither intervention has a
-significant mean-turnaround effect (Table~\ref{tab:final_kpis}).
-& \textbf{Partially supported; no strong decision claim.} \\
+RQ1 (fidelity) & The final model achieves yard-service EMD of 2.999
+minutes, weighted yard EMD of 2.340 minutes, arrival EMD of 0.072 minutes
+and turnaround EMD of 9.306 minutes (Table~\ref{tab:final_kpis}). &
+\textbf{Structurally stable, but with systematic turnaround
+under-prediction.} \\
+RQ2 (structural applicability) & The sequential trie replays 99.944\,\%
+of held-out traces without deviations with test fitness 0.99985 while satisfying
+the truck-visit case contract (Table~\ref{tab:conformance_train_test}). &
+\textbf{Applicable as a conservative simulation skeleton, with an explicit
+generality trade-off.} \\
+RQ3 (contextual expressiveness) & \textit{rules$+$workload} has 56\,\%
+higher turnaround EMD and greater cross-seed variation than
+\textit{no-rules} in the retained endpoint comparison
+(Tables~\ref{tab:configuration_screening} and~\ref{tab:std_across_configs}). &
+\textbf{More contextual expressiveness does not improve held-out fidelity
+in this dataset.} \\
+RQ4 (what-if decision support) & Both interventions execute exactly, but
+neither produces a resolved mean-turnaround effect; the model omits spatial
+container state and explicit equipment movement (Table~\ref{tab:final_kpis}). &
+\textbf{Useful for transparent model experiments, but insufficient for
+physical decision claims without further domain state.} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -817,12 +807,14 @@ under-predicts case-mean turnaround by 9.306 minutes (23.42\,\%) and
 P90 by 19.200 minutes (27.04\,\%).
 Section~\ref{sec:results_per_activity}
 decomposes the remaining error across activities, whose
-context-explainable variance is essentially zero under the available
+context-explainable variance is close to zero under the available
 features. Section~\ref{sec:results_percentile_sens} provides
 descriptive evidence that the model-derived pre-service delay includes
 a non-trivial physical-movement component (3.5\,minutes median shift
 between percentiles), confirming the domain-specific limitation
-discussed in Section~\ref{sec:limitations}.
+discussed in Section~\ref{sec:limitations}. The configuration comparison
+answers RQ3, while the intervention results and their abstraction limits
+answer RQ4.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Methodological Limitations}
@@ -836,7 +828,7 @@ enabled when the control-flow state permits its execution.  In the CTB
 process, however, consecutive operational activities occur at spatially
 separated terminal locations.  Physical truck movement between these
 locations is not represented as a separate activity in the discovered
-process model.  Consequently, the model-derived interval between
+process model. The model-derived interval between
 enablement and activity start includes both physical transition time
 and operational waiting:
 \begin{equation}
@@ -850,11 +842,11 @@ These components are not individually identifiable from the available
 data.  Individual truck travel times are not directly observed; the
 scheduling-system transition durations combine movement with congestion
 and other operational effects.  Separating the components would require
-position or trajectory data not available in the CTB systems.  The
-thesis deliberately retains the standard ProSiT semantics rather than
+position or trajectory data not available in the CTB systems. The
+thesis keeps the standard ProSiT semantics rather than
 adding an unobserved transition-time model.
 
-Waiting-time results should therefore be interpreted as
+Waiting-time results are interpreted as
 \textit{pre-service delay} rather than as a direct measurement of
 queueing or equipment-induced waiting.
 
@@ -863,11 +855,11 @@ queueing or equipment-induced waiting.
 The RMG resource selected by ProSiT is an abstract capacity assignment.
 Its freely discovered aggregate overlap capacity is 100, whereas the
 stated physical maximum of three cranes per block implies at most 66
-across 22 blocks. This mismatch is evidence that timestamp overlap also
+across 22 blocks. This mismatch is evidence that timestamp overlap
 absorbs event-log and process abstractions; it is not a physical crane
-count. The final executable baseline therefore applies the cap of three.
+count. The final executable baseline applies the cap of three.
 Even under that bound, the 20\,\% demand scenario produces no significant
-mean-turnaround increase. Thus excessive overlap capacity is not the only
+mean-turnaround increase. Excessive overlap capacity is not the only
 missing mechanism; spatial state and waterside/landside equipment
 allocation remain unmodelled.
 
@@ -875,8 +867,8 @@ Although target-area attributes can enter a discovered decision tree,
 they are predictors rather than a hard container-inventory constraint.
 The simulator does not maintain a state that binds each container to
 its actual storage block, nor does it create a relocation activity when
-the selected block differs from that historical location. Consequently,
-closing T22 redistributes its statistical resource demand across the
+the selected block differs from that historical location. Closing T22
+redistributes its statistical resource demand across the
 remaining eligible blocks without modelling relocation feasibility,
 yard-crane repositioning or the resulting change in physical truck
 travel. The T22 experiment is valid as a white-box test of the
@@ -909,10 +901,9 @@ but would not resolve those remaining structural sources of uncertainty.
 \label{sec:results_interpretive_conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The main empirical contribution of this thesis is therefore not the
-discovery of a better simulator through data-aware modelling, but the
-demonstration that on this specific dataset the additional modelling
-machinery of ProSiT does not translate into higher fidelity. The
-observation, together with the multi-seed protocol that reveals it and
-the absence of workload-feature variance reduction, is the operational
-finding that Chapter~\ref{chp:conclusion} builds upon.
+The evidence shows that the discovered model can be executed and assessed,
+but it is not complete enough for direct physical decision support. The main
+empirical contribution is not a better simulator. It is the finding that the
+additional ProSiT modelling features do not improve fidelity on this dataset.
+Together with the systematic turnaround bias and the scenario experiments,
+this identifies the limits summarised in Chapter~\ref{chp:conclusion}.
