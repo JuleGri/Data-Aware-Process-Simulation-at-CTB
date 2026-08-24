@@ -232,71 +232,118 @@ engineering section discusses this issue.
 
 \subsection{Events, Cases and Traces}
 
-Explanation of Event
-Case
-Trace
-Activity
-Timestamp
-Attribute
-Using HHLA Examples
-
 Process Mining describes a process as a sequence of recorded events. The
 following terms define this event-log structure.
 
 \paragraph{Event}
 An event records an activity at a point in time. Examples from a container
-terminal include:
-\begin{itemize} 
-    \item Truck drives through OCR gate, 
-    \item Gate Check completed, 
-    \item Truck arrives at yard position, 
-    \item Container operation at yard position completed, 
-    \item Truck exits the terminal. 
-\end{itemize} 
+terminal are shown in Table~\ref{tab:background_event_examples}.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{0.29\textwidth}|L{0.60\textwidth}|}
+\hline
+\textbf{Event} & \textbf{Description} \\
+\hline
+OCR gate entry & The truck passes the automatic identification system at the terminal entrance. \\
+Gate check completed & The administrative and security checks at the entry gate are completed. \\
+Yard position reached & The truck arrives at its assigned handling position in the yard. \\
+Container operation completed & The loading or unloading operation at the yard position is completed. \\
+Terminal exit & The truck leaves the terminal after its operations are completed. \\
+\hline
+\end{tabular}
+\caption{Examples of events in a container terminal truck process.}
+\label{tab:background_event_examples}
+\end{table}
 
 \paragraph{Activity} 
-An activity describes the type of action that is being executed. Multiple events can belong to the same activity while occurring at different times or for different process instances. Examples of activities are: 
+An activity describes the type of action that is executed. Multiple events can
+belong to the same activity while occurring at different times or for different
+process instances. Table~\ref{tab:background_activity_examples} gives examples.
 
-\begin{itemize} 
-    \item Gate In, 
-    \item Container-Delivery,
-    \item Container-Receive, 
-    \item Gate Out. 
-\end{itemize} 
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{0.29\textwidth}|L{0.60\textwidth}|}
+\hline
+\textbf{Activity} & \textbf{Description} \\
+\hline
+Gate In & Entry checks and authorization of the truck visit. \\
+Container Delivery & Transfer of a container from the truck to the terminal yard. \\
+Container Receive & Transfer of a container from the terminal yard to the truck. \\
+Gate Out & Completion of the exit procedure before the truck leaves the terminal. \\
+\hline
+\end{tabular}
+\caption{Examples of activities in a container terminal truck process.}
+\label{tab:background_activity_examples}
+\end{table}
 
 \paragraph{Case} 
-A case represents a single process instance. It is defined by the object whose process execution is being analyzed. Depending on the application domain, a case can represent different entities, such as: 
+A case represents a single process instance. It is defined by the object whose
+process execution is analyzed. Possible case objects are shown in
+Table~\ref{tab:background_case_examples}.
 
-\begin{itemize} 
-    \item a customer order, 
-    \item a container,  
-    \item a truck visit. 
-\end{itemize} 
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{0.29\textwidth}|L{0.60\textwidth}|}
+\hline
+\textbf{Case object} & \textbf{Description} \\
+\hline
+Customer order & One order is followed from its creation to its completion. \\
+Container & The recorded handling process of one container forms the case. \\
+Truck visit & The recorded process from a truck's arrival to its departure forms the case. \\
+\hline
+\end{tabular}
+\caption{Examples of objects that may define a process case.}
+\label{tab:background_case_examples}
+\end{table}
 
 In this thesis, one truck visit is one case.
 
-In traditional event logs, events are often represented by a single timestamp, typically indicating the completion of an activity. For performance-oriented Process Mining and simulation applications, richer temporal information is required. Two directly observable lifecycle states are commonly distinguished:
+In traditional event logs, events are often represented by a single timestamp,
+typically indicating the completion of an activity. Performance-oriented Process
+Mining and simulation require more temporal information.
+Table~\ref{tab:background_timestamp_attributes} shows the two directly
+observable lifecycle timestamps.
 
-\begin{itemize} 
-    \item \textbf{Start Timestamp}: The moment execution of the activity actually begins. 
-    \item \textbf{Complete Timestamp}: The moment execution of the activity finishes. 
-\end{itemize} 
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{0.29\textwidth}|L{0.60\textwidth}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+Start timestamp & Time at which the execution of the activity begins. \\
+Complete timestamp & Time at which the execution of the activity ends. \\
+\hline
+\end{tabular}
+\caption{Observable timestamp attributes of an event.}
+\label{tab:background_timestamp_attributes}
+\end{table}
 
 The duration between these two timestamps is the \textit{service time} (or execution time) of the activity. A third temporal concept, \textit{enablement}, describes the moment at which an activity becomes executable according to the process-model state. In process-mining-based simulation approaches, enablement is typically not an observed input-log attribute but is derived by replaying the event log against the discovered process model \cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The interval between model-derived enablement and the observed start timestamp is referred to as \textit{waiting time} in the ProSiT framework \cite{Vinci2026prosit} and corresponds to a pre-service delay that may include resource contention, queueing effects, and — in domains with spatial separation between activities — physical movement time. 
 
 \paragraph{Attributes}
 Events may contain attributes that describe the process context. Examples from
-container terminal operations include:
+container terminal operations are shown in
+Table~\ref{tab:background_context_attributes}.
 
-\begin{itemize} 
-    \item Truck ID,
-    \item Container Number, 
-    \item Shipping Line, 
-    \item Yard Block, 
-    \item Container Type, 
-    \item Equipment Identifier, 
-    \item Trucking Company. 
-\end{itemize} 
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|L{0.29\textwidth}|L{0.60\textwidth}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+Truck ID & Identifier of the truck involved in the recorded operation. \\
+Container number & Identifier of the container handled during the visit. \\
+Shipping line & Shipping company associated with the container. \\
+Yard block & Storage block in which the container operation takes place. \\
+Container type & Operational or physical category of the container. \\
+Equipment identifier & Identifier of the equipment used for the operation. \\
+Trucking company & Company responsible for the truck visit. \\
+\hline
+\end{tabular}
+\caption{Examples of contextual event attributes in container terminal operations.}
+\label{tab:background_context_attributes}
+\end{table}
 
 Data-aware Process Mining and simulation methods can use these attributes as
 model inputs.
@@ -330,20 +377,23 @@ The CTB input log used in this thesis provides start and completion timestamps r
 Other attributes can add operational context. Table~\ref{tab:eventlogexample}
 shows a simplified event log.
 
-\begin{table}[h] 
-\centering 
-\caption{Simplified Event Log Example} 
-\label{tab:eventlogexample} 
-\begin{tabular}{llll} 
-\hline Case ID & Activity & Timestamp & Yard Block 
-\\ \hline T001 & Gate In & 09:13:04 & - 
-\\ T001 & Yard Operation & 09:21:46 & B06 
-\\ T001 & Gate Out & 09:42:18 & - 
-\\ T002 & Gate In & 09:17:12 & - 
-\\ T002 & Yard Operation & 09:30:51 & B08 
-\\ T002 & Gate Out & 09:58:33 & - 
-\\ \hline \end{tabular} 
-\end{table} 
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Case ID} & \textbf{Activity} & \textbf{Timestamp} & \textbf{Yard block} \\
+\hline
+T001 & Gate In & 09:13:04 & -- \\
+T001 & Yard Operation & 09:21:46 & B06 \\
+T001 & Gate Out & 09:42:18 & -- \\
+T002 & Gate In & 09:17:12 & -- \\
+T002 & Yard Operation & 09:30:51 & B08 \\
+T002 & Gate Out & 09:58:33 & -- \\
+\hline
+\end{tabular}
+\caption{Simplified event log example.}
+\label{tab:eventlogexample}
+\end{table}
 
 Event logs can be stored in standard formats for exchange between Process
 Mining tools. The eXtensible Event Stream (XES) format stores events, cases,
@@ -886,14 +936,10 @@ categories work complementary, as for example a low event-log distance is eviden
 
 \begin{table}[htbp]
 \centering
-\caption{Validation questions and corresponding evidence in an
-event-log-discovered simulation study, based on Sargent's framework
-\cite{Sargent2013Validation}.}
-\label{tab:validation_evidence_types}
-\begin{tabular}{p{0.23\textwidth}p{0.29\textwidth}p{0.39\textwidth}}
-\toprule
+\begin{tabular}{|L{0.21\textwidth}|L{0.26\textwidth}|L{0.39\textwidth}|}
+\hline
 \textbf{Question} & \textbf{Validity concept} & \textbf{Typical evidence} \\
-\midrule
+\hline
 Is the abstraction reasonable? & Conceptual-model validity &
 Domain review of case boundaries, event semantics, resource meanings
 and physical constraints \\
@@ -910,8 +956,12 @@ Does a scenario predict the true intervention effect? & Predictive
 validity outside the historical regime & Intervention observations,
 controlled field evidence or additional domain-supported sensitivity
 analysis \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Validation questions and corresponding evidence in an
+event-log-discovered simulation study, based on Sargent's framework
+\cite{Sargent2013Validation}.}
+\label{tab:validation_evidence_types}
 \end{table}
 
 This distinction clarifies the scope of this thesis. The

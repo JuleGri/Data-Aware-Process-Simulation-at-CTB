@@ -15,6 +15,18 @@
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 \usepackage{enumitem}
+\usepackage{array}
+\usepackage{etoolbox}
+
+% Consistent table style: compact body, thin framed columns and captions below.
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\AtBeginEnvironment{table}{%
+  \small
+  \renewcommand{\arraystretch}{1.12}%
+  \setlength{\tabcolsep}{5pt}%
+  \setlength{\arrayrulewidth}{0.4pt}%
+}
+\captionsetup[table]{position=bottom,skip=5pt}
 
 % To reduce the space ONLY after the list:
 \setlist{after=\vspace{-1ex}} 

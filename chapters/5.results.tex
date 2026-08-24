@@ -26,14 +26,12 @@ training log. They contain 220,048 events and cover Gate In arrivals from
 55,360 events. No event is removed because of a missing timestamp.
 Table~\ref{tab:activity_counts_split} gives the activity counts.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Activity counts on the train and test partitions.}
-\label{tab:activity_counts_split}
-\begin{tabular}{lrrr}
-\toprule
+\begin{tabular}{|l|r|r|r|}
+\hline
 \textbf{Activity} & \textbf{Train} & \textbf{Test} & \textbf{Total} \\
-\midrule
+\hline
 Gate In       & 71,568 & 17,892 & 89,460 \\
 Gate Out      & 71,568 & 17,892 & 89,460 \\
 RMG\_receive  & 32,794 & 7,171  & 39,965 \\
@@ -45,8 +43,10 @@ HO2\_receive  & 4,188  & 1,276  & 5,464  \\
 HO2\_mixed    & 749    & 276    & 1,025  \\
 LL\_receive   & 1,932  & 141    & 2,073  \\
 LL\_mixed     & 53     & 11     & 64     \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Activity counts on the train and test partitions.}
+\label{tab:activity_counts_split}
 \end{table}
 
 All activities also occur in the test log, but their frequencies change.
@@ -70,22 +70,22 @@ It stores the observed sequence language. Training fitness and precision of one
 follow from this construction. They are not results. Table~\ref{tab:conformance_train_test}
 also reports the held-out coverage and structural measures.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Prefix-trie conformance and structural descriptors on train and test.}
-\label{tab:conformance_train_test}
-\begin{tabular}{lrr}
-\toprule
+\begin{tabular}{|l|r|r|}
+\hline
 \textbf{Metric} & \textbf{Train} & \textbf{Test} \\
-\midrule
+\hline
 Log fitness                      & 1.0000 & 0.9998 \\
 Fitting traces (\%)              & 100.000 & 99.944 \\
 Average trace fitness            & 1.0000 & 0.9990 \\
 Token-based precision            & 1.0000 & 0.9605 \\
 Generalisation                   & 0.5767 & 0.3732 \\
 Simplicity                       & 0.6179 & 0.6179 \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Prefix-trie conformance and structural descriptors on train and test.}
+\label{tab:conformance_train_test}
 \end{table}
 
 The held-out result is more useful. The trie accepts only training variants.
@@ -135,16 +135,12 @@ model and hold-out only.
 
 \begin{table}[htbp]
 \centering
-\caption{Held-out fidelity of the final calibrated cap-three baseline
-($N_{\text{seeds}}=10$, seeds 42--51; 17,892 cases per run).}
-\label{tab:final_kpis}
-\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}p{5.1cm}rrrr@{}}
-\toprule
+\setlength{\tabcolsep}{3.4pt}
+\begin{tabular}{|L{4.6cm}|r|r|r|r|}
+\hline
 \textbf{KPI} & \textbf{Real/ref.} & \textbf{Simulated} &
 \textbf{Difference} & \textbf{95\,\% MC CI} \\
-\midrule
+\hline
 Yard service EMD, unweighted (min) & -- & 2.999 & -- & [2.888, 3.110] \\
 Yard service EMD, real-frequency weighted (min) & -- & 2.340 & -- & [2.279, 2.402] \\
 Case-turnaround EMD (min) & -- & 9.306 & -- & [9.229, 9.384] \\
@@ -155,8 +151,12 @@ Mean turnaround (min) & 39.742 & 30.436 & $-9.306$ & [30.359, 30.514]$^{a}$ \\
 P90 turnaround (min) & 71.000 & 51.800 & $-19.200$ & [51.498, 52.102]$^{a}$ \\
 Simultaneous-arrival share (\%) & 56.660 & 54.221 & $-2.439$ pp & [54.035, 54.407]$^{a}$ \\
 Yard-activity-rate L1 error & -- & 0.1866 & -- & [0.1838, 0.1893] \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Held-out fidelity of the final calibrated cap-three baseline
+($N_{\text{seeds}}=10$, seeds 42--51; 17,892 cases per run).}
+\label{tab:final_kpis}
+\smallskip
 \parbox{0.95\textwidth}{\footnotesize $^{a}$The interval refers to the
 simulated outcome. The real hold-out statistic is fixed. Gate In and Gate Out
 are excluded from both yard-service EMD aggregates.}
@@ -177,14 +177,10 @@ Out never occurs before the last yard activity. No accepted duration exceeds
 
 \begin{table}[htbp]
 \centering
-\caption{Held-out service-time EMD by yard activity for the final
-cap-three baseline ($N_{\text{seeds}}=10$).}
-\label{tab:yard_activity_emd}
-\small
-\begin{tabular}{lrr}
-\toprule
+\begin{tabular}{|l|r|r|}
+\hline
 \textbf{Yard activity} & \textbf{Mean EMD (min)} & \textbf{95\,\% MC CI} \\
-\midrule
+\hline
 \texttt{HO2\_delivery} & 2.119 & [2.013, 2.225] \\
 \texttt{HO2\_mixed}    & 4.255 & [3.853, 4.656] \\
 \texttt{HO2\_receive}  & 2.024 & [1.768, 2.280] \\
@@ -194,8 +190,11 @@ cap-three baseline ($N_{\text{seeds}}=10$).}
 \texttt{RMG\_delivery} & 2.519 & [2.426, 2.612] \\
 \texttt{RMG\_mixed}    & 4.200 & [3.971, 4.429] \\
 \texttt{RMG\_receive}  & 2.463 & [2.374, 2.551] \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Held-out service-time EMD by yard activity for the final
+cap-three baseline ($N_{\text{seeds}}=10$).}
+\label{tab:yard_activity_emd}
 \end{table}
 
 \noindent\textbf{RQ1 answer.} The model reproduces the case order and parts of
@@ -210,14 +209,12 @@ RQ1 results.
 
 \begin{table}[htbp]
 \centering
-\caption{Pre-calibration held-out screening by ProSiT configuration
-($N_{\text{seeds}}=10$; 95\,\% Student-t Monte-Carlo CI).}
-\label{tab:configuration_screening}
-\begin{tabular}{lcc}
-\toprule
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|l|c|c|}
+\hline
 \textbf{Metric (min)} & \textbf{no-rules} &
 \textbf{rules$+$workload} \\
-\midrule
+\hline
 Case turnaround EMD & $\mathbf{13.94\;[13.15, 14.73]}$ &
 $21.75\;[20.60, 22.90]$ \\
 Inter-arrival EMD & $0.319\;[0.317, 0.320]$ &
@@ -228,8 +225,11 @@ Simulated mean turnaround & $\mathbf{53.68\;[52.89, 54.47]}$ &
 $61.49\;[60.34, 62.64]$ \\
 Simulated P90 turnaround & $\mathbf{103.05\;[101.26, 104.84]}$ &
 $124.44\;[121.70, 127.17]$ \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Pre-calibration held-out screening by ProSiT configuration
+($N_{\text{seeds}}=10$; 95\,\% Student-t Monte-Carlo CI).}
+\label{tab:configuration_screening}
 \end{table}
 
 \textit{No-rules} performs better on every turnaround measure. Its EMD is
@@ -284,18 +284,12 @@ available attributes. Table~\ref{tab:tree_r2_train_test} reports a
 training-only decision-tree test. It is not a breakdown of the final EMD. It
 also cannot prove why the RQ3 result occurs.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Per-activity duration $R^{2}$ of a decision-tree model
-conditioned on target demand, target utilisation, target rank, visit
-complexity, receive/delivery counts, hour, weekday and weekend
-indicator (training log; grid search over depth/leaf, best per
-activity).}
-\label{tab:tree_r2_train_test}
-\begin{tabular}{lr}
-\toprule
+\begin{tabular}{|l|r|}
+\hline
 \textbf{Activity} & \textbf{$R^{2}$} \\
-\midrule
+\hline
 LL\_delivery  & 0.263 \\
 LL\_mixed     & 0.258 \\
 HO2\_receive  & 0.115 \\
@@ -307,8 +301,14 @@ RMG\_receive  & $-0.005$ \\
 RMG\_delivery & $-0.004$ \\
 Gate In       & 1.000 \\
 Gate Out      & 1.000 \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Per-activity duration $R^{2}$ of a decision-tree model
+conditioned on target demand, target utilisation, target rank, visit
+complexity, receive/delivery counts, hour, weekday and weekend
+indicator (training log; grid search over depth/leaf, best per
+activity).}
+\label{tab:tree_r2_train_test}
 \end{table}
 
 Gate activities have $R^{2}=1.000$ because their service duration is fixed at
@@ -335,17 +335,17 @@ a training diagnostic, not another held-out validation result.
 
 \begin{table}[htbp]
 \centering
+\begin{tabular}{|l|r|r|r|}
+\hline
+\textbf{Model} & \textbf{MAE} & \textbf{RMSE} & \textbf{$R^{2}$} \\
+\hline
+Pooled arrival rate      & 28.98 & 34.60 & $-0.001$ \\
+Time-aware decision tree & \textbf{9.41} & \textbf{16.87} & \textbf{0.762} \\
+\hline
+\end{tabular}
 \caption{Arrival-count benchmark on 30-minute buckets (training log only,
 chronological 80/20 split).}
 \label{tab:arrival_benchmark}
-\begin{tabular}{lrrr}
-\toprule
-\textbf{Model} & \textbf{MAE} & \textbf{RMSE} & \textbf{$R^{2}$} \\
-\midrule
-Pooled arrival rate      & 28.98 & 34.60 & $-0.001$ \\
-Time-aware decision tree & \textbf{9.41} & \textbf{16.87} & \textbf{0.762} \\
-\bottomrule
-\end{tabular}
 \end{table}
 
 The time-aware tree reduces MAE by 67.5\,\% and RMSE by 51.2\,\%. The main
@@ -356,18 +356,18 @@ captures every source of arrival variation.
 
 \begin{table}[htbp]
 \centering
-\caption{Day and night arrival statistics on the training log.}
-\label{tab:day_night}
-\begin{tabular}{lrr}
-\toprule
+\begin{tabular}{|l|r|r|}
+\hline
 \textbf{Period} & \textbf{Mean inter-arrival (min)} &
 \textbf{Implied mean arrivals/hour} \\
-\midrule
+\hline
 All   & 1.00 & 60.2 \\
 Day   & 0.54 & 110.9 \\
 Night & 4.69 & 12.8 \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Day and night arrival statistics on the training log.}
+\label{tab:day_night}
 \end{table}
 
 The low inter-arrival EMD in Table~\ref{tab:final_kpis} comes from the final
@@ -386,23 +386,24 @@ capped at three. All other parameters stay unchanged. The earlier pool-level
 report from \texttt{baseline/04\_resource\_concurrency\_discovery.py} is only a
 diagnostic. It is not the simulator configuration.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Resource representation in the freely discovered calibrated
-source bundle before applying the final RMG cap.}
-\label{tab:capacities_train80}
-\begin{tabular}{llll}
-\toprule
+\begin{tabular}{|L{1.3cm}|L{3.1cm}|L{4.0cm}|L{2.6cm}|}
+\hline
 \textbf{Family} & \textbf{Identifiers} & \textbf{Eligible activities} &
 \textbf{Maximum concurrency} \\
-\midrule
+\hline
 Gate In  & \texttt{Res.GateIn}  & Gate In & 1 \\
 Gate Out & \texttt{Res.GateOut} & Gate Out & 1 \\
 HO2      & \texttt{HO2} & three HO2 activities & 15 \\
 LL       & \texttt{LL}  & three LL activities  & 22 \\
 RMG      & \texttt{T06}--\texttt{T27} (22 blocks) & three RMG activities & 4--5$^{a}$ \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Resource representation in the freely discovered calibrated
+source bundle before applying the final RMG cap.}
+\label{tab:capacities_train80}
+\smallskip
 \parbox{0.94\textwidth}{\footnotesize $^{a}$Ten RMG block identifiers
 have maximum concurrency four and twelve have maximum concurrency five;
 their aggregate upper bound is 100 simultaneous RMG tasks.
@@ -448,26 +449,27 @@ The check uses percentiles $\{5, 10, 25, 50\}$ and compares them with p5.
 Table~\ref{tab:percentile_sens} covers the 48 transitions with at least twenty
 observations. The reported association is Pearson correlation.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Empirical transition duration under alternative percentiles
-(seconds; 48 transitions with $\ge 20$ observations).}
-\label{tab:percentile_sens}
-\begin{tabular}{cccccc}
-\toprule
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
 \textbf{Percentile} &
 \textbf{Mean (s)} &
 \textbf{Median (s)} &
 \textbf{Mean shift (s)} &
 \textbf{P90 shift (s)} &
 \textbf{Pearson $r$ vs.\ p5} \\
-\midrule
+\hline
 p5   & 225.8 & 223.5 & $0.0$   & $0.0$   & 1.000 \\
 p10  & 254.6 & 254.3 & $28.8$  & $36.0$  & 0.990 \\
 p25  & 318.3 & 311.0 & $92.5$  & $110.3$ & 0.948 \\
 p50  & 435.5 & 426.0 & $209.8$ & $250.9$ & 0.812 \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Empirical transition duration under alternative percentiles
+(seconds; 48 transitions with $\ge 20$ observations).}
+\label{tab:percentile_sens}
 \end{table}
 
 The values keep a similar ordering across percentiles. Pearson $r$ is 0.990
@@ -510,7 +512,56 @@ new activity sequence. Extra moves, detours, exceptions, or a new operation
 order are outside the model. All scenario results are conditional on the
 historical paths.
 
-[Results Table to be finalised and included]
+\begin{table}[p]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.1pt}
+\renewcommand{\arraystretch}{1.06}
+\begin{tabular}{|L{1.45cm}|L{3.8cm}|r|r|r|r|}
+\hline
+\textbf{Analysis} & \textbf{KPI} & \textbf{Reference} &
+\textbf{Outcome} & \textbf{Change} & \textbf{95\,\% CI} \\
+\hline
+\multicolumn{6}{|l|}{\textit{Scenario A: T22 resource-pool reallocation (scenario minus matched baseline)}} \\
+\hline
+T22 pool & Mean turnaround (min) & 30.443 & 30.456 & $+0.012$ & [$-0.102$, $+0.127$] \\
+T22 pool & P90 turnaround (min) & 51.700 & 51.900 & $+0.200$ & [$-0.364$, $+0.764$] \\
+T22 pool & Mean RMG service (min) & 11.069 & 11.059 & $-0.010$ & [$-0.064$, $+0.045$] \\
+T22 pool & Mean RMG pre-service (min) & 6.475 & 6.479 & $+0.003$ & [$-0.034$, $+0.040$] \\
+T22 pool & RMG receive service (min) & 11.362 & 11.319 & $-0.043$ & [$-0.110$, $+0.024$] \\
+T22 pool & RMG receive pre-service (min) & 6.480 & 6.496 & $+0.016$ & [$-0.039$, $+0.071$] \\
+T22 pool & RMG delivery service (min) & 8.794 & 8.829 & $+0.035$ & [$-0.078$, $+0.147$] \\
+T22 pool & RMG delivery pre-service (min) & 6.487 & 6.451 & $-0.036$ & [$-0.087$, $+0.015$] \\
+T22 pool & Mean T22 assignments per run & 604.8 & 0.0 & $-604.8$ & exact \\
+\hline
+\multicolumn{6}{|l|}{\textit{Scenario B: 20\,\% higher working-time arrival intensity (scenario minus matched baseline)}} \\
+\hline
+Demand $+20\,\%$ & Model mean working inter-arrival (min) & 0.6830 & 0.5692 & $-0.1138$ & exact \\
+Demand $+20\,\%$ & Model arrivals per working hour & 87.842 & 105.411 & $+20.000\,\%$ & exact \\
+Demand $+20\,\%$ & Observed mean inter-arrival (min) & 0.8282 & 0.7145 & $-0.1137$ & [$-0.1145$, $-0.1128$] \\
+Demand $+20\,\%$ & Observed arrivals per elapsed hour & 72.452 & 83.979 & $+11.527$ ($+15.910\,\%$) & [$+11.478$, $+11.577$] \\
+Demand $+20\,\%$ & Observed simultaneous-arrival share (\%) & 54.221 & 60.015 & $+5.795$ pp & [$+5.736$, $+5.853$] pp \\
+Demand $+20\,\%$ & Mean turnaround (min) & 30.443 & 30.411 & $-0.033$ & [$-0.128$, $+0.063$] \\
+Demand $+20\,\%$ & Mean RMG service (min) & 11.069 & 11.063 & $-0.006$ & [$-0.067$, $+0.056$] \\
+Demand $+20\,\%$ & Mean RMG pre-service (min) & 6.475 & 6.429 & $-0.046$ & [$-0.094$, $+0.001$] \\
+Demand $+20\,\%$ & RMG receive service / pre-service (min) & 11.362 / 6.480 & 11.332 / 6.461 & $-0.030$ / $-0.020$ & [$-0.101$, $+0.041$] / [$-0.074$, $+0.035$] \\
+Demand $+20\,\%$ & RMG delivery service / pre-service (min) & 8.794 / 6.487 & 8.796 / 6.397 & $+0.002$ / $-0.090$ & [$-0.083$, $+0.087$] / [$-0.157$, $-0.022$] \\
+\hline
+Structure & Aggregate RMG maximum concurrency & 100 discovered & 66 final & $-34$ & exact domain cap \\
+Contract & Invalid cases / duration tails & 30 scenario logs & 0 & 0 & all checks passed \\
+\hline
+\end{tabular}
+\caption{Paired what-if scenario KPIs
+($N_{\text{seeds}}=10$, seeds 42--51; 17,892 cases per run).}
+\label{tab:scenario_kpis}
+\smallskip
+\parbox{0.97\textwidth}{\scriptsize Pre-service denotes the model-derived
+interval from enablement to activity start, not pure queueing time.
+``Observed'' arrival measures use the minute-resolved simulated event log and
+elapsed calendar time. Intervals refer to paired seed-wise
+scenario-minus-baseline changes and quantify simulation-seed variation
+conditional on the frozen model.}
+\end{table}
 
 \subsection{Scenario A: T22 Resource-Pool Reallocation}
 

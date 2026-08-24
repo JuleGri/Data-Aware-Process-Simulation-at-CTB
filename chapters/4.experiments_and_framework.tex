@@ -90,13 +90,10 @@ the evidence for RQ4.
 
 \begin{table}[htbp]
 \centering
-\caption{Operationalisation of the research questions.}
-\label{tab:rq_operationalisation}
-\small
-\begin{tabular}{p{2.4cm} p{6.7cm} p{4.0cm}}
-\toprule
+\begin{tabular}{|L{2.2cm}|L{6.1cm}|L{3.8cm}|}
+\hline
 \textbf{Question} & \textbf{Empirical evidence} & \textbf{Evaluation focus} \\
-\midrule
+\hline
 RQ1: Fidelity & Service-time, turnaround and inter-arrival EMD and KS;
 mean, median and P90 errors; ten-seed confidence intervals & Reproduction
 of unseen operational behaviour and remaining bias \\
@@ -110,8 +107,10 @@ additional context on fidelity and robustness \\
 RQ4: What-if decision support & Matched-seed T22 and demand interventions,
 input verification checks and KPI shifts & Scenario response and limits
 created by the simulation abstraction \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{Operationalisation of the research questions.}
+\label{tab:rq_operationalisation}
 \end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -366,14 +365,13 @@ resource semantics, even though it is fixed across the comparison.
 in Section~\ref{sec:prosit_workarounds}. All other arguments use the ProSiT
 defaults.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{ProSiT discovery hyperparameters by configuration.}
-\label{tab:prosit_hyperparams}
-\begin{tabular}{lccc}
-\toprule
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{|l|c|c|c|}
+\hline
 \textbf{Hyperparameter} & \textbf{no-rules} & \textbf{rules} & \textbf{rules$+$workload} \\
-\midrule
+\hline
 \texttt{max\_depth\_tree}          & 0             & 3             & 3 \\
 \texttt{min\_samples\_leaf\_cv}    & --            & [50, 100, 200] & [50, 100, 200] \\
 \texttt{use\_workload\_features}   & False         & False         & True \\
@@ -381,8 +379,10 @@ defaults.
 \texttt{multitasking\_thr}         & 0.05          & 0.05          & 0.05 \\
 \texttt{attribute\_mode}           & \texttt{empirical} & \texttt{empirical} & \texttt{empirical} \\
 \texttt{random\_state}             & 42            & 42            & 42 \\
-\bottomrule
+\hline
 \end{tabular}
+\caption{ProSiT discovery hyperparameters by configuration.}
+\label{tab:prosit_hyperparams}
 \end{table}
 
 With \texttt{enable\_multitasking=True}, ProSiT can classify a resource as
