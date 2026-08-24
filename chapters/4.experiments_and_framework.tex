@@ -9,7 +9,7 @@ objective and the four research questions that organise the empirical
 evaluation. Section~\ref{sec:train_test_split} defines the held-out
 train/test split that separates discovery from evaluation.
 Section~\ref{sec:process_discovery_methodology} describes the
-control-flow discovery procedure and its conformance
+control-flow encoding and its held-out coverage
 protocol. Section~\ref{sec:simulation_discovery_methodology} defines
 the three ProSiT configurations that will be compared:
 distribution-based (no-rules), data-aware with decision trees
@@ -101,7 +101,8 @@ mean, median and P90 errors; ten-seed confidence intervals & Reproduction
 of unseen operational behaviour and remaining bias \\
 RQ2: Structural applicability & Train/test fitness, precision,
 generalisation and simplicity; explicit sequential case-contract audit &
-Held-out coverage versus physically valid truck-visit semantics \\
+Recurrence of the memorised trace language and physically valid truck-visit
+semantics \\
 RQ3: Contextual expressiveness & Held-out configuration screening,
 per-activity explanatory power and cross-seed variation & Effect of
 additional context on fidelity and robustness \\
@@ -172,16 +173,17 @@ is detected. The correct partitioning is 71,568/17,892 as
 recorded in the split manifest.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Process Discovery Protocol}
+\section{Control-Flow Encoding and Held-Out Coverage Protocol}
 \label{sec:process_discovery_methodology}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Algorithm}
+\subsection{Raw Prefix-Trie Encoding}
 
-The Petri net that ProSiT uses as the authoritative control-flow
-skeleton is constructed from the observed training variants as a
-sequential prefix trie, following the definition in
-Chapter~\ref{chp:background}. Every accepted path has the form
+The Petri net that ProSiT uses as the authoritative control-flow skeleton is
+constructed from the observed training variants as a raw sequential prefix
+trie, following the definition in Chapter~\ref{chp:background}. This is not a
+classical process-discovery abstraction: it stores the observed activity
+language and does not infer additional behaviour. Every accepted path has the form
 \texttt{Gate In}$\rightarrow$one or more yard activities
 $\rightarrow$\texttt{Gate Out}. Shared prefixes are represented once,
 and a separate transition encodes each observed continuation
@@ -216,20 +218,27 @@ the activities within a single truck case remain sequential. In the final
 CTB baseline these cross-case RMG capacities are subject to the domain cap
 of three described below.
 
-This choice is conservative. A raw observed-variant trie
-does not generalise to every unseen activity combination and is less
-compact than an Inductive-Miner model. The held-out conformance protocol
-below tests whether this loss of permissiveness is material.
+This choice is deliberately restrictive. A raw observed-variant trie does not
+generalise to unseen activity combinations and is less compact than an
+Inductive-Miner model. Its perfect construction-log fitness is guaranteed and
+is not treated as a result. The held-out conformance protocol instead tests
+whether the memorised training language remains representative in a later
+period. High held-out coverage would be evidence of a repetitive and stable
+CTB trace language, not of generalisation by the trie. Accordingly, the final
+control-flow component is best described as a domain-constrained encoding of
+observed variants. Automatic discovery remains responsible for the other
+ProSiT parameters, but the trie itself does not support a claim that a general
+CTB process structure was discovered.
 The authoritative trie is
 implemented by \texttt{\_eventlog\_contract.py} and injected by
 \texttt{baseline/07\_run\_prosit\_discovery.py}. It contains 76 places
 and 144 transitions for the 70 variants observed in the frozen training
 partition.
 
-\subsection{Conformance Protocol}
+\subsection{Held-Out Coverage and Contract Protocol}
 
-Control-flow conformance metrics are computed against
-\emph{both} the training and the held-out testing partition:
+Control-flow conformance metrics are computed against \emph{both} the training
+and the held-out testing partition:
 
 \begin{itemize}
     \item Token-based replay \textbf{fitness}, i.e.\ the fraction of
@@ -247,6 +256,11 @@ no within-case activity overlap and monotonically non-decreasing
 completion timestamps. This separates two questions that aggregate
 fitness alone cannot answer: whether the net replays held-out variants
 and whether the generated traces obey the physical truck-visit order.
+For this model class, training fitness and precision are construction checks.
+Held-out fitting traces are interpreted as the share of later cases whose
+complete activity sequence already occurred during training. Generalisation
+and simplicity remain useful descriptors of the cost of memorisation, but are
+not combined into an overall process-discovery quality claim.
 The full protocol is implemented in
 \texttt{baseline/07\_run\_prosit\_discovery.py} and
 \texttt{\_eventlog\_contract.py}.

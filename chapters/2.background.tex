@@ -437,14 +437,21 @@ of the same activity whose traces share the same activity prefix
 \cite{FahrenkrogPetersen2019PRETSA}.
 
 Without pruning or smoothing, a prefix trie accepts exactly the observed
-sequence variants. It maximises replay fitness and precision
-on its construction log, but it does not infer unseen combinations,
-loops or concurrency. An Inductive-Miner model makes the opposite
-trade-off: its block-structured cuts abstract from individual
-variants and can admit behaviour not present verbatim in the log
-\cite{Leemans2014InductiveMiner}. Neither representation is always
-superior. The appropriate choice depends on whether the application
-requires controlled generalisation or a strict, auditable trace language.
+sequence variants. It therefore memorises the recorded trace language rather
+than discovering a compact or general process model. Fitness and precision on
+its construction log are expected to be one by design and are not evidence of
+discovery quality. The trie does not infer unseen combinations, loops, or
+concurrency. An Inductive-Miner model makes the opposite trade-off: its
+block-structured cuts abstract from individual variants and can admit behaviour
+not present verbatim in the log \cite{Leemans2014InductiveMiner}.
+
+The useful empirical question for a raw trie is therefore not whether it fits
+its training log, but whether its memorised language still covers a later
+period. High held-out coverage means that observed sequence variants are
+strongly repetitive and stable over time; low coverage means that the strict
+language is unsuitable outside the construction sample. A trie can be useful
+as an auditable execution guardrail, but it should not be presented as a
+general discovery of the underlying process.
 
 Figure~\ref{fig:model_representations} illustrates the two most common
 output representations of a modern discovery algorithm on the same

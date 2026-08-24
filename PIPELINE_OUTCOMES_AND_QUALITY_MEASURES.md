@@ -116,13 +116,15 @@ The pickle file `prosit_params.pkl` is the executable source of truth for a disc
 
 ### Process-model conformance
 
-| Measure | Better value | Meaning |
-|---|---:|---|
-| Fitness | 1 | How much observed log behaviour can be replayed by the discovered process model. |
-| Fit traces | 100% | Share of traces that fit the discovered model. |
-| Precision | 1 | How strongly the model avoids behaviour that was not observed. |
-| Generalisation | Usually higher | Ability to allow plausible behaviour beyond the exact training traces. | It is a trade-off. A strict trace model can have high fitness and precision but lower generalisation. |
-| Simplicity | Usually higher | Structural simplicity of the process model. | It is not a stand-alone validity test. |
+| Measure | Better value | Meaning | Critical interpretation for the CTB trie |
+|---|---:|---|---|
+| Fitness | 1 | How much observed log behaviour can be replayed by the process model. | Training fitness is one by construction because the raw trie stores every training variant. It is not a discovery-quality result. |
+| Fit traces | 100% | Share of traces that fit the model. | Held-out fit is informative: it is the share of later cases whose complete activity sequence was already seen during training. |
+| Precision | 1 | How strongly the model avoids behaviour that was not observed. | High precision is expected from a model that does not invent paths. It comes at the cost of excluding plausible unseen behaviour. |
+| Generalisation | Usually higher | Ability to allow plausible behaviour beyond the exact training traces. | The raw trie deliberately has limited generalisation and cannot generate a new combination, detour, loop, or activity order. |
+| Simplicity | Usually higher | Structural simplicity of the process model. | The 76-place, 144-transition trie is a memory of 70 variants, not a compact process abstraction. |
+
+The main prefix-trie result is a characteristic of the CTB process, not an algorithmic success. Of 17,892 held-out cases, 17,882 repeat a training variant. The raw trie cannot generalise, yet it covers 99.944% of the later period because the recorded truck-visit language is highly repetitive.
 
 ### Multi-seed uncertainty and scenario effects
 
@@ -176,8 +178,10 @@ The weighted result better describes the error experienced by a typical observed
 - Training log: 71,568 cases and 220,048 events.
 - Held-out log: 17,892 cases and 55,360 events.
 - Temporal cutoff: 20 April 2026 at 18:17.
-- Test fitness: 0.99985; fit traces: 99.944%; precision: 0.96057.
-- Ten unseen test variants represented ten cases, or 0.0559% of held-out cases.
+- The raw trie memorises 70 training variants; perfect training fitness is automatic and is not evidence of model quality.
+- Of 53 test variants, 43 were already present in training and cover 17,882 of 17,892 cases.
+- Ten unseen test variants represented ten cases, or 0.0559% of held-out cases. Test fit is therefore 99.944%.
+- The supported conclusion is that recorded CTB truck visits are highly repetitive across the two periods. The trie is a strict historical execution contract, not a generally discovered process model.
 
 ### Final cap-3 held-out validation over ten seeds
 
@@ -202,18 +206,18 @@ All final structural contract failure counts are zero. The arrivals and yard ser
 | T22 closed | +0.012 min | -0.102 to +0.127 | No |
 | Demand +20% | -0.033 min | -0.128 to +0.063 | No |
 
-The scenarios executed correctly and the T22-closed runs produced zero T22 assignments. However, the final paired intervals include zero for the main turnaround effects. The correct conclusion is therefore that the model supports technically valid what-if execution, but no clear operational effect was resolved under its present resource and congestion representation.
+The scenarios executed correctly and the T22-closed runs produced zero T22 assignments. However, the final paired intervals include zero for the main turnaround effects. The unchanged trie also forces every scenario case to follow a training-period activity sequence. The results therefore describe parameter changes within the historical process language; they cannot represent a new detour, exception step, or changed operation order caused by the intervention.
 
 ## Mapping the evidence to the research questions
 
 | Research question | Main evidence | What it supports |
 |---|---|---|
-| RQ1: reproduction of observed behaviour | `prosit_conformance.csv`, final `mc_summary.csv`, `yard_activity_emd_summary.csv`, detailed single-run metrics | Accuracy for control flow, arrivals, activity mix, service times, and case turnaround; also where the model underestimates the upper tail. |
-| RQ2: modelling challenges and limitations | Event-log contracts, calibration file, detailed activity results, missing real enabled timestamps, model audits | Problems caused by event-log abstraction, missing queue observations, resource representation, and the difference between structural and operational validity. |
-| RQ3: alternative specifications | Percentile sensitivity, no-rules versus rules/workload screening, resource-capacity and scenario-capacity sensitivity | How assumptions about enabled times, context rules, workloads, and capacities affect predictions and conclusions. |
-| RQ4: previously unobserved what-if scenarios | Parameter-change audit, paired scenario deltas, scenario contracts, T22-focused summary | Whether the frozen model can execute controlled counterfactual inputs and whether their effects are stable and structurally valid. |
+| RQ1: fidelity | Final `mc_summary.csv`, `yard_activity_emd_summary.csv`, detailed single-run metrics | Reproduction of arrivals, activity mix, service times, and case turnaround, including the remaining turnaround bias. |
+| RQ2: structural applicability | `prosit_conformance.csv`, variant counts, and case-order contracts | The later CTB period largely repeats the memorised training language while satisfying the sequential visit contract. It does not show broad process generalisation. |
+| RQ3: contextual expressiveness | No-rules versus rules/workload screening, activity-level diagnostics, and cross-seed variation | Whether the more expressive endpoint improves fidelity and how cautiously the difference can be interpreted. |
+| RQ4: what-if decision support | Parameter-change audit, paired scenario deltas, scenario contracts, and T22-focused summary | Whether interventions execute reproducibly and what their weak response reveals about missing physical state and fixed historical paths. |
 
-Together, these results address the broader research objective: evaluating the accuracy, limitations, robustness, and decision-support capability of automatically discovered data-aware simulation models for container-terminal truck operations.
+Together, these results address the broader research objective while making the hybrid construction explicit: ProSiT discovers simulation parameters, but the final control flow is a domain-constrained encoding of historical variants rather than a general automatically discovered process structure.
 
 ## Two consistency checks before final submission
 
