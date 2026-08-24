@@ -1,11 +1,10 @@
 \chapter{Results}
 \label{chap:results}
 
-This chapter reports the empirical evidence produced by the pipeline
+This chapter reports and alanyses the empirical evidence produced by the pipeline
 defined in Chapter~\ref{chp:experiments_and_framework}. Every number in
 this chapter is traceable to a script and an artefact in the
-repository; every claim is qualified by its confidence interval or its
-inherent uncertainty. The chapter is organised so that the reader
+projects repository. The chapter is organised so that the reader
 encounters the evidence in the same order in which the hypotheses of
 Section~\ref{sec:data_aware_hypotheses} depend on it.
 
@@ -34,7 +33,7 @@ empirical findings against the hypotheses.
 \label{sec:results_eventlog_char}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The train/test split of Section~\ref{sec:train_test_split} yields a
+The train/test split of Section~\ref{sec:train_test_split} generates a
 temporally ordered partition of the 89,460 cases. The training log
 contains the first 71,568 cases (220,048 events; Gate In arrivals from
 \text{2026-03-02 05:27} through \text{2026-04-20 18:15}). The testing
@@ -68,7 +67,7 @@ LL\_mixed     & 53     & 11     & 64     \\
 \end{table}
 
 No activity is missing from the test partition, but the temporal split
-does expose genuine distribution shift. For example,
+exposed a distribution shift. For example,
 \texttt{LL\_delivery} rises from 0.134 to 0.202 events per case, whereas
 \texttt{RMG\_receive} falls from 0.458 to 0.401 and
 \texttt{LL\_receive} from 0.027 to 0.008. This shift is retained rather

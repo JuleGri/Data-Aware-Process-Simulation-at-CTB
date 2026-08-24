@@ -523,18 +523,14 @@ configuration, but does not by itself establish causal effects.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Verification, Validation, and Trustworthiness}
 \label{sec:simulation_validation_background}
-The central validation question is not whether a simulator is merely
-executable, but whether it is sufficiently credible for its intended
-use. This qualification is essential: a model may be adequate for
-reproducing historical truck turnaround distributions while remaining
-inadequate for predicting the effect of an intervention outside the
-range of the observed data \cite{Sargent2013Validation,BPSAalst2015}.
-Automatically discovered simulation models do not remove this
-requirement. They replace some manual assumptions with assumptions about
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The central validation question is not whether a simulator is generally
+executable, but whether it's credible for its intended purpose. A model may be adequate for reproducing historical truck turnaround distributions and nevertheless be inadequate for predicting the effect of an intervention outside the range of the observed data \cite{Sargent2013Validation,BPSAalst2015}. Automatically discovered simulation models do not remove this requirement. They replace some manual assumptions with assumptions about
 event-log semantics, discovery algorithms, data attributes and fitted
 distributions, all of which require examination.
 
-\subsection{Foundational Distinction Between Verification and Validation}
+\subsection{Distinction Between Verification and Validation}
 
 Sargent separates several questions that are often conflated under the
 single term \emph{validation} \cite{Sargent2013Validation}.
@@ -546,17 +542,14 @@ whether that conceptual model has been implemented correctly.
 calibrate and evaluate the model are adequate. Finally,
 \emph{operational validity} asks whether the computerized model's
 output behaviour is sufficiently accurate over the domain in which the
-model is intended to be used. Historical-data validation---running the
+model is intended to be used. A historical-data validation is running the
 model under historical input conditions and comparing its output with
-observed system data---is one technique for assessing operational
+observed system data, is one technique for assessing operational
 validity \cite{Sargent2013Validation}.
 
 Table~\ref{tab:validation_evidence_types} maps these distinctions to the
 type of evidence needed in an automatically discovered BPS study. The
-categories are complementary rather than interchangeable. For example,
-a low event-log distance is evidence of operational fidelity, but it
-cannot show that a timestamp proxy has the correct physical meaning or
-that the simulator implemented a resource constraint as intended.
+categories work complementary, as for example a low event-log distance is evidence of operational fidelity, but it cannot show that a timestamp proxy has the correct physical meaning or that the simulator implemented a resource constraint as intended.
 
 \begin{table}[htbp]
 \centering
