@@ -158,12 +158,11 @@ $n_{\text{traces}}$ and $t_{\text{start}}$ match the test window
 exactly.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Control-Flow Discovery, Domain-Constrained Encoding, and Validation}
+\section{Process Discovery}
 \label{sec:process_discovery_methodology}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Process Discovery}
 
-\subsection{Expected Process-Discovery Step}
+\subsection{Expected Process-Discovery}
 
 In a data-aware process-simulation workflow, the control flow is normally
 discovered from the event log before the timing, routing, arrival, and resource
@@ -185,7 +184,7 @@ then checked against this domain contract before it was passed to ProSiT.
 
 \subsection{Initial Inductive-Miner Discovery}
 
-An Inductive-Miner model was first created from the training log. This was the
+An Inductive-Miner model was generated from the training log. This was the
 expected control-flow input for ProSiT. The Inductive Miner was selected
 because it produces sound, block-structured models and turns individual traces
 into a more general behavioural model \cite{Leemans2014InductiveMiner}. The
@@ -211,12 +210,11 @@ the two branches may interleave. The model language admits an order such as
 activity. Inner \texttt{and} cuts can also enable more than one yard branch for
 the same case.
 
-These executions violate the CTB contract. A truck cannot leave before its
-yard work is complete. It also cannot perform two yard activities at the same
+These executions violate the CTB physical constraints. A truck cannot leave before its yard work is complete. It also cannot perform two yard activities at the same
 time. This finding comes from the operator structure of the discovered tree.
 It is not a conclusion from a low conformance score.
 
-The distinction matters. The Inductive-Miner model is formally valid for the
+The distinction matters here. The Inductive-Miner model is formally valid for the
 event order presented to it. Its language is too permissive for the intended
 simulation. Process-discovery quality and domain-valid simulation behaviour
 are related, but they are not the same requirement. The initial
@@ -490,8 +488,7 @@ the following procedure is executed:
                     held-out test log.
           \end{enumerate}
     \item Aggregate the $N_{\text{seeds}}$ replications into a Student-t
-          95\,\% confidence interval per metric:
-          $\bar x \pm t_{0.975,\,N-1}\, s/\sqrt{N}$.
+          95\,\% confidence interval.
 \end{enumerate}
 
 \subsection{Implementation}

@@ -589,28 +589,6 @@ Gate In as specified in Section~\ref{sec:entry_known_attributes}; the
 later \texttt{org:resource} assignment is not used as an execution outcome
 to be predicted.
 
-\subsubsection{Temporal Features Required by ProSiT}
-\label{sec:temporal_features}
-
-ProSiT 1.0.3 does not derive temporal features (hour of day, day of
-week) directly from event timestamps during simulation-parameter
-discovery. Time-dependent attributes must be provided at case level. The
-pipeline adds two features:
-
-\begin{itemize}
-    \item \texttt{@@hour} — hour of day (0--23) extracted from the
-          earliest \texttt{start:timestamp} of the case.
-    \item \texttt{@@weekday} — day of week (0=Mon, 6=Sun).
-\end{itemize}
-
-The \texttt{@@} prefix shows that these are case-level attributes
-used by ProSiT. The temporal-feature extraction is performed in
-\texttt{09\_eventlog\_to\_xes.py}. This explicit encoding of the
-temporal signal is not an option in ProSiT but a requirement, and it
-is one of the observed side effects of the ProSiT feature-discovery
-implementation that are consolidated in
-Section~\ref{sec:prosit_workarounds}.
-
 \subsection{Final Event Log Structure}
 \label{sec:eventlog_structure}
 
