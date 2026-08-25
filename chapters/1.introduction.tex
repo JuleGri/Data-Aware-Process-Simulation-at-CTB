@@ -10,10 +10,16 @@ terminal are often costly, disruptive, or not feasible. Simulation offers a way
 to assess decisions without interrupting terminal operations.
 
 \section{Motivation}
-Simulation is used for decision support in container terminal planning and
-operations research. It can assess infrastructure investments, operational
-policies, scheduling approaches, truck appointment systems, and terminal
-redesigns before implementation. Traditional approaches mostly use manually
+Simulation is used for decision support in container-terminal planning and
+operations research. Its operational purpose is prospective: a terminal can
+compare how alternative process executions and operating conditions affect
+specific handling patterns before changing live operations. For example, when
+high yard utilisation is forecast, a terminal may compare lower truck-slot
+release rates, alternative resource allocations, or policies that favour
+receive or delivery operations, and evaluate their effects on activity-specific
+service, pre-service delay, and total truck turnaround. Simulation can likewise
+assess infrastructure investments, scheduling approaches, truck appointment
+systems, and terminal redesigns before implementation. Traditional approaches mostly use manually
 developed Discrete Event Simulation (DES) models, agent-based models, or
 digital twins. Building and maintaining these models requires domain knowledge,
 manual work, and calibration \cite{YUN1999DESSimulation,CTSteenken2004,OptimizingCTs2023,Bett2024}.
@@ -59,7 +65,11 @@ Data-aware process simulation discovers simulation models from historical
 event logs. This may reduce modelling work and keep the model closer to the
 recorded process \cite{Camargo2020,lopez2024,Vinci2023Inf.Activ.Prob}. Before
 such a model can support decisions, it must reproduce observed operations,
-remain configurable, and produce stable results. Earlier studies have shown
+remain configurable, produce stable results, and represent the mechanisms
+through which a proposed intervention can affect the relevant KPI. A model
+intended to recommend a truck-slot rate under forecast congestion must, for
+example, propagate changed arrivals through resource contention and must keep
+receive and delivery effects distinguishable. Earlier studies have shown
 that data-aware simulation can be applied to business processes
 \cite{Vinci2023Inf.Activ.Prob,Hospital2026Vinci}. Its use in logistics systems
 with congestion, competing resources, and context-dependent behaviour is less
@@ -88,12 +98,18 @@ setting characterised by physical sequencing, shared resources, temporal
 variation, and congestion. Second, it identifies methodological challenges
 that arise when automatically inferred process and resource abstractions do
 not fully correspond to known physical constraints, requiring explicit
-domain-constrained adaptations. Third, it compares different levels of
+validation and, where justified, documented domain adaptations. Third, it
+compares different levels of
 contextual model expressiveness on unseen temporal data rather than assuming
 that additional data awareness necessarily improves simulation quality.
 Finally, two operational interventions are used to investigate both the
 capabilities and the boundaries of the resulting white-box model for what-if
-analysis and decision support.
+analysis and decision support. The intended decision-support logic is made
+explicit: forecast terminal conditions define a scenario, candidate slot or
+resource policies are simulated, and their consequences are compared at both
+activity and case level. The case study evaluates how far the discovered model
+can support that logic without treating mere scenario executability as evidence
+of physical counterfactual validity.
 
 The empirical study is based on operational CTB truck-event data and combines
 process analysis, simulation-model generation, temporal hold-out validation,
@@ -137,8 +153,9 @@ characteristics of the final simulation-ready event log.
 Chapter~\ref{chp:experiments_and_framework} defines the experimental and
 evaluation framework used to answer the research questions. It introduces the
 temporal train/test split and describes the control-flow discovery procedure,
-including the initial Inductive-Miner model, the subsequent domain check, and
-the domain-constrained prefix-trie representation used by the final simulator.
+including the preservation of XES event order, the complementary
+directly-follows and Petri-net views, and the structural domain check applied
+to the final Inductive-Miner model.
 The chapter then defines the ProSiT parameter-discovery configurations with
 different levels of contextual expressiveness and documents the executable
 parameter bundles used in the experiments. In addition, it specifies the

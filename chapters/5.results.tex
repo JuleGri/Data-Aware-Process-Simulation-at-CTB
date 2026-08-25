@@ -63,12 +63,12 @@ later CTB period.
 \label{sec:results_process_discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The final simulator uses the raw prefix trie from
-Section~\ref{sec:process_discovery_methodology}. It has 76 places and 144
-transitions for 70 training variants. It is not a general process abstraction.
-It stores the observed sequence language. Training fitness and precision of one
-follow from this construction. They are not results. Table~\ref{tab:conformance_train_test}
-also reports the held-out coverage and structural measures.
+The final simulator uses the Inductive-Miner Petri net from
+Section~\ref{sec:process_discovery_methodology}. The order-preserving XES log
+produces a compact model with 7 places, 16 transitions, 32 arcs, and no
+parallel operator. It abstracts from 70 training variants rather than storing
+each path separately. Table~\ref{tab:conformance_train_test} reports its
+training and held-out quality measures.
 
 \begin{table}[htbp]
 \centering
@@ -76,40 +76,45 @@ also reports the held-out coverage and structural measures.
 \toprule
 \textbf{Metric} & \textbf{Train} & \textbf{Test} \\
 \midrule
-Log fitness                      & 1.0000 & 0.9998 \\
-Fitting traces (\%)              & 100.000 & 99.944 \\
-Average trace fitness            & 1.0000 & 0.9990 \\
-Token-based precision            & 1.0000 & 0.9605 \\
-Generalisation                   & 0.5767 & 0.3732 \\
-Simplicity                       & 0.6179 & 0.6179 \\
+Log fitness                      & 1.000000 & 0.999992 \\
+Fitting traces (\%)              & 100.000 & 99.994 \\
+Average trace fitness            & 1.000000 & 0.999993 \\
+Token-based precision            & 0.7843 & 0.7558 \\
+Generalisation                   & 0.9723 & 0.9413 \\
+Simplicity                       & 0.5610 & 0.5610 \\
 \bottomrule
 \end{tabular}
-\caption{Prefix-trie conformance and structural descriptors on train and test.}
+\caption{Inductive-Miner conformance and structural descriptors on train and test.}
 \label{tab:conformance_train_test}
 \end{table}
 
-The held-out result is more useful. The trie accepts only training variants.
-The test log contains 53 variants, of which 43 were seen in training. These 43
-variants cover 17,882 of 17,892 test cases. The other ten cases each follow a
-different unseen variant. Only 0.0559\,\% of test cases lie outside the stored
-training language.
+The test log contains 53 variants, ten of which are absent from training and
+together account for ten of 17,892 cases (0.0559\,\%). Unlike a prefix trie,
+the Inductive-Miner model can replay unseen sequential combinations. It fits
+17,891 held-out cases completely and attains a log fitness of 0.999992. The
+near-perfect score is therefore substantive held-out evidence rather than a
+consequence of memorising the construction log.
 
-The high fitness is not the main result here. The trie is intentionally designed to fit known variants. The main result is the repetition in the CTB data. A model that
-cannot create a new route still covers almost the full test period. Activity frequencies change between train and test, as shown in
-Section~\ref{sec:results_eventlog_char}. The complete activity orders hardly change.
-
-This restriction has a clear cost. Test generalisation is 0.37327 and
-simplicity is 0.61798. The trie is not compact and cannot generate unseen combinations. It does provide a strict case-order contract: one Gate In, one or more sequential yard activities, and one final Gate Out. Different trucks can still use resources at the same time. The path of each case must have occurred in training.
-
-The model can test timing, resources, and arrivals on these historical paths. It cannot support a claim that a general CTB process model was discovered. It also cannot create a new exception path, handling step, or activity order. A structural response to a disruption is missing unless the same sequence already happened during training.
+The remaining measures show the expected abstraction trade-off. Held-out
+precision is 0.7558 because the loop permits more sequential combinations and
+repetitions than were observed. This broader language is acceptable for the
+stated CTB contract: internal yard order is not prescribed, while concurrency
+within one visit is prohibited. Generalisation remains high at 0.9413, and the
+7-place net is small enough to inspect directly. A hard operator check confirms
+zero parallel cuts, and ten context-aware simulation seeds produce neither
+within-case overlap nor a \texttt{Gate Out} before the final yard activity. Although the
+formal net contains a silent yard bypass, none of the 178,920 simulated cases
+from this endpoint uses it to create a gate-only visit. The distribution-only
+endpoint is examined separately under RQ3.
 
 \medskip
 
-\noindent\textbf{RQ2 answer.} The trie covers 99.944\,\% of test cases and
-enforces the required order. This shows that the recorded CTB trace language is
-highly repetitive. It does not show that the trie generalises. The trie is a
-useful execution contract for simulations on known paths. It does not cover new
-truck-process structures.
+\noindent\textbf{RQ2 answer.} The automatically discovered Inductive-Miner net
+is suitable as the simulation backbone once the explicit XES event order is
+preserved. It combines near-perfect held-out fitness with sequential
+generalisation and passes the physical no-concurrency contract. Its lower
+precision identifies deliberate overgeneralisation of yard combinations, not
+parallel execution.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Historical Fidelity and Model Screening}
@@ -118,13 +123,16 @@ truck-process structures.
 
 This section contains two evaluations. RQ1 compares the final calibrated
 \textit{rules$+$workload} model with the temporal hold-out. RQ3 compares the
-pre-calibration \textit{no-rules} and \textit{rules$+$workload} endpoints.
-These comparisons use different model states and must not be mixed.
+equally calibrated \textit{no-rules} and \textit{rules$+$workload} endpoints.
+Both endpoints use the same discovered Inductive-Miner net, temporal split,
+arrival calibration, and ten-seed protocol. Their difference is therefore the
+way routing, duration, and resource behaviour use contextual information.
 
 \subsection{RQ1: Historical Fidelity of the Final Baseline}
 
-The final baseline uses the prefix-trie contract, training routing marginals,
-the minute-resolved arrival model, and non-pre-emptive completion. The raw RMG
+The final baseline uses the discovered Inductive-Miner net, native ProSiT
+routing learned from training, the minute-resolved arrival model, and
+non-pre-emptive completion. The raw RMG
 capacities are capped at three per block. This cap comes from the domain, not
 from the hold-out. The hold-out is used only for evaluation.
 
@@ -141,16 +149,16 @@ model and hold-out only.
 \textbf{KPI} & \textbf{Real/ref.} & \textbf{Simulated} &
 \textbf{Difference} & \textbf{95\,\% MC CI} \\
 \midrule
-Yard service EMD, unweighted (min) & -- & 2.999 & -- & [2.888, 3.110] \\
-Yard service EMD, real-frequency weighted (min) & -- & 2.340 & -- & [2.279, 2.402] \\
-Case-turnaround EMD (min) & -- & 9.306 & -- & [9.229, 9.384] \\
-Case-turnaround KS & -- & 0.1554 & -- & [0.1517, 0.1591] \\
+Yard service EMD, unweighted (min) & -- & 3.109 & -- & [2.999, 3.220] \\
+Yard service EMD, real-frequency weighted (min) & -- & 2.366 & -- & [2.335, 2.396] \\
+Case-turnaround EMD (min) & -- & 8.180 & -- & [8.096, 8.264] \\
+Case-turnaround KS & -- & 0.1334 & -- & [0.1298, 0.1369] \\
 Inter-arrival EMD (min) & -- & 0.0724 & -- & [0.0674, 0.0774] \\
 Inter-arrival KS & -- & 0.0254 & -- & [0.0215, 0.0292] \\
-Mean turnaround (min) & 39.742 & 30.436 & $-9.306$ & [30.359, 30.514]$^{a}$ \\
-P90 turnaround (min) & 71.000 & 51.800 & $-19.200$ & [51.498, 52.102]$^{a}$ \\
+Mean turnaround (min) & 39.742 & 31.572 & $-8.170$ & [31.485, 31.659]$^{a}$ \\
+P90 turnaround (min) & 71.000 & 53.690 & $-17.310$ & [53.349, 54.031]$^{a}$ \\
 Simultaneous-arrival share (\%) & 56.660 & 54.221 & $-2.439$ pp & [54.035, 54.407]$^{a}$ \\
-Yard-activity-rate L1 error & -- & 0.1866 & -- & [0.1838, 0.1893] \\
+Yard-activity-rate L1 error & -- & 0.2268 & -- & [0.2220, 0.2315] \\
 \bottomrule
 \end{tabular}
 \caption{Held-out fidelity of the final calibrated cap-three baseline
@@ -163,11 +171,11 @@ are excluded from both yard-service EMD aggregates.}
 \end{table}
 
 The result is mixed. Inter-arrival EMD is 0.0724 minutes. Unweighted yard
-service EMD is 2.999 minutes. Frequency weighting reduces it to 2.340 minutes
+service EMD is 3.109 minutes. Frequency weighting reduces it to 2.366 minutes
 because some of the larger errors occur in rare activities
 (Table~\ref{tab:yard_activity_emd}). The complete visit is less accurate. Mean
-turnaround is 9.306 minutes too short, or 23.42\,\%. P90 is 19.200 minutes too
-short, or 27.04\,\%. This bias remains across the ten seeds. The narrow seed
+turnaround is 8.170 minutes too short, or 20.56\,\%. P90 is 17.310 minutes too
+short, or 24.38\,\%. This bias remains across the ten seeds. The narrow seed
 intervals do not show that the model itself is correct.
 
 All ten runs pass the case-order checks. They contain no gate-only cases,
@@ -181,15 +189,15 @@ Out never occurs before the last yard activity. No accepted duration exceeds
 \toprule
 \textbf{Yard activity} & \textbf{Mean EMD (min)} & \textbf{95\,\% MC CI} \\
 \midrule
-HO2\_delivery & 2.119 & [2.013, 2.225] \\
-HO2\_mixed    & 4.255 & [3.853, 4.656] \\
-HO2\_receive  & 2.024 & [1.768, 2.280] \\
-LL\_delivery  & 1.353 & [1.286, 1.420] \\
-LL\_mixed     & 3.857 & [3.019, 4.695] \\
-LL\_receive   & 4.203 & [4.000, 4.406] \\
-RMG\_delivery & 2.519 & [2.426, 2.612] \\
-RMG\_mixed    & 4.200 & [3.971, 4.429] \\
-RMG\_receive  & 2.463 & [2.374, 2.551] \\
+HO2\_delivery & 2.265 & [2.119, 2.411] \\
+HO2\_mixed    & 4.397 & [3.603, 5.192] \\
+HO2\_receive  & 1.932 & [1.691, 2.174] \\
+LL\_delivery  & 1.446 & [1.343, 1.548] \\
+LL\_mixed     & 4.422 & [3.925, 4.919] \\
+LL\_receive   & 4.354 & [4.182, 4.525] \\
+RMG\_delivery & 2.488 & [2.389, 2.586] \\
+RMG\_mixed    & 4.197 & [4.024, 4.370] \\
+RMG\_receive  & 2.484 & [2.407, 2.561] \\
 \bottomrule
 \end{tabular}
 \caption{Held-out service-time EMD by yard activity for the final
@@ -204,64 +212,79 @@ turnaround distribution. Total visit time is systematically too short.
 \subsection{RQ3: Context and Held-Out Fidelity}
 
 Table~\ref{tab:configuration_screening} compares the two retained endpoints
-before the final CTB calibration. These are screening results, not the final
-RQ1 results.
+after the common CTB calibration. Both use the unchanged Inductive-Miner net;
+the comparison therefore concerns contextual expressiveness rather than a
+different control-flow language.
 
 \begin{table}[htbp]
 \centering
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcc}
+\begin{tabular}{L{5.0cm}cc}
 \toprule
-\textbf{Metric (min)} & \textbf{no-rules} &
+\textbf{Metric} & \textbf{no-rules} &
 \textbf{rules$+$workload} \\
 \midrule
-Case turnaround EMD & $\mathbf{13.94\;[13.15, 14.73]}$ &
-$21.75\;[20.60, 22.90]$ \\
-Inter-arrival EMD & $0.319\;[0.317, 0.320]$ &
-$\mathbf{0.314\;[0.313, 0.315]}$ \\
-Case turnaround KS & $\mathbf{0.103\;[0.099, 0.108]}$ &
-$0.125\;[0.123, 0.127]$ \\
-Simulated mean turnaround & $\mathbf{53.68\;[52.89, 54.47]}$ &
-$61.49\;[60.34, 62.64]$ \\
-Simulated P90 turnaround & $\mathbf{103.05\;[101.26, 104.84]}$ &
-$124.44\;[121.70, 127.17]$ \\
+Case-turnaround EMD (min) & $\mathbf{7.996\;[7.878, 8.114]}$ &
+$8.131\;[8.063, 8.198]$ \\
+Case-turnaround KS & $\mathbf{0.1276\;[0.1238, 0.1314]}$ &
+$0.1331\;[0.1298, 0.1363]$ \\
+Simulated mean turnaround (min) & $\mathbf{31.747\;[31.629, 31.865]}$ &
+$31.617\;[31.550, 31.685]$ \\
+Simulated P90 turnaround (min) & $\mathbf{54.400\;[54.031, 54.769]}$ &
+$53.600\;[53.231, 53.969]$ \\
+Inter-arrival EMD (min) & $0.0765\;[0.0696, 0.0835]$ &
+$\mathbf{0.0724\;[0.0674, 0.0774]}$ \\
+Yard-service EMD, frequency weighted (min) &
+$2.360\;[2.318, 2.401]$ & $\mathbf{2.354\;[2.312, 2.396]}$ \\
+Yard-activity-rate L1 error & $\mathbf{0.1753\;[0.1710, 0.1795]}$ &
+$0.2264\;[0.2215, 0.2313]$ \\
+Gate-only cases per 17,892 visits & $11.9\;[9.6, 14.2]$ &
+$\mathbf{0.0\;[0.0, 0.0]}$ \\
 \bottomrule
 \end{tabular}
-\caption{Pre-calibration held-out screening by ProSiT configuration
+\caption{Held-out comparison by calibrated ProSiT configuration
 ($N_{\text{seeds}}=10$; 95\,\% Student-t Monte-Carlo CI).}
 \label{tab:configuration_screening}
 \end{table}
 
-\textit{No-rules} performs better on every turnaround measure. Its EMD is
-36\,\% lower. In the other direction, \textit{rules$+$workload} is 56\,\%
-higher. The seed intervals do not overlap. \textit{Rules$+$workload} improves
-inter-arrival EMD by only 0.005 minutes, or 0.3 seconds. It is also less stable.
-Turnaround-EMD standard deviation is 1.61 minutes instead of 1.10. P90 standard
-deviation is 3.82 minutes instead of 2.50.
+The timing results are close. \textit{No-rules} has a 0.135-minute lower
+turnaround EMD, whereas \textit{rules$+$workload} has a 0.004-minute lower
+inter-arrival EMD and a 0.006-minute lower frequency-weighted yard-service
+EMD. The respective Monte-Carlo intervals overlap. The evidence therefore
+does not support a practically important timing advantage for either endpoint.
+The more visible difference lies in activity incidence: the yard-activity-rate
+L1 error rises from 0.1753 to 0.2264 with rules and workload features.
+
+The gate-only diagnostic adds a different interpretation. The unchanged net
+formally permits the silent yard bypass. Independent optional routing in
+\textit{no-rules} samples it in 11.9 of 17,892 visits on average
+(0.067\,\%), while the context-aware endpoint samples none across 178,920
+visits. This is not a parallelism or case-order violation, and the net is not
+physically constrained to suppress it. Instead, it is reported as a small
+instance of discovered-language overgeneralisation whose realised frequency
+depends on the data-aware routing layer.
 
 These intervals describe seed variation for two fixed bundles. They do not
-include discovery uncertainty or another training period. The difference is
-stable in this screening run. It is not a population-level result.
-
-The comparison has two limits. First, there is no \textit{rules}-only result.
-The test covers the combined move from unconditional distributions to trees
-with workload features. It cannot isolate the workload effect. Second, both
-values are pre-calibration. They do not compare the final model with an equally
-calibrated \textit{no-rules} model.
+include discovery uncertainty or another training period. Moreover, there is
+no \textit{rules}-only result: the comparison covers the combined move from
+unconditional distributions to decision trees with workload features and
+cannot isolate either component.
 
 \paragraph{Deliberate Choice of the Scenario Model}
 
-\textit{No-rules} is the better fidelity reference in this screening. The
-scenario experiment has another purpose. It tests whether the data-aware
+Neither endpoint dominates the held-out comparison. The scenario experiment
+has another purpose: it tests whether the data-aware
 white-box model can be changed and inspected. The calibrated
 \textit{rules$+$workload} model is used for that reason. It is not used because
-it predicted the hold-out better. RQ4 tests white-box model experiments and
-their limits. It is not a test of the best CTB forecaster.
+it is an unambiguously better forecaster. RQ4 tests white-box model experiments
+and their limits.
 
 \noindent\textbf{RQ3 answer.} More contextual expressiveness does not improve
-fidelity in the retained comparison. The tree-and-workload endpoint has worse
-turnaround results and more seed variation. The missing middle configuration
-prevents a separate conclusion about workload features.
+held-out fidelity uniformly. It suppresses the rarely sampled silent bypass
+and marginally improves inter-arrival and weighted service-time EMD, but it
+worsens activity-rate error and has no practically important turnaround
+advantage. The missing middle configuration prevents a separate conclusion
+about workload features.
 
 \paragraph{Meaning of the Time Measures}
 \label{sec:results_temporal_note}
@@ -422,11 +445,13 @@ describe overlapping event intervals. They are not verified crane counts.
 The cap removes the implausible upper bound. It does not prove that 66 is the
 effective capacity of the terminal.
 
-This is the second main domain correction in the pipeline. The prefix trie was
-needed to enforce valid case order. The resource cap was needed to enforce a
-physical upper bound. The final simulator is a hybrid of discovered
-parameters and domain constraints. It is not an unchanged output of automatic
-discovery.
+This is the material domain correction in the executable parameter bundle.
+Preserving XES event order and checking for parallel operators corrects and
+guards the discovery input without replacing the discovered control flow. The
+resource cap, by contrast, changes the learned capacities to enforce a stated
+physical upper bound. The final simulator therefore combines an automatically
+discovered Petri net and parameters with one explicit resource-domain
+constraint.
 
 An RMG block is still only a selectable resource label. It is not container
 location state. After T22 is removed, the model can assign work elsewhere
@@ -501,16 +526,28 @@ queueing time.
 \label{sec:results_scenarios}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The scenario baseline uses the previously calibrated \textit{rules$+$workload} bundle from RQ1 and the cap of maxmimum three available resources per RMG block. It is used because its rules can be
+The scenario baseline uses the previously calibrated \textit{rules$+$workload} bundle from RQ1 and a maximum of three available resources per RMG block. It is used because its rules can be
 inspected and changed. It was not the best screening configuration. Ten matched seeds (42--51) are run for the baseline, T22 removal, and the 20\,\% demand increase. This gives 30 simulations with 17,892 cases each.
 
 Table~\ref{tab:scenario_kpis} uses the baseline from this matched runner. It is only the reference for paired changes. The RQ1 results still come from Table~\ref{tab:final_kpis}.
 
-The raw prefix trie also stays fixed. The experiments can change arrival
-timing, resource assignment, and model-derived delays. They cannot create a
-new activity sequence. Extra moves, detours, exceptions, or a new operation
-order are outside the model. All scenario results are conditional on the
-historical paths.
+The Inductive-Miner net also stays fixed. The experiments can change arrival
+timing, resource assignment, and model-derived delays, while the loop may still
+generate unseen sequential combinations of the known yard activities. Extra
+activity types, detours represented by new events, and unmodelled exception
+mechanisms remain outside the model. All scenario results are conditional on
+this discovered control-flow language.
+
+The operational question is not simply whether a parameter can be changed.
+For terminal planning, the relevant question is how a forecast condition and a
+candidate response propagate through process executions: for example, whether
+reducing the number of truck slots released per hour under forecast high
+utilisation protects turnaround, or whether a resource policy shifts delay from
+receive to delivery handling. The scenario KPIs are therefore reported both at
+case level and separately for the principal RMG handling patterns. This makes
+the experiments decision-oriented while retaining the distinction between an
+effect inside the simulation and an effect established for the physical
+terminal.
 
 \begin{table}[p]
 \centering
@@ -524,15 +561,15 @@ historical paths.
 \midrule
 \multicolumn{6}{l}{\textbf{Scenario A: T22 resource-pool reallocation (scenario minus matched baseline)}} \\
 \midrule
-T22 pool & Mean turnaround (min) & 30.443 & 30.456 & $+0.012$ & [$-0.102$, $+0.127$] \\
-T22 pool & P90 turnaround (min) & 51.700 & 51.900 & $+0.200$ & [$-0.364$, $+0.764$] \\
-T22 pool & Mean RMG service (min) & 11.069 & 11.059 & $-0.010$ & [$-0.064$, $+0.045$] \\
-T22 pool & Mean RMG pre-service (min) & 6.475 & 6.479 & $+0.003$ & [$-0.034$, $+0.040$] \\
-T22 pool & RMG receive service (min) & 11.362 & 11.319 & $-0.043$ & [$-0.110$, $+0.024$] \\
-T22 pool & RMG receive pre-service (min) & 6.480 & 6.496 & $+0.016$ & [$-0.039$, $+0.071$] \\
-T22 pool & RMG delivery service (min) & 8.794 & 8.829 & $+0.035$ & [$-0.078$, $+0.147$] \\
-T22 pool & RMG delivery pre-service (min) & 6.487 & 6.451 & $-0.036$ & [$-0.087$, $+0.015$] \\
-T22 pool & Mean T22 assignments per run & 604.8 & 0.0 & $-604.8$ & exact \\
+T22 pool & Mean turnaround (min) & 31.548 & 31.640 & $+0.092$ & [$-0.016$, $+0.200$] \\
+T22 pool & P90 turnaround (min) & 53.800 & 53.800 & $0.000$ & [$-0.337$, $+0.337$] \\
+T22 pool & Mean RMG service (min) & 10.889 & 10.870 & $-0.019$ & [$-0.101$, $+0.063$] \\
+T22 pool & Mean RMG pre-service (min) & 7.885 & 7.950 & $+0.065$ & [$+0.019$, $+0.112$] \\
+T22 pool & RMG receive service (min) & 11.332 & 11.267 & $-0.065$ & [$-0.173$, $+0.043$] \\
+T22 pool & RMG receive pre-service (min) & 8.036 & 8.100 & $+0.064$ & [$-0.003$, $+0.130$] \\
+T22 pool & RMG delivery service (min) & 8.783 & 8.819 & $+0.036$ & [$-0.073$, $+0.145$] \\
+T22 pool & RMG delivery pre-service (min) & 7.666 & 7.759 & $+0.094$ & [$+0.027$, $+0.160$] \\
+T22 pool & Mean T22 assignments per run & 591.5 & 0.0 & $-591.5$ & exact \\
 \midrule
 \multicolumn{6}{l}{\textbf{Scenario B: 20\,\% higher working-time arrival intensity (scenario minus matched baseline)}} \\
 \midrule
@@ -541,11 +578,11 @@ Demand $+20\,\%$ & Model arrivals per working hour & 87.842 & 105.411 & $+20.000
 Demand $+20\,\%$ & Observed mean inter-arrival (min) & 0.8282 & 0.7145 & $-0.1137$ & [$-0.1145$, $-0.1128$] \\
 Demand $+20\,\%$ & Observed arrivals per elapsed hour & 72.452 & 83.979 & $+11.527$ ($+15.910\,\%$) & [$+11.478$, $+11.577$] \\
 Demand $+20\,\%$ & Observed simultaneous-arrival share (\%) & 54.221 & 60.015 & $+5.795$ pp & [$+5.736$, $+5.853$] pp \\
-Demand $+20\,\%$ & Mean turnaround (min) & 30.443 & 30.411 & $-0.033$ & [$-0.128$, $+0.063$] \\
-Demand $+20\,\%$ & Mean RMG service (min) & 11.069 & 11.063 & $-0.006$ & [$-0.067$, $+0.056$] \\
-Demand $+20\,\%$ & Mean RMG pre-service (min) & 6.475 & 6.429 & $-0.046$ & [$-0.094$, $+0.001$] \\
-Demand $+20\,\%$ & RMG receive service / pre-service (min) & 11.362 / 6.480 & 11.332 / 6.461 & $-0.030$ / $-0.020$ & [$-0.101$, $+0.041$] / [$-0.074$, $+0.035$] \\
-Demand $+20\,\%$ & RMG delivery service / pre-service (min) & 8.794 / 6.487 & 8.796 / 6.397 & $+0.002$ / $-0.090$ & [$-0.083$, $+0.087$] / [$-0.157$, $-0.022$] \\
+Demand $+20\,\%$ & Mean turnaround (min) & 31.548 & 31.679 & $+0.131$ & [$-0.026$, $+0.288$] \\
+Demand $+20\,\%$ & Mean RMG service (min) & 10.889 & 10.932 & $+0.043$ & [$-0.056$, $+0.143$] \\
+Demand $+20\,\%$ & Mean RMG pre-service (min) & 7.885 & 7.928 & $+0.043$ & [$-0.056$, $+0.142$] \\
+Demand $+20\,\%$ & RMG receive service / pre-service (min) & 11.332 / 8.036 & 11.356 / 8.020 & $+0.024$ / $-0.016$ & [$-0.065$, $+0.112$] / [$-0.157$, $+0.124$] \\
+Demand $+20\,\%$ & RMG delivery service / pre-service (min) & 8.783 / 7.666 & 8.794 / 7.818 & $+0.011$ / $+0.153$ & [$-0.080$, $+0.102$] / [$+0.041$, $+0.265$] \\
 \midrule
 Structure & Aggregate RMG maximum concurrency & 100 discovered & 66 final & $-34$ & exact domain cap \\
 Contract & Invalid cases / duration tails & 30 scenario logs & 0 & 0 & all checks passed \\
@@ -565,18 +602,21 @@ conditional on the frozen model.}
 
 \subsection{Scenario A: T22 Resource-Pool Reallocation}
 
-T22 receives 604.8 assignments per baseline run. This is 4.41\,\% of RMG
+T22 receives 591.5 assignments per baseline run. This is 4.12\,\% of RMG
 events. After removal, it receives none. The intervention executes as
 intended. The mean-turnaround change is
-$+0.012\;[-0.102,+0.127]$ minutes. Its paired interval includes zero. The
-intervals for mean RMG service and pre-service delay also include zero.
+$+0.092\;[-0.016,+0.200]$ minutes. Its paired interval includes zero. Mean RMG
+service changes by $-0.019\;[-0.101,+0.063]$ minutes, whereas mean RMG
+pre-service delay increases by $+0.065\;[+0.019,+0.112]$ minutes.
 
-Receive service changes by $-0.043\;[-0.110,+0.024]$ minutes and receive
-pre-service by $+0.016\;[-0.039,+0.071]$ minutes. Delivery service changes
-by $+0.035\;[-0.078,+0.147]$ minutes and delivery pre-service by
-$-0.036\;[-0.087,+0.015]$ minutes. All four paired intervals include zero.
-The experiment does not show a clear difference between receive and delivery.
-This is not evidence that a physical T22 closure has no effect.
+Receive service changes by $-0.065\;[-0.173,+0.043]$ minutes and receive
+pre-service by $+0.064\;[-0.003,+0.130]$ minutes. Delivery service changes
+by $+0.036\;[-0.073,+0.145]$ minutes and delivery pre-service by
+$+0.094\;[+0.027,+0.160]$ minutes. Thus, the only activity-specific interval
+that excludes zero is the increase in delivery pre-service delay. This is the
+kind of handling-pattern effect an operational simulation should reveal, but
+its magnitude is small and conditional on the abstract resource pool. It is not
+evidence that a physical T22 closure would cause the same effect.
 
 The experiment is not a full block-closure study. The remaining 21 blocks stay
 eligible for all RMG activities. Each keeps capacity three. The selector moves
@@ -593,12 +633,13 @@ by 15.910\,\%. Closed gate periods remain fixed. Timestamps are also floored to
 minutes. This flooring turns more short positive intervals into simultaneous
 observations. It does not change the zero mass in the input distribution.
 
-Mean turnaround changes by $-0.033\;[-0.128,+0.063]$ minutes. The interval
+Mean turnaround changes by $+0.131\;[-0.026,+0.288]$ minutes. The interval
 includes zero. The same applies to mean RMG service, mean RMG pre-service
-delay, and the receive measures. Delivery pre-service falls by
-$-0.090\;[-0.157,-0.022]$ minutes, or about 5.4 seconds. This small change is
-clear only for simulation-seed variation in this fixed model. The experiment
-does not identify its cause. It is not evidence of delivery prioritisation.
+delay, and the receive measures. Delivery pre-service increases by
+$+0.153\;[+0.041,+0.265]$ minutes, or about 9.2 seconds. This small change is
+resolved only with respect to simulation-seed variation in this fixed model.
+The experiment does not identify its physical cause and does not by itself
+justify favouring one handling type.
 
 The missing congestion response is itself a model result. The cap of three
 does not create enough system interaction to raise turnaround under higher
@@ -611,8 +652,12 @@ ship-side crane allocation. It cannot show that the real terminal could absorb
 \noindent\textbf{RQ4 answer.} Both interventions execute as specified. T22
 assignments fall to zero. Working-time arrival intensity rises by exactly
 20\,\%. Both mean-turnaround intervals include zero. The model supports clear
-and repeatable experiments. It does not support a physical counterfactual or
-an operational recommendation from these two results. Executability is not
+and repeatable experiments and exposes separate receive and delivery effects.
+That capability is the operational reason for simulation: candidate truck-slot
+rates and handling policies can be compared before they are applied. The
+present model, however, does not support a physical counterfactual or an
+operational recommendation from these two results because its congestion and
+spatial propagation mechanisms are not yet adequate. Executability is not
 counterfactual validity.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -623,34 +668,48 @@ counterfactual validity.
 The results become most informative when the structural, temporal and
 scenario findings are interpreted together. They do not describe one model
 that is simply ``good'' or ``bad.'' Instead, they show that different forms of
-process-mining evidence answer different questions. The prefix trie is highly
-successful as a contract for reproducing previously observed activity orders,
-the arrival model reproduces an important part of the workload timing, and the
-simulator remains systematically too fast at the level of complete truck
-visits. These findings are compatible because control-flow conformance,
-arrival fidelity and end-to-end temporal fidelity are distinct properties
+process-mining evidence answer different questions. The compact Inductive-Miner
+net reproduces the held-out control flow while generalising across sequential
+yard combinations, the arrival model reproduces an important part of the
+workload timing, and the simulator remains too fast at the level of complete
+truck visits. These findings are compatible because control-flow conformance,
+arrival fidelity, and end-to-end temporal fidelity are distinct properties
 \cite{Camargo2021,ChapelaCampa2023Trust,Chapela2025SimQuality}.
 
 \paragraph{Meaning for traditional Process Mining}
 Traditional Process Mining is strongest in this study as a language for
-reconstructing and checking observed process behaviour. The held-out coverage
-of 99.944\,\% shows that CTB truck visits repeat a stable set of activity
-orders over the examined period. It does not show that the trie has discovered
-the operational mechanism that produces those orders. Its perfect training
-fitness is largely a consequence of storing the training variants, while its
-lower generalisation and simplicity expose the corresponding cost. This is an
-important distinction between conformance and explanation: a model may replay
-almost every observed trace while remaining deliberately unable to generate a
-new but physically plausible trace. Likewise, the initial Inductive-Miner
-model was formally valid but introduced concurrency that conflicted with the
-sequential movement of one truck. The result therefore supports the classical
-Process-Mining principle of confronting discovered behaviour with event data,
-but it also shows why conformance scores require a domain-level semantic check
-before a discovered model becomes a simulation model
+reconstructing and checking observed process behaviour. Here, its most
+important diagnostic is not merely the near-perfect held-out fitness. It is the
+discovery that the apparent parallelism vanished when the explicit XES event
+order was preserved. The earlier parallel model represented a timestamp-based
+reordering artefact; the final process tree has no parallel operator. This
+demonstrates a classical Process-Mining point with direct simulation
+consequences: the event-log ordering relation is part of the model input, and a
+formally sound discovery can still encode the wrong semantics when coarse
+timestamps are treated as an unambiguous order
 \cite{PMRozinat2009,PMvanDerAalst2016}.
 
+The final model makes the fitness--precision--generalisation trade-off visible.
+It fits 99.994\,\% of held-out traces and retains a held-out generalisation of
+0.9413, including behaviour not stored as an exact training path. Precision is
+lower at 0.7558 because the loop admits additional yard combinations and
+repetitions. In this case, that broader language is not equivalent to physical
+parallelism and is not automatically an error: the terminal process allows
+varying sequential activity orders. The domain check must therefore be
+semantic and operator-specific. Penalising every unseen order would collapse
+discovery into memorisation, while accepting a parallel cut would violate the
+truck-visit contract.
+
+The silent gate-only path makes the same trade-off concrete. It is permitted
+by the discovered language and retained as an auditable finding rather than
+removed through an undocumented guard. Its rarity in simulation---0.067\,\%
+for \textit{no-rules} and zero cases for \textit{rules$+$workload}---shows why
+formal language analysis and realised-output validation answer complementary
+questions. A permitted path need not be common, yet it remains relevant when
+the model is interpreted beyond the observed period.
+
 The same separation applies to time. Good control-flow coverage does not
-account for the 9.306-minute mean turnaround deficit or the 19.200-minute P90
+account for the 8.170-minute mean turnaround deficit or the 17.310-minute P90
 deficit. The simulator can put activities in the correct order and still omit
 time between them. In the CTB setting, this missing time may contain movement,
 traffic, resource interaction, queueing or operational states that are not
@@ -672,17 +731,17 @@ available at case creation captures a real predictive regularity.
 
 The duration results point in the other direction. For the two dominant RMG
 activities, the diagnostic decision trees have slightly negative held-out
-$R^2$, and the more expressive \textit{rules$+$workload} configuration has a
-56\,\% larger turnaround EMD than \textit{no-rules} in the retained screening
-comparison. These two observations are consistent: the available case-level
-attributes contain little stable duration signal for the activities that
-dominate the log, so additional conditional branches can reproduce training
-associations without improving later-period simulation. They are not,
-however, a formal causal chain. The configuration comparison also changes
-other discovery components, and the missing \textit{rules}-only endpoint
-prevents isolation of the workload features. The justified conclusion is thus
-that additional context did not improve this held-out result, not that
-data-aware modelling is generally inferior to unconditional simulation.
+$R^2$, while the calibrated \textit{rules$+$workload} configuration improves
+frequency-weighted yard-service EMD by only 0.006 minutes and worsens the
+yard-activity-rate L1 error from 0.1753 to 0.2264. Turnaround EMD differs by
+only 0.135 minutes, with overlapping seed intervals. These observations are
+consistent with limited stable duration signal: conditional branches may be
+interpretable without adding useful later-period predictive information. They
+are not, however, a formal causal chain. The missing \textit{rules}-only
+endpoint prevents isolation of the workload features. The justified
+conclusion is thus that additional context changed different fidelity
+dimensions in different directions, not that data-aware modelling is
+generally superior or inferior to unconditional simulation.
 
 This qualification is central to the interpretation of data awareness.
 Adding attributes increases representational capacity, but useful capacity
@@ -722,6 +781,19 @@ main result for decision support. The model is suitable for analysing
 conditional consequences inside its documented abstraction, but not yet for
 claiming causal terminal effects from the two scenarios.
 
+The target application nevertheless remains concrete. Before publishing truck
+appointments, a terminal could combine a utilisation forecast with candidate
+hourly slot limits, simulate each policy, and compare turnaround together with
+receive- and delivery-specific service and pre-service KPIs. If forecast
+conditions threaten retrieval performance, a candidate policy could reduce
+the admitted truck rate or prioritise retrieval-compatible resources; the
+simulator would quantify both the intended benefit and any transferred delay
+to delivery operations. This prospective comparison is the benefit that a
+validated logistics simulation should provide. The CTB experiments establish
+the transparent experimental interface and show exactly which additional
+queue, location, and equipment states must be represented before that interface
+can be used prescriptively.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Methodological Limitations}
 \label{sec:limitations}
@@ -758,20 +830,21 @@ does not model feasibility, crane movement, or added truck travel. Scenario~A
 tests the resource-pool abstraction. It does not forecast a physical T22
 closure.
 
-\paragraph{Scenario Control Flow Is Restricted to Historical Variants}
+\paragraph{Scenario Control Flow Generalises Only Within a Fixed Activity Set}
 
-The prefix trie fixes control flow to the 70 training variants. This works for
-almost all cases in the later hold-out. It is more restrictive for scenarios.
-Every scenario case must follow a known path. A detour, repeated handling step,
-exception, or new activity order cannot occur. The two experiments only test
-parameter changes inside the historical trace language. They do not test a
-structural process response. Missing structural changes may also remove real
-sources of delay.
+The Inductive-Miner loop can generate sequential combinations and repetitions
+that were not present as complete training variants. This is less restrictive
+than the earlier trie representation, but it is not an open-ended terminal
+model. A scenario cannot create a new activity type, an unrecorded exception
+mechanism, or a structurally different response to disruption. The two
+experiments therefore test parameter changes inside the discovered activity
+language. Missing structural mechanisms may still remove real sources of
+delay.
 
 \paragraph{Systematic Turnaround Under-Prediction}
 
-The final model under-predicts mean turnaround by 9.306 minutes and P90 by
-19.200 minutes. The narrow seed intervals show that this is model bias, not
+The final model under-predicts mean turnaround by 8.170 minutes and P90 by
+17.310 minutes. The narrow seed intervals show that this is model bias, not
 simulation noise. The log cannot show how much missing time comes from
 movement, traffic, queueing, or an unrecorded state. Correct case order does
 not remove this limit on KPI forecasts.
@@ -789,7 +862,7 @@ the better-fitting \textit{no-rules} endpoint would react differently.
 \paragraph{External Validity Is Limited to One Terminal and Time Window}
 
 The temporal hold-out is one later period from the same terminal and source
-systems. The 99.944\,\% trie coverage shows repeated paths in this period. It
-does not show transfer to another process. The results do not cover another
+systems. Near-perfect replay fitness shows structural stability in this
+period, but not transfer to another process. The results do not cover another
 terminal, season, gate regime, or infrastructure setup. That would require
 another full discovery and validation run.

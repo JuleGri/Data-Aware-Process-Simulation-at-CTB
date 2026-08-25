@@ -10,23 +10,29 @@ Terminal Burchardkai. Two months of data were transformed into an event log
 with 89,460 truck visits and split temporally into training and test periods.
 The white-box ProSiT framework was used to compare a distribution-only model
 with a model using decision rules and workload features. The first
-Inductive-Miner model allowed impossible parallel behaviour within one truck
-visit. The final pipeline instead combines a manually implemented prefix-trie
-contract with automatically discovered timing, arrival, routing, and resource
-parameters.
+Inductive-Miner import appeared to allow impossible parallel behaviour within
+one truck visit because minute-resolved timestamps were used to reorder events.
+Preserving the explicit XES event order instead yields a compact sequential
+Petri net, which is used unchanged as the common executable control flow.
 
-The prefix trie covered 99.944\,\% of the 17,892 held-out visits. This shows a
-highly repetitive activity language, not structural generalisation. The final
+The Petri net fits 99.994\,\% of the 17,892 held-out visits and contains no
+parallel operator. Its loop generalises beyond exact training variants, while
+a rarely sampled silent gate-only path is retained and disclosed as model
+overgeneralisation rather than removed by an artificial constraint. The final
 model reproduced arrival spacing closely and parts of yard service times, but
-mean truck turnaround was 9.31 minutes too short and the 90th percentile was
-19.20 minutes too short. Before calibration, the model with rules and workload
-features produced a 56\,\% higher turnaround-distance error than the
-distribution-only model. Both control flow and RMG capacity required domain
-corrections. Two what-if experiments were transparent and repeatable, but
-their mean-turnaround confidence intervals included zero. The model also lacked
-the spatial state needed for physical counterfactual claims.
+mean truck turnaround was 8.17 minutes too short and the 90th percentile was
+17.31 minutes too short. After a common calibration, contextual rules and
+workload features did not improve fidelity uniformly: timing distances remain
+similar, the activity-rate error increases, and the rare silent bypass is no
+longer sampled. RMG capacity still required a documented domain correction.
+Two what-if experiments were transparent and repeatable, but their
+mean-turnaround confidence intervals included zero. The model also lacked the
+spatial state needed for physical counterfactual claims.
 
 Data-aware process simulation can provide an auditable historical model and a
 useful diagnostic tool for container-terminal operations. Direct operational
-decision support requires domain constraints and richer models of location,
-resources, and queueing.
+decision support requires explicit domain validation and richer models of
+location, resources, and queueing. With these mechanisms validated, the
+approach can support the central logistics use case: comparing candidate truck
+slot rates and handling policies under forecast terminal conditions before
+they are introduced in live operations.

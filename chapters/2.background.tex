@@ -338,62 +338,12 @@ Data-aware Process Mining and simulation methods can use these attributes as
 model inputs, provided that their values are available at the simulated
 decision point.
 
-\paragraph{Trace}
-A trace is the ordered sequence of events associated with one case. Classic
-trace-variant visualisations use chevrons to make this ordering visible
-\cite{Schuster2022TraceVariants}. Figure~\ref{fig:background_trace_example}
-applies this notation to one illustrative truck visit; the chevrons represent
-events, while their left-to-right arrangement represents temporal order.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-  traceevent/.style={
-    single arrow,
-    single arrow head extend=1mm,
-    draw=SchoolColor!75!black,
-    fill=SchoolColor!6,
-    minimum width=21.5mm,
-    minimum height=10mm,
-    text width=14.5mm,
-    align=center,
-    font=\scriptsize\sffamily,
-    inner xsep=2.2mm
-  },
-  boundaryevent/.style={traceevent,fill=SchoolColor!14},
-  eventnumber/.style={font=\tiny\sffamily,text=midgrey}
-]
-\node[boundaryevent] (event1) {OCR gate\\entry};
-\node[traceevent,right=.5mm of event1] (event2) {Gate In};
-\node[traceevent,right=.5mm of event2] (event3) {Yard\\arrival};
-\node[traceevent,right=.5mm of event3] (event4) {Container\\delivery};
-\node[traceevent,right=.5mm of event4] (event5) {Container\\pick-up};
-\node[boundaryevent,right=.5mm of event5] (event6) {Gate Out};
-
-\node[font=\footnotesize\sffamily\bfseries,anchor=south west]
-  at ([yshift=3mm]event1.north west) {Case T001};
-\node[eventnumber,below=1.4mm of event1] {$e_1$};
-\node[eventnumber,below=1.4mm of event2] {$e_2$};
-\node[eventnumber,below=1.4mm of event3] {$e_3$};
-\node[eventnumber,below=1.4mm of event4] {$e_4$};
-\node[eventnumber,below=1.4mm of event5] {$e_5$};
-\node[eventnumber,below=1.4mm of event6] {$e_6$};
-\end{tikzpicture}
-\caption{Illustrative trace of one truck-visit case. Each chevron denotes an
-event; the shared case identifier and temporal order connect the events into
-one trace.}
-\label{fig:background_trace_example}
-\end{figure}
-
-A trace therefore describes the observed execution path of one process
-instance, rather than the complete set of paths allowed by a process model.
-
 \subsection{Event Logs}
-An event log is a collection of such traces. In tabular form, each row
+An event log groups events into cases. For a given case, its chronologically
+ordered event sequence is called a \textit{trace}. In tabular form, each row
 represents one event, the case identifier links events that belong to the same
 process instance, and timestamps determine their order. Table~\ref{tab:eventlogexample}
-shows this storage-oriented view for two simplified truck visits, complementing
-the within-case view in Figure~\ref{fig:background_trace_example}.
+shows this storage-oriented view for two simplified truck visits.
 
 The CTB input log provides the start and completion timestamps required for
 execution-time modelling, together with resource and operational context.
@@ -484,81 +434,24 @@ block-structured model and can filter infrequent behaviour
 Process discovery shows how a recorded process was executed, rather than how it
 was expected to operate \cite{PMvanDerAalst2016}.
 
-\paragraph{Prefix trees and the observed trace language.}
-A prefix tree, or \emph{trie}, is a rooted tree representation of a set
-of sequences \cite{DeLaBriandais1959Trie}. Let an event log
-$L$ be a multiset of traces over activities $\mathcal{A}$. The trie has
-one node for every observed prefix
-\begin{equation}
-\operatorname{Pref}(L)=\{\epsilon\}\cup
-\{\langle a_1,\ldots,a_k\rangle \mid
-\exists\langle a_1,\ldots,a_n\rangle\in L,\;1\leq k\leq n\},
-\end{equation}
-where $\epsilon$ denotes the empty prefix. An edge labelled $a$ connects
-prefix $p$ to $p\cdot\langle a\rangle$ whenever that continuation occurs
-in the log. Traces with the same history share one path up
-to their first different activity; nodes and edges may be
-annotated with occurrence frequencies or data distributions. PRETSA
-uses precisely this property in process mining: each node groups events
-of the same activity whose traces share the same activity prefix
-\cite{FahrenkrogPetersen2019PRETSA}.
+\paragraph{Descriptive and executable process views}
+A directly-follows graph (DFG) summarises which activity directly follows
+another and can annotate nodes and arcs with observed frequencies or
+performance values. This makes the DFG useful for inspecting dominant flows,
+rare connections, and repetitions. It does not, however, define complete
+execution semantics: a path that can be drawn through a DFG is not necessarily
+a valid process execution \cite{PMvanDerAalst2016}.
 
-Without pruning or smoothing, a prefix trie accepts exactly the observed
-sequence variants. It therefore memorises the recorded trace language rather
-than discovering a compact or general process model. Fitness and precision on
-its construction log are expected to be one by design and are not evidence of
-discovery quality. The trie does not infer unseen combinations, loops, or
-concurrency. An Inductive-Miner model makes the opposite trade-off: its
-block-structured cuts abstract from individual variants and can admit behaviour
-not present verbatim in the log \cite{Leemans2014InductiveMiner}.
-
-The useful empirical question for a raw trie is therefore not whether it fits
-its training log, but whether its memorised language still covers a later
-period. High held-out coverage means that observed sequence variants are
-strongly repetitive and stable over time; low coverage means that the strict
-language is unsuitable outside the construction sample. A trie can be useful
-as an auditable execution guardrail, but it should not be presented as a
-general discovery of the underlying process.
-
-Figure~\ref{fig:model_representations} illustrates the two most common
-output representations of a modern discovery algorithm on the same
-event log. The process tree in Figure~\ref{fig:model_tree_theory}
-decomposes the process into hierarchically nested operators
-(\emph{seq} for sequence, \emph{xor} for exclusive choice, \emph{and}
-for concurrency, \emph{loop} for cyclic behavior). The BPMN model in
-Figure~\ref{fig:model_bpmn_theory} is the industry-standard graphical
-notation for the same behavior and is derived from the process tree
-by mapping each operator to a BPMN construct
-(exclusive gateway, parallel gateway, task). Petri-net representations
-of the same behavior are structurally equivalent but use a different
-graphical vocabulary (places and transitions); a concrete Petri-net
-example on the CTB event log is discussed in
-Section~\ref{sec:results_process_discovery}.
-
-\begin{figure}[htbp]
-\centering
-\begin{minipage}[t]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{figures/discovery/process_tree.png}
-    \subcaption{Process tree.}
-    \label{fig:model_tree_theory}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{figures/discovery/bpmn.png}
-    \subcaption{BPMN translation of the same process tree.}
-    \label{fig:model_bpmn_theory}
-\end{minipage}
-\caption{Two representations of the same discovered control flow
-(inductive miner on the CTB training log). The process tree exposes
-the hierarchical operator structure; the BPMN translation preserves
-the same behavior using the industry-standard graphical vocabulary.
-Both models describe an identical set of allowed traces and are used
-interchangeably in the process mining literature
-\cite{PMvanDerAalst2016}.}
-\label{fig:model_representations}
-\end{figure}
+Process trees and Petri nets provide such semantics. A process tree represents
+behaviour through nested sequence, exclusive-choice, parallel, and loop
+operators. The Inductive Miner discovers this block-structured representation
+and can convert it into a sound Petri net \cite{Leemans2014InductiveMiner}.
+The Petri net distinguishes places, visible activity transitions, and silent
+routing transitions; its markings determine which activity may execute next.
+Consequently, the DFG and Petri net answer complementary questions: the DFG
+shows what was frequent in the log, whereas the Petri net states what the model
+allows. The CTB instances of both views are therefore presented separately and
+interpreted in Section~\ref{sec:process_discovery_methodology}.
 
 \paragraph{Conformance Checking}
 While process discovery focuses on constructing process models, conformance checking focuses on comparing observed process executions with an existing process model \cite{aalst2012ConformanceChecking}. The objective is to identify deviations between the discovered model and the observed reality. Resulting deviations can indicate compliance violations, process inefficiencies, exceptional cases, or outdated process documentation. The quality of discovered process models is commonly evaluated using four criterias \cite{aalst2012ConformanceChecking,PMvanDerAalst2016}:

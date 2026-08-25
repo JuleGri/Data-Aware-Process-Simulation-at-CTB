@@ -116,15 +116,15 @@ The pickle file `prosit_params.pkl` is the executable source of truth for a disc
 
 ### Process-model conformance
 
-| Measure | Better value | Meaning | Critical interpretation for the CTB trie |
+| Measure | Better value | Meaning | Critical interpretation for the CTB Inductive-Miner net |
 |---|---:|---|---|
-| Fitness | 1 | How much observed log behaviour can be replayed by the process model. | Training fitness is one by construction because the raw trie stores every training variant. It is not a discovery-quality result. |
-| Fit traces | 100% | Share of traces that fit the model. | Held-out fit is informative: it is the share of later cases whose complete activity sequence was already seen during training. |
-| Precision | 1 | How strongly the model avoids behaviour that was not observed. | High precision is expected from a model that does not invent paths. It comes at the cost of excluding plausible unseen behaviour. |
-| Generalisation | Usually higher | Ability to allow plausible behaviour beyond the exact training traces. | The raw trie deliberately has limited generalisation and cannot generate a new combination, detour, loop, or activity order. |
-| Simplicity | Usually higher | Structural simplicity of the process model. | The 76-place, 144-transition trie is a memory of 70 variants, not a compact process abstraction. |
+| Fitness | 1 | How much observed log behaviour can be replayed by the process model. | Training fitness is 1.0 and held-out fitness is 0.999992. This is strong replay evidence, but it does not by itself establish precision or operational validity. |
+| Fit traces | 100% | Share of traces that fit the model. | The model completely fits 17,891 of 17,892 held-out cases (99.994%). Ten held-out variants were not present in training, so this is not exact-variant memorisation. |
+| Precision | 1 | How strongly the model avoids behaviour that was not observed. | Held-out precision is 0.7558 because the loop admits additional sequential yard combinations and repetitions. This is overgeneralisation, but not physical parallelism. |
+| Generalisation | Usually higher | Ability to allow plausible behaviour beyond exact training traces. | Held-out generalisation is 0.9413. The model can replay unseen sequential combinations while retaining a compact structure. |
+| Simplicity | Usually higher | Structural economy of the process model. | The 7-place, 16-transition net is inspectable and contains no parallel operator. Its silent yard bypass must still be disclosed as a permissive path. |
 
-The main prefix-trie result is a characteristic of the CTB process, not an algorithmic success. Of 17,892 held-out cases, 17,882 repeat a training variant. The raw trie cannot generalise, yet it covers 99.944% of the later period because the recorded truck-visit language is highly repetitive.
+The net is used unchanged. Its internal loop is treated as intended sequential generalisation because CTB yard activities may occur in different orders. The silent gate-only path is treated separately as a reported overgeneralisation finding rather than removed by a physical guard.
 
 ### Multi-seed uncertainty and scenario effects
 
@@ -140,9 +140,8 @@ These confidence intervals only describe random-seed uncertainty for one frozen 
 
 ### Structural contract measures
 
-The contract columns are hard gates, not soft quality scores. The following values must be zero:
+The following contract columns are hard gates and must be zero:
 
-- gate-only cases;
 - incorrect case boundaries;
 - overlapping activities within a sequential case;
 - decreasing completion times;
@@ -151,7 +150,7 @@ The contract columns are hard gates, not soft quality scores. The following valu
 - assignments to prohibited resources;
 - durations above the defined 24-hour validity bound.
 
-A model with a good EMD but failed structural contracts should not be treated as valid.
+A model with a good EMD but failed structural contracts should not be treated as valid. Gate-only cases are retained as a separate diagnostic because the unchanged discovered net explicitly permits that path; their frequency must be reported, but it is not conflated with parallel execution or a boundary error.
 
 ## Important limitations when reading the files
 
@@ -178,24 +177,24 @@ The weighted result better describes the error experienced by a typical observed
 - Training log: 71,568 cases and 220,048 events.
 - Held-out log: 17,892 cases and 55,360 events.
 - Temporal cutoff: 20 April 2026 at 18:17.
-- The raw trie memorises 70 training variants; perfect training fitness is automatic and is not evidence of model quality.
-- Of 53 test variants, 43 were already present in training and cover 17,882 of 17,892 cases.
-- Ten unseen test variants represented ten cases, or 0.0559% of held-out cases. Test fit is therefore 99.944%.
-- The supported conclusion is that recorded CTB truck visits are highly repetitive across the two periods. The trie is a strict historical execution contract, not a generally discovered process model.
+- The Inductive-Miner process tree contains zero parallel operators and is converted to a compact Petri net with 7 places, 16 transitions, and 32 arcs.
+- Training alignment fitness is 1.000 and 100% of training cases fit. Held-out alignment fitness is 0.999992 and 99.994% of held-out cases fit completely.
+- Held-out precision is 0.7558 and generalisation is 0.9413. The model therefore generalises beyond exact training variants through a sequential yard-activity loop; it does not merely memorise the 70 training variants.
+- The net permits a silent gate-only path. It is retained as an explicit overgeneralisation finding: it occurs zero times in the real training and held-out logs, zero times in 178,920 context-aware simulated visits, and 11.9 times per 17,892 visits on average in the no-rules endpoint.
 
 ### Final cap-3 held-out validation over ten seeds
 
 | Result | Final mean | 95% Monte Carlo CI |
 |---|---:|---:|
-| Case-turnaround EMD | 9.306 min | 9.229 to 9.384 |
-| Simulated mean turnaround | 30.436 min | 30.359 to 30.514 |
+| Case-turnaround EMD | 8.180 min | 8.096 to 8.264 |
+| Simulated mean turnaround | 31.572 min | 31.485 to 31.659 |
 | Real mean turnaround | 39.742 min | Fixed held-out reference |
-| Simulated turnaround P90 | 51.8 min | 51.498 to 52.102 |
+| Simulated turnaround P90 | 53.690 min | 53.349 to 54.031 |
 | Real turnaround P90 | 71.0 min | Fixed held-out reference |
-| Yard service-time EMD, unweighted | 2.999 min | 2.888 to 3.110 |
-| Yard service-time EMD, real-frequency weighted | 2.340 min | 2.279 to 2.402 |
+| Yard service-time EMD, unweighted | 3.109 min | 2.999 to 3.220 |
+| Yard service-time EMD, real-frequency weighted | 2.366 min | 2.335 to 2.396 |
 | Interarrival EMD | 0.072 min | 0.067 to 0.077 |
-| Yard activity-rate L1 error | 0.187 | 0.184 to 0.189 |
+| Yard activity-rate L1 error | 0.227 | 0.222 to 0.232 |
 
 All final structural contract failure counts are zero. The arrivals and yard service times are reproduced more closely than the complete case-turnaround distribution. In particular, the model underestimates the mean and upper tail of turnaround time.
 
@@ -203,23 +202,22 @@ All final structural contract failure counts are zero. The arrivals and yard ser
 
 | Scenario | Change in mean turnaround versus matched baseline | 95% paired CI | Resolved away from zero? |
 |---|---:|---:|---|
-| T22 closed | +0.012 min | -0.102 to +0.127 | No |
-| Demand +20% | -0.033 min | -0.128 to +0.063 | No |
+| T22 closed | +0.092 min | -0.016 to +0.200 | No |
+| Demand +20% | +0.131 min | -0.026 to +0.288 | No |
 
-The scenarios executed correctly and the T22-closed runs produced zero T22 assignments. However, the final paired intervals include zero for the main turnaround effects. The unchanged trie also forces every scenario case to follow a training-period activity sequence. The results therefore describe parameter changes within the historical process language; they cannot represent a new detour, exception step, or changed operation order caused by the intervention.
+The scenarios executed correctly and the T22-closed runs produced zero T22 assignments. However, the final paired intervals include zero for the main turnaround effects. The unchanged Inductive-Miner net continues to permit different sequential combinations and repetitions of known yard activities, but it cannot represent a new activity type or an unobserved exception mechanism. The results therefore describe parameter changes within the discovered process language. Activity-specific reporting identifies small resolved increases in delivery pre-service delay under both scenarios, but these are model-conditional effects rather than established physical counterfactuals.
 
 ## Mapping the evidence to the research questions
 
 | Research question | Main evidence | What it supports |
 |---|---|---|
 | RQ1: fidelity | Final `mc_summary.csv`, `yard_activity_emd_summary.csv`, detailed single-run metrics | Reproduction of arrivals, activity mix, service times, and case turnaround, including the remaining turnaround bias. |
-| RQ2: structural applicability | `prosit_conformance.csv`, variant counts, and case-order contracts | The later CTB period largely repeats the memorised training language while satisfying the sequential visit contract. It does not show broad process generalisation. |
+| RQ2: structural applicability | `prosit_conformance.csv`, Inductive-Miner operator check, and case-order contracts | The discovered sequential Petri net fits nearly all held-out cases, generalises beyond exact training variants, and produces no within-case overlap. Its silent gate-only bypass remains a disclosed overgeneralisation finding. |
 | RQ3: contextual expressiveness | No-rules versus rules/workload screening, activity-level diagnostics, and cross-seed variation | Whether the more expressive endpoint improves fidelity and how cautiously the difference can be interpreted. |
-| RQ4: what-if decision support | Parameter-change audit, paired scenario deltas, scenario contracts, and T22-focused summary | Whether interventions execute reproducibly and what their weak response reveals about missing physical state and fixed historical paths. |
+| RQ4: what-if decision support | Parameter-change audit, paired scenario deltas, scenario contracts, and receive/delivery summary | Whether interventions execute reproducibly, how activity-specific effects can be separated, and what the weak turnaround response reveals about missing physical and queue state. |
 
-Together, these results address the broader research objective while making the hybrid construction explicit: ProSiT discovers simulation parameters, but the final control flow is a domain-constrained encoding of historical variants rather than a general automatically discovered process structure.
+Together, these results address the broader research objective while making the hybrid construction explicit: ProSiT discovers simulation parameters and uses the unchanged Inductive-Miner Petri net, while the RMG capacity receives a documented physical ceiling. The discovered control-flow generalisation and the domain adaptation are therefore kept analytically distinct.
 
-## Two consistency checks before final submission
+## Resolved consistency checks
 
-1. **Percentile correlation label:** `corr_with_ref` in `validation/04_baseline_percentile_sensitivity.py` is currently calculated with the default pandas Pearson correlation. If the thesis calls this Spearman's rho or a rank correlation, either change the wording to Pearson correlation or change the script to `method="spearman"` and regenerate the output.
-2. **Arrival benchmark values:** the current `arrival_rate_analysis.csv` reports time-aware MAE 9.414, RMSE 16.873, and R-squared 0.762; the pooled model reports MAE 28.982, RMSE 34.596, and R-squared approximately -0.001. These do not exactly match the current Chapter 5 values of 9.04, 16.15, 0.777, and pooled RMSE 34.19. The table and its run source should be reconciled before submission.
+The percentile sensitivity is labelled as Pearson correlation, matching the implementation. The arrival benchmark in Chapter 5 is aligned with `arrival_rate_analysis.csv` (time-aware MAE 9.414, RMSE 16.873, and $R^2=0.762$; pooled MAE 28.982, RMSE 34.596, and $R^2\approx-0.001$).
