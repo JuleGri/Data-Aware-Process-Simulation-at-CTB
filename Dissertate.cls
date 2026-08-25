@@ -9,7 +9,9 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{Dissertate}[Dissertate Class]
-\LoadClass[12pt, twoside, openright, a4paper]{book}
+% Preserve binding-aware two-sided margins without inserting empty pages
+% solely to force chapter openings onto right-hand pages.
+\LoadClass[12pt, twoside, openany, a4paper]{book}
 
 %
 % Options
@@ -246,7 +248,6 @@
 	\pagenumbering{roman}
 	\input{frontmatter/personalize}
 	\maketitle
-	\frontispiece
 	\dedicationpage
 	\abstractpage
 	\tableofcontents
@@ -257,17 +258,17 @@
 	\phantomsection
 	\addcontentsline{toc}{chapter}{List of figures}
 	\listoffigures
-	\cleardoublepage
+	\clearpage
 
 	% table listing - required if you have any tables
 	\phantomsection
 	\addcontentsline{toc}{chapter}{List of tables}
 	\listoftables
-	\cleardoublepage
+	\clearpage
 
 	\acronyms
 
-	\cleardoublepage
+	\clearpage
 	\setcounter{page}{1}
 	\pagenumbering{arabic}
 }
@@ -332,7 +333,7 @@
 	{\large\@academicYear\par}
 	\end{center}
 	\singlespacing
-	\cleardoublepage
+	\clearpage
 }
 
 \newcommand{\copyrightpage}{
@@ -358,11 +359,10 @@
 
 \newcommand{\dedicationpage}{
 	\phantomsection
-	\setcounter{page}{3}
 	\vspace*{\fill}
 	\scshape \noindent \input{frontmatter/dedication}
 	\vspace*{\fill}
-	\cleardoublepage
+	\clearpage
 	\rm
 }
 
@@ -383,7 +383,6 @@
 
 \newcommand{\abstractpage}{
 	\phantomsection
-	\setcounter{page}{5}
 	\addcontentsline{toc}{chapter}{Abstract}
 	\chapter*{Abstract}
 	\input{frontmatter/abstract}
