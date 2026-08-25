@@ -248,7 +248,6 @@
 	\pagenumbering{roman}
 	\input{frontmatter/personalize}
 	\maketitle
-	\dedicationpage
 	\abstractpage
 	\tableofcontents
 	\phantomsection
