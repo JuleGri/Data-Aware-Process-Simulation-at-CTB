@@ -191,7 +191,7 @@ is methodologically important: activity order is part of the event-log
 semantics and must not be reconstructed implicitly from coarse or overlapping
 timestamps.
 
-\subsection{Complementary Discovery Views and Model Selection}
+\subsection{Discovered Process Flow}
 
 Figure~\ref{fig:ctb_dfg_frequency} shows a Disco-style frequency view of the
 order-preserving training log. It is a directly-follows graph generated in
@@ -210,8 +210,7 @@ directly-follows counts and line weight indicates relative frequency.}
 \label{fig:ctb_dfg_frequency}
 \end{figure}
 
-\noindent\textbf{Interpretation of the frequency view.}
-The graph confirms a stable outer process boundary: every training case enters
+The frequency view confirms a stable outer process boundary: every training case enters
 through \texttt{Gate In} and ends at \texttt{Gate Out}. Inside that boundary,
 the many directed connections do not indicate simultaneous execution. They
 show that the next sequential yard activity varies between visits and that
@@ -221,17 +220,16 @@ HO2/LL paths are comparatively rare. The DFG is therefore useful descriptive
 evidence, but it is not used directly for simulation because it has no marking
 or firing semantics and cannot itself distinguish choice from concurrency.
 
-The Inductive Miner converts the same training traces into the process tree
+The Inductive Miner expresses the same process as a sequential tree. Every case
+starts with \texttt{Gate In}. It may then execute \texttt{LL\_mixed}, after
+which it either enters the yard loop or follows a silent bypass. Each pass
+through the loop selects one visible yard activity, and the loop may repeat to
+represent visits with several handling operations. Once the loop is left, the
+case ends with \texttt{Gate Out}. The tree therefore allows different yard
+orders and repeated handling without allowing two activities of the same truck
+to execute concurrently.
 
-\begin{quote}
-\small
-\texttt{Gate In} $\rightarrow$ optional \texttt{LL\_mixed}
-$\rightarrow$ optional loop over the remaining yard activities
-$\rightarrow$ \texttt{Gate Out}.
-\end{quote}
-
-The loop selects one visible yard transition at a time and may repeat. The
-converted Petri net in Figure~\ref{fig:ctb_inductive_petri} contains 7 places,
+The converted Petri net in Figure~\ref{fig:ctb_inductive_petri} contains 7 places,
 16 transitions, and 32 arcs. Black boxes are silent routing transitions; white
 boxes are observed activities. Most importantly, the discovered process tree
 contains zero parallel operators. A single case token can therefore enable
@@ -247,7 +245,6 @@ marks completion. The net contains no parallel split.}
 \label{fig:ctb_inductive_petri}
 \end{figure}
 
-\noindent\textbf{Interpretation and selection.}
 The model abstracts from the 70 exact training variants by permitting unseen
 sequential combinations and repetitions of yard activities. This is intended
 generalisation, not a defect: the domain contract constrains concurrency and
@@ -268,16 +265,9 @@ substantially smaller model than memorising every observed path.
 
 \subsection{Held-Out Conformance and Case-Contract Validation}
 
-The discovered net is evaluated on the training and test partitions using:
-
-\begin{itemize}
-    \item token-based replay \textbf{fitness};
-    \item token-based replay \textbf{precision} as implemented by PM4Py;
-    \item \textbf{generalisation} via
-          \texttt{pm4py.generalization\_tbr}; and
-    \item \textbf{simplicity} via \texttt{pm4py.simplicity\_petri\_net}.
-\end{itemize}
-
+The discovered net is evaluated on the training and test partitions through
+token-based replay fitness and precision, together with PM4Py's
+\texttt{generalization\_tbr} and \texttt{simplicity\_petri\_net} measures.
 Fitness tests whether observed traces can be replayed; precision penalises
 behaviour allowed by the model but not supported by the log; generalisation
 rewards an abstraction that is not tied to individual observations; and
@@ -598,10 +588,9 @@ single-shot and multi-seed numbers are directly comparable.
 
 The operational value of a logistics simulation lies in comparing future
 decisions under conditions that cannot safely be tested in the live terminal.
-The intended workflow is therefore
-\emph{forecast condition $\rightarrow$ candidate operating policy
-$\rightarrow$ simulated process executions $\rightarrow$ activity- and
-system-level consequences}. A forecast of high yard utilisation could, for
+The intended workflow begins with a forecast operating condition, compares
+candidate policies through simulated process executions, and evaluates their
+activity- and system-level consequences. A forecast of high yard utilisation could, for
 example, motivate a reduction in truck slots released per hour or a temporary
 policy that favours retrieval-related handling. A useful model must then show
 not only total turnaround but also whether receive and delivery service or
