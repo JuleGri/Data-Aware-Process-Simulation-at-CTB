@@ -505,6 +505,14 @@ question of how it responds to an intervention. The CTB study follows the same
 logic but adds the event-order, physical-capacity, and logistics-specific
 validation required by a container-terminal setting.
 
+The application also illustrates why automatic discovery is not necessarily
+the final model. Domain experts modify the discovered structure where the
+Inductive-Miner abstraction is operationally implausible and assess the
+simulation results for plausibility. Its authors identify external delays,
+fine-grained inter-activity timing, drift, and structured stakeholder
+evaluation as remaining limitations \cite{Hospital2026Vinci}. These are close
+to the validity boundaries investigated in CTB.
+
 
 \subsection{Discovery of Simulation Behavior}
 
@@ -527,6 +535,26 @@ implausible paths, while a restrictive model may miss valid process variation
 and precision defines the behavioural range of the simulator
 \cite{VinciDeLeoni2025Repair}.
 
+Vinci and de Leoni \cite{VinciDeLeoni2025Repair} make this link to simulation
+explicit in a four-step repair framework. An initial stochastic Petri net is
+simulated, directly-follows features are used to train a discriminator between
+real and simulated traces, and explainable feature importance identifies
+behaviour that is systematically missing from or over-represented in the
+simulation. Three repair strategies then add selected directly-follows
+relations while preserving soundness and safeness: a complete basic repair, a
+smaller greedy repair, and an alignment-based repair that also handles repeated
+activity labels. The repaired model is retained only when held-out fitness,
+precision and simulation-log distances improve. The framework therefore
+treats model repair as a validated model comparison, not as an undocumented
+manual correction. Its currently operationalised repairs add missing
+behaviour; restricting behaviour that is allowed too broadly remains an open
+extension. This distinction matters when a discovered model is imprecise
+rather than unfit. Across 23 evaluated source models, the harmonic
+fitness--precision score improved in 19 cases; control-flow log distance fell
+in 16 cases, with a reported average reduction of 31.54\,\%. These results show
+that repair can materially improve simulation behaviour, but also that no
+operator or acceptance rule dominates every model.
+
 \paragraph{Temporal and Resource Behavior}
 
 Early simulation-discovery approaches estimate execution times, waiting
@@ -541,6 +569,15 @@ process behaviour. Resource selection may depend on more than a fixed
 activity-resource mapping \cite{BPSdifferentiatedResources2022,Vinci2026prosit}.
 Recent approaches model these aspects conditionally instead of using one
 global distribution per activity or resource.
+
+Resource differentiation is not a cosmetic detail. In five synthetic and five
+real logs, López-Pintado and Dumas report a mean cycle-time EMD of 4.63 for the
+fully differentiated setting, compared with 9.45 for pooled undifferentiated
+resources and 13.42 for unpooled undifferentiated resources
+\cite{BPSdifferentiatedResources2022}. Their evaluation concerns historical
+replication rather than proven what-if accuracy, but it establishes that
+resource availability and individual performance can materially change
+simulation fidelity.
 
 \paragraph{Arrival Behaviour}
 
@@ -564,7 +601,31 @@ Mannhardt et al. \cite{mannhardt2023stochasticProcessesModelling} extend
 stochastic Petri nets with transition weights that depend on process variables.
 The model can then capture differences between types of cases.
 
-De Leoni et al. \cite{Vinci2023Inf.Activ.Prob} extend this idea through the concept of the \textit{process state}. Rather than conditioning decisions only on static case attributes, the process state may also describe information accumulated during the execution of the case, including process-variable values and the history of previously executed activities. Their results show that incorporating this richer representation of the current process state can improve the estimation of activity-firing probabilities compared with basic frequency-based branching probabilities.
+De Leoni et al. \cite{Vinci2023Inf.Activ.Prob} extend this idea through the
+concept of the \textit{process state}. Rather than conditioning decisions only
+on static case attributes, the process state may also describe information
+accumulated during the execution of the case, including process-variable values
+and the history of previously executed activities. For every enabled
+transition, its conditional weight is estimated from the state immediately
+before firing and normalised over all transitions enabled in the current Petri
+net marking. Their two case studies show that a suitable state abstraction can
+improve simulated control-flow frequencies relative to constant branching
+probabilities. The best state reduced the reported control-flow distance by
+7.5\,\% for the road-fines process and 9.4\,\% for sepsis. The best abstraction
+is process-dependent, however: data alone, history, and their combination do
+not dominate uniformly, and one history-based configuration produced a
+livelock. The study also repaired a permissive source
+model before simulation because it allowed a one-activity execution absent
+from the log. Data-aware routing therefore complements, but does not replace,
+validation of the control-flow language itself.
+
+The corresponding stochastic labelled data Petri-net formalism assigns
+state-dependent weights to enabled transitions. It is deliberately not a full
+simulation formalism for every operational aspect: transition choice can depend
+on state without representing spatial movement, resource queues, or separate
+traffic delays. These mechanisms require additional timing and resource models
+rather than more transition weights alone
+\cite{Vinci2023Inf.Activ.Prob}.
 
 Conceptually, this research develops from fixed branching frequencies towards
 increasingly conditional stochastic behaviour. Basic stochastic process models
@@ -575,11 +636,13 @@ the current execution. The stages are not mutually exclusive model classes;
 each adds information that can explain why otherwise similar cases behave
 differently.
 
-Recent work extends data awareness beyond routing behaviour. López-Pintado et
-al. \cite{lopez2024} investigate the discovery and simulation of data-aware
-business processes more broadly, reflecting a shift towards models in which
-multiple behavioural dimensions depend on process context rather than only on
-marginal historical frequencies.
+López-Pintado et al. \cite{lopez2024} broaden the data representation through
+global, case, and event attributes, attribute-update rules, and data-dependent
+branching conditions. In their evaluated framework, however, attributes
+determine control flow; dependencies between data and activity start or
+duration remain future work. This boundary is important for physical logistics:
+a data-aware routing formalism does not by itself represent movement or
+queueing time.
 
 
 \subsection{ProSiT as a Probabilistic Data-Aware Simulation Framework}
@@ -603,6 +666,14 @@ process-state approach of Mannhardt et al.
 \cite{mannhardt2023stochasticProcessesModelling} and de Leoni et al.
 \cite{Vinci2023Inf.Activ.Prob} covers a broader range of context than the
 current ProSiT implementation.
+
+The published evaluation uses five case studies, an 80/20 temporal split, and
+five simulated logs per model. ProSiT is competitive with a black-box baseline
+while keeping the rules inspectable \cite{Vinci2026prosit}. The authors also
+draw a boundary essential for what-if use: the learned relationships capture
+correlations, not necessarily root causes. White-box inspection shows which
+association the simulator uses; causal and operational validity still require
+domain and intervention evidence.
 
 ProSiT is useful for this thesis because its level of contextual conditioning
 can be changed. This allows a comparison of model expressiveness and held-out

@@ -37,6 +37,25 @@ the simulation compared with 39.74 minutes in the hold-out, an under-prediction
 of 8.17 minutes. The simulated 90th percentile is 53.69 minutes compared with
 71.00 minutes in the hold-out.
 
+The descriptive transition analysis supplies an important scale check for this
+bias. Route-specific fifth-percentile baselines range from 2.16 to 5.28
+minutes, while the route-frequency-weighted inbound and outbound components
+sum to 7.62 minutes per visit. This is close to the 8.17-minute mean deficit and
+supports omitted physical transition time as a plausible major contributor.
+Because these lower-tail baselines do not separate movement, traffic, resource
+waiting and other operational delay, they cannot be used as a case-level
+correction or causal decomposition.
+
+The temporal-transfer audit adds a second explanation that must not be merged
+with movement. Real mean turnaround rises by 2.450 minutes from training to the
+hold-out, and mean service time rises for all nine yard activities. For the
+final cap-three baseline, the 8.170-minute held-out mean deficit decomposes into
+a 5.721-minute discrepancy relative to the training-period mean and the
+2.450-minute observed period shift. The simulator is therefore already too
+fast relative to its calibration period, while temporal drift makes the later
+comparison worse. The two mechanisms are empirically distinguishable at the
+aggregate mean level but not identifiable case by case.
+
 \textbf{RQ2} investigated the suitability of automatically discovered
 control flow for the CTB truck process. When the explicit XES event order is
 preserved, the Inductive Miner discovers a compact Petri net with no parallel
@@ -54,24 +73,26 @@ the simulation-output contract checks, the unchanged automatically discovered
 net is suitable as the ProSiT backbone and does not require a manual
 prefix-trie replacement. Its permissive silent bypass is disclosed as a
 finding rather than removed through an additional physical constraint.
+As a separate robustness experiment, a precision-oriented state split removes
+only that bypass. Held-out fitness remains 0.999992 while precision rises from
+0.7558 to 0.7939; generalisation falls from 0.9413 to 0.8859. This explicit
+trade-off shows that structural repair can improve the unsupported language
+without pretending that the repaired net remains a purely automatic discovery.
 
 \textbf{RQ3} asked how increasing the contextual expressiveness of the
-simulation model affects held-out fidelity. The comparison between the
-distribution-only \textit{no-rules} configuration and the full
-\textit{rules$+$workload} configuration shows that additional data-aware
-modelling does not automatically improve every dimension of simulation
-fidelity. After the same CTB calibration, the two configurations have similar
-turnaround, inter-arrival, and weighted service-time distances, with
-overlapping seed intervals. The more expressive endpoint worsens the
-yard-activity-rate L1 error from 0.1753 to 0.2264, but it suppresses the rarely
-sampled silent gate-only bypass: the distribution-only endpoint generates
-11.9 such cases per 17,892 visits on average, compared with none in 178,920
-context-aware visits. The net remains unchanged, so this difference is an
-interaction between its permissive language and the routing layer rather than
-a manually imposed constraint. The available contextual attributes also
-explain little of the service-time variation of the dominant RMG activities.
-Increasing expressiveness is therefore useful only when the information is
-available at the decision point and remains predictive across time.
+simulation model affects held-out fidelity. The three-level ablation separates
+process- and case-state rules from workload information. Relative to
+\textit{no-rules}, strict workload-blind \textit{rules} reduce turnaround EMD
+by 0.193 minutes and activity-rate L1 error by 0.0126 in paired ten-seed
+comparisons; their 95\,\% intervals exclude zero. They also suppress the rarely
+sampled silent gate-only bypass. Adding workload information afterward yields
+no resolved weighted service-time improvement, increases turnaround EMD by
+0.328 minutes, and increases activity-rate L1 error by 0.0637. The model's
+short tail also becomes slightly shorter at each step. The best state
+abstraction is therefore process- and metric-specific: more data awareness is
+not automatically more valid state. In CTB, the available workload proxies do
+not transfer as a useful representation of the omitted physical queueing and
+movement mechanisms.
 
 \textbf{RQ4} asked how the discovered simulation model responds to transparent
 operational interventions and what these responses reveal about its suitability
@@ -81,25 +102,34 @@ resource pool eliminates all assignments to that resource, while increasing
 the working-time arrival intensity by 20\,\% produces the intended change in
 the underlying arrival parameter. Nevertheless, neither intervention produces
 a statistically resolved change in mean truck turnaround time. The experiments
-do distinguish handling patterns: T22 removal increases simulated delivery
-pre-service delay by 0.094 minutes, and higher demand increases it by 0.153
-minutes, with both paired intervals excluding zero. These small effects are
-conditional on the current model and do not establish physical causality. More
-importantly, the scenario analysis exposes limitations of the underlying
-process abstraction. RMG resources represent statistical capacity assignments
-rather than physical container locations, and the model does not represent
-container relocation, equipment movement, waterside and landside crane
-allocation, or explicit spatial queue states. Consequently, the scenarios are
-valid experiments on the discovered simulation model, but their results cannot
-be interpreted as experimentally established counterfactual effects of the
-physical terminal.
+do distinguish handling patterns: under higher demand, mean RMG service rises
+by 0.091 minutes and mean receive service by 0.073 minutes, with both paired
+intervals excluding zero. No T22-removal mean-effect interval excludes zero.
+Repeating both scenarios with the workload-blind rules bundle again produces
+no resolved mean-turnaround response, and none of the headline
+difference-in-differences between state configurations excludes zero. The
+small component effects are therefore conditional on the current model and do
+not establish physical causality. A separate capacity-pressure diagnostic
+further shows that
+the 20\,\% intervention leaves the most-loaded held-out RMG block at only 0.506
+nominal mean utilisation under the three-task ceiling; the smallest multiplier
+to mean saturation is 2.37. The null turnaround result therefore reflects both
+a modest average-capacity stress and a process abstraction without the state
+needed to propagate short-period pressure. RMG resources represent statistical
+capacity assignments rather than physical container locations, and the model
+does not represent container relocation, equipment movement, waterside and
+landside crane allocation, or explicit spatial queue states. Consequently, the
+scenarios are valid experiments on the discovered simulation model, but their
+results cannot be interpreted as experimentally established counterfactual
+effects of the physical terminal.
 
 Read jointly, the findings reveal a consistent boundary between patterns that
 are present in the event log and mechanisms that are absent from the model.
 The stable sequential control-flow structure and strong calendar pattern are
 patterns that the discovery pipeline can reproduce. By contrast, the weak
 duration signal
-for dominant RMG activities, the systematic turnaround deficit, and the lack
+for dominant RMG activities, the observed train--test drift, the systematic
+turnaround deficit, and the lack
 of a congestion response under higher demand all point to missing event-level
 and spatial state. This agreement across independent diagnostics strengthens
 the interpretation, but it is not a causal proof: the analyses show which
@@ -127,6 +157,16 @@ contextual features do not necessarily improve simulation fidelity, and an
 executable what-if intervention does not establish that the corresponding
 physical effect is represented correctly.
 
+The layered validity audit is the main academic outcome. Event semantics and
+sequential control flow are supported; historical stochastic fidelity is
+mixed; temporal transfer is unstable; physical resource--space semantics and
+scenario propagation are not yet validated. This ranking avoids both extremes:
+the model is more than an unusable failed simulator because it provides strong
+structural and diagnostic evidence, but it is less than a decision-valid
+digital twin because its counterfactual mechanisms are incomplete. The negative
+ablation and stress-test results identify exactly which layer fails and where a
+model extension must be evaluated.
+
 The contribution of this thesis is therefore not a demonstration that the
 discovered model is already sufficient for unrestricted operational decision
 support. Rather, it provides empirical evidence about where a recent
@@ -151,25 +191,45 @@ loop can support prescriptive decisions.
 \section{Future Work}
 
 Future research should retain the reproducible discovery-and-validation
-framework while extending the process representation in four directions:
+framework while extending and testing the process representation in six
+directions:
 
 \begin{itemize}
-    \item \textbf{Richer event and state representation:} Preserve selected
-    event-level attributes and add explicit queue-entry, location, movement,
-    vessel, and rail-arrival states. Alternative case and aggregation schemes
-    should be compared through the same temporal hold-out protocol.
-    \item \textbf{Hybrid simulation formalisms:} Couple the discovered process
-    model with discrete-event or agent-based components for spatial movement,
-    equipment interaction, and capacity constraints that cannot be represented
-    by resource labels alone.
-    \item \textbf{External and discovery-level validation:} Repeat the complete
-    discovery on another season or terminal and quantify uncertainty from the
-    training sample, model discovery, input distributions, and simulation seeds.
-    \item \textbf{Operational policy validation:} Represent appointment-slot
+    \item \textbf{Complete the structural-repair experiment:} Simulate the
+    exported gate-bypass repair across the same ten seeds and rerun the scenario
+    tests. A discriminator-based precision repair could then be investigated as
+    an explicit extension of Vinci and de Leoni's addition-oriented framework,
+    with language restriction accepted only if held-out fitness and scenario
+    behaviour remain satisfactory.
+    \item \textbf{Separate physical transit from residual delay:} Add
+    timestamped route or position observations and model
+    $D_{\mathrm{pre\text{-}service}}=T_{\mathrm{transit}}+D_{\mathrm{residual}}$.
+    Transit should be generated once through visible auxiliary transitions or a
+    simulator extension, while the existing delay distribution is fitted to
+    the residual to avoid double counting. Sparse internal routes require a
+    pooled or hierarchical fallback rather than unsupported pair estimates.
+    \item \textbf{Represent sticky spatial resources and explicit queues:}
+    Bind a case's target area to feasible blocks, distinguish individual
+    availability and performance, and represent truck and equipment movement.
+    The discovered process model can then be coupled with a discrete-event or
+    agent-based physical layer for constraints that resource labels alone do
+    not encode.
+    \item \textbf{Adapt to temporal change:} Evaluate rolling-window or
+    recency-weighted discovery prospectively and repeat the three-level state
+    ablation in each period. This would show whether workload state becomes
+    useful after drift-aware refitting or remains an unsuitable abstraction.
+    \item \textbf{Validate bottleneck mechanisms:} Use the time-burden ranking
+    to select candidate locations, then distinguish service, access, queue, and
+    movement through additional timestamps and controlled interventions. Expert
+    walkthroughs should verify the causal plausibility of each proposed
+    propagation chain.
+    \item \textbf{Validate operational policies:} Represent appointment-slot
     release, forecast utilisation, and receive/delivery priority policies
     explicitly. Candidate hourly admission rates should be evaluated against
-    activity-specific and terminal-wide KPIs and, before deployment, compared
-    with observed outcomes from controlled historical or prospective policy
-    changes.
+    activity-specific and terminal-wide KPIs. In addition to modest policy
+    changes, the experiment design should include capacity-pressure levels that
+    approach and cross calibrated block saturation. Results must then be
+    compared with controlled historical or prospective outcomes before
+    deployment.
 
 \end{itemize}

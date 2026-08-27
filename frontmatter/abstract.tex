@@ -1,38 +1,40 @@
 %!TEX root = ../dissertation.tex
 
-Container terminals use simulation to test operational changes without
-disrupting live operations, but these models are usually built and calibrated
-by hand. Data-aware process simulation aims to learn executable models from
-event logs. Evidence from physical logistics systems is still limited.
+Container terminals use simulation to evaluate operational changes without
+disrupting live operations, but these models are commonly constructed and
+calibrated by hand. Data-aware process simulation instead derives executable
+models from event logs; evidence from physical logistics remains limited.
 
 This thesis evaluates the approach for truck operations at HHLA Container
-Terminal Burchardkai. Two months of data were transformed into an event log
-with 89,460 truck visits and split temporally into training and test periods.
-The white-box ProSiT framework was used to compare a distribution-only model
-with a model using decision rules and workload features. The first
-Inductive-Miner import appeared to allow impossible parallel behaviour within
-one truck visit because minute-resolved timestamps were used to reorder events.
-Preserving the explicit XES event order instead yields a compact sequential
-Petri net, which is used unchanged as the common executable control flow.
+Terminal Burchardkai. Two months of data were transformed into an event log of
+89,460 visits and divided temporally into discovery and held-out periods. The
+white-box ProSiT framework was evaluated through three configurations:
+distribution-only, workload-blind process-state rules, and rules with workload
+features. An apparent parallelism defect was traced to timestamp-based event
+reordering. Preserving explicit XES order produced a compact sequential Petri
+net used as the common executable control flow.
 
-The Petri net fits 99.994\,\% of the 17,892 held-out visits and contains no
-parallel operator. Its loop generalises beyond exact training variants, while
-a rarely sampled silent gate-only path is retained and disclosed as model
-overgeneralisation rather than removed by an artificial constraint. The final
-model reproduced arrival spacing closely and parts of yard service times, but
-mean truck turnaround was 8.17 minutes too short and the 90th percentile was
-17.31 minutes too short. After a common calibration, contextual rules and
-workload features did not improve fidelity uniformly: timing distances remain
-similar, the activity-rate error increases, and the rare silent bypass is no
-longer sampled. RMG capacity still required a documented domain correction.
-Two what-if experiments were transparent and repeatable, but their
-mean-turnaround confidence intervals included zero. The model also lacked the
-spatial state needed for physical counterfactual claims.
+The net fits 99.994\,\% of 17,892 held-out visits. A separate repair removes a
+silent gate-only bypass, raising precision from 0.7558 to 0.7939 while lowering
+generalisation from 0.9413 to 0.8859. The final scenario baseline reproduces
+arrival spacing closely and parts of yard service timing, but mean turnaround
+is 8.17 minutes too short and P90 is 17.31 minutes too short. Of the mean gap,
+2.45 minutes are attributable to an observed train--test period shift; a
+5.72-minute deficit is already present relative to the training-period mean.
+Paired ten-seed ablation shows that workload-blind rules improve turnaround
+distance and activity incidence, whereas adding workload state yields no
+resolved service-time gain and worsens both measures. The RMG concurrency cap
+still requires domain correction. Two reproducible what-if experiments produce
+no resolved mean-turnaround response. The 20\,\% demand increase leaves the
+most-loaded held-out RMG block at 0.506 nominal mean utilisation, while the
+model also lacks the spatial mechanisms needed for physical counterfactual
+claims.
 
-Data-aware process simulation can provide an auditable historical model and a
-useful diagnostic tool for container-terminal operations. Direct operational
-decision support requires explicit domain validation and richer models of
-location, resources, and queueing. With these mechanisms validated, the
-approach can support the central logistics use case: comparing candidate truck
-slot rates and handling policies under forecast terminal conditions before
-they are introduced in live operations.
+The thesis contributes a layered validity audit separating event semantics,
+control-flow language, historical fidelity, temporal transfer, physical
+resource--space semantics, and scenario response. Data-aware simulation is
+valuable here as an auditable historical and diagnostic model, but direct
+operational decision support requires validated location, movement, resource,
+and queueing mechanisms. With these extensions, the approach could compare
+truck-slot rates and handling priorities under forecast terminal conditions
+before their implementation.

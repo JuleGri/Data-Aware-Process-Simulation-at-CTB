@@ -111,6 +111,16 @@ activity and case level. The case study evaluates how far the discovered model
 can support that logic without treating mere scenario executability as evidence
 of physical counterfactual validity.
 
+The central methodological contribution is a layered validity audit. Rather
+than reducing simulation quality to one distance between a simulated log and a
+future log, the audit separates event-order semantics, control-flow language,
+state-conditioned stochastic behaviour, temporal transfer, physical
+resource--space semantics, and scenario response. A model can pass an earlier
+layer and fail a later one: near-perfect replay fitness, for example, does not
+show that travel, queues, or an intervention mechanism are represented. This
+separation turns residual errors and null scenario responses into diagnostic
+results and defines the strongest claim that the current model can support.
+
 The empirical study is based on operational CTB truck-event data and combines
 process analysis, simulation-model generation, temporal hold-out validation,
 multi-seed simulation, and controlled scenario experiments. The corresponding
@@ -156,11 +166,13 @@ temporal train/test split and describes the control-flow discovery procedure,
 including the preservation of XES event order, the complementary
 directly-follows and Petri-net views, and the structural domain check applied
 to the final Inductive-Miner model.
-The chapter then defines the ProSiT parameter-discovery configurations with
+The chapter then defines three ProSiT parameter-discovery configurations with
 different levels of contextual expressiveness and documents the executable
 parameter bundles used in the experiments. In addition, it specifies the
 Monte-Carlo replication protocol, the distributional fidelity measures, the
-two what-if interventions, and the transition-duration sensitivity analysis.
+paired ablation and temporal-transfer audits, a precision-oriented structural
+repair used as a robustness test, the two what-if interventions, and the
+transition-duration sensitivity analysis.
 The final section documents the technical adaptations required to apply
 ProSiT to the CTB event log reproducibly.
 
@@ -168,8 +180,8 @@ Chapter~\ref{chap:results} presents the empirical findings following the logic
 of the four research questions. It first examines the temporal train/test
 split and the stability of the observed control-flow language in the held-out
 period. It then evaluates the historical fidelity of the final simulation
-baseline and compares the retained ProSiT configurations to assess the effect
-of additional contextual expressiveness. Further diagnostic analyses examine
+baseline and compares the three ProSiT configurations to separate the effects
+of process-state rules and workload information. Further diagnostic analyses examine
 the predictive signal contained in the available context attributes, the
 strong temporal structure of truck arrivals, the discovered resource
 capacities, and the interpretation of model-derived pre-service delays. The
