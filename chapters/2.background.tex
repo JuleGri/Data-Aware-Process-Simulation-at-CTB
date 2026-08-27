@@ -513,6 +513,43 @@ fine-grained inter-activity timing, drift, and structured stakeholder
 evaluation as remaining limitations \cite{Hospital2026Vinci}. These are close
 to the validity boundaries investigated in CTB.
 
+\subsection{Adjacent Automatic Simulation Model Generation Research}
+
+Process-Mining-based simulation discovery is one route to reducing manual
+model construction, but it is not the only one. The adjacent Automatic
+Simulation Model Generation (ASMG) literature studies how simulation structure
+and parameters can be derived from manufacturing data, engineering models,
+sensor records, or system descriptions. Earlier and recent reviews treat ASMG
+as a distinct research field motivated by the effort, error risk, and rapid
+obsolescence of manually maintained material-flow simulations
+\cite{Reinhardt2019ASMG,Cimino2025ASMGReview}. This literature is important for
+the CTB study because it addresses the same practical objective from a
+physical-system perspective, whereas business-process simulation discovery
+often begins with a case-centric event log.
+
+Lugaresi and Matta demonstrate that event data can support automatic discovery
+of both manufacturing-system structure and parameters, but also show that the
+most detailed data-derived model is not necessarily the most appropriate
+simulation abstraction. Their tuning step selects a level of detail suited to
+the intended performance question \cite{LugaresiMatta2021}. Their later work
+uses object-centric Process Mining to reconstruct systems with converging
+material flows, for which a single case identifier loses relevant interaction
+structure \cite{LugaresiMatta2023}. These results reinforce a central
+distinction in this thesis: automation of discovery does not establish the
+physical semantics or purpose-validity of the resulting abstraction.
+
+Three related streams must therefore be distinguished. Business-process
+simulation discovery estimates executable process behaviour from event logs;
+ASMG reconstructs physical production or material-flow systems from a wider
+range of digital sources; and Process Mining in production and logistics uses
+event data to analyse and design processes, sometimes as an input to a
+separately constructed simulator
+\cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. The CTB
+study lies at their intersection: it evaluates an automatically discovered,
+data-aware executable process simulator in a physical logistics system and
+tests where event-log automation ceases to supply the state required for
+credible operational intervention.
+
 
 \subsection{Discovery of Simulation Behavior}
 

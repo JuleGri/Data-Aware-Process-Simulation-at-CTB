@@ -270,13 +270,13 @@ length. It isolates process- and case-state rules from workload information.
 \textbf{Metric} & \textbf{no-rules} & \textbf{rules} &
 \textbf{rules$+$workload} \\
 \midrule
-Turnaround EMD (min) & 7.996 & \textbf{7.803} & 8.131 \\
-Simulated mean (min) & 31.747 & \textbf{32.093} & 31.617 \\
-Simulated P90 (min)  & \textbf{54.400} & 54.000 & 53.600 \\
+Turnaround EMD (min) & 7.943 & \textbf{7.828} & 8.131 \\
+Simulated mean (min) & 31.800 & \textbf{32.118} & 31.617 \\
+Simulated P90 (min)  & 54.500 & \textbf{54.400} & 53.600 \\
 Inter-arrival EMD (min) & 0.0765 & \textbf{0.0724} & \textbf{0.0724} \\
-Yard-service EMD, weighted (min) & 2.360 & \textbf{2.354} & \textbf{2.354} \\
-Yard-activity-rate L1 error & 0.1753 & \textbf{0.1627} & 0.2264 \\
-Gate-only cases per 17,892 visits & 11.9 & \textbf{0.0} & \textbf{0.0} \\
+Yard-service EMD, weighted (min) & \textbf{2.351} & 2.356 & 2.354 \\
+Yard-activity-rate L1 error & 0.1753 & \textbf{0.1650} & 0.2264 \\
+Gate-only cases per 17,892 visits & 10.5 & \textbf{0.0} & \textbf{0.0} \\
 \bottomrule
 \end{tabular}
 \caption{Held-out comparison by calibrated ProSiT configuration
@@ -286,27 +286,27 @@ Gate-only cases per 17,892 visits & 11.9 & \textbf{0.0} & \textbf{0.0} \\
 
 The paired contrasts resolve effects that the endpoint comparison concealed.
 Moving from \textit{no-rules} to workload-blind \textit{rules} lowers
-turnaround EMD by 0.193 minutes (95\,\% paired CI
-$[-0.358,-0.028]$) and the yard-activity-rate L1 error by 0.0126
-($[-0.0186,-0.0065]$). It also moves mean turnaround 0.346 minutes upward
-($[0.175,0.518]$), towards the real mean. Weighted service-time EMD changes by
-only $-0.006$ minutes ($[-0.076,0.065]$), so no service-duration improvement is
-resolved. P90 falls by 0.4 minutes, however, which moves the already too-short
-tail farther from the real P90 of 71 minutes.
+turnaround EMD by 0.115 minutes, but its 95\,\% paired interval
+$[-0.266,0.037]$ includes zero. The resolved improvement is instead in
+activity incidence: yard-activity-rate L1 error falls by 0.0103
+($[-0.0197,-0.0009]$). Mean turnaround moves 0.318 minutes upward
+($[0.177,0.460]$), towards the real mean. Weighted service-time EMD changes by
+only $+0.005$ minutes ($[-0.071,0.082]$), and P90 by $-0.1$ minutes
+($[-0.726,0.526]$); neither difference is resolved.
 
 The next increment, from \textit{rules} to
 \textit{rules$+$workload}, does not improve weighted service-time EMD:
 the paired change is effectively zero, with a 95\,\% interval of
-$[-0.062,0.062]$ minutes. Instead, turnaround EMD rises by 0.328 minutes
-($[0.237,0.418]$), mean turnaround falls by 0.476 minutes
-($[-0.564,-0.388]$), and activity-rate L1 error rises by 0.0637
-($[0.0588,0.0686]$). Thus the available workload state degrades three held-out
+$[-0.058,0.053]$ minutes. Instead, turnaround EMD rises by 0.303 minutes
+($[0.181,0.424]$), mean turnaround falls by 0.501 minutes
+($[-0.664,-0.338]$), and activity-rate L1 error rises by 0.0614
+($[0.0568,0.0659]$). Thus the available workload state degrades three held-out
 dimensions while providing no resolved service-time gain.
 
 The gate-only diagnostic adds a different interpretation. The unchanged net
 formally permits the silent yard bypass. Independent optional routing in
-\textit{no-rules} samples it in 11.9 of 17,892 visits on average
-(0.067\,\%), while both rule-based configurations sample none across 178,920
+\textit{no-rules} samples it in 10.5 of 17,892 visits on average
+(0.059\,\%), while both rule-based configurations sample none across 178,920
 visits each. This is not a parallelism or case-order violation, and the net is not
 physically constrained to suppress it. Instead, it is reported as a small
 instance of discovered-language overgeneralisation whose realised frequency
@@ -329,8 +329,9 @@ and their limits.
 
 \noindent\textbf{RQ3 answer.} Context is beneficial only when the selected
 state abstraction carries stable information for the modelled decision.
-Process- and case-state rules improve turnaround EMD and activity incidence and
-suppress the rarely sampled silent bypass. Adding the available workload state
+Process- and case-state rules improve activity incidence and suppress the
+rarely sampled silent bypass; their small turnaround-EMD improvement is not
+resolved by the paired interval. Adding the available workload state
 afterward produces no resolved yard-service improvement and worsens activity
 incidence and complete-visit timing. More state is therefore not automatically
 more valid state.
@@ -923,18 +924,19 @@ The experiment cannot identify their separate causal contributions.
 
 The workload-blind \textit{rules} bundle provides an additional structural-
 uncertainty check. With the same cap, seeds, and interventions, T22 removal
-changes mean turnaround by $+0.099\;[-0.007,+0.204]$ minutes and the demand
-intervention by $+0.041\;[-0.162,+0.244]$ minutes. Both remain unresolved.
+changes mean turnaround by $+0.025\;[-0.083,+0.134]$ minutes and the demand
+intervention by $-0.028\;[-0.185,+0.129]$ minutes. Both remain unresolved.
 T22 removal does increase mean RMG pre-service delay by
-$+0.087\;[+0.013,+0.160]$ minutes in this configuration, particularly receive
-pre-service at $+0.115\;[+0.043,+0.186]$ minutes. Conversely, its 20\,\% demand
-run has no resolved mean RMG service or pre-service response.
+$+0.118\;[+0.038,+0.199]$ minutes in this configuration. Delivery pre-service
+increases by $+0.146\;[+0.016,+0.276]$ minutes, whereas the receive pre-service
+interval includes zero. Conversely, its 20\,\% demand run has no resolved mean
+RMG service or pre-service response.
 
 The matched difference-in-differences is more important than whether one
 configuration happens to cross a 95\,\% threshold. For mean turnaround, the
 \textit{rules$+$workload} response minus the workload-blind response is
-$-0.007\;[-0.132,+0.118]$ minutes for T22 removal and
-$+0.089\;[-0.118,+0.297]$ minutes for higher demand. None of the corresponding
+$+0.067\;[-0.087,+0.220]$ minutes for T22 removal and
+$+0.159\;[-0.060,+0.377]$ minutes for higher demand. None of the corresponding
 headline turnaround, RMG service, receive/delivery service, or RMG pre-service
 contrasts excludes zero. Thus the unresolved end-to-end response is robust to
 this state-abstraction choice, while the small component-level effects are not

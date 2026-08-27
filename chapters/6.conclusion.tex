@@ -82,12 +82,12 @@ without pretending that the repaired net remains a purely automatic discovery.
 \textbf{RQ3} asked how increasing the contextual expressiveness of the
 simulation model affects held-out fidelity. The three-level ablation separates
 process- and case-state rules from workload information. Relative to
-\textit{no-rules}, strict workload-blind \textit{rules} reduce turnaround EMD
-by 0.193 minutes and activity-rate L1 error by 0.0126 in paired ten-seed
-comparisons; their 95\,\% intervals exclude zero. They also suppress the rarely
-sampled silent gate-only bypass. Adding workload information afterward yields
+\textit{no-rules}, strict workload-blind \textit{rules} reduce activity-rate
+L1 error by 0.0103 in paired ten-seed comparisons and suppress the rarely
+sampled silent gate-only bypass. Their 0.115-minute turnaround-EMD improvement
+is not statistically resolved. Adding workload information afterward yields
 no resolved weighted service-time improvement, increases turnaround EMD by
-0.328 minutes, and increases activity-rate L1 error by 0.0637. The model's
+0.303 minutes, and increases activity-rate L1 error by 0.0614. The model's
 short tail also becomes slightly shorter at each step. The best state
 abstraction is therefore process- and metric-specific: more data awareness is
 not automatically more valid state. In CTB, the available workload proxies do
@@ -136,6 +136,17 @@ the interpretation, but it is not a causal proof: the analyses show which
 explanation is consistent with the evidence and which stronger claims the
 evidence cannot support.
 
+This boundary is not unique to the CTB implementation. Recent work on
+Process-Mining-supported simulation in production and logistics reports that
+event logs with operation start and end times can supply processing-time
+parameters, whereas transport, waiting, inventory, machine state, and
+interacting material objects commonly require additional operational data and
+semantic integration \cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}.
+The CTB results turn that general requirement into measured evidence: the
+transition-time scale check, component bottleneck ranking, capacity-pressure
+audit, and state ablation show which missing mechanisms materially constrain
+the present model's interpretation.
+
 In relation to recent data-aware Process Mining, the main advance demonstrated
 here is therefore not an automatic increase in prediction accuracy. It is the
 ability to represent, inspect, and intervene on conditional relationships while
@@ -166,6 +177,17 @@ structural and diagnostic evidence, but it is less than a decision-valid
 digital twin because its counterfactual mechanisms are incomplete. The negative
 ablation and stress-test results identify exactly which layer fails and where a
 model extension must be evaluated.
+
+This contribution is timely because a recent systematic review identifies no
+shared validation procedure for Process-Mining-based simulation, reports that
+36 of 105 reviewed studies provide no validation, and calls for assessments
+that connect process-model quality, stakeholder expectations, historical
+outcomes, and established simulation-validation principles
+\cite{Sulis2026SimulationReview}. The thesis does not claim to establish a
+universal framework from one terminal. It contributes a reproducible,
+falsification-oriented implementation of such an assessment and demonstrates
+why reporting only replay fitness or one aggregate KPI would have produced an
+academically weaker and operationally misleading conclusion.
 
 The contribution of this thesis is therefore not a demonstration that the
 discovered model is already sufficient for unrestricted operational decision

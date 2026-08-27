@@ -51,6 +51,27 @@ can reproduce these conditions and support decisions. This thesis studies its
 fidelity, structural applicability, and limitations using event logs from real
 container terminal truck operations.
 
+This problem is also visible in the wider research landscape. A recent review
+of 105 studies at the intersection of Process Mining and simulation finds that
+validation remains heterogeneous, that queue and resource modelling often
+requires information outside conventional event logs, and that fully automated
+model generation remains uncommon \cite{Sulis2026SimulationReview}. Work in
+production and logistics similarly stresses that processing timestamps alone
+do not reliably expose transport, waiting, inventory, and physical resource
+interactions; simulation-ready reconstruction may require harmonised data from
+several operational levels and an object-oriented view
+\cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. The CTB
+case therefore provides a demanding empirical test of both the promise and the
+support boundary of automatic simulation discovery.
+Adjacent ASMG research has already shown that physical-system structure and
+parameters can be reconstructed from manufacturing data, while emphasising
+purpose-dependent abstraction and multi-object material flows
+\cite{Reinhardt2019ASMG,Cimino2025ASMGReview,LugaresiMatta2021,LugaresiMatta2023}.
+The unresolved intersection is not automation, ports, or simulation in
+isolation, but a temporally validated, data-aware executable model discovered
+from real terminal event data and subjected to explicit physical and what-if
+validity checks.
+
 \section{Problem Statement}
 Container terminal operators make decisions about capacity, truck handling,
 yard use, policies, and infrastructure changes. Experiments in a real terminal
@@ -120,6 +141,10 @@ layer and fail a later one: near-perfect replay fitness, for example, does not
 show that travel, queues, or an intervention mechanism are represented. This
 separation turns residual errors and null scenario responses into diagnostic
 results and defines the strongest claim that the current model can support.
+This operationalises, for one physical-logistics application, the recent call
+for validation procedures that jointly consider process-model quality,
+historical outcomes, and stakeholder-relevant semantics rather than relying on
+an isolated fit measure \cite{Sulis2026SimulationReview}.
 
 The empirical study is based on operational CTB truck-event data and combines
 process analysis, simulation-model generation, temporal hold-out validation,
