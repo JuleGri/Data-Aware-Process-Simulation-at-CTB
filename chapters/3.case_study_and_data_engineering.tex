@@ -367,6 +367,19 @@ other yard areas (VC or LL) that involve exactly one RMG block are
 retained. The filtering logic is implemented in
 \texttt{filter\_one\_rmg\_only.py}.
 
+This case-centric design does not discard the container characteristics that
+are available for a retained truck visit; they remain available as contextual
+predictors. It does, however, collapse the independent lifecycles and relations
+of trucks, containers, yard blocks, and equipment into one visit-oriented
+record. An object-centric event log could preserve these entities and associate
+a handling event with all participating objects
+\cite{VanDerAalst2023OCPM}. It could also retain multi-block visits without
+forcing one block-level value onto the complete case. Such a representation
+would require a different source-data mapping and an object-centric simulation
+engine \cite{Knopp2023ObjectCentricSimulation}; it is therefore outside the
+scope of the ProSiT-based experiment rather than an untested variant of the
+same input configuration.
+
 \paragraph{Activity Construction}
 \label{sec:activity_construction}
 

@@ -216,7 +216,7 @@ loop can support prescriptive decisions.
 \section{Future Work}
 
 Future research should retain the reproducible discovery-and-validation
-framework while extending and testing the process representation in six
+framework while extending and testing the process representation in seven
 directions:
 
 \begin{itemize}
@@ -239,6 +239,17 @@ directions:
     The discovered process model can then be coupled with a discrete-event or
     agent-based physical layer for constraints that resource labels alone do
     not encode.
+    \item \textbf{Evaluate an object-centric event and simulation design:}
+    Reconstruct truck visits, trucks, containers, yard blocks, equipment, and
+    appointments as related objects and associate each handling event with all
+    participating objects. This could preserve container identity across
+    operations, retain multi-block visits, and support location-specific
+    assignment \cite{VanDerAalst2023OCPM,Knopp2023ObjectCentricSimulation}.
+    It would not create missing physical observations: positions, movements,
+    queues, and changing relations must still be logged and incorporated into
+    executable multi-object semantics. Recent object-centric discovery work
+    also shows that cross-object causality and model interpretability remain
+    active research problems \cite{FigueiredoJalali2025OCCN}.
     \item \textbf{Adapt to temporal change:} Evaluate rolling-window or
     recency-weighted discovery prospectively and repeat the three-level state
     ablation in each period. This would show whether workload state becomes

@@ -538,6 +538,42 @@ structure \cite{LugaresiMatta2023}. These results reinforce a central
 distinction in this thesis: automation of discovery does not establish the
 physical semantics or purpose-validity of the resulting abstraction.
 
+Object-centric Process Mining (OCPM) provides a related but distinct response
+to the limitations of case-centric event data. Instead of assigning every event
+to one selected case, object-centric event data allow an event to refer to
+multiple related objects and preserve their separate identities, attributes,
+and relations
+\cite{VanDerAalst2023OCPM}. In a container-terminal setting, a handling event
+could therefore link a truck visit, truck, container, yard block, and handling
+resource rather than reducing all of them to attributes of the truck-visit
+case. This representation can avoid convergence and divergence distortions and
+retain the lifecycles through which the same container or resource participates
+in multiple operations.
+
+Initial work has extended this perspective from analysis towards executable
+simulation by discovering object-centric process-simulation models
+\cite{Knopp2023ObjectCentricSimulation}. At the same time, current discovery
+research continues to address the interpretability of object-centric models.
+For example, Object-Centric Causal Nets aggregate redundant edges across object
+types to reduce visual complexity \cite{FigueiredoJalali2025OCCN}. The latter
+approach is a process-discovery and visualisation method rather than a
+simulation formalism, and its current implementation does not explicitly
+discover causal bindings that span different object types. Object-centric
+simulation must additionally define executable multi-object synchronisation,
+changing relations, resource participation, object creation, and timing.
+
+OCPM consequently identifies a promising alternative event-data and modelling
+architecture, but it does not infer physical information that was never
+recorded. Container positions, equipment movement, queues, route occupancy,
+and changing block assignments would still require stable object identifiers,
+timestamped state observations, and suitable execution semantics. Moreover,
+the CTB data pipeline and ProSiT interface used in this thesis are organised
+around a conventional truck-visit case and case-level contextual attributes.
+The empirical scope is therefore deliberately confined to evaluating the
+fidelity and operational limits of case-centric, data-aware simulation
+discovery. Reconstructing an OCEL and evaluating an object-centric simulation
+would constitute a different model and data-engineering study.
+
 Three related streams must therefore be distinguished. Business-process
 simulation discovery estimates executable process behaviour from event logs;
 ASMG reconstructs physical production or material-flow systems from a wider
