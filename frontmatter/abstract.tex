@@ -16,7 +16,7 @@ net used as the common executable control flow.
 
 The net fits 99.994\,\% of 17,892 held-out visits. A separate repair removes a
 silent gate-only bypass, raising precision from 0.7558 to 0.7939 while lowering
-generalisation from 0.9413 to 0.8859. The final scenario baseline reproduces
+generalisation from 0.9413 to 0.8859. The data-aware scenario reference model reproduces
 arrival spacing closely and parts of yard service timing, but mean turnaround
 is 8.17 minutes too short and P90 is 17.31 minutes too short. The 8.17-minute
 test-period gap decomposes into a 2.45-minute increase in the observed mean
@@ -26,11 +26,15 @@ improve activity incidence and suppress a rarely sampled invalid bypass, while
 their small turnaround-distance improvement is unresolved. Adding workload
 state yields no resolved service-time gain and worsens both activity incidence
 and turnaround distance. The automatically discovered RMG concurrency values
-required a documented domain correction to the physical maximum of three cranes
-per block. Two reproducible what-if experiments produce no resolved
-mean-turnaround response. The 20\,\% demand increase leaves the most-loaded
-held-out RMG block at 0.506 nominal mean utilisation, while the model also
-lacks the spatial mechanisms needed for physical counterfactual claims.
+required a documented correction to the terminal-expert-validated maximum of
+three cranes per block. Two reproducible policy experiments produce no
+resolved mean-turnaround response, and the 20\,\% demand increase leaves the
+most-loaded held-out RMG block at 0.506 nominal mean utilisation. A six-level
+demand ladder resolves the resulting ambiguity: at a realised elapsed-rate
+ratio of 2.367, mean turnaround rises by 4.644 minutes and mean RMG pre-service
+by 5.878 minutes. The model therefore propagates abstract capacity pressure
+near the nominal saturation region, but it lacks the validated spatial
+mechanisms needed for physical counterfactual claims.
 
 The thesis contributes a layered validity audit separating event semantics,
 control-flow language, historical fidelity, temporal transfer, physical

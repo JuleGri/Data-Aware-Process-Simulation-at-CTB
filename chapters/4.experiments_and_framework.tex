@@ -22,8 +22,9 @@ distribution-based (no-rules), data-aware with decision trees
 multi-seed Monte-Carlo replication protocol that produces the
 confidence intervals used throughout Chapter~\ref{chap:results}.
 Section~\ref{sec:evaluation_metrics} defines the evaluation metrics.
-Section~\ref{sec:what_if_design} defines the two operational what-if
-scenarios. Section~\ref{sec:results_percentile_sens_design} defines the
+Section~\ref{sec:what_if_design} defines the two operational what-if scenarios
+and the diagnostic demand-saturation ladder.
+Section~\ref{sec:results_percentile_sens_design} defines the
 transition-baseline sensitivity study.
 Section~\ref{sec:prosit_workarounds} documents the ProSiT workarounds required
 for the CTB event log.
@@ -106,7 +107,7 @@ Figure~\ref{fig:research_design} gives an overview of the complete pipeline.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/schemas/experimental_pipeline_bw.png}
+\includegraphics[width=\textwidth,trim=0 0 0 105,clip]{figures/schemas/experimental_pipeline_bw.png}
 \caption{Solution architecture of the experimental pipeline.}
 \label{fig:research_design}
 \end{figure}
@@ -117,7 +118,8 @@ training partition and an unseen test partition. Only the training data are
 used to discover the control flow and the ProSiT simulation parameters. The
 training log is loaded in its explicit XES event order and an Inductive-Miner
 model is discovered. A hard structural check rejects any model containing a
-parallel operator because the activities of one truck must be sequential. The
+parallel operator because terminal experts confirmed that the activities of
+one truck must be sequential. The
 accepted Petri net becomes the common control-flow skeleton for all simulation
 configurations.
 
@@ -231,7 +233,9 @@ it; two activities of the same truck may not execute in parallel. Different
 trucks may still be processed concurrently through the simulator's resource
 capacities. The order among yard activities is not constrained because it
 depends on the handling requirements of the visit and repetitions are
-operationally possible.
+operationally possible. The no-parallelism constraint was confirmed by
+operational experts from the terminal and fixed before inspecting the
+discovered model.
 
 An initial diagnostic conversion through a PM4Py DataFrame formatter sorted
 events by timestamps. Because CTB start and completion timestamps can overlap
@@ -247,32 +251,37 @@ timestamps.
 
 \subsection{Discovered Process Flow}
 
-Figure~\ref{fig:ctb_dfg_frequency} shows a Disco-style frequency view of the
-order-preserving training log. It is a directly-follows graph generated in
-PM4Py, rather than a literal export from Fluxicon Disco. Each node reports an
-activity's occurrence count and each arc reports how often its target directly
-followed its source. Thick arcs make the dominant entrance, handling, and exit
-connections visible, whereas thin arcs expose rare combinations and repeated
-yard work.
+Figure~\ref{fig:ctb_dfg_frequency} shows a Disco-style dominant-frequency view
+of the order-preserving training log. It is a directly-follows graph generated
+from the PM4Py result rather than a literal export from Fluxicon Disco. Each
+node reports an activity's occurrence count and each arc reports how often its
+target directly followed its source. To keep the process readable on the page,
+the figure retains transitions observed in at least 1\,\% of training cases
+($n\geq716$). The unfiltered 59-arc graph is retained in the project artifacts
+for audit but is too dense to support visual interpretation.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{figures/discovery/dfg_frequency_inductive_training.png}
-\caption{Frequency directly-follows graph of the order-preserving CTB training
-log (71,568 cases). Node labels show activity occurrences; arc labels show
-directly-follows counts and line weight indicates relative frequency.}
+\includegraphics[width=0.86\textwidth,height=0.66\textheight,keepaspectratio]{figures/discovery/dfg_frequency_dominant_training.png}
+\caption{Dominant-frequency directly-follows graph of the order-preserving CTB
+training log (71,568 cases). Node labels show activity occurrences; arc labels
+show directly-follows counts and line weight indicates relative frequency.
+Arcs observed in fewer than 1\,\% of cases are omitted for legibility.}
 \label{fig:ctb_dfg_frequency}
 \end{figure}
 
-The frequency view confirms a stable outer process boundary: every training case enters
-through \texttt{Gate In} and ends at \texttt{Gate Out}. Inside that boundary,
-the many directed connections do not indicate simultaneous execution. They
-show that the next sequential yard activity varies between visits and that
-activities can repeat. \texttt{RMG\_receive}, \texttt{RMG\_delivery}, and
-\texttt{LL\_delivery} dominate the handling volume, while mixed and selected
-HO2/LL paths are comparatively rare. The DFG is therefore useful descriptive
-evidence, but it is not used directly for simulation because it has no marking
-or firing semantics and cannot itself distinguish choice from concurrency.
+The frequency view confirms a stable outer process boundary: every training
+case enters through \texttt{Gate In} and ends at \texttt{Gate Out}. Most visits
+contain one yard activity; the prominent connection from
+\texttt{LL\_delivery} to \texttt{RMG\_receive} shows the principal
+multi-operation sequence.
+\texttt{RMG\_receive}, \texttt{RMG\_delivery}, and \texttt{LL\_delivery}
+dominate the handling volume. These directed connections describe succession,
+not simultaneous execution: terminal experts confirmed that one truck does
+not perform two activities in parallel. The DFG is therefore useful
+descriptive evidence, but it is not used directly for simulation because it
+has no marking or firing semantics and cannot itself distinguish choice from
+concurrency.
 
 The Inductive Miner expresses the same process as a sequential tree. Every case
 starts with \texttt{Gate In}. It may then execute \texttt{LL\_mixed}, after
@@ -504,12 +513,12 @@ the serialized object that generated the reported simulations is
 the source of truth. Two provenance layers are distinguished. The frozen,
 training-only calibrated \textit{no-rules}, \textit{rules}, and
 \textit{rules$+$workload} \texttt{prosit\_params.pkl} files are authoritative
-for the RQ3 ablation. The latter is also the freely discovered source for the final CTB
-baseline, which is a deep-copied effective
+for the RQ3 ablation. The latter is also the freely discovered source for the
+data-aware scenario reference model, which is a deep-copied effective
 bundle in which the RMG concurrency values are capped at the domain maximum
 of three; it is stored as
 \texttt{params\_baseline\_rmg\_max\_concurrency\_3.pkl} in the final
-scenario result directory and is authoritative for the final validation
+scenario result directory and is authoritative for its reported validation
 and scenario results. The discovered overlap capacities remain
 auditable without being mistaken for physically feasible capacities. All
 executable bundles contain the Petri net and markings, routing and
@@ -770,8 +779,8 @@ The freely discovered serialized source assigns maximum concurrency four
 to ten RMG block identifiers and five to twelve, for an aggregate effective
 upper bound of 100. ProSiT obtains these numbers from overlapping timestamps;
 they are empirical concurrency proxies rather than equipment counts. They
-exceed the hard physical upper bound of three cranes and the three lanes in
-which trucks can wait after announcing readiness at a block. The final
+exceed the hard physical upper bound of three RMGs per block, which was
+confirmed by operational experts from the terminal. The final
 effective baseline replaces every RMG value $c_r$
 with $\min(c_r,3)$. The aggregate upper bound becomes $22\times3=66$. This
 does not assert that three cranes normally serve landside trucks: in regular
@@ -782,6 +791,11 @@ estimated landside staffing level. No resource
 mapping, calendar, selection rule, timing model, arrival model or
 control-flow parameter is changed. The T22 and demand interventions are
 then independently re-derived from this capped baseline.
+
+The expert confirmation applies to the ceiling, not to the learned HO2 and LL
+concurrency values, the assumption that all 168 weekly resource-calendar slots
+are open, or the simulator's assignment and queue semantics. Those quantities
+remain empirical or technical abstractions and are evaluated as such.
 
 This is a transparent domain constraint rather than a data-driven
 recalibration: the freely discovered source remains frozen as discovery
@@ -818,6 +832,34 @@ can create or hide short overlaps and because block identifiers are not crane
 trajectories. The reproducible implementation is
 \texttt{validation/18\_rmg\_capacity\_pressure\_audit.py}.
 
+\paragraph{Demand-Saturation Ladder}
+
+Because the offered-load diagnostic places nominal mean saturation near a
+realised elapsed arrival-rate ratio of 2.37, a separate stress test evaluates
+$m\in\{1.0,1.2,1.5,2.0,2.4,3.0\}$. Each level is derived from the same frozen
+\textit{rules$+$workload} cap-three bundle by replacing every empirical
+working-time inter-arrival sample $x_i$ with $x_i/m$. The process net, case
+volume, seed, resource mappings, capacities, calendars, duration models, and
+case-attribute generation remain fixed. Ten matched seeds therefore produce
+60 runs of 17,892 cases. Structural case contracts are enforced at every
+level; duration tails above 24 hours are reported rather than rejected because
+they may be a substantive outcome under deliberate overload.
+
+The configured value $m$ scales working-time inter-arrivals. It is not assumed
+to equal the arrival-rate multiplier measured over elapsed calendar time,
+because gate closures remain fixed and the simulated horizon shortens as
+demand rises. Both quantities are therefore reported. The capacity comparison
+and response-curve x-axis use the realised elapsed-rate ratio relative to the
+matched baseline; this places the response on the same scale as the independent
+2.37 offered-load estimate.
+
+This ladder is a diagnostic response-surface experiment, not a forecast that
+CTB would admit two or three times its observed truck volume. It distinguishes
+an intervention that is simply too modest to reach the model's capacity region
+from a simulator that fails to propagate demand pressure even when the
+nominal offered-load threshold is crossed. The executable implementation
+is \texttt{saturation\_experiment.py} in the reviewer handover package.
+
 \paragraph{Reporting}
 
 The unified driver \texttt{validation/09\_multi\_seed\_scenarios.py}
@@ -839,6 +881,8 @@ identical source hashes and settings before computing the paired direct
 effects and interactions. These uncapped results are diagnostic only and
 are excluded from the authoritative final result table; the 30 cap-three
 scenario logs form the final scenario evidence.
+The 60 demand-saturation replications are stored separately and interpreted as
+a diagnostic stress test rather than a third operational policy scenario.
 
 To test whether scenario response depends on the selected state abstraction,
 the same cap-three baseline and interventions are also executed with the

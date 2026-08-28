@@ -1,14 +1,20 @@
 # CTB ProSiT reproduction
 
-This folder contains the three final simulation models used in the thesis:
+This folder contains the three saved simulation models used in the thesis:
 
 - the calibrated baseline;
 - the T22-closure scenario; and
 - the 20% demand-increase scenario.
 
+The demand-saturation diagnostic does not need another model file. Its six
+arrival-intensity levels are derived in memory from the saved baseline so that
+the Petri net, rules, resources, and capacities remain fixed.
+
 Open either `CTB_ProSiT_Colab.ipynb` or `CTB_ProSiT_Local.ipynb` and select
-**Run All**. The full run simulates 17,892 cases for each model with the ten
-matched seeds 42--51. It takes approximately 30 minutes.
+**Run All**. The first run simulates 17,892 cases for each saved model with the
+ten matched seeds 42--51. The second run uses the same case count and seeds at
+six demand levels. Allow approximately 45--75 minutes, depending on the
+computer or Colab runtime.
 
 ## What is loaded
 
@@ -26,16 +32,29 @@ load the PKL files supplied in this folder.
 2. loads the PNML and all three JSON exports;
 3. loads the exact PKL models;
 4. checks the two intervention definitions;
-5. runs 10 matched seeds for all three models;
-6. calculates the five reported result tables; and
-7. compares every fresh table with `expected_results/`.
+5. runs 10 matched seeds for all three saved models;
+6. reproduces the paired policy-scenario tables;
+7. derives and runs the six-level demand-saturation diagnostic; and
+8. compares every fresh table with `expected_results/`.
 
-Successful completion ends with five `values_match = True` rows and a maximum
-absolute numerical difference of `0.0`. New files are written only to
-`outputs/full/` (or `outputs/smoke/` when the short test is selected).
+Successful completion ends with two comparison tables whose
+`values_match` entries are all `True` and whose maximum absolute numerical
+difference is `0.0`. New files are written only to `outputs/full/` and
+`outputs/saturation_full/` (or the corresponding smoke folders when the short
+test is selected).
 
 ## Scope
 
 The notebook reproduces the final simulations from frozen models. It does not
 repeat discovery or event-level validation because the confidential CTB event
 log is not distributed.
+
+## Expected comparison
+
+The T22 and 20% demand policy runs do not resolve an overall mean-turnaround
+change. The demand ladder explains the latter result. A realised elapsed-rate
+ratio of 1.159 remains unresolved; at 1.378 the first small response appears,
+and at 2.367 mean turnaround rises by 4.644 minutes while mean RMG pre-service
+rises by 5.878 minutes. The high-load service-time change remains unresolved,
+so the response is carried by model-derived pre-service delay. This is a
+result about the saved simulation model, not a physical forecast for CTB.

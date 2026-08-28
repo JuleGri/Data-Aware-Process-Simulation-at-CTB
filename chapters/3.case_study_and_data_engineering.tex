@@ -28,8 +28,10 @@ Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs 
 
     The CTB environment in this project has several resource constraints.
     Located between the waterside and the landside, 22 RMG storage
-    blocks (T06--T27) serve both sides. Operationally, at most three
-    automated gantry cranes can work in parallel at one block. The CTB
+    blocks (T06--T27) serve both sides. Operational experts from the terminal
+    confirmed two constraints used in this study: the activities of one truck
+    cannot be executed in parallel, and at most three automated rail-mounted
+    gantry cranes can work concurrently at one block. The CTB
     has two specialised areas: an empty-container depot (called
     ``MT'' or ``LL'', from the German \textit{Leerlager}) and the
     manually operated HO2 yard area. The terminal gate consists of 16
@@ -72,6 +74,9 @@ reefer indicators, dwell time and inbound/outbound carriers. \\
     The raw extract covers approximately 104,000 truck visits, 113,466
     container move events and 336 yard-state snapshots
     ($8$ weeks $\times 7$ days $\times 6$ snapshots per day).
+    The move-event count refers to the raw report-system extract; it is not the
+    denominator used later for the cleaned and cross-system-matched schedule
+    records.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Event Log Engineering}
@@ -91,7 +96,7 @@ event log.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/schemas/event_log_engineering_pipeline_bw.png}
+\includegraphics[width=\textwidth,trim=0 0 0 105,clip]{figures/schemas/event_log_engineering_pipeline_bw.png}
 \caption{Event-log engineering pipeline. The ITS schedule, report-system
 records, yard snapshots and container master data are cleaned and integrated.
 Truck visits are then represented as cases with lifecycle events and
@@ -315,21 +320,22 @@ cases and 22 twelve-hour outliers.
 
 \paragraph{Process Completeness Filters}
 
-\paragraph{Container identification coverage.} Overall, 111,646 of
-113,136 operational records could be assigned a valid
-\texttt{TruckVisitGkey} (98.68\%), and 110,866 records could be assigned
-a valid container identifier (97.99\%). Despite the fallback procedure,
-2,270 records belonging to 2,034 truck visits remained without a valid
+\paragraph{Container identification coverage.} After schedule cleaning and
+the one-to-many cross-system match, 111,648 of 113,136 operational records
+could be assigned a valid \texttt{TruckVisitGkey} (98.68\%), and 110,868
+records could be assigned a valid container identifier (97.99\%). Despite the
+fallback procedure, 2,268 records belonging to 2,032 truck visits remained without a valid
 container assignment. Since container-related attributes are needed for
 the later context enrichment and simulation-discovery stages, these
 process instances are removed entirely (a complete-case filter). This
-removes 2,034 truck visits and 3,397 associated records, leaving 91,335
-complete truck visits and 109,739 operational records.
+removes 2,032 truck visits and 3,394 associated records, leaving 91,337
+complete truck visits and 109,742 operational records.
 
 \paragraph{Unknown activity types.} During activity construction, cases
 containing activities classified as \texttt{unknown} are removed. Such
 events cannot be mapped to operational process steps with enough confidence.
 They would introduce ambiguity into process discovery and simulation discovery.
+This complete-case filter removes 184 visits and 604 events.
 
 \paragraph{Process scope restriction.} The event log is restricted to
 truck visits containing exactly one interaction with an automated RMG
@@ -340,12 +346,30 @@ workload, utilisation and demand measures can be assigned one value per case.
 It forms the basis for the
 block-focused what-if experiments in
 Section~\ref{sec:what_if_design}.
+After the unknown-activity filter, this scope decision removes 1,693
+multi-RMG visits and 6,820 events.
 
-\paragraph{Event-level cleanup.} Immediately before exporting the event
-log, remaining events with an \texttt{\_unknown} suffix are removed.
-Unlike the previous filters, this is an event-level cleanup rather than
-a case-level exclusion; its purpose is to remove residual events
-that cannot be interpreted within the final process model.
+Table~\ref{tab:eventlog_attrition} reconciles the resulting denominators. The
+increase from operational records to event-log events is intentional: Gate In
+and Gate Out are added and lifecycle records are transformed into activities.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}L{4.1cm}rrX@{}}
+\toprule
+\textbf{Pipeline stage} & \textbf{Cases} & \textbf{Rows/events} & \textbf{Change in scope} \\
+\midrule
+Cleaned schedule after cross-system matching & 93,369 & 113,136 & Operational rows before the container complete-case filter. \\
+Container-complete schedule & 91,337 & 109,742 & Remove 2,032 visits without a defensible container assignment. \\
+Expanded event log & 91,337 & 282,832 & Add case-boundary events and transform lifecycle records. \\
+Known-activity cases & 91,153 & 282,228 & Remove 184 visits containing an unknown activity. \\
+Final one-RMG study scope & 89,460 & 275,408 & Remove 1,693 visits involving more than one RMG block. \\
+\bottomrule
+\end{tabularx}
+\caption{Case and record attrition from the cleaned schedule to the final event log.}
+\label{tab:eventlog_attrition}
+\end{table}
 
 \subsection{Case and Activity Definition}
 \label{sec:case_definition}

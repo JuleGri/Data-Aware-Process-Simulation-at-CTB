@@ -18,8 +18,12 @@ resulting models were evaluated on a temporally held-out period that was unseen
 during model development. The evaluation combined control-flow conformance,
 distributional quality measures, repeated Monte-Carlo simulation, and explicit
 structural checks. Different levels of contextual model expressiveness were
-compared, and the final data-aware model
-was subsequently used in two transparent what-if experiments concerning an RMG resource-pool intervention and increased truck demand.
+compared, and the maximally expressive \textit{rules$+$workload} reference model
+was subsequently used in two transparent what-if experiments concerning an RMG
+resource-pool intervention and increased truck demand. The workload-blind
+\textit{rules} model remains the strongest configuration in historical
+screening; the reference model was selected to examine ProSiT's full
+state-aware scenario interface, not because it was the best forecaster.
 \end{sloppypar}
 
 The implementation and empirical evaluation answer the four research questions
@@ -28,7 +32,7 @@ introduced in Chapter~1.
 \textbf{RQ1} asked to what extent a ProSiT simulation model discovered from
 historical CTB truck-operation data can reproduce the behaviour observed in an
 unseen temporal hold-out. The model reproduces some dimensions considerably
-better than others. The final baseline achieves an unweighted yard-service
+better than others. The data-aware reference model achieves an unweighted yard-service
 Wasserstein distance of 3.109 minutes and a real-frequency-weighted distance
 of 2.366 minutes, while the inter-arrival distribution differs by only 0.072
 minutes. Despite these comparatively small distances, the model systematically
@@ -60,8 +64,9 @@ aggregate mean level but not identifiable case by case.
 control flow for the CTB truck process. When the explicit XES event order is
 preserved, the Inductive Miner discovers a compact Petri net with no parallel
 operator. Its loop permits varying sequential combinations and repetitions of
-yard activities, which is consistent with the domain requirement: the internal
-order may vary, but one truck cannot perform two activities simultaneously.
+yard activities, which is consistent with the terminal-expert-validated domain
+requirement: the internal order may vary, but one truck cannot perform two
+activities simultaneously.
 The model attains a held-out fitness of 0.999992, fits 99.994\,\% of held-out
 traces completely, and retains a generalisation score of 0.9413. Its lower
 precision of 0.7558 reflects a broader sequential language, not forbidden
@@ -116,15 +121,22 @@ conditional on the current model and do not establish physical causality. A
 separate capacity-pressure diagnostic further shows that the 20\,\%
 intervention leaves the most-loaded held-out RMG block at only 0.506 nominal
 mean utilisation under the three-task ceiling; the smallest multiplier to mean
-saturation is 2.37. The null turnaround result therefore reflects both a
-modest average-capacity stress and a process abstraction without the state
-needed to propagate short-period pressure. RMG resources represent statistical
-capacity assignments rather than physical container locations, and the model
-does not represent container relocation, equipment movement, waterside and
-landside crane allocation, or explicit spatial queue states. Consequently, the
-scenarios are valid experiments on the discovered simulation model, but their
-results cannot be interpreted as experimentally established counterfactual
-effects of the physical terminal.
+saturation is 2.37. The six-level demand ladder then shows a non-linear model
+response. A configured twofold working-time intensity produces a realised
+elapsed-rate ratio of 2.367; at that level, mean turnaround rises by 4.644
+minutes, P90 by 10.700 minutes and mean RMG pre-service by 5.878 minutes. At a
+realised rate ratio of 3.504, the corresponding changes reach 6.160, 14.800 and
+7.767 minutes. Mean RMG service remains unresolved at the high-load levels.
+The simulator therefore propagates abstract capacity pressure through
+pre-service delay once realised demand reaches the nominal saturation region.
+This is stronger evidence than the original 20\,\% test, but it remains
+model-conditional. RMG resources represent statistical capacity assignments
+rather than physical container locations, and the model does not represent
+container relocation, equipment movement, waterside and landside crane
+allocation, or explicit spatial queue states. Consequently, the scenarios and
+stress ladder are valid experiments on the discovered simulation model, but
+their results cannot be interpreted as experimentally established
+counterfactual effects of the physical terminal.
 
 Read jointly, the findings reveal a consistent boundary between patterns that
 are present in the event log and mechanisms that are absent from the model.
@@ -132,9 +144,9 @@ The stable sequential control-flow structure and strong calendar pattern are
 patterns that the discovery pipeline can reproduce. By contrast, the weak
 duration signal
 for dominant RMG activities, the observed train--test drift, the systematic
-turnaround deficit, and the lack
-of a congestion response under higher demand all point to missing event-level
-and spatial state. This agreement across independent diagnostics strengthens
+turnaround deficit, and a capacity response whose physical propagation chain
+is not represented all point to missing event-level and spatial state. This
+agreement across independent diagnostics strengthens
 the interpretation, but it is not a causal proof: the analyses show which
 explanation is consistent with the evidence and which stronger claims the
 evidence cannot support.
@@ -177,9 +189,9 @@ mixed; temporal transfer is unstable; physical resource--space semantics and
 scenario propagation are not yet validated. This ranking avoids both extremes:
 the model is more than an unusable failed simulator because it provides strong
 structural and diagnostic evidence, but it is less than a decision-valid
-digital twin because its counterfactual mechanisms are incomplete. The negative
-ablation and stress-test results identify exactly which layer fails and where a
-model extension must be evaluated.
+digital twin because its counterfactual mechanisms are incomplete. The
+ablation and response-surface results identify which validity layer remains
+unsupported and where a model extension must be evaluated.
 
 This contribution is timely because a recent systematic review identifies no
 shared validation procedure for Process-Mining-based simulation, reports that
@@ -210,8 +222,9 @@ limits or resource-priority policies, observe their consequences for receive
 and delivery handling as well as total turnaround, and select a policy before
 committing it to live operations. Automatically discovered data-aware models can
 make this loop easier to update and audit than a wholly manual model. The CTB
-case implements the transparent intervention-and-measurement loop; its negative
-stress-test results identify the additional physical state required before the
+case implements the transparent intervention-and-measurement loop; its
+threshold-shaped stress response shows that abstract capacity pressure is
+represented and identifies the additional physical state required before the
 loop can support prescriptive decisions.
 \section{Future Work}
 
@@ -262,10 +275,10 @@ directions:
     \item \textbf{Validate operational policies:} Represent appointment-slot
     release, forecast utilisation, and receive/delivery priority policies
     explicitly. Candidate hourly admission rates should be evaluated against
-    activity-specific and terminal-wide KPIs. In addition to modest policy
-    changes, the experiment design should include capacity-pressure levels that
-    approach and cross calibrated block saturation. Results must then be
-    compared with controlled historical or prospective outcomes before
+    activity-specific and terminal-wide KPIs around the response region found
+    by the demand ladder. The experiment must be repeated after spatial queues,
+    feasible block assignment and movement have been represented, and its
+    results compared with controlled historical or prospective outcomes before
     deployment.
 
 \end{itemize}
