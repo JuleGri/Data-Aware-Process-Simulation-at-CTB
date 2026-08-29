@@ -33,18 +33,18 @@ introduced in Chapter~1.
 historical CTB truck-operation data can reproduce the behaviour observed in an
 unseen temporal hold-out. The model reproduces some dimensions considerably
 better than others. The data-aware reference model achieves an unweighted yard-service
-Wasserstein distance of 3.109 minutes and a real-frequency-weighted distance
-of 2.366 minutes, while the inter-arrival distribution differs by only 0.072
+Wasserstein distance of 3.025 minutes and a real-frequency-weighted distance
+of 2.381 minutes, while the inter-arrival distribution differs by only 0.072
 minutes. Despite these comparatively small distances, the model systematically
-under-predicts complete truck turnaround. Mean turnaround is 31.57 minutes in
+under-predicts complete truck turnaround. Mean turnaround is 31.63 minutes in
 the simulation compared with 39.74 minutes in the hold-out, an under-prediction
-of 8.17 minutes. The simulated 90th percentile is 53.69 minutes compared with
+of 8.12 minutes. The simulated 90th percentile is 53.70 minutes compared with
 71.00 minutes in the hold-out.
 
 The descriptive transition analysis supplies an important scale check for this
 bias. Route-specific fifth-percentile baselines range from 2.16 to 5.28
 minutes, while the route-frequency-weighted inbound and outbound components
-sum to 7.62 minutes per visit. This is close to the 8.17-minute mean deficit and
+sum to 7.62 minutes per visit. This is close to the 8.12-minute mean deficit and
 supports omitted physical transition time as a plausible major contributor.
 Because these lower-tail baselines do not separate movement, traffic, resource
 waiting and other operational delay, they cannot be used as a case-level
@@ -53,8 +53,8 @@ correction or causal decomposition.
 The temporal-transfer audit adds a second explanation that must not be merged
 with movement. Real mean turnaround rises by 2.450 minutes from training to the
 hold-out, and mean service time rises for all nine yard activities. For the
-final cap-three baseline, the 8.170-minute held-out mean deficit decomposes into
-a 5.721-minute discrepancy relative to the training-period mean and the
+final cap-three baseline, the 8.115-minute held-out mean deficit decomposes into
+a 5.666-minute discrepancy relative to the training-period mean and the
 2.450-minute observed period shift. The simulator is therefore already too
 fast relative to its calibration period, while temporal drift makes the later
 comparison worse. The two mechanisms are empirically distinguishable at the
@@ -92,8 +92,8 @@ L1 error by 0.0103 in paired ten-seed comparisons and suppress the rarely
 sampled silent gate-only bypass. Their 0.115-minute turnaround-EMD improvement
 is not statistically resolved. Adding workload information afterward yields
 no resolved weighted service-time improvement, increases turnaround EMD by
-0.303 minutes, and increases activity-rate L1 error by 0.0614. The model's
-short tail also becomes slightly shorter at each step. The best state
+0.375 minutes, lowers simulated mean turnaround by 0.576 minutes, lowers P90
+by 1.000 minute, and increases activity-rate L1 error by 0.0598. The best state
 abstraction is therefore process- and metric-specific: more data awareness is
 not automatically more valid state. In CTB, the available workload proxies do
 not transfer as a useful representation of the omitted physical queueing and
@@ -137,6 +137,16 @@ allocation, or explicit spatial queue states. Consequently, the scenarios and
 stress ladder are valid experiments on the discovered simulation model, but
 their results cannot be interpreted as experimentally established
 counterfactual effects of the physical terminal.
+
+The matched capacity sensitivity removes a remaining methodological
+ambiguity. Repeating the final Inductive-Miner baseline and scenarios with the
+freely discovered RMG capacities produces no resolved direct cap effect on
+mean turnaround and no resolved cap-by-scenario mean-turnaround interaction.
+The expert-validated ceiling is therefore retained because the uncapped
+capacities violate a physical bound, not because it creates the headline
+result. A resolved cap-by-demand interaction in mean RMG service remains a
+secondary model-sensitivity finding without a validated physical
+interpretation.
 
 Read jointly, the findings reveal a consistent boundary between patterns that
 are present in the event log and mechanisms that are absent from the model.

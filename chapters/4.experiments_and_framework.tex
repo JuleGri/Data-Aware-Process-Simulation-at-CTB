@@ -862,6 +862,17 @@ is \texttt{saturation\_experiment.py} in the reviewer handover package.
 
 \paragraph{Reporting}
 
+All central simulation tables use the same deterministic execution path in
+\texttt{\_prosit\_ctb\_calibration.py}. In addition to setting NumPy and Python
+seeds, this adapter orders equally weighted enabled transitions before drawing
+from ProSiT's routing probabilities. This removes dependence on Python set
+iteration without changing the Petri net, learned probabilities or random
+draw. Historical fidelity, the three-configuration ablation, cap sensitivity,
+both policy scenarios, state sensitivity and the demand ladder are therefore
+derived from one runner contract. A machine-readable provenance manifest in
+the reviewer package records the source-bundle and result-file hashes, seeds,
+trace count and authoritative result directories.
+
 The unified driver \texttt{validation/09\_multi\_seed\_scenarios.py}
 executes baseline and both interventions with ten matched seeds
 (42--51), $n_{\text{traces}}=17{,}892$ and

@@ -195,16 +195,16 @@ model and hold-out only.
 \textbf{KPI} & \textbf{Real/ref.} & \textbf{Simulated} &
 \textbf{Difference} & \textbf{95\,\% MC CI} \\
 \midrule
-Yard service EMD, unweighted (min) & -- & 3.109 & -- & [2.999, 3.220] \\
-Yard service EMD, real-frequency weighted (min) & -- & 2.366 & -- & [2.335, 2.396] \\
-Case-turnaround EMD (min) & -- & 8.180 & -- & [8.096, 8.264] \\
-Case-turnaround KS & -- & 0.1334 & -- & [0.1298, 0.1369] \\
+Yard service EMD, unweighted (min) & -- & 3.025 & -- & [2.866, 3.183] \\
+Yard service EMD, real-frequency weighted (min) & -- & 2.381 & -- & [2.329, 2.434] \\
+Case-turnaround EMD (min) & -- & 8.125 & -- & [8.024, 8.226] \\
+Case-turnaround KS & -- & 0.1322 & -- & [0.1297, 0.1346] \\
 Inter-arrival EMD (min) & -- & 0.0724 & -- & [0.0674, 0.0774] \\
 Inter-arrival KS & -- & 0.0254 & -- & [0.0215, 0.0292] \\
-Mean turnaround (min) & 39.742 & 31.572 & $-8.170$ & [31.485, 31.659]$^{a}$ \\
-P90 turnaround (min) & 71.000 & 53.690 & $-17.310$ & [53.349, 54.031]$^{a}$ \\
+Mean turnaround (min) & 39.742 & 31.627 & $-8.115$ & [31.528, 31.726]$^{a}$ \\
+P90 turnaround (min) & 71.000 & 53.700 & $-17.300$ & [53.354, 54.046]$^{a}$ \\
 Simultaneous-arrival share (\%) & 56.660 & 54.221 & $-2.439$ pp & [54.035, 54.407]$^{a}$ \\
-Yard-activity-rate L1 error & -- & 0.2268 & -- & [0.2220, 0.2315] \\
+Yard-activity-rate L1 error & -- & 0.2260 & -- & [0.2217, 0.2304] \\
 \bottomrule
 \end{tabular}
 \caption{Held-out fidelity of the calibrated data-aware cap-three reference model
@@ -217,11 +217,11 @@ are excluded from both yard-service EMD aggregates.}
 \end{table}
 
 The result is mixed. Inter-arrival EMD is 0.0724 minutes. Unweighted yard
-service EMD is 3.109 minutes. Frequency weighting reduces it to 2.366 minutes
+service EMD is 3.025 minutes. Frequency weighting reduces it to 2.381 minutes
 because some of the larger errors occur in rare activities
 (Table~\ref{tab:yard_activity_emd}). The complete visit is less accurate. Mean
-turnaround is 8.170 minutes too short, or 20.56\,\%. P90 is 17.310 minutes too
-short, or 24.38\,\%. This bias remains across the ten seeds. The narrow seed
+turnaround is 8.115 minutes too short, or 20.42\,\%. P90 is 17.300 minutes too
+short, or 24.37\,\%. This bias remains across the ten seeds. The narrow seed
 intervals do not show that the model itself is correct.
 
 All ten runs pass the case-order checks. They contain no gate-only cases,
@@ -235,15 +235,15 @@ Out never occurs before the last yard activity. No accepted duration exceeds
 \toprule
 \textbf{Yard activity} & \textbf{Mean EMD (min)} & \textbf{95\,\% MC CI} \\
 \midrule
-HO2\_delivery & 2.265 & [2.119, 2.411] \\
-HO2\_mixed    & 4.397 & [3.603, 5.192] \\
-HO2\_receive  & 1.932 & [1.691, 2.174] \\
-LL\_delivery  & 1.446 & [1.343, 1.548] \\
-LL\_mixed     & 4.422 & [3.925, 4.919] \\
-LL\_receive   & 4.354 & [4.182, 4.525] \\
-RMG\_delivery & 2.488 & [2.389, 2.586] \\
-RMG\_mixed    & 4.197 & [4.024, 4.370] \\
-RMG\_receive  & 2.484 & [2.407, 2.561] \\
+HO2\_delivery & 2.188 & [1.963, 2.413] \\
+HO2\_mixed    & 4.254 & [3.803, 4.706] \\
+HO2\_receive  & 1.943 & [1.700, 2.187] \\
+LL\_delivery  & 1.438 & [1.352, 1.525] \\
+LL\_mixed     & 3.811 & [2.875, 4.748] \\
+LL\_receive   & 4.309 & [4.024, 4.594] \\
+RMG\_delivery & 2.552 & [2.483, 2.622] \\
+RMG\_mixed    & 4.221 & [3.992, 4.450] \\
+RMG\_receive  & 2.505 & [2.458, 2.552] \\
 \bottomrule
 \end{tabular}
 \caption{Held-out service-time EMD by yard activity for the final
@@ -273,12 +273,12 @@ length. It isolates process- and case-state rules from workload information.
 \textbf{Metric} & \textbf{no-rules} & \textbf{rules} &
 \textbf{rules$+$workload} \\
 \midrule
-Turnaround EMD (min) & 7.943 & \textbf{7.828} & 8.131 \\
-Simulated mean (min) & 31.800 & \textbf{32.118} & 31.617 \\
-Simulated P90 (min)  & 54.500 & \textbf{54.400} & 53.600 \\
+Turnaround EMD (min) & 7.943 & \textbf{7.828} & 8.203 \\
+Simulated mean (min) & 31.800 & \textbf{32.118} & 31.542 \\
+Simulated P90 (min)  & \textbf{54.500} & 54.400 & 53.400 \\
 Inter-arrival EMD (min) & 0.0765 & \textbf{0.0724} & \textbf{0.0724} \\
-Yard-service EMD, weighted (min) & \textbf{2.351} & 2.356 & 2.354 \\
-Yard-activity-rate L1 error & 0.1753 & \textbf{0.1650} & 0.2264 \\
+Yard-service EMD, weighted (min) & \textbf{2.351} & 2.356 & 2.380 \\
+Yard-activity-rate L1 error & 0.1753 & \textbf{0.1650} & 0.2249 \\
 Gate-only cases per 17,892 visits & 10.5 & \textbf{0.0} & \textbf{0.0} \\
 \bottomrule
 \end{tabular}
@@ -299,12 +299,14 @@ only $+0.005$ minutes ($[-0.071,0.082]$), and P90 by $-0.1$ minutes
 
 The next increment, from \textit{rules} to
 \textit{rules$+$workload}, does not improve weighted service-time EMD:
-the paired change is effectively zero, with a 95\,\% interval of
-$[-0.058,0.053]$ minutes. Instead, turnaround EMD rises by 0.303 minutes
-($[0.181,0.424]$), mean turnaround falls by 0.501 minutes
-($[-0.664,-0.338]$), and activity-rate L1 error rises by 0.0614
-($[0.0568,0.0659]$). Thus the available workload state degrades three held-out
-dimensions while providing no resolved service-time gain.
+the paired change is $+0.024$ minutes, with a 95\,\% interval of
+$[-0.026,0.074]$. Instead, turnaround EMD rises by 0.375 minutes
+($[0.222,0.529]$), mean turnaround falls by 0.576 minutes
+($[-0.760,-0.392]$), P90 falls by 1.000 minute
+($[-1.584,-0.416]$), and activity-rate L1 error rises by 0.0598
+($[0.0526,0.0671]$). Thus the available workload state degrades turnaround,
+tail and activity-incidence fidelity while providing no resolved service-time
+gain.
 
 The gate-only diagnostic adds a different interpretation. The unchanged net
 formally permits the silent yard bypass. Independent optional routing in
@@ -387,8 +389,8 @@ Equation~\ref{eq:mean_transfer_decomposition} separates the final mean deficit
 without pretending that the two sources can be identified case by case. For
 the cap-three scenario baseline,
 \begin{equation}
-39.742-31.572=(37.293-31.572)+(39.742-37.293)
-=5.721+2.450\ \text{minutes}.
+39.742-31.627=(37.293-31.627)+(39.742-37.293)
+=5.666+2.450\ \text{minutes}.
 \end{equation}
 Approximately 70\,\% of the mean deficit is therefore already present relative
 to the training-period mean; the remaining 30\,\% is the later-period mean
@@ -399,7 +401,7 @@ decomposition of EMD.
 
 The service-time comparison points in the same direction. The strict
 \textit{rules} simulations have a frequency-weighted yard-service EMD of 0.595
-minutes against the training data, compared with 2.354 minutes against the
+minutes against the training data, compared with 2.356 minutes against the
 hold-out. Much of the held-out service mismatch is therefore temporal transfer.
 Complete turnaround still has a substantial training-period deficit, which
 indicates an additional model boundary beyond drift. The distinction is
@@ -625,7 +627,7 @@ rises by 209.8 seconds, or about 3.5 minutes.
 Route-frequency weighting gives a p5 baseline of 232.5 seconds for the inbound
 gate-to-yard leg and 224.8 seconds for the outbound yard-to-gate leg. Their sum
 is 457.2 seconds, or 7.62 minutes per visit. This is close in scale to the
-8.170-minute mean turnaround under-prediction in
+8.115-minute mean turnaround under-prediction in
 Table~\ref{tab:final_kpis}. The comparison is diagnostically important: omitted
 physical transition time can plausibly account for a large part of the mean
 bias. It is not an additive correction or a causal decomposition. The p5 values
@@ -894,11 +896,54 @@ but no resolved propagation into total turnaround or accumulated pre-service
 delay. The experiment does not identify a physical cause and does not by
 itself justify favouring one handling type.
 
-The missing congestion response is itself a model result. The cap of three
-does not create enough system interaction to raise turnaround under higher
-demand. The model has no explicit queue state, container location, or
-ship-side crane allocation. It cannot show that the real terminal could absorb
-20\,\% more demand without congestion.
+The missing congestion response is itself a model result. Under the capped
+reference, 20\,\% higher demand does not create enough system interaction to
+raise turnaround. The model has no explicit queue state, container location,
+or ship-side crane allocation. It cannot show that the real terminal could
+absorb 20\,\% more demand without congestion.
+
+\subsection{Sensitivity to the Expert-Validated RMG Ceiling}
+\label{sec:results_rmg_cap_sensitivity}
+
+The final Inductive-Miner scenario experiment was repeated without replacing
+the overlap-derived RMG capacities. Table~\ref{tab:rmg_cap_sensitivity}
+reports matched-seed differences between the cap-three and uncapped models.
+The first contrast is a direct level effect within each setting. The second is
+the interaction defined in Chapter~4: whether the cap changes a scenario
+response after removing its baseline level effect.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{L{3.2cm}rrrr}
+\toprule
+\textbf{Setting} & \textbf{$\Delta$ mean TA} & \textbf{95\,\% CI} &
+\textbf{Cap$\times$scenario} & \textbf{95\,\% CI} \\
+\midrule
+Baseline & $+0.085$ & [$-0.058$, $+0.228$] & -- & -- \\
+T22 removal & $+0.104$ & [$-0.022$, $+0.230$] & $+0.019$ & [$-0.157$, $+0.195$] \\
+20\,\% demand & $-0.017$ & [$-0.139$, $+0.106$] & $-0.102$ & [$-0.276$, $+0.073$] \\
+\bottomrule
+\end{tabular}
+\caption{Paired RMG-cap sensitivity for mean turnaround (TA), in minutes
+($N_{\text{seeds}}=10$). Direct effects are cap three minus uncapped;
+interactions compare the corresponding scenario effects.}
+\label{tab:rmg_cap_sensitivity}
+\end{table}
+
+Every mean-turnaround interval includes zero. Baseline RMG pre-service changes
+by only $+0.011\;[-0.042,+0.065]$ minutes under the cap, and the corresponding
+scenario interactions are $+0.062\;[-0.065,+0.188]$ minutes for T22 removal
+and $-0.052\;[-0.178,+0.073]$ minutes for demand. The only resolved
+component-level interaction is demand-side mean RMG service at
+$+0.087\;[+0.013,+0.161]$ minutes. It shows that this small conditional
+service response depends on the capacity representation; it does not identify
+a physical cause. Although the direct T22 P90 level effect is resolved at
+$+0.500\;[+0.123,+0.877]$ minutes, its cap-by-scenario interaction is not
+($+0.200\;[-0.457,+0.857]$). The expert ceiling is therefore retained as a
+documented physical correction, but it is not the driver of the headline
+turnaround or pre-service findings.
 
 \subsection{Capacity Pressure of the Demand Intervention}
 
@@ -1027,8 +1072,8 @@ RMG service or pre-service response.
 The matched difference-in-differences is more important than whether one
 configuration happens to cross a 95\,\% threshold. For mean turnaround, the
 \textit{rules$+$workload} response minus the workload-blind response is
-$+0.067\;[-0.087,+0.220]$ minutes for T22 removal and
-$+0.159\;[-0.060,+0.377]$ minutes for higher demand. None of the corresponding
+$+0.046\;[-0.123,+0.216]$ minutes for T22 removal and
+$+0.033\;[-0.179,+0.246]$ minutes for higher demand. None of the corresponding
 headline turnaround, RMG service, receive/delivery service, or RMG pre-service
 contrasts exclude zero. Thus the unresolved end-to-end response is robust to
 this state-abstraction choice, while the small component-level effects are not
@@ -1059,6 +1104,13 @@ present model, however, does not support a physical counterfactual or an
 operational recommendation from these results because its spatial assignment,
 movement and queue semantics are not yet adequate. Executability and even a
 plausible stress response are not counterfactual validity.
+
+The matched uncapped sensitivity reaches the same headline conclusion: no
+direct cap effect or cap-by-scenario interaction on mean turnaround is
+resolved. The ceiling is thus necessary to respect the expert-validated
+physical bound, but the negative counterfactual conclusion is not an artefact
+of imposing it. The resolved cap-by-demand interaction in mean RMG service is
+reported as model sensitivity rather than physical evidence.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interpretation: From Process Mining to Data-Aware Simulation}
@@ -1121,7 +1173,7 @@ not substituted silently for the discovered model. The rare realised frequency
 does not by itself make the formal defect harmless.
 
 The same separation applies to time. Good control-flow coverage does not
-account for the 8.170-minute mean turnaround deficit or the 17.310-minute P90
+account for the 8.115-minute mean turnaround deficit or the 17.300-minute P90
 deficit. The simulator can put activities in the correct order and still omit
 time between them. In the CTB setting, this missing time may contain movement,
 traffic, resource interaction, queueing or operational states that are not
@@ -1133,7 +1185,7 @@ or variant frequencies would have produced an overly positive conclusion.
 The transition-baseline diagnostic makes the scale of that abstraction
 boundary concrete. Route-specific p5 values lie between 2.16 and 5.28 minutes,
 and the frequency-weighted inbound and outbound lower-tail components sum to
-7.62 minutes per visit. Their proximity to the 8.170-minute mean deficit is
+7.62 minutes per visit. Their proximity to the 8.115-minute mean deficit is
 consistent with omitted physical movement being a major contributor. It does
 not prove that all residual time is travel, because the baseline also contains
 unseparated traffic and operational delay and because a percentile summary
@@ -1355,8 +1407,8 @@ real sources of delay.
 
 \paragraph{Systematic Turnaround Under-Prediction}
 
-The data-aware reference model under-predicts mean turnaround by 8.170 minutes and P90 by
-17.310 minutes. The narrow seed intervals show that this is model bias, not
+The data-aware reference model under-predicts mean turnaround by 8.115 minutes and P90 by
+17.300 minutes. The narrow seed intervals show that this is model bias, not
 simulation noise. The log cannot show how much missing time comes from
 movement, traffic, queueing, or an unrecorded state. Correct case order does
 not remove this limit on KPI forecasts.

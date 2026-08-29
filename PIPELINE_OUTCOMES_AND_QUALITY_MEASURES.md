@@ -44,32 +44,37 @@ flowchart LR
 
 ### Final thesis evidence
 
-- **Discovery source:** `../trucksimulation/baseline/discovery_params/params_20260816_214403_train80/prosit_discovery_workload_sequential_calibrated/`
-- **Final held-out validation:** `../trucksimulation/validation/results/prosit_sequential_calibrated_rmg_cap3_vs_holdout_ci/`
-- **Final scenarios:** `../trucksimulation/validation/results/prosit_sequential_calibrated_scenarios_rmg_cap3_ci/`
+- **Discovery source:** `../trucksimulation/baseline/discovery_params/params_20260816_214403_train80/prosit_discovery_workload_inductive_calibrated/`
+- **Final held-out validation:** `../trucksimulation/validation/results/final_deterministic_20260829_rules_workload_cap3_vs_holdout_ci/`
+- **Final scenarios:** `../trucksimulation/validation/results/final_deterministic_20260829_rules_workload_scenarios_cap3_ci/`
+- **Uncapped sensitivity:** `../trucksimulation/validation/results/final_deterministic_20260829_rules_workload_scenarios_uncapped_ci/`
+- **Paired cap comparison:** `../trucksimulation/validation/results/final_deterministic_20260829_rmg_capacity_sensitivity/`
+- **Three-configuration ablation:** `../trucksimulation/validation/results/final_deterministic_20260829_three_configuration_ablation/`
+- **Scenario-state ablation:** `../trucksimulation/validation/results/final_deterministic_20260829_scenario_state_ablation/`
 - **Temporal split:** `../trucksimulation/validation/results/split_manifest.json`
 
 ### Supporting detailed results
 
-- **Single-run validation with detailed activity and distribution files:** `../trucksimulation/validation/results/prosit_sequential_calibrated_vs_holdout/`
+- **Supporting single-run Inductive-Miner diagnostics:** `../trucksimulation/validation/results/prosit_inductive_calibrated_vs_holdout/`
 - **Percentile sensitivity:** `../trucksimulation/validation/results/percentile_sensitivity/`
 - **Receive/delivery utilisation:** `../trucksimulation/validation/results/receive_delivery_utilisation/`
 - **Context-rule audit:** `../trucksimulation/validation/results/prosit_context_rule_audit/`
 
-The folders named `prosit_train80_*`, older timestamped validation folders, and the uncapped `prosit_sequential_calibrated_scenarios_ci` folder are development, screening, or diagnostic runs. They should not replace the final cap-3 validation and scenario folders in the thesis.
+Folders without the `final_deterministic_20260829` prefix are development or supporting runs unless the provenance manifest names them as an input to a final comparison. The uncapped folder is a diagnostic sensitivity and does not replace the expert-constrained cap-three result.
 
 ## The files to open first
 
 | Order | File | What it tells you |
 |---:|---|---|
 | 1 | `validation/results/split_manifest.json` | How the full log was split; case and event counts; cutoff date; leakage checks. |
-| 2 | `.../prosit_discovery_workload_sequential_calibrated/prosit_run_summary.json` | Discovery inputs, settings, calibration, output paths, and model metadata. |
-| 3 | `.../prosit_discovery_workload_sequential_calibrated/prosit_conformance.csv` | Training and test process-model conformance. |
-| 4 | `.../prosit_sequential_calibrated_rmg_cap3_vs_holdout_ci/mc_summary.csv` | Main held-out validation measures averaged across ten seeds, including 95% confidence intervals. |
-| 5 | `.../prosit_sequential_calibrated_rmg_cap3_vs_holdout_ci/yard_activity_emd_summary.csv` | Activity-level service-time EMDs for the yard activities. |
-| 6 | `.../prosit_sequential_calibrated_scenarios_rmg_cap3_ci/scenario_parameter_changes.json` | The exact parameters changed in each scenario and the parameters intentionally kept constant. |
-| 7 | `.../prosit_sequential_calibrated_scenarios_rmg_cap3_ci/scenario_paired_delta_summary.csv` | Main scenario effects calculated against the matched baseline seed. |
-| 8 | `.../prosit_sequential_calibrated_scenarios_rmg_cap3_ci/scenario_contracts.csv` | Whether every scenario run remained structurally valid. All hard-failure columns must be zero. |
+| 2 | `.../prosit_discovery_workload_inductive_calibrated/prosit_run_summary.json` | Discovery inputs, settings, calibration, output paths, and model metadata. |
+| 3 | `.../prosit_discovery_workload_inductive_calibrated/prosit_conformance.csv` | Training and test process-model conformance. |
+| 4 | `.../final_deterministic_20260829_rules_workload_cap3_vs_holdout_ci/mc_summary.csv` | Main held-out validation measures averaged across ten seeds, including 95% confidence intervals. |
+| 5 | `.../final_deterministic_20260829_rules_workload_cap3_vs_holdout_ci/yard_activity_emd_summary.csv` | Activity-level service-time EMDs for the yard activities. |
+| 6 | `.../final_deterministic_20260829_rules_workload_scenarios_cap3_ci/scenario_parameter_changes.json` | The exact parameters changed in each scenario and the parameters intentionally kept constant. |
+| 7 | `.../final_deterministic_20260829_rules_workload_scenarios_cap3_ci/scenario_paired_delta_summary.csv` | Main scenario effects calculated against the matched baseline seed. |
+| 8 | `.../final_deterministic_20260829_rules_workload_scenarios_cap3_ci/scenario_contracts.csv` | Whether every scenario run remained structurally valid. All hard-failure columns must be zero. |
+| 9 | `.../final_deterministic_20260829_rmg_capacity_sensitivity/capacity_sensitivity_interaction_summary.csv` | Whether imposing the expert cap changes the scenario response after its baseline level effect is removed. |
 
 The pickle file `prosit_params.pkl` is the executable source of truth for a discovered model. `prosit_params.json` is a large human-readable audit representation, but the simulation should not be reconstructed from it.
 
@@ -180,21 +185,21 @@ The weighted result better describes the error experienced by a typical observed
 - The Inductive-Miner process tree contains zero parallel operators and is converted to a compact Petri net with 7 places, 16 transitions, and 32 arcs.
 - Training alignment fitness is 1.000 and 100% of training cases fit. Held-out alignment fitness is 0.999992 and 99.994% of held-out cases fit completely.
 - Held-out precision is 0.7558 and generalisation is 0.9413. The model therefore generalises beyond exact training variants through a sequential yard-activity loop; it does not merely memorise the 70 training variants.
-- The net permits a silent gate-only path. It is retained as an explicit overgeneralisation finding: it occurs zero times in the real training and held-out logs, zero times in 178,920 context-aware simulated visits, and 11.9 times per 17,892 visits on average in the no-rules endpoint.
+- The net permits a silent gate-only path. It is retained as an explicit overgeneralisation finding: it occurs zero times in the real training and held-out logs, zero times in 178,920 context-aware simulated visits, and 10.5 times per 17,892 visits on average in the final deterministic no-rules runs.
 
 ### Final cap-3 held-out validation over ten seeds
 
 | Result | Final mean | 95% Monte Carlo CI |
 |---|---:|---:|
-| Case-turnaround EMD | 8.180 min | 8.096 to 8.264 |
-| Simulated mean turnaround | 31.572 min | 31.485 to 31.659 |
+| Case-turnaround EMD | 8.125 min | 8.024 to 8.226 |
+| Simulated mean turnaround | 31.627 min | 31.528 to 31.726 |
 | Real mean turnaround | 39.742 min | Fixed held-out reference |
-| Simulated turnaround P90 | 53.690 min | 53.349 to 54.031 |
+| Simulated turnaround P90 | 53.700 min | 53.354 to 54.046 |
 | Real turnaround P90 | 71.0 min | Fixed held-out reference |
-| Yard service-time EMD, unweighted | 3.109 min | 2.999 to 3.220 |
-| Yard service-time EMD, real-frequency weighted | 2.366 min | 2.335 to 2.396 |
+| Yard service-time EMD, unweighted | 3.025 min | 2.866 to 3.183 |
+| Yard service-time EMD, real-frequency weighted | 2.381 min | 2.329 to 2.434 |
 | Interarrival EMD | 0.072 min | 0.067 to 0.077 |
-| Yard activity-rate L1 error | 0.227 | 0.222 to 0.232 |
+| Yard activity-rate L1 error | 0.226 | 0.222 to 0.230 |
 
 All final structural contract failure counts are zero. The arrivals and yard service times are reproduced more closely than the complete case-turnaround distribution. In particular, the model underestimates the mean and upper tail of turnaround time.
 
@@ -202,10 +207,14 @@ All final structural contract failure counts are zero. The arrivals and yard ser
 
 | Scenario | Change in mean turnaround versus matched baseline | 95% paired CI | Resolved away from zero? |
 |---|---:|---:|---|
-| T22 closed | +0.092 min | -0.016 to +0.200 | No |
-| Demand +20% | +0.131 min | -0.026 to +0.288 | No |
+| T22 closed | +0.072 min | -0.092 to +0.235 | No |
+| Demand +20% | +0.005 min | -0.136 to +0.147 | No |
 
-The scenarios executed correctly and the T22-closed runs produced zero T22 assignments. However, the final paired intervals include zero for the main turnaround effects. The unchanged Inductive-Miner net continues to permit different sequential combinations and repetitions of known yard activities, but it cannot represent a new activity type or an unobserved exception mechanism. The results therefore describe parameter changes within the discovered process language. Activity-specific reporting identifies small resolved increases in delivery pre-service delay under both scenarios, but these are model-conditional effects rather than established physical counterfactuals.
+The scenarios executed correctly and the T22-closed runs produced zero T22 assignments. However, the final paired intervals include zero for the main turnaround effects. The unchanged Inductive-Miner net continues to permit different sequential combinations and repetitions of known yard activities, but it cannot represent a new activity type or an unobserved exception mechanism. The results therefore describe parameter changes within the discovered process language. Under higher demand, mean RMG and RMG-receive service show small resolved increases; the matched state and capacity sensitivities show that such component effects depend on model specification and are not established physical counterfactuals.
+
+### Final RMG-cap sensitivity
+
+Cap three minus uncapped changes baseline mean turnaround by +0.085 minutes (95% CI -0.058 to +0.228). The cap-by-scenario mean-turnaround interaction is +0.019 minutes for T22 removal (-0.157 to +0.195) and -0.102 minutes for higher demand (-0.276 to +0.073). None is resolved. The cap is retained to satisfy the expert-validated physical ceiling, but it does not drive the headline turnaround result. The resolved cap-by-demand interaction in mean RMG service (+0.087 minutes, +0.013 to +0.161) is a secondary model-sensitivity result.
 
 ## Mapping the evidence to the research questions
 

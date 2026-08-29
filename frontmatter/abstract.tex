@@ -18,9 +18,9 @@ The net fits 99.994\,\% of 17,892 held-out visits. A separate repair removes a
 silent gate-only bypass, raising precision from 0.7558 to 0.7939 while lowering
 generalisation from 0.9413 to 0.8859. The data-aware scenario reference model reproduces
 arrival spacing closely and parts of yard service timing, but mean turnaround
-is 8.17 minutes too short and P90 is 17.31 minutes too short. The 8.17-minute
+is 8.12 minutes too short and P90 is 17.30 minutes too short. The 8.12-minute
 test-period gap decomposes into a 2.45-minute increase in the observed mean
-between periods and a 5.72-minute simulation deficit relative to the
+between periods and a 5.67-minute simulation deficit relative to the
 training-period mean. Paired ten-seed ablation shows that workload-blind rules
 improve activity incidence and suppress a rarely sampled invalid bypass, while
 their small turnaround-distance improvement is unresolved. Adding workload
@@ -35,6 +35,10 @@ ratio of 2.367, mean turnaround rises by 4.644 minutes and mean RMG pre-service
 by 5.878 minutes. The model therefore propagates abstract capacity pressure
 near the nominal saturation region, but it lacks the validated spatial
 mechanisms needed for physical counterfactual claims.
+Repeating the final Inductive-Miner scenarios without the RMG cap produces no
+resolved direct or cap-by-scenario effect on mean turnaround; the ceiling is
+therefore a necessary domain correction rather than the source of the
+headline result.
 
 The thesis contributes a layered validity audit separating event semantics,
 control-flow language, historical fidelity, temporal transfer, physical
