@@ -427,6 +427,15 @@ The repaired PNML and executable parameter bundle are exported separately by
 of one structural assumption, not a claim that the published repair operators
 of Vinci and de Leoni already implement precision-side pruning.
 
+The stochastic robustness comparison changes only this Petri net inside the
+final cap-three \textit{visit-only} bundle. Original and repaired bundles use
+the same held-out period, simulation start, 17,892 cases, and seeds 42--51.
+They are compared through turnaround and yard-service EMD, activity-rate
+error, 3-gram NGD under both event-order definitions, and the complete case
+contract. This design tests whether the formal language restriction changes
+realised simulation behaviour rather than inferring such an effect from
+conformance precision alone.
+
 The order-corrected but otherwise unchanged Inductive-Miner Petri net is
 consequently accepted as the automatic-discovery baseline and passed to
 ProSiT. The separately repaired net remains a robustness model. The earlier
@@ -863,6 +872,15 @@ but overlap in a pooled block label is not treated as a physical crane count.
 The procedure is implemented in
 \texttt{validation/13\_bottleneck\_analysis.py}. Its causal scope is limited to
 identifying accumulation points that require further physical modelling.
+
+A targeted \texttt{LL\_mixed} audit complements the aggregate ranking. It
+counts its position and direct successors in both temporal partitions and
+compares a successor's composite pre-service gap after \texttt{LL\_mixed} with
+the same activity after other predecessors. This describes whether the rare
+branch is associated with a distinct downstream time burden. It does not turn
+seven multi-yard observations into a mandatory routing rule. The reproducible
+implementation is
+\texttt{validation/20\_ll\_mixed\_sequence\_bottleneck\_audit.py}.
 
 \paragraph{Implementation}
 

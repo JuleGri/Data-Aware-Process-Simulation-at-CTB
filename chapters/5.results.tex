@@ -155,13 +155,40 @@ and slightly raises the simplicity score. It also lowers the generalisation
 score by 0.0554. This is the expected fitness--precision--generalisation
 trade-off made empirical: restricting unsupported language improves precision,
 but it reduces the model's measured ability to generalise. The unchanged net
-remains the primary automatic-discovery baseline; the repaired net is exported
-as a separate PNML and ProSiT bundle and would require a complete simulation
-and scenario rerun before operational use. A two-seed, 100-case execution
-smoke test confirms that the repaired bundle loads, simulates, produces no
-gate-only cases, and satisfies the hard sequential case contract. This checks
-technical executability only; it is deliberately not reported as a statistical
-validation of the repaired model.
+remains the primary automatic-discovery baseline, while the repaired net is
+exported as a separate PNML and ProSiT bundle.
+
+The full stochastic robustness comparison finds no realised fidelity cost.
+With the final cap-three \textit{visit-only} parameters, all metric cells are
+identical between the original and repaired bundles for seeds 42--51. This
+includes turnaround and service-time EMD, activity-rate error, all case-contract
+counts, and every activity-specific service distance. Completion-order 3-gram
+NGD is 0.05649 for both models, and explicit-order NGD is 0.05646 for both. The
+paired difference is exactly zero for every seed and ordering definition. The
+removed bypass was never realised under these parameters, so the repair
+improves the formal process language without changing the sampled baseline
+behaviour. This does not show that the branch would remain irrelevant under
+every alternative parameterisation or intervention. The scenario conclusions
+therefore continue to refer to the unchanged automatic-discovery baseline.
+
+\paragraph{Interpretation of the \texttt{LL\_mixed} Branch}
+
+The special structural role of \texttt{LL\_mixed} is supported by a small and
+highly concentrated set of visits. Across the complete train and hold-out
+periods, 64 visits contain the activity and 57 of them contain no other yard
+activity. Their observed pattern is therefore simply \texttt{Gate In},
+\texttt{LL\_mixed}, and \texttt{Gate Out}. Only seven visits combine
+\texttt{LL\_mixed} with another yard activity. In six training visits it occurs
+first and is followed by \texttt{RMG\_receive}. The single held-out exception
+follows the order \texttt{RMG\_delivery}, \texttt{LL\_mixed}. One plausible
+operational interpretation is that an empty-container exchange is normally
+completed before another yard area for routing reasons. The six training cases
+are compatible with that explanation, but the small sample and held-out
+exception do not justify a mandatory ordering rule. The isolated branch is
+primarily evidence of a valid one-stop process variant rather than evidence
+that \texttt{LL\_mixed} must always precede other yard work. The counts and
+sequences are exported by
+\texttt{validation/20\_ll\_mixed\_sequence\_bottleneck\_audit.py}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Historical Fidelity and Model Screening}
@@ -783,6 +810,18 @@ reconstructed held-out time. RMG delivery accounts for a further 15.45\,\%.
 These frequency-weighted results make the RMG receive/delivery distinction
 operationally important even though the present scenarios do not identify a
 resolved turnaround effect.
+
+\texttt{LL\_mixed} is not a system-level bottleneck in this decomposition. Its
+eleven held-out occurrences accumulate 233 minutes of service and composite
+pre-service delay, only 0.0328\,\% of total held-out turnaround. All are followed
+directly by \texttt{Gate Out}. In the training period, the six
+\texttt{LL\_mixed}--\texttt{RMG\_receive} transitions have a mean downstream
+pre-service gap of 10.667 minutes, compared with 11.251 minutes for
+\texttt{RMG\_receive} after other predecessors. Their medians are both six
+minutes and their P90 values are 22.5 and 23.0 minutes. The available evidence
+therefore does not indicate additional congestion after \texttt{LL\_mixed}.
+Its process-structural distinctiveness should not be confused with a large
+frequency-weighted time burden.
 
 \begin{figure}[htbp]
 \centering
