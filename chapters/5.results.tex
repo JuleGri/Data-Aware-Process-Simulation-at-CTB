@@ -68,8 +68,9 @@ later CTB period.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The final simulator uses the Inductive-Miner Petri net from
-Section~\ref{sec:process_discovery_methodology}. The order-preserving XES log
-produces a compact model with 7 places, 16 transitions, 32 arcs, and no
+Section~\ref{sec:process_discovery_methodology}. The XES log preserves the ITS
+schedule-derived stop order. Using that order produces a compact model with
+7 places, 16 transitions, 32 arcs, and no
 parallel operator. It abstracts from 70 training variants rather than storing
 each path separately. Table~\ref{tab:conformance_train_test} reports its
 training and held-out quality measures.
@@ -114,8 +115,8 @@ endpoint is examined separately under RQ3.
 \medskip
 
 \noindent\textbf{RQ2 answer.} The automatically discovered Inductive-Miner net
-is suitable as the simulation backbone once the explicit XES event order is
-preserved. It combines near-perfect held-out fitness with sequential
+is suitable as the simulation backbone once the ITS schedule-derived stop
+order stored in XES is preserved. It combines near-perfect held-out fitness with sequential
 generalisation and passes the terminal-expert-validated no-concurrency
 contract. Its lower
 precision primarily reflects broader yard combinations rather than parallel
@@ -288,6 +289,16 @@ Gate-only cases per run & 0 & 0 & 0 & 0 \\
 \label{tab:configuration_screening}
 \end{table}
 
+The completion-time ordering used for the primary NGD calculation is not
+decisive for this comparison. With explicit \texttt{case:event:order}, mean NGD
+is 0.05657 for \textit{visit-only}, 0.07304 for \textit{static-only}, 0.05656
+for \textit{native-only} and 0.07345 for \textit{both}. Each value differs by
+about 0.00003 from its completion-order counterpart in
+Table~\ref{tab:configuration_screening}. The same two practically tied models
+remain best, while both configurations containing static proxies remain
+materially worse. The reference-model decision is therefore unchanged by the
+announced ordering sensitivity.
+
 Static proxies have no resolved turnaround or weighted-service effect when
 native state is off: the paired EMD changes are $-0.021$
 [$-0.137,+0.095$] and $-0.024$ [$-0.081,+0.033$] minutes. They do, however,
@@ -316,8 +327,21 @@ $\rho=0.922$ for gate and RMG utilisation, $0.898$ for gate and RMG demand, and
 $-0.790$ for target utilisation and target rank. By contrast, the largest
 absolute demand--native-state correlation is 0.190 and the largest
 utilisation--native-state correlation is 0.019. Correlated attributes may
-remain in an event log; the methodological issue is unstable feature selection,
-not a requirement that predictors be mutually independent.
+remain in an event log. The methodological issue is that attribution to an
+individual split can depend on the candidate set, not that predictors must be
+mutually independent.
+
+The retained native rule also makes the white-box scope concrete. In the
+\textit{native-only} and \textit{both} bundles, the waiting-time tree for T13
+splits once at \texttt{queue\_length}$=6.5$. Values at or below the threshold
+use a fitted exponential distribution with a reported node value of 7.167
+minutes. Values above the threshold use a lognormal distribution with a
+reported node value of 52.404 minutes. This condition is inspectable and can be
+challenged against domain knowledge. It is not treated as a causal queueing law,
+and neither operational scenario edits this split or replaces one of its
+subtrees. The scenarios demonstrate transparent parameter intervention, while
+this retained rule illustrates the additional tree structure that ProSiT makes
+available for future rule-level interventions.
 
 The semantically cleaned static sensitivity confirms this boundary. Relative
 to visit-only, it changes turnaround EMD by $+0.049$
@@ -326,9 +350,11 @@ to visit-only, it changes turnaround EMD by $+0.049$
 [$+0.0560,+0.0683$] and 3-gram NGD by $+0.01636$
 [$+0.01458,+0.01813$]. None of its retained splits uses demand or utilisation;
 the expanded candidate set instead changes which visit and location rules are
-selected. The result is evidence of discovery instability, not evidence that a
-retained demand split directly causes the error. It also removes the rationale
-for further ad-hoc feature subsets.
+selected. The result is evidence of feature-candidate-set or specification
+sensitivity. It is not a repeated-sampling demonstration of statistical
+discovery instability, and it is not evidence that a retained demand split
+directly causes the error. It also removes the rationale for further ad-hoc
+feature subsets.
 
 \paragraph{Reference-model decision}
 
@@ -572,7 +598,7 @@ The cap removes the implausible upper bound. It does not prove that 66 is the
 effective capacity of the terminal.
 
 This is the material expert-supported domain correction in the executable parameter bundle.
-Preserving XES event order and checking for parallel operators corrects and
+Preserving the ITS schedule-derived XES order and checking for parallel operators corrects and
 guards the discovery input without replacing the discovered control flow. The
 resource cap, by contrast, changes the learned capacities to enforce a stated
 physical upper bound. The final simulator therefore combines an automatically
@@ -992,15 +1018,18 @@ than three overlapping recorded RMG events; for T13 the share is 9.82\,\%.
 Those bursts may reflect genuine short-period pressure, minute-resolution
 artifacts, waterside/landside allocation, or an incorrect block-pool
 abstraction. The 20\,\% result alone therefore cannot distinguish an
-intervention that is too modest from a simulator that is unable to propagate
-capacity pressure. The demand-saturation ladder makes that distinction
-directly.
+intervention that is too modest from a final reference model that is unable to
+propagate capacity pressure. A historical demand-saturation ladder provides a
+separate diagnostic of whether an earlier ProSiT bundle can produce such a
+mechanism. It does not identify the saturation point of the final
+\textit{visit-only} bundle.
 
 \subsection{Demand-Saturation Stress Test}
 
-Table~\ref{tab:demand_saturation_ladder} reports the additional 60-run
-response surface from the earlier fully contextualised diagnostic bundle. The
-configured multiplier scales working-time
+Table~\ref{tab:demand_saturation_ladder} reports a 60-run response surface from
+the earlier fully contextualised diagnostic bundle. It is retained as
+mechanistic evidence about that model version and is not used to validate or
+select the final reference. The configured multiplier scales working-time
 inter-arrivals; the realised rate ratio is measured over elapsed calendar
 time. These quantities diverge because the gate calendar remains fixed while
 the simulated horizon becomes shorter. All 60 runs preserve the case count,
@@ -1061,12 +1090,13 @@ estimate on the realised-rate axis.
     \label{fig:demand_saturation_ladder}
 \end{figure}
 
-This result changes the diagnosis. The simulator does contain an abstract
-capacity-pressure mechanism: once realised demand reaches the independently
+For the earlier fully contextualised bundle, the result demonstrates an
+abstract capacity-pressure mechanism. Once realised demand reaches the independently
 estimated capacity region, pre-service and end-to-end delay increase clearly.
 The missing response at 20\,\% is therefore primarily evidence that the policy
 scenario was a modest stress inside this model, not evidence that ProSiT can
-never generate congestion. The stress curve is still not a physical CTB
+never generate congestion. It does not establish why the final
+\textit{visit-only} model produces its null response. The stress curve is still not a physical CTB
 forecast. Its onset and shape depend on interchangeable block assignments,
 fully open discovered resource calendars and model-derived enablement rather
 than verified spatial queues. The expert-validated three-RMG ceiling supports
@@ -1115,12 +1145,14 @@ that these are model experiments rather than stable physical effects. The
 capacity-pressure audit
 also shows that 20\,\% higher arrivals leave the most-loaded held-out block at
 only 0.506 nominal mean utilisation under the three-task ceiling. The extended
-demand ladder in the earlier fully contextualised bundle resolves the
-mechanistic ambiguity: at a realised elapsed-rate ratio of
+demand ladder shows that an earlier fully contextualised bundle can propagate
+abstract capacity pressure. At a realised elapsed-rate ratio of
 2.367, mean turnaround rises by 4.644 minutes and mean RMG pre-service by 5.878
-minutes; stronger levels produce still larger responses. The simulator can
-therefore propagate abstract resource pressure, but the threshold and
-propagation mechanism have not been validated as physical CTB behaviour.
+minutes, and stronger levels produce still larger responses. Because the
+ladder does not use the final \textit{visit-only} bundle, it neither explains
+that model's null response nor establishes its saturation threshold. The
+threshold and propagation mechanism of the earlier bundle have also not been
+validated as physical CTB behaviour.
 That capability is the operational reason for simulation: candidate truck-slot
 rates and handling policies can be compared before they are applied. The
 present model, however, does not support a physical counterfactual or an
@@ -1156,8 +1188,8 @@ arrival fidelity, and end-to-end temporal fidelity are distinct properties
 Traditional Process Mining is strongest in this study as a language for
 reconstructing and checking observed process behaviour. Here, its most
 important diagnostic is not merely the near-perfect held-out fitness. It is the
-discovery that the apparent parallelism vanished when the explicit XES event
-order was preserved. The earlier parallel model represented a timestamp-based
+discovery that the apparent parallelism vanished when the ITS schedule-derived
+stop order stored in XES was preserved. The earlier parallel model represented a timestamp-based
 reordering artefact; the final process tree has no parallel operator. This
 demonstrates a classical Process-Mining point with direct simulation
 consequences: the event-log ordering relation is part of the model input, and a
@@ -1284,10 +1316,12 @@ response. The temporal arrival features show a strong association with when
 trucks enter the terminal, but the 20\,\% arrival intervention produces no
 resolved mean-turnaround increase. This combination does not imply that real
 CTB turnaround is independent of demand. It shows that the fitted simulator
-contains an arrival relationship, but the chosen change remains below mean
-block saturation. The extended ladder then shows that the same model develops
-a strong pre-service and turnaround response when realised arrivals reach the
-independently estimated capacity region. In the same way, eliminating T22
+contains an arrival relationship, while the offered-load calculation places
+the chosen change below mean block saturation. The historical ladder shows
+that an earlier fully contextualised model develops a strong pre-service and
+turnaround response when realised arrivals reach the independently estimated
+capacity region. This is supporting mechanism evidence, not a direct
+explanation of the final model. In the same way, eliminating T22
 assignments verifies that the resource rule was
 changed, while the near-zero turnaround effect reflects reallocation within an
 abstract interchangeable resource pool. It is not evidence that closing a
@@ -1335,7 +1369,7 @@ strong result in one perspective from being used to imply validity in another.
 \toprule
 \textbf{Validity layer} & \textbf{CTB assessment} & \textbf{Decisive evidence} \\
 \midrule
-Event and case semantics & Supported & Explicit XES order; no case-contract violations in accepted runs. \\
+Event and case semantics & Supported & ITS schedule-derived stop order stored in XES and no case-contract violations in accepted runs. \\
 Control-flow language & Supported with caveat & Fitness 0.999992 and no parallel operator; precision 0.7558 and a formal gate-only bypass. \\
 Historical stochastic fidelity & Mixed & Arrival and yard-service distances are moderate; mean and tail turnaround remain too short. \\
 Temporal transfer & Not stable & Real mean turnaround rises by 2.450 minutes and all yard-service means increase. \\
@@ -1410,14 +1444,33 @@ closure.
 
 \paragraph{Scope of Expert Validation}
 
-Operational experts from the terminal confirmed two constraints used as hard
-eligibility conditions: one truck does not execute activities in parallel, and
-no block can use more than three RMGs concurrently. This confirmation supports
-the operator check and the cap-three correction. It does not validate the
-discovered HO2 or LL capacities, the fully open resource calendars, arrival and
-duration distributions, block-interchangeability assumption, pre-service-delay
-semantics, or any scenario response. These elements therefore remain subject
-to the empirical and structural limitations reported above.
+The project-level expert review confirmed the gate boundaries, the requirement
+for at least one yard activity, arbitrary yard ordering and repetition, the
+validity of \texttt{LL\_mixed}-only yard visits and the invalidity of gate-only
+visits. It also confirmed two hard physical constraints. One truck does not
+execute activities in parallel, and no block can use more than three RMGs
+concurrently. These judgments support the case contract, operator check,
+bypass diagnosis and cap-three correction. They do not validate the discovered
+HO2 or LL capacities, the fully open resource calendars, arrival and duration
+distributions, block-interchangeability assumption, pre-service-delay
+semantics, or any scenario response. The review was a requirements check and
+did not produce a formal transcript or inter-rater assessment. Its evidential
+scope is therefore narrower than a structured expert-validation study.
+
+\paragraph{The Empirical Population Excludes Multi-RMG Visits}
+
+The case-level ProSiT representation requires one unambiguous RMG target for
+the block-specific context variables. The pipeline therefore removes 1,693
+visits and 6,820 events involving more than one RMG block. The results apply to
+the resulting one-RMG subprocess, not to the complete population of CTB truck
+movements. The exclusion removes some of the visits most likely to contain
+additional movement, cross-block resource interaction and spatial complexity.
+It may therefore make transport and congestion behaviour easier than in the
+full terminal population. An object-centric representation could preserve the
+truck, containers and multiple blocks as related objects instead of forcing one
+block value onto the complete visit
+\cite{VanDerAalst2023OCPM,Knopp2023ObjectCentricSimulation}. This is a direct
+empirical scope boundary, not only a general future-work opportunity.
 
 \paragraph{Scenario Control Flow Generalises Only Within a Fixed Activity Set}
 

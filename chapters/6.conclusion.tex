@@ -50,8 +50,9 @@ unchanged but raises turnaround EMD by 0.097 minutes without static proxies and
 0.310 minutes with them; their turnaround interaction is 0.213 minutes. No
 weighted yard-service gain is resolved. A semantically cleaned static set
 retains no demand or utilisation split and still worsens activity and 3-gram
-fidelity, indicating feature-selection instability rather than a useful load
-signal. The parsimonious \textit{visit-only} bundle is therefore the
+fidelity, indicating feature-candidate-set sensitivity rather than a useful
+load signal. This is not a repeated-sampling claim of statistical discovery
+instability. The parsimonious \textit{visit-only} bundle is therefore the
 within-study reference; \textit{both} is investigated but rejected. Because
 the same hold-out informs this choice and the reported fidelity, the reference
 is not an independently selected prospective model. More context is not
@@ -76,15 +77,19 @@ single 2,050-minute T22 visit is retained as a model-tail diagnostic; it does
 not produce a resolved P90 shift. Repeating the scenarios with the rejected
 \textit{both} bundle leaves the mean-turnaround conclusion unchanged, while
 the higher-demand P90 and receive pre-service responses are bundle-sensitive.
-The stress ladder from the earlier fully contextualised bundle explains the weak headline response: the 20\,\%
-intervention remains below the model's nominal RMG
-saturation region. At a configured twofold intensity, the realised arrival-rate
-ratio is 2.367 and mean turnaround, P90, and RMG pre-service time rise by 4.644,
-10.700, and 5.878 minutes, respectively. The simulator can propagate abstract
-capacity pressure through pre-service delay, but it does not represent
-container location, truck movement, explicit queues, or waterside--landside
-equipment allocation. Its scenario outputs are valid model experiments, not
-validated forecasts of physical terminal interventions.
+The final model's weak headline response is consistent with the offered-load
+diagnostic, which places the 20\,\% intervention below nominal mean RMG
+saturation. A separate stress ladder from an earlier fully contextualised
+bundle shows that this earlier model can propagate stronger demand pressure.
+At a configured twofold intensity, the realised arrival-rate ratio is 2.367 and
+mean turnaround, P90, and RMG pre-service time rise by 4.644, 10.700, and 5.878
+minutes, respectively. The historical run does not establish the final
+\textit{visit-only} bundle's saturation point. It shows only that a related
+ProSiT bundle can propagate abstract capacity pressure through pre-service
+delay. Neither model represents container location, truck movement, explicit
+queues, or waterside--landside equipment allocation. The scenario outputs are
+valid model experiments, not validated forecasts of physical terminal
+interventions.
 
 The expert-validated limit of three RMGs per block is retained as a physical
 eligibility condition. An earlier fully contextualised capped-versus-uncapped
@@ -116,6 +121,12 @@ reaches its current boundary where the operational mechanism is absent from
 the log: movement, location, queues, equipment interaction, and changing
 physical capacity. High replay fitness cannot compensate for those omissions,
 and adding correlated attributes does not create missing state.
+
+The empirical scope is narrower than all CTB truck operations. The study
+excludes 1,693 multi-RMG visits because the case-level parameterisation cannot
+attach more than one block state to a visit. The conclusions therefore concern
+the retained one-RMG subprocess and may understate movement and cross-block
+resource complexity.
 
 This distinction is operationally important. A validated terminal model could
 compare hourly truck-slot limits or handling priorities before implementation.

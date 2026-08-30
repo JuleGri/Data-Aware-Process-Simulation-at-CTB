@@ -7,11 +7,15 @@ models from event logs; evidence from physical logistics remains limited.
 
 This thesis evaluates the approach for truck operations at HHLA Container
 Terminal Burchardkai. Two months of data were transformed into an event log of
-89,460 visits and divided temporally into discovery and held-out periods. The
+89,460 visits and divided temporally into discovery and held-out periods. To
+keep block context well defined at case level, 1,693 visits involving more than
+one RMG block were excluded. The empirical population therefore represents a
+restricted terminal subprocess rather than all truck movements. The
 white-box ProSiT framework was evaluated through a $2\times2$ comparison of
 manual demand/utilisation proxies and ProSiT's native workload/queue state,
 with visit, process and location state held common. An apparent parallelism defect was traced to timestamp-based event
-reordering. Preserving explicit XES order produced a compact sequential Petri
+reordering. Preserving the ITS schedule-derived stop order stored in XES
+produced a compact sequential Petri
 net used as the common executable control flow.
 
 The net fits 99.994\,\% of 17,892 held-out visits. A separate repair removes a
@@ -36,9 +40,9 @@ three cranes per block. Two reproducible policy experiments produce no
 resolved mean-turnaround response. T22 removal increases model-derived RMG
 pre-service delay slightly, whereas the 20\,\% demand increase produces no
 resolved handling mean effect and leaves the
-most-loaded held-out RMG block at 0.506 nominal mean utilisation. An earlier
-fully contextualised six-level demand ladder resolves the mechanistic
-ambiguity: at a realised elapsed-rate
+most-loaded held-out RMG block at 0.506 nominal mean utilisation. In a separate
+historical diagnostic, an earlier fully contextualised six-level demand ladder
+shows that a related ProSiT bundle can propagate stronger load. At a realised elapsed-rate
 ratio of 2.367, mean turnaround rises by 4.644 minutes and mean RMG pre-service
 by 5.878 minutes. That model therefore propagates abstract capacity pressure
 near the nominal saturation region, but it lacks the validated spatial
