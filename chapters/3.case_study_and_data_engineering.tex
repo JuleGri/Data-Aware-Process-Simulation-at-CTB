@@ -124,6 +124,8 @@ FAHRPLAN\_UID & Unique truck-visit identifier used as the case ID. \\
 LKW\_KENNZEICHEN & Truck licence plate number. \\
 ANLAUFPUNKT\_HALTESTELLE & Exchange-area identifier, such as T20,
 LL or VC. \\
+ANLAUFPUNKT\_SEQUENZNUMMER & Operational schedule position of the yard
+stop within the truck visit. \\
 FP\_ZEITPUNKT\_ERSTELLUNG & Time at which the schedule entry was
 created; used as the Gate In timestamp. \\
 ALP\_ZEITPUNKT\_BEREITMELDUNG & Time at which the handling activity
@@ -437,6 +439,19 @@ Gate Out      & Truck departure \\
 
 The 22 individual RMG blocks (T06--T27) are retained as distinct
 resources to preserve block-specific utilisation patterns.
+
+The within-case yard order is taken from the ITS field
+\texttt{ANLAUFPUNKT\_SEQUENZNUMMER}. It is an operational schedule order, not
+an order inferred from the lifecycle timestamps and not a direct observation
+from a truck-position sensor. Stops are sorted first by this sequence number.
+If two records have the same sequence number, the reported ready time is used
+as the secondary key and the stable source-row order resolves any remaining
+tie. Event-log construction then places the added \texttt{Gate In} event before
+the ordered yard stops and the added \texttt{Gate Out} event after them. The
+result is persisted as \texttt{case:event:order} and becomes the order of the
+XES trace. This construction embeds only the case-boundary rule and the source
+schedule sequence. The combinations and repetitions inside the yard remain
+inputs to process discovery rather than manually prescribed control flow.
 
 \subsection{Activity Timestamps and Temporal Semantics}
 \label{sec:lifecycle_events}

@@ -1094,6 +1094,7 @@ label does not always denote a
 physically interchangeable crane or storage position.
 
 \paragraph{Stochastic Replication and Confidence Intervals}
+\label{sec:stochastic_replication_ci}
 
 A BPS model is a stochastic generator. One fixed model can generate
 many possible event logs, whereas the real test log is only one observed
@@ -1117,6 +1118,18 @@ $x_1,\ldots,x_N$, a two-sided Student-$t$ interval is
     t_{0.975,N-1}\frac{s}{\sqrt{N}},
 \end{equation}
 where $s$ is the sample standard deviation across replications.
+
+This Monte-Carlo interval is different from an interval for a change between
+two observed periods. When the observations in two periods are independent and
+their variances and sample sizes may differ, a Welch interval estimates the
+difference between their means without imposing equal variances
+\cite{Welch1947}. A percentile such as P90 is not a sample mean and does not use
+the same standard-error formula. Its sampling uncertainty can instead be
+estimated with a non-parametric bootstrap. Complete cases are repeatedly drawn
+with replacement within each period, the percentile difference is recalculated
+and empirical quantiles of those differences form the interval
+\cite{EfronTibshirani1993}. The unit of resampling must match the independent
+observational unit. In the CTB study this unit is one truck visit, not one event.
 
 The interpretation of this interval must remain narrow. Conditional on
 one frozen discovered parameter bundle and one fixed real test log, it

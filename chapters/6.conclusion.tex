@@ -3,7 +3,140 @@
 \label{chp:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This thesis investigated how far automatically discovered, data-aware process simulation can be transferred from conventional business-process settings to a physically constrained logistics environment. Using two months of operational truck-handling data from HHLA Container Terminal Burchardkai (CTB), a simulation-ready event log was constructed and used to discover an executable process simulation with ProSiT. The evaluation deliberately went beyond asking whether the resulting model could be executed. It examined whether the discovered control flow remained applicable to an unseen temporal period, how closely the simulator reproduced the observed process, whether additional contextual information improved that fidelity, and how the model responded when operational parameters were changed.
+This thesis evaluated how far an automatically discovered, data-aware ProSiT
+model can represent truck handling at the HHLA Container Terminal Burchardkai.
+The result is neither a failed simulator nor a decision-valid digital twin. It
+is a reproducible process simulation with strong structural validity, mixed
+historical fidelity, and incomplete physical and counterfactual validity.
+
+\section{Answers to the Research Questions}
+
+\paragraph{RQ1: Historical fidelity.}
+The selected \textit{visit-only} model reproduces arrivals and yard-service
+times more closely than complete truck turnaround. Across ten seeds, the
+inter-arrival EMD is 0.072 minutes; yard-service EMD is 3.195 minutes
+unweighted and 2.357 minutes when weighted by real activity frequency. Mean
+turnaround is 32.11 minutes in simulation and 39.74 minutes in the temporal
+hold-out; the corresponding EMD is 7.77 minutes. The simulated P90 is 54.20
+minutes rather than 71.00 minutes. The model therefore reproduces selected
+input and activity-level distributions but systematically underestimates the
+end-to-end KPI.
+
+Two diagnostics delimit this error. Route-specific fifth-percentile
+transition baselines lie between 2.16 and 5.28 minutes and sum to a
+frequency-weighted 7.62 minutes per visit. This scale is consistent with
+omitted movement and other pre-service time, but it is not a case-level or
+causal decomposition. In addition, real mean turnaround increases by 2.45
+minutes between training and hold-out. Missing physical time and temporal
+transfer error are therefore both plausible contributors and cannot be
+identified separately from the available timestamps.
+
+\paragraph{RQ2: Control-flow suitability.}
+With the explicit event order preserved, Inductive Miner discovers a compact
+sequential Petri net without a parallel operator. It reaches held-out fitness
+0.999992, 99.994\,\% completely fitting held-out traces, generalisation 0.9413,
+and precision 0.7558. The lower precision reflects additional sequential yard
+combinations and a silent gate-only bypass, not simultaneous activities of one
+truck. All generated reference cases satisfy the hard sequential case
+contract. A separate bypass repair raises precision to 0.7939 while reducing
+generalisation to 0.8859. The unchanged discovered net is therefore a suitable
+simulation backbone, provided that its overgeneralisation is disclosed and
+not confused with physical validity.
+
+\paragraph{RQ3: Contextual expressiveness.}
+The $2\times2$ experiment separates manually constructed static workload
+proxies from ProSiT's native workload and queue state. Static proxies increase
+yard-activity-rate error by about 0.063 and 3-gram NGD by about 0.0165, with or
+without native state. Native state leaves these control-flow measures largely
+unchanged but raises turnaround EMD by 0.097 minutes without static proxies and
+0.310 minutes with them; their turnaround interaction is 0.213 minutes. No
+weighted yard-service gain is resolved. A semantically cleaned static set
+retains no demand or utilisation split and still worsens activity and 3-gram
+fidelity, indicating feature-candidate-set sensitivity rather than a useful
+load signal. This is not a repeated-sampling claim of statistical discovery
+instability. The parsimonious \textit{visit-only} bundle is therefore the
+within-study reference; \textit{both} is investigated but rejected. Because
+the same hold-out informs this choice and the reported fidelity, the reference
+is not an independently selected prospective model. More context is not
+equivalent to a better process state.
+
+\paragraph{RQ4: What-if capability.}
+Both interventions execute reproducibly, but their technical meanings differ.
+Closing T22 changes the feasible resource mapping and calendar; it is a
+transparent resource-allocation intervention, not a decision-tree edit. The
+20\,\% demand scenario changes the empirical distribution in the arrival
+model's single leaf. This matches ProSiT's leaf-value interaction mechanism,
+but it does not exercise a context-dependent split or subtree modification.
+The thesis therefore demonstrates inspectable parameter intervention, not the
+full range of ProSiT tree interactions.
+
+Neither intervention changes mean turnaround by an amount resolved across the
+ten paired seeds. T22 removal increases model-derived RMG pre-service delay by
+0.118 minutes, with a 0.134-minute increase for receive handling, but does not
+change mean service or turnaround. The 20\,\% demand intervention has no
+resolved handling or end-to-end mean effect in the selected reference. A
+single 2,050-minute T22 visit is retained as a model-tail diagnostic; it does
+not produce a resolved P90 shift. Repeating the scenarios with the rejected
+\textit{both} bundle leaves the mean-turnaround conclusion unchanged, while
+the higher-demand P90 and receive pre-service responses are bundle-sensitive.
+The final model's weak headline response is consistent with the offered-load
+diagnostic, which places the 20\,\% intervention below nominal mean RMG
+saturation. A separate stress ladder from an earlier fully contextualised
+bundle shows that this earlier model can propagate stronger demand pressure.
+At a configured twofold intensity, the realised arrival-rate ratio is 2.367 and
+mean turnaround, P90, and RMG pre-service time rise by 4.644, 10.700, and 5.878
+minutes, respectively. The historical run does not establish the final
+\textit{visit-only} bundle's saturation point. It shows only that a related
+ProSiT bundle can propagate abstract capacity pressure through pre-service
+delay. Neither model represents container location, truck movement, explicit
+queues, or waterside--landside equipment allocation. The scenario outputs are
+valid model experiments, not validated forecasts of physical terminal
+interventions.
+
+The expert-validated limit of three RMGs per block is retained as a physical
+eligibility condition. An earlier fully contextualised capped-versus-uncapped
+diagnostic produces neither a resolved direct mean-turnaround effect nor a
+resolved cap-by-scenario mean-turnaround interaction. This supports the cap as
+a documented correction but is not an uncapped validation of the later
+\textit{visit-only} reference.
+
+\section{Scientific Contribution and Validity Boundary}
+
+The thesis makes four concrete contributions:
+
+\begin{enumerate}
+    \item a simulation-ready CTB event-log abstraction that separates explicit
+    process order from imperfect timestamp observations;
+    \item a temporal held-out and multi-seed evaluation of ProSiT in a physical
+    logistics setting;
+    \item a layered validity audit that separates control-flow conformance,
+    stochastic fidelity, contextual transfer, physical constraints, and
+    scenario validity; and
+    \item a reproducible distinction between discovered parameters,
+    expert-supplied constraints, and scenario-specific interventions.
+\end{enumerate}
+
+The central finding is that automatic simulation-model generation transfers
+successfully where the event log observes the relevant process relation. It
+captures sequential control flow, arrivals, and parts of activity timing. It
+reaches its current boundary where the operational mechanism is absent from
+the log: movement, location, queues, equipment interaction, and changing
+physical capacity. High replay fitness cannot compensate for those omissions,
+and adding correlated attributes does not create missing state.
+
+The empirical scope is narrower than all CTB truck operations. The study
+excludes 1,693 multi-RMG visits because the case-level parameterisation cannot
+attach more than one block state to a visit. The conclusions therefore concern
+the retained one-RMG subprocess and may understate movement and cross-block
+resource complexity.
+
+This distinction is operationally important. A validated terminal model could
+compare hourly truck-slot limits or handling priorities before implementation.
+The present model already provides an auditable intervention-and-measurement
+workflow, but its outputs should support diagnosis and model development rather
+than unrestricted prescriptive decisions. This conclusion is consistent with
+the need for multi-perspective validation identified in recent simulation
+research \cite{Sulis2026SimulationReview}.
 
 The results show that these questions have different answers. The strongest part of the automatically discovered model is its process structure. Preserving the explicit event order of the XES log allowed the Inductive Miner to discover a compact sequential Petri net without parallel behaviour within a truck visit. On the temporal hold-out, the net reaches a fitness of 0.999992 and completely fits 99.994\,\% of the 17,892 held-out visits. Its precision of 0.7558 reflects additional sequential combinations and a silent gate-only bypass rather than physically impossible within-truck concurrency. A separate precision-oriented repair increases precision to 0.7939 while reducing generalisation to 0.8859, illustrating the expected trade-off between restricting unsupported behaviour and retaining a more general process language. The unchanged discovered net therefore provides a suitable executable backbone for the CTB truck process, provided that its remaining overgeneralisation is made explicit rather than interpreted as physical behaviour. This answers RQ2 positively for the structural level of the simulation.
 
