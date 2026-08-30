@@ -716,8 +716,8 @@ percentile, over the 48 transitions with at least twenty observations.}
 time between recorded activities is physically meaningful and too large to be
 treated as zero. They do not identify its mechanism. The data do not separate
 movement, traffic, queueing, and other delay, and the real log has no
-enablement timestamp. This is consistent with Vinci and de Leoni's
-\cite{VinciDeLeoni2025Repair} distinction between repairing duration or
+enablement timestamp. This is consistent with the simulation-guided
+model-repair distinction \cite{SimulationGuidedRepair2025} between repairing duration or
 inter-activity time and first resolving resource-driven versus exogenous
 waiting. The present model output is consequently called pre-service delay; it
 is not validated queueing time.
@@ -1256,13 +1256,13 @@ Formal language analysis and realised-output validation therefore answer
 complementary questions. A permitted path need not be common, yet it remains
 relevant when the model is interpreted beyond the observed period.
 
-This is a precision-side model-repair problem. The simulation-guided framework
-of Vinci and de Leoni \cite{VinciDeLeoni2025Repair} provides a rigorous way to
+This is a precision-side model-repair problem. The simulation-guided
+control-flow repair framework \cite{SimulationGuidedRepair2025} provides a rigorous way to
 identify differences between real and simulated control flow and to compare an
 original and repaired net on held-out data. Its published operators currently
 add missing behaviour, however, whereas the CTB bypass requires restricting
-excess behaviour. De Leoni et al. \cite{Vinci2023Inf.Activ.Prob} demonstrate
-that an explicit manual restriction before simulation can be defensible when a
+excess behaviour. A state-aware stochastic Petri-net study
+\cite{Vinci2023Inf.Activ.Prob} demonstrates that an explicit manual restriction before simulation can be defensible when a
 source model permits a minimal trace absent from the log. For CTB, such a
 restricted net should therefore be evaluated as a separate robustness model,
 not substituted silently for the discovered model. The rare realised frequency
@@ -1325,8 +1325,8 @@ interpretability makes the association auditable, but does not convert it into
 causality or guarantee predictive validity
 \cite{Vinci2026prosit,Sargent2013Validation}.
 
-This result sharpens rather than contradicts the state-abstraction findings of
-Vinci et al. \cite{Vinci2023Inf.Activ.Prob}. Their best-performing abstraction
+This result sharpens rather than contradicts earlier process-state-abstraction
+experiments \cite{Vinci2023Inf.Activ.Prob}. The best-performing abstraction
 varies between the two evaluated processes, and an unsuitable history state can
 create problematic simulated behaviour. The CTB ablation supplies the missing
 application-specific test: the parsimonious visit/process state reproduces
@@ -1433,9 +1433,9 @@ processing, and resource inputs rather than reporting magnitude alone
 \cite{Wang2026TemporalDeviations}. The CTB study contributes a physical-
 logistics instance in which those layers fail at different points.
 
-This framing also clarifies the role of expert intervention. The hospital
-application of Vinci et al. combines automatic discovery with manual structural
-changes and expert plausibility assessment before optimisation
+This framing also clarifies the role of expert intervention. A hospital
+simulation-discovery application combines automatic discovery with manual
+structural changes and expert plausibility assessment before optimisation
 \cite{Hospital2026Vinci}. The CTB structural repair experiment follows the same
 principle of explicit, separately evaluated domain knowledge. A comparable
 expert validation of queue, travel and resource semantics remains necessary

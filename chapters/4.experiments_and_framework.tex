@@ -349,6 +349,11 @@ Arcs observed in fewer than 1\,\% of cases are omitted for legibility.}
 \label{fig:ctb_dfg_frequency}
 \end{figure}
 
+The complete unfiltered 59-arc graph is provided in
+Appendix~\ref{app:model_inspection}. It is retained as an audit view rather
+than enlarged in the main chapter because its rare relations obscure the
+dominant flow at normal reading size.
+
 The frequency view confirms a stable outer process boundary: every training
 case enters through \texttt{Gate In} and ends at \texttt{Gate Out}. Most visits
 contain one yard activity. The prominent connection from
@@ -399,11 +404,12 @@ an explicit output diagnostic rather than silently removed. Its frequency is
 reported for each retained configuration as evidence of the model's
 overgeneralisation.
 
-This decision is made against an explicit model-repair alternative. De Leoni
-et al. \cite{Vinci2023Inf.Activ.Prob} manually changed a source Petri net before
-their simulation experiments when it allowed an unobserved one-activity trace.
-Vinci and de Leoni \cite{VinciDeLeoni2025Repair} subsequently formalised an
-iterative workflow in which real and simulated traces are discriminated,
+This decision is made against an explicit model-repair alternative. A
+state-aware stochastic Petri-net study \cite{Vinci2023Inf.Activ.Prob} manually
+changed its source model before simulation because it allowed an unobserved
+one-activity trace. A later simulation-guided control-flow repair framework
+\cite{SimulationGuidedRepair2025} formalised an iterative workflow in which real
+and simulated traces are discriminated,
 explanatory directly-follows features propose repairs, and the original and
 repaired nets are compared on held-out fitness, precision and simulation-log
 distance. Their implemented repair operators add missing behaviour. The paper
@@ -425,7 +431,7 @@ the same held-out fitness, precision, generalisation, and simplicity measures.
 The repaired PNML and executable parameter bundle are exported separately by
 \texttt{validation/16\_gate\_only\_structural\_repair.py}. This is an ablation
 of one structural assumption, not a claim that the published repair operators
-of Vinci and de Leoni already implement precision-side pruning.
+already implement precision-side pruning.
 
 The stochastic robustness comparison changes only this Petri net inside the
 final cap-three \textit{visit-only} bundle. Original and repaired bundles use
@@ -595,13 +601,9 @@ The full pipeline is executed by
 \texttt{baseline/07\_run\_prosit\_discovery.py}. The pickled
 \texttt{SimulatorParameters} objects
 (\texttt{prosit\_params.pkl}) and their JSON representations are stored
-in the paramset folder. The compared bundles are stored as
-\path{prosit_discovery_feature_visit_only_common_20260829/},
-\path{prosit_discovery_feature_static_only_20260829/},
-\path{prosit_discovery_feature_native_only_20260829/}, and
-\path{prosit_discovery_feature_both_common_20260829/}. The clean-static
-sensitivity is stored separately as
-\path{prosit_discovery_feature_clean_static_20260829/}.
+in separate parameter-set folders. Their model roles and the compact reviewer
+handover are documented in Appendix~\ref{app:model_inspection} rather than as
+implementation-directory listings in the main text.
 
 \subsection{Authoritative Parameter Bundle and Serialization Contract}
 \label{sec:authoritative_parameter_bundle}
@@ -660,6 +662,12 @@ and must never be loaded from an untrusted source. Reproducibility
 requires the recorded software environment. These limitations are the
 reason for retaining the JSON companions even though they are not the
 authoritative runtime state.
+
+Appendix~\ref{app:model_inspection} maps the PNML, baseline and scenario
+pickles, readable JSON companions, notebooks, expected results, and provenance
+files in the independently uploadable reviewer package. This provides a direct
+inspection path without moving technical file inventories into the main
+methodological argument.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Monte-Carlo Replication Protocol}

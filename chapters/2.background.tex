@@ -604,12 +604,13 @@ estimate the probability of alternative paths
 The discovered control-flow structure defines the behaviour that the simulator
 can generate. Too much generalisation may allow
 implausible paths, while a restrictive model may miss valid process variation
-\cite{PMvanDerAalst2016,VinciDeLeoni2025Repair}. The balance between fitness
+\cite{PMvanDerAalst2016,SimulationGuidedRepair2025}. The balance between fitness
 and precision defines the behavioural range of the simulator
-\cite{VinciDeLeoni2025Repair}.
+\cite{SimulationGuidedRepair2025}.
 
-Vinci and de Leoni \cite{VinciDeLeoni2025Repair} make this link to simulation
-explicit in a four-step repair framework. An initial stochastic Petri net is
+The simulation-guided control-flow repair framework
+\cite{SimulationGuidedRepair2025} makes this link explicit in four steps. An
+initial stochastic Petri net is
 simulated, directly-follows features are used to train a discriminator between
 real and simulated traces, and explainable feature importance identifies
 behaviour that is systematically missing from or over-represented in the
@@ -674,8 +675,9 @@ Mannhardt et al. \cite{mannhardt2023stochasticProcessesModelling} extend
 stochastic Petri nets with transition weights that depend on process variables.
 The model can then capture differences between types of cases.
 
-De Leoni et al. \cite{Vinci2023Inf.Activ.Prob} extend this idea through the
-concept of the \textit{process state}. Rather than conditioning decisions only
+The state-aware stochastic Petri-net approach
+\cite{Vinci2023Inf.Activ.Prob} extends this idea through the concept of the
+\textit{process state}. Rather than conditioning decisions only
 on static case attributes, the process state may also describe information
 accumulated during the execution of the case, including process-variable values
 and the history of previously executed activities. For every enabled
@@ -735,10 +737,9 @@ returns one value.
 ProSiT can use case-level attributes, execution history, resource information,
 temporal information, and workload features \cite{Vinci2026prosit}. It does
 not support every event-level attribute that changes during execution. The
-process-state approach of Mannhardt et al.
-\cite{mannhardt2023stochasticProcessesModelling} and de Leoni et al.
-\cite{Vinci2023Inf.Activ.Prob} covers a broader range of context than the
-current ProSiT implementation.
+state-dependent stochastic Petri-net formulations
+\cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}
+cover a broader range of context than the current ProSiT implementation.
 
 The published evaluation uses five case studies, an 80/20 temporal split, and
 five simulated logs per model. ProSiT is competitive with a black-box baseline
