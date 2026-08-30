@@ -10,12 +10,12 @@ historical fidelity, and incomplete physical and counterfactual validity.
 \section{Answers to the Research Questions}
 
 \paragraph{RQ1: Historical fidelity.}
-The final \textit{rules$+$workload} model reproduces arrivals and yard-service
+The selected \textit{visit-only} model reproduces arrivals and yard-service
 times more closely than complete truck turnaround. Across ten seeds, the
-inter-arrival EMD is 0.072 minutes; yard-service EMD is 3.025 minutes
-unweighted and 2.381 minutes when weighted by real activity frequency. Mean
-turnaround is 31.63 minutes in simulation and 39.74 minutes in the temporal
-hold-out; the corresponding EMD is 8.12 minutes. The simulated P90 is 53.70
+inter-arrival EMD is 0.072 minutes; yard-service EMD is 3.195 minutes
+unweighted and 2.357 minutes when weighted by real activity frequency. Mean
+turnaround is 32.11 minutes in simulation and 39.74 minutes in the temporal
+hold-out; the corresponding EMD is 7.77 minutes. The simulated P90 is 54.20
 minutes rather than 71.00 minutes. The model therefore reproduces selected
 input and activity-level distributions but systematically underestimates the
 end-to-end KPI.
@@ -42,16 +42,20 @@ simulation backbone, provided that its overgeneralisation is disclosed and
 not confused with physical validity.
 
 \paragraph{RQ3: Contextual expressiveness.}
-Workload-blind decision rules provide the strongest result in the three-level
-ablation. Relative to \textit{no-rules}, they reduce yard-activity-rate L1
-error by 0.0103 and suppress the sampled gate-only bypass; the 0.115-minute
-turnaround-EMD improvement is unresolved. Adding the available workload state
-then increases turnaround EMD by 0.375 minutes, lowers simulated mean
-turnaround by 0.576 minutes and P90 by 1.000 minute, and increases activity-rate
-L1 error by 0.0598. No weighted yard-service improvement is resolved. More
-context is consequently not equivalent to a better process state. The CTB
-workload proxies do not replace unobserved movement, queue, and equipment
-state.
+The $2\times2$ experiment separates manually constructed static workload
+proxies from ProSiT's native workload and queue state. Static proxies increase
+yard-activity-rate error by about 0.063 and 3-gram NGD by about 0.0165, with or
+without native state. Native state leaves these control-flow measures largely
+unchanged but raises turnaround EMD by 0.097 minutes without static proxies and
+0.310 minutes with them; their turnaround interaction is 0.213 minutes. No
+weighted yard-service gain is resolved. A semantically cleaned static set
+retains no demand or utilisation split and still worsens activity and 3-gram
+fidelity, indicating feature-selection instability rather than a useful load
+signal. The parsimonious \textit{visit-only} bundle is therefore the
+within-study reference; \textit{both} is investigated but rejected. Because
+the same hold-out informs this choice and the reported fidelity, the reference
+is not an independently selected prospective model. More context is not
+equivalent to a better process state.
 
 \paragraph{RQ4: What-if capability.}
 Both interventions execute reproducibly, but their technical meanings differ.
@@ -64,10 +68,16 @@ The thesis therefore demonstrates inspectable parameter intervention, not the
 full range of ProSiT tree interactions.
 
 Neither intervention changes mean turnaround by an amount resolved across the
-ten paired seeds. Under 20\,\% higher demand, mean RMG service rises by 0.091
-minutes and RMG-receive service by 0.073 minutes, but these small component
-effects are model-conditional. The stress ladder explains the weak headline
-response: the 20\,\% intervention remains below the model's nominal RMG
+ten paired seeds. T22 removal increases model-derived RMG pre-service delay by
+0.118 minutes, with a 0.134-minute increase for receive handling, but does not
+change mean service or turnaround. The 20\,\% demand intervention has no
+resolved handling or end-to-end mean effect in the selected reference. A
+single 2,050-minute T22 visit is retained as a model-tail diagnostic; it does
+not produce a resolved P90 shift. Repeating the scenarios with the rejected
+\textit{both} bundle leaves the mean-turnaround conclusion unchanged, while
+the higher-demand P90 and receive pre-service responses are bundle-sensitive.
+The stress ladder from the earlier fully contextualised bundle explains the weak headline response: the 20\,\%
+intervention remains below the model's nominal RMG
 saturation region. At a configured twofold intensity, the realised arrival-rate
 ratio is 2.367 and mean turnaround, P90, and RMG pre-service time rise by 4.644,
 10.700, and 5.878 minutes, respectively. The simulator can propagate abstract
@@ -77,10 +87,11 @@ equipment allocation. Its scenario outputs are valid model experiments, not
 validated forecasts of physical terminal interventions.
 
 The expert-validated limit of three RMGs per block is retained as a physical
-eligibility condition. Against the uncapped model, it produces neither a
-resolved direct mean-turnaround effect nor a resolved cap-by-scenario
-mean-turnaround interaction. The cap prevents an invalid resource state; it
-does not create the thesis's headline findings.
+eligibility condition. An earlier fully contextualised capped-versus-uncapped
+diagnostic produces neither a resolved direct mean-turnaround effect nor a
+resolved cap-by-scenario mean-turnaround interaction. This supports the cap as
+a documented correction but is not an uncapped validation of the later
+\textit{visit-only} reference.
 
 \section{Scientific Contribution and Validity Boundary}
 

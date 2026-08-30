@@ -8,37 +8,47 @@ models from event logs; evidence from physical logistics remains limited.
 This thesis evaluates the approach for truck operations at HHLA Container
 Terminal Burchardkai. Two months of data were transformed into an event log of
 89,460 visits and divided temporally into discovery and held-out periods. The
-white-box ProSiT framework was evaluated through three configurations:
-distribution-only, workload-blind process-state rules, and rules with workload
-features. An apparent parallelism defect was traced to timestamp-based event
+white-box ProSiT framework was evaluated through a $2\times2$ comparison of
+manual demand/utilisation proxies and ProSiT's native workload/queue state,
+with visit, process and location state held common. An apparent parallelism defect was traced to timestamp-based event
 reordering. Preserving explicit XES order produced a compact sequential Petri
 net used as the common executable control flow.
 
 The net fits 99.994\,\% of 17,892 held-out visits. A separate repair removes a
 silent gate-only bypass, raising precision from 0.7558 to 0.7939 while lowering
-generalisation from 0.9413 to 0.8859. The data-aware scenario reference model reproduces
+generalisation from 0.9413 to 0.8859. The selected \textit{visit-only}
+reference model reproduces
 arrival spacing closely and parts of yard service timing, but mean turnaround
-is 8.12 minutes too short and P90 is 17.30 minutes too short. The 8.12-minute
+is 7.63 minutes too short and P90 is 16.80 minutes too short. The 7.63-minute
 test-period gap decomposes into a 2.45-minute increase in the observed mean
-between periods and a 5.67-minute simulation deficit relative to the
-training-period mean. Paired ten-seed ablation shows that workload-blind rules
-improve activity incidence and suppress a rarely sampled invalid bypass, while
-their small turnaround-distance improvement is unresolved. Adding workload
-state yields no resolved service-time gain and worsens both activity incidence
-and turnaround distance. The automatically discovered RMG concurrency values
+between periods and a 5.18-minute simulation deficit relative to the
+training-period mean. Paired ten-seed comparisons show that static workload
+proxies worsen activity-frequency and 3-gram fidelity, while native state
+increases turnaround distance and has no resolved service-time benefit. A
+cleaned static sensitivity retains no demand or utilisation split and reaches
+the same negative control-flow conclusion. The parsimonious visit-only bundle
+is therefore retained as the within-study reference. Because the
+same later period informs both this comparison and the reported reference
+performance, it is not an independent prospective validation. The
+automatically discovered RMG concurrency values
 required a documented correction to the terminal-expert-validated maximum of
 three cranes per block. Two reproducible policy experiments produce no
-resolved mean-turnaround response, and the 20\,\% demand increase leaves the
-most-loaded held-out RMG block at 0.506 nominal mean utilisation. A six-level
-demand ladder resolves the resulting ambiguity: at a realised elapsed-rate
+resolved mean-turnaround response. T22 removal increases model-derived RMG
+pre-service delay slightly, whereas the 20\,\% demand increase produces no
+resolved handling mean effect and leaves the
+most-loaded held-out RMG block at 0.506 nominal mean utilisation. An earlier
+fully contextualised six-level demand ladder resolves the mechanistic
+ambiguity: at a realised elapsed-rate
 ratio of 2.367, mean turnaround rises by 4.644 minutes and mean RMG pre-service
-by 5.878 minutes. The model therefore propagates abstract capacity pressure
+by 5.878 minutes. That model therefore propagates abstract capacity pressure
 near the nominal saturation region, but it lacks the validated spatial
 mechanisms needed for physical counterfactual claims.
-Repeating the final Inductive-Miner scenarios without the RMG cap produces no
-resolved direct or cap-by-scenario effect on mean turnaround; the ceiling is
-therefore a necessary domain correction rather than the source of the
-headline result.
+Repeating the scenarios with the rejected \textit{both} bundle preserves the
+mean-turnaround conclusion but reveals bundle-sensitive P90 and receive
+pre-service responses. An earlier fully contextualised capped-versus-uncapped
+diagnostic produces no resolved direct or cap-by-scenario mean-turnaround
+effect; it supports the ceiling as a necessary domain correction without
+constituting an uncapped validation of the selected reference.
 
 The thesis contributes a layered validity audit separating event semantics,
 control-flow language, historical fidelity, temporal transfer, physical

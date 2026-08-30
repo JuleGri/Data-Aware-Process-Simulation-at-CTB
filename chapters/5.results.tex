@@ -4,8 +4,9 @@
 This chapter reports the results for the four research questions from
 Chapter~\ref{chp:experiments_and_framework}. RQ2 comes first. The control-flow
 contract must be usable before timing can be evaluated. RQ1 then compares the
-data-aware reference configuration with the temporal hold-out. RQ3 compares three ProSiT
-configurations. The next sections examine temporal transfer, context, arrivals,
+data-aware reference configuration with the temporal hold-out. RQ3 compares
+four ProSiT configurations in the standardized $2\times2$ feature-source
+design. The next sections examine temporal transfer, context, arrivals,
 resources, and transition times. These diagnostics help interpret the results, but they do
 not prove their causes. RQ4 evaluates two policy interventions and a
 demand-saturation response surface.
@@ -166,10 +167,10 @@ validation of the repaired model.
 \label{sec:results_holdout_fidelity}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This section contains two evaluations. RQ1 compares the calibrated reference
-\textit{rules$+$workload} model with the temporal hold-out. RQ3 compares three
-equally calibrated configurations: \textit{no-rules}, strict workload-blind
-\textit{rules}, and \textit{rules$+$workload}.
+This section contains two evaluations. RQ1 compares the final cap-three
+\textit{visit-only} within-study reference with the temporal hold-out. RQ3 uses
+the standardized $2\times2$ feature-source experiment and the clean-static
+sensitivity to justify that reference-model decision.
 All configurations use the same discovered Inductive-Miner net, temporal split,
 arrival calibration, and ten-seed protocol. Their difference is therefore the
 way routing, duration, and resource behaviour use contextual information.
@@ -195,16 +196,16 @@ model and hold-out only.
 \textbf{KPI} & \textbf{Real/ref.} & \textbf{Simulated} &
 \textbf{Difference} & \textbf{95\,\% MC CI} \\
 \midrule
-Yard service EMD, unweighted (min) & -- & 3.025 & -- & [2.866, 3.183] \\
-Yard service EMD, real-frequency weighted (min) & -- & 2.381 & -- & [2.329, 2.434] \\
-Case-turnaround EMD (min) & -- & 8.125 & -- & [8.024, 8.226] \\
-Case-turnaround KS & -- & 0.1322 & -- & [0.1297, 0.1346] \\
+Yard service EMD, unweighted (min) & -- & 3.195 & -- & [3.099, 3.291] \\
+Yard service EMD, real-frequency weighted (min) & -- & 2.357 & -- & [2.289, 2.425] \\
+Case-turnaround EMD (min) & -- & 7.767 & -- & [7.612, 7.922] \\
+Case-turnaround KS & -- & 0.1254 & -- & [0.1194, 0.1313] \\
 Inter-arrival EMD (min) & -- & 0.0724 & -- & [0.0674, 0.0774] \\
 Inter-arrival KS & -- & 0.0254 & -- & [0.0215, 0.0292] \\
-Mean turnaround (min) & 39.742 & 31.627 & $-8.115$ & [31.528, 31.726]$^{a}$ \\
-P90 turnaround (min) & 71.000 & 53.700 & $-17.300$ & [53.354, 54.046]$^{a}$ \\
+Mean turnaround (min) & 39.742 & 32.114 & $-7.629$ & [31.929, 32.298]$^{a}$ \\
+P90 turnaround (min) & 71.000 & 54.200 & $-16.800$ & [53.748, 54.652]$^{a}$ \\
 Simultaneous-arrival share (\%) & 56.660 & 54.221 & $-2.439$ pp & [54.035, 54.407]$^{a}$ \\
-Yard-activity-rate L1 error & -- & 0.2260 & -- & [0.2217, 0.2304] \\
+Yard-activity-rate L1 error & -- & 0.1634 & -- & [0.1579, 0.1688] \\
 \bottomrule
 \end{tabular}
 \caption{Held-out fidelity of the calibrated data-aware cap-three reference model
@@ -217,11 +218,11 @@ are excluded from both yard-service EMD aggregates.}
 \end{table}
 
 The result is mixed. Inter-arrival EMD is 0.0724 minutes. Unweighted yard
-service EMD is 3.025 minutes. Frequency weighting reduces it to 2.381 minutes
+service EMD is 3.195 minutes. Frequency weighting reduces it to 2.357 minutes
 because some of the larger errors occur in rare activities
 (Table~\ref{tab:yard_activity_emd}). The complete visit is less accurate. Mean
-turnaround is 8.115 minutes too short, or 20.42\,\%. P90 is 17.300 minutes too
-short, or 24.37\,\%. This bias remains across the ten seeds. The narrow seed
+turnaround is 7.629 minutes too short, or 19.20\,\%. P90 is 16.800 minutes too
+short, or 23.66\,\%. This bias remains across the ten seeds. The narrow seed
 intervals do not show that the model itself is correct.
 
 All ten runs pass the case-order checks. They contain no gate-only cases,
@@ -235,15 +236,15 @@ Out never occurs before the last yard activity. No accepted duration exceeds
 \toprule
 \textbf{Yard activity} & \textbf{Mean EMD (min)} & \textbf{95\,\% MC CI} \\
 \midrule
-HO2\_delivery & 2.188 & [1.963, 2.413] \\
-HO2\_mixed    & 4.254 & [3.803, 4.706] \\
-HO2\_receive  & 1.943 & [1.700, 2.187] \\
-LL\_delivery  & 1.438 & [1.352, 1.525] \\
-LL\_mixed     & 3.811 & [2.875, 4.748] \\
-LL\_receive   & 4.309 & [4.024, 4.594] \\
-RMG\_delivery & 2.552 & [2.483, 2.622] \\
-RMG\_mixed    & 4.221 & [3.992, 4.450] \\
-RMG\_receive  & 2.505 & [2.458, 2.552] \\
+HO2\_delivery & 2.196 & [2.040, 2.352] \\
+HO2\_mixed    & 5.190 & [4.359, 6.021] \\
+HO2\_receive  & 1.974 & [1.761, 2.188] \\
+LL\_delivery  & 1.445 & [1.363, 1.528] \\
+LL\_mixed     & 4.511 & [4.146, 4.876] \\
+LL\_receive   & 4.313 & [3.981, 4.645] \\
+RMG\_delivery & 2.504 & [2.411, 2.596] \\
+RMG\_mixed    & 4.197 & [4.036, 4.358] \\
+RMG\_receive  & 2.426 & [2.320, 2.532] \\
 \bottomrule
 \end{tabular}
 \caption{Held-out service-time EMD by yard activity for the final
@@ -255,91 +256,98 @@ cap-three baseline ($N_{\text{seeds}}=10$).}
 the arrival and service-time behaviour. It does not reproduce the full
 turnaround distribution. Total visit time is systematically too short.
 
-\subsection{RQ3: Context and Held-Out Fidelity}
+\subsection{RQ3: Feature Sources and Held-Out Fidelity}
 
-Table~\ref{tab:configuration_screening} compares all three levels after the
-common CTB calibration. They use the unchanged Inductive-Miner net; the
-comparison therefore concerns contextual expressiveness rather than a
-different control-flow language. The middle configuration is strictly blind
-to demand, utilisation, workload ranks and bins, live workload, and queue
-length. It isolates process- and case-state rules from workload information.
+Table~\ref{tab:configuration_screening} reports the standardized $2\times2$
+experiment. All four cells use the same event-log source, Inductive-Miner net,
+split, tree settings, deterministic runner and seeds. They differ only in
+whether manually constructed static demand/utilisation proxies and ProSiT's
+native workload/queue state are available. The N-Gram Distribution Distance
+(NGD), here with $n=3$, compares local activity-order frequencies; lower values are
+better for every reported error measure.
 
 \begin{table}[htbp]
 \centering
 \small
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{L{4.2cm}ccc}
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabular}{L{4.2cm}rrrr}
 \toprule
-\textbf{Metric} & \textbf{no-rules} & \textbf{rules} &
-\textbf{rules$+$workload} \\
+\textbf{Metric} & \textbf{visit-only} & \textbf{static-only} &
+\textbf{native-only} & \textbf{both} \\
 \midrule
-Turnaround EMD (min) & 7.943 & \textbf{7.828} & 8.203 \\
-Simulated mean (min) & 31.800 & \textbf{32.118} & 31.542 \\
-Simulated P90 (min)  & \textbf{54.500} & 54.400 & 53.400 \\
-Inter-arrival EMD (min) & 0.0765 & \textbf{0.0724} & \textbf{0.0724} \\
-Yard-service EMD, weighted (min) & \textbf{2.351} & 2.356 & 2.380 \\
-Yard-activity-rate L1 error & 0.1753 & \textbf{0.1650} & 0.2249 \\
-Gate-only cases per 17,892 visits & 10.5 & \textbf{0.0} & \textbf{0.0} \\
+Turnaround EMD (min) & 7.870 & 7.848 & 7.967 & 8.158 \\
+Yard-service EMD, weighted (min) & 2.379 & 2.355 & 2.351 & 2.368 \\
+Yard-activity-rate L1 error & 0.1632 & 0.2265 & 0.1635 & 0.2276 \\
+3-gram NGD & 0.05661 & 0.07308 & 0.05659 & 0.07349 \\
+Inter-arrival EMD (min) & 0.07241 & 0.07241 & 0.07241 & 0.07241 \\
+Gate-only cases per run & 0 & 0 & 0 & 0 \\
 \bottomrule
 \end{tabular}
-\caption{Held-out comparison by calibrated ProSiT configuration
-($N_{\text{seeds}}=10$; bold marks the most favourable mean in each row).}
+\caption{Held-out $2\times2$ feature-source comparison
+($N_{\text{seeds}}=10$; 17,892 cases per run).}
 \label{tab:configuration_screening}
 \end{table}
 
-The paired contrasts resolve effects that the endpoint comparison concealed.
-Moving from \textit{no-rules} to workload-blind \textit{rules} lowers
-turnaround EMD by 0.115 minutes, but its 95\,\% paired interval
-$[-0.266,0.037]$ includes zero. The resolved improvement is instead in
-activity incidence: yard-activity-rate L1 error falls by 0.0103
-($[-0.0197,-0.0009]$). Mean turnaround moves 0.318 minutes upward
-($[0.177,0.460]$), towards the real mean. Weighted service-time EMD changes by
-only $+0.005$ minutes ($[-0.071,0.082]$), and P90 by $-0.1$ minutes
-($[-0.726,0.526]$); neither difference is resolved.
+Static proxies have no resolved turnaround or weighted-service effect when
+native state is off: the paired EMD changes are $-0.021$
+[$-0.137,+0.095$] and $-0.024$ [$-0.081,+0.033$] minutes. They do, however,
+worsen activity-rate error by $+0.0633$ [$+0.0570,+0.0696$] and 3-gram NGD by
+$+0.01647$ [$+0.01460,+0.01835$]. The same losses occur when native state is
+on. The static proxies therefore change the generated control-flow mixture,
+not merely a duration model.
 
-The next increment, from \textit{rules} to
-\textit{rules$+$workload}, does not improve weighted service-time EMD:
-the paired change is $+0.024$ minutes, with a 95\,\% interval of
-$[-0.026,0.074]$. Instead, turnaround EMD rises by 0.375 minutes
-($[0.222,0.529]$), mean turnaround falls by 0.576 minutes
-($[-0.760,-0.392]$), P90 falls by 1.000 minute
-($[-1.584,-0.416]$), and activity-rate L1 error rises by 0.0598
-($[0.0526,0.0671]$). Thus the available workload state degrades turnaround,
-tail and activity-incidence fidelity while providing no resolved service-time
-gain.
+Native workload state has almost no effect on activity-rate error or NGD when
+static proxies are off, but raises turnaround EMD by $+0.097$
+[$+0.007,+0.187$] minutes. With static proxies present, the increase is
+$+0.310$ [$+0.189,+0.431$] minutes. The turnaround interaction is $+0.213$
+[$+0.064,+0.361$] minutes: the native-state penalty is larger when static
+proxies are simultaneously available. No corresponding weighted yard-service,
+activity-rate, or NGD interaction is resolved. This identifies bundle-level
+predictive interaction; it does not establish a causal operational interaction
+between terminal workload variables.
 
-The gate-only diagnostic adds a different interpretation. The unchanged net
-formally permits the silent yard bypass. Independent optional routing in
-\textit{no-rules} samples it in 10.5 of 17,892 visits on average
-(0.059\,\%), while both rule-based configurations sample none across 178,920
-visits each. This is not a parallelism or case-order violation, and the net is not
-physically constrained to suppress it. Instead, it is reported as a small
-instance of discovered-language overgeneralisation whose realised frequency
-depends on the data-aware routing layer.
+The rule audit explains why ordinary feature importance would be misleading.
+The static-only and both bundles each retain just one split from the static
+workload family, on \texttt{target\_rank\_group}; no continuous demand or
+utilisation split survives. Native-only and both each retain one
+\texttt{queue\_length} split. Most retained rules use visit/process or location
+state. Correlation is concentrated within alternative static representations:
+$\rho=0.922$ for gate and RMG utilisation, $0.898$ for gate and RMG demand, and
+$-0.790$ for target utilisation and target rank. By contrast, the largest
+absolute demand--native-state correlation is 0.190 and the largest
+utilisation--native-state correlation is 0.019. Correlated attributes may
+remain in an event log; the methodological issue is unstable feature selection,
+not a requirement that predictors be mutually independent.
 
-These intervals describe seed variation for three fixed bundles. They do not
-include discovery uncertainty or another training period. They isolate the
-incremental feature sets, but they do not identify the effect of each
-individual demand, utilisation, or live-workload predictor.
+The semantically cleaned static sensitivity confirms this boundary. Relative
+to visit-only, it changes turnaround EMD by $+0.049$
+[$-0.023,+0.121$] and weighted yard-service EMD by $-0.024$
+[$-0.095,+0.046$], both unresolved. Activity-rate error rises by $+0.0622$
+[$+0.0560,+0.0683$] and 3-gram NGD by $+0.01636$
+[$+0.01458,+0.01813$]. None of its retained splits uses demand or utilisation;
+the expanded candidate set instead changes which visit and location rules are
+selected. The result is evidence of discovery instability, not evidence that a
+retained demand split directly causes the error. It also removes the rationale
+for further ad-hoc feature subsets.
 
-\paragraph{Deliberate Choice of the Scenario Model}
+\paragraph{Reference-model decision}
 
-The workload-blind \textit{rules} configuration is the strongest historical
-screening model overall, but the scenario experiment
-has another purpose: it tests whether the data-aware
-white-box model can be changed and inspected. The calibrated
-\textit{rules$+$workload} model is used for that reason. It is not used because
-it is an unambiguously better forecaster. RQ4 tests white-box model experiments
-and their limits.
+\textit{Visit-only} is fixed as the within-study reference because it is the
+most parsimonious cell, has the lowest activity-rate error, and is practically
+tied for the lowest 3-gram NGD. Static-only's 0.021-minute turnaround-EMD
+advantage is unresolved and accompanied by materially worse generated activity
+frequencies and local sequences. The \textit{both} model is therefore recorded
+as investigated but rejected. It remains useful only for checking whether the
+scenario conclusion depends on this model choice. Because the same temporal
+hold-out informed the decision, ``within-study reference'' does not mean an
+independently selected prospective model.
 
-\noindent\textbf{RQ3 answer.} Context is beneficial only when the selected
-state abstraction carries stable information for the modelled decision.
-Process- and case-state rules improve activity incidence and suppress the
-rarely sampled silent bypass; their small turnaround-EMD improvement is not
-resolved by the paired interval. Adding the available workload state
-afterward produces no resolved yard-service improvement and worsens activity
-incidence and complete-visit timing. More state is therefore not automatically
-more valid state.
+\noindent\textbf{RQ3 answer.} Neither static workload proxies nor ProSiT's
+native dynamic state improve the multi-perspective historical fit. Static
+proxies harm control-flow-frequency fidelity; native state harms turnaround
+fidelity, especially when combined with them. More available state is therefore
+not automatically more valid process state, and the evidence favours the
+parsimonious visit-only model for this event log.
 
 \paragraph{Meaning of the Time Measures}
 \label{sec:results_temporal_note}
@@ -387,22 +395,23 @@ information to handle evolving processes
 
 Equation~\ref{eq:mean_transfer_decomposition} separates the final mean deficit
 without pretending that the two sources can be identified case by case. For
-the cap-three scenario baseline,
+the final \textit{visit-only} cap-three baseline,
 \begin{equation}
-39.742-31.627=(37.293-31.627)+(39.742-37.293)
-=5.666+2.450\ \text{minutes}.
+39.742-32.114=(37.293-32.114)+(39.742-37.293)
+=5.179+2.450=7.629\ \text{minutes}.
 \end{equation}
-Approximately 70\,\% of the mean deficit is therefore already present relative
-to the training-period mean; the remaining 30\,\% is the later-period mean
-shift. For the strict \textit{rules} model, the corresponding calibration
-period deficit is 5.200 minutes and the held-out deficit is 7.649 minutes.
+Approximately 68\,\% of the mean deficit is therefore already present relative
+to the training-period mean; the remaining 32\,\% is the later-period mean
+shift.
 This decomposition applies to the means only and is not an additive
 decomposition of EMD.
 
-The service-time comparison points in the same direction. The strict
-\textit{rules} simulations have a frequency-weighted yard-service EMD of 0.595
-minutes against the training data, compared with 2.356 minutes against the
-hold-out. Much of the held-out service mismatch is therefore temporal transfer.
+The service-time comparison points in the same direction. An earlier
+training-period diagnostic for the workload-blind rules bundle produced a
+frequency-weighted yard-service EMD of 0.595 minutes, whereas the standardized
+\textit{visit-only} reference reaches 2.357 minutes against the hold-out. The
+comparison is descriptive because the bundle versions are not identical, but
+it is consistent with substantial temporal transfer in activity timing.
 Complete turnaround still has a substantial training-period deficit, which
 indicates an additional model boundary beyond drift. The distinction is
 important because a direct future-log comparison alone can conflate simulator
@@ -627,7 +636,7 @@ rises by 209.8 seconds, or about 3.5 minutes.
 Route-frequency weighting gives a p5 baseline of 232.5 seconds for the inbound
 gate-to-yard leg and 224.8 seconds for the outbound yard-to-gate leg. Their sum
 is 457.2 seconds, or 7.62 minutes per visit. This is close in scale to the
-8.115-minute mean turnaround under-prediction in
+7.629-minute mean turnaround under-prediction in
 Table~\ref{tab:final_kpis}. The comparison is diagnostically important: omitted
 physical transition time can plausibly account for a large part of the mean
 bias. It is not an additive correction or a causal decomposition. The p5 values
@@ -771,8 +780,12 @@ modelling; it does not attribute all accumulated delay to capacity shortage.
 \label{sec:results_scenarios}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The scenario baseline uses the previously calibrated \textit{rules$+$workload} bundle from RQ1 and a maximum of three available resources per RMG block. It is used because its rules can be
-inspected and changed. It was not the best screening configuration. Ten matched seeds (42--51) are run for the baseline, T22 removal, and the 20\,\% demand increase. This gives 30 simulations with 17,892 cases each.
+The primary scenario baseline is the selected \textit{visit-only} bundle with
+the expert-validated maximum of three available resources per RMG block. Ten
+matched seeds (42--51) are run for the baseline, T22 removal, and the 20\,\%
+demand increase, giving 30 simulations with 17,892 cases each. The same design
+is repeated with the investigated but rejected \textit{both} bundle. This
+second set is a model-choice robustness check, not a second reference model.
 
 Table~\ref{tab:scenario_kpis} uses the baseline from this matched runner. It is only the reference for paired changes. The RQ1 results still come from Table~\ref{tab:final_kpis}.
 
@@ -802,15 +815,15 @@ terminal.
 \toprule
 \textbf{KPI} & \textbf{Reference} & \textbf{Outcome} & \textbf{Change} & \textbf{95\,\% CI} \\
 \midrule
-Mean turnaround (min) & 31.627 & 31.699 & $+0.072$ & [$-0.092$, $+0.235$] \\
-P90 turnaround (min) & 53.700 & 53.900 & $+0.200$ & [$-0.252$, $+0.652$] \\
-Mean RMG service (min) & 10.852 & 10.851 & $-0.001$ & [$-0.062$, $+0.060$] \\
-Mean RMG pre-service (min) & 7.898 & 7.979 & $+0.081$ & [$-0.011$, $+0.173$] \\
-RMG receive service (min) & 11.273 & 11.271 & $-0.002$ & [$-0.103$, $+0.099$] \\
-RMG receive pre-service (min) & 8.037 & 8.131 & $+0.094$ & [$-0.003$, $+0.191$] \\
-RMG delivery service (min) & 8.784 & 8.813 & $+0.029$ & [$-0.034$, $+0.091$] \\
-RMG delivery pre-service (min) & 7.725 & 7.799 & $+0.074$ & [$-0.091$, $+0.239$] \\
-Mean T22 assignments per run & 588.4 & 0.0 & $-588.4$ & exact \\
+Mean turnaround (min) & 32.114 & 32.224 & $+0.110$ & [$-0.057$, $+0.277$] \\
+P90 turnaround (min) & 54.200 & 54.500 & $+0.300$ & [$-0.289$, $+0.889$] \\
+Mean RMG service (min) & 11.073 & 11.009 & $-0.064$ & [$-0.155$, $+0.027$] \\
+Mean RMG pre-service (min) & 8.155 & 8.273 & $+0.118$ & [$+0.041$, $+0.195$] \\
+RMG receive service (min) & 11.353 & 11.288 & $-0.066$ & [$-0.172$, $+0.041$] \\
+RMG receive pre-service (min) & 8.198 & 8.332 & $+0.134$ & [$+0.039$, $+0.228$] \\
+RMG delivery service (min) & 8.833 & 8.756 & $-0.077$ & [$-0.208$, $+0.054$] \\
+RMG delivery pre-service (min) & 8.124 & 8.233 & $+0.108$ & [$-0.004$, $+0.221$] \\
+Mean T22 assignments per run & 590.5 & 0.0 & $-590.5$ & exact \\
 \bottomrule
 \end{tabularx}
 \caption{Paired Scenario A results: T22 resource-pool reallocation
@@ -831,11 +844,11 @@ Model arrivals per working hour & 87.842 & 105.411 & $+20.000\,\%$ & exact \\
 Observed mean inter-arrival (min) & 0.8282 & 0.7145 & $-0.1137$ & [$-0.1145$, $-0.1128$] \\
 Observed arrivals per elapsed hour & 72.452 & 83.979 & $+11.527$ ($+15.910\,\%$) & [$+11.478$, $+11.577$] \\
 Observed simultaneous-arrival share (\%) & 54.221 & 60.015 & $+5.795$ pp & [$+5.736$, $+5.853$] pp \\
-Mean turnaround (min) & 31.627 & 31.633 & $+0.005$ & [$-0.136$, $+0.147$] \\
-Mean RMG service (min) & 10.852 & 10.943 & $+0.091$ & [$+0.037$, $+0.146$] \\
-Mean RMG pre-service (min) & 7.898 & 7.907 & $+0.009$ & [$-0.072$, $+0.090$] \\
-RMG receive service / pre-service (min) & 11.273 / 8.037 & 11.347 / 8.000 & $+0.073$ / $-0.038$ & [$+0.038$, $+0.108$] / [$-0.119$, $+0.043$] \\
-RMG delivery service / pre-service (min) & 8.784 / 7.725 & 8.866 / 7.774 & $+0.081$ / $+0.049$ & [$-0.020$, $+0.183$] / [$-0.047$, $+0.146$] \\
+Mean turnaround (min) & 32.114 & 32.080 & $-0.033$ & [$-0.171$, $+0.104$] \\
+Mean RMG service (min) & 11.073 & 11.060 & $-0.013$ & [$-0.080$, $+0.054$] \\
+Mean RMG pre-service (min) & 8.155 & 8.097 & $-0.058$ & [$-0.130$, $+0.014$] \\
+RMG receive service / pre-service (min) & 11.353 / 8.198 & 11.350 / 8.137 & $-0.003$ / $-0.061$ & [$-0.120$, $+0.114$] / [$-0.142$, $+0.020$] \\
+RMG delivery service / pre-service (min) & 8.833 / 8.124 & 8.792 / 8.054 & $-0.040$ / $-0.070$ & [$-0.181$, $+0.101$] / [$-0.200$, $+0.059$] \\
 \bottomrule
 \end{tabularx}
 \caption{Paired Scenario B results: 20\,\% higher working-time arrival
@@ -846,29 +859,33 @@ intensity ($N_{\text{seeds}}=10$; scenario minus matched baseline).}
 interval from enablement to activity start, not pure queueing time.
 ``Observed'' arrival measures use the minute-resolved simulated event log and
 elapsed calendar time. Intervals quantify paired seed-wise variation
-conditional on the frozen model. Across all 30 cap-three scenario logs, the
-sequential and duration-tail contracts pass. The expert-validated RMG ceiling
-reduces aggregate maximum concurrency from the discovered 100 to 66.}
+conditional on the frozen model. All 30 primary logs pass the structural case
+contracts. One T22-closure visit in seed 46 has a turnaround of 2,050 minutes;
+it is retained and reported as a duration-tail diagnostic, not treated as a
+physical contract violation. No service event exceeds 24 hours. The
+expert-validated RMG ceiling reduces aggregate maximum concurrency from the
+discovered 100 to 66.}
 \end{table}
 
 \subsection{Scenario A: T22 Resource-Pool Reallocation}
 
-T22 receives 588.4 assignments per baseline run. This is 4.10\,\% of RMG
+T22 receives 590.5 assignments per baseline run. This is 4.32\,\% of RMG
 events. After removal, it receives none. The intervention executes as
 intended. The mean-turnaround change is
-$+0.072\;[-0.092,+0.235]$ minutes. Its paired interval includes zero. Mean RMG
-service changes by $-0.001\;[-0.062,+0.060]$ minutes, whereas mean RMG
-pre-service delay changes by $+0.081\;[-0.011,+0.173]$ minutes.
+$+0.110\;[-0.057,+0.277]$ minutes. Its paired interval includes zero. Mean RMG
+service changes by $-0.064\;[-0.155,+0.027]$ minutes, whereas mean RMG
+pre-service delay increases by $+0.118\;[+0.041,+0.195]$ minutes.
 
-Receive service changes by $-0.002\;[-0.103,+0.099]$ minutes and receive
-pre-service by $+0.094\;[-0.003,+0.191]$ minutes. Delivery service changes
-by $+0.029\;[-0.034,+0.091]$ minutes and delivery pre-service by
-$+0.074\;[-0.091,+0.239]$ minutes. None of these mean-effect intervals
-excludes zero. The model therefore verifies the reassignment mechanism but
-does not resolve a mean performance effect at case, service or pre-service
-level. That distinction is important: removing an eligible resource in the
-statistical pool is observable, while a physical closure effect is not
-established.
+Receive service changes by $-0.066\;[-0.172,+0.041]$ minutes and receive
+pre-service increases by $+0.134\;[+0.039,+0.228]$ minutes. Delivery service
+changes by $-0.077\;[-0.208,+0.054]$ minutes and delivery pre-service by
+$+0.108\;[-0.004,+0.221]$ minutes. The selected model therefore resolves a
+small increase in model-derived pre-service delay, concentrated in receive
+handling, but no end-to-end or service-time effect. The single 2,050-minute
+visit occurs in this scenario and is retained; the unresolved P90 change
+($+0.300\;[-0.289,+0.889]$ minutes) shows that it is an isolated model tail,
+not a general distributional shift. Removing an eligible statistical resource
+is observable, whereas a physical block-closure effect is not established.
 
 The experiment is not a full block-closure study. The remaining 21 blocks stay
 eligible for all RMG activities. Each keeps capacity three. The selector moves
@@ -885,16 +902,15 @@ by 15.910\,\%. Closed gate periods remain fixed. Timestamps are also floored to
 minutes. This flooring turns more short positive intervals into simultaneous
 observations. It does not change the zero mass in the input distribution.
 
-Mean turnaround changes by $+0.005\;[-0.136,+0.147]$ minutes, and mean RMG
-pre-service by $+0.009\;[-0.072,+0.090]$ minutes. Both intervals include
-zero. Mean RMG service increases by $+0.091\;[+0.037,+0.146]$ minutes, driven
-mainly by receive service at $+0.073\;[+0.038,+0.108]$ minutes; delivery
-service and both handling-specific pre-service intervals remain unresolved.
-The higher arrival intensity therefore produces a small response in the
-workload-conditioned service-time component, about 5.5 seconds on average,
-but no resolved propagation into total turnaround or accumulated pre-service
-delay. The experiment does not identify a physical cause and does not by
-itself justify favouring one handling type.
+Mean turnaround changes by $-0.033\;[-0.171,+0.104]$ minutes, mean RMG service
+by $-0.013\;[-0.080,+0.054]$ minutes, and mean RMG pre-service by
+$-0.058\;[-0.130,+0.014]$ minutes. All intervals include zero. The receive and
+delivery service and pre-service intervals also include zero. Thus the
+selected workload-blind reference transmits the intervention to arrival times
+but not to a resolved handling or end-to-end response. This is expected to be
+possible in ProSiT: changing arrivals alone need not affect service draws when
+the selected trees retain no dynamic workload input. Any response would have
+to arise through shared-resource scheduling and model-derived enablement.
 
 The missing congestion response is itself a model result. Under the capped
 reference, 20\,\% higher demand does not create enough system interaction to
@@ -905,9 +921,10 @@ absorb 20\,\% more demand without congestion.
 \subsection{Sensitivity to the Expert-Validated RMG Ceiling}
 \label{sec:results_rmg_cap_sensitivity}
 
-The final Inductive-Miner scenario experiment was repeated without replacing
-the overlap-derived RMG capacities. Table~\ref{tab:rmg_cap_sensitivity}
-reports matched-seed differences between the cap-three and uncapped models.
+Before the final feature-source selection, the fully contextualised
+Inductive-Miner scenario experiment was repeated without replacing the
+overlap-derived RMG capacities. Table~\ref{tab:rmg_cap_sensitivity} reports
+matched-seed differences between its cap-three and uncapped versions.
 The first contrast is a direct level effect within each setting. The second is
 the interaction defined in Chapter~4: whether the cap changes a scenario
 response after removing its baseline level effect.
@@ -942,8 +959,9 @@ service response depends on the capacity representation; it does not identify
 a physical cause. Although the direct T22 P90 level effect is resolved at
 $+0.500\;[+0.123,+0.877]$ minutes, its cap-by-scenario interaction is not
 ($+0.200\;[-0.457,+0.857]$). The expert ceiling is therefore retained as a
-documented physical correction, but it is not the driver of the headline
-turnaround or pre-service findings.
+documented physical correction. This historical diagnostic shows that it did
+not drive the headline effects within that contextualised bundle; it is not an
+uncapped validation of the later selected \textit{visit-only} reference.
 
 \subsection{Capacity Pressure of the Demand Intervention}
 
@@ -981,7 +999,8 @@ directly.
 \subsection{Demand-Saturation Stress Test}
 
 Table~\ref{tab:demand_saturation_ladder} reports the additional 60-run
-response surface. The configured multiplier scales working-time
+response surface from the earlier fully contextualised diagnostic bundle. The
+configured multiplier scales working-time
 inter-arrivals; the realised rate ratio is measured over elapsed calendar
 time. These quantities diverge because the gate calendar remains fixed while
 the simulated horizon becomes shorter. All 60 runs preserve the case count,
@@ -1005,8 +1024,8 @@ $\boldsymbol{m}$ & \textbf{rate ratio} & \textbf{per hour} & \textbf{turnaround}
 3.0 & 3.504 & 253.884 & 37.787 & $+6.160$ [$+5.889$, $+6.431$] & 15.665 & $+7.767$ [$+7.548$, $+7.985$] \\
 \bottomrule
 \end{tabularx}
-\caption{Demand-saturation response of the cap-three
-\textit{rules$+$workload} model ($N_{\mathrm{seeds}}=10$). Times and paired
+\caption{Demand-saturation response of the earlier fully contextualised
+cap-three model ($N_{\mathrm{seeds}}=10$). Times and paired
 changes are in minutes; the realised rate ratio uses each level's mean elapsed
 arrival rate relative to the matched baseline.}
 \label{tab:demand_saturation_ladder}
@@ -1034,7 +1053,7 @@ estimate on the realised-rate axis.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.96\textwidth]{figures/results_demand_saturation_ladder.png}
-    \caption{Response of the data-aware scenario reference model to increasing
+    \caption{Response of the earlier fully contextualised diagnostic model to increasing
     realised elapsed arrival rates. Points are ten-seed means and shaded bands
     are 95\,\% Monte-Carlo intervals. The dashed line marks the independent
     2.37 nominal mean-saturation estimate for the most-loaded held-out RMG
@@ -1059,41 +1078,45 @@ fidelity.
 
 \subsection{Scenario Response Across State Configurations}
 
-The workload-blind \textit{rules} bundle provides an additional structural-
-uncertainty check. With the same cap, seeds, and interventions, T22 removal
-changes mean turnaround by $+0.025\;[-0.083,+0.134]$ minutes and the demand
-intervention by $-0.028\;[-0.185,+0.129]$ minutes. Both remain unresolved.
-T22 removal does increase mean RMG pre-service delay by
-$+0.118\;[+0.038,+0.199]$ minutes in this configuration. Delivery pre-service
-increases by $+0.146\;[+0.016,+0.276]$ minutes, whereas the receive pre-service
-interval includes zero. Conversely, its 20\,\% demand run has no resolved mean
-RMG service or pre-service response.
+The selected \textit{visit-only} and rejected \textit{both} bundles are
+compared with the same cap, seeds and interventions. In \textit{both}, T22
+removal changes mean turnaround by $+0.072\;[-0.000,+0.145]$ minutes and mean
+RMG pre-service by $+0.056\;[+0.012,+0.100]$ minutes. Its receive pre-service
+change is also resolved, while delivery service falls by
+$0.095\;[0.006,0.184]$ minutes. The 20\,\% demand intervention changes mean
+turnaround by $+0.057\;[-0.075,+0.188]$ minutes; mean RMG service and
+pre-service remain unresolved. These component results differ from the
+selected reference even though both configurations retain the same Petri net.
 
 The matched difference-in-differences is more important than whether one
 configuration happens to cross a 95\,\% threshold. For mean turnaround, the
-\textit{rules$+$workload} response minus the workload-blind response is
-$+0.046\;[-0.123,+0.216]$ minutes for T22 removal and
-$+0.033\;[-0.179,+0.246]$ minutes for higher demand. None of the corresponding
-headline turnaround, RMG service, receive/delivery service, or RMG pre-service
-contrasts exclude zero. Thus the unresolved end-to-end response is robust to
-this state-abstraction choice, while the small component-level effects are not
-stable enough to attribute to workload features. This is direct evidence of
-input-model uncertainty that the within-configuration Monte-Carlo intervals
-alone do not show.
+\textit{both} response minus the \textit{visit-only} response is
+$-0.038\;[-0.220,+0.143]$ minutes for T22 removal and
+$+0.090\;[-0.096,+0.276]$ minutes for higher demand. Neither excludes zero.
+The corresponding mean RMG service and pre-service contrasts are also
+unresolved. Two narrower outcomes are bundle-sensitive: for higher demand,
+the P90 response differs by $+0.500\;[+0.123,+0.877]$ minutes and receive
+pre-service by $+0.137\;[+0.013,+0.261]$ minutes. Thus the absence of a mean
+turnaround response is robust, whereas tail and component conclusions are not
+fully stable across plausible parameter bundles. This is direct evidence of
+input-model uncertainty that within-configuration Monte-Carlo intervals alone
+do not show.
 
 \medskip
 
 \noindent\textbf{RQ4 answer.} Both policy interventions execute as specified. T22
-assignments fall to zero. Working-time arrival intensity rises by exactly
-20\,\%. Both mean-turnaround intervals include zero. The model supports clear
-and repeatable experiments and exposes separate receive and delivery effects;
-in this run, only the higher-demand intervention produces a resolved mean RMG
-service response. That component response is not statistically distinguishable
-from the workload-blind configuration's response, whereas the unresolved mean
-turnaround is reproduced by both configurations. The capacity-pressure audit
+assignments fall to zero, and working-time arrival intensity rises by exactly
+20\,\%. In the selected \textit{visit-only} reference, both mean-turnaround
+intervals include zero. T22 removal produces a small resolved increase in
+model-derived RMG pre-service delay, especially for receive handling; the
+demand intervention produces no resolved handling or end-to-end mean response.
+The isolated 2,050-minute T22 visit and bundle-sensitive P90 contrasts reinforce
+that these are model experiments rather than stable physical effects. The
+capacity-pressure audit
 also shows that 20\,\% higher arrivals leave the most-loaded held-out block at
 only 0.506 nominal mean utilisation under the three-task ceiling. The extended
-demand ladder resolves the ambiguity: at a realised elapsed-rate ratio of
+demand ladder in the earlier fully contextualised bundle resolves the
+mechanistic ambiguity: at a realised elapsed-rate ratio of
 2.367, mean turnaround rises by 4.644 minutes and mean RMG pre-service by 5.878
 minutes; stronger levels produce still larger responses. The simulator can
 therefore propagate abstract resource pressure, but the threshold and
@@ -1105,12 +1128,13 @@ operational recommendation from these results because its spatial assignment,
 movement and queue semantics are not yet adequate. Executability and even a
 plausible stress response are not counterfactual validity.
 
-The matched uncapped sensitivity reaches the same headline conclusion: no
-direct cap effect or cap-by-scenario interaction on mean turnaround is
-resolved. The ceiling is thus necessary to respect the expert-validated
-physical bound, but the negative counterfactual conclusion is not an artefact
-of imposing it. The resolved cap-by-demand interaction in mean RMG service is
-reported as model sensitivity rather than physical evidence.
+The earlier matched uncapped sensitivity reaches the same headline conclusion
+within the fully contextualised bundle: no direct cap effect or cap-by-scenario
+interaction on mean turnaround is resolved. It supports retaining the ceiling
+as a physical correction, but it does not prove that the final
+\textit{visit-only} response would be unchanged without the cap. Its resolved
+cap-by-demand interaction in mean RMG service is reported as historical model
+sensitivity rather than physical evidence.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interpretation: From Process Mining to Data-Aware Simulation}
@@ -1154,11 +1178,12 @@ truck-visit contract.
 
 The silent gate-only path makes the same trade-off concrete. It is permitted
 by the discovered language and retained as an auditable finding rather than
-removed through an undocumented guard. Its rarity in simulation---0.059\,\%
-for \textit{no-rules} and zero cases for \textit{rules$+$workload}---shows why
-formal language analysis and realised-output validation answer complementary
-questions. A permitted path need not be common, yet it remains relevant when
-the model is interpreted beyond the observed period.
+removed through an undocumented guard. None of the four standardized
+decision-tree configurations samples it in 178,920 visits per configuration;
+an earlier unconditional-routing benchmark sampled it in 0.059\,\% of visits.
+Formal language analysis and realised-output validation therefore answer
+complementary questions. A permitted path need not be common, yet it remains
+relevant when the model is interpreted beyond the observed period.
 
 This is a precision-side model-repair problem. The simulation-guided framework
 of Vinci and de Leoni \cite{VinciDeLeoni2025Repair} provides a rigorous way to
@@ -1173,7 +1198,7 @@ not substituted silently for the discovered model. The rare realised frequency
 does not by itself make the formal defect harmless.
 
 The same separation applies to time. Good control-flow coverage does not
-account for the 8.115-minute mean turnaround deficit or the 17.300-minute P90
+account for the 7.629-minute mean turnaround deficit or the 16.800-minute P90
 deficit. The simulator can put activities in the correct order and still omit
 time between them. In the CTB setting, this missing time may contain movement,
 traffic, resource interaction, queueing or operational states that are not
@@ -1185,7 +1210,7 @@ or variant frequencies would have produced an overly positive conclusion.
 The transition-baseline diagnostic makes the scale of that abstraction
 boundary concrete. Route-specific p5 values lie between 2.16 and 5.28 minutes,
 and the frequency-weighted inbound and outbound lower-tail components sum to
-7.62 minutes per visit. Their proximity to the 8.115-minute mean deficit is
+7.62 minutes per visit. Their proximity to the 7.629-minute mean deficit is
 consistent with omitted physical movement being a major contributor. It does
 not prove that all residual time is travel, because the baseline also contains
 unseparated traffic and operational delay and because a percentile summary
@@ -1206,15 +1231,15 @@ available at case creation captures a real predictive regularity.
 
 The duration results point in the other direction. For the two dominant RMG
 activities, the diagnostic decision trees have slightly negative held-out
-$R^2$. The strict ablation makes the source of the endpoint result clearer.
-Process- and case-state rules improve turnaround EMD and activity incidence,
-but adding workload information afterward leaves weighted service-time EMD
-unchanged within a wide paired interval and worsens turnaround and routing
-measures. These observations are consistent with limited stable duration
-signal: conditional branches may be interpretable without adding useful
-later-period predictive information. They are not, however, a formal causal
-chain or proof that workload never matters. They show that the available CTB
-workload representation does not transfer as useful state in this experiment.
+$R^2$. The factorial experiment makes the source of the endpoint result
+clearer. Static workload proxies worsen activity-frequency and 3-gram fidelity;
+native state raises turnaround EMD and interacts negatively with the static set,
+while neither source resolves a weighted service-time improvement. The
+clean-static model retains no demand or utilisation split and still changes the
+selected visit/location tree structure. Conditional branches may therefore be
+interpretable without adding stable later-period predictive information. This
+is not proof that workload never matters; it shows that the available CTB
+representations do not transfer as useful state in this experiment.
 
 This qualification is central to the interpretation of data awareness.
 Adding attributes increases representational capacity, but useful capacity
@@ -1233,9 +1258,9 @@ This result sharpens rather than contradicts the state-abstraction findings of
 Vinci et al. \cite{Vinci2023Inf.Activ.Prob}. Their best-performing abstraction
 varies between the two evaluated processes, and an unsuitable history state can
 create problematic simulated behaviour. The CTB ablation supplies the missing
-application-specific test: case and process state help selected routing
-measures, whereas the available workload state does not improve the dominant
-timing error. It also goes beyond data-aware routing alone. The framework of
+application-specific test: the parsimonious visit/process state reproduces
+local control flow most closely, whereas neither workload source improves the
+dominant timing error. It also goes beyond data-aware routing alone. The framework of
 López-Pintado et al. \cite{lopez2024} demonstrates the value of case data for
 control-flow decisions but identifies data-dependent activity duration as a
 separate extension. CTB shows why that separation matters in physical
@@ -1372,8 +1397,8 @@ the term \textit{pre-service delay}, not queueing time.
 
 An RMG resource in ProSiT is an abstract capacity assignment. The discovered
 overlap capacity is 100. The stated physical cap is 66 across 22 blocks. This
-mismatch shows that timestamp overlap is not a crane count. The scenario reference model
-uses the cap of three per block.
+mismatch shows that timestamp overlap is not a crane count. The selected
+scenario reference model uses the cap of three per block.
 
 The cap does not add spatial state. Target-area attributes are predictors, not
 hard inventory constraints. The simulator does not bind a container to a
@@ -1407,8 +1432,8 @@ real sources of delay.
 
 \paragraph{Systematic Turnaround Under-Prediction}
 
-The data-aware reference model under-predicts mean turnaround by 8.115 minutes and P90 by
-17.300 minutes. The narrow seed intervals show that this is model bias, not
+The data-aware reference model under-predicts mean turnaround by 7.629 minutes and P90 by
+16.800 minutes. The narrow seed intervals show that this is model bias, not
 simulation noise. The log cannot show how much missing time comes from
 movement, traffic, queueing, or an unrecorded state. Correct case order does
 not remove this limit on KPI forecasts.
@@ -1422,9 +1447,10 @@ variation in one fixed model. They do not cover a new training period, another
 discovery run, or missing spatial state. The cap sets a ceiling but adds no
 location feasibility or equipment movement. More seeds would narrow these
 intervals. They would not reduce structural uncertainty. The matched
-state-configuration ablation addresses one part of that uncertainty: it shows
-that the unresolved mean-turnaround response persists with workload-blind
-rules. It still does not cover a new training period, another discovered net,
+state-configuration comparison addresses one part of that uncertainty: it
+shows that the unresolved mean-turnaround response persists across the selected
+\textit{visit-only} and rejected \textit{both} bundles. It still does not cover
+a new training period, another discovered net,
 alternative resource semantics, or the missing spatial and queueing state.
 
 \paragraph{External Validity Is Limited to One Terminal and Time Window}
