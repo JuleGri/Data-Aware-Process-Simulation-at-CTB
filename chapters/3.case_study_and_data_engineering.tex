@@ -31,12 +31,12 @@ Section~\ref{sec:train_test_split}.
     The CTB environment in this project has several resource constraints.
     Located between the waterside and the landside, 22 RMG storage
     blocks (T06--T27) serve both sides. Operational experts from the terminal
-    confirmed two constraints used in this study: the activities of one truck
-    cannot be executed in parallel, and at most three automated rail-mounted
-    gantry cranes can work concurrently at one block. The CTB
-    has two specialised areas: an empty-container depot (called
-    ``MT'' or ``LL'', from the German \textit{Leerlager}) and the
-    manually operated HO2 yard area. The terminal gate consists of 16
+    confirmed two constraints used in this study, one the one hand, that the activities of one truck
+    cannot be executed in parallel, and on  the other, that at most three automated rail-mounted
+    gantry cranes can work concurrently at one block with a limit of three truck handling locations per block. The CTB
+    has two specialised areas, one an empty-container depot (called
+    "MT" or "LL", from the German \textit{Leerlager}) and the
+    manually operated so called "HO2"  (\textit{originating from Hand-Over-Area}) yard area. The terminal gate consists of 16
     lanes, split between incoming and outgoing trucks. The number of
     operated gate lanes varies by day, shift and terminal resource plan.
 
@@ -281,7 +281,7 @@ $(\texttt{TruckVisitGkey}, \texttt{TruckExchangeArea})\equiv
 (\texttt{TruckVisitGkey}, \texttt{ANLAUFPUNKT\_HALTESTELLE})$.
 
 When the first matching step fails, a fallback is
-applied to single-exchange-area visits: if a truck visit contains only
+applied to single-exchange-area visits. If a truck visit contains only
 one yard activity and no container identifier was matched, the
 container ID is inferred from any other transaction associated with the
 same \texttt{TruckVisitGkey}. The resulting links are audited before
@@ -291,7 +291,7 @@ event-log construction.
 \label{sec:invalid_process_instances}
 
 The cleaning pipeline removes complete cases rather than individual
-records: whenever a truck visit violates one of the defined quality
+records, so whenever a truck visit violates one of the defined quality
 criteria the entire process instance is excluded, so that only
 internally consistent process executions are retained. The same rules are
 applied at case level before event-log construction.
@@ -355,7 +355,7 @@ After the unknown-activity filter, this scope decision removes 1,693
 multi-RMG visits and 6,820 events.
 
 Table~\ref{tab:eventlog_attrition} reconciles the resulting denominators. The
-increase from operational records to event-log events is intentional: Gate In
+increase from operational records to event-log events is intentional, as Gate In
 and Gate Out are added and lifecycle records are transformed into activities.
 
 \begin{table}[htbp]
@@ -681,8 +681,8 @@ variables as case attributes does not leak the simulated future
 provided that the same planned manifest is supplied for a prospective run.
 
 The implementation detail that the target block is reconstructed from the
-planned stop's area-specific activity label can otherwise look like
-look-ahead: after genericising \texttt{T06--T27} activities, the reconstructed
+planned stop's area-specific activity label can otherwise look like a
+unknown details leakage, where after genericising \texttt{T06--T27} activities, the reconstructed
 block is copied into \texttt{primary\_target\_area}. Semantically, however,
 the source is the planned \texttt{ANLAUFPUNKT\_HALTESTELLE} attached to the
 visit order and available at entry, not the later activity-completion
@@ -724,7 +724,7 @@ assigned RMG block.
 
 An explicit support audit found an exact demand and utilisation key for every
 visit in the 80\,\% development period used for discovery and configuration
-selection. The auxiliary series end before the final operational records: 12
+selection. The auxiliary series end before the final operational records. 12
 visits in the last 20\,\% period lie beyond the demand support and 766 lie
 beyond the yard-state support. Their boundary values are left missing rather
 than filled from an earlier minute or extrapolated. They are not consumed by
