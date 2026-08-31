@@ -15,13 +15,13 @@ case level, 1,693 visits involving more than one RMG block were excluded. The
 empirical scope is therefore a defined one-RMG subprocess rather than all
 terminal truck movements.
 
-Preserving the ITS schedule-derived stop order stored in XES produces a compact
-sequential Petri net. On 17,892 test visits, the net reaches fitness 0.999992
-and completely fits 99.994\,\% of cases. A separate repair removes a silent
-gate-only bypass and raises precision from 0.7558 to 0.7939, but a matched
-ten-seed experiment finds no change in the generated fidelity results. The
-repair therefore improves the formal language without altering realised
-baseline behaviour.
+Preserving the ITS schedule-derived stop order stored in XES avoids a
+timestamp-induced parallelism artefact, but the raw Inductive-Miner model
+still requires an explicit domain repair to enforce sequential truck semantics
+and remove a gate-only bypass.  The resulting expert-repaired sequential Petri
+net fits all 17,892 held-out visits (fitness 1.0) with a test precision of
+0.7641.  This is the single executable model used by every ProSiT
+configuration and reported throughout the thesis.
 
 A $2\times2$ validation experiment separates manually constructed static
 demand and utilisation proxies from ProSiT's native workload and queue state.

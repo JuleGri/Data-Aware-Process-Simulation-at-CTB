@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "C:\Users\Jule\Documents\Master\Masterthesis\Data-Aware-Process-Simulation-at-CTB\artifacts\json_roundtrip_audit_final_ctb\26_json_roundtrip_audit.py", line 16, in <module>
+    from prosit.simulator import SimulatorParameters
+  File "C:\Users\Jule\AppData\Local\Programs\Python\Python311\Lib\site-packages\prosit\__init__.py", line 3, in <module>
+    from prosit.simulator import SimulatorParameters, SimulatorEngine
+  File "C:\Users\Jule\AppData\Local\Programs\Python\Python311\Lib\site-packages\prosit\simulator.py", line 7, in <module>
+    import pm4py
+  File "C:\Users\Jule\AppData\Local\Programs\Python\Python311\Lib\site-packages\pm4py\__init__.py", line 24, in <module>
+    from pm4py import (
+  File "C:\Users\Jule\AppData\Local\Programs\Python\Python311\Lib\site-packages\pm4py\util\__init__.py", line 22, in <module>
+    from pm4py.util import (
+  File "C:\Users\Jule\AppData\Local\Programs\Python\Python311\Lib\site-packages\pm4py\util\compression\__init__.py", line 22, in <module>
+    from pm4py.util.compression import dtypes, util
+  File "C:\Users\Jule\AppData\Local\Programs\Python\Python311\Lib\site-packages\pm4py\util\compression\util.py", line 28, in <module>
+    from pm4py.objects.dfg.obj import DFG
+  File "C:\Users\Jule\AppData\Local\Programs\Python\Python311\Lib\site-packages\pm4py\objects\__init__.py", line 22, in <module>
+    from pm4py.util import constants as pm4_constants
+  File "C:\Users\Jule\AppData\Local\Programs\Python\Python311\Lib\site-packages\pm4py\util\constants.py", line 262, in <module>
+    parent_name = str(psutil.Process(parent_pid).name())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Jule\AppData\Roaming\Python\Python311\site-packages\psutil\__init__.py", line 314, in __init__
+    self._init(pid)
+  File "C:\Users\Jule\AppData\Roaming\Python\Python311\site-packages\psutil\__init__.py", line 360, in _init
+    raise NoSuchProcess(pid, msg=msg) from None
+psutil.NoSuchProcess: process PID not found (pid=10224)

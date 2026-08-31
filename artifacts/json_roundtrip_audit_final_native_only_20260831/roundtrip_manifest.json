@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-08-31T12:44:27.911067+02:00",
+  "prosit_json_contract": "Official to_json/from_json representation of discovered parameters.",
+  "audit_question": "Whether the exact post-calibration in-memory sample state of the final CTB bundles survives a JSON round trip.",
+  "scope": "CTB bundles and installed ProSiT version only; this is not a claim that JSON is generally inferior to pickle.",
+  "source": "C:\\Users\\Jule\\Documents\\Master\\Masterthesis\\trucksimulation\\validation\\results\\tvt_final_native_only_scenarios_cap3_20260831",
+  "summary": [
+    {
+      "scenario": "baseline",
+      "pickle_sha256": "abc7b44006f511e5c447098b1e13c92cd5c5f3a1bb86213d816811a9f74b6cd9",
+      "json_sha256": "641f426be04c16de8d7e75baeb0ba9942fe6cf8edeb9fee6c6c154dc8f400cc2",
+      "rules_mode_equal": true,
+      "use_workload_features_equal": true,
+      "resources_equal": true,
+      "max_concurrency_equal": true,
+      "calendars_equal": true,
+      "empirical_case_attribute_distribution_equal": true,
+      "pickle_sampled_nodes": 40,
+      "roundtrip_sampled_nodes_before_runtime": 0,
+      "pickle_arrival_sample_n": 71530,
+      "roundtrip_arrival_sample_n_before_runtime": 0,
+      "ctb_calibration_metadata_in_pickle": true,
+      "ctb_calibration_metadata_after_roundtrip": false
+    },
+    {
+      "scenario": "t22_closed",
+      "pickle_sha256": "52ab15291cf95c32eb1ffc57c5ab955cfd257da89c9568e125457bce3c94ae89",
+      "json_sha256": "98cdd3f4c2d9e1a2fe312ac08ba5fae0db90c1c3630fd64e198767b2202532fe",
+      "rules_mode_equal": true,
+      "use_workload_features_equal": true,
+      "resources_equal": true,
+      "max_concurrency_equal": true,
+      "calendars_equal": true,
+      "empirical_case_attribute_distribution_equal": true,
+      "pickle_sampled_nodes": 40,
+      "roundtrip_sampled_nodes_before_runtime": 0,
+      "pickle_arrival_sample_n": 71530,
+      "roundtrip_arrival_sample_n_before_runtime": 0,
+      "ctb_calibration_metadata_in_pickle": true,
+      "ctb_calibration_metadata_after_roundtrip": false
+    },
+    {
+      "scenario": "demand_plus_20pct",
+      "pickle_sha256": "1b54a1a09efe37b711063a67ff2d2cc0b7f11276a80e0caf7dab7af3b8f8810f",
+      "json_sha256": "5b818c8d4c9935f0513d9bef8d2d80795f0d6405dbd01342f74d72f17f6e50ad",
+      "rules_mode_equal": true,
+      "use_workload_features_equal": true,
+      "resources_equal": true,
+      "max_concurrency_equal": true,
+      "calendars_equal": true,
+      "empirical_case_attribute_distribution_equal": true,
+      "pickle_sampled_nodes": 40,
+      "roundtrip_sampled_nodes_before_runtime": 0,
+      "pickle_arrival_sample_n": 71530,
+      "roundtrip_arrival_sample_n_before_runtime": 0,
+      "ctb_calibration_metadata_in_pickle": true,
+      "ctb_calibration_metadata_after_roundtrip": false
+    }
+  ],
+  "outputs": [
+    "roundtrip_summary.csv",
+    "sampled_node_inventory.csv"
+  ]
+}
