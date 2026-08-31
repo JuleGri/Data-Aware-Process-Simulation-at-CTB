@@ -114,11 +114,15 @@ to distinguish between reproducing historical behaviour, constructing an
 executable simulation model, and supporting credible what-if reasoning.
 The chronological development period is divided once more into discovery and
 validation partitions. The four ProSiT configurations are discovered on the
-first partition and compared on the next. Only the selected configuration is
-then rediscovered on the combined development data and evaluated on the final
-20\,\% temporal test period. The test period is therefore untouched by model
-selection. Its results remain retrospective evidence from one terminal and
-should not be confused with prospective field validation of an intervention.
+first partition and compared on the next. The configuration selected for
+historical fidelity is then rediscovered on the combined development data and
+evaluated on the final 20\,\% temporal test period. A separate
+purpose-specific audit asks whether the model used for demand scenarios
+contains an endogenous state through which changed arrivals can affect delay.
+This distinction prevents historical replay quality from being treated as
+sufficient evidence of intervention validity. The test results remain
+retrospective evidence from one terminal and should not be confused with
+prospective field validation of an intervention.
 
 The thesis contributes an empirical evaluation of data-aware process
 simulation in container terminal truck operations. First, it examines the
@@ -134,6 +138,9 @@ that additional data awareness necessarily improves simulation quality.
 Finally, two operational interventions and a six-level demand-saturation
 stress test are used to investigate both the capabilities and the boundaries
 of the resulting white-box model for what-if analysis and decision support.
+The experiment separates a parsimonious historical-fidelity reference from a
+minimal state-aware scenario model instead of claiming one globally best
+configuration for both objectives.
 The intended decision-support logic is made
 explicit: forecast terminal conditions define a scenario, candidate slot or
 resource policies are simulated, and their consequences are compared at both
@@ -207,7 +214,9 @@ $2\times2$ feature-source design and documents the executable parameter
 bundles used in the experiments. In addition, it specifies the
 Monte-Carlo replication protocol, the distributional fidelity measures, the
 paired ablation and temporal-transfer audits, the two what-if interventions, and the
-transition-duration sensitivity analysis.
+transition-duration sensitivity analysis. It also defines the separate
+adequacy criteria for a scenario model that must propagate changed demand
+through endogenous state.
 The final section documents the technical adaptations required to apply
 ProSiT to the CTB event log reproducibly.
 
@@ -218,7 +227,9 @@ language. It then compares the four ProSiT configurations on validation data,
 rediscovers the selected configuration on the complete development period,
 and evaluates its historical fidelity once on the untouched test period. The
 comparison separates the effects of static workload proxies and ProSiT's
-native workload state. Further diagnostic analyses examine
+native workload state. A matched stress test then compares the workload-blind
+historical reference with the minimal native-state model used for the demand
+scenario. Further diagnostic analyses examine
 the predictive signal contained in the available context attributes, the
 strong temporal structure of truck arrivals, the discovered resource
 capacities, and the interpretation of model-derived pre-service delays. The

@@ -9,7 +9,8 @@ and operational scenario runs reported in Chapter~\ref{chap:results}.
 Section~\ref{sec:experiment_goals} defines the goals of the experiments.
 Section~\ref{sec:solution_architecture} describes the solution architecture
 and connects its processing blocks. Section~\ref{sec:train_test_split} defines
-the held-out train/test split that separates discovery from evaluation and the
+the temporal train/validation/test split that separates discovery, model
+comparison, and final evaluation, together with the
 temporal-transfer diagnostic that distinguishes period change from model error.
 Section~\ref{sec:process_discovery_methodology} describes the
 control-flow discovery, event-order correction, structural domain check,
@@ -59,11 +60,14 @@ proxies and the simulator's native dynamic workload state. More context is
 treated as a modelling choice, not as an expected improvement.
 
 The third goal is to examine the model as a white-box tool for operational
-what-if analysis. The selected model is exposed to a resource-pool change at
-T22 and to a higher truck-arrival rate. These interventions test whether the
-specified input changes reach the simulation and whether the resulting KPI
-changes are interpretable within the model boundaries. They do not establish
-that the same effects would occur in the real terminal.
+what-if analysis. Historical fidelity and intervention validity are treated as
+different requirements. A parsimonious model may reproduce a held-out log but
+still omit the state through which an intervention should act. Candidate
+models are therefore exposed to a resource-pool change at T22 and to a higher
+truck-arrival rate. These interventions test whether the specified input
+changes reach the simulation and whether the resulting KPI changes are
+interpretable within the model boundaries. They do not establish that the
+same effects would occur in the real terminal.
 
 Across these goals, robustness is assessed through a temporal hold-out,
 repeated simulation runs, model-quality diagnostics, and sensitivity checks.
@@ -115,14 +119,14 @@ Figure~\ref{fig:research_design} gives an overview of the complete pipeline.
 \includegraphics[width=\textwidth,trim=0 0 0 105,clip]{figures/schemas/experimental_pipeline_bw.png}
 \caption{Solution architecture of the final experimental pipeline. Parameter
 discovery uses the standardized $2\times2$ feature-source design in
-Table~\ref{tab:prosit_hyperparams}. Every cell shares the training and test
-split, Petri-net skeleton, runner and replication protocol.}
+Table~\ref{tab:prosit_hyperparams}. Every cell shares the temporal partitions,
+Petri-net skeleton, runner and replication protocol.}
 \label{fig:research_design}
 \end{figure}
 
 The input is the simulation-ready event log from
-Chapter~\ref{chp:case_study_and_data}. It is divided chronologically into a
-training partition and an unseen test partition. Only the training data are
+Chapter~\ref{chp:case_study_and_data}. It is divided chronologically into
+discovery, validation, and test partitions. Only development-period data are
 used to discover the control flow and the ProSiT simulation parameters. Within
 each case, the physical stop sequence is stored as
 \texttt{case:event:order}. The XES export and import preserve this sequence
@@ -134,20 +138,25 @@ one truck must be sequential. The
 accepted Petri net becomes the common control-flow skeleton for all simulation
 configurations.
 
-ProSiT then discovers arrival, timing, routing, and resource parameters from
-the training partition. The four configurations differ only in whether static
-workload proxies and native dynamic workload state are available to their
-decision models. Each discovered parameter
-bundle is stored separately and simulated over the same time window and case
-volume as the test partition. Repeated runs with different seeds produce the
-simulation logs used for the fidelity comparison and confidence intervals.
+ProSiT first discovers arrival, timing, routing, and resource parameters from
+the 64\,\% discovery partition. The four configurations differ only in whether
+static workload proxies and native dynamic workload state are available to
+their decision models. Each discovered parameter bundle is stored separately
+and simulated over the same time window and case volume as the 16\,\%
+validation partition. After the historical-fidelity comparison, the required
+configurations are rediscovered on the complete 80\,\% development period.
+Repeated runs with different seeds produce the simulation logs used for the
+fidelity comparison and confidence intervals.
 
 The evaluation block compares the simulated logs with the held-out event log
 from several perspectives. It checks control-flow coverage, timing
 distributions, point statistics, arrival behaviour, and resource assumptions.
-After this historical evaluation, one transparent parameter bundle is used for
-the two what-if experiments. The scenario runner changes only the defined
-input parameters and compares each intervention with a matched-seed baseline.
+After the historical comparison, model roles are assigned by the validity
+claim being tested. The configuration selected for historical fidelity is
+used for RQ1. A separate purpose-specific audit determines the least complex
+configuration that can propagate a demand intervention through endogenous
+simulation state for RQ4. The scenario runner changes only the defined input
+parameters and compares each intervention with a matched-seed baseline.
 The transition-duration sensitivity study and the documented ProSiT
 workarounds provide additional diagnostic evidence around the main pipeline.
 
@@ -579,7 +588,7 @@ attributes. Exact minute-level joins additionally prevent future observations
 from entering a case through interpolation or nearest-time matching; this is a
 temporal-integrity safeguard rather than a decorrelation procedure.
 
-\subsection{Pre-Specified Configuration Selection}
+\subsection{Pre-Specified Historical-Fidelity Selection}
 
 The four configurations are discovered on the 64\,\% training partition and
 compared on the subsequent 16\,\% validation partition. Selection uses four
@@ -595,7 +604,51 @@ state sources is preferred, followed by lower mean NGD. If none satisfies it,
 validation results are inspected. It reflects the burden of justifying extra
 state and prevents an unresolved improvement in one metric from overriding a
 resolved loss in another. The untouched test partition has no role in this
-decision.
+decision. This rule selects the model used to answer RQ1. It does not establish
+that the same configuration is adequate for an intervention whose mechanism
+requires endogenous system state.
+
+\subsection{Purpose-Specific Scenario-Model Adequacy}
+\label{sec:scenario_model_adequacy}
+
+The model used for RQ4 is assessed against a second requirement that is not
+captured by historical replay alone. A demand scenario must transmit a change
+in arrivals through endogenous workload or queue state to model-derived delay.
+Model choice for this purpose follows four ordered criteria:
+\begin{enumerate}
+    \item the common Petri net, sequential case contract, and expert-validated
+    RMG ceiling must be satisfied;
+    \item the candidate must show no statistically resolved deterioration
+    relative to \textit{visit-only} on the four RQ3 validation errors;
+    \item a matched-seed demand ladder must show that sufficiently large
+    arrival pressure can produce a resolved increase in pre-service and
+    turnaround time;
+    \item among candidates satisfying the preceding criteria, the model with
+    fewer additional information sources is preferred.
+\end{enumerate}
+Criterion 2 is deliberately described as the absence of a resolved
+deterioration. It is not a formal non-inferiority test because no numerical
+non-inferiority margins were specified in advance.
+
+This adequacy audit was introduced after the workload-blind
+\textit{visit-only} stress test showed that even extreme arrival changes did
+not propagate to delay. It is therefore reported as an adaptive,
+purpose-driven refinement rather than as part of the pre-specified RQ3
+selection. The \textit{visit-only} configuration remains the selected
+historical-fidelity model and the negative control for intervention response.
+The \textit{native-only} configuration is the least complex candidate that
+adds an endogenous state source. The \textit{static-only} configuration cannot
+update its sampled historical demand and utilisation proxies when arrivals
+are changed. The \textit{both} configuration adds the same native state but
+also retains those static proxies. It is therefore less parsimonious and can
+combine current simulated state with attributes drawn from the historical
+joint distribution.
+
+The resulting role assignment does not identify one globally best model.
+\textit{Visit-only} supports the RQ1 claim about historical reproduction.
+\textit{Native-only} supports the narrower RQ4 claim about response inside the
+simulator. The latter remains a diagnostic scenario model until its queue,
+movement, and resource semantics are validated against physical observations.
 
 \subsection{Discovery Hyperparameters}
 
@@ -664,13 +717,15 @@ scripts. If a derived table, JSON summary and executable state disagree,
 the serialized object that generated the reported simulations is
 the source of truth. Two provenance layers are distinguished. The four frozen
 64\,\%-training bundles are authoritative for the RQ3 comparison on the
-16\,\% validation period. The configuration chosen by the pre-specified rule
-is then rediscovered on the combined 80\,\% development period. This second
-bundle, not any of the four preliminary bundles, is authoritative for the
-untouched RQ1 test and the RQ4 scenarios.
+16\,\% validation period. The configurations required for the final model
+roles are then rediscovered on the combined 80\,\% development period. The
+rediscovered \textit{visit-only} bundle is authoritative for the RQ1
+historical test. The rediscovered \textit{native-only} bundle is authoritative
+for the RQ4 scenario analysis. Neither role is assigned from performance on
+the final test period.
 
-The freely discovered 80\,\% source bundle is retained unchanged. The
-effective scenario reference is a deep copy in which the RMG concurrency
+Each freely discovered 80\,\% source bundle is retained unchanged. The
+effective execution reference is a deep copy in which the RMG concurrency
 values are capped at the domain maximum of three. It is stored as
 \texttt{params\_baseline\_rmg\_max\_concurrency\_3.pkl} beside its two
 scenario derivatives. A machine-readable model-role manifest records the
@@ -980,15 +1035,15 @@ an acceptable terminal-wide average can conceal a harmful shift for one
 handling pattern.
 
 Two independent interventions are evaluated to address RQ4. Both are
-derived by deep copy from the final calibrated reference bundle. Configuration
-selection uses only the 16\,\% validation segment within the earlier 80\,\%
-period. The selected configuration is then rediscovered on the combined
-80\,\% development period before it is evaluated once on the untouched final
-20\,\% test period. The RMG ceiling is applied to a deep copy of this final
-bundle before either intervention is derived. Neither the test observations
-nor the scenario outcomes define a scenario parameter. The experiments are
-deliberately simple tests of this decision-support chain, rather than proposed
-operating policies.
+derived by deep copy from the calibrated \textit{native-only} scenario bundle
+rediscovered on the complete 80\,\% development period. This model role is
+assigned by the adequacy criteria in
+Section~\ref{sec:scenario_model_adequacy}. The cap-three
+\textit{visit-only} bundle is retained as the workload-blind negative control.
+The RMG ceiling is applied to a deep copy before either intervention is
+derived. Neither the observed test outcomes nor the scenario outcomes are used
+to fit a scenario parameter. The experiments are deliberately simple tests of
+this decision-support chain, rather than proposed operating policies.
 
 Both interventions use inspectable ProSiT parameters, but they do not exercise
 the complete white-box intervention space. Scenario~A changes a resource
@@ -1042,7 +1097,7 @@ detailed model of a particular appointment or lane-opening policy.
 The freely discovered serialized source assigns maximum concurrency four
 to ten RMG block identifiers and five to twelve, for an aggregate effective
 upper bound of 100. ProSiT obtains these numbers from overlapping timestamps.
-they are empirical concurrency proxies rather than equipment counts. They
+They are empirical concurrency proxies rather than equipment counts. They
 exceed the hard physical upper bound of three RMGs per block, which was
 confirmed by operational experts from the terminal. The final
 effective baseline replaces every RMG value $c_r$
@@ -1063,13 +1118,13 @@ remain empirical or technical abstractions and are evaluated as such.
 
 This is a transparent domain constraint rather than a data-driven
 recalibration. The freely discovered source remains frozen as discovery
-evidence, whereas the cap-three copy is the authoritative effective CTB
-baseline. A matching uncapped copy of the final selected \textit{visit-only}
-bundle is evaluated on the same test period with identical seeds, trace counts
-and start time. This paired sensitivity determines whether the physical cap
-materially changes the reported historical fidelity. It does not use the test
-result to choose or fit the cap; the ceiling is retained because it is a
-validated domain constraint.
+evidence, whereas the cap-three copy is the effective execution model. A
+matching uncapped copy of the historical \textit{visit-only} model is
+evaluated on the same test period with identical seeds, trace counts and start
+time. This paired sensitivity determines whether the physical cap materially
+changes the reported historical fidelity. It does not use the test result to
+choose or fit the cap. The ceiling is retained because it is a validated
+domain constraint.
 
 \paragraph{Capacity-Pressure Diagnostic}
 
@@ -1093,14 +1148,15 @@ trajectories.
 
 Because the offered-load diagnostic places nominal mean saturation near a
 realised elapsed arrival-rate ratio of 2.37, a separate stress test evaluates
-$m\in\{1.0,1.2,1.5,2.0,2.4,3.0\}$. Each level was derived from the earlier
-fully contextualized cap-three bundle by replacing every empirical
-working-time inter-arrival sample $x_i$ with $x_i/m$. The process net, case
-volume, seed, resource mappings, capacities, calendars, duration models, and
-case-attribute generation remain fixed. Ten matched seeds therefore produce
-60 runs of 17,892 cases. Structural case contracts are enforced at every
-level. Duration tails above 24 hours are reported rather than rejected because
-they may be a substantive outcome under deliberate overload.
+$m\in\{1.0,1.2,1.5,2.0,2.4,3.0\}$. Every level is derived independently from
+the cap-three \textit{visit-only} and \textit{native-only} bundles by replacing
+each empirical working-time inter-arrival sample $x_i$ with $x_i/m$. The
+process net, case volume, seed, resource mappings, capacities, calendars,
+duration models, and case-attribute generation remain fixed. Ten matched seeds
+produce 60 runs per configuration and 120 runs in total. Structural case
+contracts are enforced at every level. Duration tails above 24 hours are
+reported rather than rejected because they may be a substantive outcome under
+deliberate overload.
 
 The configured value $m$ scales working-time inter-arrivals. It is not assumed
 to equal the arrival-rate multiplier measured over elapsed calendar time,
@@ -1131,7 +1187,7 @@ equally weighted enabled transitions before drawing
 from ProSiT's routing probabilities. This removes dependence on Python set
 iteration without changing the Petri net, learned probabilities or random
 draw. Historical fidelity, the four-cell feature-source experiment, cap sensitivity,
-both policy scenarios, bundle sensitivity and the demand ladder are therefore
+both policy scenarios and the demand ladder are therefore
 derived from one runner contract. A machine-readable provenance manifest in
 the research project records the source-bundle and result-file hashes, seeds,
 trace count and authoritative result directories.
@@ -1143,8 +1199,8 @@ common random numbers. Mean, median and 90th percentile of turnaround,
 RMG service and RMG pre-service delay are reported together with the
 observed arrival KPIs. For the T22 experiment, service and pre-service
 effects are reported separately for
-\texttt{RMG\_receive} and \texttt{RMG\_delivery}. Every one of the 30
-generated logs is subjected
+\texttt{RMG\_receive} and \texttt{RMG\_delivery}. Every generated log in
+either model role is subjected
 to the sequential case contract of
 Section~\ref{sec:process_discovery_methodology}. Any violation aborts
 the run. The 24-hour threshold used for robust historical distance metrics is
@@ -1155,24 +1211,24 @@ being silently removed or replaced. A separate diagnostic invocation with
 80\,\%-development source bundle. The capacity comparison verifies identical
 source hashes, seeds and settings before computing the paired
 cap-three-minus-uncapped effects. These uncapped results are diagnostic only
-and are excluded from configuration selection. The 30 cap-three scenario logs
-form the primary final scenario evidence.
-The 60 demand-saturation replications are stored separately and interpreted as
-a diagnostic stress test rather than a third operational policy scenario.
+and are excluded from configuration selection. The 30 \textit{native-only}
+cap-three scenario logs form the primary RQ4 scenario evidence. The matching
+30 \textit{visit-only} logs are the workload-blind negative control. The 120
+demand-saturation replications are stored separately and interpreted as a
+diagnostic stress test rather than a third operational policy scenario.
 
-To test whether scenario response depends on the selected feature-source
-bundle, the same cap-three baseline and interventions are also executed with
-the investigated but rejected \textit{both} bundle, using the identical ten seeds. For
-configuration $c$, scenario $q$, and seed $i$, the paired response is
+To isolate the contribution of native dynamic state, the cap-three
+\textit{visit-only} and \textit{native-only} models use identical seeds. For
+configuration $c$, demand level $q$, and seed $i$, the paired response is
 $d_{c,q,i}=Y_{c,q,i}-Y_{c,0,i}$. The configuration sensitivity is then the
 difference-in-differences
 \begin{equation}
-    D_{q,i}=d_{\textit{both},q,i}
+    D_{q,i}=d_{\textit{native-only},q,i}
              -d_{\textit{visit-only},q,i}.
 \end{equation}
 Student-$t$ intervals over the ten $D_{q,i}$ values distinguish a response
-that is robust across the selected and rejected bundles from one that appears
-only in a particular parameterization.
+attributable to access to native dynamic state from ordinary Monte-Carlo
+variation in either bundle.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Descriptive Transition-Duration Analysis}

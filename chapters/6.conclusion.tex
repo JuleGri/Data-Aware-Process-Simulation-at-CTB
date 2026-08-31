@@ -46,11 +46,11 @@ frequency-weighted bottleneck.
 
 The answer to RQ1 is mixed. The selected cap-three \textit{visit-only} model
 reproduces arrivals closely, with an inter-arrival EMD of 0.072 minutes. Its
-yard-service EMD is 3.195 minutes without frequency weighting and 2.357 minutes
+yard-service EMD is 3.150 minutes without frequency weighting and 2.341 minutes
 when weighted by the real activity frequencies. Complete truck turnaround is
-less accurate. Mean turnaround is 32.114 minutes in simulation and 39.742
-minutes in the hold-out, a deficit of 7.629 minutes or 19.20\,\%. Simulated P90
-is 54.200 rather than 71.000 minutes. The narrow intervals across ten
+less accurate. Mean turnaround is 33.812 minutes in simulation and 39.742
+minutes in the hold-out, a deficit of 5.930 minutes or 14.92\,\%. Simulated P90
+is 57.900 rather than 71.000 minutes. The narrow intervals across ten
 Monte-Carlo seeds show that this is systematic model error rather than
 simulation noise.
 
@@ -59,7 +59,7 @@ mean turnaround increases by 2.450 minutes between the training and hold-out
 periods, so the temporal evaluation combines model mismatch with operational
 change. Route-specific fifth-percentile transition baselines range from 2.16
 to 5.28 minutes. Their frequency-weighted boundary contribution is 7.62
-minutes per visit, close in scale to the mean turnaround deficit. These values
+minutes per visit, comparable in scale to the mean turnaround deficit. These values
 support a non-zero movement and transfer component between recorded
 activities, but they do not separate travel, traffic, dispatching, access
 delay, and queueing. Adding them to the current pre-service distributions

@@ -344,7 +344,7 @@ four-cell result is sufficient to conclude that the available workload state
 does not provide a resolved validation improvement under the tested ProSiT
 specification.
 
-\paragraph{Reference-model decision}
+\paragraph{Historical reference-model decision}
 
 \textit{Visit-only} is selected because none of the three additional-state
 configurations passes the rule fixed before validation results were inspected.
@@ -352,13 +352,18 @@ It is therefore the parsimonious fallback, not a winner chosen by ranking noisy
 point estimates. After this decision, \textit{visit-only} is rediscovered on
 the combined 80\,\% development log and evaluated once on the untouched test
 period. The final test results in Table~\ref{tab:final_kpis} do not participate
-in this choice.
+in this choice. This decision concerns RQ1 historical fidelity. It does not
+remove the need to test whether a model used for RQ4 contains the endogenous
+state required by an intervention.
 
 \noindent\textbf{RQ3 answer.} Neither static workload proxies nor ProSiT's
 native dynamic state produces a statistically resolved multi-perspective
 validation improvement. More available state is therefore not automatically
 more useful process state. Under the pre-specified selection rule, the evidence
-favours the parsimonious \textit{visit-only} configuration for this event log.
+favours the parsimonious \textit{visit-only} configuration for historical
+reproduction of this event log. The demand-response adequacy audit in
+Section~\ref{sec:results_scenarios} assigns a different, explicitly narrower
+role to native dynamic state.
 
 \paragraph{Meaning of the Time Measures}
 \label{sec:results_temporal_note}
@@ -802,14 +807,13 @@ modelling; it does not attribute all accumulated delay to capacity shortage.
 \label{sec:results_scenarios}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The primary scenario baseline is the selected \textit{visit-only} bundle with
-the expert-validated maximum of three available resources per RMG block. Ten
-matched seeds (42--51) are run for the baseline, T22 removal, and the 20\,\%
-demand increase, giving 30 simulations with 17,892 cases each. The same design
-is repeated with the investigated but rejected \textit{both} bundle. This
-second set is a model-choice robustness check, not a second reference model.
-
-Table~\ref{tab:scenario_kpis} uses the baseline from this matched runner. It is only the reference for paired changes. The RQ1 results still come from Table~\ref{tab:final_kpis}.
+The analysis distinguishes two model roles. The cap-three
+\textit{visit-only} bundle remains the historical-fidelity reference and acts
+as a workload-blind negative control. The cap-three \textit{native-only}
+bundle is the purpose-specific scenario model because it adds the endogenous
+queue and workload state required by a demand intervention. Both use the same
+expert-repaired Petri net, ten matched seeds (42--51), and 17,892 cases per
+run. The RQ1 results still come from Table~\ref{tab:final_kpis}.
 
 The expert-repaired sequential net also stays fixed. The experiments can change arrival
 timing, resource assignment, and model-derived delays, while the loop may still
@@ -837,17 +841,18 @@ terminal.
 \toprule
 \textbf{KPI} & \textbf{Reference} & \textbf{Outcome} & \textbf{Change} & \textbf{95\,\% CI} \\
 \midrule
-Mean turnaround (min) & 33.820 & 33.818 & $-0.003$ & [$-0.133$, $+0.128$] \\
-P90 turnaround (min) & 57.900 & 57.800 & $-0.100$ & [$-0.506$, $+0.306$] \\
-Mean RMG service (min) & 11.055 & 11.055 & $+0.001$ & [$-0.123$, $+0.125$] \\
-Mean RMG pre-service (min) & 8.168 & 8.232 & $+0.065$ & [$+0.010$, $+0.119$] \\
-RMG receive service (min) & 11.312 & 11.303 & $-0.008$ & [$-0.146$, $+0.129$] \\
-RMG receive pre-service (min) & 8.224 & 8.293 & $+0.068$ & [$-0.001$, $+0.137$] \\
-RMG delivery service (min) & 8.810 & 8.815 & $+0.004$ & [$-0.088$, $+0.097$] \\
-RMG delivery pre-service (min) & 8.100 & 8.116 & $+0.016$ & [$-0.108$, $+0.140$] \\
+Mean turnaround (min) & 33.635 & 33.605 & $-0.030$ & [$-0.168$, $+0.107$] \\
+P90 turnaround (min) & 57.400 & 57.500 & $+0.100$ & [$-0.428$, $+0.628$] \\
+Mean RMG service (min) & 11.028 & 11.035 & $+0.006$ & [$-0.053$, $+0.066$] \\
+Mean RMG pre-service (min) & 8.031 & 7.938 & $-0.093$ & [$-0.146$, $-0.040$] \\
+RMG receive service (min) & 11.336 & 11.301 & $-0.035$ & [$-0.132$, $+0.062$] \\
+RMG receive pre-service (min) & 8.086 & 8.021 & $-0.066$ & [$-0.144$, $+0.013$] \\
+RMG delivery service (min) & 8.706 & 8.795 & $+0.089$ & [$-0.011$, $+0.188$] \\
+RMG delivery pre-service (min) & 8.001 & 7.873 & $-0.128$ & [$-0.265$, $+0.009$] \\
 \bottomrule
 \end{tabularx}
-\caption{Paired Scenario A results: T22 resource-pool reallocation
+\caption{Paired Scenario A results in the \textit{native-only} scenario model:
+T22 resource-pool reallocation
 ($N_{\text{seeds}}=10$; scenario minus matched baseline).}
 \label{tab:scenario_kpis}
 \end{table}
@@ -865,15 +870,16 @@ Model arrivals per working hour & 87.842 & 105.411 & $+20.000\,\%$ & exact \\
 Observed mean inter-arrival (min) & 0.8282 & 0.7145 & $-0.1137$ & [$-0.1145$, $-0.1128$] \\
 Observed arrivals per elapsed hour & 72.452 & 83.979 & $+11.527$ ($+15.910\,\%$) & [$+11.478$, $+11.577$] \\
 Observed simultaneous-arrival share (\%) & 54.221 & 60.015 & $+5.795$ pp & [$+5.736$, $+5.853$] pp \\
-Mean turnaround (min) & 33.820 & 33.819 & $-0.001$ & [$-0.136$, $+0.133$] \\
-Mean RMG service (min) & 11.055 & 11.050 & $-0.005$ & [$-0.080$, $+0.070$] \\
-Mean RMG pre-service (min) & 8.168 & 8.129 & $-0.039$ & [$-0.113$, $+0.036$] \\
-RMG receive service / pre-service (min) & 11.312 / 8.224 & 11.314 / 8.170 & $+0.002$ / $-0.054$ & [$-0.078$, $+0.082$] / [$-0.151$, $+0.043$] \\
-RMG delivery service / pre-service (min) & 8.810 / 8.100 & 8.785 / 8.109 & $-0.025$ / $+0.009$ & [$-0.101$, $+0.051$] / [$-0.058$, $+0.077$] \\
+Mean turnaround (min) & 33.635 & 33.548 & $-0.087$ & [$-0.281$, $+0.106$] \\
+Mean RMG service (min) & 11.028 & 11.078 & $+0.049$ & [$-0.041$, $+0.140$] \\
+Mean RMG pre-service (min) & 8.031 & 7.969 & $-0.062$ & [$-0.139$, $+0.014$] \\
+RMG receive service / pre-service (min) & 11.336 / 8.086 & 11.361 / 8.033 & $+0.025$ / $-0.053$ & [$-0.072$, $+0.123$] / [$-0.159$, $+0.053$] \\
+RMG delivery service / pre-service (min) & 8.706 / 8.001 & 8.772 / 7.902 & $+0.065$ / $-0.099$ & [$-0.072$, $+0.203$] / [$-0.234$, $+0.037$] \\
 \bottomrule
 \end{tabularx}
-\caption{Paired Scenario B results: 20\,\% higher working-time arrival
-intensity ($N_{\text{seeds}}=10$; scenario minus matched baseline).}
+\caption{Paired Scenario B results in the \textit{native-only} scenario model:
+20\,\% higher working-time arrival intensity
+($N_{\text{seeds}}=10$; scenario minus matched baseline).}
 \label{tab:demand_scenario_kpis}
 \smallskip
 \parbox{0.97\textwidth}{\scriptsize Pre-service denotes the model-derived
@@ -889,19 +895,17 @@ discovered 100 to 66.}
 \subsection{Scenario A: T22 Resource-Pool Reallocation}
 
 T22 is removed from every eligible RMG pool and its calendar is closed. The
-intervention therefore executes as specified. The mean-turnaround change is
-$-0.003\;[-0.133,+0.128]$ minutes and the P90 change is
-$-0.100\;[-0.506,+0.306]$ minutes. Both paired intervals include zero. Mean
-RMG service changes by $+0.001\;[-0.123,+0.125]$ minutes, whereas mean RMG
-pre-service delay increases by $+0.065\;[+0.010,+0.119]$ minutes.
-
-Receive service changes by $-0.008\;[-0.146,+0.129]$ minutes and receive
-pre-service by $+0.068\;[-0.001,+0.137]$ minutes. Delivery service changes by
-$+0.004\;[-0.088,+0.097]$ minutes and delivery pre-service by
-$+0.016\;[-0.108,+0.140]$ minutes. The model therefore resolves only a very
-small aggregate increase in model-derived RMG pre-service delay, with no
-end-to-end or service-time effect. Removing an eligible statistical resource
-is observable, whereas a physical block-closure effect is not established.
+intervention therefore executes as specified. In the workload-blind
+\textit{visit-only} negative control, the mean-turnaround change is
+$-0.030\;[-0.168,+0.107]$ minutes and the P90 change is
+$+0.100\;[-0.428,+0.628]$ minutes. Both paired intervals include zero. Mean
+RMG service changes by $+0.006\;[-0.053,+0.066]$ minutes, whereas mean RMG
+pre-service delay changes by $-0.093\;[-0.146,-0.040]$ minutes. Receive
+service and pre-service changes are unresolved. Delivery service and
+pre-service changes are also unresolved. The model therefore resolves a small
+decrease in aggregate model-derived RMG pre-service delay, with no end-to-end
+or service-time effect. Removing an eligible statistical resource is
+observable, whereas a physical block-closure effect is not established.
 
 The experiment is not a full block-closure study. The remaining 21 blocks stay
 eligible for all RMG activities. Each keeps capacity three. The selector moves
@@ -918,21 +922,20 @@ by 15.910\,\%. Closed gate periods remain fixed. Timestamps are also floored to
 minutes. This flooring turns more short positive intervals into simultaneous
 observations. It does not change the zero mass in the input distribution.
 
-Mean turnaround changes by $-0.001\;[-0.136,+0.133]$ minutes, mean RMG service
-by $-0.005\;[-0.080,+0.070]$ minutes, and mean RMG pre-service by
-$-0.039\;[-0.113,+0.036]$ minutes. All intervals include zero. The receive and
-delivery service and pre-service intervals also include zero. Thus the
-selected workload-blind reference transmits the intervention to arrival times
-but not to a resolved handling or end-to-end response. This is expected to be
-possible in ProSiT: changing arrivals alone need not affect service draws when
-the selected trees retain no dynamic workload input. Any response would have
-to arise through shared-resource scheduling and model-derived enablement.
+Mean turnaround changes by $-0.087\;[-0.281,+0.106]$ minutes, mean RMG service
+by $+0.049\;[-0.041,+0.140]$ minutes, and mean RMG pre-service by
+$-0.062\;[-0.139,+0.014]$ minutes. The receive and delivery mean service and
+pre-service intervals also include zero. The \textit{native-only} model
+therefore transmits the intervention to its dynamic state but does not produce
+a resolved mean handling or end-to-end response at this demand level.
 
-The missing congestion response is itself a model result. Under the capped
-reference, 20\,\% higher demand does not create enough system interaction to
-raise turnaround. The model has no explicit queue state, container location,
-or ship-side crane allocation. It cannot show that the real terminal could
-absorb 20\,\% more demand without congestion.
+The result is interpreted together with the response surface below. A 20\,\%
+change in working-time intensity produces only a 15.910\,\% increase in
+elapsed arrival rate and remains below the fitted model's transition region.
+It cannot show that the real terminal could absorb 20\,\% more demand without
+congestion. The model still lacks container location, physical movement,
+ship-side crane allocation, and an observed queue against which its internal
+queue state could be validated.
 
 \subsection{Sensitivity to the Expert-Validated RMG Ceiling}
 \label{sec:results_rmg_cap_sensitivity}
@@ -1001,23 +1004,23 @@ than three overlapping recorded RMG events; for T13 the share is 9.82\,\%.
 Those bursts may reflect genuine short-period pressure, minute-resolution
 artifacts, waterside/landside allocation, or an incorrect block-pool
 abstraction. The 20\,\% result alone therefore cannot distinguish an
-intervention that is too modest from a final reference model that is unable to
-propagate capacity pressure. A historical demand-saturation ladder provides a
-separate diagnostic of whether an earlier ProSiT bundle can produce such a
-mechanism. It does not identify the saturation point of the final
-\textit{visit-only} bundle.
+intervention that is too modest from a model that is unable to propagate
+capacity pressure. The paired demand-saturation ladder distinguishes these
+possibilities by comparing the workload-blind \textit{visit-only} model with
+the \textit{native-only} model under identical demand levels.
 
 \subsection{Demand-Saturation Stress Test}
 
-Table~\ref{tab:demand_saturation_ladder} reports a 60-run response surface from
-the earlier fully contextualised diagnostic bundle. It is retained as
-mechanistic evidence about that model version and is not used to validate or
-select the final reference. The configured multiplier scales working-time
-inter-arrivals; the realised rate ratio is measured over elapsed calendar
-time. These quantities diverge because the gate calendar remains fixed while
-the simulated horizon becomes shorter. All 60 runs preserve the case count,
-case boundary and no-overlap contracts, and none produces a service or
-turnaround duration above 24 hours.
+The final stress test compares the cap-three \textit{visit-only} and
+\textit{native-only} Train-80 bundles under exactly the same six demand levels
+and seeds. It contains 60 runs per model and 120 runs in total. The configured
+multiplier scales working-time inter-arrivals. The realised rate ratio is
+measured over elapsed calendar time. These quantities diverge because the gate
+calendar remains fixed while the simulated horizon becomes shorter. Every run
+preserves the case count, case boundary, and no-overlap contracts.
+Table~\ref{tab:demand_saturation_ladder} reports the \textit{native-only}
+response. The \textit{visit-only} result is used as the matched
+workload-blind negative control.
 
 \begin{table}[htbp]
 \centering
@@ -1028,128 +1031,123 @@ turnaround duration above 24 hours.
 \textbf{Configured} & \textbf{Realised} & \textbf{Arrivals} & \textbf{Mean} & \textbf{Paired turnaround change} & \textbf{RMG pre-} & \textbf{Paired pre-service change} \\
 $\boldsymbol{m}$ & \textbf{rate ratio} & \textbf{per hour} & \textbf{turnaround} & \textbf{[95\,\% CI]} & \textbf{service} & \textbf{[95\,\% CI]} \\
 \midrule
-1.0 & 1.000 & 72.452  & 31.627 & reference & 7.898  & reference \\
-1.2 & 1.159 & 83.979  & 31.633 & $+0.006$ [$-0.136$, $+0.147$] & 7.907  & $+0.009$ [$-0.072$, $+0.090$] \\
-1.5 & 1.378 & 99.855  & 32.203 & $+0.576$ [$+0.074$, $+1.078$] & 8.593  & $+0.694$ [$+0.075$, $+1.314$] \\
-2.0 & 2.367 & 171.472 & 36.272 & $+4.644$ [$+3.808$, $+5.481$] & 13.776 & $+5.878$ [$+4.888$, $+6.868$] \\
-2.4 & 2.825 & 204.697 & 37.341 & $+5.714$ [$+5.503$, $+5.926$] & 15.106 & $+7.208$ [$+6.975$, $+7.440$] \\
-3.0 & 3.504 & 253.884 & 37.787 & $+6.160$ [$+5.889$, $+6.431$] & 15.665 & $+7.767$ [$+7.548$, $+7.985$] \\
+1.0 & 1.000 & 72.452  & 33.635 & reference & 8.031  & reference \\
+1.2 & 1.159 & 83.979  & 33.548 & $-0.087$ [$-0.281$, $+0.106$] & 7.969  & $-0.062$ [$-0.139$, $+0.014$] \\
+1.5 & 1.378 & 99.855  & 33.680 & $+0.045$ [$-0.102$, $+0.191$] & 7.958  & $-0.073$ [$-0.116$, $-0.029$] \\
+2.0 & 2.367 & 171.472 & 33.718 & $+0.082$ [$-0.101$, $+0.266$] & 8.057  & $+0.026$ [$-0.155$, $+0.207$] \\
+2.4 & 2.825 & 204.697 & 35.450 & $+1.815$ [$+0.858$, $+2.772$] & 10.349 & $+2.318$ [$+1.132$, $+3.504$] \\
+3.0 & 3.504 & 253.884 & 37.704 & $+4.069$ [$+3.743$, $+4.396$] & 13.251 & $+5.221$ [$+4.878$, $+5.563$] \\
 \bottomrule
 \end{tabularx}
-\caption{Demand-saturation response of the earlier fully contextualised
-cap-three model ($N_{\mathrm{seeds}}=10$). Times and paired
+\caption{Demand-saturation response of the final \textit{native-only}
+cap-three scenario model ($N_{\mathrm{seeds}}=10$). Times and paired
 changes are in minutes; the realised rate ratio uses each level's mean elapsed
 arrival rate relative to the matched baseline.}
 \label{tab:demand_saturation_ladder}
 \end{table}
 
-The 20\,\% level remains unresolved for mean and P90 turnaround and for RMG
-pre-service delay. At the configured 1.5 level, corresponding to a realised
-rate ratio of 1.378, the first small resolved response appears: mean turnaround
-rises by 0.576 minutes and mean RMG pre-service by 0.694 minutes. The decisive
-change occurs at configured $m=2.0$. Because of the fixed gate calendar, this
-level produces a realised elapsed-rate ratio of 2.367, almost exactly the 2.37
-mean-saturation estimate. Mean turnaround then rises by 4.644
-[$3.808$, $5.481$] minutes, P90 by 10.700 [$8.437$, $12.963$] minutes and mean
-RMG pre-service by 5.878 [$4.888$, $6.868$] minutes.
+Up to the realised rate ratio 2.367, the \textit{native-only} mean-turnaround
+and mean RMG pre-service intervals include zero. At ratio 2.825, mean
+turnaround rises by 1.815 minutes, P90 turnaround by 4.100 minutes, mean RMG
+pre-service by 2.318 minutes, and P90 RMG pre-service by 4.650 minutes. All
+four changes have intervals above zero. At ratio 3.504, the corresponding
+changes reach 4.069, 9.800, 5.221, and 12.750 minutes. The first resolved
+end-to-end response is therefore bounded between realised rate ratios 2.367
+and 2.825. This interval describes the transition region of the fitted model.
+It is not an estimate of a physical CTB capacity threshold.
 
-At realised rate ratios 2.825 and 3.504, the mean-turnaround changes reach
-5.714 and 6.160 minutes, and the corresponding P90 changes reach 13.600 and
-14.800 minutes. By contrast, mean RMG service changes by only 0.025
-[$-0.060$, $0.109$] and 0.040 [$-0.035$, $0.115$] minutes at these two levels.
-The high-load response is therefore carried by model-derived pre-service
-delay rather than longer service draws. Figure~\ref{fig:demand_saturation_ladder}
-shows this non-linear response and places the independent 2.37 offered-load
-estimate on the realised-rate axis.
+The negative control shows why this response matters for model choice. In
+\textit{visit-only}, even the 3.504 ratio changes mean turnaround by only
+$+0.050\;[-0.057,+0.158]$ minutes and mean RMG pre-service by
+$-0.012\;[-0.066,+0.042]$ minutes. The native-minus-visit
+difference-in-differences at ratio 2.825 is
+$+1.851\;[+1.034,+2.669]$ minutes for mean turnaround and
+$+2.284\;[+1.120,+3.448]$ minutes for mean RMG pre-service. At ratio 3.504,
+the contrasts are $+4.019\;[+3.676,+4.361]$ and
+$+5.233\;[+4.865,+5.600]$ minutes. The response is therefore associated with
+access to ProSiT's native dynamic state rather than with the changed arrival
+sample alone.
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.96\textwidth]{figures/results_demand_saturation_ladder.png}
-    \caption{Response of the earlier fully contextualised diagnostic model to increasing
-    realised elapsed arrival rates. Points are ten-seed means and shaded bands
-    are 95\,\% Monte-Carlo intervals. The dashed line marks the independent
-    2.37 nominal mean-saturation estimate for the most-loaded held-out RMG
-    block.}
-    \label{fig:demand_saturation_ladder}
-\end{figure}
+The fitted mechanism is inspectable. The Train-80 \textit{native-only}
+waiting-time model retains one dynamic split, for T13 at
+\texttt{queue\_length}$\leq6.5$. The lower-queue leaf has a representative
+value of 7.167 minutes and an exponential distribution. The higher-queue leaf
+has a representative value of 52.404 minutes and a lognormal distribution.
+When higher demand makes the second leaf more frequent, pre-service and
+turnaround increase non-linearly. This is an automatically discovered
+state-conditioned waiting rule. It is not a causal queueing law or proof that
+T13 physically changes behaviour at exactly 6.5 trucks.
 
-For the earlier fully contextualised bundle, the result demonstrates an
-abstract capacity-pressure mechanism. Once realised demand reaches the independently
-estimated capacity region, pre-service and end-to-end delay increase clearly.
-The missing response at 20\,\% is therefore primarily evidence that the policy
-scenario was a modest stress inside this model, not evidence that ProSiT can
-never generate congestion. It does not establish why the final
-\textit{visit-only} model produces its null response. The stress curve is still not a physical CTB
-forecast. Its onset and shape depend on interchangeable block assignments,
-fully open discovered resource calendars and model-derived enablement rather
-than verified spatial queues. The expert-validated three-RMG ceiling supports
-the capacity bound; it does not validate these propagation semantics. Even at
-the 3.504 realised rate ratio, mean turnaround remains below the observed
-hold-out mean of 39.74 minutes. Artificial overload therefore cannot replace
-the omitted transition-time and spatial mechanisms needed for baseline
-fidelity.
+The missing response at 20\,\% is therefore evidence that the intervention is
+too modest to enter the response region of this abstract model. The stress
+curve is still not a physical CTB forecast. Its onset and shape depend on
+interchangeable block assignments, fully open discovered resource calendars,
+and model-derived enablement rather than verified spatial queues. The
+expert-validated three-RMG ceiling supports the capacity bound. It does not
+validate these propagation semantics. Even at the 3.504 realised rate ratio,
+mean turnaround remains below the observed hold-out mean of 39.74 minutes.
+Artificial overload therefore cannot replace the omitted transition-time and
+spatial mechanisms needed for baseline fidelity.
 
-\subsection{Scenario Response Across State Configurations}
+\subsection{Objective Assignment of Model Roles}
 
-The selected \textit{visit-only} and rejected \textit{both} bundles are
-compared with the same cap, seeds and interventions. In \textit{both}, T22
-removal changes mean turnaround by $+0.072\;[-0.000,+0.145]$ minutes and mean
-RMG pre-service by $+0.056\;[+0.012,+0.100]$ minutes. Its receive pre-service
-change is also resolved, while delivery service falls by
-$0.095\;[0.006,0.184]$ minutes. The 20\,\% demand intervention changes mean
-turnaround by $+0.057\;[-0.075,+0.188]$ minutes; mean RMG service and
-pre-service remain unresolved. These component results differ from the
-selected reference even though both configurations retain the same Petri net.
+The four-cell validation experiment and the paired stress test answer
+different questions. Under the pre-specified RQ3 rule, \textit{visit-only} is
+the historical-fidelity reference because no added state source produces a
+resolved validation improvement. Relative to that reference,
+\textit{native-only} changes turnaround EMD by
+$+0.105\;[-0.099,+0.308]$ minutes, weighted yard-service EMD by
+$+0.037\;[-0.037,+0.112]$ minutes, activity-rate L1 by
+$+0.0006\;[-0.0032,+0.0044]$, and 3-gram NGD by
+$+0.00006\;[-0.00032,+0.00044]$. There is no statistically resolved
+deterioration, although this is not a formal non-inferiority conclusion.
 
-The matched difference-in-differences is more important than whether one
-configuration happens to cross a 95\,\% threshold. For mean turnaround, the
-\textit{both} response minus the \textit{visit-only} response is
-$-0.038\;[-0.220,+0.143]$ minutes for T22 removal and
-$+0.090\;[-0.096,+0.276]$ minutes for higher demand. Neither excludes zero.
-The corresponding mean RMG service and pre-service contrasts are also
-unresolved. Two narrower outcomes are bundle-sensitive: for higher demand,
-the P90 response differs by $+0.500\;[+0.123,+0.877]$ minutes and receive
-pre-service by $+0.137\;[+0.013,+0.261]$ minutes. Thus the absence of a mean
-turnaround response is robust, whereas tail and component conclusions are not
-fully stable across plausible parameter bundles. This is direct evidence of
-input-model uncertainty that within-configuration Monte-Carlo intervals alone
-do not show.
+Historical equivalence within these intervals is not enough for RQ4. The
+workload-blind model fails the intervention-response requirement, while the
+native-state model produces a clear high-load response. \textit{Native-only}
+is therefore assigned the scenario-model role. It is preferred over
+\textit{both} because the latter adds static historical proxies that do not
+update with the simulated arrival intervention. It is preferred over
+\textit{static-only} because static proxies cannot provide an endogenous
+queue state. This decision is purpose-specific. It does not overturn the RQ3
+result or claim that \textit{native-only} is globally the best model.
+
+The demand-response criterion was added after the workload-blind stress
+diagnostic. It is consequently an adaptive analysis and not part of the
+pre-specified historical selection. Reporting both stages preserves the
+evidential distinction. RQ1 evaluates historical reproduction with the
+selected \textit{visit-only} model. RQ4 evaluates intervention behaviour with
+the minimal responsive \textit{native-only} model and uses
+\textit{visit-only} as a negative control.
 
 \medskip
 
-\noindent\textbf{RQ4 answer.} Both policy interventions execute as specified. T22
-assignments fall to zero, and working-time arrival intensity rises by exactly
-20\,\%. In the selected \textit{visit-only} reference, both mean-turnaround
-intervals include zero. T22 removal produces a small resolved increase in
-model-derived RMG pre-service delay, especially for receive handling; the
-demand intervention produces no resolved handling or end-to-end mean response.
-The isolated 2,050-minute T22 visit and bundle-sensitive P90 contrasts reinforce
-that these are model experiments rather than stable physical effects. The
-capacity-pressure audit
-also shows that 20\,\% higher arrivals leave the most-loaded held-out block at
-only 0.506 nominal mean utilisation under the three-task ceiling. The extended
-demand ladder shows that an earlier fully contextualised bundle can propagate
-abstract capacity pressure. At a realised elapsed-rate ratio of
-2.367, mean turnaround rises by 4.644 minutes and mean RMG pre-service by 5.878
-minutes, and stronger levels produce still larger responses. Because the
-ladder does not use the final \textit{visit-only} bundle, it neither explains
-that model's null response nor establishes its saturation threshold. The
-threshold and propagation mechanism of the earlier bundle have also not been
-validated as physical CTB behaviour.
-That capability is the operational reason for simulation: candidate truck-slot
-rates and handling policies can be compared before they are applied. The
-present model, however, does not support a physical counterfactual or an
-operational recommendation from these results because its spatial assignment,
-movement and queue semantics are not yet adequate. Executability and even a
-plausible stress response are not counterfactual validity.
+\noindent\textbf{RQ4 answer.} Both policy interventions execute as specified.
+T22 assignments fall to zero, and working-time arrival intensity rises by
+exactly 20\,\%. The workload-blind T22 negative control produces no resolved
+end-to-end change and only a small increase in model-derived RMG pre-service
+delay. In the \textit{native-only} demand model, the 20\,\% intervention also
+produces no resolved handling or mean-turnaround response. The capacity audit
+shows why this is plausible inside the fitted model. The most-loaded held-out
+block reaches only 0.506 nominal mean utilisation under the three-task
+ceiling.
 
-The earlier matched uncapped sensitivity reaches the same headline conclusion
-within the fully contextualised bundle: no direct cap effect or cap-by-scenario
-interaction on mean turnaround is resolved. It supports retaining the ceiling
-as a physical correction, but it does not prove that the final
-\textit{visit-only} response would be unchanged without the cap. Its resolved
-cap-by-demand interaction in mean RMG service is reported as historical model
-sensitivity rather than physical evidence.
+The paired stress test closes the more important functional question. The
+\textit{visit-only} model remains invariant even at the highest tested demand,
+whereas \textit{native-only} develops a resolved delay response between
+realised arrival-rate ratios 2.367 and 2.825. At ratio 3.504, mean turnaround
+increases by 4.069 minutes and mean RMG pre-service by 5.221 minutes. The
+matched native-minus-visit contrasts confirm that this difference is not
+explained by Monte-Carlo variation. The retained T13 queue-length split gives
+an inspectable statistical mechanism for the non-linear response.
+
+This capability is the operational reason for simulation. Candidate truck-slot
+rates and handling policies can be compared before they are applied. The
+reported transition region is nevertheless a property of the fitted
+simulation, not a physical CTB congestion threshold. Spatial assignment,
+movement, equipment allocation, and observed queue semantics remain
+insufficient for a prescriptive recommendation. Executability and a plausible
+stress response do not establish counterfactual validity.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interpretation: From Process Mining to Data-Aware Simulation}
@@ -1299,11 +1297,15 @@ trucks enter the terminal, but the 20\,\% arrival intervention produces no
 resolved mean-turnaround increase. This combination does not imply that real
 CTB turnaround is independent of demand. It shows that the fitted simulator
 contains an arrival relationship, while the offered-load calculation places
-the chosen change below mean block saturation. The historical ladder shows
-that an earlier fully contextualised model develops a strong pre-service and
-turnaround response when realised arrivals reach the independently estimated
-capacity region. This is supporting mechanism evidence, not a direct
-explanation of the final model. In the same way, eliminating T22
+the chosen change below mean block saturation. The paired ladder adds the
+missing functional test. The workload-blind model does not respond even under
+extreme demand, while the minimal native-state model develops a strong
+pre-service and turnaround response once the realised rate passes the
+independently estimated capacity region. The only retained dynamic split in
+the final waiting model links T13 queue length to two different waiting-time
+distributions. This provides a direct explanation of the response inside the
+simulator without establishing the same threshold as a physical law. In the
+same way, eliminating T22
 assignments verifies that the resource rule was
 changed, while the near-zero turnaround effect reflects reallocation within an
 abstract interchangeable resource pool. It is not evidence that closing a
@@ -1313,7 +1315,8 @@ Taken together, the scenario results act as stress tests of the model's
 semantics. A null effect can be a substantive operational finding only when
 the mechanisms through which the intervention should propagate are represented
 and validated. Here, the saturation experiment demonstrates a capacity-driven
-response inside the abstract resource model, but it does not validate the
+response only when native dynamic state is enabled. This separates historical
+replay fidelity from intervention validity, but it does not validate the
 physical route through which that response would arise. Location feasibility,
 movement, differentiated crane availability and spatial queue state remain
 absent. The contribution of the
@@ -1495,9 +1498,8 @@ discovery run, or missing spatial state. The cap sets a ceiling but adds no
 location feasibility or equipment movement. More seeds would narrow these
 intervals. They would not reduce structural uncertainty. The matched
 state-configuration comparison addresses one part of that uncertainty: it
-shows that the unresolved mean-turnaround response persists across the selected
-\textit{visit-only} and rejected \textit{both} bundles. It still does not cover
-a new training period, another discovered net,
+shows that high-load response depends on whether native dynamic state is
+available. It still does not cover a new training period, another discovered net,
 alternative resource semantics, or the missing spatial and queueing state.
 
 \paragraph{External Validity Is Limited to One Terminal and Time Window}
