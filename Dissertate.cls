@@ -249,25 +249,25 @@
 	\input{frontmatter/personalize}
 	\maketitle
 	\abstractpage
+	\cleardoublepage
 	\tableofcontents
-	\phantomsection
-	\clearpage
+	\cleardoublepage
 
 	% figure listing - required if you have any figures
 	\phantomsection
 	\addcontentsline{toc}{chapter}{List of figures}
 	\listoffigures
-	\clearpage
+	\cleardoublepage
 
 	% table listing - required if you have any tables
 	\phantomsection
 	\addcontentsline{toc}{chapter}{List of tables}
 	\listoftables
-	\clearpage
+	\cleardoublepage
 
 	\acronyms
 
-	\clearpage
+	\cleardoublepage
 	\setcounter{page}{1}
 	\pagenumbering{arabic}
 }

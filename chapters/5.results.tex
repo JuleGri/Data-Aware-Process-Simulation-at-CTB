@@ -196,7 +196,7 @@ model and hold-out only.
 \setlength{\tabcolsep}{3.4pt}
 \begin{tabular}{L{4.6cm}rrrr}
 \toprule
-\textbf{KPI} & \textbf{Real/ref.} & \textbf{Simulated} &
+\textbf{KPI} & \textbf{Real/ref.} & \shortstack{\textbf{Simulated}\\\textbf{or distance}} &
 \textbf{Difference} & \textbf{95\,\% MC CI} \\
 \midrule
 Yard service EMD, unweighted (min) & -- & 3.150 & -- & [2.985, 3.315] \\
@@ -221,7 +221,11 @@ historical-fidelity model
 treated as fixed, so the interval refers to the simulated-minus-real
 difference. Intervals for the remaining rows refer to the named error metric
 across simulated logs. Gate In and Gate Out are excluded from both yard-service
-EMD aggregates.}
+EMD aggregates. For EMD, KS, NGD and L1 rows, the reported value is already a
+distance or error calculated between the real hold-out and each simulated log.
+These rows therefore have no separate real/reference value or difference. The
+point-statistic rows report the real value, simulated value and
+simulated-minus-real difference.}
 \end{table}
 
 The result is mixed. Inter-arrival spacing is reproduced closely, and the yard
