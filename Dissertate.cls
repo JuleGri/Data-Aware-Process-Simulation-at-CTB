@@ -9,7 +9,9 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{Dissertate}[Dissertate Class]
-\LoadClass[12pt, twoside, openright, a4paper]{book}
+% Preserve binding-aware two-sided margins without inserting empty pages
+% solely to force chapter openings onto right-hand pages.
+\LoadClass[12pt, twoside, openany, a4paper]{book}
 
 %
 % Options
@@ -81,15 +83,39 @@
 \Urlmuskip = 0mu plus 1mu
 \RequirePackage{amssymb}
 \RequirePackage{mathspec}
-\setmathsfont(Digits,Latin,Greek)[Numbers={Proportional}]{EB Garamond}
-\setmathrm{EB Garamond}
+% Load the font files shipped with this repository instead of relying on an
+% operating-system font installation. This keeps local and CI builds
+% reproducible across machines.
+\setmathsfont(Digits,Latin,Greek)[Path={fonts/EB Garamond/},Numbers={Proportional}]{EBGaramond12-Regular.otf}
+\setmathrm[Path={fonts/EB Garamond/},ItalicFont={EBGaramond12-Italic.otf}]{EBGaramond12-Regular.otf}
 \AtBeginEnvironment{tabular}{\addfontfeature{RawFeature=+tnum}}
 \widowpenalty=300
 \clubpenalty=300
-\setromanfont[Numbers=OldStyle, Ligatures={Common, TeX}, Scale=1.0]{EB Garamond}
-\newfontfamily{\smallcaps}[RawFeature={+c2sc,+scmp}]{EB Garamond}
-\setsansfont[Scale=MatchLowercase, BoldFont={Lato Bold}]{Lato Regular}
-\setmonofont[Scale=MatchLowercase]{Source Code Pro}
+\setromanfont[
+  Path={fonts/EB Garamond/},
+  ItalicFont={EBGaramond12-Italic.otf},
+  BoldFont={EBGaramond-SemiBold.otf},
+  BoldItalicFont={EBGaramond-SemiBoldItalic.otf},
+  Numbers=OldStyle,
+  Ligatures={Common, TeX},
+  Scale=1.0
+]{EBGaramond12-Regular.otf}
+\newfontfamily{\smallcaps}[
+  Path={fonts/EB Garamond/},
+  RawFeature={+c2sc,+scmp}
+]{EBGaramond12-Regular.otf}
+\setsansfont[
+  Path={fonts/Lato/},
+  ItalicFont={Lato-RegIta.ttf},
+  BoldFont={Lato-Bol.ttf},
+  BoldItalicFont={Lato-BolIta.ttf},
+  Scale=MatchLowercase
+]{Lato-Reg.ttf}
+\setmonofont[
+  Path={fonts/Source Code Pro/},
+  BoldFont={SourceCodePro-Bold.ttf},
+  Scale=MatchLowercase
+]{SourceCodePro-Regular.ttf}
 %\RequirePackage[labelfont={bf,sf,footnotesize,singlespacing},
                 %textfont={sf,footnotesize,singlespacing},
                 %justification={justified,RaggedRight},
@@ -105,8 +131,8 @@
 %\usepackage[table,xcdraw]{xcolor}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\pgfplotsset{compat=newest} 
-\pgfplotsset{plot coordinates/math parser=false} 
+\pgfplotsset{compat=newest}
+\pgfplotsset{plot coordinates/math parser=false}
 \newlength\fheight
 \newlength\fwidth
 \usepackage{booktabs}
@@ -142,7 +168,7 @@
 \RequirePackage{titling}
 
 % Front matter.
-\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{1}
 \usepackage[titles]{tocloft}
 \usepackage[titletoc]{appendix}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
@@ -204,7 +230,7 @@
 \def\department#1{\gdef\@department{#1}}
 \def\university#1{\gdef\@university{#1}}
 
-% School color 
+% School color
 \definecolor{SchoolColor}{rgb}{0.71, 0, 0.106} % UNIPD red
 \definecolor{chaptergrey}{rgb}{0.61, 0, 0.09} % dialed back a little
 \definecolor{midgrey}{rgb}{0.4, 0.4, 0.4}
@@ -222,8 +248,6 @@
 	\pagenumbering{roman}
 	\input{frontmatter/personalize}
 	\maketitle
-	\frontispiece
-	\dedicationpage
 	\abstractpage
 	\tableofcontents
 	\phantomsection
@@ -232,18 +256,18 @@
 	% figure listing - required if you have any figures
 	\phantomsection
 	\addcontentsline{toc}{chapter}{List of figures}
-	\listoffigures	
-	\cleardoublepage
+	\listoffigures
+	\clearpage
 
 	% table listing - required if you have any tables
 	\phantomsection
 	\addcontentsline{toc}{chapter}{List of tables}
 	\listoftables
-	\cleardoublepage
+	\clearpage
 
 	\acronyms
 
-	\cleardoublepage
+	\clearpage
 	\setcounter{page}{1}
 	\pagenumbering{arabic}
 }
@@ -258,54 +282,57 @@
 	\thispagestyle{empty}
 	\setcounter{page}{1}
 	\begin{center}
-	\vbox to0pt{\vbox to\textheight{\vfill \includegraphics[width=11.5cm]{resources/unipd-light} \vfill}\vss}
-	%\vspace*{\fill}
-	\begin{figure}
-	\centering
-  		\includegraphics[height=2.5cm]{resources/unipd-bn}
-	\end{figure}
-
-	\setstretch{1.5}
-
-	\scshape{\huge{\bfseries{\@university}}} \\
-	\line(1, 0){400} \\
-	\scshape{\large{Department of \@department}} \\
-	\vspace{3pt}
-	\scshape{\large{\textit{Master Thesis in \@mastername}}} \\
-
-	\vspace{2pt}
-
-	\setstretch{2.5}
-
-	\vspace{10pt}
-	\scshape{\LARGE{\bfseries{\textcolor{SchoolColor}{\thetitle}}}} \normalsize \\
-	\vspace{15pt}
-	
-	\setstretch{1.2}
+	\vbox to0pt{\vbox to\textheight{\vfill \includegraphics[width=11.2cm]{resources/unipd-light} \vfill}\vss}
+	\includegraphics[height=2.35cm]{resources/unipd-bn}\par
+	\vspace{1.1em}
+	{\huge\bfseries\scshape \@university\par}
+	\vspace{.45em}
+	{\color{SchoolColor}\rule{.88\textwidth}{1.1pt}\par}
+	\vspace{.65em}
+	{\large\scshape Department of \@department\par}
+	\vspace{.25em}
+	{\large\itshape Master Thesis in \@mastername\par}
 
 	\vfill
-	\begin{normalsize}
-	\begin{flushleft}
-	  \textit{Supervisor} \hfill \textit{Master Candidate}\\
-	  \vspace{1pt}
-	  \@advisor \hfill \@author\\
-	  \@university \\
-	  \vspace{6pt}
-	  \textit{Co-supervisors} \hfill \textit{Student ID}\\
-	  \@coadvisorOne \hfill \@studentId \\
-    \@coadvisorOneUniversity\\
-	  \@coadvisorTwo \\
-	  \@coadvisorTwoUniversity \\
-	\vspace{30pt}
-	\centering
-	\large{\textit{Academic Year} \\ \@academicYear}
-	\end{flushleft}
-	\end{normalsize}
-	
+	\begin{minipage}{.94\textwidth}
+	  \centering
+	  {\color{SchoolColor}\fontsize{17.5}{22}\selectfont\bfseries\thetitle\par}
+	\end{minipage}
+	\vfill
+
+	\begin{minipage}[t]{.46\textwidth}
+	  \raggedright
+	  {\small\itshape Supervisor}\par
+	  \vspace{.25em}
+	  \@advisor\par
+	  \@university\par
+	  \vspace{1.1em}
+	  {\small\itshape Co-supervisors}\par
+	  \vspace{.25em}
+	  \@coadvisorOne\par
+	  \@coadvisorOneUniversity\par
+	  \vspace{.35em}
+	  \@coadvisorTwo\par
+	  \@coadvisorTwoUniversity\par
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{.40\textwidth}
+	  \raggedleft
+	  {\small\itshape Master Candidate}\par
+	  \vspace{.25em}
+	  \@author\par
+	  \vspace{1.1em}
+	  {\small\itshape Student ID}\par
+	  \vspace{.25em}
+	  \@studentId\par
+	\end{minipage}
+
+	\vfill
+	{\small\itshape Academic Year\par}
+	{\large\@academicYear\par}
 	\end{center}
-	\vspace*{\fill}
 	\singlespacing
-	\cleardoublepage
+	\clearpage
 }
 
 \newcommand{\copyrightpage}{
@@ -331,11 +358,10 @@
 
 \newcommand{\dedicationpage}{
 	\phantomsection
-	\setcounter{page}{3}
 	\vspace*{\fill}
 	\scshape \noindent \input{frontmatter/dedication}
 	\vspace*{\fill}
-	\cleardoublepage
+	\clearpage
 	\rm
 }
 
@@ -356,7 +382,6 @@
 
 \newcommand{\abstractpage}{
 	\phantomsection
-	\setcounter{page}{5}
 	\addcontentsline{toc}{chapter}{Abstract}
 	\chapter*{Abstract}
 	\input{frontmatter/abstract}

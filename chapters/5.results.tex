@@ -1,482 +1,475 @@
 \chapter{Results}
 \label{chap:results}
 
-This chapter reports the empirical evidence produced by the pipeline
-defined in Chapter~\ref{chp:experiments_and_framework}. Every number in
-this chapter is traceable to a script and an artefact in the
-repository; every claim is qualified by its confidence interval or its
-inherent uncertainty. The chapter is organised so that the reader
-encounters the evidence in the same order in which the hypotheses of
-Section~\ref{sec:data_aware_hypotheses} depend on it.
+This chapter presents the empirical findings of the CTB study. They reveal a
+clear separation between structural conformance, historical timing fidelity,
+and scenario responsiveness. The sequential Petri net covers almost all
+held-out visits, whereas the simulator reproduces only parts of the observed
+timing behavior and systematically underestimates truck turnaround. Adding
+static or native workload state does not improve validation fidelity enough to
+replace the parsimonious historical reference. Native queue state becomes
+relevant for scenario behavior only under substantially increased demand, not
+under the initial 20\,\% intervention. This distinction frames the interpretation
+of all subsequent results.
 
-Section~\ref{sec:results_eventlog_char} reports the descriptive
-characteristics of the training and testing partitions produced by the
-split of Section~\ref{sec:train_test_split}.
-Section~\ref{sec:results_process_discovery} reports the discovered
-Petri net and its conformance on both partitions (RQ2).
-Section~\ref{sec:results_arrival_process} reports the temporal
-structure of the arrival process (H1).
-Section~\ref{sec:results_holdout_fidelity} reports the held-out
-Monte-Carlo fidelity of the ProSiT configurations
-(RQ1, H2, H3). Section~\ref{sec:results_per_activity} decomposes the
-fidelity by activity to identify where each configuration wins or
-loses. Section~\ref{sec:results_resource_capacities} reports the
-discovered resource capacities and their limits.
-Section~\ref{sec:results_percentile_sens} provides a descriptive
-analysis of transition durations.
-Section~\ref{sec:results_scenarios} reports the two what-if scenarios
-(H4). Section~\ref{sec:limitations} discusses the methodological
-limitations. Section~\ref{sec:results_summary} consolidates the
-empirical findings against the hypotheses.
+The evidence is presented from model foundation to operational application.
+The temporal partitions and control-flow analysis first establish the common
+evaluation basis. The historical-fidelity and feature-source comparisons then
+show which aspects of the later period are reproduced and which remain biased.
+Analyses of temporal transfer, context, arrivals, resources, transition times,
+and accumulated time burden locate the main explanatory boundaries without
+claiming unobserved causes. The chapter closes with the T22-closure,
+increased-demand, and saturation experiments, separating reproducible simulator
+responses from physically validated terminal effects.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Event Log Characteristics on the Held-Out Split}
+\section{Temporal Train--Validation--Test Split}
 \label{sec:results_eventlog_char}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The train/test split of Section~\ref{sec:train_test_split} yields a
-temporally ordered partition of the 89,458 cases. Cases with earliest
-event timestamp $\le\text{2026-04-20 18:14}$ form the training log
-(71,566 cases, 221,559 events, cases spanning
-\text{2026-03-02 05:25} through the cutoff). Cases with earliest event
-timestamp $>\text{2026-04-20 18:14}$ form the testing log (17,892
-cases, 55,864 events). No events are dropped for missing timestamps.
-Table~\ref{tab:activity_counts_split} lists the per-activity counts in
-both partitions.
+The temporal split contains 89,460 cases. The first 57,254 cases and 175,902
+events form the 64\,\% discovery partition. The following 14,314 cases and
+44,146 events form the 16\,\% validation partition, beginning at
+\text{2026-04-10 15:50}. Together, these partitions constitute the 71,568-case
+development log. The next arrival at \text{2026-04-20 18:17} starts the
+untouched 20\,\% test log with 17,892 cases and 55,360 events. The development
+log is used again only after configuration selection, when the selected model
+is rediscovered before its single final test evaluation.
+Table~\ref{tab:activity_counts_split} gives the activity counts.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Activity counts on the train and test partitions.}
-\label{tab:activity_counts_split}
 \begin{tabular}{lrrr}
 \toprule
 \textbf{Activity} & \textbf{Train} & \textbf{Test} & \textbf{Total} \\
 \midrule
-Gate In       & 71,566 & 17,892 & 89,458 \\
-Gate Out      & 71,566 & 17,892 & 89,458 \\
-RMG\_receive  & 30,656 & 7,678  & 38,334 \\
-RMG\_delivery & 14,010 & 3,514  & 17,524 \\
-RMG\_mixed    & 10,816 & 2,706  & 13,522 \\
-LL\_delivery  & 7,678  & 1,911  & 9,589  \\
-HO2\_delivery & 5,351  & 1,338  & 6,689  \\
-HO2\_receive  & 3,807  & 955    & 4,762  \\
-LL\_mixed     & 3,571  & 880    & 4,451  \\
-HO2\_mixed    & 1,810  & 444    & 2,254  \\
-LL\_receive   & 728    & 182    & 910    \\
+Gate In       & 71,568 & 17,892 & 89,460 \\
+Gate Out      & 71,568 & 17,892 & 89,460 \\
+RMG\_receive  & 32,794 & 7,171  & 39,965 \\
+RMG\_delivery & 17,823 & 4,681  & 22,504 \\
+RMG\_mixed    & 3,986  & 953    & 4,939  \\
+LL\_delivery  & 9,612  & 3,618  & 13,230 \\
+HO2\_delivery & 5,775  & 1,449  & 7,224  \\
+HO2\_receive  & 4,188  & 1,276  & 5,464  \\
+HO2\_mixed    & 749    & 276    & 1,025  \\
+LL\_receive   & 1,932  & 141    & 2,073  \\
+LL\_mixed     & 53     & 11     & 64     \\
 \bottomrule
 \end{tabular}
+\caption{Activity counts on the combined development and final test partitions.}
+\label{tab:activity_counts_split}
 \end{table}
 
-The per-activity distribution on the test partition is proportional to
-the training partition to within 1--3\,\% for the four RMG-related
-activities and within 5\,\% for the low-frequency activities
-(\texttt{LL\_receive}, \texttt{HO2\_mixed}). No activity is missing from
-the test partition. The split therefore does not introduce
-class-imbalance artefacts that would confound the fidelity comparison
-in Section~\ref{sec:results_holdout_fidelity}.
+All activities also occur in the test log, but their frequencies change.
+\texttt{LL\_delivery} rises from 0.134 to 0.202 events per case.
+\texttt{RMG\_receive} falls from 0.458 to 0.401, and
+\texttt{LL\_receive} falls from 0.027 to 0.008. This shift is kept in the
+evaluation. It contributes to the final yard-activity-rate L1 error in
+Table~\ref{tab:final_kpis}. A random split would mix this later-period shift
+into all partitions. The temporal design preserves it while retaining a
+separate selection and test period. It still covers only one later CTB period.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Process Discovery and Held-Out Conformance}
+\section{Control-Flow Stability Across the Held-Out Period}
 \label{sec:results_process_discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The Petri net is discovered from the training partition with the
-inductive miner as described in
-Section~\ref{sec:process_discovery_methodology}. Table~\ref{tab:conformance_train_test}
-reports the four conformance metrics on both partitions.
+The raw Inductive-Miner result is informative but is not sufficient as an executable CTB source model. On the 64\,\% discovery partition it contains
+three parallel operators because frequently reversed sequential relations are
+interpreted as concurrency. It also permits a complete yard bypass. Both
+properties conflict with the terminal-expert case contract. The model used by all four ProSiT configurations is therefore the transparent repair defined in
+Equation~\ref{eq:ctb_control_flow_contract}. It has 4 places, 12 transitions,
+24 arcs, and no parallel operator. It requires at least one yard activity and
+permits arbitrary sequential orders and repetitions. Table~\ref{tab:conformance_train_test}
+reports the quality of this repaired source model after rediscovery of the
+selected parameter configuration on the combined development period.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Petri-net conformance on train and test.}
-\label{tab:conformance_train_test}
 \begin{tabular}{lrr}
 \toprule
 \textbf{Metric} & \textbf{Train} & \textbf{Test} \\
 \midrule
-Fitness (token-based replay)     & 1.000 & 1.000 \\
-Precision (token-based replay)   & 0.904 & 0.872 \\
-Generalisation                   & 0.974 & 0.949 \\
-Simplicity                       & 0.652 & 0.652 \\
+Log fitness                      & 1.000000 & 1.000000 \\
+Fitting traces (\%)              & 100.000 & 100.000 \\
+Average trace fitness            & 1.000000 & 1.000000 \\
+Token-based precision            & 0.7815 & 0.7641 \\
+Generalisation                   & 0.9762 & 0.9488 \\
+Simplicity                       & 0.5000 & 0.5000 \\
 \bottomrule
 \end{tabular}
+\caption{Conformance and structural descriptors of the expert-repaired
+sequential source model on development and final test data.}
+\label{tab:conformance_train_test}
 \end{table}
 
-Fitness of $1.000$ on the training log is expected: the inductive miner
-is fitness-preserving by construction. Fitness of $1.000$ on the
-held-out testing log is not automatic: it demonstrates that the
-control-flow structure discovered on the first 80\,\% of the cases
-replays every case in the last 20\,\% without token deficit. Precision
-drops from 0.904 to 0.872 (a relative reduction of 3.5\,\%) and
-generalisation from 0.974 to 0.949 (a relative reduction of 2.6\,\%).
-Simplicity depends only on the Petri-net structure and is identical
-across partitions.
+The test log contains 53 variants, ten of which are absent from development and
+together account for ten of 17,892 cases (0.0559\,\%). Unlike a prefix trie,
+the repaired loop can replay unseen sequential combinations. It fits all
+17,892 test cases completely. This is substantive test evidence rather than a
+consequence of memorising the construction log.
 
-The size of the discovered Petri net is 42 places, 59 transitions and
-128 arcs. The training log contains 134 trace variants; the top-3
-variants account for 67.5\,\% of all cases and the top-20 variants for
-98.7\,\%. The remaining variants correspond to low-frequency
-operational deviations
-(e.g.\ \texttt{Gate In}$\to$\texttt{HO2\_mixed}$\to$\texttt{LL\_delivery}$\to$\texttt{Gate Out}
-with 41 cases).
-
-Figure~\ref{fig:petri_net} shows the discovered Petri net enriched with
-token-replay frequency; edge labels report the number of tokens that
-crossed the corresponding transition during replay on the training log.
-The visualisation makes the process structure explicit: after
-\texttt{Gate In} the flow branches at a first exclusive choice
-between RMG, LL and HO2 handling; the three handling families each
-carry an internal exclusive choice between \texttt{receive},
-\texttt{delivery} and \texttt{mixed} sub-activities; the flow
-re-converges before \texttt{Gate Out}. The relative arc thickness
-mirrors the activity counts of Table~\ref{tab:activity_counts_split}:
-the RMG family dominates ($\approx 63\,\%$ of yard activities), the LL
-family follows ($\approx 21\,\%$) and the HO2 family is the least
-frequent ($\approx 16\,\%$). No unreachable transitions or dead places
-appear in the net.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.95\textwidth]{figures/discovery/petri_net_frequency.png}
-\caption{Discovered Petri net with token-replay frequency on the
-training log (71,566 cases, 221,559 events). Transition labels report
-the number of replayed tokens. The visualisation is produced by
-\texttt{pm4py.visualization.petri\_net.visualizer} in the
-\texttt{FREQUENCY} variant.}
-\label{fig:petri_net}
-\end{figure}
-
-Figure~\ref{fig:dfg_freq} shows the directly-follows graph of the
-training log. This is a complementary view to the Petri net:
-whereas the Petri net encodes the concurrency and exclusive choice
-structure inferred by the inductive miner, the DFG shows the raw
-handover statistics between activities. The dominant paths
-\texttt{Gate~In}$\to$\texttt{RMG\_receive}$\to$\texttt{Gate~Out},
-\texttt{Gate~In}$\to$\texttt{RMG\_delivery}$\to$\texttt{Gate~Out} and
-\texttt{Gate~In}$\to$\texttt{RMG\_mixed}$\to$\texttt{Gate~Out}
-carry 30k, 14k and 11k cases respectively.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.85\textwidth]{figures/discovery/dfg_frequency.png}
-\caption{Directly-follows graph of the training log with edge
-frequencies. Complementary to the Petri net in
-Figure~\ref{fig:petri_net}: shows raw handover statistics between
-activities.}
-\label{fig:dfg_freq}
-\end{figure}
-
-Figure~\ref{fig:variants_top20} confirms the concentration of behaviour
-in a small number of variants. The top 20 trace variants cover 98.7\,\%
-of the 71,566 training cases; the tail of 114 additional variants
-accounts for only 908 cases and consists mainly of visits that combine
-two yard families in a single visit (e.g.\ HO2 receive followed by an
-RMG delivery). The event log is therefore structurally regular: the
-Petri net of Figure~\ref{fig:petri_net} is a compact representation of
-the observed control flow, not a coarse simplification of a highly
-variable process.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{figures/discovery/variants_top20.png}
-\caption{Trace-variant coverage on the training log. The top 20 of the
-134 observed variants cover 98.7\,\% of the 71,566 cases; the label
-next to each variant reports the number of cases following it.}
-\label{fig:variants_top20}
-\end{figure}
+The remaining measures show the expected abstraction trade-off. Test precision
+is 0.7641 because the loop permits more sequential combinations and
+repetitions than were observed. This broader language is consistent with the
+stated CTB contract because experts identified no forbidden yard successor
+pair. Generalisation remains high at 0.9488. A hard operator check confirms
+zero parallel cuts, and the ten final simulation replications produce neither
+within-case overlap, gate-only cases, nor a \texttt{Gate Out} before the final
+yard activity.
 
 \medskip
 
-\noindent\textbf{RQ2 (structural quality).} The control-flow model
-generalises to the held-out period: fitness stays at $1.0$ and the
-precision and generalisation reductions are modest. The Petri net is
-therefore a legitimate skeleton for the simulation-parameter discovery
-that follows.
+\noindent\textbf{RQ2 answer.} Automatic discovery identifies a compact and
+general control-flow language, but the raw result is not physically admissible
+without domain repair. The expert-repaired source model achieves complete test
+fitness, preserves sequential generalisation, and satisfies the mandatory
+gate, yard-work, and no-concurrency conditions. The result supports the
+repaired model as a simulation backbone. It does not support presenting the
+unmodified Inductive-Miner output as a fully automatic operational model.
+
+\subsection{Discovery-to-Execution Repair}
+
+Transitioning from the raw tree to the executable tree is a primary modeling
+step, rather than a secondary robustness test. It removes both forms of excess
+behavior identified by the domain audit, consisting of the concurrent activities of one single truck
+and the gate-only bypass. At the same time, it retains the activity alphabet
+and deliberately allows arbitrary sequential yard combinations and
+repetitions. The repair is fixed before validation and is identical for every
+feature-source configuration. It therefore cannot explain performance
+differences among the four ProSiT cells.
+
+The raw tree itself remains an auditable discovery artifact. Its structure is
+also sample-window sensitive, as the 64\,\% discovery tree contains three
+parallel operators, when the tree rediscovered on the complete 80\,\%
+development period contains none but still allows for the yard bypass. This
+instability enhances the methodological finding that a high-fitness
+discovered petri net is not automatically a physically valid simulation model.
+
+\paragraph{Interpretation of the \texttt{LL\_mixed} Branch}
+
+The special structural role of \texttt{LL\_mixed} is supported by a small and
+highly concentrated set of visits. Across the complete train and hold-out
+periods, 64 visits contain the activity and 57 of them contain no other yard
+activity. Their observed pattern is therefore simply \texttt{Gate In},
+\texttt{LL\_mixed}, and \texttt{Gate Out}. Only seven visits combine
+\texttt{LL\_mixed} with another yard activity. In six training visits it occurs
+first and is followed by \texttt{RMG\_receive}. The single held-out exception
+follows the order \texttt{RMG\_delivery}, \texttt{LL\_mixed}. A plausible
+operational interpretation is that an empty-container exchange is normally
+completed before another yard area for routing reasons. The six training cases
+are compatible with that explanation, but the small sample and held-out
+exception do not justify a mandatory ordering rule. The isolated branch is
+mainly evidence of an valid one-stop process variant rather than evidence
+that \texttt{LL\_mixed} must always precede other yard work.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Temporal Structure of the Arrival Process}
-\label{sec:results_arrival_process}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-The arrival process is the clearest case for time-conditioning in the
-CTB event log. Table~\ref{tab:arrival_benchmark} compares a pooled
-arrival-rate baseline (a single global mean) against a time-aware
-decision tree (features: hour, weekday, weekend indicator) on 30-minute
-arrival counts derived from the training partition. Both models are
-evaluated on a chronological 80/20 split within the training partition
-so that the numbers reflect the same temporal-hold-out logic used for
-the simulator evaluation later.
-
-\begin{table}[h]
-\centering
-\caption{Arrival-rate benchmark on 30-minute buckets (training log only,
-chronological 80/20 split).}
-\label{tab:arrival_benchmark}
-\begin{tabular}{lrrr}
-\toprule
-\textbf{Model} & \textbf{MAE} & \textbf{RMSE} & \textbf{$R^{2}$} \\
-\midrule
-Pooled arrival rate         & 28.98 & 34.60 & $-0.001$ \\
-Time-aware decision tree    & \textbf{9.41}  & \textbf{16.87} & \textbf{0.762} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The pooled baseline has an $R^{2}$ indistinguishable from zero: a
-single global arrival rate has no predictive power for 30-minute
-arrival counts on this dataset. The time-aware tree reduces MAE by
-67.5\,\% and RMSE by 51.2\,\% and achieves $R^{2}=0.762$. The day/night
-statistics of Table~\ref{tab:day_night} confirm the underlying
-non-stationarity: mean arrivals per hour rise from 12.8 at night to
-110.9 during the day, an $8.7\times$ difference that a pooled model
-cannot represent.
-
-\begin{table}[h]
-\centering
-\caption{Day vs.\ night arrival statistics on the training log.}
-\label{tab:day_night}
-\begin{tabular}{lrrr}
-\toprule
-\textbf{Period} & \textbf{Mean inter-arrival (min)} & \textbf{Mean arrivals/hour} & \textbf{Cases} \\
-\midrule
-All   & 1.00  & 60.2   & 71,566 \\
-Day   & 0.54  & 110.9  & 63,710 \\
-Night & 4.69  & 12.8   & 7,856  \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\medskip
-
-\noindent\textbf{H1 (time dependence of arrivals) is accepted.} The
-time-aware arrival model reduces MAE by 67.5\,\% and RMSE by 51.2\,\%
-relative to a pooled baseline on a chronological within-training
-hold-out. This is a substantial and interpretable effect. The
-day/night contrast (Table~\ref{tab:day_night}) is the operational
-mechanism that the tree captures.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Held-Out Simulation Fidelity (Multi-Seed)}
+\section{Historical Fidelity and Model Screening}
 \label{sec:results_holdout_fidelity}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The three ProSiT configurations of
-Section~\ref{sec:simulation_discovery_methodology} are evaluated
-against the held-out test log using the Monte-Carlo protocol of
-Section~\ref{sec:mc_protocol}. Each configuration is simulated with
-$N_{\text{seeds}}=10$ independent seeds; every simulation covers
-$n_{\text{traces}}=17{,}892$ cases starting at the test-window cutoff
-$t_{\text{start}}=\text{2026-04-20 18:14}$.
+This section contains two distinct stages. RQ3 compares the four feature-source
+configurations on the 16\,\% validation period and selects one configuration by
+the pre-specified rule. RQ1 then evaluates that configuration, rediscovered on
+the combined 80\,\% development log, once on the untouched test period. All
+configurations use the same expert-repaired Petri net, arrival calibration and
+ten-seed protocol. Their difference is therefore the way routing, duration and
+resource behavior use contextual information.
 
-Consistent with the corrected temporal semantics of
-Section~\ref{sec:lifecycle_events}, the real event log contains only
-observed timestamps (\texttt{start:timestamp} and
-\texttt{time:timestamp}); activity enablement is derived internally by
-ProSiT from A* alignment against the discovered Petri net.
-Consequently, service-time and case-turnaround comparisons are
-directly available (both real and simulated logs carry start/complete
-timestamps), while the model-derived pre-service delay is available
-only from the simulated log.
+\subsection{RQ1: Historical Fidelity of the Data-Aware Reference Model}
 
-Table~\ref{tab:headline_ci} reports the headline fidelity metrics with
-95\,\% Student-t confidence intervals.
+The final reference model uses the expert-repaired sequential net, native
+ProSiT routing learned from development data, the minute-resolved arrival model, and
+non-pre-emptive completion. The raw RMG
+capacities are capped at three per block. This cap comes from the domain, not
+from the hold-out split. The hold-out is used only for evaluation.
 
-\begin{table}[h]
+Ten runs of 17,892 cases use seeds 42--51. Each run starts at the frozen cutoff
+$t_{\text{start}}=\text{2026-04-20 18:17}$. Table~\ref{tab:final_kpis}
+summarises the comparison. Its intervals cover seed variation for this fixed
+model and hold-out only.
+
+\begin{table}[htbp]
 \centering
-\caption{Held-out fidelity by ProSiT configuration
-($N_{\text{seeds}}=10$; 95\,\% Student-t CI).}
-\label{tab:headline_ci}
-\begin{tabular}{lcc}
+\setlength{\tabcolsep}{3.4pt}
+\begin{tabular}{L{4.6cm}rrrr}
 \toprule
-\textbf{Metric (min)} &
-\textbf{no-rules} &
-\textbf{rules$+$workload} \\
+\textbf{KPI} & \textbf{Real/ref.} & \textbf{Simulated} &
+\textbf{Difference} & \textbf{95\,\% MC CI} \\
 \midrule
-Service EMD (mean over activities) &
-$1.91\;[1.89, 1.93]$ &
-$2.00\;[1.94, 2.06]$ \\
-Case turnaround EMD &
-$\mathbf{13.94\;[13.15, 14.73]}$ &
-$21.75\;[20.60, 22.90]$ \\
-Inter-arrival EMD &
-$0.319\;[0.317, 0.320]$ &
-$0.314\;[0.313, 0.315]$ \\
-Case turnaround KS &
-$0.103\;[0.099, 0.108]$ &
-$0.125\;[0.123, 0.127]$ \\
-Sim mean turnaround &
-$53.68\;[52.89, 54.47]$ &
-$61.49\;[60.34, 62.64]$ \\
-Sim P90 turnaround &
-$103.05\;[101.26, 104.84]$ &
-$124.44\;[121.70, 127.17]$ \\
+Yard service EMD, unweighted (min) & -- & 3.150 & -- & [2.985, 3.315] \\
+Yard service EMD, real-frequency weighted (min) & -- & 2.341 & -- & [2.295, 2.387] \\
+Case-turnaround EMD (min) & -- & 6.159 & -- & [6.041, 6.278] \\
+Case-turnaround KS & -- & 0.0928 & -- & [0.0893, 0.0962] \\
+Inter-arrival EMD (min) & -- & 0.0724 & -- & [0.0674, 0.0774] \\
+Inter-arrival KS & -- & 0.0254 & -- & [0.0215, 0.0292] \\
+Mean turnaround (min) & 39.742 & 33.812 & $-5.930$ & [33.682, 33.943]$^{a}$ \\
+P90 turnaround (min) & 71.000 & 57.900 & $-13.100$ & [57.674, 58.126]$^{a}$ \\
+Simultaneous-arrival share (\%) & 56.660 & 54.221 & $-2.439$ pp & [54.035, 54.407]$^{a}$ \\
+Yard-activity-rate L1 error & -- & 0.1636 & -- & [0.1593, 0.1678] \\
 \bottomrule
 \end{tabular}
+\caption{Held-out fidelity of the calibrated data-aware cap-three reference model
+($N_{\text{seeds}}=10$, seeds 42--51, and 17,892 cases per run).}
+\label{tab:final_kpis}
+\smallskip
+\parbox{0.95\textwidth}{\footnotesize $^{a}$The interval refers to the
+simulated outcome. The real hold-out statistic is fixed. Gate In and Gate Out
+are excluded from both yard-service EMD aggregates.}
 \end{table}
 
-\subsection{RQ1: Point Estimate of Held-Out Fidelity}
+The result turned out mixed. Inter-arrival EMD is 0.0724 minutes. Unweighted yard
+service EMD is 3.150 minutes. Frequency weighting reduces it to 2.341 minutes
+because some of the larger errors occur in rare activities
+(Table~\ref{tab:yard_activity_emd}). The complete visit is less accurate. Mean
+turnaround is 5.930 minutes too short, or 14.92\,\%. P90 is 13.100 minutes too
+short, or 18.45\,\%. This bias remains across the ten seeds. The narrow seed
+intervals do not show that the model itself is correct.
 
-Under the \textit{no-rules} configuration (the better-performing
-variant; see H2 below) the discovered simulator reproduces case
-turnaround with a Wasserstein distance of $13.94$ minutes $[13.15,
-14.73]$ and a KS statistic of $0.103\;[0.099, 0.108]$ against the
-17,892-case held-out log. The mean turnaround in the real log is 43.3
-minutes (measured as first \texttt{start:timestamp} to last
-\texttt{time:timestamp} per case); the simulator produces
-$53.68\pm 1.10$ minutes (an over-prediction of 24.0\,\% at the mean).
-The 90th percentile of turnaround is 76.0 minutes in the real log
-versus $103.1\pm 2.5$ minutes in the simulator (an over-prediction of
-35.6\,\%).
+The \textit{native-only} bundle gives a completion-order
+3-gram NGD of 0.05657 on the same final test period
+($95\,\%$ MC CI $[0.05514,0.05800]$). The explicit ITS-order sensitivity is
+0.05654 ($[0.05511,0.05797]$), a difference of only 0.00003. This very close
+values show that the NGD result is not driven by the small number of
+timestamp inversions in the underlaying data. Its increase, relative to the validation value of
+approximately 0.04857, is consistent with the temporal transfer loss in
+activity combinations. NGD remains a control-flow distance and not evidence that
+timing, queues, or physical movement are actually correctly represented.
 
-Service-time distributions are reproduced accurately: the mean
-per-activity service-time EMD is $1.91$ minutes $[1.89, 1.93]$.
-Inter-arrival EMD is $0.319$ minutes $[0.317, 0.320]$, confirming that
-the time-aware arrival model closely reproduces the observed truck
-arrival process.
+As a role check, the same test period evaluated with the cap-three
+\textit{native-only} bundle gives a frequency-weighted yard-service EMD of
+2.382 minutes ($[2.324,2.440]$), a case-turnaround EMD of 6.324 minutes
+($[6.207,6.440]$), and an activity-rate L1 error of 0.1635
+($[0.1586,0.1685]$). These values are close to the corresponding
+\textit{visit-only} values of 2.341 minutes, 6.159 minutes, and 0.1636.
+The small differences do not change the historical reference decision. They
+show that the native-state scenario model does not incur a large additional
+historical mismatch as they provide a different inervention capability.
 
-The turnaround over-prediction originates in ProSiT's model-derived
-pre-service delay, which accumulates across the 2--4 activities in a
-typical truck visit. Because physical truck movement between terminal
-locations is not modelled as a separate activity, this delay includes
-both operational waiting and physical transition time
-(Section~\ref{sec:limitations}).
+All ten runs pass the case-order checks. They contain no gate-only cases,
+within-case overlaps, invalid boundaries, or decreasing completion times. Gate
+Out never occurs before the last yard activity. No accepted duration exceeds
+24 hours. These checks are necessary, but they do not remove the timing bias.
 
-\subsection{H2: Does the Data-Aware Configuration Improve Fidelity?}
-
-The comparison between \textit{no-rules} and
-\textit{rules$+$workload} directly tests H2. On every fidelity metric
-except inter-arrival, the distribution-only configuration produces
-strictly lower (better) values, and the 95\,\% confidence intervals
-are disjoint:
-
-\begin{itemize}
-    \item Case turnaround EMD: \textit{no-rules}
-          $13.94\;[13.15, 14.73]$ vs.\
-          \textit{rules$+$workload} $21.75\;[20.60, 22.90]$. The CIs
-          are disjoint; \textit{rules$+$workload} is 56\,\% worse.
-    \item Service EMD: \textit{no-rules} $1.91\;[1.89, 1.93]$ vs.\
-          \textit{rules$+$workload} $2.00\;[1.94, 2.06]$. The CIs
-          barely overlap; the point-estimate direction favours
-          \textit{no-rules}.
-    \item Inter-arrival EMD: \textit{rules$+$workload}
-          $0.314\;[0.313, 0.315]$ vs.\
-          \textit{no-rules} $0.319\;[0.317, 0.320]$. Here the
-          tree-based configuration wins, but the absolute
-          difference is 0.005 minutes ($\approx 0.3$ seconds).
-\end{itemize}
-
-\noindent\textbf{H2 is rejected.} The data-aware configuration does
-not improve fidelity on the CTB event log. The distribution-only
-simulator achieves a 56\,\% lower case-turnaround EMD with disjoint
-confidence intervals. The only gain for the tree-based variant is on
-the inter-arrival distribution and it is operationally negligible.
-
-\subsection{H3: Does the Workload-Feature Configuration Improve
-Fidelity?}
-
-H3 cannot be tested in isolation because we compare \textit{no-rules}
-(the distribution-only baseline) against
-\textit{rules$+$workload} (the full data-aware variant). Since the
-combined effect of enabling both trees and workload features produces
-strictly worse fidelity than the no-rules baseline, H3 is subsumed by
-the H2 rejection. Workload features do not compensate for the
-fidelity loss introduced by the decision trees.
-
-\noindent\textbf{H3 is rejected.} Adding queue-length and workload
-features to the ProSiT waiting-time and resource-selection models does
-not improve held-out fidelity on the CTB event log.
-
-\subsection{A Secondary Effect: Workload Features Reduce Simulator
-Variance}
-
-Although the mean of every fidelity metric is unchanged, the seed-to-seed
-standard deviation of the \textit{rules$+$workload} configuration is
-consistently lower than that of \textit{rules}. Table~\ref{tab:std_across_configs}
-lists the standard deviation of the four headline metrics across the
-ten seeds.
-
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Cross-seed standard deviation of the fidelity metrics
-($N_{\text{seeds}}=10$).}
-\label{tab:std_across_configs}
-\begin{tabular}{lcc}
+\begin{tabular}{lrr}
 \toprule
-\textbf{Metric} &
-\textbf{no-rules} &
-\textbf{rules$+$workload} \\
+\textbf{Yard activity} & \textbf{Mean EMD (min)} & \textbf{95\,\% MC CI} \\
 \midrule
-Service EMD (min)        & 0.03  & 0.08 \\
-Case turnaround EMD (min) & 1.10  & 1.61 \\
-Case turnaround sim P90 (min) & 2.50  & 3.82 \\
+HO2\_delivery & 2.086 & [1.876, 2.296] \\
+HO2\_mixed    & 4.440 & [3.655, 5.224] \\
+HO2\_receive  & 1.844 & [1.669, 2.018] \\
+LL\_delivery  & 1.448 & [1.365, 1.530] \\
+LL\_mixed     & 5.266 & [3.968, 6.564] \\
+LL\_receive   & 4.265 & [4.053, 4.477] \\
+RMG\_delivery & 2.525 & [2.445, 2.605] \\
+RMG\_mixed    & 4.007 & [3.666, 4.348] \\
+RMG\_receive  & 2.467 & [2.406, 2.528] \\
 \bottomrule
 \end{tabular}
+\caption{Held-out service-time EMD by yard activity for the final cap-three
+\textit{visit-only} historical reference ($N_{\text{seeds}}=10$).}
+\label{tab:yard_activity_emd}
 \end{table}
 
-The \textit{no-rules} configuration produces lower cross-seed variance
-than \textit{rules$+$workload} on every metric. The
-\textit{rules$+$workload} simulator has turnaround-EMD standard
-deviation 46\,\% larger than \textit{no-rules} (1.61 vs.\ 1.10
-minutes). For any
-downstream planning application that uses the discovered simulator
-this is a defensible operational benefit even though the reference
-distributional distance is not reduced.
+\noindent\textbf{RQ1 answer.} The model reproduces the case order and parts of
+the arrival and service-time behavior. It does not reproduce the full
+turnaround distribution. Total visit time is systematically too short.
 
-\subsection{Methodological Note on Temporal Semantics}
+\subsection{RQ3: Feature Sources and Validation Fidelity}
+
+Table~\ref{tab:configuration_screening} reports the standardized $2\times2$
+experiment on the 16\,\% validation period. All four cells use the same
+64\,\% discovery partition, repaired source net, tree settings, deterministic
+runner and seeds. They differ only in
+whether manually constructed static demand/utilisation proxies and ProSiT's
+native workload/queue state are available. The N-Gram Distribution Distance
+(NGD), here with $n=3$, compares local activity-order frequencies. Lower values are
+better for every reported error measure.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabular}{L{4.2cm}rrrr}
+\toprule
+\textbf{Metric} & \textbf{visit-only} & \textbf{static-only} &
+\textbf{native-only} & \textbf{both} \\
+\midrule
+Turnaround EMD (min) & 9.149 & 9.163 & 9.253 & 9.173 \\
+Yard-service EMD, weighted (min) & 1.735 & 1.760 & 1.773 & 1.715 \\
+Yard-activity-rate L1 error & 0.1285 & 0.1305 & 0.1291 & 0.1305 \\
+3-gram NGD & 0.04857 & 0.04915 & 0.04863 & 0.04884 \\
+Gate-only cases per run & 0 & 0 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\caption{Validation $2\times2$ feature-source comparison
+($N_{\text{seeds}}=10$ and 14,314 cases per run).}
+\label{tab:configuration_screening}
+\end{table}
+
+The ordering definition used for NGD is not decisive. With explicit
+\texttt{case:event:order}, mean NGD is 0.04852 for \textit{visit-only}, 0.04910
+for \textit{static-only}, 0.04857 for \textit{native-only} and 0.04879 for
+\textit{both}. Each is within 0.00006 of its completion-order counterpart in
+Table~\ref{tab:configuration_screening}.
+
+Relative to \textit{visit-only}, the paired static-only changes are $+0.014$
+minutes for turnaround EMD (95\,\% CI $[-0.134,+0.162]$), $+0.025$ minutes for
+weighted yard-service EMD ($[-0.041,+0.091]$), $+0.0020$ for activity-rate L1
+($[-0.0045,+0.0085]$), and $+0.00059$ for 3-gram NGD
+($[-0.00121,+0.00238]$). None is resolved.
+
+The native-only differences are also unresolved: $+0.105$ minutes for
+turnaround EMD ($[-0.099,+0.308]$), $+0.037$ minutes for weighted service EMD
+($[-0.037,+0.112]$), $+0.0006$ for activity-rate L1
+($[-0.0032,+0.0044]$), and $+0.00006$ for NGD
+($[-0.00032,+0.00044]$). The combined model has a slightly lower mean weighted
+service EMD than \textit{visit-only} ($-0.020$ minutes), but its interval
+$[-0.108,+0.067]$ crosses zero and the other three primary measures do not
+improve. Thus no complex cell satisfies the pre-specified requirement of at
+least one resolved improvement without a resolved worsening.
+
+The rule audit explains why ordinary feature importance would be misleading.
+The static-only bundle retains static-state splits on \texttt{target\_rank},
+\texttt{target\_demand}, \texttt{rmg\_demand}, and
+\texttt{mt\_utilization}. The combined bundle retains
+\texttt{target\_rank\_group}, \texttt{target\_rank},
+\texttt{target\_demand}, and \texttt{rmg\_demand}. Native-only and both each
+retain one \texttt{queue\_length} split. Most retained rules nevertheless use
+visit/process or location state. Correlation is concentrated within alternative static representations:
+$\rho=0.922$ for gate and RMG utilisation, $0.898$ for gate and RMG demand, and
+$-0.790$ for target utilisation and target rank. By contrast, the largest
+absolute demand--native-state correlation is 0.190 and the largest
+utilisation--native-state correlation is 0.019. Correlated attributes may
+remain in an event log. The methodological issue is that attribution to an
+individual split can depend on the candidate set, not that predictors must be
+mutually independent.
+
+The retained native rule also makes the white-box scope concrete. In the
+\textit{native-only} and \textit{both} bundles, the waiting-time tree for T07
+splits once at \texttt{queue\_length}$=4.5$. Values at or below the threshold
+use a fitted exponential distribution with a reported node value of 6.825
+minutes. Values above the threshold use a gamma distribution with a reported
+node value of 27.474 minutes. This condition is inspectable and can be
+challenged against domain knowledge. It is not treated as a causal queueing law,
+and neither operational scenario edits this split or replaces one of its
+subtrees. The scenarios demonstrate transparent parameter intervention, while
+this retained rule illustrates the additional tree structure that ProSiT makes
+available for future rule-level interventions.
+
+The earlier semantically cleaned static sensitivity remains an exploratory
+specification audit rather than a fifth selection cell. It motivated removal
+of redundant aggregate, target-derived, binned and rank representations from
+future model designs, but it is not used to choose the final model. The final
+four-cell result is sufficient to conclude that the available workload state
+does not provide a resolved validation improvement under the tested ProSiT
+specification.
+
+\paragraph{Historical reference-model decision}
+
+\textit{Visit-only} is selected because none of the three additional-state
+configurations passes the rule fixed before validation results were inspected.
+It is therefore the parsimonious fallback, not a winner chosen by ranking noisy
+point estimates. After this decision, \textit{visit-only} is rediscovered on
+the combined 80\,\% development log and evaluated once on the untouched test
+period. The final test results in Table~\ref{tab:final_kpis} do not participate
+in this choice. This decision concerns RQ1 historical fidelity. It does not
+remove the need to test whether a model used for RQ4 contains the endogenous
+state required by an intervention.
+
+\noindent\textbf{RQ3 answer.} Neither static workload proxies nor ProSiT's
+native dynamic state produces a statistically resolved multi-perspective
+validation improvement. More available state is therefore not automatically
+more useful process state. Under the pre-specified selection rule, the evidence
+favours the parsimonious \textit{visit-only} configuration for historical
+reproduction of this event log. The demand-response adequacy audit in
+Section~\ref{sec:results_scenarios} assigns a different, explicitly narrower
+role to native dynamic state.
+
+\paragraph{Meaning of the Time Measures}
 \label{sec:results_temporal_note}
 
-The event log used for discovery and validation contains only observed
-timestamps (\texttt{start:timestamp} and \texttt{time:timestamp}).
-Activity enablement is derived internally by ProSiT via A* alignment
-against the discovered Petri net.  This means:
-\begin{itemize}
-    \item Service-time EMD compares real vs.\ simulated
-          $\text{complete}-\text{start}$ per activity — both quantities
-          are directly available.
-    \item Case-turnaround EMD compares real vs.\ simulated
-          $\text{last\_complete}-\text{first\_start}$ per case — both
-          quantities are directly available.
-    \item Pre-service delay (ProSiT ``waiting time'') is available only
-          from the simulated log, where ProSiT emits the model-derived
-          \texttt{enabled:timestamp}. A cross-log comparison of waiting
-          time is not performed because the real log does not contain
-          an observed enablement timestamp.
-\end{itemize}
+The real log has start and completion timestamps, but no enablement timestamp.
+Service-time EMD uses $\text{complete}-\text{start}$. Turnaround EMD uses
+$\text{last\_complete}-\text{first\_start}$. Both can be calculated for both
+logs. ProSiT derives enablement internally and writes it only to the simulated
+log. Simulated $\text{start}-\text{enabled}$ is called pre-service delay. It
+cannot be validated against real waiting time.
 
-Figure~\ref{fig:cdf_turnaround} shows the empirical CDF of case
-turnaround in the held-out real log against a single draw of the
-\textit{no-rules} simulator (the better-performing configuration). The
-simulator tracks the real distribution up to approximately the
-60th percentile, then over-predicts in the upper tail.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.75\textwidth]{figures/discovery/cdf_turnaround.png}
-\caption{Empirical CDF of case turnaround: real held-out log vs.\ a
-single \textit{no-rules} simulation draw.}
-\label{fig:cdf_turnaround}
-\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Per-Activity Decomposition of Fidelity}
+\section{Temporal Transfer and Error Decomposition}
+\label{sec:results_temporal_transfer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The observed process changes between discovery and evaluation. Mean truck
+turnaround rises from 37.293 minutes in training to 39.742 minutes in the
+hold-out, a 2.450-minute increase (95\,\% Welch CI $[2.003,2.896]$).
+The median rises from 29 to 32 minutes and P90 from 67 to 71 minutes. The
+bootstrapped 95\,\% interval for the P90 increase is $[3,6]$ minutes. The
+Wasserstein distance between the two real turnaround distributions is 3.235
+minutes. The hold-out is therefore not an exchangeable sample from an
+unchanged period.
+
+The change is not confined to case composition. Mean service time increases
+for all nine yard activities, with activity-specific increases between 1.20
+and 4.01 minutes. Using held-out activity frequencies, their mean shift is
+2.120 minutes and their aggregate Wasserstein distance is 2.131 minutes.
+At the same time, process-flow composition changes by a total-variation
+distance of 0.072 and target-area composition by 0.102. The receive share
+falls by 7.22 percentage points.
+
+This drift also affects a simple congestion interpretation of the available
+state variables. Gate and RMG utilisation proxies are lower in the hold-out
+(standardised shifts $-1.095$ and $-0.675$), while all yard-service means and
+complete turnaround are higher. Several demand measures rise, but the
+direction of the utilisation proxies is inconsistent with treating them as a
+stable causal measurement of terminal congestion. They stay predictive
+features whose relationships transfer empirically, not mechanical queue
+state. This finding is consistent with recent work on online simulation
+discovery, which gives greater weight to recent data while retaining historical
+information to handle evolving processes
+\cite{vinci2025onlinediscoverysimulationmodels}.
+
+Equation~\ref{eq:mean_transfer_decomposition} separates the final mean deficit
+without pretending that the two sources can be identified case by case. For
+the final \textit{visit-only} cap-three baseline,
+\begin{equation}
+39.742-33.812=(37.293-33.812)+(39.742-37.293)
+=3.481+2.450=5.930\ \text{minutes}.
+\end{equation}
+Approximately 59\,\% of the mean deficit is therefore already present relative
+to the training-period mean. The remaining 41\,\% is the later-period mean
+shift.
+This decomposition applies to the means only and is not an additive
+decomposition of EMD.
+
+The service-time comparison shows a behavior in the same direction. An earlier
+training-period diagnostic for the workload-blind rules bundle produced a
+frequency-weighted yard-service EMD of 0.595 minutes, whereas the standardized
+\textit{visit-only} reference reaches 2.341 minutes against the test period. The
+comparison is descriptive, because the bundle versions are not identical, but
+it is consistent with temporal transfer in activity timing.
+Complete turnaround still has a substantial training-period deficit, which
+indicates an additional model boundary beyond a drift. This distinction is
+important to mention, as a direct future-log comparison alone can confuse the simulator
+error with changing process behavior \cite{Ozdemir2025UtilityBPS}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Context Signal in Activity Durations}
 \label{sec:results_per_activity}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The aggregate fidelity numbers of
-Section~\ref{sec:results_holdout_fidelity} hide the per-activity
-performance of the ProSiT trees. To locate where data-aware
-conditioning does and does not add value,
-Table~\ref{tab:tree_r2_train_test} reports the coefficient of
-determination $R^{2}$ of the ProSiT-style decision-tree grid used in
-the sensitivity study \texttt{05\_data\_aware\_discovery\_evaluation.py}
-for each activity on the training partition.
+The RQ3 ablation shows no resolved validation improvement from adding the
+available workload state. The next diagnostic
+checks how much duration information is present in the
+available attributes. Table~\ref{tab:tree_r2_train_test} reports a
+training-only decision-tree test. It is not a breakdown of the final EMD. It
+also cannot prove why the RQ3 result occurs.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Per-activity duration $R^{2}$ of a decision-tree model
-conditioned on target demand, target utilisation, target rank, visit
-complexity, receive/delivery counts, hour, weekday and weekend
-indicator (training log; grid search over depth/leaf, best per
-activity).}
-\label{tab:tree_r2_train_test}
 \begin{tabular}{lr}
 \toprule
 \textbf{Activity} & \textbf{$R^{2}$} \\
@@ -494,100 +487,171 @@ Gate In       & 1.000 \\
 Gate Out      & 1.000 \\
 \bottomrule
 \end{tabular}
+\caption{Per-activity duration $R^{2}$ of a decision-tree model
+conditioned on target demand, target utilisation, target rank, visit
+complexity, receive/delivery counts, hour, weekday and weekend
+indicator (training log, grid search over depth/leaf, best per
+activity).}
+\label{tab:tree_r2_train_test}
 \end{table}
 
-Gate activities have $R^{2}=1.000$ because their service duration is
-constant zero by construction: Gate In and Gate Out have identical
-start and completion timestamps
-(Section~\ref{sec:lifecycle_events}). For the seven yard activities the
-$R^{2}$ ranges from $-0.005$ (RMG activities) to $0.263$
-(\texttt{LL\_delivery}). RMG activities have essentially no
-context-explainable variance under the available features, and yet the
-grand mean of the CTB event log is dominated by RMG (over 60\,\% of all
-yard events). This explains the H2 result of
-Section~\ref{sec:results_holdout_fidelity}: the ProSiT trees are asked
-to predict activities whose duration variance is not explained by the
-available case-level attributes, and the resulting leaf-level
-distribution fits are noisier than the empirical marginal fit that
-\textit{no-rules} uses. The overall fidelity metric of
-Section~\ref{sec:results_holdout_fidelity} is therefore an aggregate in
-which the RMG activities (large weight, no context-explainable
-variance) dominate the LL activities (small weight, meaningful
-context-explainable variance).
+Gate activities have $R^{2}=1.000$ because their service duration is fixed at
+zero. This is not useful predictive performance. The nine yard activities
+range from $-0.005$ for \texttt{RMG\_receive} to $0.263$ for
+\texttt{LL\_delivery}. The two main RMG activities are close to zero. RMG
+activities still account for more than 60\,\% of yard events.
+
+The available attributes explain little of the duration variation in the
+largest activity family. This is consistent with the weak RQ3 result. It is
+not proof of its cause. Leaf size, fitted distributions, routing, resource
+selection, and the change between train and test may also affect the result.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discovered Resource Capacities}
+\section{Arrival Structure as a Counterexample}
+\label{sec:results_arrival_process}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The weak duration results do not mean that context is useless in every sense, as 
+the arrival behavior provides a counterexample. Table~\ref{tab:arrival_benchmark} compares
+one pooled arrival rate with a tree using hour, weekday, and weekend features.
+The test uses a chronological 80/20 split inside the training partition. It is
+a training diagnostic, not another held-out validation result.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Model} & \textbf{MAE} & \textbf{RMSE} & \textbf{$R^{2}$} \\
+\midrule
+Pooled arrival rate      & 28.98 & 34.60 & $-0.001$ \\
+Time-aware decision tree & \textbf{9.41} & \textbf{16.87} & \textbf{0.762} \\
+\bottomrule
+\end{tabular}
+\caption{Arrival-count benchmark on 30-minute buckets (training log only,
+chronological 80/20 split).}
+\label{tab:arrival_benchmark}
+\end{table}
+
+The time-aware tree reduces MAE by 67.5\,\% and RMSE by 51.2\,\%. The main
+pattern is also visible in Table~\ref{tab:day_night}. The estimated day rate is
+about 8.7 times the night rate. Arrival intensity is not constant, so the time conditioning is useful here. The result does not show that the tree
+captures every source of arrival variation.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lrr}
+\toprule
+\textbf{Period} & \textbf{Mean inter-arrival (min)} &
+\textbf{Implied mean arrivals/hour} \\
+\midrule
+All   & 1.00 & 60.2 \\
+Day   & 0.54 & 110.9 \\
+Night & 4.69 & 12.8 \\
+\bottomrule
+\end{tabular}
+\caption{Day and night arrival statistics on the training log.}
+\label{tab:day_night}
+\end{table}
+
+The low inter-arrival EMD in Table~\ref{tab:final_kpis} comes from the final
+calibrated simulator, not from this tree alone. Good arrival
+timing does not fix the turnaround bias tho, as the missing time occurs after arrival.
+
+A qualification is necessary. The inter-arrival EMD compares the marginal
+distribution of successive arrival gaps.  It does not validate the temporal
+structure of the arrival process: hour-of-day and weekday profiles, arrival
+bursts, temporal autocorrelation, or conditional relationships between arrival
+time, visit type, and processing duration are not assessed by this single
+distributional distance.  A simulator can reproduce the basic inter-arrival
+distribution while generating arrivals at the wrong times of day or with the
+wrong peak behavior.  This is especially relevant in a logistics process
+with strong calendar effects.  The reported inter-arrival EMD should therefore
+be interpreted as a necessary but insufficient as a stand alone condition for arrival-process
+fidelity.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Resource Discovery and the Domain Cap}
 \label{sec:results_resource_capacities}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Table~\ref{tab:capacities_train80} reports the pool-level concurrency
-statistics computed from the training partition
-(\texttt{baseline/04\_resource\_concurrency\_discovery.py}) together
-with the chosen effective capacity.
+The discovered source bundle contains 26 resource identifiers.
+Table~\ref{tab:capacities_train80} shows their maximum concurrency. The source
+bundle is kept for audit. The final runs use a copy, in which each RMG block is
+capped at three, a value confirmed by the projects terminal experts. All other
+parameters stay unchanged. The earlier pool-level overlap report is only a
+diagnostic, and not the simulator configuration.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Pool-level resource concurrency and chosen capacities on the
-training log.}
-\label{tab:capacities_train80}
-\begin{tabular}{lrrrr}
+\begin{tabular}{L{1.3cm}L{3.1cm}L{4.0cm}L{2.6cm}}
 \toprule
-\textbf{Resource} & \textbf{Median} & \textbf{P90} & \textbf{Max} & \textbf{Chosen capacity} \\
+\textbf{Family} & \textbf{Identifiers} & \textbf{Eligible activities} &
+\textbf{Maximum concurrency} \\
 \midrule
-Gate In  & 0 & 0 & 10 & 1 \\
-Gate Out & 0 & 0 & 9  & 1 \\
-HO2      & 1 & 7 & 15 & 3 \\
-LL       & 0 & 5 & 25 & 3 \\
-Other    & 4 & 26 & 54 & 3 \\
+Gate In  & Res.GateIn  & Gate In & 1 \\
+Gate Out & Res.GateOut & Gate Out & 1 \\
+HO2      & HO2 & three HO2 activities & 15 \\
+LL       & LL  & three LL activities  & 22 \\
+RMG      & T06--T27 (22 blocks) & three RMG activities & 4--5$^{a}$ \\
 \bottomrule
 \end{tabular}
+\caption{Resource representation in the freely discovered calibrated
+source bundle before applying the final RMG cap.}
+\label{tab:capacities_train80}
+\smallskip
+\parbox{0.94\textwidth}{\footnotesize $^{a}$Ten RMG block identifiers
+show a maximum concurrency of four and twelve show the maximum concurrency five.
+their aggregate upper bound is 100 simultaneous RMG tasks.
+This exceeds the expert-validated physical upper bound of 66 implied by at
+most three RMGs at each of the 22 blocks.}
 \end{table}
 
-The gate-related pools remain largely single-threaded: their median and
-P90 concurrency are both zero because gate events have negligible
-service duration. The HO2 and LL pools show low median but non-trivial
-P90 concurrency and are assigned effective capacity 3. The
-$\text{max}$ column reveals rare peak concurrency of 25 (LL) and 15
-(HO2), which the chosen capacity of 3 does \emph{not} reproduce.
+All 168 weekly slots in each resource calendar are open. Gate closures are
+handled by the arrival calendar. Every RMG activity can select any of the 22
+block identifiers. The learned rules provide the weights. Removing T22 leaves
+21 identifiers and removes three capacity units from the final model.
+The HO2 and LL concurrency values, fully open resource calendars, and
+interchangeable-block assignment mechanism were not covered by the expert
+confirmation and remain model abstractions.
 
-This is a deliberate simplification. The pooled-resource abstraction of
-the CTB event log conflates two effects: (i) parallel handling within
-one pool by multiple physical resources and (ii) sequential handling by
-one physical resource with heavy demand. The maximum concurrency does
-not distinguish between these; the P90 does. Capping the effective
-capacity at 3 favours a conservative interpretation of the discovered
-pool. The alternative capacities $\{1, 2, 3\}$ are exercised in the
-capacity-sensitivity analysis of
-\texttt{06\_robustness\_analysis.py}. This limitation is one of the
-main methodological boundaries of the CTB case study: the event log
-does not carry individualised worker or equipment calendars, so the
-discovered capacities are effective operational capacities, not
-physical staffing counts.
+The raw RMG capacities sum to 100. The expert-validated physical upper bound is defined as 66. Three RMGs, as well as 3 possible handling lanes for trucks, at each of 22 blocks. This mismatch is important. The discovered values
+describe overlapping event intervals. They are not verified crane counts.
+The cap removes the implausible upper bound. It does not reflect, that 66 is the
+effective capacity of the terminal.
+
+This is the material expert-supported domain correction in the executable parameter bundle.
+Preserving the ITS schedule-derived XES order and checking for parallel operators corrects and
+guards the discovery input without replacing the discovered control flow. The
+resource cap, by contrast, changes the learned capacities to enforce a stated
+physical upper bound. The final simulator therefore combines an automatically
+discovered Petri net and parameters with one explicit resource-domain
+constraint.
+
+An RMG block is still only a selectable resource label. It is not container
+location state. After T22 is removed, the model can assign work elsewhere
+without checking storage or travel feasibility. This limit is central to
+Scenario~A and is discussed in Section~\ref{sec:limitations}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Descriptive Analysis of Transition Durations}
+\section{Sensitivity of Transition-Time Baselines}
 \label{sec:results_percentile_sens}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-As noted in Section~\ref{sec:abandoned_baseline}, an earlier pipeline
-version used route-specific transition baselines to reconstruct
-activity enablement.  Although this approach was superseded by
-ProSiT's internal model-derived enablement, the empirical transition
-durations remain informative because they characterise the
-physical-movement component that is embedded within ProSiT's
-model-derived pre-service delay.
+An older pipeline version used route-specific transition baselines to
+reconstruct enablement. Section~\ref{sec:lifecycle_events} explains why this
+was replaced by ProSiT's own enablement. The old analysis is kept as a
+sensitivity check. It shows how much an assumed baseline changes with the
+chosen percentile. It does not separate movement, traffic, queueing, or other
+unrecorded delay.
 
-The analysis of Section~\ref{sec:results_percentile_sens_design}
-recomputes the baseline table using percentiles $\{5, 10, 25, 50\}$
-and reports the mean shift and the rank correlation.
-Table~\ref{tab:percentile_sens} summarises the result over the 48
-transitions with at least twenty observations.
+The check uses percentiles $\{5, 10, 25, 50\}$ and compares them with p5.
+Table~\ref{tab:percentile_sens} covers the 48 transitions with at least twenty
+observations. The reproducible table contains 24 gate-to-yard and 24
+yard-to-gate route pairs. The association for this report is the Pearson correlation.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Empirical transition duration under alternative percentiles
-(seconds; 48 transitions with $\ge 20$ observations).}
-\label{tab:percentile_sens}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{cccccc}
 \toprule
 \textbf{Percentile} &
@@ -595,7 +659,7 @@ transitions with at least twenty observations.
 \textbf{Median (s)} &
 \textbf{Mean shift (s)} &
 \textbf{P90 shift (s)} &
-\textbf{Corr vs.\ p5} \\
+\textbf{Pearson $r$ vs.\ p5} \\
 \midrule
 p5   & 225.8 & 223.5 & $0.0$   & $0.0$   & 1.000 \\
 p10  & 254.6 & 254.3 & $28.8$  & $36.0$  & 0.990 \\
@@ -603,238 +667,778 @@ p25  & 318.3 & 311.0 & $92.5$  & $110.3$ & 0.948 \\
 p50  & 435.5 & 426.0 & $209.8$ & $250.9$ & 0.812 \\
 \bottomrule
 \end{tabular}
+\caption{Empirical transition duration under alternative percentiles
+(seconds, based on 48 transitions with $\ge 20$ observations).}
+\label{tab:percentile_sens}
 \end{table}
 
-Two properties are relevant for interpreting the model-derived
-pre-service delay.  First, the ranking of transitions by duration is
-almost invariant to the percentile choice: $\rho$ between p5 and p10
-is $0.990$, and even between p5 and p50 it is $0.812$.  Second, the
-absolute shift grows quickly: moving from the 5th to the 50th
-percentile shifts the mean transition duration by $3.5$\,minutes.
-Because physical truck movement is not modelled as a separate activity,
-this shift is entirely absorbed into ProSiT's model-derived
-pre-service delay.
+At p5, the route-specific values range from 129.8 to 317.0 seconds, or 2.16 to
+5.28 minutes. The mean and median are both about 3.7 minutes. The p5 statistic
+is therefore a lower-tail operational baseline rather than a zero-duration
+assumption, as even low-delay observations contain a fairly stable, non-trivial
+transition component. The values also keep a similar ordering across
+percentiles. Pearson $r$ is 0.990 between p5 and p10 and 0.812 between p5 and
+p50. Their absolute level still changes. From p5 to p50, the mean baseline
+rises by 209.8 seconds, or about 3.5 minutes.
 
-Figure~\ref{fig:percentile_shift} shows the CDF of the per-transition
+Route-frequency weighting provides a p5 baseline of 232.5 seconds for the inbound
+gate-to-yard leg and 224.8 seconds for the outbound yard-to-gate leg. Their sum
+is 457.2 seconds, or 7.62 minutes per visit. This is close in scale to the
+5.930-minute mean turnaround under-prediction in
+Table~\ref{tab:final_kpis}. The comparison is diagnostically important tho. Omitted
+physical transition time can plausibly be the reason for a large part of the mean
+bias. It is not an additive correction or a causal decomposition. The p5 values
+come from a descriptive source table, use a lower-tail percentile as a proxy,
+and may still represent a combination of movement, traffic, operational delay and timestamp resolution. Internal movements in visits with several yard stops would add
+further unobserved structure rather than make the two boundary components
+disappear. Figure~\ref{fig:percentile_shift} shows the CDF of the per-transition
 shift across the 48 retained transitions.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/discovery/percentile_shift.png}
 \caption{CDF of the per-transition duration shift relative to the 5th
-percentile, over the 48 transitions with at least twenty observations.
-Illustrates the physical-movement component embedded in the
-model-derived pre-service delay.}
+percentile, over the 48 transitions with at least twenty observations.}
 \label{fig:percentile_shift}
 \end{figure}
 
-\medskip
+\begin{sloppypar}
+The lower-tail route values are evidence that
+time between recorded activities is physically meaningful and too large to be
+treated as zero. They do not identify its mechanism. The data do not separate
+movement, traffic, queueing, and other delay, and the real log has no
+enablement timestamp. This is consistent with the simulation-guided
+model-repair distinction \cite{SimulationGuidedRepair2025} between repairing duration or
+inter-activity time and first resolving resource-driven versus exogenous
+waiting. The present model output is consequently called pre-service delay. It
+is not validated queueing time.
+\end{sloppypar}
 
-\noindent\textbf{Interpretation.} The transition-duration analysis
-confirms that the model-derived pre-service delay reported in
-Section~\ref{sec:results_holdout_fidelity} includes a non-trivial
-physical-movement component (at least 3.5\,minutes on average at the
-median percentile).  This does not invalidate the ProSiT waiting-time
-model --- it identifies a domain-specific limitation: the ``waiting
-time'' reported in the CTB context is broader than pure queueing and
-should be interpreted as pre-service delay.  This limitation is
-discussed in Section~\ref{sec:limitations}.
+The raw timetable source contains 433 positive stop-to-stop observations for
+multi-stop visits. No individual internal route pair reaches the twenty-case
+threshold used for the route table. A route-specific internal movement model
+would therefore be unstable. Pooling those observations gives a p5 of
+186.8 seconds (3.11 minutes), a p10 of 237.8 seconds (3.96 minutes), and a
+median of 558 seconds (9.30 minutes). The pooled lower tail supports a
+non-zero internal movement component, but the sparse route cells do not
+support a matrix of yard-to-yard distributions. This is why the present
+analysis uses the boundary routes as a scale check and does not insert an
+unvalidated duration for every possible loop transition.
+
+Hard-coding these values into silent Petri-net transitions is not a valid
+shortcut in the present engine. ProSiT fires silent transitions immediately.
+they do not hold a token for a sampled duration. A timed movement step would
+therefore require either a visible auxiliary transition retained in the
+simulation log or an extension of the simulator's firing semantics. More
+importantly, the current pre-service distribution was fitted to the complete
+observed inter-activity gap. Adding a transit draw on top would count part of
+the same time twice.
+
+A defensible extension would first estimate a non-negative, route-dependent
+movement component and then refit the residual:
+\begin{equation}
+D_{\mathrm{pre\text{-}service}}
+=T_{\mathrm{transit}}(r_{\mathrm{from}},r_{\mathrm{to}},z)
++D_{\mathrm{access/queue}}(s,z),
+\end{equation}
+where $z$ contains only state available at the transition and $s$ is the
+current process/resource state. The components need not be statistically
+independent: traffic can affect both movement and queue arrival. Independence
+would be a simplifying hypothesis to test, not a property implied by the log.
+The existing p5 values can initialise or bound the movement component, but
+trajectory or position data are required to identify it. State-dependent
+transition weights in an SLDPN decide what fires. They cannot supply this
+missing timed movement mechanism by themselves
+\cite{Vinci2023Inf.Activ.Prob}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{What-If Scenarios: T22 Closure and Reduced RMG Pool}
-\label{sec:results_scenarios}
+\section{Held-Out Bottleneck Analysis}
+\label{sec:results_bottlenecks}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The two what-if scenarios of Section~\ref{sec:what_if_design} are
-executed with the \textit{rules$+$workload} parameters (the
-configuration adopted for its variance-reduction property in
-Section~\ref{sec:results_holdout_fidelity}). Each scenario is compared
-to its own baseline run so that scenario-vs-baseline deltas are matched
-on the simulation window and on the random-number-generator state
-consumed for the baseline draw.
-Table~\ref{tab:scenarios_headline} reports the mean turnaround, mean
-RMG service time and mean RMG waiting time.
+A bottleneck analysis identifies long individual activity compared to a
+frequent activity at which a large amount of system time accumulates. The
+held-out log is therefore decomposed at event level. The recorded handling operations service time
+is completion minus start. The non-negative gap from the previous event's
+completion to the current event's start is called \emph{composite pre-service
+delay}. For the sequential truck process, the sum of both components exactly
+reconstructs each case turnaround. The pre-service delay time span can contain
+movement, traffic and transfer, dispatching, and queueing. It is not interpreted
+as a direct queue measurement in this thesis.
 
-\begin{table}[h]
+Across the 17,892 held-out visits, mean turnaround is 39.742 minutes. Recorded
+handling contributes 14.755 minutes per visit and composite pre-service delay
+contributes 24.987 minutes. The decomposition error is zero for every case.
+Table~\ref{tab:bottleneck_burden} ranks activities by their frequency-weighted
+contribution rather than their mean duration alone.
+
+\begin{table}[htbp]
 \centering
-\caption{What-if scenario results
-($n_{\text{traces}}=17{,}892$;
-$t_{\text{start}}=\text{2026-04-20 18:14}$;
-\textit{rules$+$workload}).}
-\label{tab:scenarios_headline}
-\begin{tabular}{lccc}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{L{3.2cm}rrr}
 \toprule
-\textbf{Scenario} &
-\textbf{Mean turnaround (min)} &
-\textbf{Mean RMG service (min)} &
-\textbf{Mean RMG waiting (min)} \\
+\textbf{Activity} & \textbf{Service (min)} &
+\textbf{Composite pre-service (min)} & \textbf{Total share} \\
 \midrule
-Scenario A baseline               & 63.25 & 14.33 & 11.65 \\
-Scenario A: T22 closed            & 65.19 & 15.25 & 10.55 \\
-$\Delta$ Scenario A               & $+1.94\,(+3.1\%)$ & $+0.92\,(+6.4\%)$ & $-1.10\,(-9.5\%)$ \\
-\midrule
-Scenario B baseline               & 62.91 & 13.13 & 11.92 \\
-Scenario B: T22 closed \& reduced pool & 64.33 & 13.28 & 13.49 \\
-$\Delta$ Scenario B               & $+1.42\,(+2.3\%)$ & $+0.15\,(+1.1\%)$ & $+1.57\,(+13.1\%)$ \\
+Gate Out     & 0      & 201,690 & 28.36\,\% \\
+RMG receive  & 98,808 & 100,205 & 27.99\,\% \\
+RMG delivery & 53,028 & 56,829  & 15.45\,\% \\
+LL delivery  & 39,868 & 21,651  & 8.65\,\% \\
+HO2 receive  & 23,671 & 20,934  & 6.27\,\% \\
 \bottomrule
 \end{tabular}
+\caption{Largest accumulated service and composite pre-service burdens in the
+held-out period. Minutes are totals over all 17,892 visits.}
+\label{tab:bottleneck_burden}
 \end{table}
 
-Figure~\ref{fig:scenario_deltas} shows the three KPIs side by side.
-The mechanisms behind the two scenarios are visually distinct:
-Scenario~A shifts workload onto retained blocks and elevates service
-time while reducing waiting; Scenario~B removes capacity from the pool
-and instead builds a queue.
+The largest component is the gap before Gate Out: 11.273 minutes per visit on
+average and 201,690 minutes in total. It contains the outbound transition and
+any unobserved release or exit delay, so calling Gate Out a queueing bottleneck
+would be too strong. RMG receive is the largest handling-related accumulation
+point. Its mean service is 13.779 minutes and its mean composite pre-service
+delay is 13.974 minutes. Together the activity accounts for 27.99\,\% of all
+reconstructed held-out time. RMG delivery accounts for a further 15.45\,\%.
+These frequency-weighted results make the RMG receive/delivery distinction
+operationally important even though the present scenarios do not identify a
+resolved turnaround effect.
+
+\texttt{LL\_mixed} is not a system-level bottleneck in this decomposition. Its
+eleven held-out occurrences accumulate 233 minutes of service and composite
+pre-service delay, only 0.0328\,\% of total held-out turnaround. All are followed
+directly by \texttt{Gate Out}. In the training period, the six
+\texttt{LL\_mixed}--\texttt{RMG\_receive} transitions have a mean downstream
+pre-service gap of 10.667 minutes, compared with 11.251 minutes for
+\texttt{RMG\_receive} after other predecessors. Their medians are both six
+minutes and their P90 values are 22.5 and 23.0 minutes. The available evidence
+therefore does not indicate additional congestion after \texttt{LL\_mixed}.
+Its process-structural distinctiveness should not be confused with a large
+frequency-weighted time burden.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/scenario_deltas.png}
-\caption{What-if scenario outcomes. Grey bar with hatched fill:
-Scenario~A baseline (shown as reference); blue: T22 closed; red:
-T22 closed and reduced RMG pool. Dotted horizontal line: Scenario~B
-baseline. Values are means over the 17,892 simulated cases.}
-\label{fig:scenario_deltas}
+\includegraphics[width=0.86\textwidth]{figures/results_bottleneck_time_burden.png}
+\caption{Accumulated held-out time by activity, separated into recorded
+handling service and composite pre-service delay.}
+\label{fig:bottleneck_time_burden}
 \end{figure}
 
-\subsection{Direction of the Scenario Effects}
+The resource-overlap audit reinforces the modelling caveat. Several RMG block
+labels exhibit four overlapping recorded intervals even though the physical
+scenario model caps effective capacity at three. The overlap is evidence about
+the event-log resource abstraction and timestamp behavior, not proof that a
+fourth crane exists. A causal bottleneck claim requires spatially sticky block
+assignment and an explicit queue state. The present analysis therefore
+identifies where time accumulates and which components deserve further
+modelling. It does not attribute all accumulated delay to capacity shortage.
 
-Both scenarios produce a positive turnaround delta relative to their
-own baseline. Closing T22 alone (Scenario~A) increases mean turnaround
-by 3.1\,\% and mean RMG service time by 6.4\,\% while decreasing mean
-RMG waiting by 9.5\,\%. The simulator therefore reallocates workload to
-the retained blocks; the retained blocks accept the extra work in the
-form of longer service (they serve more mixed-work visits) rather than
-longer queues.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What-If Experiments}
+\label{sec:results_scenarios}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Combining the closure with a reduced RMG pool (Scenario~B) again
-increases turnaround (+2.3\,\%) but produces a qualitatively different
-adjustment: RMG service time is essentially unchanged (+1.1\,\%) while
-RMG waiting increases by 13.1\,\%. This is consistent with the
-mechanism that the smaller pool cannot absorb the displaced service in
-parallel and therefore queues form.
+The analysis distinguishes two model roles. The cap-three
+\textit{visit-only} bundle remains the historical-fidelity reference and acts
+as a workload-blind negative control. The cap-three \textit{native-only}
+bundle is the purpose-specific scenario model because it adds the endogenous
+queue and workload state required by a demand intervention. Both use the same
+expert-repaired Petri net, ten matched seeds (42--51), and 17,892 cases per
+run. The RQ1 results still come from Table~\ref{tab:final_kpis}.
 
-\subsection{Statistical Reservation}
+The expert-repaired sequential net also stays fixed. The experiments can change arrival
+timing, resource assignment, and model-derived delays, while the loop may still
+generate unseen sequential combinations of the known yard activities. Extra
+activity types, detours represented by new events, and unmodelled exception
+mechanisms remain outside the model. All scenario results are conditional on
+this discovered control-flow language.
 
-The two baseline point estimates in
-Table~\ref{tab:scenarios_headline} differ by 0.34 minutes across
-independent runs (63.25 vs.\ 62.91). This is within the seed-to-seed
-standard deviation of $\pm 1.20$ minutes reported in
-Section~\ref{sec:results_holdout_fidelity} for
-\textit{rules$+$workload}. The scenario deltas of $+1.94$ and $+1.42$
-minutes are therefore of the same order of magnitude as the simulator's
-own Monte-Carlo variance. The direction of the effect is consistent
-across scenarios, but the magnitude should not be over-interpreted
-without a matched-seed multi-seed protocol equivalent to
-Section~\ref{sec:mc_protocol}. Constructing that matched-seed
-scenario protocol is identified as a limitation in
-Chapter~\ref{chp:conclusion}.
+The operational question is not simply whether a parameter can be changed.
+For terminal planning, the relevant question is how a forecast condition and a
+candidate response propagate through process executions: for example, whether
+reducing the number of truck slots released per hour under forecast high
+utilisation protects turnaround, or whether a resource policy shifts delay from
+receive to delivery handling. The scenario KPIs are therefore reported both at
+case level and separately for the principal RMG handling patterns. This makes
+the experiments decision-oriented while retaining the distinction between an
+effect inside the simulation and an effect established for the physical
+terminal.
 
-\subsection{Correction Relative to an Earlier Draft}
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.2pt}
+\begin{tabularx}{\textwidth}{@{}Xrrrr@{}}
+\toprule
+\textbf{KPI} & \textbf{Reference} & \textbf{Outcome} & \textbf{Change} & \textbf{95\,\% CI} \\
+\midrule
+Mean turnaround (min) & 33.635 & 33.605 & $-0.030$ & [$-0.168$, $+0.107$] \\
+P90 turnaround (min) & 57.400 & 57.500 & $+0.100$ & [$-0.428$, $+0.628$] \\
+Mean RMG service (min) & 11.028 & 11.035 & $+0.006$ & [$-0.053$, $+0.066$] \\
+Mean RMG pre-service (min) & 8.031 & 7.938 & $-0.093$ & [$-0.146$, $-0.040$] \\
+RMG receive service (min) & 11.336 & 11.301 & $-0.035$ & [$-0.132$, $+0.062$] \\
+RMG receive pre-service (min) & 8.086 & 8.021 & $-0.066$ & [$-0.144$, $+0.013$] \\
+RMG delivery service (min) & 8.706 & 8.795 & $+0.089$ & [$-0.011$, $+0.188$] \\
+RMG delivery pre-service (min) & 8.001 & 7.873 & $-0.128$ & [$-0.265$, $+0.009$] \\
+\bottomrule
+\end{tabularx}
+\caption{Paired Scenario A results in the \textit{native-only} scenario model:
+T22 resource-pool reallocation
+($N_{\text{seeds}}=10$, scenario minus matched baseline).}
+\label{tab:scenario_kpis}
+\end{table}
 
-An earlier version of this chapter reported the following scenario
-numbers: baseline mean turnaround 30.90 minutes, T22 closed 29.78
-minutes, T22 closed and reduced RMG pool 29.99 minutes. Those numbers
-came from a discovery configuration that was fit on the full event log
-(not the training partition) using the pre-workload ProSiT variant and
-a legacy pickle. Under that setup, closing a block appeared to
-\emph{decrease} turnaround, which was one of the objections raised in
-the internal critical review of the thesis.
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabularx}{\textwidth}{@{}Xrrrr@{}}
+\toprule
+\textbf{KPI} & \textbf{Reference} & \textbf{Outcome} & \textbf{Change} & \textbf{95\,\% CI} \\
+\midrule
+Model mean working inter-arrival (min) & 0.6830 & 0.5692 & $-0.1138$ & exact \\
+Model arrivals per working hour & 87.842 & 105.411 & $+20.000\,\%$ & exact \\
+Observed mean inter-arrival (min) & 0.8282 & 0.7145 & $-0.1137$ & [$-0.1145$, $-0.1128$] \\
+Observed arrivals per elapsed hour & 72.452 & 83.979 & $+11.527$ ($+15.910\,\%$) & [$+11.478$, $+11.577$] \\
+Observed simultaneous-arrival share (\%) & 54.221 & 60.015 & $+5.795$ pp & [$+5.736$, $+5.853$] pp \\
+Mean turnaround (min) & 33.635 & 33.548 & $-0.087$ & [$-0.281$, $+0.106$] \\
+Mean RMG service (min) & 11.028 & 11.078 & $+0.049$ & [$-0.041$, $+0.140$] \\
+Mean RMG pre-service (min) & 8.031 & 7.969 & $-0.062$ & [$-0.139$, $+0.014$] \\
+RMG receive service / pre-service (min) & 11.336 / 8.086 & 11.361 / 8.033 & $+0.025$ / $-0.053$ & [$-0.072$, $+0.123$] / [$-0.159$, $+0.053$] \\
+RMG delivery service / pre-service (min) & 8.706 / 8.001 & 8.772 / 7.902 & $+0.065$ / $-0.099$ & [$-0.072$, $+0.203$] / [$-0.234$, $+0.037$] \\
+\bottomrule
+\end{tabularx}
+\caption{Paired Scenario B results in the \textit{native-only} scenario model:
+20\,\% higher working-time arrival intensity
+($N_{\text{seeds}}=10$, scenario minus matched baseline).}
+\label{tab:demand_scenario_kpis}
+\smallskip
+\parbox{0.97\textwidth}{\scriptsize Pre-service denotes the model-derived
+interval from enablement to activity start, not pure queueing time.
+``Observed'' arrival measures use the minute-resolved simulated event log and
+elapsed calendar time. Intervals quantify paired seed-wise variation
+conditional on the frozen model. All 30 primary logs pass the structural case
+contracts, and no service event or complete visit exceeds 24 hours. The
+expert-validated RMG ceiling reduces aggregate maximum concurrency from the
+discovered 100 to 66.}
+\end{table}
 
-The corrected scenario runs of Table~\ref{tab:scenarios_headline}
-resolve the paradox: with the training-only discovery, aligned
-simulation window and the workload-aware configuration, closing a
-block increases turnaround as expected from queueing considerations.
-The earlier direction reversal was an artefact of the seed and of an
-unaligned simulation window between the baseline and the scenario, not
-a property of the simulator itself.
+\subsection{Scenario A: T22 Resource-Pool Reallocation}
+
+T22 is removed from every eligible RMG pool and its calendar is closed. The
+intervention therefore executes as specified. In the
+\textit{native-only} scenario model, the mean-turnaround change is
+$-0.030\;[-0.168,+0.107]$ minutes and the P90 change is
+$+0.100\;[-0.428,+0.628]$ minutes. Both paired intervals include zero. Mean
+RMG service changes by $+0.006\;[-0.053,+0.066]$ minutes, whereas mean RMG
+pre-service delay changes by $-0.093\;[-0.146,-0.040]$ minutes. Receive
+service and pre-service changes are unresolved. Delivery service and
+pre-service changes are also unresolved. The model therefore resolves a small
+decrease in aggregate model-derived RMG pre-service delay, with no end-to-end
+or service-time effect. The workload-blind \textit{visit-only} negative control
+gives the same qualitative conclusion, with a mean-turnaround change of
+$-0.003\;[-0.133,+0.128]$ minutes and a pre-service change of
+$+0.065\;[+0.010,+0.119]$ minutes. Removing an eligible statistical resource
+is observable, whereas a physical block-closure effect is not established.
+
+The experiment is not a full block-closure study. The remaining 21 blocks stay
+eligible for all RMG activities. Each keeps capacity three. The selector moves
+T22 work to another statistical resource. It does not check container
+location, block compatibility, relocation, or added travel. The result only
+tests the abstract resource pool.
+
+\subsection{Scenario B: 20\,\% Higher Demand}
+
+The working-time intervention is exact. Mean inter-arrival time changes from
+0.6830 to 0.5692 minutes. The implied rate rises from 87.842 to 105.411 arrivals
+per working hour, or 20\,\%. The rate measured over elapsed calendar time rises
+by 15.910\,\%. Closed gate periods remain fixed. Timestamps are also floored to
+minutes. This flooring turns more short positive intervals into simultaneous
+observations. It does not change the zero mass in the input distribution.
+
+Mean turnaround changes by $-0.087\;[-0.281,+0.106]$ minutes, mean RMG service
+by $+0.049\;[-0.041,+0.140]$ minutes, and mean RMG pre-service by
+$-0.062\;[-0.139,+0.014]$ minutes. The receive and delivery mean service and
+pre-service intervals also include zero. The \textit{native-only} model
+therefore transmits the intervention to its dynamic state but does not produce
+a resolved mean handling or end-to-end response at this demand level.
+
+The result is interpreted together with the response surface below. A 20\,\%
+change in working-time intensity produces only a 15.910\,\% increase in
+elapsed arrival rate and remains below the fitted model's transition region.
+It cannot show that the real terminal could absorb 20\,\% more demand without
+congestion. The model still lacks container location, physical movement,
+ship-side crane allocation, and an observed queue against which its internal
+queue state could be validated.
+
+\subsection{Sensitivity to the Expert-Validated RMG Ceiling}
+\label{sec:results_rmg_cap_sensitivity}
+
+The final \textit{visit-only} model is evaluated both with the
+expert-validated ceiling of three RMGs per block and with the overlap-derived
+capacities of four or five. Table~\ref{tab:rmg_cap_sensitivity} reports paired
+cap-three-minus-uncapped differences on the untouched test period. This is the
+matching sensitivity required to distinguish a domain constraint from a
+performance-improving calibration.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{L{5.0cm}rr}
+\toprule
+\textbf{Metric} & \textbf{Cap-three minus uncapped} & \textbf{95\,\% CI} \\
+\midrule
+Turnaround EMD (min) & $-0.051$ & [$-0.268$, $+0.167$] \\
+Mean turnaround (min) & $+0.135$ & [$-0.063$, $+0.333$] \\
+P90 turnaround (min) & $+0.100$ & [$-0.306$, $+0.506$] \\
+Weighted yard-service EMD (min) & $-0.024$ & [$-0.079$, $+0.031$] \\
+Yard-activity-rate L1 error & $+0.00003$ & [$-0.00217$, $+0.00222$] \\
+\bottomrule
+\end{tabular}
+\caption{Paired RMG-cap sensitivity of the historical \textit{visit-only}
+reference model on the test period ($N_{\text{seeds}}=10$).}
+\label{tab:rmg_cap_sensitivity}
+\end{table}
+
+Every interval includes zero. The expert ceiling is therefore retained because
+it represents a validated physical bound, not because it improves historical
+fidelity. Within this abstract pooled-resource model, replacing capacities of
+four or five with three does not materially alter the reported baseline. This
+null sensitivity also warns that the resource abstraction does not generate
+the congestion response that might be expected from a spatially explicit
+terminal model.
+
+\subsection{Capacity Pressure of the Demand Intervention}
+
+The independent offered-load diagnostic adds an important qualification to
+that interpretation. Across the 21 RMG blocks observed in the held-out period,
+T13 has the highest nominal utilisation under a ceiling of three concurrent
+tasks: 0.422 at the held-out arrival rate and 0.506 after multiplying arrivals
+by 1.20. If block routing and service times remained unchanged, the smallest
+arrival multiplier required for any block to reach mean saturation would be
+2.37, not 1.20. Figure~\ref{fig:rmg_capacity_pressure} shows the complete
+block-level comparison.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.92\textwidth]{figures/results_rmg_capacity_pressure.png}
+    \caption{Held-out RMG offered load under the three-task block ceiling and
+    the mechanical 20\,\% arrival-rate increase. The diagnostic holds routing
+    and service times fixed and therefore measures scenario pressure, not
+    queueing delay.}
+    \label{fig:rmg_capacity_pressure}
+\end{figure}
+
+The intervention is therefore not a severe mean-capacity stress test in the
+pooled block abstraction. This helps explain why the resource ceiling alone
+does not generate a large turnaround response. It does not prove that queues
+are absent. Twelve blocks contain at least some held-out minutes with more
+than three overlapping recorded RMG events. For T13 the share is 9.82\,\%.
+Those bursts may reflect genuine short-period pressure, minute-resolution
+artifacts, waterside/landside allocation, or an incorrect block-pool
+abstraction. The 20\,\% result alone therefore cannot distinguish an
+intervention that is too modest from a model that is unable to propagate
+capacity pressure. The paired demand-saturation ladder distinguishes these
+possibilities by comparing the workload-blind \textit{visit-only} model with
+the \textit{native-only} model under identical demand levels.
+
+\subsection{Demand-Saturation Stress Test}
+\label{sec:results_saturation}
+
+The final stress test compares the cap-three \textit{visit-only} and
+\textit{native-only} Train-80 bundles under exactly the same six demand levels
+and seeds. It contains 60 runs per model and 120 runs in total. The configured
+multiplier scales working-time inter-arrivals. The realised rate ratio is
+measured over elapsed calendar time. These quantities diverge because the gate
+calendar remains fixed while the simulated horizon becomes shorter. Every run
+preserves the case count, case boundary, and no-overlap contracts.
+Table~\ref{tab:demand_saturation_ladder} reports the \textit{native-only}
+response. The \textit{visit-only} result is used as the matched
+workload-blind negative control.
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.8pt}
+\begin{tabularx}{\textwidth}{@{}rrrrXrX@{}}
+\toprule
+\textbf{Configured} & \textbf{Realised} & \textbf{Arrivals} & \textbf{Mean} & \textbf{Paired turnaround change} & \textbf{RMG pre-} & \textbf{Paired pre-service change} \\
+$\boldsymbol{m}$ & \textbf{rate ratio} & \textbf{per hour} & \textbf{turnaround} & \textbf{[95\,\% CI]} & \textbf{service} & \textbf{[95\,\% CI]} \\
+\midrule
+1.0 & 1.000 & 72.452  & 33.635 & reference & 8.031  & reference \\
+1.2 & 1.159 & 83.979  & 33.548 & $-0.087$ [$-0.281$, $+0.106$] & 7.969  & $-0.062$ [$-0.139$, $+0.014$] \\
+1.5 & 1.378 & 99.855  & 33.680 & $+0.045$ [$-0.102$, $+0.191$] & 7.958  & $-0.073$ [$-0.116$, $-0.029$] \\
+2.0 & 2.367 & 171.472 & 33.718 & $+0.082$ [$-0.101$, $+0.266$] & 8.057  & $+0.026$ [$-0.155$, $+0.207$] \\
+2.4 & 2.825 & 204.697 & 35.450 & $+1.815$ [$+0.858$, $+2.772$] & 10.349 & $+2.318$ [$+1.132$, $+3.504$] \\
+3.0 & 3.504 & 253.884 & 37.704 & $+4.069$ [$+3.743$, $+4.396$] & 13.251 & $+5.221$ [$+4.878$, $+5.563$] \\
+\bottomrule
+\end{tabularx}
+\caption{Demand-saturation response of the final \textit{native-only}
+cap-three scenario model ($N_{\mathrm{seeds}}=10$). Times and paired
+changes are in minutes. The realised rate ratio uses each level's mean elapsed
+arrival rate relative to the matched baseline.}
+\label{tab:demand_saturation_ladder}
+\end{table}
+
+Up to the realised rate ratio 2.367, the \textit{native-only} mean-turnaround
+and mean RMG pre-service intervals include zero. At ratio 2.825, mean
+turnaround rises by 1.815 minutes, P90 turnaround by 4.100 minutes, mean RMG
+pre-service by 2.318 minutes, and P90 RMG pre-service by 4.650 minutes. All
+four changes have intervals above zero. At ratio 3.504, the corresponding
+changes reach 4.069, 9.800, 5.221, and 12.750 minutes. The first resolved
+end-to-end response is therefore bounded between realised rate ratios 2.367
+and 2.825. This interval describes the transition region of the fitted model.
+It is not an estimate of a physical CTB capacity threshold.
+
+The negative control shows why this response matters for model choice. In
+\textit{visit-only}, even the 3.504 ratio changes mean turnaround by only
+$+0.050\;[-0.057,+0.158]$ minutes and mean RMG pre-service by
+$-0.012\;[-0.066,+0.042]$ minutes. The native-minus-visit
+difference-in-differences at ratio 2.825 is
+$+1.851\;[+1.034,+2.669]$ minutes for mean turnaround and
+$+2.284\;[+1.120,+3.448]$ minutes for mean RMG pre-service. At ratio 3.504,
+the contrasts are $+4.019\;[+3.676,+4.361]$ and
+$+5.233\;[+4.865,+5.600]$ minutes. The response is therefore associated with
+access to ProSiT's native dynamic state rather than with the changed arrival
+sample alone.
+
+The fitted mechanism is inspectable. The Train-80 \textit{native-only}
+waiting-time model retains one dynamic split, for T13 at
+\texttt{queue\_length}$\leq6.5$. The lower-queue leaf has a representative
+value of 7.167 minutes and an exponential distribution. The higher-queue leaf
+has a representative value of 52.404 minutes and a lognormal distribution.
+When higher demand makes the second leaf more frequent, pre-service and
+turnaround increase non-linearly. This is an automatically discovered
+state-conditioned waiting rule. It is not a causal queueing law or proof that
+T13 physically changes behavior at exactly 6.5 trucks.
+
+The missing response at 20\,\% is therefore evidence that the intervention is
+too modest to enter the response region of this abstract model. The stress
+curve is still not a physical CTB forecast. Its onset and shape depend on
+interchangeable block assignments, fully open discovered resource calendars,
+and model-derived enablement rather than verified spatial queues.  In addition,
+the fixed-case-count design is a compressed-arrival-horizon experiment: it
+changes not only arrival intensity but also where arrivals fall relative to
+gate closures, the exposure to end-of-horizon effects, and the calendar-induced
+composition of completing cases.  The reported transition region therefore
+reflects the combined effect of demand compression and these confounds, not
+resource-capacity saturation alone.  The
+expert-validated three-RMG ceiling supports the capacity bound. It does not
+validate these propagation semantics. Even at the 3.504 realised rate ratio,
+mean turnaround remains below the observed hold-out mean of 39.74 minutes.
+Artificial overload therefore cannot replace the omitted transition-time and
+spatial mechanisms needed for baseline fidelity.
+
+\subsection{Objective Assignment of Model Roles}
+
+The four-cell validation experiment and the paired stress test answer
+different questions. Under the pre-specified RQ3 rule, \textit{visit-only} is
+the historical-fidelity reference because no added state source produces a
+resolved validation improvement. Relative to that reference,
+\textit{native-only} changes turnaround EMD by
+$+0.105\;[-0.099,+0.308]$ minutes, weighted yard-service EMD by
+$+0.037\;[-0.037,+0.112]$ minutes, activity-rate L1 by
+$+0.0006\;[-0.0032,+0.0044]$, and 3-gram NGD by
+$+0.00006\;[-0.00032,+0.00044]$. There is no statistically resolved
+deterioration, although this is not a formal non-inferiority conclusion.
+
+Historical equivalence within these intervals is not enough for RQ4. The
+workload-blind model fails the intervention-response requirement, while the
+native-state model produces a clear high-load response. \textit{Native-only}
+is therefore assigned the scenario-model role. It is preferred over
+\textit{both} because the latter adds static historical proxies that do not
+update with the simulated arrival intervention. It is preferred over
+\textit{static-only} because static proxies cannot provide an endogenous
+queue state. This decision is purpose-specific. It does not overturn the RQ3
+result or claim that \textit{native-only} is globally the best model.
+
+The demand-response criterion was added after the workload-blind stress
+diagnostic. It is consequently an adaptive analysis and not part of the
+pre-specified historical selection. Reporting both stages preserves the
+evidential distinction. RQ1 evaluates historical reproduction with the
+selected \textit{visit-only} model. RQ4 evaluates intervention behavior with
+the minimal responsive \textit{native-only} model and uses
+\textit{visit-only} as a negative control.
 
 \medskip
 
-\noindent\textbf{H4 (scenario direction) is accepted with the caveat
-that} the magnitude of the observed delta is comparable to the
-simulator's Monte-Carlo variance. Both scenarios produce a positive
-turnaround delta with a mechanistically defensible internal
-composition. The scenario protocol therefore succeeds in producing
-operationally plausible KPI shifts under the two evaluated disruptions.
+\noindent\textbf{RQ4 answer.} Both policy interventions execute as specified.
+T22 assignments fall to zero, and working-time arrival intensity rises by
+exactly 20\,\%. The workload-blind T22 negative control produces no resolved
+end-to-end change and only a small increase in model-derived RMG pre-service
+delay. In the \textit{native-only} demand model, the 20\,\% intervention also
+produces no resolved handling or mean-turnaround response. The capacity audit
+shows why this is plausible inside the fitted model. The most-loaded held-out
+block reaches only 0.506 nominal mean utilisation under the three-task
+ceiling.
+
+The paired stress test closes the more important functional question. The
+\textit{visit-only} model remains invariant even at the highest tested demand,
+whereas \textit{native-only} develops a resolved delay response between
+realised arrival-rate ratios 2.367 and 2.825. At ratio 3.504, mean turnaround
+increases by 4.069 minutes and mean RMG pre-service by 5.221 minutes. The
+matched native-minus-visit contrasts confirm that this difference is not
+explained by Monte-Carlo variation. The retained T13 queue-length split gives
+an inspectable statistical mechanism for the non-linear response.
+
+This capability is the operational reason for simulation. Candidate truck-slot
+rates and handling policies can be compared before they are applied. The
+reported transition region is nevertheless a property of the fitted
+simulation, not a physical CTB congestion threshold. Spatial assignment,
+movement, equipment allocation, and observed queue semantics remain
+insufficient for a prescriptive recommendation. Executability and a plausible
+stress response do not establish counterfactual validity.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Summary of Empirical Findings}
-\label{sec:results_summary}
+\section{Interpretation: From Process Mining to Data-Aware Simulation}
+\label{sec:results_interpretation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Table~\ref{tab:results_summary} consolidates the empirical results
-against the hypotheses of Section~\ref{sec:data_aware_hypotheses}.
+The results become most informative when the structural, temporal and
+scenario findings are interpreted together. They do not describe one model
+that is simply ``good'' or ``bad.'' Instead, they show that different forms of
+process-mining evidence answer different questions. The compact repaired
+source net reproduces the test control flow while generalising across sequential
+yard combinations, the arrival model reproduces an important part of the
+workload timing, and the simulator remains too fast at the level of complete
+truck visits. These findings are compatible because control-flow conformance,
+arrival fidelity, and end-to-end temporal fidelity are distinct properties
+\cite{Camargo2021,ChapelaCampa2023Trust,Chapela2025SimQuality}.
 
-\begin{table}[h]
+\paragraph{Meaning for traditional Process Mining}
+Traditional Process Mining is strongest in this study as a language for
+reconstructing and checking observed process behavior. Here, its most
+important diagnostic is not merely complete test fitness. Preserving the ITS
+schedule-derived stop order removes a timestamp-sorting artefact, but the raw
+64\,\% Inductive-Miner tree still contains three parallel operators. The
+algorithm interprets reversed sequential relations as concurrency even though
+terminal experts state that one truck is serviced sequentially. The final tree
+has no parallel operator because this semantic conflict is repaired explicitly,
+not because discovery alone resolves it. This demonstrates a classical
+Process-Mining point with direct simulation consequences: the event-log
+ordering relation and the domain meaning of a discovered operator both require
+validation
+\cite{PMRozinat2009,PMvanDerAalst2016}.
+
+The final model makes the fitness--precision--generalisation trade-off visible.
+It fits 100\,\% of test traces and retains a test generalisation of
+0.9488, including behavior not stored as an exact development path. Precision is
+lower at 0.7641 because the loop admits additional yard combinations and
+repetitions. In this case, that broader language is not equivalent to physical
+parallelism and is not automatically an error: the terminal process allows
+varying sequential activity orders. The domain check must therefore be
+semantic and operator-specific. Penalising every unseen order would collapse
+discovery into memorisation, while accepting a parallel cut would violate the
+truck-visit contract.
+
+The silent gate-only path in the raw tree makes the same trade-off concrete.
+It is retained in the discovery audit but removed from the executable source
+model because experts reject a visit without yard work. Formal language
+analysis and realised-output validation still answer complementary questions:
+the former identifies what could happen, while the latter confirms that all
+final replications satisfy the repaired contract.
+
+This is a precision-side model-repair problem. The simulation-guided
+control-flow repair framework \cite{SimulationGuidedRepair2025} provides a rigorous way to
+identify differences between real and simulated control flow and to compare an
+original and repaired net on held-out data. Its published operators currently
+add missing behavior, however, whereas the CTB bypass requires restricting
+excess behavior. A state-aware stochastic Petri-net study
+\cite{Vinci2023Inf.Activ.Prob} demonstrates that an explicit manual restriction before simulation can be defensible when a
+source model permits a minimal trace absent from the log. For CTB, the
+restriction is therefore documented as the discovery-to-execution repair and
+applied before every ProSiT configuration is fitted. It is neither hidden nor
+selected from validation performance.
+
+The same separation applies to time. Good control-flow coverage does not
+account for the 5.930-minute mean turnaround deficit or the 13.100-minute P90
+deficit. The simulator can put activities in the correct order and still omit
+time between them. In the CTB setting, this missing time may contain movement,
+traffic, resource interaction, queueing or operational states that are not
+represented as events. The temporal bias is therefore not a contradiction of
+the conformance result. It identifies a different abstraction boundary. This
+is why evaluating an event-log-derived simulator only through replay fitness
+or variant frequencies would have produced an overly positive conclusion.
+
+The transition-baseline diagnostic makes the scale of that abstraction
+boundary concrete. Route-specific p5 values lie between 2.16 and 5.28 minutes,
+and the frequency-weighted inbound and outbound lower-tail components sum to
+7.62 minutes per visit. Their proximity to the 5.930-minute mean deficit is
+consistent with omitted physical movement being a major contributor. It does
+not prove that all residual time is travel, because the baseline also contains
+unseparated traffic and operational delay and because a percentile summary
+cannot be subtracted case by case. The fair conclusion is therefore stronger
+than merely saying that ``some time is missing,'' but weaker than claiming a
+validated travel-time mechanism.
+
+\paragraph{Meaning for data-aware Process Mining}
+Recent data-aware methods extend conventional discovery by conditioning
+routing, duration or resource behavior on case attributes and process state
+\cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob,Vinci2026prosit}.
+The CTB results show both the value and the limit of that extension. Its value
+is selective rather than universal. Calendar context contains a strong and
+stable signal for arrivals: the time-aware benchmark reduces arrival-count
+MAE by 67.5\,\% and RMSE by 51.2\,\%, and the day arrival rate is about 8.7
+times the night rate. In this part of the process, conditioning on information
+available at case creation captures a real predictive regularity.
+
+The duration results point in the other direction. For the two dominant RMG
+activities, the diagnostic decision trees have slightly negative test
+$R^2$. In the factorial validation experiment, none of the three
+additional-state configurations achieves a resolved improvement over
+\textit{visit-only} without a resolved loss elsewhere. Static demand,
+utilisation and rank variables do appear in learned rules, and the native
+models retain one queue-length split. Their interpretability therefore does
+not imply improved temporal transfer. This is not proof that workload never
+matters. It shows that the available CTB representations do not add validated
+predictive value under the tested specification.
+
+This qualification is central to the interpretation of data awareness.
+Adding attributes increases representational capacity, but useful capacity
+depends on information timing, measurement quality and a relationship that is
+stable across the training and application regimes. Case-level target demand
+or utilisation may be correlated with an observed duration without measuring
+the physical mechanism that caused it. Conversely, a weak marginal
+relationship can hide omitted event-level states such as the actual queue,
+truck position or equipment movement. The white-box character of ProSiT is
+valuable here because the learned conditions can be inspected and challenged.
+interpretability makes the association auditable, but does not convert it into
+causality or guarantee predictive validity
+\cite{Vinci2026prosit,Sargent2013Validation}.
+
+This result sharpens rather than contradicts earlier process-state-abstraction
+experiments \cite{Vinci2023Inf.Activ.Prob}. The best-performing abstraction
+varies between the two evaluated processes, and an unsuitable history state can
+create problematic simulated behavior. The CTB ablation supplies the missing
+application-specific test: neither workload source improves the joint
+validation criteria sufficiently to replace the parsimonious visit/process
+state. It also goes beyond data-aware routing alone. The framework of
+López-Pintado et al. \cite{lopez2024} demonstrates the value of case data for
+control-flow decisions but identifies data-dependent activity duration as a
+separate extension. CTB shows why that separation matters in physical
+logistics: state-dependent firing probabilities cannot by themselves create
+travel, queues, or spatially constrained service.
+
+The resource result is equally consistent with the differentiated-resource
+evidence of López-Pintado and Dumas \cite{BPSdifferentiatedResources2022}.
+Treating resources as statistically interchangeable can preserve event counts
+while distorting timing. In CTB, capping nominal RMG concurrency does not make
+target assignment spatially sticky and does not model crane or truck movement.
+By contrast, physical container-terminal simulation represents travel,
+equipment interaction and allocation policies explicitly
+\cite{Kastner2021}. The current hybrid research opportunity is therefore to
+retain the discovered white-box process and state rules while supplying a
+mechanistic movement, queue, and resource-assignment layer.
+
+\paragraph{Correlation, scenarios, and operational meaning}
+The results therefore distinguish predictive association from intervention
+response. The temporal arrival features show a strong association with when
+trucks enter the terminal, but the 20\,\% arrival intervention produces no
+resolved mean-turnaround increase. This combination does not imply that real
+CTB turnaround is independent of demand. It shows that the fitted simulator
+contains an arrival relationship, while the offered-load calculation places
+the chosen change below mean block saturation. The paired ladder adds the
+missing functional test. The workload-blind model does not respond even under
+extreme demand, while the minimal native-state model develops a strong
+pre-service and turnaround response once the realised rate passes the
+independently estimated capacity region. The only retained dynamic split in
+the final waiting model links T13 queue length to two different waiting-time
+distributions. This provides a direct explanation of the response inside the
+simulator without establishing the same threshold as a physical law. In the
+same way, eliminating T22
+assignments verifies that the resource rule was
+changed, while the near-zero turnaround effect reflects reallocation within an
+abstract interchangeable resource pool. It is not evidence that closing a
+physical block would have no operational effect.
+
+Taken together, the scenario results act as stress tests of the model's
+semantics. A null effect can be a substantive operational finding only when
+the mechanisms through which the intervention should propagate are represented
+and validated. Here, the saturation experiment demonstrates a capacity-driven
+response only when native dynamic state is enabled. This separates historical
+replay fidelity from intervention validity, but it does not validate the
+physical route through which that response would arise. Location feasibility,
+movement, differentiated crane availability and spatial queue state remain
+absent. The contribution of the
+data-aware white-box model is consequently twofold: it supports reproducible
+and inspectable changes, and it makes the boundary between an implemented
+association and a credible physical mechanism visible. That boundary is the
+main result for decision support. The model is suitable for analysing
+conditional consequences inside its documented abstraction, but not yet for
+claiming causal terminal effects from the scenarios or stress ladder.
+
+The target application nevertheless remains concrete. Before publishing truck
+appointments, a terminal could combine a utilisation forecast with candidate
+hourly slot limits, simulate each policy, and compare turnaround together with
+receive- and delivery-specific service and pre-service KPIs. If forecast
+conditions threaten retrieval performance, a candidate policy could reduce
+the admitted truck rate or prioritise retrieval-compatible resources. The
+simulator would quantify both the intended benefit and any transferred delay
+to delivery operations. This prospective comparison is the benefit that a
+validated logistics simulation should provide. The CTB experiments establish
+the transparent experimental interface and show exactly which additional
+queue, location, and equipment states must be represented before that interface
+can be used prescriptively.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Layered Validity Synthesis}
+\label{sec:results_layered_validity}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Table~\ref{tab:validity_ladder} brings the diagnostics together. It prevents a
+strong result in one perspective from being used to imply validity in another.
+
+\begin{table}[htbp]
 \centering
-\caption{Summary of empirical findings.}
-\label{tab:results_summary}
-\begin{tabular}{p{2.2cm} p{6.5cm} p{4.5cm}}
+\begin{tabularx}{\textwidth}{L{3.0cm}L{2.4cm}X}
 \toprule
-\textbf{Hypothesis} & \textbf{Evidence} & \textbf{Outcome} \\
+\textbf{Validity layer} & \textbf{CTB assessment} & \textbf{Decisive evidence} \\
 \midrule
-H1 (arrival time-dependence) &
-Time-aware tree reduces MAE by 67.5\,\% and RMSE by 51.2\,\% versus
-pooled baseline; $R^{2}=0.762$
-(Table~\ref{tab:arrival_benchmark}).
-& \textbf{Accepted.} \\
-H2 (data-aware fidelity gain) &
-\textit{rules$+$workload} does not lower turnaround or service EMD
-versus \textit{no-rules} on the held-out log; in fact, the
-distribution-only simulator achieves 56\,\% lower turnaround EMD
-with disjoint 95\,\% CIs
-(Table~\ref{tab:headline_ci}).
-& \textbf{Rejected.} \\
-H3 (workload-feature gain) &
-H3 is subsumed by the H2 rejection: the combined effect of trees and
-workload features produces strictly worse fidelity than the
-distribution-only baseline.
-& \textbf{Rejected.} \\
-H3-secondary (variance reduction) &
-\textit{rules$+$workload} reduces cross-seed standard deviation of
-turnaround EMD relative to \textit{no-rules}
-(Table~\ref{tab:headline_ci}); however, the mean fidelity is worse.
-& \textbf{Not sufficient to
-offset H2 rejection.} \\
-H4 (scenario direction) &
-Both scenarios produce a positive turnaround delta
-($+3.1\,\%$ and $+2.3\,\%$) with mechanistically consistent internal
-composition (Table~\ref{tab:scenarios_headline}). Magnitude is
-comparable to the simulator's Monte-Carlo variance.
-& \textbf{Accepted with
-caveat.} \\
+Event and case semantics & Supported & ITS schedule-derived stop order stored in XES and no case-contract violations in accepted runs. \\
+Control-flow language & Supported after repair & Fitness 1.0000, precision 0.7641, no parallel operator, and no gate-only bypass. \\
+Historical stochastic fidelity & Mixed & Arrival and yard-service distances are moderate. Mean and tail turnaround remain too short. \\
+Temporal transfer & Not stable & Real mean turnaround rises by 2.450 minutes and all yard-service means increase. \\
+Resource and spatial semantics & Not supported physically & The cap limits concurrency but does not enforce target location, travel, queue, or equipment movement. \\
+Scenario response & Responsive inside native-state model, not physically validated & Policy inputs change reproducibly. A non-linear pre-service and turnaround response appears around the fitted saturation region, while the workload-blind control remains invariant. \\
+Prescriptive counterfactual use & Not yet supported & Intervention mechanisms and stakeholder plausibility require further validation. \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
+\caption{Layered validity assessment of the CTB simulation.}
+\label{tab:validity_ladder}
 \end{table}
 
-Section~\ref{sec:results_process_discovery} (RQ2) establishes that the
-Petri net generalises to the held-out period. Section~\ref{sec:results_holdout_fidelity}
-(RQ1) reports that the distribution-only ProSiT simulator
-over-predicts case-mean turnaround by 24.0\,\% and P90 by 35.6\,\%.
-Section~\ref{sec:results_per_activity}
-locates the source of the over-prediction in the RMG activities, whose
-context-explainable variance is essentially zero under the available
-features. Section~\ref{sec:results_percentile_sens} provides
-descriptive evidence that the model-derived pre-service delay includes
-a non-trivial physical-movement component (3.5\,minutes median shift
-between percentiles), confirming the domain-specific limitation
-discussed in Section~\ref{sec:limitations}.
+The boundary is systematic. Traditional Process Mining supports the first two
+layers particularly well: it reveals ordering semantics, generalisation, and
+excess language. Data-aware simulation adds auditable conditional routing and
+timing rules and supports the third layer where suitable state is available.
+The later layers require mechanisms that are not implied by correlation alone.
+Recent work is moving in the same direction: evolving-process discovery
+addresses drift \cite{vinci2025onlinediscoverysimulationmodels}, and temporal
+deviation analysis seeks to attribute simulation mismatch to arrival,
+processing, and resource inputs rather than reporting magnitude alone
+\cite{Wang2026TemporalDeviations}. The CTB study contributes a physical-
+logistics instance in which those layers fail at different points.
+
+This framing also clarifies the role of expert intervention. A hospital
+simulation-discovery application combines automatic discovery with manual
+structural changes and expert plausibility assessment before optimisation
+\cite{Hospital2026Vinci}. The CTB source-model repair follows the same
+principle of explicit and auditable domain knowledge. A comparable
+expert validation of queue, travel and resource semantics remains necessary
+before slot-rate or handling-priority recommendations are presented as terminal
+counterfactuals.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Methodological Limitations}
 \label{sec:limitations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Model-Derived Waiting Time Includes Physical Movement}
+\paragraph{Pre-Service Delay}
 
-ProSiT follows process-model semantics in which an activity becomes
-enabled when the control-flow state permits its execution.  In the CTB
-process, however, consecutive operational activities occur at spatially
-separated terminal locations.  Physical truck movement between these
-locations is not represented as a separate activity in the discovered
-process model.  Consequently, the model-derived interval between
-enablement and activity start includes both physical transition time
-and operational waiting:
+ProSiT enables an activity when the process model allows it. Consecutive CTB
+activities can occur at different locations, but truck movement is not a
+separate activity in the event-log design. The time from completion of one
+activity to the start of the next can therefore combine
 \begin{equation}
     D_{\mathrm{pre\text{-}service}} \approx
     T_{\mathrm{physical}} +
@@ -842,46 +1446,147 @@ and operational waiting:
     T_{\mathrm{queue}} +
     T_{\mathrm{other}}.
 \end{equation}
-These components are not individually identifiable from the available
-data.  Individual truck travel times are not directly observed; the
-scheduling-system transition durations combine movement with congestion
-and other operational effects.  Separating the components would require
-position or trajectory data not available in the CTB systems.  The
-thesis deliberately retains the standard ProSiT semantics rather than
-adding an unobserved transition-time model.
+The log cannot identify these parts separately. The percentile check shows
+that a reconstructed baseline is sensitive to its assumption. It does not
+measure any one part. This would require position, trajectory, queue-entry, or
+similar state data. These data are not available. The results use
+the term \textit{pre-service delay}, not queueing time.
 
-Waiting-time results should therefore be interpreted as
-\textit{pre-service delay} rather than as a direct measurement of
-queueing or equipment-induced waiting.
+\paragraph{Service-Time Semantics and Downstream Implications}
 
-\subsection{Tail Over-Prediction at the Base-Model Level}
+The interval from \texttt{BEREITMELDUNG} (reported ready) to
+\texttt{ERFUELLUNG} (fulfilled) is labelled \emph{service time} for
+consistency with the BPS literature, but it is more accurately a
+ready-to-fulfilment stage duration.  It may include resource-access delay,
+dispatching latency, or short operational waits that occur between the
+reported-ready instant and the start of active handling.  This distinction
+matters because the same variable enters duration-distribution fitting,
+service-time EMD comparisons, resource-capacity assumptions, and the
+offered-load calculations used for the demand-saturation diagnostic.  If
+congestion-related waiting is partially included in what is called service
+time, then the offered-load estimate may overstate effective utilisation and
+the capacity-saturation region may be shifted.  The thesis retains the term to
+avoid divergence from the framework it builds on, but the downstream
+interpretations should be read with this qualification.
 
-The simulator over-predicts mean turnaround by 24.0\,\% and P90
-turnaround by 35.6\,\% even in the better-performing \textit{no-rules}
-configuration.  This is a property of the base simulation model (not
-of data-aware conditioning): the pooled activity-duration distributions
-have heavy right tails that ProSiT samples without an operational cap.
-In reality, excessively long waiting may be interrupted by operational
-decisions (e.g.\ a truck being rerouted) that are not represented in
-the process model.
+\paragraph{Resource Assignment Is Not Spatial Container Relocation}
 
-\subsection{Scenario Deltas Within Monte-Carlo Variance}
+An RMG resource in ProSiT is an abstract capacity assignment. The discovered
+overlap capacity is 100. The stated physical cap is 66 across 22 blocks. This
+mismatch shows that timestamp overlap is not a crane count. The selected
+scenario reference model uses the cap of three per block.
 
-The what-if scenario deltas (Section~\ref{sec:results_scenarios}) are
-of the same order of magnitude as the simulator's cross-seed variance.
-The what-if experiments therefore demonstrate directional plausibility
-but do not support quantitative planning claims at the current
-replication count.
+The cap does not add spatial state. Target-area attributes are predictors, not
+hard inventory constraints. The simulator does not bind a container to a
+storage block. It also does not create relocation work after reassignment.
+Closing T22 spreads its statistical demand across the remaining blocks. It
+does not model feasibility, crane movement, or added truck travel. Scenario~A
+tests the resource-pool abstraction. It does not forecast a physical T22
+closure.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Summary of Findings Against Hypotheses}
-\label{sec:results_summary}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Initial State at the Temporal Cutoff}
 
-The main empirical contribution of this thesis is therefore not the
-discovery of a better simulator through data-aware modelling, but the
-demonstration that on this specific dataset the additional modelling
-machinery of ProSiT does not translate into higher fidelity. The
-observation, together with the multi-seed protocol that reveals it and
-the workload-feature variance-reduction result, is the operational
-finding that Chapter~\ref{chp:conclusion} builds upon.
+Each replication starts from the Petri-net initial marking with no active
+truck cases and empty resource schedules. Trucks that entered before the test
+cutoff but remained inside the real terminal are not reconstructed. The
+historical comparison is therefore conditional on an empty simulated system
+at the beginning of the period. This can bias the earliest generated cases and
+is one reason not to interpret the test as a live digital-twin initialization.
+All matched scenario alternatives share exactly the same empty state, so this
+boundary does not by itself create their paired differences. Operational use
+would require work-in-progress initialization or a documented warm-up design.
+
+\paragraph{Scope of Expert Validation}
+
+The project-level expert review confirmed the gate boundaries, the requirement
+for at least one yard activity, arbitrary yard ordering and repetition, the
+validity of \texttt{LL\_mixed}-only yard visits and the invalidity of gate-only
+visits. It also confirmed two hard physical constraints. One truck does not
+execute activities in parallel, and no block can use more than three RMGs
+concurrently. These judgments support the case contract, operator check,
+bypass diagnosis and cap-three correction. They do not validate the discovered
+HO2 or LL capacities, the fully open resource calendars, arrival and duration
+distributions, block-interchangeability assumption, pre-service-delay
+semantics, or any scenario response. The review was a requirements check and
+did not produce a formal transcript or inter-rater assessment. Its evidential
+scope is therefore narrower than a structured expert-validation study.
+
+\paragraph{The Empirical Population Excludes Multi-RMG Visits}
+
+The case-level ProSiT representation requires one unambiguous RMG target for
+the block-specific context variables. The pipeline therefore removes 1,693
+visits and 6,820 events involving more than one RMG block. The results apply to
+the resulting one-RMG subprocess, not to the complete population of CTB truck
+movements. The exclusion removes some of the visits most likely to contain
+additional movement, cross-block resource interaction and spatial complexity.
+It may therefore make transport and congestion behavior easier than in the
+full terminal population. An object-centric representation could preserve the
+truck, containers and multiple blocks as related objects instead of forcing one
+block value onto the complete visit
+\cite{VanDerAalst2023OCPM,Knopp2023ObjectCentricSimulation}. This is a direct
+empirical scope boundary, not only a general future-work opportunity.
+
+\paragraph{Scenario Control Flow Generalises Only Within a Fixed Activity Set}
+
+The Inductive-Miner loop can generate sequential combinations and repetitions
+that were not present as complete training variants. This is less restrictive
+than the earlier trie representation, but it is not an open-ended terminal
+model. A scenario cannot create a new activity type, an unrecorded exception
+mechanism, or a structurally different response to disruption. The two policy
+experiments and the demand ladder therefore test parameter changes inside the
+discovered activity language. Missing structural mechanisms may still remove
+real sources of delay.
+
+\paragraph{Systematic Turnaround Under-Prediction}
+
+The data-aware reference model under-predicts mean turnaround by 5.930 minutes and P90 by
+13.100 minutes. The narrow seed intervals show that this is model bias, not
+simulation noise. The log cannot show how much missing time comes from
+movement, traffic, queueing, or an unrecorded state. Correct case order does
+not remove this limit on KPI forecasts.
+
+\paragraph{Scenario Intervals Cover Only Part of Structural Uncertainty}
+
+The matched-seed intervals in Tables~\ref{tab:scenario_kpis},
+\ref{tab:demand_scenario_kpis}, and
+\ref{tab:demand_saturation_ladder} cover random
+variation in one fixed model. They do not cover a new training period, another
+discovery run, or missing spatial state. The cap sets a ceiling but adds no
+location feasibility or equipment movement. More seeds would narrow these
+intervals. They would not reduce structural uncertainty. The matched
+state-configuration comparison addresses one part of that uncertainty: it
+shows that high-load response depends on whether native dynamic state is
+available. It still does not cover a new training period, another discovered net,
+alternative resource semantics, or the missing spatial and queueing state.
+
+\paragraph{External Validity Is Limited to One Terminal and Time Window}
+
+The temporal hold-out is one later period from the same terminal and source
+systems. Near-perfect replay fitness shows structural stability in this
+period, but the observed 2.450-minute mean-turnaround shift shows that temporal
+stationarity does not hold even within the study window. The results do not
+cover another terminal, season, gate regime, or infrastructure setup. That
+would require another full discovery and validation run. An adaptive or
+rolling-window simulator would additionally require prospective evaluation.
+
+\paragraph{Marginal Arrival Validation Does Not Establish Process-Level
+Fidelity}
+
+The inter-arrival EMD of 0.072 minutes compares marginal gap distributions.
+It does not assess hour-of-day arrival profiles, weekday effects, burst-size
+distributions, temporal autocorrelation, or conditional dependencies between
+arrival time and visit characteristics.  A simulator can reproduce the
+marginal inter-arrival distribution while misplacing arrivals within the day
+or suppressing realistic arrival clustering.  These dimensions are not
+validated in the current study and should be assessed before the arrival model
+is used for time-of-day-sensitive policy comparisons.
+
+\paragraph{Event-Linkage Reliability}
+
+The cross-system identifier match uses plate number and minute-resolved
+timestamp.  This composite key works on the evaluated data, but it remains
+vulnerable to duplicate plates at the same minute, delayed or retroactive
+event recording, and rounding artefacts in other extraction periods.  The
+findings therefore demonstrate validity for the evaluated data-generation
+process, not unconditional reliability of the linkage procedure across
+arbitrary terminal periods or source-system versions.

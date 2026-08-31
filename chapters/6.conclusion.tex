@@ -1,35 +1,196 @@
-\chapter{Conclusion (3)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Conclusion}
 \label{chp:conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This thesis addressed one of the most important open challenges in ...
+This thesis investigated how far an automatically discovered, data-aware
+process simulation can be transferred to a physically constrained logistics
+environment. Two months of operational truck-handling data from the HHLA
+Container Terminal Burchardkai were transformed into a simulation-ready event
+log and used to discover an executable ProSiT model. The evaluation did not
+equate successful execution with validity. It examined the discovered control
+flow, historical and temporal fidelity, the effect of different state
+representations, physical constraints, and the response to operational
+interventions as separate claims.
 
-The theoretical contribution of this research was ...
+The strongest result concerns control flow. Preserving the ITS
+schedule-derived stop order stored in XES allows Inductive Miner to discover a
+compact Petri net without parallel behaviour inside a truck visit. Only 11 of
+89,460 visits change sequence under completion-time sorting, yet these rare
+inversions are sufficient to produce an incorrect parallel cut when timestamps
+are treated as the ordering relation. The raw Inductive-Miner result still
+requires an explicit domain repair: on the 64\,\% discovery partition it
+contains three parallel operators, and the 80\,\% rediscovery retains a
+gate-only bypass (fitness 0.999994, precision 0.7558). Both properties
+conflict with the expert-validated case contract. The final executable model
+is the expert-repaired sequential Petri net, which enforces sequential yard
+handling and removes the bypass. On the temporal hold-out it achieves fitness
+1.0 and test precision 0.7641.  This is the single model used by all four
+ProSiT configurations and for every reported simulation result.
 
-Finally, we demonstrated how our new framework...
+The unusual \texttt{LL\_mixed} branch has a narrow empirical basis. In 57 of
+64 observed visits containing \texttt{LL\_mixed}, it is the only yard activity.
+Of the seven combined visits, six training cases place it first before
+\texttt{RMG\_receive}, while one held-out case places it after
+\texttt{RMG\_delivery}. An empty-container exchange performed first for routing
+reasons is therefore a plausible interpretation, but not a validated universal
+rule. Its rarity also means that \texttt{LL\_mixed} contributes only
+0.0328\,\% of held-out turnaround burden and does not constitute a
+frequency-weighted bottleneck.
 
-Ultimately, this thesis provides both a...
+The answer to RQ1 is mixed. The selected cap-three \textit{visit-only} model
+reproduces arrivals closely, with an inter-arrival EMD of 0.072 minutes. Its
+yard-service EMD is 3.150 minutes without frequency weighting and 2.341 minutes
+when weighted by the real activity frequencies. Complete truck turnaround is
+less accurate. Mean turnaround is 33.812 minutes in simulation and 39.742
+minutes in the hold-out, a deficit of 5.930 minutes or 14.92\,\%. Simulated P90
+is 57.900 rather than 71.000 minutes. The narrow intervals across ten
+Monte-Carlo seeds show that this is systematic model error rather than
+simulation noise.
 
+Two analyses delimit that error without claiming a causal decomposition. Real
+mean turnaround increases by 2.450 minutes between the training and hold-out
+periods, so the temporal evaluation combines model mismatch with operational
+change. Route-specific fifth-percentile transition baselines range from 2.16
+to 5.28 minutes. Their frequency-weighted boundary contribution is 7.62
+minutes per visit, comparable in scale to the mean turnaround deficit. These values
+support a non-zero movement and transfer component between recorded
+activities, but they do not separate travel, traffic, dispatching, access
+delay, and queueing. Adding them to the current pre-service distributions
+would risk counting the same elapsed time twice.
+
+The held-out bottleneck decomposition reinforces this interpretation. Of the
+39.742-minute real mean turnaround, recorded handling contributes 14.755
+minutes and composite pre-service delay contributes 24.987 minutes. The gap
+before \texttt{Gate Out} is the largest single accumulated component. RMG
+receive is the largest handling-related accumulation point and accounts for
+27.99\,\% of reconstructed held-out time when service and pre-service delay are
+combined. These are time-burden findings, not proof of a physical queue or a
+capacity shortage, because the event log does not observe the mechanisms
+inside the gaps.
+
+RQ3 shows that additional state does not automatically improve historical
+simulation quality. The standardized $2\times2$ experiment separates static
+demand/utilisation proxies from ProSiT's native workload and queue state.
+No added-state configuration produces a resolved improvement on turnaround,
+weighted yard-service, activity-rate, or 3-gram error. The pre-specified rule
+therefore selects \textit{visit-only} as the parsimonious historical reference.
+This is a model-selection result for replay fidelity, not a claim that the
+configuration is adequate for every intervention.
+
+The purpose-specific stress audit adds the missing functional test. Under the
+same demand ladder, \textit{visit-only} remains effectively invariant even at
+the highest tested rate. \textit{Native-only} is historically comparable but
+develops resolved increases in turnaround and RMG pre-service once the
+realised arrival-rate ratio moves from 2.367 to 2.825. The smallest model
+capable of representing this endogenous response is therefore used for the
+demand scenario. This adaptive role assignment is reported separately from
+the pre-specified RQ3 selection. It does not identify a globally best model.
+The available state still cannot reconstruct truck position, container
+location, equipment movement, spatial queues, or changing
+waterside--landside allocation when those relations are absent from the event
+log.
+
+RQ4 makes this validity boundary visible. Both operational interventions are
+implemented reproducibly in the cap-three \textit{native-only} scenario model.
+Removing T22 changes mean turnaround by $-0.030$ minutes with a 95\,\% interval
+of $[-0.168,+0.107]$, while model-derived RMG pre-service decreases by a
+resolved 0.093 minutes. Increasing working-time arrival intensity by 20\,\%
+raises elapsed arrival rate by 15.910\,\% but changes mean turnaround by
+$-0.087\;[-0.281,+0.106]$ minutes. The selected demand change is therefore
+below the model's response region.
+
+The extended demand ladder demonstrates that this is a threshold effect inside
+the simulator, not a general inability to propagate demand. At a realised
+ratio of 2.825, mean turnaround increases by 1.815 minutes and mean RMG
+pre-service by 2.318 minutes. At ratio 3.504, the increases are 4.069 and
+5.221 minutes.  Because the ladder keeps the case count fixed while
+compressing working-time inter-arrivals, it is a compressed-arrival-horizon
+experiment that also changes calendar exposure and end-of-horizon effects.
+The reported transition region reflects these combined factors, not resource
+capacity alone.
+The T13 waiting-time tree contains one inspectable
+\texttt{queue\_length} split at 6.5. Its high-queue leaf has a representative
+value of 52.404 minutes compared with 7.167 minutes in the low-queue leaf.
+This is a statistical state-conditioned rule, not a causal queueing law.
+Neither scenario exercises the complete white-box intervention space because
+no learned threshold or subtree is edited.
+
+The expert-validated ceiling of three RMGs per block illustrates the
+difference between empirical parameter discovery and physical admissibility.
+Overlap-derived capacities above three are retained as discovery evidence but
+are capped in the effective scenario model. The paired capped-versus-uncapped
+diagnostic for the historical reference does not resolve a direct
+mean-turnaround effect. The ceiling is therefore retained because the uncapped
+state is physically impossible, not because it produces the headline findings.
+
+The scientific contribution is the resulting layered audit of automatic
+simulation-model generation in port logistics. The thesis provides a
+reproducible CTB event-log and ProSiT workflow, a temporal and multi-seed
+evaluation, an empirical comparison of alternative state sources, and a clear
+separation between discovered parameters, expert-supplied constraints, and
+scenario interventions. The strongest defensible contribution is not a
+validated truck-terminal simulator for reliable operational decision-making.
+It is a layered, data-aware methodology for diagnosing when a
+process-mining-based simulation reproduces historical observations, where
+apparent validity breaks down, and why historical fit does not automatically
+imply scenario validity.  The simulator itself should be understood as a
+research prototype and diagnostic instrument.  More importantly, the study demonstrates why control-flow
+conformance, stochastic fidelity, temporal transfer, physical semantics, and
+counterfactual validity must not be collapsed into one claim of simulation
+accuracy. It also shows that model selection is objective-dependent:
+the parsimonious historical reference and the minimal responsive scenario
+model need not be the same bundle. A model can have almost perfect held-out replay fitness while
+underestimating turnaround. A richer feature set can perform worse than a
+simpler one. A physically impossible capacity can be inferred from overlapping
+timestamps. A technically correct intervention can still lack the mechanism
+required for a physical forecast.
+
+The empirical scope is the retained one-RMG subprocess rather than all CTB
+truck movements. The case-level representation excludes 1,693 multi-RMG visits
+and 6,820 events because it cannot attach multiple changing block states to one
+truck case. The study may therefore underrepresent movement, cross-block
+interaction, and spatial complexity. Within that boundary, the model is a
+transparent historical and diagnostic simulation. It is not yet a
+decision-valid digital twin. Its present operational value is to make model
+assumptions, scenario mechanics, and evidence gaps inspectable. A future model
+with validated location, movement, equipment, and queue state could support the
+decision loop that motivates terminal simulation by comparing truck-slot,
+resource, and handling policies before their implementation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Future Work}
-While the proposed framework establishes a solid foundation for...
-To advance this framework, future efforts should be directed across the following key areas:
+\label{sec:future_work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{itemize}  
-    \item \textbf{Different TErminal  Setting):} A fundamental structural difference between SG
-    
-     
+Future work should retain the reproducible discovery-and-validation protocol
+while extending the mechanisms and evidence that currently limit physical and
+counterfactual interpretation:
+
+\begin{itemize}
+    \item \textbf{Separate physical movement from residual pre-service delay.}
+    Route, position, or equipment observations are required to estimate
+    transition-specific movement and then refit the remaining access and
+    waiting component. This must be done as one decomposition so that physical
+    transit is not added on top of a distribution that already contains it.
+
+    \item \textbf{Represent spatial assignment, equipment state, and queues.}
+    Containers and truck operations should be bound to physically feasible
+    locations, with explicit resource movement and queue semantics. A coupled
+    discrete-event, agent-based, or object-centric design could retain the
+    discovered process model while representing mechanisms that conventional
+    case-centric event data omit
+    \cite{VanDerAalst2023OCPM,Knopp2023ObjectCentricSimulation}.
+
+    \item \textbf{Evaluate temporal transfer prospectively.}
+    Rolling or recency-weighted discovery should be tested across several later
+    periods. Configuration selection and final validation should use separate
+    temporal windows so that the selected model is evaluated independently.
+
+    \item \textbf{Test an explicit white-box policy.}
+    A context-dependent and expert-validated decision, such as a threshold for
+    truck-slot release or receive/delivery priority, should be represented by a
+    visible ProSiT rule, leaf, or subtree intervention. Its simulated effect
+    should then be compared with historical natural experiments or prospective
+    terminal observations before it is used for operational recommendations.
 \end{itemize}
-
-\section{Personal Takeaways}
-Beyond the theoretical conclusions of this thesis, I would like to close by reflecting on the personal and professional insights I take away from this research project:
-
-\begin{enumerate}
-    \item \textbf{Independent Project Management:} I learned how to self-organize, manage timelines effectively, and work independently to drive a large-scale project to completion.
-
-    \item \textbf{Embracing Setbacks as Progress:} I understood firsthand that failure, unexpected results, and rigorous debugging are not roadblocks, but rather inherent and necessary steps in the scientific research process.
-
-    \item \textbf{The Value of First Principles Thinking:} I learned that when facing complex challenges, the most effective strategy is often to step back, re-evaluate the fundamental mathematics and logic, and approach the problem from a renewed perspective.
-
-    \item \textbf{Prioritizing Reproducibility Over Complexity:} I realized that a tested, reproducible, and well-documented framework holds far more scientific value than a system that is overly complex but unmanageable. Furthermore, working in small, modular, and heavily tested scripts proved absolutely necessary when scaling up to a large codebase.
-
-    \item \textbf{Navigating Collaborative Research Dynamics:} I experienced the immense value of working within an active research group, where navigating open questions and integrating diverse feedback significantly enriched the final work.
-\end{enumerate}

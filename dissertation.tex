@@ -2,22 +2,45 @@
 %!TEX encoding = UTF-8 Unicode
 
 \documentclass{Dissertate}
-%Subsection spacing
-\titlespacing*{\subsection}{0pt}{2.5ex plus 1ex minus .2ex}{1ex plus .2ex}
-\titlespacing*{\subsubsection}{0pt}{1ex plus 1ex minus .2ex}{.2ex plus .1ex}
-\titlespacing*{\paragraph}{0pt}{1ex plus 1ex minus .2ex}{5pt}
+% Compact, intentionally shallow heading hierarchy.
+\titlespacing*{\subsection}{0pt}{2.2ex plus .8ex minus .2ex}{.7ex plus .2ex}
+\titlespacing*{\paragraph}{0pt}{1.25ex plus .5ex minus .2ex}{.65em}
 %Links
 \usepackage{hyperref}
 %Graphs
 \usepackage{tikz}
 \usepackage[RPvoltages]{circuitikz}
-%Space between paragraphs
-\setlength{\parskip}{0.5em}
-\setlength{\parindent}{0pt}
+% Traditional thesis paragraphs create a calmer, less fragmented page.
+\setlength{\parskip}{0pt plus .2pt}
+\setlength{\parindent}{1.25em}
 \usepackage{enumitem}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{etoolbox}
+
+% Consistent table style: compact body, breakable identifiers and captions below.
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\let\tableunderscore\_
+\AtBeginEnvironment{table}{%
+  \footnotesize
+  \renewcommand{\arraystretch}{1.12}%
+  \setlength{\tabcolsep}{4pt}%
+  \renewcommand{\_}{\tableunderscore\allowbreak}%
+}
+\captionsetup[table]{position=bottom,skip=5pt}
+
+% Favor text-led pages and avoid sparse float-only pages.
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{1}
+\setcounter{totalnumber}{3}
+\renewcommand{\topfraction}{.90}
+\renewcommand{\bottomfraction}{.80}
+\renewcommand{\textfraction}{.10}
+\renewcommand{\floatpagefraction}{.72}
 
 % To reduce the space ONLY after the list:
-\setlist{after=\vspace{-1ex}} 
+\setlist{after=\vspace{-1ex}}
 
 % Or, to tighten up the space BOTH before and after the list:
 \setlist{topsep=2pt}
@@ -44,11 +67,12 @@
 %Norm
 \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
-\usepackage{pgfplots} 
+\usepackage{pgfplots}
 \usetikzlibrary{arrows.meta}
 \usepackage{makecell}
 \usetikzlibrary{decorations.pathreplacing}
 \usepackage{wrapfig}
+\usepackage{rotating}
 \usepackage{placeins}
 \usepackage{footmisc}
 %------------------------------------------------------------------------%
@@ -57,37 +81,31 @@
     \input{frontmatter/personalize}
     \frontmatter
     \setstretch{\dnormalspacing}
-    
+
     % chapters
     \setcounter{chapter}{0}
-    
+
     \include{chapters/1.introduction}
-    
+
     \include{chapters/2.background}
-    
+
     \include{chapters/3.case_study_and_data_engineering}
-    
+
     \include{chapters/4.experiments_and_framework}
-    
+
     \include{chapters/5.results}
-    
+
     \include{chapters/6.conclusion}
 
-    %\include{chapters/6.results}
+    \appendix
+    \include{appendices/model_inspection_and_reproduction}
 
-    %\include{chapters/7.discussion}
-    
-    %\include{chapters/8.conclusion}
-    
     % afterword
-    \cleardoublepage
+    \clearpage
     \phantomsection
     \addcontentsline{toc}{chapter}{References}
     \bibliography{references.bib}
-    
-    \cleardoublepage
-    \phantomsection
-    \addcontentsline{toc}{chapter}{Acknowledgments}
-    \acknowledgments
+
+    % Acknowledgments are intentionally omitted until final text is supplied.
 
 \end{document}

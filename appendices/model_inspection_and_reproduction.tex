@@ -1,0 +1,68 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Model Inspection and Reproduction}
+\label{app:model_inspection}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This appendix separates visual process inspection from executable model state.
+The complete directly-follows graph exposes every observed training-log
+relation. The graph is descriptive. The discovered Petri net and fitted ProSiT
+parameters define the executable simulation model.
+
+\section{Unfiltered Training-Log Control Flow}
+
+Figure~\ref{fig:appendix_full_dfg} shows the unfiltered 59-arc directly-follows
+graph of the order-preserving training log. It is included for audit because
+the dominant-frequency view in Chapter~\ref{chp:experiments_and_framework}
+deliberately suppresses rare relations. The complete view confirms the fixed
+gate boundary and makes low-frequency repetitions and cross-activity relations
+inspectable. Its density also demonstrates why it is unsuitable as the primary
+explanatory figure. It is a descriptive view and should not be interpreted as a Petri net. In particular,
+a directly-follows arc records observed succession but does not encode choice,
+concurrency, markings, or firing rules.
+
+\begin{sidewaysfigure}[p]
+\centering
+\includegraphics[width=0.92\textheight,height=0.88\textwidth,keepaspectratio]{figures/discovery/dfg_frequency_inductive_training.png}
+\caption{Complete frequency directly-follows graph of the order-preserving CTB
+training log. Node labels report activity occurrences and arc labels report
+directly-follows counts. All 59 observed arcs are retained. The figure is a
+descriptive audit view and is not the executable simulation model.}
+\label{fig:appendix_full_dfg}
+\end{sidewaysfigure}
+
+\section{Executable Model State}
+
+The baseline, T22-closure and increased-demand models are retained as separate
+serialized ProSiT parameter objects. The baseline contains the common Petri
+net, markings, fitted distributions, resources, capacities and calendars.
+The T22 scenario removes the block from the eligible RMG resource mappings and
+its availability calendar. The demand scenario changes only the empirical
+working-time inter-arrival sample. These state differences are described in
+Section~\ref{sec:what_if_design}. No source-code listing is required to
+interpret the interventions.
+
+The public ProSiT save-and-load workflow serializes discovered parameters so
+that simulation can be repeated without rerunning discovery
+\cite{ProSiTRepository}. The project follows that workflow and additionally
+retains the exact Python objects used for the CTB experiments. A machine-readable
+round-trip audit covers the baseline, T22-closure and increased-demand bundles
+of the final \textit{native-only} scenario model. Fitted rules, capacities,
+calendars, workload settings and empirical case-attribute distributions survive
+reconstruction. Each pickle additionally contains 40 timing or rule nodes with
+stored \texttt{sampled} arrays. This includes 71,530 calibrated inter-arrival
+values in the arrival node. None of these arrays is present immediately after
+\texttt{from\_json()}, and the CTB-specific calibration metadata attached to the
+Python objects is not reconstructed either.
+
+The JSON files consequently remain valid portable descriptions of the
+discovered parameters. Exact numerical reproduction instead uses the trusted
+pickles because they preserve the complete post-calibration in-memory state
+that produced the reported runs. This distinction is specific to the audited
+CTB bundles and software version and is not a general criticism of ProSiT's
+JSON interface. Pickles must only be loaded from this trusted project state and
+with the recorded environment.
+
+The serialized objects and provenance records are retained in the research
+project and can be supplied separately if executable reproduction is requested.
+They are not required to follow the methodological argument or the result
+tables in the thesis.
