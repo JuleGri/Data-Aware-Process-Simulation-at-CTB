@@ -8,7 +8,7 @@ and operational scenario runs reported in Chapter~\ref{chap:results}.
 
 Section~\ref{sec:experiment_goals} defines the goals of the experiments.
 Section~\ref{sec:solution_architecture} describes the solution architecture
-and connects its processing blocks. Section~\ref{sec:train_test_split} defines
+and connects its processing blocks. Setion~\ref{sec:train_test_split} defines
 the temporal train/validation/test split that separates discovery, model
 comparison, and final evaluation, together with the
 temporal-transfer diagnostic that distinguishes period change from model error.
@@ -54,7 +54,7 @@ operationally valid simulation.
 
 The second goal is to measure how well the resulting simulation reproduces an
 unseen period of terminal operation. This includes the activity sequence,
-service times, truck turnaround times, and the arrival process. Four ProSiT
+service times, truck turnround times, and the arrival process. Four ProSiT
 configurations form a factorial comparison of manually constructed workload
 proxies and the simulator's native dynamic workload state. More context is
 treated as a modelling choice, not as an expected improvement.
@@ -349,7 +349,7 @@ sequence is the best available representation of the executed stop order.
 An initial diagnostic conversion through a PM4Py DataFrame formatter sorted
 events by timestamp. Because CTB timestamps have minute resolution and may
 overlap, that conversion changed the stored trace order. The authoritative
-pipeline instead preserves \texttt{case:event:order}. The original timestamps
+pipeline instead preserves \texttt{case:event:order}; the original timestamps
 remain unchanged for the time and resource models. A direct audit shows that
 completion-time sorting changes the sequence of 11 among 89,460 visits. This
 input correction is necessary, but it does not by itself guarantee a
@@ -521,7 +521,7 @@ testing several depths on the same validation period would add another layer
 of model selection and increase the risk of attributing sample-specific splits
 to operational mechanisms. The minimum-leaf cross-validation already controls
 local sample support within the fixed depth. The conclusion is therefore
-conditional on the standard depth-three ProSiT configuration. The thesis does
+conditional on the standard depth-three ProSiT configuration; the thesis does
 not claim that depth three is globally optimal for CTB.
 
 \paragraph{Configuration \textit{visit-only}}
@@ -584,13 +584,9 @@ source. Case attributes are sampled as observed joint tuples rather than as
 independently fitted marginals, thereby preserving their empirical dependence
 structure. Retained splits are reported as an inventory of rules used by a
 particular fitted model, not as unique causal effects of individual
-attributes. Exact minute-level joins prevent an additional nearest-time match
-from substituting another minute. They do not make the previously interpolated
-static yard and demand series causal. Those series remain retrospective state
-estimates based on adjacent observations. This limitation affects the static
-feature-source experiment, but not the final \textit{visit-only} historical
-reference or \textit{native-only} scenario model because neither uses the
-manual demand or utilisation proxies.
+attributes. Exact minute-level joins additionally prevent future observations
+from entering a case through interpolation or nearest-time matching; this is a
+temporal-integrity safeguard rather than a decorrelation procedure.
 
 \subsection{Pre-Specified Historical-Fidelity Selection}
 
@@ -621,12 +617,12 @@ in arrivals through endogenous workload or queue state to model-derived delay.
 Model choice for this purpose follows four ordered criteria:
 \begin{enumerate}
     \item the common Petri net, sequential case contract, and expert-validated
-    RMG ceiling must be satisfied.
+    RMG ceiling must be satisfied;
     \item the candidate must show no statistically resolved deterioration
-    relative to \textit{visit-only} on the four RQ3 validation errors.
+    relative to \textit{visit-only} on the four RQ3 validation errors;
     \item a matched-seed demand ladder must show that sufficiently large
     arrival pressure can produce a resolved increase in pre-service and
-    turnaround time.
+    turnaround time;
     \item among candidates satisfying the preceding criteria, the model with
     fewer additional information sources is preferred.
 \end{enumerate}
@@ -742,28 +738,24 @@ distribution objects, calibration metadata and the empirical sample arrays
 used for stochastic draws.
 
 The ProSiT JSON export is retained as the portable, human-inspectable
-representation supported by the framework \cite{ProSiTRepository}. A
-round-trip audit of the three final \textit{native-only} scenario bundles
-confirmed that fitted rule structures, resource capacities, calendars,
-workload settings and empirical case-attribute distributions are reconstructed
-consistently. The audit also identified a CTB-specific difference that matters
-for exact numerical reproduction. Each frozen pickle contains 40 timing or
-rule nodes with empirical \texttt{sampled} arrays. One of these is the calibrated
-arrival node with 71,530 inter-arrival values. Immediately after
-\texttt{from\_json()}, the reconstructed objects contain none of these sampled
-arrays. They would therefore have to be generated again from the fitted
-distributions before use. The additional CTB calibration metadata attached to
-the Python objects is likewise not reconstructed by the JSON round trip.
-
-These observations do not contradict the role of JSON as ProSiT's supported
-representation of discovered parameters. They show that this representation
-is not guaranteed to recreate the exact post-calibration in-memory state from
-which the reported CTB simulations were generated. The trusted pickle is
-therefore the authoritative execution snapshot for numerical reproduction,
-while JSON remains the inspection and interchange format. This conclusion is
-limited to the audited CTB bundles and installed ProSiT version. It is not a
-general claim that JSON is inferior to pickle or that ProSiT fails to serialize
-its discovered model parameters.
+representation supported by the framework. For the final CTB bundles,
+the round-trip audit in
+\path{artifacts/json\_roundtrip\_audit\_final\_ctb\_20260831/roundtrip\_summary.csv}
+confirmed that the fitted rule structures, resource capacities, calendars,
+workload flags and empirical case-attribute distributions are reconstructed
+consistently. It also showed a CTB-specific difference that matters for exact
+numerical reproduction: each frozen pickle contains 39 runtime rule nodes
+with empirical \texttt{sampled} arrays, including 71,530 calibrated arrival
+samples, whereas the corresponding object immediately after
+\texttt{from\_json()} contains no sampled nodes. The serializer removes these
+arrays and the runtime can regenerate them lazily from the stored fitted
+distributions. Consequently, a JSON-reconstructed object is a valid portable
+description of the discovered model, but it is not guaranteed to be
+numerically identical to the post-calibration object that produced the CTB
+results. The pickle is therefore the authoritative execution snapshot for
+the reported experiments, while JSON remains the inspection and interchange
+format. This is an observed property of the exact CTB bundles and installed
+ProSiT version, not a claim that JSON is generally inferior to pickle.
 
 The companion files \texttt{prosit\_run\_summary.json},
 \texttt{control\_flow\_contract.json} and
@@ -1186,6 +1178,24 @@ therefore asks at which offered arrival rate the simulated terminal moves from
 absorbing additional demand to accumulating material congestion. Its higher
 levels are stress-test points used to identify that transition, not proposed
 operating plans.
+
+\paragraph{Design Limitations of the Fixed-Case-Count Ladder}
+
+The design keeps the number of generated cases fixed at 17,892 while
+compressing working-time inter-arrivals.  This is a compressed-arrival-horizon
+experiment, not a pure steady-state capacity test.  In addition to raising
+arrival intensity, it changes where arrivals fall relative to operating hours,
+the exposure to gate-closure periods, end-of-horizon effects, and the
+composition of cases completing within the observation window.  The reported
+transition region consequently reflects the combined effect of these factors,
+not resource capacity alone.  A cleaner alternative would use a fixed
+observation horizon and vary the arrival rate with sufficient warm-up and
+run-out periods.  ProSiT's current engine initialises from an empty state
+(Section~\ref{sec:replication_protocol}) and does not support a documented
+warm-up discard, so that alternative is not available without framework
+modification.  The compressed-horizon design is therefore retained as the
+feasible diagnostic, and its confounds are noted when the transition region is
+interpreted in Section~\ref{sec:results_saturation}.
 
 \paragraph{Reporting}
 

@@ -18,21 +18,15 @@ schedule-derived stop order stored in XES allows Inductive Miner to discover a
 compact Petri net without parallel behaviour inside a truck visit. Only 11 of
 89,460 visits change sequence under completion-time sorting, yet these rare
 inversions are sufficient to produce an incorrect parallel cut when timestamps
-are treated as the ordering relation. On the temporal hold-out, the final net
-reaches a fitness of 0.999992 and completely fits 99.994\,\% of 17,892 visits.
-Its precision of 0.7558 reflects additional sequential yard combinations and a
-silent gate-only bypass, not physically impossible concurrency of one truck.
-The broader internal ordering and repetition of yard activities are consistent
-with the expert-validated terminal process. The gate-only bypass is not. A
-separate precision-oriented repair removes this path and raises precision to
-0.7939 while reducing generalisation from 0.9413 to 0.8859. The unchanged and
-repaired bundles produce identical EMD, activity-rate, case-contract, and
-3-gram NGD results in a matched ten-seed comparison. The repair therefore improves
-the formal language without changing realised baseline behaviour. The
-unchanged net is retained as the auditable automatic-discovery baseline, while
-the repair documents the trade-off introduced by a domain restriction. This
-supports a positive answer to RQ2 at the structural level, but not an
-unqualified claim of physical validity.
+are treated as the ordering relation. The raw Inductive-Miner result still
+requires an explicit domain repair: on the 64\,\% discovery partition it
+contains three parallel operators, and the 80\,\% rediscovery retains a
+gate-only bypass (fitness 0.999994, precision 0.7558). Both properties
+conflict with the expert-validated case contract. The final executable model
+is the expert-repaired sequential Petri net, which enforces sequential yard
+handling and removes the bypass. On the temporal hold-out it achieves fitness
+1.0 and test precision 0.7641.  This is the single model used by all four
+ProSiT configurations and for every reported simulation result.
 
 The unusual \texttt{LL\_mixed} branch has a narrow empirical basis. In 57 of
 64 observed visits containing \texttt{LL\_mixed}, it is the only yard activity.
@@ -110,7 +104,12 @@ The extended demand ladder demonstrates that this is a threshold effect inside
 the simulator, not a general inability to propagate demand. At a realised
 ratio of 2.825, mean turnaround increases by 1.815 minutes and mean RMG
 pre-service by 2.318 minutes. At ratio 3.504, the increases are 4.069 and
-5.221 minutes. The T13 waiting-time tree contains one inspectable
+5.221 minutes.  Because the ladder keeps the case count fixed while
+compressing working-time inter-arrivals, it is a compressed-arrival-horizon
+experiment that also changes calendar exposure and end-of-horizon effects.
+The reported transition region reflects these combined factors, not resource
+capacity alone.
+The T13 waiting-time tree contains one inspectable
 \texttt{queue\_length} split at 6.5. Its high-queue leaf has a representative
 value of 52.404 minutes compared with 7.167 minutes in the low-queue leaf.
 This is a statistical state-conditioned rule, not a causal queueing law.
@@ -130,7 +129,13 @@ simulation-model generation in port logistics. The thesis provides a
 reproducible CTB event-log and ProSiT workflow, a temporal and multi-seed
 evaluation, an empirical comparison of alternative state sources, and a clear
 separation between discovered parameters, expert-supplied constraints, and
-scenario interventions. More importantly, it demonstrates why control-flow
+scenario interventions. The strongest defensible contribution is not a
+validated truck-terminal simulator for reliable operational decision-making.
+It is a layered, data-aware methodology for diagnosing when a
+process-mining-based simulation reproduces historical observations, where
+apparent validity breaks down, and why historical fit does not automatically
+imply scenario validity.  The simulator itself should be understood as a
+research prototype and diagnostic instrument.  More importantly, the study demonstrates why control-flow
 conformance, stochastic fidelity, temporal transfer, physical semantics, and
 counterfactual validity must not be collapsed into one claim of simulation
 accuracy. It also shows that model selection is objective-dependent:

@@ -560,6 +560,18 @@ The low inter-arrival EMD in Table~\ref{tab:final_kpis} comes from the final
 calibrated simulator, not from this tree alone. More importantly, good arrival
 timing does not fix the turnaround bias. The missing time occurs after arrival.
 
+A qualification is necessary. The inter-arrival EMD compares the marginal
+distribution of successive arrival gaps.  It does not validate the temporal
+structure of the arrival process: hour-of-day and weekday profiles, arrival
+bursts, temporal autocorrelation, or conditional relationships between arrival
+time, visit type, and processing duration are not assessed by this single
+distributional distance.  A simulator can reproduce the marginal inter-arrival
+distribution while generating arrivals at the wrong times of day or with the
+wrong burst behaviour.  This is particularly important in a logistics process
+with strong calendar effects.  The reported inter-arrival EMD should therefore
+be interpreted as a necessary but insufficient condition for arrival-process
+fidelity.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Resource Discovery and the Domain Cap}
 \label{sec:results_resource_capacities}
@@ -1038,6 +1050,7 @@ possibilities by comparing the workload-blind \textit{visit-only} model with
 the \textit{native-only} model under identical demand levels.
 
 \subsection{Demand-Saturation Stress Test}
+\label{sec:results_saturation}
 
 The final stress test compares the cap-three \textit{visit-only} and
 \textit{native-only} Train-80 bundles under exactly the same six demand levels
@@ -1110,7 +1123,13 @@ The missing response at 20\,\% is therefore evidence that the intervention is
 too modest to enter the response region of this abstract model. The stress
 curve is still not a physical CTB forecast. Its onset and shape depend on
 interchangeable block assignments, fully open discovered resource calendars,
-and model-derived enablement rather than verified spatial queues. The
+and model-derived enablement rather than verified spatial queues.  In addition,
+the fixed-case-count design is a compressed-arrival-horizon experiment: it
+changes not only arrival intensity but also where arrivals fall relative to
+gate closures, the exposure to end-of-horizon effects, and the calendar-induced
+composition of completing cases.  The reported transition region therefore
+reflects the combined effect of demand compression and these confounds, not
+resource-capacity saturation alone.  The
 expert-validated three-RMG ceiling supports the capacity bound. It does not
 validate these propagation semantics. Even at the 3.504 realised rate ratio,
 mean turnaround remains below the observed hold-out mean of 39.74 minutes.
@@ -1440,6 +1459,23 @@ measure any one part. This would require position, trajectory, queue-entry, or
 similar state data. These data are not available. The results use
 the term \textit{pre-service delay}, not queueing time.
 
+\paragraph{Service-Time Semantics and Downstream Implications}
+
+The interval from \texttt{BEREITMELDUNG} (reported ready) to
+\texttt{ERFUELLUNG} (fulfilled) is labelled \emph{service time} for
+consistency with the BPS literature, but it is more accurately a
+ready-to-fulfilment stage duration.  It may include resource-access delay,
+dispatching latency, or short operational waits that occur between the
+reported-ready instant and the start of active handling.  This distinction
+matters because the same variable enters duration-distribution fitting,
+service-time EMD comparisons, resource-capacity assumptions, and the
+offered-load calculations used for the demand-saturation diagnostic.  If
+congestion-related waiting is partially included in what is called service
+time, then the offered-load estimate may overstate effective utilisation and
+the capacity-saturation region may be shifted.  The thesis retains the term to
+avoid divergence from the framework it builds on, but the downstream
+interpretations should be read with this qualification.
+
 \paragraph{Resource Assignment Is Not Spatial Container Relocation}
 
 An RMG resource in ProSiT is an abstract capacity assignment. The discovered
@@ -1539,3 +1575,25 @@ stationarity does not hold even within the study window. The results do not
 cover another terminal, season, gate regime, or infrastructure setup. That
 would require another full discovery and validation run. An adaptive or
 rolling-window simulator would additionally require prospective evaluation.
+
+\paragraph{Marginal Arrival Validation Does Not Establish Process-Level
+Fidelity}
+
+The inter-arrival EMD of 0.072 minutes compares marginal gap distributions.
+It does not assess hour-of-day arrival profiles, weekday effects, burst-size
+distributions, temporal autocorrelation, or conditional dependencies between
+arrival time and visit characteristics.  A simulator can reproduce the
+marginal inter-arrival distribution while misplacing arrivals within the day
+or suppressing realistic arrival clustering.  These dimensions are not
+validated in the current study and should be assessed before the arrival model
+is used for time-of-day-sensitive policy comparisons.
+
+\paragraph{Event-Linkage Reliability}
+
+The cross-system identifier match uses plate number and minute-resolved
+timestamp.  This composite key works on the evaluated data, but it remains
+vulnerable to duplicate plates at the same minute, delayed or retroactive
+event recording, and rounding artefacts in other extraction periods.  The
+findings therefore demonstrate validity for the evaluated data-generation
+process, not unconditional reliability of the linkage procedure across
+arbitrary terminal periods or source-system versions.
