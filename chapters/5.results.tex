@@ -642,14 +642,11 @@ reconstruct enablement, whereas the final simulation uses ProSiT's
 model-derived enablement mechanism (Section~\ref{sec:lifecycle_events}). The
 estimates are therefore retained only as a scale check. Across the 48
 gate-to-yard and yard-to-gate transitions with at least twenty observations,
-fifth-percentile transition times range from 2.16 to 5.28 minutes. The
-frequency-weighted estimates are 3.88 minutes inbound and 3.75 minutes
-outbound, or 7.62 minutes per visit. This is comparable in scale to the
-5.930-minute mean turnaround underprediction in
+the fifth-percentile transition times range from 2.16 to 5.28 minutes. The frequency-weighted estimates are 3.88 minutes inbound and 3.75 minutes outbound, or 7.62 minutes per visit. This is comparable in scale to the 5.930-minute mean turnaround underprediction in
 Table~\ref{tab:final_kpis}. The comparison indicates that unobserved transition
 time may contribute materially to the residual, but it is neither an additive
 correction nor a causal decomposition.
-
+\begin{sloppypar}
 The estimates do not isolate physical movement. The ITS data contain neither
 enablement nor trajectory timestamps, so an observed inter-activity gap may
 combine movement, traffic, dispatching, terminal release, and queueing. The
@@ -658,7 +655,7 @@ Introducing an additional transition-time draw would therefore risk counting
 part of the same delay twice. Simulation output is consequently interpreted as
 \emph{composite pre-service delay}, not as measured queueing time. Separating
 its components would require additional position or trajectory data.
-
+\end{sloppypar}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Held-Out Bottleneck Analysis}
 \label{sec:results_bottlenecks}
@@ -701,9 +698,9 @@ held-out period. Minutes are totals over all 17,892 visits.}
 \end{table}
 
 The largest component is the gap before Gate Out: 11.273 minutes per visit on
-average and 201,690 minutes in total. It contains the outbound transition and
-any unobserved release or exit delay, so calling Gate Out a queueing bottleneck
-would be too strong. RMG receive is the largest handling-related accumulation
+average and 201,690 minutes in total. It contains the outbound transition and additionally 
+any unpredictibale human behavior regarding intentional break of truck drivers while still on the treminal, or unobserved releases due to customer communications. Identifying the Gate Out operation as a queueing bottleneck
+would be unsuitable in the given setting. RMG receive is the largest handling-related accumulation
 point. Its mean service is 13.779 minutes and its mean composite pre-service
 delay is 13.974 minutes. Together the activity accounts for 27.99\,\% of all
 reconstructed held-out time. RMG delivery accounts for a further 15.45\,\%.
