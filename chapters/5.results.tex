@@ -654,7 +654,7 @@ Table~\ref{tab:final_kpis}. The comparison indicates that unobserved transition
 time may contribute materially to the residual, but it is neither an additive
 correction nor a causal decomposition.
 
-Separating movement from waiting is a recognised difficulty in data-driven
+Separating movement from waiting is a recognised challenge in data-driven
 simulation for physical logistics. Reviews report that queue and resource
 behaviour often cannot be recovered from conventional event logs because the
 required operational state is missing
@@ -662,17 +662,16 @@ required operational state is missing
 production-logistics application decomposes an observed inter-activity interval
 into transport and waiting only where buffer state identifies the two
 components. Transport is then represented explicitly, while waiting emerges
-from resource and buffer logic \cite{Grobis2026SimulationDevelopment}. CTB has
-neither enablement, trajectory, nor queue-state observations for such a
+from resource and buffer logic \cite{Grobis2026SimulationDevelopment}. CTB does not sufficiently have reliable data on enablement, trajectory or queue-state observations for such a
 decomposition. ProSiT models execution, model-derived waiting, arrivals, and
 resource availability, but provides no separate timed spatial-transfer
 primitive \cite{Vinci2026prosit}. Physical transition time is therefore not
 identifiable or directly executable within the present model. Simply adding a
-transition-time draw would also count part of the undifferentiated gap already
+transition-time manually would also count part of the undifferentiated gap already
 fitted as pre-service delay. A valid extension must first observe or estimate
 movement, refit the residual waiting component, and introduce explicit movement
-semantics. Until then, the output is interpreted as \emph{composite pre-service
-delay}, not as measured queueing time.
+semantics in the model. Until then, the output is interpreted as \emph{composite pre-service
+delay}, not as realistically measured queueing time.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Held-Out Bottleneck Analysis}
