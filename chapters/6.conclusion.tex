@@ -45,8 +45,9 @@ when weighted by the real activity frequencies. Complete truck turnaround is
 less accurate. Mean turnaround is 33.812 minutes in simulation and 39.742
 minutes in the hold-out, a deficit of 5.930 minutes or 14.92\,\%. Simulated P90
 is 57.900 rather than 71.000 minutes. The narrow intervals across ten
-Monte-Carlo seeds show that this is systematic model error rather than
-simulation noise.
+Monte-Carlo seeds show that the discrepancy is stable for the fixed model and
+test period rather than ordinary run-to-run simulation noise. They do not
+identify its cause.
 
 Two analyses delimit that error without claiming a causal decomposition. Real
 mean turnaround increases by 2.450 minutes between the training and hold-out
@@ -93,12 +94,11 @@ log.
 
 RQ4 makes this validity boundary visible. Both operational interventions are
 implemented reproducibly in the cap-three \textit{native-only} scenario model.
-Removing T22 changes mean turnaround by $-0.030$ minutes with a 95\,\% interval
-of $[-0.168,+0.107]$, while model-derived RMG pre-service decreases by a
-resolved 0.093 minutes. Increasing working-time arrival intensity by 20\,\%
-raises elapsed arrival rate by 15.910\,\% but changes mean turnaround by
-$-0.087\;[-0.281,+0.106]$ minutes. The selected demand change is therefore
-below the model's response region.
+Removing T22 produces no resolved turnaround effect and only a small change in
+model-derived RMG pre-service. Increasing working-time arrival intensity by
+20\,\% raises elapsed arrival rate by 15.910\,\% but likewise produces no
+resolved turnaround response. The selected demand change is therefore below
+the model's response region.
 
 The extended demand ladder demonstrates that this is a threshold effect inside
 the simulator, not a general inability to propagate demand. At a realised

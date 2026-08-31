@@ -204,9 +204,9 @@ Case-turnaround KS & -- & 0.0928 & -- & [0.0893, 0.0962] \\
 Inter-arrival EMD (min) & -- & 0.0724 & -- & [0.0674, 0.0774] \\
 Inter-arrival KS & -- & 0.0254 & -- & [0.0215, 0.0292] \\
 N-Gram Distance ($N=3$) & -- & 0.05677 & -- & [0.05540, 0.05813] \\
-Mean turnaround (min) & 39.742 & 33.812 & $-5.930$ & [33.682, 33.943]$^{a}$ \\
-P90 turnaround (min) & 71.000 & 57.900 & $-13.100$ & [57.674, 58.126]$^{a}$ \\
-Simultaneous-arrival share (\%) & 56.660 & 54.221 & $-2.439$ pp & [54.035, 54.407]$^{a}$ \\
+Mean turnaround (min) & 39.742 & 33.812 & $-5.930$ & [$-6.060$, $-5.799$]$^{a}$ \\
+P90 turnaround (min) & 71.000 & 57.900 & $-13.100$ & [$-13.326$, $-12.874$]$^{a}$ \\
+Simultaneous-arrival share (\%) & 56.660 & 54.221 & $-2.439$ pp & [$-2.625$, $-2.253$] pp$^{a}$ \\
 Yard-activity-rate L1 error & -- & 0.1636 & -- & [0.1593, 0.1678] \\
 \bottomrule
 \end{tabular}
@@ -214,38 +214,39 @@ Yard-activity-rate L1 error & -- & 0.1636 & -- & [0.1593, 0.1678] \\
 ($N_{\text{seeds}}=10$, seeds 42--51, and 17,892 cases per run).}
 \label{tab:final_kpis}
 \smallskip
-\parbox{0.95\textwidth}{\footnotesize $^{a}$The interval refers to the
-simulated outcome. The real hold-out statistic is fixed. Gate In and Gate Out
-are excluded from both yard-service EMD aggregates.}
+\parbox{0.95\textwidth}{\footnotesize $^{a}$The real hold-out statistic is
+treated as fixed, so the interval refers to the simulated-minus-real
+difference. Intervals for the remaining rows refer to the named error metric
+across simulated logs. Gate In and Gate Out are excluded from both yard-service
+EMD aggregates.}
 \end{table}
 
-The result turned out mixed. Inter-arrival EMD is 0.0724 minutes. Unweighted yard
-service EMD is 3.150 minutes. Frequency weighting reduces it to 2.341 minutes
-because some of the larger errors occur in rare activities
+The result is mixed. Inter-arrival spacing is reproduced closely, and the yard
+service mismatch is moderate. Frequency weighting reduces the latter because
+some of the larger errors occur in rare activities
 (Table~\ref{tab:yard_activity_emd}). The complete visit is less accurate. Mean
 turnaround is 5.930 minutes too short, or 14.92\,\%. P90 is 13.100 minutes too
-short, or 18.45\,\%. This bias remains across the ten seeds. The narrow seed
-intervals do not show that the model itself is correct.
+short, or 18.45\,\%. This discrepancy persists across the ten seeds. The narrow
+intervals show that it is not caused by ordinary run-to-run simulation
+variation. They do not show that the model itself is correct or identify the
+source of the error.
 
 The final \textit{visit-only} bundle gives a completion-order N-Gram Distance
-(NGD) with $N=3$ of 0.05677 on the same final test period
-($95\,\%$ MC CI $[0.05540,0.05813]$). The explicit ITS-order sensitivity is
-0.05673 ($[0.05537,0.05810]$), a difference of only 0.00003. The close values
-show that the NGD result is not driven by the small number of timestamp
-inversions in the underlying data. Its increase relative to the validation
-value of approximately 0.04857 is consistent with temporal transfer in local
-activity combinations. NGD remains a control-flow distance and is not evidence
-that timing, queues, or physical movement are represented correctly.
+(NGD) with $N=3$ of 0.05677 on the same final test period. Reconstructing the
+order from the explicit ITS event-order field changes the result only in the
+fifth decimal place. The NGD result is therefore not driven by the small number
+of timestamp inversions in the underlying data. Its moderate increase relative
+to validation is consistent with temporal transfer in local activity
+combinations. NGD remains a control-flow distance and is not evidence that
+timing, queues, or physical movement are represented correctly.
 
-As a role check, the same test period evaluated with the cap-three
-\textit{native-only} bundle gives a frequency-weighted yard-service EMD of
-2.382 minutes ($[2.324,2.440]$), a case-turnaround EMD of 6.324 minutes
-($[6.207,6.440]$), and an activity-rate L1 error of 0.1635
-($[0.1586,0.1685]$). These values are close to the corresponding
-\textit{visit-only} values of 2.341 minutes, 6.159 minutes, and 0.1636.
-The small differences do not change the historical reference decision. They
-show that the native-state scenario model does not incur a large additional
-historical mismatch while providing a different intervention capability.
+As a role check, the same test period is also evaluated with the cap-three
+\textit{native-only} bundle. Its frequency-weighted yard-service,
+case-turnaround, and activity-rate errors remain close to those of
+\textit{visit-only}. The small differences do not change the historical
+reference decision. They show that the native-state scenario model does not
+incur a large additional historical mismatch while providing a different
+intervention capability.
 
 All ten runs pass the case-order checks. They contain no gate-only cases,
 within-case overlaps, invalid boundaries, or decreasing completion times. Gate
@@ -310,14 +311,12 @@ Gate-only cases per run & 0 & 0 & 0 & 0 \\
 \label{tab:configuration_screening}
 \end{table}
 
-The ordering definition used for NGD is not decisive. With explicit
-\texttt{case:event:order}, mean NGD is 0.04852 for \textit{visit-only}, 0.04910
-for \textit{static-only}, 0.04857 for \textit{native-only} and 0.04879 for
-\textit{both}. Each is within 0.00006 of its completion-order counterpart in
-Table~\ref{tab:configuration_screening}.
+The ordering definition used for NGD is not decisive. Recomputing all four
+configurations from the explicit \texttt{case:event:order} field changes each
+mean only in the fifth decimal place and leaves the comparison unchanged.
 
 Relative to \textit{visit-only}, the paired static-only changes are $+0.014$
-minutes for turnaround EMD (95\,\% CI $[-0.134,+0.162]$), $+0.025$ minutes for
+minutes for turnaround EMD (95\,\% paired MC CI $[-0.134,+0.162]$), $+0.025$ minutes for
 weighted yard-service EMD ($[-0.041,+0.091]$), $+0.0020$ for activity-rate L1
 ($[-0.0045,+0.0085]$), and $+0.00059$ for NGD ($N=3$)
 ($[-0.00121,+0.00238]$). None is resolved.
@@ -408,7 +407,7 @@ The observed process changes between discovery and evaluation. Mean truck
 turnaround rises from 37.293 minutes in training to 39.742 minutes in the
 hold-out, a 2.450-minute increase (95\,\% Welch CI $[2.003,2.896]$).
 The median rises from 29 to 32 minutes and P90 from 67 to 71 minutes. The
-bootstrapped 95\,\% interval for the P90 increase is $[3,6]$ minutes. The
+95\,\% case-bootstrap interval for the P90 increase is $[3,6]$ minutes. The
 Wasserstein distance between the two real turnaround distributions is 3.235
 minutes. The hold-out is therefore not an exchangeable sample from an
 unchanged period.
@@ -791,7 +790,7 @@ terminal.
 \setlength{\tabcolsep}{3.2pt}
 \begin{tabularx}{\textwidth}{@{}Xrrrr@{}}
 \toprule
-\textbf{KPI} & \textbf{Reference} & \textbf{Outcome} & \textbf{Change} & \textbf{95\,\% CI} \\
+\textbf{KPI} & \textbf{Reference} & \textbf{Outcome} & \textbf{Change} & \textbf{95\,\% paired MC CI} \\
 \midrule
 Mean turnaround (min) & 33.635 & 33.605 & $-0.030$ & [$-0.168$, $+0.107$] \\
 P90 turnaround (min) & 57.400 & 57.500 & $+0.100$ & [$-0.428$, $+0.628$] \\
@@ -815,7 +814,7 @@ T22 resource-pool reallocation
 \setlength{\tabcolsep}{3.0pt}
 \begin{tabularx}{\textwidth}{@{}Xrrrr@{}}
 \toprule
-\textbf{KPI} & \textbf{Reference} & \textbf{Outcome} & \textbf{Change} & \textbf{95\,\% CI} \\
+\textbf{KPI} & \textbf{Reference} & \textbf{Outcome} & \textbf{Change} & \textbf{95\,\% paired MC CI} \\
 \midrule
 Model mean working inter-arrival (min) & 0.6830 & 0.5692 & $-0.1138$ & exact \\
 Model arrivals per working hour & 87.842 & 105.411 & $+20.000\,\%$ & exact \\
@@ -847,20 +846,14 @@ discovered 100 to 66.}
 \subsection{Scenario A: T22 Resource-Pool Reallocation}
 
 T22 is removed from every eligible RMG pool and its calendar is closed. The
-intervention therefore executes as specified. In the
-\textit{native-only} scenario model, the mean-turnaround change is
-$-0.030\;[-0.168,+0.107]$ minutes and the P90 change is
-$+0.100\;[-0.428,+0.628]$ minutes. Both paired intervals include zero. Mean
-RMG service changes by $+0.006\;[-0.053,+0.066]$ minutes, whereas mean RMG
-pre-service delay changes by $-0.093\;[-0.146,-0.040]$ minutes. Receive
-service and pre-service changes are unresolved. Delivery service and
-pre-service changes are also unresolved. The model therefore resolves a small
-decrease in aggregate model-derived RMG pre-service delay, with no end-to-end
-or service-time effect. The workload-blind \textit{visit-only} negative control
-gives the same qualitative conclusion, with a mean-turnaround change of
-$-0.003\;[-0.133,+0.128]$ minutes and a pre-service change of
-$+0.065\;[+0.010,+0.119]$ minutes. Removing an eligible statistical resource
-is observable, whereas a physical block-closure effect is not established.
+intervention therefore executes as specified. In the \textit{native-only}
+scenario model, neither mean nor P90 turnaround changes are resolved. Service
+and pre-service changes for receive and delivery are likewise unresolved. The
+only resolved result is a small decrease in aggregate model-derived RMG
+pre-service delay. The workload-blind \textit{visit-only} negative control also
+shows no end-to-end response and only a small pre-service change. Removing an
+eligible statistical resource is observable, whereas a physical block-closure
+effect is not established.
 
 The experiment is not a full block-closure study. The remaining 21 blocks stay
 eligible for all RMG activities. Each keeps capacity three. The selector moves
@@ -870,19 +863,17 @@ tests the abstract resource pool.
 
 \subsection{Scenario B: 20\,\% Higher Demand}
 
-The working-time intervention is exact. Mean inter-arrival time changes from
-0.6830 to 0.5692 minutes. The implied rate rises from 87.842 to 105.411 arrivals
-per working hour, or 20\,\%. The rate measured over elapsed calendar time rises
-by 15.910\,\%. Closed gate periods remain fixed. Timestamps are also floored to
-minutes. This flooring turns more short positive intervals into simultaneous
-observations. It does not change the zero mass in the input distribution.
+The working-time intervention is exact: the configured rate rises by 20\,\%.
+Measured over elapsed calendar time, the increase is 15.910\,\% because closed
+gate periods remain fixed. Timestamps are also floored to minutes. This
+flooring turns more short positive intervals into simultaneous observations.
+It does not change the zero mass in the input distribution.
 
-Mean turnaround changes by $-0.087\;[-0.281,+0.106]$ minutes, mean RMG service
-by $+0.049\;[-0.041,+0.140]$ minutes, and mean RMG pre-service by
-$-0.062\;[-0.139,+0.014]$ minutes. The receive and delivery mean service and
-pre-service intervals also include zero. The \textit{native-only} model
-therefore transmits the intervention to its dynamic state but does not produce
-a resolved mean handling or end-to-end response at this demand level.
+The paired intervals for mean turnaround, RMG service, RMG pre-service, and the
+receive- and delivery-specific measures all include zero. The
+\textit{native-only} model therefore transmits the intervention to its dynamic
+state but does not produce a resolved mean handling or end-to-end response at
+this demand level.
 
 The result is interpreted together with the response surface below. A 20\,\%
 change in working-time intensity produces only a 15.910\,\% increase in
@@ -908,7 +899,7 @@ performance-improving calibration.
 \setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{L{5.0cm}rr}
 \toprule
-\textbf{Metric} & \textbf{Cap-three minus uncapped} & \textbf{95\,\% CI} \\
+\textbf{Metric} & \textbf{Cap-three minus uncapped} & \textbf{95\,\% paired MC CI} \\
 \midrule
 Turnaround EMD (min) & $-0.051$ & [$-0.268$, $+0.167$] \\
 Mean turnaround (min) & $+0.135$ & [$-0.063$, $+0.333$] \\
@@ -985,7 +976,7 @@ workload-blind negative control.
 \begin{tabularx}{\textwidth}{@{}rrrrXrX@{}}
 \toprule
 \textbf{Configured} & \textbf{Realised} & \textbf{Arrivals} & \textbf{Mean} & \textbf{Paired turnaround change} & \textbf{RMG pre-} & \textbf{Paired pre-service change} \\
-$\boldsymbol{m}$ & \textbf{rate ratio} & \textbf{per hour} & \textbf{turnaround} & \textbf{[95\,\% CI]} & \textbf{service} & \textbf{[95\,\% CI]} \\
+$\boldsymbol{m}$ & \textbf{rate ratio} & \textbf{per hour} & \textbf{turnaround} & \textbf{[95\,\% paired MC CI]} & \textbf{service} & \textbf{[95\,\% paired MC CI]} \\
 \midrule
 1.0 & 1.000 & 72.452  & 33.635 & reference & 8.031  & reference \\
 1.2 & 1.159 & 83.979  & 33.548 & $-0.087$ [$-0.281$, $+0.106$] & 7.969  & $-0.062$ [$-0.139$, $+0.014$] \\
@@ -1004,23 +995,20 @@ arrival rate relative to the matched baseline.}
 
 Up to the realised rate ratio 2.367, the \textit{native-only} mean-turnaround
 and mean RMG pre-service intervals include zero. At ratio 2.825, mean
-turnaround rises by 1.815 minutes, P90 turnaround by 4.100 minutes, mean RMG
-pre-service by 2.318 minutes, and P90 RMG pre-service by 4.650 minutes. All
-four changes have intervals above zero. At ratio 3.504, the corresponding
-changes reach 4.069, 9.800, 5.221, and 12.750 minutes. The first resolved
-end-to-end response is therefore bounded between realised rate ratios 2.367
-and 2.825. This interval describes the transition region of the fitted model.
-It is not an estimate of a physical CTB capacity threshold.
+turnaround rises by 1.815 minutes and mean RMG pre-service by 2.318 minutes.
+The corresponding mean and P90 intervals are all above zero, and the response
+strengthens further at the highest demand level. The first resolved end-to-end
+response is therefore bounded between realised rate ratios 2.367 and 2.825.
+This interval describes the transition region of the fitted model. It is not
+an estimate of a physical CTB capacity threshold.
 
-The negative control shows why this response matters for model choice. In
-\textit{visit-only}, even the 3.504 ratio changes mean turnaround by only
-$+0.050\;[-0.057,+0.158]$ minutes and mean RMG pre-service by
-$-0.012\;[-0.066,+0.042]$ minutes. The native-minus-visit
-difference-in-differences at ratio 2.825 is
+The negative control shows why this response matters for model choice.
+\textit{Visit-only} remains effectively invariant even at the highest demand
+level. The native-minus-visit difference-in-differences at the first resolved
+response level, ratio 2.825, is
 $+1.851\;[+1.034,+2.669]$ minutes for mean turnaround and
-$+2.284\;[+1.120,+3.448]$ minutes for mean RMG pre-service. At ratio 3.504,
-the contrasts are $+4.019\;[+3.676,+4.361]$ and
-$+5.233\;[+4.865,+5.600]$ minutes. The response is therefore associated with
+$+2.284\;[+1.120,+3.448]$ minutes for mean RMG pre-service. Both contrasts grow
+further at the highest demand level. The response is therefore associated with
 access to ProSiT's native dynamic state rather than with the changed arrival
 sample alone.
 
@@ -1056,15 +1044,11 @@ spatial mechanisms needed for baseline fidelity.
 The four-cell validation experiment and the paired stress test answer
 different questions. Under the pre-specified RQ3 rule, \textit{visit-only} is
 the historical-fidelity reference because no added state source produces a
-resolved validation improvement. Relative to that reference,
-\textit{native-only} changes turnaround EMD by
-$+0.105\;[-0.099,+0.308]$ minutes, weighted yard-service EMD by
-$+0.037\;[-0.037,+0.112]$ minutes, activity-rate L1 by
-$+0.0006\;[-0.0032,+0.0044]$, and NGD ($N=3$) by
-$+0.00006\;[-0.00032,+0.00044]$. There is no statistically resolved
-deterioration, although this is not a formal non-inferiority conclusion.
-
-Historical equivalence within these intervals is not enough for RQ4. The
+resolved validation improvement. None of the four historical-fidelity
+differences between \textit{native-only} and \textit{visit-only} is resolved.
+This is not a formal equivalence or non-inferiority result. It provides no
+evidence that \textit{native-only} is historically superior under the tested
+precision. Historical similarity is not enough for RQ4. The
 workload-blind model fails the intervention-response requirement, while the
 native-state model produces a clear high-load response. \textit{Native-only}
 is therefore assigned the scenario-model role. It is preferred over
@@ -1462,8 +1446,10 @@ real sources of delay.
 \paragraph{Systematic Turnaround Under-Prediction}
 
 The data-aware reference model under-predicts mean turnaround by 5.930 minutes and P90 by
-13.100 minutes. The narrow seed intervals show that this is model bias, not
-simulation noise. The log cannot show how much missing time comes from
+13.100 minutes. The narrow seed intervals show that this discrepancy is stable
+for the fixed model and test period rather than an artefact of ordinary
+run-to-run simulation noise. They do not identify its cause. The log cannot
+show how much missing time comes from
 movement, traffic, queueing, or an unrecorded state. Correct case order does
 not remove this limit on KPI forecasts.
 

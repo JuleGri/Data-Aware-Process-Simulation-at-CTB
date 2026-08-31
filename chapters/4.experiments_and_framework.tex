@@ -793,8 +793,8 @@ of the simulator itself. This is the same many-possible-realisations
 problem addressed by the multi-log validation design of
 Chapela-Campa et al. and by classical independent-replication output
 analysis \cite{ChapelaCampa2023Trust,Law2015Simulation}. This thesis
-reports every fidelity metric with a Monte-Carlo confidence
-interval.
+reports Monte-Carlo confidence intervals for the final fidelity estimates
+and for the planned configuration and scenario contrasts.
 
 \subsection{Replication Design}
 
@@ -804,12 +804,15 @@ The same replication design is used for all four ProSiT configurations:
 \ \textit{native-only},\ \textit{both}\}.
 \end{equation}
 For each configuration $c\in\mathcal{C}$, the stored parameter bundle is
-loaded and a fresh simulation engine is created. Ten runs are then
-generated with the seeds $s_i=42+i$ for $i=0,\ldots,9$. Each run starts at the test cutoff
-$t_{\mathrm{start}}=\text{2026-04-20 18:17:00}$ and generates
-$n_{\mathrm{traces}}=17{,}892$ cases. The start time and case count are read
-from the split manifest so that every simulated log represents the same window
-as the held-out data.
+loaded and a fresh simulation engine is created. Ten runs are generated with
+the seeds $s_i=42+i$ for $i=0,\ldots,9$. During configuration selection, each
+run represents the 16\,\% validation window and contains 14,314 cases. After
+selection, the rediscovered reference model is evaluated in ten runs over the
+untouched 20\,\% test window, beginning at
+$t_{\mathrm{start}}=\text{2026-04-20 18:17:00}$ and containing 17,892 cases.
+The applicable start time and case count are read from the split manifest so
+that each simulated log matches the real partition against which it is
+evaluated.
 
 ProSiT initializes each replication with the Petri-net initial marking, no
 active cases and empty resource schedules. It does not reconstruct trucks that
@@ -864,7 +867,9 @@ Student-$t$ interval is appropriate because the reported quantity is the mean
 of replication-level metrics and the simulation variance is estimated from a
 small sample. It is used as a transparent uncertainty summary, not as evidence
 that ten runs identify input-model or discovery uncertainty. Those sources of
-uncertainty remain outside the interval. The base seed is 42.
+uncertainty remain outside the interval. All intervals are pointwise. They do
+not provide simultaneous coverage across the complete set of metrics and
+scenarios. The base seed is 42.
 
 The choice to seed Python's \texttt{random} and \texttt{numpy.random}
 before each \texttt{engine.apply()} rather than the ProSiT engine
