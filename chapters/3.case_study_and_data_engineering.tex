@@ -126,8 +126,8 @@ ANLAUFPUNKT\_HALTESTELLE & Exchange-area identifier, such as T20,
 LL or VC. \\
 ANLAUFPUNKT\_SEQUENZNUMMER & Operational schedule position of the yard
 stop within the truck visit. \\
-FP\_ZEITPUNKT\_ERSTELLUNG & Time at which the schedule entry was
-created; used as the Gate In timestamp. \\
+FP\_ZEITPUNKT\_ERSTELLUNG & Operational admission timestamp created at
+the gate after the upstream OCR observation; used as the Gate In timestamp. \\
 ALP\_ZEITPUNKT\_BEREITMELDUNG & Time at which the handling activity
 was reported ready for execution. \\
 ALP\_ZEITPUNKT\_ERFUELLUNG & Time at which the handling activity was
@@ -187,8 +187,7 @@ exchange area; these must be mapped to the higher-level operational
 zones used by the scheduling system. All exchange areas
 beginning with ``HP'' (\textit{Hochpalette}) are mapped to ``LL''
 (\textit{Leerlager}) to align with the schedule system's terminology.
-The mapping is implemented in
-\texttt{002\_Prep\_area\_mapping\_report.py}.
+The mapping is applied consistently before source-system integration.
 
 \paragraph{Container Master Data}
 
@@ -234,8 +233,10 @@ identifier), \texttt{KAP\_TEU\_THEORETISCH} (theoretical TEU capacity),
 \texttt{BEL\_TEU} (current TEU occupancy) and \texttt{AUSLASTUNG\_\%}
 (utilisation percentage). Because observations are irregularly spaced,
 the data is resampled to a uniform one-minute frequency using linear
-interpolation on the numeric fields (script
-\texttt{004\_Prep\_create\_interpolated\_yard\_state\_for\_s3.py}).
+interpolation on the numeric fields within the observed support. The resulting
+minute key is joined exactly to the minute-resolved Gate In timestamp. Values
+are not taken from a later minute and the series is not extrapolated beyond
+its final observation.
 
 \paragraph{Truck Demand Data}
 
@@ -244,9 +245,8 @@ aggregating truck arrivals over rolling time windows. For each exchange
 area and one-minute time interval, the feature
 \texttt{TRUCK\_DEMAND\_LAST\_1H} is calculated as the number of trucks
 that became ready for processing in that area during the preceding
-sixty minutes. The demand pipeline (script
-\texttt{005\_Prep\_create\_truck\_demand.py}) first resamples the schedule
-data to one-minute intervals based on
+sixty minutes. The demand preparation first resamples the schedule data to
+one-minute intervals based on
 \texttt{ALP\_ZEITPUNKT\_BEREITMELDUNG}. It then applies a rolling
 60-minute window and counts truck arrivals separately for the Gate, the
 individual RMG blocks T06--T27, VC, LL and MT. The block-level RMG series are
@@ -280,8 +280,8 @@ When the first matching step fails, a fallback is
 applied to single-exchange-area visits: if a truck visit contains only
 one yard activity and no container identifier was matched, the
 container ID is inferred from any other transaction associated with the
-same \texttt{TruckVisitGkey}. The integration logic is implemented in
-\texttt{01\_match\_container\_ids\_to\_schedule.py}.
+same \texttt{TruckVisitGkey}. The resulting links are audited before
+event-log construction.
 
 \paragraph{Invalid Process Instances}
 \label{sec:invalid_process_instances}
@@ -289,9 +289,8 @@ same \texttt{TruckVisitGkey}. The integration logic is implemented in
 The cleaning pipeline removes complete cases rather than individual
 records: whenever a truck visit violates one of the defined quality
 criteria the entire process instance is excluded, so that only
-internally consistent process executions are retained. The
-cleaning procedures are implemented in
-\texttt{00\_its\_fahrplan\_raw\_to\_fahrplan\_cleaned\_0304.py}.
+internally consistent process executions are retained. The same rules are
+applied at case level before event-log construction.
 
 \paragraph{Missing lifecycle information.} Cases are removed if one or
 more required lifecycle timestamps are missing:
@@ -389,9 +388,23 @@ To attach block-specific context features
 include only process instances that interact with exactly one RMG block.
 Visits involving multiple RMG blocks are excluded because a single value could
 not be assigned to their block-specific congestion measures. Visits to
-other yard areas (VC or LL) that involve exactly one RMG block are
-retained. The filtering logic is implemented in
-\texttt{filter\_one\_rmg\_only.py}.
+other yard areas (VC or LL) that involve exactly one RMG block are retained.
+The restriction is applied before generic RMG activity labels are constructed,
+using the number of distinct physical RMG blocks per visit.
+
+The restriction concerns distinct blocks, not repeated RMG handling. Before
+this filter and after removing unknown activities, 1,693 of 91,153 visits
+(1.86\,\%) used more than one physical RMG
+block. The final log still contains 135 visits with two or three RMG activities
+at the same block, so repeated handling remains part of the discovered process
+language. The same single-block cohort is used for every cell of the
+feature-source experiment because the static cells require one unambiguous
+target-area state. If a workload-blind configuration is ultimately selected,
+this does not retroactively make the population filter a requirement of that
+model. It remains a common-cohort design choice that enables a fair factorial
+comparison. Reintroducing multi-block visits would require a separate
+population-sensitivity study or an object-centric representation rather than a
+silent enlargement of only one configuration.
 
 This case-centric design does not discard the container characteristics that
 are available for a retained truck visit; they remain available as contextual
@@ -508,7 +521,8 @@ are mapped for each activity type.
 \textbf{Complete timestamp} \\
 \midrule
 Gate In & FP\_ZEITPUNKT\_ERSTELLUNG & Same value as the start
-timestamp. \\
+timestamp; represents terminal admission after the upstream approach and
+possible pre-gate waiting. \\
 Yard activity & ALP\_ZEITPUNKT\_BEREITMELDUNG &
 ALP\_ZEITPUNKT\_ERFUELLUNG \\
 Gate Out & FP\_ZEITPUNKT\_GATEOUT & FP\_ZEITPUNKT\_GATEOUT \\
@@ -518,9 +532,15 @@ Gate Out & FP\_ZEITPUNKT\_GATEOUT & FP\_ZEITPUNKT\_GATEOUT \\
 \label{tab:activity_timestamp_mapping}
 \end{table}
 
-The OCR gate timestamp (\texttt{StageStartTime}) from the report system is
-retained in the auxiliary column \texttt{ocr\_timestamp} for diagnostic
-purposes. It is not mapped to activity enablement.
+The OCR timestamp (\texttt{StageStartTime}) records the truck upstream of the
+operational Gate In boundary and is retained in the auxiliary column
+\texttt{ocr\_timestamp} for diagnostic purposes. Across the final cases it is
+never later than the selected Gate In timestamp and precedes it by a median of
+two minutes. The interval can contain approach, waiting and gate processing,
+but the available records do not identify these components separately. The
+simulation case therefore begins at operational admission and does not model
+the external queue before the gate. The OCR timestamp is not mapped to
+activity enablement.
 
 \paragraph{Model-Derived Pre-Service Delay}
 
@@ -606,8 +626,7 @@ entry-known case attributes.
 \paragraph{Container Features}
 
 Container-related context is aggregated to case level so that visit
-properties can serve as case-level attributes in ProSiT (script
-\texttt{03\_aggregate\_container\_details\_case\_level.py}). The resulting
+properties can serve as case-level attributes in ProSiT. The resulting
 \texttt{n\_containers} attribute counts the unique containers handled during
 the visit. The binary attributes \texttt{has\_hazardous} and
 \texttt{has\_reefer} are aggregated using a logical OR across the complete
@@ -620,26 +639,31 @@ handling complexity of the visit.
 
 Yard state features capture the storage capacity and utilisation status
 of different terminal areas at truck arrival (Gate In event). These
-features are matched temporally using \texttt{pd.merge\_asof} with a
-\texttt{nearest} strategy. The joined snapshot provides the overall
+features are matched by an exact equality join on the minute-resolved Gate In
+timestamp. The joined snapshot provides the overall
 \texttt{gate\_utilization}, the aggregated \texttt{rmg\_utilization}, and
 the area-level \texttt{vc\_utilization} and \texttt{mt\_utilization}. For
 single-block visits, \texttt{target\_utilization} gives the utilisation of
 the assigned RMG block.
 
-These features are added in \texttt{06\_add\_utils\_to\_eventlog.py}.
-
 \paragraph{Demand Features}
 
 Demand features quantify operational load pressure at different
-terminal areas over a rolling 60-minute window (scripts
-\texttt{05\_add\_demand\_features\_to\_eventlog.py} and
-\texttt{08\_add\_all\_target\_features.py}). The general
+terminal areas over a rolling 60-minute window. The general
 \texttt{gate\_demand} counts trucks processed across the terminal during the
 preceding hour. The \texttt{rmg\_demand}, \texttt{vc\_demand} and
 \texttt{mt\_demand} attributes separate this load by operational area.
 For single-block visits, \texttt{target\_demand} records the demand for the
 assigned RMG block.
+
+An explicit support audit found an exact demand and utilisation key for every
+visit in the 80\,\% development period used for discovery and configuration
+selection. The auxiliary series end before the final operational records: 12
+visits in the last 20\,\% period lie beyond the demand support and 766 lie
+beyond the yard-state support. Their boundary values are left missing rather
+than filled from an earlier minute or extrapolated. They are not consumed by
+the final workload-blind model. This makes the temporal support visible and
+prevents future information or stale-state carry-forward.
 
 \paragraph{Target Block Features}
 
@@ -654,9 +678,7 @@ block identifier.
 
 These features are reconstructed from the planned, area-specific stop
 labels before the RMG activities are genericised and are then carried as
-case attributes (scripts
-\texttt{07\_convert\_to\_RMG\_filter\_LL+HO2\_only.py} and
-\texttt{08\_add\_all\_target\_features.py}). Their information time is
+case attributes. Their information time is
 Gate In as specified above under Information Available at Truck Entry; the
 later \texttt{org:resource} assignment is not used as an execution outcome
 to be predicted.

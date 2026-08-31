@@ -154,7 +154,7 @@ workarounds provide additional diagnostic evidence around the main pipeline.
 \FloatBarrier
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Held-Out Train/Test Split}
+\section{Temporal Train/Validation/Test Split}
 \label{sec:train_test_split}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -164,26 +164,39 @@ A temporal split was chosen because the intended application learns a
 simulation model from past operations and applies it to a later operating
 period. A random split would mix earlier and later cases in both partitions and
 could conceal changes in activity composition, workload or performance. The
-earlier 80\,\% of truck visits are therefore used for control-flow and parameter
-discovery, while the later 20\,\% are used for evaluation. Each truck visit is
-assigned as a complete case so that no part of a visit can enter both
-partitions. This design tests temporal transfer under the observed case-study
-conditions and follows the need to separate model construction from evaluation
-when business processes may evolve
-\cite{ChapelaCampa2023Trust,Ozdemir2025UtilityBPS,vinci2025onlinediscoverysimulationmodels}.
-The cutoff and both case partitions are saved and reused unchanged by every
-downstream script.
+last-block design follows the forecasting principle that evaluation data must
+occur after the data available for model construction
+\cite{BergmeirBenitez2012}. The final 20\,\% remain an untouched test period,
+consistent with the outer temporal 80/20 convention used in the ProSiT
+evaluation \cite{Vinci2026prosit}. The preceding 80\,\% are treated as the
+development period and split once more in chronological 80/20 proportions.
+This produces 64\,\% discovery data ($0.8\times0.8$) and 16\,\% validation data
+($0.8\times0.2$) relative to the complete log. The exact percentages are a
+pragmatic allocation, not a value prescribed by ProSiT or a universal
+statistical optimum. They preserve the already defined final test period,
+provide 57,254 cases for discovery, and leave 14,314 later cases for a
+selection period comparable in duration to the final test window.
+
+The validation partition is used only to select among the four candidate
+configurations. After selection, the chosen configuration is
+rediscovered on the combined 80\,\% development period and evaluated once on
+the final 20\,\%. Each truck visit is assigned as a complete case so that no
+part of a visit can enter two partitions. This design tests temporal transfer
+under the observed case-study conditions. Separating model selection from the
+final performance estimate avoids the selection bias that arises when the same
+finite sample is used for both purposes
+\cite{CawleyTalbot2010,ChapelaCampa2023Trust,Ozdemir2025UtilityBPS,vinci2025onlinediscoverysimulationmodels}.
+Both cutoffs and all three case partitions are persisted and reused unchanged.
 
 \paragraph{Status of the Evaluation Set}
 
-The later 20\,\% are held out from all control-flow and parameter discovery.
-However, the same later period is also used to compare the four ProSiT
-configurations and to designate \textit{visit-only} as the reference model.
-It is therefore a hold-out for parameter discovery, but not a second untouched
-test after model selection. The reported performance is a retrospective
-within-study estimate. It is not an independent prospective validation on a
-new period or terminal. No scenario parameter is fitted to the evaluation
-period.
+The final 20\,\% are not inspected during feature-source selection. The
+four-cell comparison is performed only on the 16\,\% validation period. The
+test period is then used for the reported historical-fidelity estimate of the
+single selected configuration. This is a genuinely untouched temporal test
+within the case study, although it remains a retrospective evaluation of one
+terminal and is not a prospective field validation of future interventions.
+No scenario parameter is fitted to either validation or test outcomes.
 
 \paragraph{Split Definition}
 \label{sec:split_definition}
@@ -196,19 +209,15 @@ earliest event timestamp:
       \text{start}(e),\text{time}(e)
       \mid e\in c_i \bigr\}.
 \end{equation}
-Sort the cases by $\tau$ and a deterministic case-identifier. The first 80\,\% form the training set and the remaining
-20\,\% form the test set. The cutoff $\tau^{\star}$ is recorded as the earliest arrival in the test set.
-
-On the CTB event log the cutoff is
-$\tau^{\star}=\text{2026-04-20 18:17:00}$. The split produces 71,568
-training cases (220,048 events) and 17,892 testing cases (55,360
-events). No events are dropped. The split is realised by
-\texttt{validation/01\_train\_test\_split.py} and is documented in
-\texttt{validation/results/split\_manifest.json}, which records
-the seed, the cutoff and the per-activity coverage in both partitions.
-The manifest is loaded by every downstream simulation script so that
-$n_{\text{traces}}$ and $t_{\text{start}}$ match the test window
-exactly.
+Sort the cases by $\tau$ and a seeded deterministic tie break for equal
+timestamps. The first 57,254 cases (175,902 events) form the 64\,\% discovery
+partition. The next 14,314 cases (44,146 events) form the 16\,\% validation
+partition, beginning at 2026-04-10 15:50. The final 17,892 cases (55,360
+events) form the 20\,\% test partition, beginning at 2026-04-20 18:17. Their
+union is the complete 89,460-case log and no events are dropped. A persisted
+split manifest records the case counts, both temporal cutoffs and source-file
+hashes. The simulation case count and start time are always read from the
+manifest corresponding to the partition being evaluated.
 
 \subsection{Temporal-Transfer Diagnostic}
 \label{sec:temporal_transfer_method}
@@ -253,10 +262,10 @@ an accounting identity, not a causal attribution of individual cases or
 mechanisms. It is not applied to Wasserstein distances because distributional
 distances do not have the same additive decomposition.
 
-The script \texttt{validation/14\_temporal\_transfer\_audit.py} loads the two
-frozen real partitions, constructs one turnaround observation per case and
-computes the real-period distribution, composition, Welch and bootstrap
-diagnostics. It neither loads simulated logs nor repeats model discovery. The
+The temporal-transfer audit loads the two frozen real partitions, constructs
+one turnaround observation per case and computes the real-period distribution,
+composition, Welch and bootstrap diagnostics. It neither loads simulated logs
+nor repeats model discovery. The
 simulation mean in Equation~\ref{eq:mean_transfer_decomposition} comes from the
 standardized ten-seed evaluation reported in Chapter~\ref{chap:results}. The
 equation combines these separately reported summaries.
@@ -286,6 +295,21 @@ operationally possible. The no-parallelism constraint was confirmed by
 operational experts from the terminal and fixed before inspecting the
 discovered model.
 
+The resulting discovery problem differs from the long, largely acyclic chains
+that are common in administrative business-process examples. A truck visit is
+constructed from a small activity vocabulary and a fixed gate boundary. Its
+internal behaviour consists mainly of different sequential combinations and
+occasional repetitions of the same yard services. The dominant heterogeneity
+is therefore not the number of activity labels, but the selected combination,
+their order, the responsible terminal area, and the strongly varying service
+and pre-service durations. This pattern is typical of logistics operations in
+which a limited set of handling functions is repeated under changing demand,
+utilisation, routing and resource conditions. A compact activity alphabet does
+not make the process trivial to simulate. It shifts the relevant modelling
+question from discovering a long nominal path to reproducing the frequencies,
+timing, resource contention and context-dependent performance of many short
+physical executions.
+
 The domain input was collected as a project-level requirements and
 plausibility review with CTB operational experts rather than as a formal
 qualitative interview study. The experts confirmed that every relevant visit
@@ -314,19 +338,16 @@ describes this construction and its assumption that the operational schedule
 sequence is the best available representation of the executed stop order.
 
 An initial diagnostic conversion through a PM4Py DataFrame formatter sorted
-events by timestamp. Because CTB start and completion timestamps can overlap
-at minute resolution, that conversion changed the stored trace order and
-produced a model containing parallel cuts. The model was an artefact of the
-import path, not the final discovery result. The authoritative pipeline builds
-and reads the XES event log without the timestamp-sorting formatter. It thereby
-preserves \texttt{case:event:order}, while the original timestamps remain
-unchanged for all time and resource models. Activity order is part of the
-event-log semantics and must not be reconstructed implicitly from coarse or
-overlapping timestamps. A direct audit shows that completion-time sorting
-changes the activity sequence of 11 among 89,460 visits. Eight changes occur in
-the training partition and three in the evaluation partition. The small count
-does not make the order interchangeable because even rare inversions can add a
-parallel cut to a discovery algorithm.
+events by timestamp. Because CTB timestamps have minute resolution and may
+overlap, that conversion changed the stored trace order. The authoritative
+pipeline instead preserves \texttt{case:event:order}; the original timestamps
+remain unchanged for the time and resource models. A direct audit shows that
+completion-time sorting changes the sequence of 11 among 89,460 visits. This
+input correction is necessary, but it does not by itself guarantee a
+physically admissible discovered model. Even with the intended event order,
+Inductive Miner may interpret frequently reversed directly-follows relations
+as concurrency. In CTB these relations express alternative sequential routing,
+not simultaneous service of one truck.
 
 \subsection{Discovered Process Flow}
 
@@ -367,91 +388,74 @@ descriptive evidence, but it is not used directly for simulation because it
 has no marking or firing semantics and cannot itself distinguish choice from
 concurrency.
 
-The Inductive Miner expresses the same process as a sequential tree. Every case
-starts with \texttt{Gate In}. It may then execute \texttt{LL\_mixed}, after
-which it either enters the yard loop or follows a silent bypass. Each pass
-through the loop selects one visible yard activity, and the loop may repeat to
-represent visits with several handling operations. Once the loop is left, the
-case ends with \texttt{Gate Out}. The tree therefore allows different yard
-orders and repeated handling without allowing two activities of the same truck
-to execute concurrently.
+The raw Inductive-Miner tree is retained as a discovery diagnostic. On the
+64\,\% discovery partition it contains three parallel operators and an
+optional complete yard section. The first property conflicts with the
+expert-validated single-truck semantics, while the second permits the invalid
+trace \texttt{Gate In} $\rightarrow$ \texttt{Gate Out}. The raw tree is
+therefore not silently presented as an operationally valid source model.
 
-The converted Petri net in Figure~\ref{fig:ctb_inductive_petri} contains 7 places,
-16 transitions, and 32 arcs. Black boxes are silent routing transitions. White
-boxes are observed activities. Most importantly, the discovered process tree
-contains zero parallel operators. A single case token can therefore enable
-only a sequential yard path before reaching \texttt{Gate Out}.
+Before ProSiT parameter discovery, a pre-specified source-model repair maps the
+observed activity alphabet to the validated CTB case contract. The repaired
+process tree has the form
+\begin{equation}
+\operatorname{sequence}\!\left(
+\texttt{Gate In},
+\operatorname{loop}\!\left(
+\operatorname{xor}(a_1,\ldots,a_k),\tau
+\right),
+\texttt{Gate Out}
+\right),
+\label{eq:ctb_control_flow_contract}
+\end{equation}
+where $a_1,\ldots,a_k$ are the yard activities observed in the discovery
+partition. The loop executes its visible choice at least once and may repeat
+it. Consequently, the model permits arbitrary sequential yard orders and
+repetitions, but neither within-truck parallelism nor a gate-only visit. This
+repair does not prescribe which yard order is frequent. ProSiT still learns
+routing weights, activity durations, waiting times and resource behaviour from
+the event log.
+
+This distinction is methodologically important. The raw tree is the outcome
+of automatic process discovery. The executable Petri net is a transparent,
+expert-supported repair of that outcome. Calling the latter an unchanged
+Inductive-Miner model would overstate automation. Conversely, rejecting the
+entire discovery approach because a concurrency cut is physically unsuitable
+would discard the useful evidence that the process consists of a compact,
+highly variable yard-activity language.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{figures/discovery/petri_net_inductive.png}
-\caption{Inductive-Miner Petri net discovered from the order-preserving CTB
-training log. White transitions represent observed activities, black
-transitions are silent routing steps, circles are places, and the double circle
-marks completion. The net contains no parallel split.}
+\caption{Expert-constrained sequential Petri net used as the common ProSiT
+source model. Its activity alphabet is obtained from the discovery partition.
+White transitions represent observed activities, black transitions are silent
+routing steps, circles are places, and the double circle marks completion.}
 \label{fig:ctb_inductive_petri}
 \end{figure}
 
-The model abstracts from the 70 exact training variants by permitting unseen
-sequential combinations and repetitions of yard activities. This is intended
-generalisation, not a defect: the domain contract constrains concurrency and
-the entrance/exit boundary, not the internal order of yard services. The net
-also contains a silent structural bypass of the yard loop. This makes its
-formal language slightly broader than the observed log, in which every visit
-has yard work. Native ProSiT transition-weight discovery nevertheless learns
-routing from the training data. The potential bypass is therefore assessed by
-an explicit output diagnostic rather than silently removed. Its frequency is
-reported for each retained configuration as evidence of the model's
-overgeneralisation.
+The repair follows the general principle demonstrated in state-aware
+stochastic simulation research that an automatically obtained source net may
+require an explicit domain correction before it is used for experiments
+\cite{Vinci2023Inf.Activ.Prob}. Simulation-guided control-flow repair further
+shows why the discovered and repaired languages should be distinguished and
+evaluated rather than conflated \cite{SimulationGuidedRepair2025}. The CTB
+adaptation is fixed from the terminal case contract, not inferred from
+validation performance. It is applied identically to all four ProSiT
+configurations. The factorial comparison therefore cannot favour one feature
+configuration through a different Petri net.
 
-This decision is made against an explicit model-repair alternative. A
-state-aware stochastic Petri-net study \cite{Vinci2023Inf.Activ.Prob} manually
-changed its source model before simulation because it allowed an unobserved
-one-activity trace. A later simulation-guided control-flow repair framework
-\cite{SimulationGuidedRepair2025} formalised an iterative workflow in which real
-and simulated traces are discriminated,
-explanatory directly-follows features propose repairs, and the original and
-repaired nets are compared on held-out fitness, precision and simulation-log
-distance. Their implemented repair operators add missing behaviour. The paper
-explicitly leaves precision-oriented restriction of excessive behaviour as an
-extension. The CTB defect is of the latter kind: the gate-only trace is already
-permitted and would have to be removed, not added. Applying the published
-repair operators unchanged would therefore not solve it. A manually restricted
-net would be a legitimate secondary robustness model, but it would no longer be
-the unchanged discovery result and would require the complete conformance,
-simulation and scenario evaluation to be repeated.
-
-To quantify this alternative without replacing the primary model, a separate
-precision-oriented robustness repair splits the state after \texttt{Gate In}.
-If \texttt{LL\_mixed} has not occurred, the silent branch is forced into the
-yard loop. If it has occurred, the observed \texttt{LL\_mixed}-only visit
-remains possible. The modification therefore removes only the gate-only path
-identified in the structural audit. Original and repaired nets are compared on
-the same held-out fitness, precision, generalisation, and simplicity measures.
-The repaired PNML and executable parameter bundle are exported separately by
-\texttt{validation/16\_gate\_only\_structural\_repair.py}. This is an ablation
-of one structural assumption, not a claim that the published repair operators
-already implement precision-side pruning.
-
-The stochastic robustness comparison changes only this Petri net inside the
-final cap-three \textit{visit-only} bundle. Original and repaired bundles use
-the same held-out period, simulation start, 17,892 cases, and seeds 42--51.
-They are compared through turnaround and yard-service EMD, activity-rate
-error, 3-gram NGD under both event-order definitions, and the complete case
-contract. This design tests whether the formal language restriction changes
-realised simulation behaviour rather than inferring such an effect from
-conformance precision alone.
-
-The order-corrected but otherwise unchanged Inductive-Miner Petri net is
-consequently accepted as the automatic-discovery baseline and passed to
-ProSiT. The separately repaired net remains a robustness model. The earlier
-prefix-trie fallback is not part of the final methodology. This choice retains
-automatic discovery, supports unseen but sequential variants, and produces a
-substantially smaller model than memorising every observed path.
+The repaired model deliberately generalises beyond exact observed variants.
+It permits unseen sequential combinations because experts identified no
+physically excluded predecessor-successor pair. This is a strong abstraction
+and its routing-frequency fidelity must be tested empirically through activity
+rates and 3-gram NGD. The earlier prefix-trie fallback is not part of the final
+methodology.
 
 \subsection{Held-Out Conformance and Case-Contract Validation}
 
-The discovered net is evaluated on the training and test partitions through
+The executable net is evaluated on the discovery, validation and final test
+partitions through
 token-based replay fitness and precision, together with PM4Py's
 \texttt{generalization\_tbr} and \texttt{simplicity\_petri\_net} measures.
 Fitness tests whether observed traces can be replayed. Precision penalises
@@ -465,14 +469,10 @@ contracts.
 The generated logs are also checked against the sequential case contract. Each
 case must contain one initial \texttt{Gate In} and one final \texttt{Gate Out}.
 Activities inside one case may not overlap, \texttt{Gate Out} may not precede
-yard work, and completion timestamps may not decrease. Gate-only paths remain
-a reported overgeneralisation diagnostic because they are explicitly permitted
-by the unchanged discovered net. They are not conflated with parallel
-execution. This separates replay coverage from physical sequence validity. The
-protocol is implemented in
-\texttt{baseline/07\_run\_prosit\_discovery.py} and
-\texttt{\_eventlog\_contract.py}. Its results are reported in
-Section~\ref{sec:results_process_discovery}.
+yard work, and completion timestamps may not decrease. Gate-only paths and
+within-case overlap are hard contract violations for the repaired model. This
+separates replay coverage from physical sequence validity. The results are
+reported in Section~\ref{sec:results_process_discovery}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Parameter Discovery Configurations}
@@ -502,6 +502,18 @@ temporal models, the implementation selects among candidate leaf sizes using
 Wasserstein-distance-based cross-validation. It does not use CRPS. A candidate
 tree that provides no useful validation improvement remains pooled. This
 internal safeguard and all other discovery logic are identical across cells.
+
+Depth three follows the standard ProSiT specification used as the controlled
+framework configuration in this study \cite{Vinci2026prosit}. It permits up to three successive
+binary partitions and is sufficient to express interactions among visit,
+location and workload state without producing very small terminal leaves.
+Deeper trees were not screened because tree depth was not a research factor:
+testing several depths on the same validation period would add another layer
+of model selection and increase the risk of attributing sample-specific splits
+to operational mechanisms. The minimum-leaf cross-validation already controls
+local sample support within the fixed depth. The conclusion is therefore
+conditional on the standard depth-three ProSiT configuration; the thesis does
+not claim that depth three is globally optimal for CTB.
 
 \paragraph{Configuration \textit{visit-only}}
 \label{sec:cfg_rules}
@@ -539,13 +551,51 @@ shows whether one source changes the contribution of the other.
 
 \paragraph{Clean-static sensitivity}
 
-A pre-specified follow-up tests whether redundancy inside the static set masks
-a useful signal. It retains the common visit and location state plus only
+An exploratory sensitivity specified before its execution tests whether
+redundancy inside the static set masks a useful signal. It retains the common
+visit and location state plus only
 \texttt{rmg}, \texttt{vc}, and \texttt{mt} demand and utilisation. It removes
 gate-wide, target-derived, bin and rank representations and keeps native
 workload disabled. This model is compared only with \textit{visit-only}. It is
 a post-hoc sensitivity, not another cell used to select among arbitrary
 feature combinations. No further ad-hoc combinations are tested.
+
+\paragraph{Treatment of correlated attributes}
+
+Correlation does not trigger automatic threshold-based feature deletion.
+Decision-tree discovery does not require mutually independent predictors, and
+several correlated CTB variables have distinct operational meanings. Their
+presence does, however, make attribution to an individual split non-unique
+because the tree can select one of several substitute predictors. The analysis
+therefore proceeds at the level of semantically defined information sources.
+The factorial design isolates static workload proxies from ProSiT's native
+dynamic state, while the clean-static sensitivity removes alternative
+aggregate, target-derived, binned and ranked representations within the static
+source. Case attributes are sampled as observed joint tuples rather than as
+independently fitted marginals, thereby preserving their empirical dependence
+structure. Retained splits are reported as an inventory of rules used by a
+particular fitted model, not as unique causal effects of individual
+attributes. Exact minute-level joins additionally prevent future observations
+from entering a case through interpolation or nearest-time matching; this is a
+temporal-integrity safeguard rather than a decorrelation procedure.
+
+\subsection{Pre-Specified Configuration Selection}
+
+The four configurations are discovered on the 64\,\% training partition and
+compared on the subsequent 16\,\% validation partition. Selection uses four
+primary errors that cover complementary perspectives: turnaround EMD,
+frequency-weighted yard-service EMD, yard-activity-rate L1 error, and
+completion-order 3-gram NGD. Paired differences use the common seeds 42--51.
+An additional state source replaces the workload-blind \textit{visit-only}
+candidate only if its 95\,\% paired interval shows an improvement in at least
+one primary error and no paired interval shows a deterioration in another.
+If several candidates satisfy this rule, the configuration with fewer added
+state sources is preferred, followed by lower mean NGD. If none satisfies it,
+\textit{visit-only} is selected. This conservative rule is fixed before the
+validation results are inspected. It reflects the burden of justifying extra
+state and prevents an unresolved improvement in one metric from overriding a
+resolved loss in another. The untouched test partition has no role in this
+decision.
 
 \subsection{Discovery Hyperparameters}
 
@@ -583,7 +633,8 @@ All four configurations receive the same training-only CTB calibration. It
 preserves the empirical zero-inflated working-minute inter-arrival sample,
 allows already admitted trucks to finish across the weekly gate closure, and
 quantises simulated timestamps to the source log's one-minute resolution.
-Routing remains the native ProSiT discovery result for the Inductive-Miner net.
+Routing remains the native ProSiT discovery result for the expert-repaired
+sequential net.
 Applying these common observation and calendar settings to all configurations keeps
 the RQ3 comparison focused on contextual model expressiveness.
 
@@ -597,12 +648,10 @@ to serve several trucks at the same time. It is also different from
 \texttt{use\_workload\_features}, which only adds workload and queue state as
 inputs to the decision trees.
 
-The full pipeline is executed by
-\texttt{baseline/07\_run\_prosit\_discovery.py}. The pickled
-\texttt{SimulatorParameters} objects
+The pickled \texttt{SimulatorParameters} objects
 (\texttt{prosit\_params.pkl}) and their JSON representations are stored
-in separate parameter-set folders. Their model roles and the compact reviewer
-handover are documented in Appendix~\ref{app:model_inspection} rather than as
+in separate parameter-set folders. Their roles and serialization contract are
+documented in Appendix~\ref{app:model_inspection} rather than as
 implementation-directory listings in the main text.
 
 \subsection{Authoritative Parameter Bundle and Serialization Contract}
@@ -613,25 +662,19 @@ reproducibility term: it denotes the exact executable
 \texttt{SimulatorParameters} state loaded by the validation and scenario
 scripts. If a derived table, JSON summary and executable state disagree,
 the serialized object that generated the reported simulations is
-the source of truth. Two provenance layers are distinguished. The four frozen,
-training-only factorial bundles are authoritative for RQ3. On the temporal
-hold-out, \textit{visit-only} is designated the within-study reference because
-it is parsimonious and reproduces activity frequencies and local 3-gram
-sequences most closely. This is a within-study model choice, not an independent
-prospective validation. The \textit{both} bundle is retained as an investigated
-but rejected model and as a scenario-response robustness comparator.
+the source of truth. Two provenance layers are distinguished. The four frozen
+64\,\%-training bundles are authoritative for the RQ3 comparison on the
+16\,\% validation period. The configuration chosen by the pre-specified rule
+is then rediscovered on the combined 80\,\% development period. This second
+bundle, not any of the four preliminary bundles, is authoritative for the
+untouched RQ1 test and the RQ4 scenarios.
 
-The standardized \textit{visit-only} pickle is the freely discovered source
-for the final data-aware scenario reference model, which is a deep-copied effective
-bundle in which the RMG concurrency values are capped at the domain maximum
-of three. It is stored as
-\texttt{params\_baseline\_rmg\_max\_concurrency\_3.pkl} in the final
-scenario result directory and is authoritative for its reported validation
-and scenario results. The same scenarios are re-run from the standardized
-\textit{both} source solely to quantify bundle-dependent response. A
-machine-readable model-role manifest records the source and derived SHA-256
-hashes, seeds, result directories and this distinction. It is stored at
-\path{validation/results/standardized_20260830_model_selection/model_role_manifest.json}.
+The freely discovered 80\,\% source bundle is retained unchanged. The
+effective scenario reference is a deep copy in which the RMG concurrency
+values are capped at the domain maximum of three. It is stored as
+\texttt{params\_baseline\_rmg\_max\_concurrency\_3.pkl} beside its two
+scenario derivatives. A machine-readable model-role manifest records the
+source and derived SHA-256 hashes, split roles, seeds and result directories.
 The discovered overlap capacities remain
 auditable without being mistaken for physically feasible capacities. All
 executable bundles contain the Petri net and markings, routing and
@@ -639,35 +682,42 @@ resource-selection rules, resource mappings and capacities, calendars,
 distribution objects, calibration metadata and the empirical sample arrays
 used for stochastic draws.
 
-The ProSiT JSON export is retained as a portable, human-inspectable
-companion, but it is not an execution-equivalent serialization of the
-calibrated object. The JSON rule nodes preserve fitted
-distribution names, parameters and representative values but do not
-serialize all empirical \texttt{sampled} arrays held in the Python
-object. This matters because the CTB calibration modifies those arrays
-and ProSiT samples from them at runtime. Reconstructing the
-final simulator from JSON alone can change its stochastic behaviour. The
-pickle is authoritative because the JSON does not fully
-represent all empirical sample arrays. This statement concerns the actual
-ProSiT serialization schema used here, not an intrinsic superiority of
-the pickle format.
+The ProSiT JSON export is retained as the portable, human-inspectable
+representation supported by the framework. For the three final CTB bundles,
+the round-trip audit in
+\path{artifacts/json\_roundtrip\_audit\_final\_ctb\_20260831/roundtrip\_summary.csv}
+confirmed that the fitted rule structures, resource capacities, calendars,
+workload flags and empirical case-attribute distributions are reconstructed
+consistently. It also showed a CTB-specific difference that matters for exact
+numerical reproduction: each frozen pickle contains 39 runtime rule nodes
+with empirical \texttt{sampled} arrays, including 71,530 calibrated arrival
+samples, whereas the corresponding object immediately after
+\texttt{from\_json()} contains no sampled nodes. The serializer removes these
+arrays and the runtime can regenerate them lazily from the stored fitted
+distributions. Consequently, a JSON-reconstructed object is a valid portable
+description of the discovered model, but it is not guaranteed to be
+numerically identical to the post-calibration object that produced the CTB
+results. The pickle is therefore the authoritative execution snapshot for
+the reported experiments, while JSON remains the inspection and interchange
+format. This is an observed property of the exact CTB bundles and installed
+ProSiT version, not a claim that JSON is generally inferior to pickle.
 
 The companion files \texttt{prosit\_run\_summary.json},
 \texttt{control\_flow\_contract.json} and
 \texttt{ctb\_calibration.json} document provenance and intended changes.
 Validation and scenario scripts record SHA-256 hashes of their source
 pickles, and scenario bundles are produced by deep copy rather than by
-mutating the frozen baseline. Pickle is Python- and class-version-specific
-and must never be loaded from an untrusted source. Reproducibility
-requires the recorded software environment. These limitations are the
-reason for retaining the JSON companions even though they are not the
-authoritative runtime state.
+mutating the frozen baseline. The audit script and manifest are included
+with the thesis artefacts so that the reported distinction can be checked
+independently. Pickle is Python- and class-version-specific and must never
+be loaded from an untrusted source. Reproducibility requires the recorded
+software environment. These limitations explain why both formats are
+retained: JSON supports transparent inspection, while pickle preserves the
+exact trusted runtime snapshot.
 
-Appendix~\ref{app:model_inspection} maps the PNML, baseline and scenario
-pickles, readable JSON companions, notebooks, expected results, and provenance
-files in the independently uploadable reviewer package. This provides a direct
-inspection path without moving technical file inventories into the main
-methodological argument.
+Appendix~\ref{app:model_inspection} distinguishes the descriptive process view
+from the executable Petri net and serialized parameter state without moving
+technical directory inventories into the main methodological argument.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Monte-Carlo Replication Protocol}
@@ -687,15 +737,29 @@ interval.
 
 \subsection{Replication Design}
 
-The same replication design is used for the four ProSiT configurations
-$c\in\mathcal{C}=\{\textit{visit-only},\textit{static-only},
-\textit{native-only},\textit{both}\}$. For each configuration, the stored parameter
-bundle is loaded and a fresh simulation engine is created. Ten runs are then
+The same replication design is used for all four ProSiT configurations:
+\begin{equation}
+\mathcal{C}=\{\textit{visit-only},\ \textit{static-only},\
+\ \textit{native-only},\ \textit{both}\}.
+\end{equation}
+For each configuration $c\in\mathcal{C}$, the stored parameter bundle is
+loaded and a fresh simulation engine is created. Ten runs are then
 generated with the seeds $s_i=42+i$ for $i=0,\ldots,9$. Each run starts at the test cutoff
 $t_{\mathrm{start}}=\text{2026-04-20 18:17:00}$ and generates
 $n_{\mathrm{traces}}=17{,}892$ cases. The start time and case count are read
 from the split manifest so that every simulated log represents the same window
 as the held-out data.
+
+ProSiT initializes each replication with the Petri-net initial marking, no
+active cases and empty resource schedules. It does not reconstruct trucks that
+entered before the temporal cutoff and were still inside the terminal at that
+instant. The comparison therefore evaluates a terminating simulation started
+at the observed boundary, not a fully observed steady-state snapshot. This
+initial-condition limitation can affect the earliest generated cases and is
+reported as such. It is shared by all configurations and all matched scenario
+runs, so paired intervention effects are not created by different warm-up
+states. A future operational deployment should initialize the engine from live
+work in progress or use a documented warm-up period.
 
 Let $m_{c,i}$ be one fidelity metric for configuration $c$ and seed $s_i$.
 The reported value is the mean across the $N=10$ runs. Its 95\,\% Student-$t$
@@ -725,23 +789,21 @@ is
  I=(Y_{\mathrm{both}}-Y_{\mathrm{static}})
    -(Y_{\mathrm{native}}-Y_{\mathrm{visit}}).
 \end{equation}
-The four-cell discovery and simulation are orchestrated by
-\texttt{validation/22\_run\_feature\_source\_factorial.py}. Paired effects and
-the interaction are calculated by
-\texttt{validation/21\_feature\_source\_factorial.py}. The clean-static
-sensitivity uses the identical split, runner and seeds.
+The clean-static sensitivity uses the identical split, execution contract and
+seeds.
 
-\paragraph{Implementation}
-
-The protocol is implemented in
-\texttt{validation/06\_multi\_seed\_ci.py}. \(N_{\text{seeds}}=10\) is
-used for every configuration. This mirrors the $K=10$ design used by
-Chapela-Campa et al. while remaining computationally feasible for the
-17,892-case CTB test window \cite{ChapelaCampa2023Trust}. The resulting
-Student-$t$ intervals quantify simulation sampling uncertainty
-conditional on one frozen model and one fixed test log. With only ten
-replications, they are not estimates of discovery or input-model
-uncertainty. The base seed is 42.
+\(N_{\text{seeds}}=10\) is used for every configuration. Independent
+replications are the standard output-analysis unit for a terminating
+stochastic simulation because each run provides one independent observation
+of the statistic generated by the fixed input model \cite{Law2015Simulation}.
+Ten replications also match the multi-log validation design used for business
+process simulation while remaining computationally feasible for the
+17,892-case CTB evaluation window \cite{ChapelaCampa2023Trust}. The
+Student-$t$ interval is appropriate because the reported quantity is the mean
+of replication-level metrics and the simulation variance is estimated from a
+small sample. It is used as a transparent uncertainty summary, not as evidence
+that ten runs identify input-model or discovery uncertainty. Those sources of
+uncertainty remain outside the interval. The base seed is 42.
 
 The choice to seed Python's \texttt{random} and \texttt{numpy.random}
 before each \texttt{engine.apply()} rather than the ProSiT engine
@@ -757,6 +819,18 @@ variability that a user would observe in production.
 
 The comparison of a simulated event log against the real held-out log uses complementary distributional and point-statistic measures.
 Each metric is computed once per Monte-Carlo replication so that a confidence interval can be attached to the point estimate.
+
+The metric set follows the intended use of the model rather than collapsing
+validity into one score \cite{Sargent2013Validation,Chapela2025SimQuality}.
+Conformance and the case contract assess whether the control-flow language can
+represent the terminal process. Activity-rate L1 and NGD assess what the
+simulator actually generates within that language. Wasserstein distances
+assess the complete timing distributions in their natural unit of minutes,
+while mean, median and P90 errors remain directly interpretable for terminal
+management. Bottleneck decomposition then locates accumulated time without
+claiming that an observational gap is a causal queue. Reporting these views
+separately avoids an arbitrary weighted validity index and makes trade-offs
+between structural, temporal and operational fidelity visible.
 
 \paragraph{Wasserstein Distance (EMD)}
 
@@ -802,7 +876,7 @@ For each distribution pair the two-sample KS statistic is computed by
 events, sub-sampling is applied so that each side contributes at most
 $10{,}000$ observations to the test. This limits computational cost and
 the extreme sample-size sensitivity of the associated significance test.
-it does not turn the $p$-value into a fidelity effect size. The KS
+It does not turn the $p$-value into a fidelity effect size. The KS
 statistic (magnitude of the maximum vertical CDF gap) is reported
 alongside the EMD as the main measure. The $p$-value is retained
 only as a secondary diagnostic.
@@ -858,8 +932,7 @@ tie breaking, matching the published metric convention. The ITS
 schedule-derived case order stored in XES is retained as a sensitivity because
 three held-out cases contain small
 timestamp inversions. NGD complements, rather than replaces, complete-trace
-conformance and the case-language contract. It is implemented in
-\texttt{validation/19\_ngram\_control\_flow\_distance.py}.
+conformance and the case-language contract.
 
 \paragraph{Frequency-Weighted Bottleneck Decomposition}
 
@@ -877,25 +950,17 @@ The gap is not interpreted as pure queueing. It may combine movement,
 traffic or transfer, dispatching, and resource waiting. Resource-level overlap
 at event start is reported as a separate diagnostic against the cap of three,
 but overlap in a pooled block label is not treated as a physical crane count.
-The procedure is implemented in
-\texttt{validation/13\_bottleneck\_analysis.py}. Its causal scope is limited to
-identifying accumulation points that require further physical modelling.
+Its causal scope is limited to identifying accumulation points that require
+further physical modelling.
 
 A targeted \texttt{LL\_mixed} audit complements the aggregate ranking. It
 counts its position and direct successors in both temporal partitions and
 compares a successor's composite pre-service gap after \texttt{LL\_mixed} with
 the same activity after other predecessors. This describes whether the rare
 branch is associated with a distinct downstream time burden. It does not turn
-seven multi-yard observations into a mandatory routing rule. The reproducible
-implementation is
-\texttt{validation/20\_ll\_mixed\_sequence\_bottleneck\_audit.py}.
-
-\paragraph{Implementation}
-
-The metric definitions are implemented in
-\texttt{validation/02\_validate\_simulation.py} and reused verbatim by
-\texttt{validation/06\_multi\_seed\_ci.py} to guarantee that
-single-shot and multi-seed numbers are directly comparable.
+seven multi-yard observations into a mandatory routing rule. The same metric
+definitions are reused for single-run diagnostics and multi-seed evaluation so
+that their values remain directly comparable.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{What-If Scenario Design}
@@ -915,15 +980,15 @@ an acceptable terminal-wide average can conceal a harmful shift for one
 handling pattern.
 
 Two independent interventions are evaluated to address RQ4. Both are
-derived by deep copy from the frozen, training-only calibrated
-\textit{visit-only} reference bundle. The RMG ceiling is applied to the deep
-copy before either intervention is derived. No held-out observation is used to
-define or fit a scenario parameter, although the within-study reference bundle
-itself was selected in the preceding hold-out comparison. The same
-interventions are independently derived from the standardized \textit{both}
-bundle to test scenario-response robustness. The experiments are deliberately
-simple tests of this decision-support chain, rather than proposed operating
-policies.
+derived by deep copy from the final calibrated reference bundle. Configuration
+selection uses only the 16\,\% validation segment within the earlier 80\,\%
+period. The selected configuration is then rediscovered on the combined
+80\,\% development period before it is evaluated once on the untouched final
+20\,\% test period. The RMG ceiling is applied to a deep copy of this final
+bundle before either intervention is derived. Neither the test observations
+nor the scenario outcomes define a scenario parameter. The experiments are
+deliberately simple tests of this decision-support chain, rather than proposed
+operating policies.
 
 Both interventions use inspectable ProSiT parameters, but they do not exercise
 the complete white-box intervention space. Scenario~A changes a resource
@@ -999,20 +1064,12 @@ remain empirical or technical abstractions and are evaluated as such.
 This is a transparent domain constraint rather than a data-driven
 recalibration. The freely discovered source remains frozen as discovery
 evidence, whereas the cap-three copy is the authoritative effective CTB
-baseline. An uncapped comparison is retained from the earlier fully
-contextualised Inductive-Miner bundle only as a diagnostic of what the
-overlap-derived parameter would imply. It is not presented as an uncapped
-counterpart to the later selected \textit{visit-only} reference. Its capped
-and uncapped replications use identical seeds, trace counts and start time.
-In addition to direct cap effects, that diagnostic comparison reports
-the interaction
-\begin{equation}
-\Delta_{\mathrm{interaction}}=
-(Y_{\mathrm{scenario}}-Y_{\mathrm{baseline}})_{c\leq3}
--(Y_{\mathrm{scenario}}-Y_{\mathrm{baseline}})_{\mathrm{discovered}},
-\end{equation}
-so that changes in scenario response are not confused with a general
-level shift caused by the cap.
+baseline. A matching uncapped copy of the final selected \textit{visit-only}
+bundle is evaluated on the same test period with identical seeds, trace counts
+and start time. This paired sensitivity determines whether the physical cap
+materially changes the reported historical fidelity. It does not use the test
+result to choose or fit the cap; the ceiling is retained because it is a
+validated domain constraint.
 
 \paragraph{Capacity-Pressure Diagnostic}
 
@@ -1030,8 +1087,7 @@ approaches mean saturation under the capacity assumption. A separate
 minute-grid overlap check reports the observed share of time at or above
 capacity. It is interpreted cautiously because minute-resolved timestamps
 can create or hide short overlaps and because block identifiers are not crane
-trajectories. The reproducible implementation is
-\texttt{validation/18\_rmg\_capacity\_pressure\_audit.py}.
+trajectories.
 
 \paragraph{Demand-Saturation Ladder}
 
@@ -1058,24 +1114,29 @@ This ladder is a diagnostic response-surface experiment, not a forecast that
 CTB would admit two or three times its observed truck volume. It distinguishes
 an intervention that is simply too modest to reach the model's capacity region
 from a simulator that fails to propagate demand pressure even when the
-nominal offered-load threshold is crossed. The executable implementation
-is \texttt{saturation\_experiment.py} in the reviewer handover package.
+nominal offered-load threshold is crossed. The intervention also has a direct
+operational interpretation. Terminal management cannot choose the realised
+arrival process exactly, but it can influence the admitted truck rate through
+slot availability and the number of staffed gate lanes. The response curve
+therefore asks at which offered arrival rate the simulated terminal moves from
+absorbing additional demand to accumulating material congestion. Its higher
+levels are stress-test points used to identify that transition, not proposed
+operating plans.
 
 \paragraph{Reporting}
 
-All central simulation tables use the same deterministic execution path in
-\texttt{\_prosit\_ctb\_calibration.py}. In addition to setting NumPy and Python
-seeds, this adapter orders equally weighted enabled transitions before drawing
+All central simulation tables use the same deterministic execution path. In
+addition to setting NumPy and Python seeds, the execution adapter orders
+equally weighted enabled transitions before drawing
 from ProSiT's routing probabilities. This removes dependence on Python set
 iteration without changing the Petri net, learned probabilities or random
 draw. Historical fidelity, the four-cell feature-source experiment, cap sensitivity,
 both policy scenarios, bundle sensitivity and the demand ladder are therefore
 derived from one runner contract. A machine-readable provenance manifest in
-the reviewer package records the source-bundle and result-file hashes, seeds,
+the research project records the source-bundle and result-file hashes, seeds,
 trace count and authoritative result directories.
 
-The unified driver \texttt{validation/09\_multi\_seed\_scenarios.py}
-executes baseline and both interventions with ten matched seeds
+Baseline and both interventions are executed with ten matched seeds
 (42--51), $n_{\text{traces}}=17{,}892$ and
 $t_{\text{start}}=\text{2026-04-20 18:17}$. All paired deltas use
 common random numbers. Mean, median and 90th percentile of turnaround,
@@ -1090,13 +1151,11 @@ the run. The 24-hour threshold used for robust historical distance metrics is
 not a physical case contract. Simulated service events or visits above it are
 retained in raw scenario KPIs and reported by seed and scenario instead of
 being silently removed or replaced. A separate diagnostic invocation with
-\texttt{--no-rmg-cap} reproduces the 30 uncapped overlap-capacity replications
-for the earlier fully contextualised bundle.
-\texttt{validation/10\_compare\_rmg\_capacity\_sensitivity.py} verifies
-identical source hashes and settings before computing the paired direct
-effects and interactions. These uncapped results are diagnostic only and
-are excluded from the authoritative final result table and from selection of
-the final reference model. The 30 \textit{visit-only} cap-three scenario logs
+\texttt{--no-rmg-cap} reproduces the uncapped final baseline from the same
+80\,\%-development source bundle. The capacity comparison verifies identical
+source hashes, seeds and settings before computing the paired
+cap-three-minus-uncapped effects. These uncapped results are diagnostic only
+and are excluded from configuration selection. The 30 cap-three scenario logs
 form the primary final scenario evidence.
 The 60 demand-saturation replications are stored separately and interpreted as
 a diagnostic stress test rather than a third operational policy scenario.
@@ -1113,8 +1172,7 @@ difference-in-differences
 \end{equation}
 Student-$t$ intervals over the ten $D_{q,i}$ values distinguish a response
 that is robust across the selected and rejected bundles from one that appears
-only in a particular parameterization. The comparison is implemented in
-\texttt{validation/17\_compare\_scenario\_state\_ablation.py}.
+only in a particular parameterization.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Descriptive Transition-Duration Analysis}
@@ -1133,9 +1191,8 @@ recomputed with the 5th, 10th, 25th and 50th percentiles as
 alternative choices. For each transition $(a,b)$ with at least twenty
 observations the resulting baseline duration is reported together with
 the shift relative to the 5th percentile and the Pearson correlation
-between percentiles. This analysis is implemented in
-\texttt{validation/04\_baseline\_percentile\_sensitivity.py} and
-reported in Section~\ref{sec:results_percentile_sens}. It does
+between percentiles. The analysis is reported in
+Section~\ref{sec:results_percentile_sens}. It does
 \textbf{not} affect ProSiT's simulation-parameter discovery. Its
 purpose is to illustrate that the model-derived pre-service delay
 includes a non-trivial physical-movement component that cannot be
@@ -1169,36 +1226,6 @@ correlations, and empirical sampling from the training distribution is
 the appropriate choice given the number of categorical attributes
 present in the CTB log.
 
-\paragraph{Simulation in No-Rules Mode}
-
-In \textit{no-rules} mode ProSiT samples the routing choice via
-\texttt{random.choice(seq)} where \texttt{seq} is a
-\texttt{numpy.ndarray}. Python's built-in \texttt{random.choice}
-evaluates \texttt{if not seq:}, which raises
-\texttt{ValueError: The truth value of an array with more than one
-element is ambiguous.} on multi-element numpy arrays. The workaround is
-a minimal monkey patch that intercepts \texttt{random.choice} while the
-engine is running and forwards \texttt{numpy.ndarray} arguments through
-\texttt{numpy.random.randint}. The patch is contained to the
-simulation call and is restored immediately afterwards. It is applied
-by both \texttt{baseline/07\_run\_prosit\_discovery.py} and
-\texttt{validation/06\_multi\_seed\_ci.py}.
-
-\paragraph{Duplicated Columns in the Simulated Log}
-
-ProSiT 1.0.3 writes case-level attributes into the event-level frame
-returned by \texttt{SimulatorEngine.apply()}. When a case-level
-attribute has the same name as an event attribute (in the CTB log this
-happens for \texttt{enabled:timestamp} because ProSiT writes case-level
-attributes into the event-level frame), the resulting
-\texttt{pandas.DataFrame}
-carries duplicate column labels. Standard operations such as
-\texttt{pd.to\_datetime(df[col])} then return a \texttt{DataFrame} slice
-instead of a \texttt{Series} and fail. The workaround is a single
-\texttt{df.loc[:, \textasciitilde df.columns.duplicated()]} call at the
-start of every KPI-computation function. It is applied both in the
-what-if scripts and in the multi-seed CI driver.
-
 \paragraph{Temporal Features Outside the ProSiT Input}
 
 The final discovery contract does not pass hour-of-day or day-of-week
@@ -1220,8 +1247,8 @@ Python's \texttt{random} and \texttt{numpy.random} before every call to
 however. ProSiT obtains enabled transitions from a set, while PM4Py hashes
 transition objects by in-memory identity. After a model is reloaded, the same
 enabled transitions can therefore be presented to the weighted sampler in a
-different order and consume the same random draw differently. The reviewer
-runner canonicalises this list by the stable Petri-net transition name
+different order and consume the same random draw differently. The deterministic
+execution adapter canonicalises this list by the stable Petri-net transition name
 immediately before the existing weighted draw. It changes neither the net nor
 the learned transition weights. Independent fresh-process runs with the same
 seed then produce identical result tables. This stable ordering, together with

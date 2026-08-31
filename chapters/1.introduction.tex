@@ -112,10 +112,13 @@ improves this fidelity, and investigates how the data-aware model responds to
 transparent operational interventions. Together, these analyses are intended
 to distinguish between reproducing historical behaviour, constructing an
 executable simulation model, and supporting credible what-if reasoning.
-The later period is a within-study evaluation hold-out: it is not used for
-parameter discovery, but it does inform the comparison and selection of the
-reported reference configuration. Its results are therefore retrospective
-evidence for this case study, not an independent prospective validation.
+The chronological development period is divided once more into discovery and
+validation partitions. The four ProSiT configurations are discovered on the
+first partition and compared on the next. Only the selected configuration is
+then rediscovered on the combined development data and evaluated on the final
+20\,\% temporal test period. The test period is therefore untouched by model
+selection. Its results remain retrospective evidence from one terminal and
+should not be confused with prospective field validation of an intervention.
 
 The thesis contributes an empirical evaluation of data-aware process
 simulation in container terminal truck operations. First, it examines the
@@ -162,7 +165,7 @@ remainder of the thesis.
 
 \begin{enumerate} 
 \item \textbf{RQ1:} To what extent can a ProSiT simulation model discovered from historical CTB truck-operation data reproduce the observed behaviour of an unseen temporal hold-out?
-\item \textbf{RQ2:} To what extent can the discovered process structure represent held-out CTB truck-handling behaviour while respecting the physical sequential constraints of a truck visit?
+\item \textbf{RQ2:} To what extent can the discovered and transparently domain-repaired process structure represent held-out CTB truck-handling behaviour while respecting the physical sequential constraints of a truck visit?
 \item \textbf{RQ3:} How does increasing the contextual expressiveness of the simulation model affect held-out simulation fidelity in the CTB truck process?
 \item \textbf{RQ4:} How does the discovered simulation model respond to transparent operational interventions, and what do these responses reveal about its suitability and limitations for what-if decision support?
 \end{enumerate} 
@@ -193,27 +196,29 @@ characteristics of the final simulation-ready event log.
 
 Chapter~\ref{chp:experiments_and_framework} defines the experimental and
 evaluation framework used to answer the research questions. It introduces the
-temporal train/test split and describes the control-flow discovery procedure,
+temporal train/validation/test split and describes the control-flow discovery procedure,
 including the preservation of the ITS schedule-derived stop order stored in
 XES, the complementary
 directly-follows and Petri-net views, and the structural domain check applied
-to the final Inductive-Miner model.
+to the raw Inductive-Miner model. It then defines the expert-supported
+sequential source-model repair used consistently for parameter discovery.
 The chapter then defines four ProSiT parameter-discovery configurations in a
 $2\times2$ feature-source design and documents the executable parameter
 bundles used in the experiments. In addition, it specifies the
 Monte-Carlo replication protocol, the distributional fidelity measures, the
-paired ablation and temporal-transfer audits, a precision-oriented structural
-repair used as a robustness test, the two what-if interventions, and the
+paired ablation and temporal-transfer audits, the two what-if interventions, and the
 transition-duration sensitivity analysis.
 The final section documents the technical adaptations required to apply
 ProSiT to the CTB event log reproducibly.
 
 Chapter~\ref{chap:results} presents the empirical findings following the logic
-of the four research questions. It first examines the temporal train/test
-split and the stability of the observed control-flow language in the held-out
-period. It then evaluates the historical fidelity of the final simulation
-baseline and compares the four ProSiT configurations to separate the effects
-of static workload proxies and ProSiT's native workload state. Further diagnostic analyses examine
+of the four research questions. It first examines the temporal
+train/validation/test design and the stability of the observed control-flow
+language. It then compares the four ProSiT configurations on validation data,
+rediscovers the selected configuration on the complete development period,
+and evaluates its historical fidelity once on the untouched test period. The
+comparison separates the effects of static workload proxies and ProSiT's
+native workload state. Further diagnostic analyses examine
 the predictive signal contained in the available context attributes, the
 strong temporal structure of truck arrivals, the discovered resource
 capacities, and the interpretation of model-derived pre-service delays. The

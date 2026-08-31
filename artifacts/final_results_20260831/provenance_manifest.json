@@ -1,0 +1,35 @@
+{
+  "schema": "ctb-final-results-provenance-1",
+  "generated_on": "2026-08-31",
+  "design": {
+    "split": "chronological 64% discovery, 16% validation, 20% untouched test",
+    "selection": "pre-specified paired multi-metric rule on validation only",
+    "selected_configuration": "visit_only",
+    "final_discovery": "selected configuration rediscovered on combined 80% development data",
+    "control_flow": "expert-repaired sequential CTB contract",
+    "seeds": [42, 43, 44, 45, 46, 47, 48, 49, 50, 51],
+    "rmg_constraint": "maximum concurrency three per block"
+  },
+  "source_bundle": {
+    "path": "trucksimulation/validation/results/tvt_final_visit_only_scenarios_cap3_20260831/params_baseline_rmg_max_concurrency_3.pkl",
+    "sha256": "e18a056975ea7145a6f550ddbd4173e50e9154cc27dde6f9443929161b719a6a"
+  },
+  "files": {
+    "control_flow_contract.json": "1CC32F6FE96C880F25E034D452BE95BCFC6BD3A016B9C17DB2C9F8FE551A11CB",
+    "final_test_cap3_mc_summary.csv": "F8047B89DFAE6B95942AB130220237B83D058B759A1A6BCC165533879707682A",
+    "final_test_ngd_summary.csv": "CF5EB435A651563FF201371A413E9933C9AD44ED2D9D757D69154F1D9C39B923",
+    "final_test_uncapped_mc_summary.csv": "6883CF99496075E0484432054F1254F56BCFC94E987D8AA811942BD2DC5C97BA",
+    "prosit_conformance.csv": "50213926BA18B96265E1CB2342B5424AE94EDCDE66C1EF7E937F15682B7B545D",
+    "scenario_kpi_summary.csv": "72A2ED8D757EF82944D1D92FEE1D3282DF5F9A09E1E19935DC5EEA0A57CFE42D",
+    "scenario_paired_delta_summary.csv": "A24475F2121B39691FFEE045EDD7CE7A30D350DD99E26212678959297C6AE853",
+    "scenario_parameter_changes.json": "AAC529C86DD935AE2FED2499E713800D60353B37451C1239543B0D28221E5AD0",
+    "selection_contrasts.csv": "4CCC8FD1B28C7A2EA4F217C9E5E90B7FA15FB30352CBF9AA52912F4ACE55CD7F",
+    "selection_manifest.json": "9E0E8BD3CDE966E43AE40CA34B8BD48A4534D3E9E55222E159AA5E49CD81A890",
+    "split_manifest_64_16_20.json": "4836A1EBC917601C2380ECF221DEAB2A38FA31F3AB1B9AB89FC712B5253320B7"
+  },
+  "json_roundtrip_audit": {
+    "path": "artifacts/json_roundtrip_audit_final_ctb_20260831",
+    "scope": ["baseline", "t22_closed", "demand_plus_20pct"]
+  },
+  "pending_at_manifest_creation": "final selected-bundle demand-saturation ladder"
+}
