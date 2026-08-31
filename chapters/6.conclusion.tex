@@ -22,8 +22,8 @@ are treated as the ordering relation. The raw Inductive-Miner result still
 requires an explicit domain repair: on the 64\,\% discovery partition it
 contains three parallel operators, and the 80\,\% rediscovery retains a
 gate-only bypass (fitness 0.999994, precision 0.7558). Both properties
-conflict with the expert-validated case contract. The final executable model
-is the expert-repaired sequential Petri net, which enforces sequential yard
+conflict with the expert-validated case contract. The common executable
+control-flow model is the expert-repaired sequential Petri net, which enforces sequential yard
 handling and removes the bypass. On the temporal hold-out it achieves fitness
 1.0 and test precision 0.7641.  This is the single model used by all four
 ProSiT configurations and for every reported simulation result.
@@ -38,7 +38,8 @@ rule. Its rarity also means that \texttt{LL\_mixed} contributes only
 0.0328\,\% of held-out turnaround burden and does not constitute a
 frequency-weighted bottleneck.
 
-The answer to RQ1 is mixed. The selected cap-three \textit{visit-only} model
+The answer to RQ1 is mixed. The selected cap-three \textit{visit-only}
+historical-reference model
 reproduces arrivals closely, with an inter-arrival EMD of 0.072 minutes. Its
 yard-service EMD is 3.150 minutes without frequency weighting and 2.341 minutes
 when weighted by the real activity frequencies. Complete truck turnaround is
@@ -57,8 +58,18 @@ to 5.28 minutes. Their frequency-weighted boundary contribution is 7.62
 minutes per visit, comparable in scale to the mean turnaround deficit. These values
 support a non-zero movement and transfer component between recorded
 activities, but they do not separate travel, traffic, dispatching, access
-delay, and queueing. Adding them to the current pre-service distributions
-would risk counting the same elapsed time twice.
+delay, and queueing. A separate transition component cannot be introduced
+defensibly without first estimating movement and refitting the remaining
+pre-service distribution. Otherwise, part of the observed gap would be
+represented twice.
+
+The same limitation is visible directly in the main RMG patterns. Relative to
+the observed previous-completion-to-start gap, the \textit{visit-only}
+historical-reference model underpredicts
+mean composite pre-service delay by about 5.75 minutes for receive handling and
+4.04 minutes for delivery handling. ProSiT's enabled timestamp is correct
+relative to the Petri-net marking, but no physical readiness timestamp exists
+against which it could be validated.
 
 The held-out bottleneck decomposition reinforces this interpretation. Of the
 39.742-minute real mean turnaround, recorded handling contributes 14.755
@@ -79,29 +90,34 @@ therefore selects \textit{visit-only} as the parsimonious historical reference.
 This is a model-selection result for replay fidelity, not a claim that the
 configuration is adequate for every intervention.
 
-The purpose-specific stress audit adds the missing functional test. Under the
-same demand ladder, \textit{visit-only} remains effectively invariant even at
-the highest tested rate. \textit{Native-only} is historically comparable but
-develops resolved increases in turnaround and RMG pre-service once the
-realised arrival-rate ratio moves from 2.367 to 2.825. The smallest model
-capable of representing this endogenous response is therefore used for the
-demand scenario. This adaptive role assignment is reported separately from
-the pre-specified RQ3 selection. It does not identify a globally best model.
-The available state still cannot reconstruct truck position, container
-location, equipment movement, spatial queues, or changing
+The intervention audit exposes the limitation of that historical selection.
+Under the same demand ladder, \textit{visit-only} remains effectively invariant
+even at the highest tested rate. The cap-three \textit{native-only} bundle is
+the minimal tested configuration containing the endogenous state pathway
+needed to test whether changed arrivals reach a fitted waiting-time rule. It is
+therefore used as a demand-propagation mechanism probe, not because its
+response proves that it is a better or validated simulator. Its historical
+differences from
+\textit{visit-only} are small and unresolved, but this does not establish
+equivalence. The available state still cannot reconstruct truck position,
+container location, equipment movement, spatial queues, or changing
 waterside--landside allocation when those relations are absent from the event
 log.
 
-RQ4 makes this validity boundary visible. Both operational interventions are
-implemented reproducibly in the cap-three \textit{native-only} scenario model.
-Removing T22 produces no resolved turnaround effect and only a small change in
-model-derived RMG pre-service. Increasing working-time arrival intensity by
-20\,\% raises elapsed arrival rate by 15.910\,\% but likewise produces no
-resolved turnaround response. The selected demand change is therefore below
-the model's response region.
+RQ4 is consequently intervention-specific. The T22 experiment tests executable
+resource-pool removal and reassignment. Removing T22 produces no resolved
+turnaround effect and only a small change in model-derived RMG pre-service, but
+the model lacks persistent container location, relocation, and movement
+semantics. The result therefore cannot be interpreted as evidence that closing
+a physical block would have little effect. The demand experiment tests whether
+increased arrivals can propagate through endogenous state. Increasing
+working-time arrival intensity by 20\,\% raises elapsed arrival rate by
+15.910\,\% but produces no resolved turnaround response. The selected change is
+below the model's response region.
 
-The extended demand ladder demonstrates that this is a threshold effect inside
-the simulator, not a general inability to propagate demand. At a realised
+The extended demand ladder shows an apparent threshold-like response under
+this fitted simulator and experimental design, rather than a general inability
+to propagate demand. At a realised
 ratio of 2.825, mean turnaround increases by 1.815 minutes and mean RMG
 pre-service by 2.318 minutes. At ratio 3.504, the increases are 4.069 and
 5.221 minutes.  Because the ladder keeps the case count fixed while
@@ -119,7 +135,7 @@ no learned threshold or subtree is edited.
 The expert-validated ceiling of three RMGs per block illustrates the
 difference between empirical parameter discovery and physical admissibility.
 Overlap-derived capacities above three are retained as discovery evidence but
-are capped in the effective scenario model. The paired capped-versus-uncapped
+are capped in the effective execution bundles. The paired capped-versus-uncapped
 diagnostic for the historical reference does not resolve a direct
 mean-turnaround effect. The ceiling is therefore retained because the uncapped
 state is physically impossible, not because it produces the headline findings.
@@ -129,22 +145,26 @@ simulation-model generation in port logistics. The thesis provides a
 reproducible CTB event-log and ProSiT workflow, a temporal and multi-seed
 evaluation, an empirical comparison of alternative state sources, and a clear
 separation between discovered parameters, expert-supplied constraints, and
-scenario interventions. The strongest defensible contribution is not a
-validated truck-terminal simulator for reliable operational decision-making.
-It is a layered, data-aware methodology for diagnosing when a
-process-mining-based simulation reproduces historical observations, where
-apparent validity breaks down, and why historical fit does not automatically
-imply scenario validity.  The simulator itself should be understood as a
-research prototype and diagnostic instrument.  More importantly, the study demonstrates why control-flow
+intervention edits. The strongest defensible contribution is not a validated
+truck-terminal simulator for reliable operational decision-making. It is a
+methodology for diagnosing when a process-mining-based simulation reproduces
+historical observations and when its state lacks the mechanism required by a
+particular intervention.
+
+The case demonstrates that historical fidelity is a necessary screening
+criterion, not a sufficient selection rule for what-if simulation. The
+workload-blind benchmark reproduces historical process properties but omits an
+endogenous demand pathway. Native state supplies such a pathway in the fitted
+simulator, while the resulting magnitude and threshold remain unvalidated
+against physical CTB congestion. T22 exposes a different boundary because
+resource-pool reallocation is executable but spatial relocation is absent. The
+adaptive mechanism audit is therefore exploratory, and its stress response is
+an outcome rather than a criterion used to select a model. Control-flow
 conformance, stochastic fidelity, temporal transfer, physical semantics, and
 counterfactual validity must not be collapsed into one claim of simulation
-accuracy. It also shows that model selection is objective-dependent:
-the parsimonious historical reference and the minimal responsive scenario
-model need not be the same bundle. A model can have almost perfect held-out replay fitness while
-underestimating turnaround. A richer feature set can perform worse than a
-simpler one. A physically impossible capacity can be inferred from overlapping
-timestamps. A technically correct intervention can still lack the mechanism
-required for a physical forecast.
+accuracy. A model can have almost perfect held-out replay fitness while
+underestimating turnaround, and a technically correct intervention can still
+lack the mechanism required for a physical forecast.
 
 The empirical scope is the retained one-RMG subprocess rather than all CTB
 truck movements. The case-level representation excludes 1,693 multi-RMG visits
@@ -168,6 +188,14 @@ while extending the mechanisms and evidence that currently limit physical and
 counterfactual interpretation:
 
 \begin{itemize}
+    \item \textbf{Pre-specify joint model-selection criteria.}
+    Historical fidelity should remain a necessary screen, but parsimony should
+    be evaluated subject to the mechanism required by the intended intervention.
+    Intervention response should then be reported as an outcome of that
+    pre-specified eligible model, not as a reason to search for a more responsive
+    configuration. Explicit equivalence or non-inferiority margins would make
+    the historical screen more informative.
+
     \item \textbf{Separate physical movement from residual pre-service delay.}
     Route, position, or equipment observations are required to estimate
     transition-specific movement and then refit the remaining access and

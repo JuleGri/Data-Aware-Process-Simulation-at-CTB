@@ -525,10 +525,46 @@ process-model alignment during the simulation-parameter discovery
 phase (Section~\ref{sec:simulation_discovery_methodology}).  ProSiT
 uses an A*-based optimal alignment as defined in
 Section~\ref{sec:astar_alignment_definition} to relate each observed
-event to a transition and determine when that transition becomes enabled
-in the discovered Petri net, then computes a model-derived pre-service
-delay relative to both the enablement time and the resource's
-availability schedule.
+event to a transition and replay the marking. During replay, the model clock
+advances to the completion timestamp of each synchronous visible event.
+Transitions that subsequently become enabled receive that clock value, while
+invisible model moves do not advance time. During simulation, ProSiT attaches a
+timestamp to every place token. For a transition $t$ with input places
+${}^{\bullet}t$, its structural enablement time is
+\begin{equation}
+    t_{\mathrm{enabled}}(t)
+    = \max_{p\in{}^{\bullet}t} t_{\mathrm{token}}(p).
+\end{equation}
+The initial token receives the simulated case-arrival time. A completed visible
+transition places tokens carrying its completion time, and a silent transition
+passes the current token time through the marking. In the expert-repaired
+sequential CTB net this gives the particularly simple identity
+\begin{equation}
+    t_{\mathrm{enabled},i}=t_{\mathrm{complete},i-1}
+\end{equation}
+for every visible activity after \texttt{Gate In}. Gate In is enabled at the
+simulated case-arrival time. This is the concrete meaning of ProSiT's generated
+\texttt{enabled:timestamp} in the present model
+\cite{Vinci2026prosit,ProSiTRepository}.
+
+ProSiT 1.0.3 then treats structural enablement and resource availability as
+separate steps. During discovery it determines when the observed resource is
+available after structural enablement and fits a residual waiting-time model
+from that resource-availability time to the observed start, measured in active
+calendar minutes. During simulation, a case whose eligible resource capacity
+is occupied first advances to the selected resource's availability time. A
+waiting-time value is then sampled from the applicable fitted distribution and
+added through the resource calendar. The event written to the simulated log
+retains the earlier structural enablement time. Therefore
+\begin{equation}
+    t_{\mathrm{start}}-t_{\mathrm{enabled}}
+    = D_{\mathrm{capacity}}+D_{\mathrm{fitted\ residual}}
+      +D_{\mathrm{calendar}}
+\end{equation}
+at the level of simulation semantics. The first activity of a case receives no
+sampled waiting time. These steps explain why the generated pre-service
+interval can react to resource capacity and native workload state even though
+the enabled timestamp itself follows only the Petri-net state.
 
 \paragraph{Timestamp Mapping by Activity Type}
 
@@ -580,6 +616,15 @@ represented as a separate activity in the discovered process model.
 The model-derived interval may therefore combine physical movement between
 locations, internal traffic and congestion, resource availability and queue
 waiting, and other delays not represented by the control-flow model.
+ProSiT therefore calculates the enabled timestamp exactly according to the
+chosen Petri-net semantics, but its accuracy as a physical readiness timestamp
+cannot be measured from the CTB data. No independently observed enablement or
+arrival-at-location timestamp exists. What can be evaluated is the resulting
+composite interval. In the sequential model, the observable counterpart of
+simulated $t_{\mathrm{start}}-t_{\mathrm{enabled}}$ is the real gap
+$t_{\mathrm{start},i}-t_{\mathrm{complete},i-1}$. This comparison tests temporal
+fidelity of the complete pre-service gap without claiming to validate physical
+movement or queueing separately.
 This is a domain-specific limitation when transferring
 business-process simulation semantics to physical terminal operations
 and is a methodological limit of this thesis
@@ -604,7 +649,9 @@ It derives enablement from the aligned process model
 \cite{Vinci2026prosit}. The final method keeps only the observed start and
 completion timestamps and leaves enablement reconstruction to the
 process-model alignment. This keeps the data and simulation semantics
-consistent.
+consistent, but it replaces the former travel-adjusted proxy with structural
+Petri-net enablement. It does not establish when the truck physically reached
+the next location.
 
 The transition-baseline data is preserved in the repository as
 diagnostic material and may be useful for future work that introduces

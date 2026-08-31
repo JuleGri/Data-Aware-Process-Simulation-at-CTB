@@ -20,7 +20,7 @@ timestamp-induced parallelism artefact, but the raw Inductive-Miner model
 still requires an explicit domain repair to enforce sequential truck semantics
 and remove a gate-only bypass.  The resulting expert-repaired sequential Petri
 net fits all 17,892 held-out visits (fitness 1.0) with a test precision of
-0.7641.  This is the single executable model used by every ProSiT
+0.7641.  This is the single executable control-flow model used by every ProSiT
 configuration and reported throughout the thesis.
 
 A $2\times2$ validation experiment separates manually constructed static
@@ -38,17 +38,20 @@ and test period rather than ordinary simulation noise.
 Two expert-supported physical requirements are audited separately. Activities
 of one truck must remain sequential, and no more than three RMGs may operate in
 one block. The latter ceiling is imposed transparently because overlap-derived
-capacities exceed the physical maximum. For what-if analysis, a purpose-specific
-\textit{native-only} model supplies the endogenous queue state absent from the
-historical reference. Closing block T22 and increasing working-time demand by
-20\,\% produce no resolved mean-turnaround effect. A matched six-level stress
-test nevertheless reveals a non-linear response at higher realised arrival
-rates. This demonstrates demand propagation inside the fitted simulator, not a
-validated physical congestion threshold.
+capacities exceed the physical maximum. Historical-fidelity selection alone
+chooses the workload-blind \textit{visit-only} benchmark. An adaptive mechanism
+audit therefore uses \textit{native-only} to test whether endogenous queue state
+can transmit changed arrivals to delay. Closing block T22 and increasing
+working-time demand by 20\,\% produce no resolved mean-turnaround effect. A
+matched six-level stress test reveals a non-linear response only at much higher
+realised arrival rates. This establishes an internal response pathway in the
+fitted simulator, not a validated physical CTB congestion response.
 
 The thesis contributes a layered validity audit that separates event order,
 control-flow language, historical fidelity, temporal transfer, physical
-semantics, and intervention response. The resulting model is useful for
-transparent historical analysis and diagnostic what-if experiments. Direct
-prescriptive use still requires explicit location, movement, equipment, and
-queue mechanisms together with prospective operational validation.
+semantics, and intervention response. The case shows that historical fidelity
+is a necessary screen but is not sufficient for selecting a what-if simulator.
+The resulting artefacts support transparent historical analysis and diagnostic
+mechanism tests. Direct prescriptive use still requires explicit location,
+movement, equipment, and queue mechanisms together with prospective
+operational validation.
