@@ -130,9 +130,9 @@ unmodified Inductive-Miner output as a fully automatic operational model.
 
 \subsection{Discovery-to-Execution Repair}
 
-The change from the raw tree to the executable tree is a primary modelling
-step rather than a secondary robustness test. It removes both forms of excess
-behaviour identified by the domain audit: concurrent activities of one truck
+Transitioning from the raw tree to the executable tree is a primary modeling
+step, rather than a secondary robustness test. It removes both forms of excess
+behavior identified by the domain audit, consisting of the concurrent activities of one single truck
 and the gate-only bypass. At the same time, it retains the activity alphabet
 and deliberately allows arbitrary sequential yard combinations and
 repetitions. The repair is fixed before validation and is identical for every
@@ -140,11 +140,11 @@ feature-source configuration. It therefore cannot explain performance
 differences among the four ProSiT cells.
 
 The raw tree itself remains an auditable discovery artifact. Its structure is
-also sample-window sensitive: the 64\,\% discovery tree contains three
-parallel operators, whereas the tree rediscovered on the complete 80\,\%
-development period contains none but still permits the yard bypass. This
-instability reinforces the methodological finding that a high-fitness
-discovered net is not automatically a physically valid simulation model.
+also sample-window sensitive, as the 64\,\% discovery tree contains three
+parallel operators, when the tree rediscovered on the complete 80\,\%
+development period contains none but still allows for the yard bypass. This
+instability enhances the methodological finding that a high-fitness
+discovered petri net is not automatically a physically valid simulation model.
 
 \paragraph{Interpretation of the \texttt{LL\_mixed} Branch}
 
@@ -155,12 +155,12 @@ activity. Their observed pattern is therefore simply \texttt{Gate In},
 \texttt{LL\_mixed}, and \texttt{Gate Out}. Only seven visits combine
 \texttt{LL\_mixed} with another yard activity. In six training visits it occurs
 first and is followed by \texttt{RMG\_receive}. The single held-out exception
-follows the order \texttt{RMG\_delivery}, \texttt{LL\_mixed}. One plausible
+follows the order \texttt{RMG\_delivery}, \texttt{LL\_mixed}. A plausible
 operational interpretation is that an empty-container exchange is normally
 completed before another yard area for routing reasons. The six training cases
 are compatible with that explanation, but the small sample and held-out
 exception do not justify a mandatory ordering rule. The isolated branch is
-primarily evidence of a valid one-stop process variant rather than evidence
+mainly evidence of an valid one-stop process variant rather than evidence
 that \texttt{LL\_mixed} must always precede other yard work.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -182,7 +182,7 @@ The final reference model uses the expert-repaired sequential net, native
 ProSiT routing learned from development data, the minute-resolved arrival model, and
 non-pre-emptive completion. The raw RMG
 capacities are capped at three per block. This cap comes from the domain, not
-from the hold-out. The hold-out is used only for evaluation.
+from the hold-out split. The hold-out is used only for evaluation.
 
 Ten runs of 17,892 cases use seeds 42--51. Each run starts at the frozen cutoff
 $t_{\text{start}}=\text{2026-04-20 18:17}$. Table~\ref{tab:final_kpis}
@@ -218,7 +218,7 @@ simulated outcome. The real hold-out statistic is fixed. Gate In and Gate Out
 are excluded from both yard-service EMD aggregates.}
 \end{table}
 
-The result is mixed. Inter-arrival EMD is 0.0724 minutes. Unweighted yard
+The result turned out mixed. Inter-arrival EMD is 0.0724 minutes. Unweighted yard
 service EMD is 3.150 minutes. Frequency weighting reduces it to 2.341 minutes
 because some of the larger errors occur in rare activities
 (Table~\ref{tab:yard_activity_emd}). The complete visit is less accurate. Mean
@@ -226,7 +226,7 @@ turnaround is 5.930 minutes too short, or 14.92\,\%. P90 is 13.100 minutes too
 short, or 18.45\,\%. This bias remains across the ten seeds. The narrow seed
 intervals do not show that the model itself is correct.
 
-The purpose-specific \textit{native-only} bundle gives a completion-order
+The \textit{native-only} bundle gives a completion-order
 3-gram NGD of 0.05657 on the same final test period
 ($95\,\%$ MC CI $[0.05514,0.05800]$). The explicit ITS-order sensitivity is
 0.05654 ($[0.05511,0.05797]$), a difference of only 0.00003. The close
