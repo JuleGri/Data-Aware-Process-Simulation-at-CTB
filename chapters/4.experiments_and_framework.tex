@@ -557,7 +557,7 @@ own dynamic state abstraction from the manually engineered proxies.
 \label{sec:cfg_workload}
 
 The full static attribute set and ProSiT's native dynamic state are available
-together. This is the most context-rich cell, but it is not presumed to be the
+together. This is the most context-rich cell, but it is not assumed to be the
 best configuration for every purpose. Comparing it with \textit{static-only} and \textit{native-only}
 shows whether one source changes the contribution of the other.
 
@@ -597,7 +597,7 @@ temporal-integrity safeguard rather than a decorrelation procedure.
 
 The four configurations are discovered on the 64\,\% training partition and
 compared on the subsequent 16\,\% validation partition. Selection uses four
-primary errors that cover complementary perspectives: turnaround EMD,
+primary errors that cover complementary perspectives, with turnaround EMD,
 frequency-weighted yard-service EMD, yard-activity-rate L1 error, and
 completion-order NGD ($N=3$). Paired differences use the common seeds 42--51.
 An additional state source replaces the workload-blind \textit{visit-only}
@@ -733,7 +733,7 @@ implementation-directory listings in the main text.
 \label{sec:authoritative_parameter_bundle}
 
 In this thesis, \emph{authoritative parameter bundle} is an operational
-reproducibility term: it denotes the exact executable
+reproducibility term, which describes the exact executable
 \texttt{SimulatorParameters} state loaded by the validation and scenario
 scripts. If a derived table, JSON summary and executable state disagree,
 the serialized object that generated the reported simulations is
@@ -767,7 +767,7 @@ the round-trip audit in
 confirmed that the fitted rule structures, resource capacities, calendars,
 workload flags and empirical case-attribute distributions are reconstructed
 consistently. It also showed a CTB-specific difference that matters for exact
-numerical reproduction: each frozen pickle contains 39 runtime rule nodes
+numerical reproduction, where each frozen pickle contains 39 runtime rule nodes
 with empirical \texttt{sampled} arrays, including 71,530 calibrated arrival
 samples, whereas the corresponding object immediately after
 \texttt{from\_json()} contains no sampled nodes. The serializer removes these
@@ -790,7 +790,7 @@ with the thesis artefacts so that the reported distinction can be checked
 independently. Pickle is Python- and class-version-specific and must never
 be loaded from an untrusted source. Reproducibility requires the recorded
 software environment. These limitations explain why both formats are
-retained: JSON supports transparent inspection, while pickle preserves the
+retained, as JSON supports transparent inspection, while pickle preserves the
 exact trusted runtime snapshot.
 
 Appendix~\ref{app:model_inspection} distinguishes the descriptive process view
@@ -803,9 +803,8 @@ technical directory inventories into the main methodological argument.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Every ProSiT simulation includes stochastic draws from the fitted
-distributions. One Monte-Carlo draw is not enough to conclude that one
-configuration is more faithful than
-another: the observed difference may be within the sampling variance
+distributions. One Monte-Carlo draw is not enough to conclude that one configuration is more faithful than
+another, when the observed difference may be within the sampling variance
 of the simulator itself. This is the same many-possible-realisations
 problem addressed by the multi-log validation design of
 Chapela-Campa et al. and by classical independent-replication output
