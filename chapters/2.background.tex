@@ -9,7 +9,7 @@ services. Large vessels can carry more than 20,000 containers, requiring high
 handling volumes to be coordinated while vessel and landside turnaround times
 remain short \cite{CTSteenken2004}. Since the 1960s, the standardised container
 has become the principal unit of global freight transport. Throughput is
-reported in twenty-foot equivalent units (TEU): a 20-foot container equals one
+reported in twenty-foot equivalent units (TEU). A 20-foot container equals one
 TEU and a 40-foot container equals two
 \cite{Hartmann2005cenariosforCTSimulation}. The resulting coordination choices
 affect berth time, truck turnaround, terminal throughput, and service quality
@@ -87,8 +87,7 @@ arrivals and reduce congestion. A trucking company reserves a time slot before t
 Character Recognition (OCR) systems identify the container and vehicle and
 match this information with the booking. The truck may
 then wait before the physical gate admits it to the terminal \cite{Bett2024}.
-It drives to the assigned yard location and performs one or more transactions:
-it may deliver an export container, receive an import container, or complete
+It drives to the assigned yard location and performs one or more transactions. It may deliver an export container, receive an import container, or complete
 several deliveries and collections during the same visit.
 
 An efficient pattern is the \textit{multi move}. A truck delivers one or more export containers and collects one or more import containers during the same
@@ -293,7 +292,7 @@ process progresses and how its performance develops over time.
 
 The resource perspective relates execution to people, equipment, or other
 operational units and examines how work is allocated among them. The data
-perspective connects behaviour with case and event attributes, such as object
+perspective connects behavior with case and event attributes, such as object
 type, yard location, or operational context, that may influence routing or
 duration. These perspectives are analytically distinct but describe the same
 recorded process. Their joint use links process structure with timing,
@@ -303,14 +302,14 @@ resources, and operating circumstances.
 
 The objective of process discovery is to construct a process model from an
 event log without a predefined process model \cite{PMvanDerAalst2016}. The
-output should reproduce the observed behaviour. Depending on the discovery
+output should reproduce the observed behavior. Depending on the discovery
 algorithm, it can be a Petri net, process tree, BPMN model, or directly-follows
 graph \cite{PMRozinat2009}. The Alpha Miner is an early algorithm for deriving
-causal dependencies and parallel behaviour. The Heuristics Miner adds observed
+causal dependencies and parallel behavior. The Heuristics Miner adds observed
 frequencies and is consequently more tolerant of noise and infrequent
-behaviour. The Inductive Miner used in this thesis recursively decomposes the
+behavior. The Inductive Miner used in this thesis recursively decomposes the
 log through sequence, exclusive-choice, parallel, and loop cuts, producing a
-sound block-structured model while allowing infrequent behaviour to be filtered
+sound block-structured model while allowing infrequent behavior to be filtered
 \cite{Leemans2014InductiveMiner}.
 
 Process discovery shows how a recorded process was executed, rather than how it
@@ -319,17 +318,17 @@ was expected to operate \cite{PMvanDerAalst2016}.
 A directly-follows graph (DFG) summarises which activity directly follows
 another and can annotate nodes and arcs with observed frequencies or
 performance values. This makes the DFG useful for inspecting dominant flows,
-rare connections, and repetitions. It does not, however, define complete
-execution semantics: a path that can be drawn through a DFG is not necessarily
+rare connections, and repetitions. It does not, define complete
+execution semantics, as a path that can be drawn through a DFG is not necessarily
 a valid process execution \cite{PMvanDerAalst2016}.
 
 Process trees and Petri nets provide such semantics. A process tree represents
-behaviour through nested sequence, exclusive-choice, parallel, and loop
+behavior through nested sequence, exclusive-choice, parallel, and loop
 operators. The Inductive Miner discovers this block-structured representation
 and can convert it into a sound Petri net \cite{Leemans2014InductiveMiner}.
 The Petri net distinguishes places, visible activity transitions, and silent
 routing transitions. Its markings determine which activity may execute next.
-Consequently, the DFG and Petri net answer complementary questions: the DFG
+Consequently, the DFG and Petri net answer complementary questions. The DFG
 shows what was frequent in the log, whereas the Petri net states what the model
 allows. The CTB instances of both views are therefore presented separately and
 interpreted in Section~\ref{sec:process_discovery_methodology}.
@@ -342,19 +341,19 @@ inefficiencies, compliance problems, or outdated documentation
 \cite{aalst2012ConformanceChecking}. Discovered models are commonly assessed
 through four related quality criteria
 \cite{aalst2012ConformanceChecking,PMvanDerAalst2016}. \emph{Fitness} measures
-how much observed behaviour the model can replay, whereas \emph{precision}
-penalises additional behaviour allowed without support in the log.
+how much observed behavior the model can replay, whereas \emph{precision}
+penalises additional behavior allowed without support in the log.
 \emph{Generalisation} rewards a model that captures plausible underlying
-behaviour instead of reproducing only the observed sample, and
+behavior instead of reproducing only the observed sample, and
 \emph{simplicity} favours structural economy when competing models explain the
-data sufficiently well. The criteria must be interpreted jointly: a perfectly
+data sufficiently well. The criteria should be interpreted together. A perfectly
 fitting model may overgeneralise, while a highly precise model may merely
 memorise the available cases.
 
 \label{sec:astar_alignment_definition}
 An important conformance technique is optimal alignment. An alignment relates
 the observed event sequence of a case to an executable run of a process
-model. Formally, it is a sequence of three move types: a
+model. Formally, it is a sequence of three move types: A
 \emph{synchronous move} consumes an event and fires a transition with the
 same visible label. A \emph{log move} consumes an event without a
 corresponding model transition. A \emph{model move} fires a model
@@ -390,7 +389,7 @@ the structural model and help analysts identify possible improvements.
 
 \subsection{Fundamentals of Business Process Simulation}
 Business Process Simulation (BPS) uses executable models to study process
-behaviour in a virtual environment. Organisations can run these models under
+behavior in a virtual environment. Organisations can run these models under
 controlled conditions without disturbing live operations
 \cite{BPSAalst2015}. Simulation can estimate throughput times, waiting times,
 resource use, service levels, and costs before a change is implemented. It is
@@ -454,9 +453,9 @@ capacities, and learning routing probabilities or context-dependent
 decision rules from historical observations
 \cite{PMRozinat2009,Camargo2020}. In simulation discovery, many of these
 steps form part of the automated discovery procedure itself. Calibration
-must still be distinguished from validation: agreement with the
+must still be distinguished from validation. Agreement with the
 data used to fit a model shows in-sample fit, whereas an
-independent assessment requires data that did not determine those
+independent assessment require data that did not determine those exact
 parameters. Section~\ref{sec:simulation_validation_background} develops
 the corresponding verification and validation concepts.
 
@@ -466,11 +465,11 @@ the corresponding verification and validation concepts.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The previous sections introduced Business Process Simulation and event logs.
-Simulation discovery connects both by estimating simulation behaviour from
+Simulation discovery connects both by estimating simulation behavior from
 recorded process executions. The estimated parameters are integrated into an
 executable process model \cite{PMRozinat2009,Camargo2020,simod2024}. Research
 has moved from basic stochastic parameters towards context-dependent and
-data-aware behaviour.
+data-aware behavior.
 
 \paragraph{From Simulation Discovery to Data-Driven Simulation}
 
@@ -482,7 +481,7 @@ Later research extended this idea. Solti et al.
 \cite{stochastikPetriNets2013Solti} study stochastic Petri nets with flexible
 delay distributions. Camargo et al. \cite{Camargo2020} proposed a framework
 that discovers process structure, activity durations, resource pools,
-calendars, and arrival behaviour from event logs. Simod further automates the
+calendars, and arrival behavior from event logs. Simod further automates the
 discovery and calibration of simulation models \cite{simod2024}.
 
 Another research branch studies generative process models. Camargo et al.
@@ -492,12 +491,11 @@ fitted distributions, but they are harder to inspect and configure. This issue
 is discussed in Section~\ref{sec:explainable_simulation}.
 
 Research has moved from extracting standard simulation parameters to learning
-relations between process state and simulated behaviour
+relations between process state and simulated behavior
 \cite{PMRozinat2009,Camargo2020,Camargo2021}.
 
-A recent healthcare application makes the resulting methodological sequence
-explicit: an event log is prepared, a process-simulation model is discovered,
-simulated and observed behaviour are compared, and only a sufficiently accurate
+A recent healthcare application defines a resulting methodological sequence. An event log is prepared, a process-simulation model is discovered,
+simulated and observed behavior are compared, and only a sufficiently accurate
 model is used to examine alternative resource configurations
 \cite{Hospital2026Vinci}. This order matters beyond healthcare. It separates
 evidence that a model reproduces its historical operating regime from the later
@@ -535,7 +533,7 @@ the intended performance question \cite{LugaresiMatta2021}. Their later work
 uses object-centric Process Mining to reconstruct systems with converging
 material flows, for which a single case identifier loses relevant interaction
 structure \cite{LugaresiMatta2023}. These results reinforce a central
-distinction in this thesis: automation of discovery does not establish the
+distinction in this thesis, namely, that automation of discovery does not establish the
 physical semantics or purpose-validity of the resulting abstraction.
 
 Object-centric Process Mining (OCPM) provides a related but distinct response
@@ -575,13 +573,13 @@ discovery. Reconstructing an OCEL and evaluating an object-centric simulation
 would constitute a different model and data-engineering study.
 
 Three related streams must therefore be distinguished. Business-process
-simulation discovery estimates executable process behaviour from event logs.
+simulation discovery estimates executable process behavior from event logs.
 ASMG reconstructs physical production or material-flow systems from a wider
 range of digital sources. Process Mining in production and logistics uses
 event data to analyse and design processes, sometimes as an input to a
 separately constructed simulator
 \cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. The CTB
-study lies at their intersection: it evaluates an automatically discovered,
+study lies at their intersection, where it evaluates an automatically discovered,
 data-aware executable process simulator in a physical logistics system and
 tests where event-log automation ceases to supply the state required for
 credible operational intervention.
@@ -601,11 +599,11 @@ process model defines which activities may occur, while stochastic weights
 estimate the probability of alternative paths
 \cite{stochastikPetriNets2013Solti,burke2020stochasticPD}.
 
-The discovered control-flow structure defines the behaviour that the simulator
+The discovered control-flow structure defines the behavior that the simulator
 can generate. Too much generalisation may allow
 implausible paths, while a restrictive model may miss valid process variation
 \cite{PMvanDerAalst2016,SimulationGuidedRepair2025}. The balance between fitness
-and precision defines the behavioural range of the simulator
+and precision defines the behavioral range of the simulator
 \cite{SimulationGuidedRepair2025}.
 
 The simulation-guided control-flow repair framework
@@ -613,33 +611,33 @@ The simulation-guided control-flow repair framework
 initial stochastic Petri net is
 simulated, directly-follows features are used to train a discriminator between
 real and simulated traces, and explainable feature importance identifies
-behaviour that is systematically missing from or over-represented in the
+behavior that is systematically missing from or over-represented in the
 simulation. Three repair strategies then add selected directly-follows
-relations while preserving soundness and safeness: a complete basic repair, a
+relations while preserving soundness and safeness and a complete basic repair, a
 smaller greedy repair, and an alignment-based repair that also handles repeated
 activity labels. The repaired model is retained only when held-out fitness,
 precision and simulation-log distances improve. The framework therefore
 treats model repair as a validated model comparison, not as an undocumented
 manual correction. Its currently operationalised repairs add missing
-behaviour. Restricting behaviour that is allowed too broadly remains an open
+behavior. Restricting behavior that is allowed too broadly remains an open
 extension. This distinction matters when a discovered model is imprecise
 rather than unfit. Across 23 evaluated source models, the harmonic
 fitness--precision score improved in 19 cases. Control-flow log distance fell
 in 16 cases, with a reported average reduction of 31.54\,\%. These results show
-that repair can materially improve simulation behaviour, but also that no
+that repair can materially improve simulation behavior, but also that no
 operator or acceptance rule dominates every model.
 
 \paragraph{Temporal and Resource Behavior}
 
 Early simulation-discovery approaches estimate execution times, waiting
-behaviour, and resource characteristics from event-log distributions
+behavior, and resource characteristics from event-log distributions
 \cite{PMRozinat2009,stochastikPetriNets2013Solti}. Later approaches model
 calendars, resource pools, allocation rules, and differences between resources
 \cite{Camargo2020,BPSdifferentiatedResources2022}.
 
 Timing often depends on operational context. Execution and waiting times may
 change with workload, resource availability, case characteristics, or earlier
-process behaviour. Resource selection may depend on more than a fixed
+process behavior. Resource selection may depend on more than a fixed
 activity-resource mapping \cite{BPSdifferentiatedResources2022,Vinci2026prosit}.
 Recent approaches model these aspects conditionally instead of using one
 global distribution per activity or resource.
@@ -653,7 +651,7 @@ replication rather than proven what-if accuracy, but it establishes that
 resource availability and individual performance can materially change
 simulation fidelity.
 
-\paragraph{Arrival Behaviour}
+\paragraph{Arrival behavior}
 
 Classical simulation-discovery approaches estimate inter-arrival times from
 historical case-start timestamps \cite{PMRozinat2009,Camargo2020}. Later
@@ -670,7 +668,7 @@ of 70\,\% and 30\,\%, the model may use these probabilities for every case.
 This describes how often each path occurred, but not why cases followed
 different paths \cite{PMRozinat2009,burke2020stochasticPD}.
 
-Data-aware simulation conditions stochastic behaviour on process data.
+Data-aware simulation conditions stochastic behavior on process data.
 Mannhardt et al. \cite{mannhardt2023stochasticProcessesModelling} extend
 stochastic Petri nets with transition weights that depend on process variables.
 The model can then capture differences between types of cases.
@@ -687,23 +685,23 @@ net marking. Their two case studies show that a suitable state abstraction can
 improve simulated control-flow frequencies relative to constant branching
 probabilities. The best state reduced the reported control-flow distance by
 7.5\,\% for the road-fines process and 9.4\,\% for sepsis. The best abstraction
-is process-dependent, however: data alone, history, and their combination do
+is process-dependent, but data alone, history, and their combination do
 not dominate uniformly, and one history-based configuration produced a
 livelock. The study also repaired a permissive source
 model before simulation because it allowed a one-activity execution absent
 from the log. Data-aware routing therefore complements, but does not replace,
 validation of the control-flow language itself.
 
-The corresponding stochastic labelled data Petri-net formalism assigns
+The corresponding stochastic labeled data Petri-net formalism assigns
 state-dependent weights to enabled transitions. It is deliberately not a full
-simulation formalism for every operational aspect: transition choice can depend
+simulation formalism for every operational aspect. Transition choice can depend
 on state without representing spatial movement, resource queues, or separate
 traffic delays. These mechanisms require additional timing and resource models
 rather than more transition weights alone
 \cite{Vinci2023Inf.Activ.Prob}.
 
 Conceptually, this research develops from fixed branching frequencies towards
-increasingly conditional stochastic behaviour. Basic stochastic process models
+increasingly conditional stochastic behavior. Basic stochastic process models
 retain variation but apply the same routing probabilities to every case.
 Data-aware models condition those probabilities on recorded attributes, while
 process-state-aware approaches additionally use information accumulated during
@@ -715,8 +713,7 @@ López-Pintado et al. \cite{lopez2024} broaden the data representation through
 global, case, and event attributes, attribute-update rules, and data-dependent
 branching conditions. In their evaluated framework, however, attributes
 determine control flow. Dependencies between data and activity start or
-duration remain future work. This boundary is important for physical logistics:
-a data-aware routing formalism does not by itself represent movement or
+duration remain future work. This boundary is important for physical logistics, because a data-aware routing formalism does not by itself represent movement or
 queueing time.
 
 
@@ -726,10 +723,10 @@ queueing time.
 ProSiT (\textit{PROcess SImulation Tool}) applies data awareness to several simulation dimensions
 \cite{Vinci2026prosit}. Its probabilistic white-box predictors model
 control-flow decisions, execution times, waiting times, resource selection, and
-arrival behaviour.
+arrival behavior.
 
 The framework uses probabilistic decision trees to split the feature space.
-Each leaf contains a local probability distribution. Simulation behaviour can
+Each leaf contains a local probability distribution. Simulation behavior can
 vary by context while remaining stochastic. This differs from both a model
 with one global distribution per parameter and a deterministic model that
 returns one value.
@@ -744,7 +741,7 @@ cover a broader range of context than the current ProSiT implementation.
 The published evaluation uses five case studies, an 80/20 temporal split, and
 five simulated logs per model. ProSiT is competitive with a black-box baseline
 while keeping the rules inspectable \cite{Vinci2026prosit}. The authors also
-draw a boundary essential for what-if use: the learned relationships capture
+draw a boundary essential for what-if use, as the learned relationships capture
 correlations, not necessarily root causes. White-box inspection shows which
 association the simulator uses. Causal and operational validity still require
 domain and intervention evidence.
@@ -759,7 +756,7 @@ central to the experimental design in
 Section~\ref{sec:simulation_discovery_methodology}
 \cite{Vinci2026prosit}. The parameter
 \texttt{max\_depth\_tree} limits the depth of the probabilistic decision trees
-used for conditional simulation behaviour. Setting it to zero disables the
+used for conditional simulation behavior. Setting it to zero disables the
 conditional trees and yields an unconditional distribution-based model.
 increasing it permits more detailed combinations of contextual features but
 also increases complexity and the risk of overfitting.
@@ -785,9 +782,9 @@ modified. Traditional BPS models are transparent because their control flow,
 routing probabilities, resources, and timing assumptions are defined by hand
 \cite{BPSAalst2015}.
 
-Machine-learning models can learn behaviour from historical event data and may
+Machine-learning models can learn behavior from historical event data and may
 improve prediction \cite{Camargo2020,Camargo2021}. However, their internal
-logic can be difficult to inspect. A model may reproduce historical behaviour
+logic can be difficult to inspect. A model may reproduce historical behavior
 without showing why it selected a route, waiting time, or resource. This makes
 validation and what-if analysis harder \cite{runtimeIntegration2024}. For
 what-if analysis, users must be able to change parameters or rules and judge
@@ -848,7 +845,7 @@ whether that conceptual model has been implemented correctly.
 \emph{Data validity} concerns whether the data used to construct,
 calibrate and evaluate the model are adequate. Finally,
 \emph{operational validity} asks whether the computerised model's
-output behaviour is accurate enough over the domain in which the
+output behavior is accurate enough over the domain in which the
 model is intended to be used. Historical-data validation, in which the model
 runs under historical input conditions and its output is compared with observed
 system data, is one technique for assessing operational validity
@@ -876,7 +873,7 @@ reproducible seeds and parameter-provenance checks \\
 Are discovery and evaluation data suitable? & Data validity &
 Event-log quality checks, timestamp semantics, leakage prevention and a
 training/test separation \\
-Does the model reproduce observed behaviour? & Operational validity &
+Does the model reproduce observed behavior? & Operational validity &
 Comparison of simulated and held-out real logs across multiple process
 perspectives and stochastic replications \\
 Does a scenario predict the true intervention effect? & Predictive
@@ -905,27 +902,26 @@ terminal.
 Process Mining provides a natural representation for historical-data
 validation because both the observed system and the simulator can be
 represented by event logs. Rozinat et al. established an early version
-of this principle: they discover control-flow, data, performance and
+of this principle, where they discover control-flow, data, performance and
 resource perspectives, integrate them into a coloured Petri-net
 simulation model, simulate a second event log, and analyse how well that
 generated log approximates the characteristics of the original log
 \cite{PMRozinat2009}. This is stronger than checking whether the
 discovered model can execute. It evaluates whether its generated
-behaviour resembles recorded behaviour.
+behavior resembles recorded behavior.
 
 Camargo et al. formalise the same idea as an optimisation objective.
 Candidate BPS configurations generate event logs and hyperparameter
 optimisation searches for the configuration that maximises similarity
-to observed log behaviour \cite{Camargo2020}. Their later comparison of
+to observed log behavior \cite{Camargo2020}. Their later comparison of
 data-driven simulation and deep generative models further shows
-why quality must not be inferred from case-sequence frequencies alone:
-conventional data-driven simulators may reproduce activity sequences
+why quality must not be inferred from case-sequence frequencies alone A conventional data-driven simulators may reproduce activity sequences
 and their frequencies while performing worse on temporal dynamics
 \cite{Camargo2021}.
 
 The implication is that operational fidelity is multi-dimensional.
 Relevant perspectives include control flow, activity and case timing,
-case arrivals, congestion and resource behaviour. A model can be close
+case arrivals, congestion and resource behavior. A model can be close
 to the real log in one perspective and far away in another. Collapsing
 all discrepancies into one number can hide the mechanism
 that is incorrectly represented
@@ -938,7 +934,7 @@ evaluation problem of this thesis
 \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. Their starting point
 is that the true BPS model is normally unavailable and that different
 simulation engines use incomparable internal formats. They evaluate a model
-indirectly as a generator: multiple logs generated by
+indirectly as a generator, where multiple logs generated by
 the BPS model are compared with an actual event log that was not used
 to construct the model. The framework separates control-flow, temporal
 and congestion perspectives and reports a measure for each instead of
@@ -950,13 +946,12 @@ perspective-specific measures can identify the source of a discrepancy
 
 From the control-flow perspective, output quality asks whether the simulator
 generates activity sequences and sequence frequencies resembling the observed
-process. It is distinct from replay fitness of a control-flow model:
-fitness asks whether real case sequences are allowed by the model, whereas
+process. It is distinct from replaying fitness of a control-flow model. Fitness asks whether real case sequences are allowed by the model, whereas
 output validation asks which sequences the stochastic simulator actually
 generates and with what frequency.
 
 Stochastic conformance work applies transport distances to probability
-distributions over case sequences or other behavioural abstractions
+distributions over case sequences or other behavioral abstractions
 \cite{leeman2013EarthMovers}. Chapela-Campa et al. instead define two
 simulation-oriented log distances \cite{ChapelaCampa2023Trust,
 Chapela2025SimQuality}. Control-Flow Log Distance (CFLD) computes the
@@ -997,7 +992,7 @@ distance. For end-to-end performance, Cycle Time Distribution (CTD)
 compares the empirical distributions of complete case durations.
 
 The CTB evaluation uses more directly interpretable distributions at
-the level of its research questions: inter-arrival time, per-activity
+the level of its research questions. Inter-arrival time, per-activity
 yard service time, model-derived pre-service delay and case turnaround
 time. Reporting complete distributions rather than only their means is
 useful because equal averages can conceal differences in dispersion,
@@ -1016,13 +1011,13 @@ time cases remain in the system
 be temporally unrealistic even if it generates the correct
 total number of cases.
 
-This issue matters at CTB: truck demand determines competition for
+This issue matters at CTB, where truck demand determines competition for
 yard resources, and simultaneous arrivals result from the minute-resolved
 source data. The evaluation reports
 inter-arrival distance, simultaneous-arrival share and arrivals per
 elapsed hour alongside turnaround and yard-service distributions.
 These measures do not directly observe a physical queue. They assess
-whether the generated workload and its resulting temporal behaviour
+whether the generated workload and its resulting temporal behavior
 match what the available event log can identify.
 
 \paragraph{Wasserstein Distance}
@@ -1045,7 +1040,7 @@ Wasserstein distance assumes equal normalised mass
 \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. For empirical
 probability distributions with unit mass, the formulations coincide.
 In Process Mining, related transport distances have been used for
-stochastic conformance checking over behavioural distributions
+stochastic conformance checking over behavioral distributions
 \cite{leeman2013EarthMovers}. In this thesis, the term \emph{EMD} for
 service, inter-arrival and turnaround samples denotes the
 one-dimensional $W_1$ distance between empirical distributions.
@@ -1072,7 +1067,7 @@ binary significance decisions.
 
 \paragraph{Additional Requirements for Data-Aware Discovery}
 
-A data-aware simulator conditions behaviour on case attributes, process
+A data-aware simulator conditions behavior on case attributes, process
 state or workload information rather than using only global
 distributions and branching frequencies
 \cite{Vinci2023Inf.Activ.Prob,lopez2024,Vinci2026prosit}. This adds a
@@ -1102,7 +1097,7 @@ A BPS model is a stochastic generator. One fixed model can generate
 many possible event logs, whereas the real test log is only one observed
 realisation. A single simulated log mixes model fidelity
 with the random draws of that run. Chapela-Campa et al. address this
-problem directly: they generate $K$ logs from $K$ simulation runs,
+problem directly. They generate $K$ logs from $K$ simulation runs,
 match their case count and start point to an actual test log that was
 not used for model construction, compare every generated log with that
 test log, and construct confidence intervals for each perspective-

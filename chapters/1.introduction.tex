@@ -1,20 +1,20 @@
 \chapter{Introduction}
 \label{chp:introduction}
 
-Container terminals connect maritime and hinterland transport networks. Higher
+Container terminals connect maritime and hinterland transport networks. Increasing
 container volumes and larger vessels require terminal operators to make many
 tactical and operational decisions under uncertainty. These decisions concern
-truck dispatching, yard-block allocation, resource use, congestion, equipment
+truck dispatching, yard-block allocation, resource planning and use, congestion, equipment
 failures, and temporary infrastructure outages. Experiments in an operating
 terminal are often costly, disruptive, or not feasible. Simulation offers a way
-to assess decisions without interrupting terminal operations.
+to assess decisions without interrupting a terminals continuous operations.
 
 \section{Motivation}
 Simulation is used for decision support in container-terminal planning and
-operations research. Its operational purpose is prospective: a terminal can
+operations research. From an operations management perspective, a terminal can
 compare how alternative process executions and operating conditions affect
 specific handling patterns before changing live operations. For example, when
-high yard utilisation is forecast, a terminal may compare lower truck-slot
+high yard utilisation is forecasted, a terminal may compare lower truck-slot
 release rates, alternative resource allocations, or policies that favour
 receive or delivery operations, and evaluate their effects on activity-specific
 service, pre-service delay, and total truck turnaround. Simulation can likewise
@@ -24,7 +24,7 @@ developed Discrete Event Simulation (DES) models, agent-based models, or
 digital twins. Building and maintaining these models requires domain knowledge,
 manual work, and calibration \cite{YUN1999DESSimulation,CTSteenken2004,OptimizingCTs2023,Bett2024}.
 
-Process Mining research has studied how simulation models can be built
+Process Mining research has studied how simulation models can be discovered and built
 from event logs. Earlier work showed that control-flow behaviour, activity
 durations, arrival patterns, resource allocations, and routing probabilities
 can be discovered from process data and used in executable simulation models
@@ -142,7 +142,7 @@ The experiment separates a parsimonious historical-fidelity reference from a
 minimal state-aware scenario model instead of claiming one globally best
 configuration for both objectives.
 The intended decision-support logic is made
-explicit: forecast terminal conditions define a scenario, candidate slot or
+explicit, when forecast terminal conditions define a scenario, candidate slot or
 resource policies are simulated, and their consequences are compared at both
 activity and case level. The case study evaluates how far the discovered model
 can support that logic without treating mere scenario executability as evidence
@@ -153,7 +153,7 @@ than reducing simulation quality to one distance between a simulated log and a
 future log, the audit separates event-order semantics, control-flow language,
 state-conditioned stochastic behaviour, temporal transfer, physical
 resource--space semantics, and scenario response. A model can pass an earlier
-layer and fail a later one: near-perfect replay fitness, for example, does not
+layer and fail a later one. Then, a near-perfect replay fitness, for example, does not
 show that travel, queues, or an intervention mechanism are represented. This
 separation turns residual errors and null scenario responses into diagnostic
 results and defines the strongest claim that the current model can support.

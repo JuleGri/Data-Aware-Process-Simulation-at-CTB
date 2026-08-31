@@ -932,7 +932,7 @@ terminal model.
 \subsection{Capacity Pressure of the Demand Intervention}
 
 The independently offered-load diagnostic adds an important qualification to
-that interpretation. Across the 21 RMG blocks observed in the held-out period,
+that interpretation. Across the 22 RMG blocks observed in the held-out period,
 T13 has the highest nominal utilisation under a ceiling of three concurrent
 tasks, with 0.422 at the held-out arrival rate and 0.506 after multiplying arrivals
 by 1.20. If block routing and service times remained unchanged, the smallest
@@ -955,9 +955,8 @@ pooled block abstraction. This helps explain why the resource ceiling alone
 does not generate a large turnaround response. It does not prove that queues
 are absent. Twelve blocks contain at least some held-out minutes with more
 than three overlapping recorded RMG events. For T13 the share is 9.82\,\%.
-Those bursts may reflect genuine short-period pressure, minute-resolution
-artifacts, waterside/landside allocation, or an incorrect block-pool
-abstraction. The 20\,\% result alone therefore cannot distinguish an
+Those peaks may reflect genuine short-period pressure, minute-resolution
+artifacts or simply the waterside/landside allocation. The 20\,\% result alone therefore cannot distinguish an
 intervention that is too modest from a model that is unable to propagate
 capacity pressure. The paired demand-saturation ladder distinguishes these
 possibilities by comparing the workload-blind \textit{visit-only} model with
@@ -1053,15 +1052,24 @@ spatial mechanisms needed for baseline fidelity.
 \subsection{Objective Assignment of Model Roles}
 
 The four-cell validation experiment and the paired stress test answer
-different questions. Under the pre-specified RQ3 rule, \textit{visit-only} is
-the historical-fidelity reference because no added state source produces a
-resolved validation improvement. Relative to that reference,
-\textit{native-only} changes turnaround EMD by
-$+0.105\;[-0.099,+0.308]$ minutes, weighted yard-service EMD by
-$+0.037\;[-0.037,+0.112]$ minutes, activity-rate L1 by
-$+0.0006\;[-0.0032,+0.0044]$, and NGD ($N=3$) by
-$+0.00006\;[-0.00032,+0.00044]$. There is no statistically resolved
-deterioration, although this is not a formal non-inferiority conclusion.
+different questions. Under the pre-specified RQ3 selection rule,
+\textit{visit-only} remains the historical-fidelity reference because none of
+the added-state configurations provides a resolved improvement on the
+validation period. The \textit{native-only} configuration, however, reproduces
+the same historical behavior at essentially the same level of fidelity. Relative
+to \textit{visit-only}, its turnaround EMD is only 0.105 minutes higher and its
+frequency-weighted yard-service EMD only 0.037 minutes higher. The generated
+control flow is practically unchanged, with an activity-rate L1 difference of
+0.0006 and an NGD ($N=3$) difference of only 0.00006. These changes are small
+relative to the absolute validation errors and provide no evidence of a
+meaningful loss of historical fidelity from adding ProSiT's native workload
+state. This does not establish statistical equivalence or formal
+non-inferiority, because no equivalence margin was specified in advance.
+Instead, it supports a narrower role assignment: \textit{visit-only} remains
+the parsimonious model for historical reproduction, while
+\textit{native-only} can be examined separately as the least complex model
+that adds the endogenous workload and queue state required for the demand
+response experiments.
 
 Historical equivalence within these intervals is not enough for RQ4. The
 workload-blind model fails the intervention-response requirement, while the
@@ -1115,7 +1123,7 @@ stress response do not establish counterfactual validity.
 \label{sec:results_interpretation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The results become most informative when the structural, temporal and
+The generated results become most informative when the structural, temporal and
 scenario findings are interpreted together. They do not describe one model
 that is simply ``good'' or ``bad.'' Instead, they show that different forms of
 process-mining evidence answer different questions. The compact repaired
@@ -1126,17 +1134,17 @@ truck visits. These findings are compatible because control-flow conformance,
 arrival fidelity, and end-to-end temporal fidelity are distinct properties
 \cite{Camargo2021,ChapelaCampa2023Trust,Chapela2025SimQuality}.
 
-\paragraph{Meaning for traditional Process Mining}
-Traditional Process Mining is strongest in this study as a language for
+\paragraph{Interpretation for traditional Process Mining}
+Traditional Process Mining is strongest in this study as a method for
 reconstructing and checking observed process behavior. Here, its most
-important diagnostic is not merely complete test fitness. Preserving the ITS
+important diagnostic is not only the complete test fitness. Preserving the ITS
 schedule-derived stop order removes a timestamp-sorting artefact, but the raw
 64\,\% Inductive-Miner tree still contains three parallel operators. The
 algorithm interprets reversed sequential relations as concurrency even though
 terminal experts state that one truck is serviced sequentially. The final tree
 has no parallel operator because this semantic conflict is repaired explicitly,
 not because discovery alone resolves it. This demonstrates a classical
-Process-Mining point with direct simulation consequences: the event-log
+Process-Mining point with direct simulation consequences, as the event-log
 ordering relation and the domain meaning of a discovered operator both require
 validation
 \cite{PMRozinat2009,PMvanDerAalst2016}.
