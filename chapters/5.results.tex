@@ -257,6 +257,26 @@ within-case overlaps, invalid boundaries, or decreasing completion times. Gate
 Out never occurs before the last yard activity. No accepted duration exceeds
 24 hours. These checks are necessary, but they do not remove the timing bias.
 
+Figure~\ref{fig:cdf_turnaround} shows the empirical CDF of case turnaround
+for the real held-out period and a representative simulated replication. The
+simulated distribution is shifted left across the entire range: the deficit is
+not confined to the upper tail but reflects a systematic shortfall that grows
+with turnaround duration. At the median (real $\approx32$ minutes), the
+simulated CDF is already visibly ahead. At the 90th percentile, the gap
+widens further, consistent with the 13.100-minute P90 deficit in
+Table~\ref{tab:final_kpis}. The upper tail beyond 200 minutes is thin in both
+logs; it does not drive the headline metrics.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.82\textwidth]{figures/discovery/cdf_turnaround.png}
+\caption{Empirical CDF of case turnaround time for the real held-out period
+and a representative simulated replication. The leftward shift of the
+simulated curve shows that the turnaround deficit is distributed across the
+body of the distribution, not concentrated in the tail.}
+\label{fig:cdf_turnaround}
+\end{figure}
+
 \begin{table}[htbp]
 \centering
 \begin{tabular}{lrr}
