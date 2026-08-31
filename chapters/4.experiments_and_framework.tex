@@ -458,7 +458,7 @@ The repaired model deliberately generalises beyond exact observed variants.
 It permits unseen sequential combinations because experts identified no
 physically excluded predecessor-successor pair. This is a strong abstraction
 and its routing-frequency fidelity must be tested empirically through activity
-rates and 3-gram NGD. The earlier prefix-trie fallback is not part of the final
+rates and NGD ($N=3$). The earlier prefix-trie fallback is not part of the final
 methodology.
 
 \subsection{Held-Out Conformance and Case-Contract Validation}
@@ -594,7 +594,7 @@ The four configurations are discovered on the 64\,\% training partition and
 compared on the subsequent 16\,\% validation partition. Selection uses four
 primary errors that cover complementary perspectives: turnaround EMD,
 frequency-weighted yard-service EMD, yard-activity-rate L1 error, and
-completion-order 3-gram NGD. Paired differences use the common seeds 42--51.
+completion-order NGD ($N=3$). Paired differences use the common seeds 42--51.
 An additional state source replaces the workload-blind \textit{visit-only}
 candidate only if its 95\,\% paired interval shows an improvement in at least
 one primary error and no paired interval shows a deterioration in another.
@@ -683,13 +683,19 @@ location attributes and all remaining discovery settings are common.}
 \end{table}
 
 All four configurations receive the same training-only CTB calibration. It
-preserves the empirical zero-inflated working-minute inter-arrival sample,
-allows already admitted trucks to finish across the weekly gate closure, and
+preserves the empirical zero-inflated working-minute inter-arrival sample and
 quantises simulated timestamps to the source log's one-minute resolution.
+After discovery, it also replaces each resource-specific availability calendar,
+which contains between 123 and 128 active hourly slots in the final development
+bundle, with a fully open $7\times24=168$-slot calendar. This prevents an
+activity of a truck already admitted to the terminal from being suspended at a
+weekly gate closure. The arrival calendar remains unchanged and continues to
+control admission. Consequently, the 168 slots express non-pre-emptive
+completion semantics rather than observed continuous resource staffing.
 Routing remains the native ProSiT discovery result for the expert-repaired
-sequential net.
-Applying these common observation and calendar settings to all configurations keeps
-the RQ3 comparison focused on contextual model expressiveness.
+sequential net. Applying these common observation and calendar settings to all
+configurations keeps the RQ3 comparison focused on contextual model
+expressiveness.
 
 With \texttt{enable\_multitasking=True}, ProSiT can classify a resource as
 multitasking when at least 5\,\% of its observed events show concurrent work.
@@ -966,20 +972,20 @@ that the simulator reproduces the empirical activity mixture and repetition
 rates more closely. Gate In and Gate Out are excluded because the case contract
 requires exactly one of each and would otherwise add no discriminatory value.
 
-\paragraph{3-Gram Distribution Distance}
+\paragraph{N-Gram Distance (NGD), with $N=3$}
 
 NGD compares local activity-order frequencies in the generated and held-out
 logs \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. Each case sequence is
-padded at both boundaries with $n-1$ dummy activities. Let $C_L(g)$ be the
-count of $n$-gram $g$ in the resulting profile of log $L$. The distance is
+padded at both boundaries with $N-1$ dummy activities. Let $C_L(g)$ be the
+count of $N$-gram $g$ in the resulting profile of log $L$. The distance is
 \begin{equation}
-    \operatorname{NGD}_n(L_1,L_2)
+    \operatorname{NGD}_N(L_1,L_2)
     =
     \frac{\sum_g\left|C_{L_1}(g)-C_{L_2}(g)\right|}
          {\sum_g C_{L_1}(g)+\sum_g C_{L_2}(g)}.
 \end{equation}
-It lies in $[0,1]$, with zero indicating identical n-gram count profiles. The
-primary analysis uses $n=3$. Unlike directly-follows pairs, triples retain the
+It lies in $[0,1]$, with zero indicating identical $N$-gram count profiles. The
+primary analysis uses $N=3$. Unlike directly-follows pairs, triples retain the
 local predecessor--activity--successor context, while remaining substantially
 less sparse than longer subsequences for the CTB activity set. The primary
 profile orders events by completion timestamp with stable explicit/input-order
@@ -1112,9 +1118,10 @@ control-flow parameter is changed. The T22 and demand interventions are
 then independently re-derived from this capped baseline.
 
 The expert confirmation applies to the ceiling, not to the learned HO2 and LL
-concurrency values, the assumption that all 168 weekly resource-calendar slots
-are open, or the simulator's assignment and queue semantics. Those quantities
-remain empirical or technical abstractions and are evaluated as such.
+concurrency values, the post-discovery choice to keep all 168 weekly
+resource-calendar slots open, or the simulator's assignment and queue
+semantics. Those quantities remain empirical or technical abstractions and are
+evaluated as such.
 
 This is a transparent domain constraint rather than a data-driven
 recalibration. The freely discovered source remains frozen as discovery

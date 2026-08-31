@@ -178,9 +178,9 @@ resource behavior use contextual information.
 
 \subsection{RQ1: Historical Fidelity of the Data-Aware Reference Model}
 
-The final reference model uses the expert-repaired sequential net, native
-ProSiT routing learned from development data, the minute-resolved arrival model, and
-non-pre-emptive completion. The raw RMG
+The final selected \textit{visit-only} reference model uses the expert-repaired
+sequential net, native ProSiT routing learned from development data, the
+minute-resolved arrival model, and non-pre-emptive completion. The raw RMG
 capacities are capped at three per block. This cap comes from the domain, not
 from the hold-out split. The hold-out is used only for evaluation.
 
@@ -203,13 +203,14 @@ Case-turnaround EMD (min) & -- & 6.159 & -- & [6.041, 6.278] \\
 Case-turnaround KS & -- & 0.0928 & -- & [0.0893, 0.0962] \\
 Inter-arrival EMD (min) & -- & 0.0724 & -- & [0.0674, 0.0774] \\
 Inter-arrival KS & -- & 0.0254 & -- & [0.0215, 0.0292] \\
+N-Gram Distance ($N=3$) & -- & 0.05677 & -- & [0.05540, 0.05813] \\
 Mean turnaround (min) & 39.742 & 33.812 & $-5.930$ & [33.682, 33.943]$^{a}$ \\
 P90 turnaround (min) & 71.000 & 57.900 & $-13.100$ & [57.674, 58.126]$^{a}$ \\
 Simultaneous-arrival share (\%) & 56.660 & 54.221 & $-2.439$ pp & [54.035, 54.407]$^{a}$ \\
 Yard-activity-rate L1 error & -- & 0.1636 & -- & [0.1593, 0.1678] \\
 \bottomrule
 \end{tabular}
-\caption{Held-out fidelity of the calibrated data-aware cap-three reference model
+\caption{Held-out fidelity of the final selected cap-three \textit{visit-only} model
 ($N_{\text{seeds}}=10$, seeds 42--51, and 17,892 cases per run).}
 \label{tab:final_kpis}
 \smallskip
@@ -226,15 +227,15 @@ turnaround is 5.930 minutes too short, or 14.92\,\%. P90 is 13.100 minutes too
 short, or 18.45\,\%. This bias remains across the ten seeds. The narrow seed
 intervals do not show that the model itself is correct.
 
-The \textit{native-only} bundle gives a completion-order
-3-gram NGD of 0.05657 on the same final test period
-($95\,\%$ MC CI $[0.05514,0.05800]$). The explicit ITS-order sensitivity is
-0.05654 ($[0.05511,0.05797]$), a difference of only 0.00003. This very close
-values show that the NGD result is not driven by the small number of
-timestamp inversions in the underlaying data. Its increase, relative to the validation value of
-approximately 0.04857, is consistent with the temporal transfer loss in
-activity combinations. NGD remains a control-flow distance and not evidence that
-timing, queues, or physical movement are actually correctly represented.
+The final \textit{visit-only} bundle gives a completion-order N-Gram Distance
+(NGD) with $N=3$ of 0.05677 on the same final test period
+($95\,\%$ MC CI $[0.05540,0.05813]$). The explicit ITS-order sensitivity is
+0.05673 ($[0.05537,0.05810]$), a difference of only 0.00003. The close values
+show that the NGD result is not driven by the small number of timestamp
+inversions in the underlying data. Its increase relative to the validation
+value of approximately 0.04857 is consistent with temporal transfer in local
+activity combinations. NGD remains a control-flow distance and is not evidence
+that timing, queues, or physical movement are represented correctly.
 
 As a role check, the same test period evaluated with the cap-three
 \textit{native-only} bundle gives a frequency-weighted yard-service EMD of
@@ -244,7 +245,7 @@ As a role check, the same test period evaluated with the cap-three
 \textit{visit-only} values of 2.341 minutes, 6.159 minutes, and 0.1636.
 The small differences do not change the historical reference decision. They
 show that the native-state scenario model does not incur a large additional
-historical mismatch as they provide a different inervention capability.
+historical mismatch while providing a different intervention capability.
 
 All ten runs pass the case-order checks. They contain no gate-only cases,
 within-case overlaps, invalid boundaries, or decreasing completion times. Gate
@@ -284,8 +285,8 @@ experiment on the 16\,\% validation period. All four cells use the same
 64\,\% discovery partition, repaired source net, tree settings, deterministic
 runner and seeds. They differ only in
 whether manually constructed static demand/utilisation proxies and ProSiT's
-native workload/queue state are available. The N-Gram Distribution Distance
-(NGD), here with $n=3$, compares local activity-order frequencies. Lower values are
+native workload/queue state are available. N-Gram Distance (NGD), here with
+$N=3$, compares local activity-order frequencies. Lower values are
 better for every reported error measure.
 
 \begin{table}[htbp]
@@ -300,7 +301,7 @@ better for every reported error measure.
 Turnaround EMD (min) & 9.149 & 9.163 & 9.253 & 9.173 \\
 Yard-service EMD, weighted (min) & 1.735 & 1.760 & 1.773 & 1.715 \\
 Yard-activity-rate L1 error & 0.1285 & 0.1305 & 0.1291 & 0.1305 \\
-3-gram NGD & 0.04857 & 0.04915 & 0.04863 & 0.04884 \\
+NGD ($N=3$) & 0.04857 & 0.04915 & 0.04863 & 0.04884 \\
 Gate-only cases per run & 0 & 0 & 0 & 0 \\
 \bottomrule
 \end{tabular}
@@ -318,7 +319,7 @@ Table~\ref{tab:configuration_screening}.
 Relative to \textit{visit-only}, the paired static-only changes are $+0.014$
 minutes for turnaround EMD (95\,\% CI $[-0.134,+0.162]$), $+0.025$ minutes for
 weighted yard-service EMD ($[-0.041,+0.091]$), $+0.0020$ for activity-rate L1
-($[-0.0045,+0.0085]$), and $+0.00059$ for 3-gram NGD
+($[-0.0045,+0.0085]$), and $+0.00059$ for NGD ($N=3$)
 ($[-0.00121,+0.00238]$). None is resolved.
 
 The native-only differences are also unresolved: $+0.105$ minutes for
@@ -600,24 +601,30 @@ source bundle before applying the final RMG cap.}
 \label{tab:capacities_train80}
 \smallskip
 \parbox{0.94\textwidth}{\footnotesize $^{a}$Ten RMG block identifiers
-show a maximum concurrency of four and twelve show the maximum concurrency five.
-their aggregate upper bound is 100 simultaneous RMG tasks.
+show a maximum concurrency of four and twelve show a maximum concurrency of
+five. Their aggregate upper bound is 100 simultaneous RMG tasks.
 This exceeds the expert-validated physical upper bound of 66 implied by at
 most three RMGs at each of the 22 blocks.}
 \end{table}
 
-All 168 weekly slots in each resource calendar are open. Gate closures are
-handled by the arrival calendar. Every RMG activity can select any of the 22
+After discovery, the CTB calibration replaces the resource-specific calendars,
+which contain 123--128 active hourly slots, with 168 open slots per week. This
+deliberate post-discovery setting lets trucks admitted before a gate closure
+finish without pausing their activities. The unchanged arrival calendar still
+controls admission and therefore retains the gate-closure schedule. The open
+resource calendars do not establish continuous physical staffing. Every RMG
+activity can select any of the 22
 block identifiers. The learned rules provide the weights. Removing T22 leaves
 21 identifiers and removes three capacity units from the final model.
-The HO2 and LL concurrency values, fully open resource calendars, and
+The HO2 and LL concurrency values, fully open CTB-calibrated resource calendars, and
 interchangeable-block assignment mechanism were not covered by the expert
 confirmation and remain model abstractions.
 
-The raw RMG capacities sum to 100. The expert-validated physical upper bound is defined as 66. Three RMGs, as well as 3 possible handling lanes for trucks, at each of 22 blocks. This mismatch is important. The discovered values
-describe overlapping event intervals. They are not verified crane counts.
-The cap removes the implausible upper bound. It does not reflect, that 66 is the
-effective capacity of the terminal.
+The raw RMG capacities sum to 100, whereas the expert-validated ceiling of
+three per block gives an aggregate upper bound of 66 across the 22 blocks. The
+discovered values describe overlapping event intervals, not verified crane
+counts. The cap removes an implausible concurrency value but does not assert
+that all 66 units are simultaneously staffed or available to landside trucks.
 
 This is the material expert-supported domain correction in the executable parameter bundle.
 Preserving the ITS schedule-derived XES order and checking for parallel operators corrects and
@@ -1031,7 +1038,7 @@ T13 physically changes behavior at exactly 6.5 trucks.
 The missing response at 20\,\% is therefore evidence that the intervention is
 too modest to enter the response region of this abstract model. The stress
 curve is still not a physical CTB forecast. Its onset and shape depend on
-interchangeable block assignments, fully open discovered resource calendars,
+interchangeable block assignments, fully open CTB-calibrated resource calendars,
 and model-derived enablement rather than verified spatial queues.  In addition,
 the fixed-case-count design is a compressed-arrival-horizon experiment: it
 changes not only arrival intensity but also where arrivals fall relative to
@@ -1054,7 +1061,7 @@ resolved validation improvement. Relative to that reference,
 \textit{native-only} changes turnaround EMD by
 $+0.105\;[-0.099,+0.308]$ minutes, weighted yard-service EMD by
 $+0.037\;[-0.037,+0.112]$ minutes, activity-rate L1 by
-$+0.0006\;[-0.0032,+0.0044]$, and 3-gram NGD by
+$+0.0006\;[-0.0032,+0.0044]$, and NGD ($N=3$) by
 $+0.00006\;[-0.00032,+0.00044]$. There is no statistically resolved
 deterioration, although this is not a formal non-inferiority conclusion.
 
@@ -1421,7 +1428,7 @@ visits. It also confirmed two hard physical constraints. One truck does not
 execute activities in parallel, and no block can use more than three RMGs
 concurrently. These judgments support the case contract, operator check,
 bypass diagnosis and cap-three correction. They do not validate the discovered
-HO2 or LL capacities, the fully open resource calendars, arrival and duration
+HO2 or LL capacities, the fully open CTB-calibrated resource calendars, arrival and duration
 distributions, block-interchangeability assumption, pre-service-delay
 semantics, or any scenario response. The review was a requirements check and
 did not produce a formal transcript or inter-rater assessment. Its evidential
