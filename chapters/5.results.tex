@@ -69,12 +69,10 @@ separate selection and test period. It still covers only one later CTB period.
 \label{sec:results_process_discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The raw Inductive-Miner result is informative but not sufficient as an
-executable CTB source model. On the 64\,\% discovery partition it contains
+The raw Inductive-Miner result is informative but is not sufficient as an executable CTB source model. On the 64\,\% discovery partition it contains
 three parallel operators because frequently reversed sequential relations are
 interpreted as concurrency. It also permits a complete yard bypass. Both
-properties conflict with the terminal-expert case contract. The model used by
-all four ProSiT configurations is therefore the transparent repair defined in
+properties conflict with the terminal-expert case contract. The model used by all four ProSiT configurations is therefore the transparent repair defined in
 Equation~\ref{eq:ctb_control_flow_contract}. It has 4 places, 12 transitions,
 24 arcs, and no parallel operator. It requires at least one yard activity and
 permits arbitrary sequential orders and repetitions. Table~\ref{tab:conformance_train_test}
