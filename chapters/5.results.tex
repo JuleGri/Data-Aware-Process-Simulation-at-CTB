@@ -265,7 +265,7 @@ with turnaround duration. At the median (real $\approx32$ minutes), the
 simulated CDF is already visibly ahead. At the 90th percentile, the gap
 widens further, consistent with the 13.100-minute P90 deficit in
 Table~\ref{tab:final_kpis}. The upper tail beyond 200 minutes is thin in both
-logs; it does not drive the headline metrics.
+logs, it does not drive the headline metrics.
 
 \begin{figure}[htbp]
 \centering
@@ -305,14 +305,15 @@ turnaround distribution. Total visit time is systematically too short.
 
 \subsection{RQ3: Feature Sources and Validation Fidelity}
 
-Table~\ref{tab:configuration_screening} reports the standardized $2\times2$
-experiment on the 16\,\% validation period. All four cells use the same
-64\,\% discovery partition, repaired source net, tree settings, deterministic
-runner and seeds. They differ only in
-whether manually constructed static demand/utilisation proxies and ProSiT's
-native workload/queue state are available. N-Gram Distance (NGD), here with
-$N=3$, compares local activity-order frequencies. Lower values are
-better for every reported error measure.
+The $2\times2$ experiment tests whether either of the two additional information
+sources improves validation fidelity relative to the workload-blind
+\textit{visit-only} configuration. Table~\ref{tab:configuration_screening}
+reports the mean errors on the 16\,\% validation period. All configurations use
+the same discovery partition, repaired Petri net, discovery settings, and
+replication protocol defined in Section~\ref{sec:simulation_parameter_discovery}.
+They differ only in the availability of manually constructed static
+demand/utilisation proxies and ProSiT's native workload and queue state.
+Lower values indicate better fidelity.
 
 \begin{table}[htbp]
 \centering
@@ -327,90 +328,86 @@ Turnaround EMD (min) & 9.149 & 9.163 & 9.253 & 9.173 \\
 Yard-service EMD, weighted (min) & 1.735 & 1.760 & 1.773 & 1.715 \\
 Yard-activity-rate L1 error & 0.1285 & 0.1305 & 0.1291 & 0.1305 \\
 NGD ($N=3$) & 0.04857 & 0.04915 & 0.04863 & 0.04884 \\
-Gate-only cases per run & 0 & 0 & 0 & 0 \\
 \bottomrule
 \end{tabular}
-\caption{Validation $2\times2$ feature-source comparison
+\caption{Mean validation errors in the $2\times2$ feature-source experiment
 ($N_{\text{seeds}}=10$ and 14,314 cases per run).}
 \label{tab:configuration_screening}
 \end{table}
 
-The ordering definition used for NGD is not decisive. Recomputing all four
-configurations from the explicit \texttt{case:event:order} field changes each
-mean only in the fifth decimal place and leaves the comparison unchanged.
+The results provide no clear historical-fidelity gain from either additional
+state source. The static-only configuration is slightly worse than
+\textit{visit-only} on all four primary measures. The \textit{native-only}
+configuration is also close to the reference: turnaround EMD increases by
+0.105 minutes and weighted yard-service EMD by 0.037 minutes, while the
+differences in activity-rate L1 and NGD are only 0.0006 and 0.00006,
+respectively. The combined configuration has the lowest mean weighted
+yard-service EMD, at 1.715 rather than 1.735 minutes, but does not improve the
+other three measures.
 
-Relative to \textit{visit-only}, the paired static-only changes are $+0.014$
-minutes for turnaround EMD (95\,\% paired MC CI $[-0.134,+0.162]$), $+0.025$ minutes for
-weighted yard-service EMD ($[-0.041,+0.091]$), $+0.0020$ for activity-rate L1
-($[-0.0045,+0.0085]$), and $+0.00059$ for NGD ($N=3$)
-($[-0.00121,+0.00238]$). None is resolved.
+The paired seed comparisons lead to the same conclusion. For every candidate
+configuration and primary metric, the 95\,\% paired Monte-Carlo interval
+includes zero. None of the added-state configurations therefore satisfies the
+pre-specified selection rule of showing a resolved improvement without a
+resolved deterioration elsewhere. This result should not be interpreted as
+statistical equivalence between the configurations, but rather the intervals quantify
+simulation-level variation across the ten seeds and no equivalence margin was
+defined.
 
-The native-only differences are also unresolved: $+0.105$ minutes for
-turnaround EMD ($[-0.099,+0.308]$), $+0.037$ minutes for weighted service EMD
-($[-0.037,+0.112]$), $+0.0006$ for activity-rate L1
-($[-0.0032,+0.0044]$), and $+0.00006$ for NGD
-($[-0.00032,+0.00044]$). The combined model has a slightly lower mean weighted
-service EMD than \textit{visit-only} ($-0.020$ minutes), but its interval
-$[-0.108,+0.067]$ crosses zero and the other three primary measures do not
-improve. Thus no complex cell satisfies the pre-specified requirement of at
-least one resolved improvement without a resolved worsening.
+The NGD comparison is also insensitive to the event-order definition.
+Recomputing the four configurations using the explicit
+\texttt{case:event:order} field changes the mean values only in the fifth
+decimal place and does not change the comparison. All configurations also
+satisfy the common sequential case contract, so structural validity does not
+distinguish the four cells.
 
-The rule audit explains why ordinary feature importance would be misleading.
-The static-only bundle retains static-state splits on \texttt{target\_rank},
-\texttt{target\_demand}, \texttt{rmg\_demand}, and
-\texttt{mt\_utilization}. The combined bundle retains
-\texttt{target\_rank\_group}, \texttt{target\_rank},
-\texttt{target\_demand}, and \texttt{rmg\_demand}. Native-only and both each
-retain one \texttt{queue\_length} split. Most retained rules nevertheless use
-visit/process or location state. Correlation is concentrated within alternative static representations:
-$\rho=0.922$ for gate and RMG utilisation, $0.898$ for gate and RMG demand, and
-$-0.790$ for target utilisation and target rank. By contrast, the largest
-absolute demand--native-state correlation is 0.190 and the largest
-utilisation--native-state correlation is 0.019. Correlated attributes may
-remain in an event log. The methodological issue is that attribution to an
-individual split can depend on the candidate set, not that predictors must be
-mutually independent.
+The absence of an aggregate fidelity improvement does not mean that the added
+predictors are ignored by ProSiT. The static-only and combined bundles retain
+several splits on static workload variables, including
+\texttt{target\_rank}, \texttt{target\_demand}, and
+\texttt{rmg\_demand}. The native-only and combined bundles each retain one
+\texttt{queue\_length} split. Most fitted rules nevertheless continue to use
+the visit, process, and location attributes that are common to all four
+configurations. The additional information is therefore used locally by the
+fitted trees, but this does not translate into better generated-log fidelity
+on the validation period.
 
-The retained native rule also makes the white-box scope concrete. In the
-\textit{native-only} and \textit{both} bundles, the waiting-time tree for T07
-splits once at \texttt{queue\_length}$=4.5$. Values at or below the threshold
-use a fitted exponential distribution with a reported node value of 6.825
-minutes. Values above the threshold use a gamma distribution with a reported
-node value of 27.474 minutes. This condition is inspectable and can be
-challenged against domain knowledge. It is not treated as a causal queueing law,
-and neither operational scenario edits this split or replaces one of its
-subtrees. The scenarios demonstrate transparent parameter intervention, while
-this retained rule illustrates the additional tree structure that ProSiT makes
-available for future rule-level interventions.
+Individually retained splits here, should not be interpreted as unique effects of
+specific predictors.Several static workload variables are strongly correlated: Pearson $r$ is
+0.922 between gate and RMG utilisation, 0.898 between gate and RMG demand,
+and $-0.790$ between target utilisation and target rank. This does not
+invalidate their use as predictors in the decision trees, but it limits the
+interpretation of individual retained splits. Correlated predictors may
+substitute for one another, so the selected split can depend on the available
+candidate set rather than identify a unique effect of one variable \cite{SimulationGuidedRepair2025}. This
+distinction is important here because RQ3 evaluates the contribution of the
+static information source as a bundle, rather than the independent effect of
+individual workload variables.
 
-The earlier semantically cleaned static sensitivity remains an exploratory
-specification audit rather than a fifth selection cell. It motivated removal
-of redundant aggregate, target-derived, binned and rank representations from
-future model designs, but it is not used to choose the historical reference. The
-four-cell result is sufficient to conclude that the available workload state
-does not provide a resolved validation improvement under the tested ProSiT
-specification.
+The magnitude of the differences is also small. For example,
+\textit{native-only} changes turnaround EMD by only 0.105 minutes and weighted
+yard-service EMD by 0.037 minutes, while its NGD differs from
+\textit{visit-only} by only 0.00006. The four configurations therefore generate
+very similar historical behaviour despite having different workload information
+available to their fitted rules. For RQ3, this supports the parsimonious
+\textit{visit-only} reference. More broadly, however, the weak separation shows
+that the added workload state has little influence on historical output under
+the observed operating conditions. This may reflect limited predictive signal,
+limited use of the added state by the fitted trees, or an operating range in
+which workload effects are not strongly expressed. The validation experiment
+alone cannot distinguish between these explanations.
+s rather than as evidence for or against individual variables.
 
-\paragraph{Historical reference-model decision}
+\medskip
 
-\textit{Visit-only} is selected because none of the three additional-state
-configurations passes the rule fixed before validation results were inspected.
-It is therefore the parsimonious fallback, not a winner chosen by ranking noisy
-point estimates. After this decision, \textit{visit-only} is rediscovered on
-the combined 80\,\% development log and evaluated once on the untouched test
-period. The final test results in Table~\ref{tab:final_kpis} do not participate
-in this choice. This decision concerns RQ1 historical fidelity. It does not
-remove the need to test whether a model used for RQ4 contains the endogenous
-state required by an intervention.
-
-\noindent\textbf{RQ3 answer.} Neither static workload proxies nor ProSiT's
-native dynamic state produces a statistically resolved multi-perspective
-validation improvement. More available state is therefore not automatically
-more useful process state. Under the pre-specified selection rule, the evidence
-favours the parsimonious \textit{visit-only} configuration for historical
-reproduction of this event log. The demand-response adequacy audit in
-Section~\ref{sec:results_scenarios} assigns a different, explicitly narrower
-role to native dynamic state.
+\noindent\textbf{RQ3 answer.}
+Under the tested ProSiT specification, neither the manually constructed
+workload proxies nor ProSiT's native dynamic state improves historical
+validation fidelity enough to justify the additional state under the
+pre-specified selection rule. \textit{Visit-only} is therefore selected as the
+historical-fidelity reference. This result concerns reproduction of the
+observed process only. If an endogenous workload state is additionally required for a
+specific what-if intervention is evaluated separately under RQ4.
 
 \paragraph{Meaning of the Time Measures}
 \label{sec:results_temporal_note}
@@ -441,58 +438,55 @@ show which share is movement, traffic, dispatching, or resource waiting.
 \label{sec:results_temporal_transfer}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The observed process changes between discovery and evaluation. Mean truck
-turnaround rises from 37.293 minutes in training to 39.742 minutes in the
-hold-out, a 2.450-minute increase (95\,\% Welch CI $[2.003,2.896]$).
-The median rises from 29 to 32 minutes and P90 from 67 to 71 minutes. The
-95\,\% case-bootstrap interval for the P90 increase is $[3,6]$ minutes. The
-Wasserstein distance between the two real turnaround distributions is 3.235
-minutes. The hold-out is therefore not an exchangeable sample from an
-unchanged period.
+The observed process becomes slower between the training and test periods.
+Mean truck turnaround increases from 37.293 to 39.742 minutes, a
+2.45-minute increase (95\,\% Welch CI $[2.003,2.896]$). The median rises
+from 29 to 32 minutes and P90 from 67 to 71 minutes. The Wasserstein distance
+between the two observed turnaround distributions is 3.24 minutes. Yard
+service changes in the same direction: mean duration increases for all nine
+yard activities, with a frequency-weighted mean increase of 2.120 minutes.
+The test period therefore represents a measurably different operating period,
+rather than a unchanged continuation of the training data.
 
-The change is not confined to case composition. Mean service time increases
-for all nine yard activities, with activity-specific increases between 1.20
-and 4.01 minutes. Using held-out activity frequencies, their mean shift is
-2.120 minutes and their aggregate Wasserstein distance is 2.131 minutes.
-At the same time, process-flow composition changes by a total-variation
-distance of 0.072 and target-area composition by 0.102. The receive share
-falls by 7.22 percentage points.
+Changes in the available workload proxies do not provide a simple congestion
+explanation for this shift. Gate and RMG utilisation proxies are lower in the
+test period while yard-service times and complete turnaround are higher.
+These variables should therefore be interpreted as empirical predictors, rather
+than stable measurements of physical congestion. Simulation
+models discovered from historical logs may lose accuracy when the underlying
+process evolves. Vinci et al.\ address this problem through online discovery
+that gives greater weight to recent observations while retaining historical
+information \cite{vinci2025onlinediscoverysimulationmodels}.
 
-This drift also affects a simple congestion interpretation of the available
-state variables. Gate and RMG utilisation proxies are lower in the hold-out
-(standardised shifts $-1.095$ and $-0.675$), while all yard-service means and
-complete turnaround are higher. Several demand measures rise, but the
-direction of the utilisation proxies is inconsistent with treating them as a
-stable causal measurement of terminal congestion. They stay predictive
-features whose relationships transfer empirically, not mechanical queue
-state. This finding is consistent with recent work on online simulation
-discovery, which gives greater weight to recent data while retaining historical
-information to handle evolving processes
-\cite{vinci2025onlinediscoverysimulationmodels}.
-
-Equation~\ref{eq:mean_transfer_decomposition} separates the reported mean
-deficit without pretending that the two sources can be identified case by
-case. For the cap-three \textit{visit-only} historical reference,
+The change in observed conditions explains only part of the final turnaround
+error. For the cap-three \textit{visit-only} historical reference,
 \begin{equation}
-39.742-33.812=(37.293-33.812)+(39.742-37.293)
-=3.481+2.450=5.930\ \text{minutes}.
+39.742-33.812
+=
+(37.293-33.812)
++
+(39.742-37.293)
+=
+3.481+2.450
+=
+5.930\ \text{minutes}.
 \end{equation}
-Approximately 59\,\% of the mean deficit is therefore already present relative
-to the training-period mean. The remaining 41\,\% is the later-period mean
-shift.
-This decomposition applies to the means only and is not an additive
-decomposition of EMD.
+Thus, 3.481 minutes, or about 59\,\% of the mean test-period deficit, is already
+present relative to the training-period mean. The remaining 2.450 minutes,
+or about 41\,\%, corresponds to the increase in observed mean turnaround
+between the two periods. This is an accounting identity for the means, not a
+causal decomposition and not a decomposition of EMD.
 
-The service-time comparison shows a behavior in the same direction. An earlier
-training-period diagnostic for the workload-blind rules bundle produced a
-frequency-weighted yard-service EMD of 0.595 minutes, whereas the standardized
-\textit{visit-only} reference reaches 2.341 minutes against the test period. The
-comparison is descriptive, because the bundle versions are not identical, but
-it is consistent with temporal transfer in activity timing.
-Complete turnaround still has a substantial training-period deficit, which
-indicates an additional model boundary beyond a drift. This distinction is
-important to mention, as a direct future-log comparison alone can confuse the simulator
-error with changing process behavior \cite{Ozdemir2025UtilityBPS}.
+Temporal transfer therefore contributes substantially to the test-period
+turnaround error, but it does not explain the full bias. The simulator already
+underestimates mean turnaround relative to the period from which it was
+learned, indicating a model limitation in addition to the later process change.
+This distinction is important because direct comparison with a future event log
+can otherwise mix simulation error with changes in the underlying process
+\cite{Ozdemir2025UtilityBPS}. Recent work on temporal deviations in BPS similarly
+argues for moving beyond the magnitude of simulation--reality differences and
+examining the arrival, processing-time, and resource inputs associated with
+them \cite{Wang2026TemporalDeviations}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Context Signal in Activity Durations}
@@ -656,9 +650,15 @@ block identifiers. The learned rules provide the weights. Removing T22 leaves
 \textit{native-only} execution bundle.
 The HO2 and LL concurrency values, fully open CTB-calibrated resource calendars, and
 interchangeable-block assignment mechanism were not covered by the expert
-confirmation and remain model abstractions.
+confirmation and remain model abstractions. The comparatively high discovered
+concurrency values for HO2 and LL are retained because the available terminal
+resource information for these areas is too volatile to support a stable
+physical capacity estimate. Both areas also contain a varying number of
+handling positions that allow several trucks to be processed or
+held in parallel. The discovered concurrency therefore represents this
+aggregate parallel handling capacity rather than a verified count of individual physical resources.
 
-The raw RMG capacities sum to 100, whereas the expert-validated ceiling of
+The discovered raw RMG capacities sum up to 100, whereas the expert-validated ceiling of
 three per block gives an aggregate upper bound of 66 across the 22 blocks. The
 discovered values describe overlapping event intervals, not verified crane
 counts. The cap removes an implausible concurrency value but does not assert
@@ -1293,12 +1293,11 @@ retain the discovered white-box process and state rules while supplying a
 mechanistic movement, queue, and resource-assignment layer.
 
 \paragraph{Correlation, scenarios, and operational meaning}
-The results therefore distinguish predictive association from intervention
-response. The temporal arrival features show a strong association with when
+The results distinguish predictive association from intervention response alone. The temporal arrival features display a strong association with when
 trucks enter the terminal, but the 20\,\% arrival intervention produces no
 resolved mean-turnaround increase. This combination does not imply that real
 CTB turnaround is independent of demand. It shows that the fitted simulator
-contains an arrival relationship, while the offered-load calculation places
+contains an arrival relationship, while the offered-load calculation, places
 the chosen change below mean block saturation. The paired ladder adds the
 missing functional test. The workload-blind model does not respond even under
 extreme demand, while the minimal native-state model develops a strong
@@ -1410,14 +1409,13 @@ activity to the start of the next can therefore combine
     T_{\mathrm{queue}} +
     T_{\mathrm{other}}.
 \end{equation}
-The log cannot identify these parts separately. The percentile check shows
-that a reconstructed baseline is sensitive to its assumption. It does not
-measure any one part. This would require position, trajectory, queue-entry, or
-similar state data. These data are not available. The results use
-the term \textit{pre-service delay}, not queueing time.
+The presented event log cannot identify these parts separately. The percentile check shows
+that a reconstructed baseline is sensitive to its assumption. This would require position, trajectory, queue-entry, or
+similar state data. These data are not available at the execution of this thesis. The results use
+the intended term \textit{pre-service delay}, not queueing time.
 The model's enabled timestamp is structurally auditable because it follows the
 Petri-net marking. Its accuracy as a physical readiness timestamp is not
-auditable without an independent readiness observation. The activity-specific
+auditable without independent readiness observation data. The activity-specific
 composite-gap comparison therefore tests the temporal consequence of the
 enablement convention, not the latent timestamp itself.
 
@@ -1426,13 +1424,13 @@ enablement convention, not the latent timestamp itself.
 The interval from \texttt{BEREITMELDUNG} (reported ready at the handover
 location) to \texttt{ERFUELLUNG} (fulfilled) is the period during which the
 truck driver is present at the handling point and dependent on terminal
-operations: crane positioning, container retrieval or placement including
-restacking, and completion confirmation.  Physical queueing and transit from
+operations, like crane positioning, container retrieval or placement including
+restacking, and completion confirmation. Physical queueing and transit from
 the previous location occur \emph{before} the ready timestamp and are
 therefore part of the model-derived pre-service delay, not the service time.
 The label \emph{service time} is consequently used in its standard BPS meaning.
 Longer values reflect heavier terminal handling requirements, not driver-side
-waiting.  The offered-load calculations use this definition; their validity
+waiting.  The offered-load calculations use this definition. Their validity
 depends on the ready timestamp accurately marking the start of terminal
 service rather than an earlier dispatching event.
 

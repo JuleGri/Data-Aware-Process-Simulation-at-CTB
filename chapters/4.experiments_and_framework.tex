@@ -352,7 +352,7 @@ sequence is the best available representation of the executed stop order.
 An initial diagnostic conversion through a PM4Py DataFrame formatter sorted
 events by timestamp. Because CTB timestamps have minute resolution and may
 overlap, that conversion changed the stored trace order. The authoritative
-pipeline instead preserves \texttt{case:event:order}; the original timestamps
+pipeline instead preserves \texttt{case:event:order}, while the original timestamps
 remain unchanged for the time and resource models. A direct audit shows that
 completion-time sorting changes the sequence of 11 among 89,460 visits. This
 input correction is necessary, but it does not by itself guarantee a
@@ -513,7 +513,7 @@ therefore use decision trees whose leaves carry local distributions. For the
 temporal models, the implementation selects among candidate leaf sizes using
 Wasserstein-distance-based cross-validation. It does not use CRPS. A candidate
 tree that provides no useful validation improvement remains pooled. This
-internal safeguard and all other discovery logic are identical across cells.
+internal safety measure and all other discovery logic are identical across cells.
 
 Depth three follows the standard ProSiT specification used as the controlled
 framework configuration in this study \cite{Vinci2026prosit}. It permits up to three successive
@@ -524,7 +524,7 @@ testing several depths on the same validation period would add another layer
 of model selection and increase the risk of attributing sample-specific splits
 to operational mechanisms. The minimum-leaf cross-validation already controls
 local sample support within the fixed depth. The conclusion is therefore
-conditional on the standard depth-three ProSiT configuration; the thesis does
+conditional on the standard depth-three ProSiT configuration and the thesis does
 not claim that depth three is globally optimal for CTB.
 
 \paragraph{Configuration \textit{visit-only}}
@@ -590,8 +590,8 @@ independently fitted marginals, thereby preserving their empirical dependence
 structure. Retained splits are reported as an inventory of rules used by a
 particular fitted model, not as unique causal effects of individual
 attributes. Exact minute-level joins additionally prevent future observations
-from entering a case through interpolation or nearest-time matching; this is a
-temporal-integrity safeguard rather than a decorrelation procedure.
+from entering a case through interpolation or nearest-time matching. This is a little
+temporal-integrity security rather than a decorrelation procedure.
 
 \subsection{Pre-Specified Historical-Fidelity Selection}
 
@@ -889,7 +889,7 @@ scenarios. The base seed is 42.
 
 The choice to seed Python's \texttt{random} and \texttt{numpy.random}
 before each \texttt{engine.apply()} rather than the ProSiT engine
-itself is intentional: ProSiT 1.0.3 does not expose a per-call seed on
+itself is intentional, ProSiT 1.0.3 does not expose a per-call seed on
 its simulation engine. Seeding both random-number generators before the
 call yields reproducible replications and captures the same stochastic
 variability that a user would observe in production.
