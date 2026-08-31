@@ -248,6 +248,7 @@
 	\pagenumbering{roman}
 	\input{frontmatter/personalize}
 	\maketitle
+	\cleardoublepage
 	\abstractpage
 	\cleardoublepage
 	\tableofcontents
