@@ -75,66 +75,55 @@ combined. These are time-burden findings, not proof of a physical queue or a
 capacity shortage, because the event log does not observe the mechanisms
 inside the gaps.
 
-RQ3 shows that additional state does not automatically improve simulation
-quality. The standardized $2\times2$ experiment separates static
+RQ3 shows that additional state does not automatically improve historical
+simulation quality. The standardized $2\times2$ experiment separates static
 demand/utilisation proxies from ProSiT's native workload and queue state.
-Static proxies increase the yard-activity-rate error by about 0.063 and
-3-gram NGD by about 0.0165, irrespective of whether native state is present.
-Native state leaves these control-flow measures almost unchanged, but raises
-turnaround EMD by 0.097 minutes without static proxies and by 0.310 minutes
-with them. Their turnaround interaction is 0.213 minutes. No weighted
-yard-service improvement is resolved. A semantically cleaned static candidate
-set retains no demand or utilisation split and still worsens activity-rate and
-local-sequence fidelity. This is evidence of feature-candidate-set sensitivity,
-not repeated-sampling evidence of statistical discovery instability. The NGD
-ranking is unchanged when the ITS order stored in XES replaces completion-time
-ordering in the sensitivity calculation.
+No added-state configuration produces a resolved improvement on turnaround,
+weighted yard-service, activity-rate, or 3-gram error. The pre-specified rule
+therefore selects \textit{visit-only} as the parsimonious historical reference.
+This is a model-selection result for replay fidelity, not a claim that the
+configuration is adequate for every intervention.
 
-The parsimonious \textit{visit-only} bundle is consequently used as the
-within-study reference. This choice is deliberately qualified. The same
-temporal hold-out was used to compare the four configurations and to report the
-selected model's fidelity. It is therefore not an independently selected
-prospective model. The experiment nevertheless establishes an important
-substantive result. The available contextual attributes and native ProSiT state
-do not supply the missing physical state. Data awareness can condition model
-behaviour on observed information, but it cannot reconstruct truck position,
-container location, equipment movement, spatial queues, or changing
+The purpose-specific stress audit adds the missing functional test. Under the
+same demand ladder, \textit{visit-only} remains effectively invariant even at
+the highest tested rate. \textit{Native-only} is historically comparable but
+develops resolved increases in turnaround and RMG pre-service once the
+realised arrival-rate ratio moves from 2.367 to 2.825. The smallest model
+capable of representing this endogenous response is therefore used for the
+demand scenario. This adaptive role assignment is reported separately from
+the pre-specified RQ3 selection. It does not identify a globally best model.
+The available state still cannot reconstruct truck position, container
+location, equipment movement, spatial queues, or changing
 waterside--landside allocation when those relations are absent from the event
 log.
 
 RQ4 makes this validity boundary visible. Both operational interventions are
-implemented reproducibly. Removing T22 represents a plausible construction,
-system, infrastructure, or mechanical-failure condition and eliminates all
-T22 assignments. It changes mean turnaround by $+0.110$ minutes with a 95\,\%
-interval of $[-0.057,+0.277]$, while model-derived RMG pre-service delay rises
-by a resolved 0.118 minutes. Increasing working-time arrival intensity by
-20\,\% represents a plausible change in admitted truck volume through slot and
-gate-lane decisions. It changes mean turnaround by $-0.033$ minutes with an
-interval of $[-0.171,+0.104]$ and produces no resolved mean handling response.
-Repeating both interventions with the rejected \textit{both} bundle preserves
-the mean-turnaround conclusion, although selected tail and component responses
-remain bundle-sensitive.
+implemented reproducibly in the cap-three \textit{native-only} scenario model.
+Removing T22 changes mean turnaround by $-0.030$ minutes with a 95\,\% interval
+of $[-0.168,+0.107]$, while model-derived RMG pre-service decreases by a
+resolved 0.093 minutes. Increasing working-time arrival intensity by 20\,\%
+raises elapsed arrival rate by 15.910\,\% but changes mean turnaround by
+$-0.087\;[-0.281,+0.106]$ minutes. The selected demand change is therefore
+below the model's response region.
 
-These scenarios demonstrate transparent parameter intervention, not the full
-white-box intervention potential of ProSiT. T22 removal changes resource
-mapping and availability. The demand experiment changes the empirical samples
-of one arrival leaf. Neither experiment changes a tree condition, threshold,
-or subtree. A retained T13 waiting-time rule illustrates that such structure is
-inspectable, but it is not interpreted as a causal queueing law. The 20\,\%
-intervention also remains below nominal mean saturation in the independent
-offered-load diagnostic. A separate historical demand ladder shows that an
-earlier fully contextualised bundle propagates sufficiently strong abstract
-capacity pressure into additional delay. Because it does not use the final
-\textit{visit-only} bundle, it neither explains that model's weak response nor
-establishes its saturation threshold.
+The extended demand ladder demonstrates that this is a threshold effect inside
+the simulator, not a general inability to propagate demand. At a realised
+ratio of 2.825, mean turnaround increases by 1.815 minutes and mean RMG
+pre-service by 2.318 minutes. At ratio 3.504, the increases are 4.069 and
+5.221 minutes. The T13 waiting-time tree contains one inspectable
+\texttt{queue\_length} split at 6.5. Its high-queue leaf has a representative
+value of 52.404 minutes compared with 7.167 minutes in the low-queue leaf.
+This is a statistical state-conditioned rule, not a causal queueing law.
+Neither scenario exercises the complete white-box intervention space because
+no learned threshold or subtree is edited.
 
 The expert-validated ceiling of three RMGs per block illustrates the
 difference between empirical parameter discovery and physical admissibility.
 Overlap-derived capacities above three are retained as discovery evidence but
-are capped in the effective scenario model. The earlier capped-versus-uncapped
-diagnostic does not resolve a direct mean-turnaround effect or a cap-by-scenario
-interaction. The ceiling is therefore retained because the uncapped state is
-physically impossible, not because it produces the headline findings.
+are capped in the effective scenario model. The paired capped-versus-uncapped
+diagnostic for the historical reference does not resolve a direct
+mean-turnaround effect. The ceiling is therefore retained because the uncapped
+state is physically impossible, not because it produces the headline findings.
 
 The scientific contribution is the resulting layered audit of automatic
 simulation-model generation in port logistics. The thesis provides a
@@ -144,7 +133,9 @@ separation between discovered parameters, expert-supplied constraints, and
 scenario interventions. More importantly, it demonstrates why control-flow
 conformance, stochastic fidelity, temporal transfer, physical semantics, and
 counterfactual validity must not be collapsed into one claim of simulation
-accuracy. A model can have almost perfect held-out replay fitness while
+accuracy. It also shows that model selection is objective-dependent:
+the parsimonious historical reference and the minimal responsive scenario
+model need not be the same bundle. A model can have almost perfect held-out replay fitness while
 underestimating turnaround. A richer feature set can perform worse than a
 simpler one. A physically impossible capacity can be inferred from overlapping
 timestamps. A technically correct intervention can still lack the mechanism

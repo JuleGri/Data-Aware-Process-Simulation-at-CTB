@@ -59,7 +59,7 @@ requires information outside conventional event logs, and that fully automated
 model generation remains uncommon \cite{Sulis2026SimulationReview}. Work in
 production and logistics similarly stresses that processing timestamps alone
 do not reliably expose transport, waiting, inventory, and physical resource
-interactions; simulation-ready reconstruction may require harmonised data from
+interactions. Simulation-ready reconstruction may require harmonised data from
 several operational levels and an object-oriented view
 \cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. The CTB
 case therefore provides a demanding empirical test of both the promise and the
@@ -224,12 +224,12 @@ Chapter~\ref{chap:results} presents the empirical findings following the logic
 of the four research questions. It first examines the temporal
 train/validation/test design and the stability of the observed control-flow
 language. It then compares the four ProSiT configurations on validation data,
-rediscovers the selected configuration on the complete development period,
-and evaluates its historical fidelity once on the untouched test period. The
-comparison separates the effects of static workload proxies and ProSiT's
-native workload state. A matched stress test then compares the workload-blind
-historical reference with the minimal native-state model used for the demand
-scenario. Further diagnostic analyses examine
+rediscovers the historical reference on the complete development period, and
+evaluates its historical fidelity once on the final test period. The comparison
+separates the effects of static workload proxies and ProSiT's native workload
+state. A matched stress test then compares the workload-blind historical
+reference with the minimal native-state model used for the demand scenario.
+Further diagnostic analyses examine
 the predictive signal contained in the available context attributes, the
 strong temporal structure of truck arrivals, the discovered resource
 capacities, and the interpretation of model-derived pre-service delays. The

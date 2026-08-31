@@ -7,7 +7,9 @@ records into a simulation-ready event log. It covers the data engineering but do
 Section~\ref{sec:cs_environment} introduces HHLA Container Terminal
 Burchardkai (CTB), the truck-handling operations and the data sources.
 Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs lifecycle timestamps and derives the case-level context required by ProSiT
-\cite{Vinci2026prosit}. The final section describes the event log and its characteristics used for the train/test split in Section~\ref{sec:train_test_split}.
+\cite{Vinci2026prosit}. The final section describes the event log and its
+characteristics used for the temporal train/validation/test split in
+Section~\ref{sec:train_test_split}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Case Study Environment}
@@ -74,7 +76,7 @@ reefer indicators, dwell time and inbound/outbound carriers. \\
     The raw extract covers approximately 104,000 truck visits, 113,466
     container move events and 336 yard-state snapshots
     ($8$ weeks $\times 7$ days $\times 6$ snapshots per day).
-    The move-event count refers to the raw report-system extract; it is not the
+    The move-event count refers to the raw report-system extract. It is not the
     denominator used later for the cleaned and cross-system-matched schedule
     records.
 
@@ -127,7 +129,7 @@ LL or VC. \\
 ANLAUFPUNKT\_SEQUENZNUMMER & Operational schedule position of the yard
 stop within the truck visit. \\
 FP\_ZEITPUNKT\_ERSTELLUNG & Operational admission timestamp created at
-the gate after the upstream OCR observation; used as the Gate In timestamp. \\
+the gate after the upstream OCR observation and used as the Gate In timestamp. \\
 ALP\_ZEITPUNKT\_BEREITMELDUNG & Time at which the handling activity
 was reported ready for execution. \\
 ALP\_ZEITPUNKT\_ERFUELLUNG & Time at which the handling activity was
@@ -183,7 +185,7 @@ truck plate, vessel voyage number or train ID. \\
 A container is considered ``picked up'' or ``delivered'' by a truck if
 the corresponding inbound or outbound carrier identifier resolves to a
 truck. The report system uses detailed handover-lane codes for the
-exchange area; these must be mapped to the higher-level operational
+exchange area. These must be mapped to the higher-level operational
 zones used by the scheduling system. All exchange areas
 beginning with ``HP'' (\textit{Hochpalette}) are mapped to ``LL''
 (\textit{Leerlager}) to align with the schedule system's terminology.
@@ -234,9 +236,11 @@ identifier), \texttt{KAP\_TEU\_THEORETISCH} (theoretical TEU capacity),
 (utilisation percentage). Because observations are irregularly spaced,
 the data is resampled to a uniform one-minute frequency using linear
 interpolation on the numeric fields within the observed support. The resulting
-minute key is joined exactly to the minute-resolved Gate In timestamp. Values
-are not taken from a later minute and the series is not extrapolated beyond
-its final observation.
+minute key is joined exactly to the minute-resolved Gate In timestamp. The join
+does not substitute a later minute and the series is not extrapolated beyond
+its final observation. The interpolated value itself is nevertheless a
+retrospective estimate based on adjacent yard observations rather than a
+strictly causal online measurement.
 
 \paragraph{Truck Demand Data}
 
@@ -254,7 +258,7 @@ also aggregated into one yard-section demand measure.
 
 The resulting demand features capture workload pressure at the time of
 case arrival. They are included as contextual predictors because such
-pressure may influence waiting times and resource-allocation decisions;
+pressure may influence waiting times and resource-allocation decisions.
 their empirical contribution is evaluated under RQ3 in
 Section~\ref{sec:simulation_discovery_methodology}.
 
@@ -312,7 +316,7 @@ three cases with negative durations and 43 with overlapping activities.
 
 \paragraph{Extreme runtime outliers.} Two further runtime filters are
 applied. The first removes cases with excessive gate-out delay
-($t_{\text{GateOut}}-t_{\text{LastCompletion}}>10\text{h}$); such
+($t_{\text{GateOut}}-t_{\text{LastCompletion}}>10\text{h}$). Such
 records commonly indicate system failure. The second removes visits
 whose total turnaround time exceeds twelve hours
 ($t_{\text{GateOut}}-t_{\text{GateIn}}>12\text{h}$), which is
@@ -407,7 +411,7 @@ population-sensitivity study or an object-centric representation rather than a
 silent enlargement of only one configuration.
 
 This case-centric design does not discard the container characteristics that
-are available for a retained truck visit; they remain available as contextual
+are available for a retained truck visit. They remain available as contextual
 predictors. It does, however, collapse the independent lifecycles and relations
 of trucks, containers, yard blocks, and equipment into one visit-oriented
 record. An object-centric event log could preserve these entities and associate
@@ -415,7 +419,7 @@ a handling event with all participating objects
 \cite{VanDerAalst2023OCPM}. It could also retain multi-block visits without
 forcing one block-level value onto the complete case. Such a representation
 would require a different source-data mapping and an object-centric simulation
-engine \cite{Knopp2023ObjectCentricSimulation}; it is therefore outside the
+engine \cite{Knopp2023ObjectCentricSimulation}. It is therefore outside the
 scope of the ProSiT-based experiment rather than an untested variant of the
 same input configuration.
 
@@ -521,7 +525,7 @@ are mapped for each activity type.
 \textbf{Complete timestamp} \\
 \midrule
 Gate In & FP\_ZEITPUNKT\_ERSTELLUNG & Same value as the start
-timestamp; represents terminal admission after the upstream approach and
+timestamp and represents terminal admission after the upstream approach and
 possible pre-gate waiting. \\
 Yard activity & ALP\_ZEITPUNKT\_BEREITMELDUNG &
 ALP\_ZEITPUNKT\_ERFUELLUNG \\
@@ -606,7 +610,7 @@ the truck enters the terminal. The number of planned stops,
 the numbers of delivery and receive transactions, the planned target area
 and the resulting final visit-complexity score are known at Gate In. The
 pipeline reproduces this entry-time information by aggregating all rows of
-the same \texttt{FAHRPLAN\_UID}; it does not infer these attributes from
+the same \texttt{FAHRPLAN\_UID}. It does not infer these attributes from
 later realised durations or completion outcomes.
 \texttt{visit\_complexity} is a deterministic summary of the planned
 stop/container manifest (visit size, container-handling complexity and
@@ -679,7 +683,7 @@ block identifier.
 These features are reconstructed from the planned, area-specific stop
 labels before the RMG activities are genericised and are then carried as
 case attributes. Their information time is
-Gate In as specified above under Information Available at Truck Entry; the
+Gate In as specified above under Information Available at Truck Entry. The
 later \texttt{org:resource} assignment is not used as an execution outcome
 to be predicted.
 
@@ -818,8 +822,11 @@ The generated event log is exported as the full CSV
 \texttt{s6\_eventlog\_target\_rank\_features.csv}. The frozen temporal partitions are exported as \texttt{s6\_train.csv},
 \texttt{s6\_test.csv} and the corresponding
 \texttt{xes\_files/s6\_train.xes} and
-\texttt{xes\_files/s6\_test.xes}. CSV is the pipeline format; XES enables compatibility with pm4py, ProM
+\texttt{xes\_files/s6\_test.xes}. CSV is the pipeline format. XES enables compatibility with pm4py, ProM
 and ProSiT for process discovery and conformance analysis.
 
 The chronological character of the log is preserved, as every
-case follows a increasing temporal behavior from Gate In to Gate Out. This property is further examined in Chapter~\ref{chp:experiments_and_framework} to define a temporal train/test split at case level (see Section~\ref{sec:train_test_split}).
+case follows an increasing temporal order from Gate In to Gate Out. This
+property is further examined in Chapter~\ref{chp:experiments_and_framework} to
+define a temporal train/validation/test split at case level (see
+Section~\ref{sec:train_test_split}).

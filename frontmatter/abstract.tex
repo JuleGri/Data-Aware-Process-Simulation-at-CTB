@@ -1,66 +1,53 @@
 %!TEX root = ../dissertation.tex
 
 Container terminals use simulation to evaluate operational changes without
-disrupting live operations, but these models are commonly constructed and
-calibrated by hand. Data-aware process simulation instead derives executable
-models from event logs; evidence from physical logistics remains limited.
+disrupting live operations, but conventional models are commonly constructed
+and calibrated by hand. Data-aware process simulation instead derives
+executable models from event logs. Its validity in physical logistics remains
+under-evaluated.
 
-This thesis evaluates the approach for truck operations at HHLA Container
-Terminal Burchardkai. Two months of data were transformed into an event log of
-89,460 visits and divided temporally into discovery and held-out periods. To
-keep block context well defined at case level, 1,693 visits involving more than
-one RMG block were excluded. The empirical population therefore represents a
-restricted terminal subprocess rather than all truck movements. The
-white-box ProSiT framework was evaluated through a $2\times2$ comparison of
-manual demand/utilisation proxies and ProSiT's native workload/queue state,
-with visit, process and location state held common. An apparent parallelism defect was traced to timestamp-based event
-reordering. Preserving the ITS schedule-derived stop order stored in XES
-produced a compact sequential Petri
-net used as the common executable control flow.
+This thesis examines ProSiT for truck operations at HHLA Container Terminal
+Burchardkai. Two months of operational data were transformed into an event log
+of 89,460 truck visits. The log was divided chronologically into 64\,\%
+discovery, 16\,\% validation, and 20\,\% test data. The final test period was
+not used for configuration selection. To maintain unambiguous block context at
+case level, 1,693 visits involving more than one RMG block were excluded. The
+empirical scope is therefore a defined one-RMG subprocess rather than all
+terminal truck movements.
 
-The net fits 99.994\,\% of 17,892 held-out visits. A separate repair removes a
-silent gate-only bypass, raising precision from 0.7558 to 0.7939 while lowering
-generalisation from 0.9413 to 0.8859. A matched ten-seed comparison produces
-identical fidelity, activity-frequency, and 3-gram NGD results before and after the
-repair because the removed path is never realised. The selected \textit{visit-only}
-reference model reproduces
-arrival spacing closely and parts of yard service timing, but mean turnaround
-is 7.63 minutes too short and P90 is 16.80 minutes too short. The 7.63-minute
-test-period gap decomposes into a 2.45-minute increase in the observed mean
-between periods and a 5.18-minute simulation deficit relative to the
-training-period mean. Paired ten-seed comparisons show that static workload
-proxies worsen activity-frequency and 3-gram fidelity, while native state
-increases turnaround distance and has no resolved service-time benefit. A
-cleaned static sensitivity retains no demand or utilisation split and reaches
-the same negative control-flow conclusion. The parsimonious visit-only bundle
-is therefore retained as the within-study reference. Because the
-same later period informs both this comparison and the reported reference
-performance, it is not an independent prospective validation. The
-automatically discovered RMG concurrency values
-required a documented correction to the terminal-expert-validated maximum of
-three cranes per block. Two reproducible policy experiments produce no
-resolved mean-turnaround response. T22 removal increases model-derived RMG
-pre-service delay slightly, whereas the 20\,\% demand increase produces no
-resolved handling mean effect and leaves the
-most-loaded held-out RMG block at 0.506 nominal mean utilisation. In a separate
-historical diagnostic, an earlier fully contextualised six-level demand ladder
-shows that a related ProSiT bundle can propagate stronger load. At a realised elapsed-rate
-ratio of 2.367, mean turnaround rises by 4.644 minutes and mean RMG pre-service
-by 5.878 minutes. That model therefore propagates abstract capacity pressure
-near the nominal saturation region, but it lacks the validated spatial
-mechanisms needed for physical counterfactual claims.
-Repeating the scenarios with the rejected \textit{both} bundle preserves the
-mean-turnaround conclusion but reveals bundle-sensitive P90 and receive
-pre-service responses. An earlier fully contextualised capped-versus-uncapped
-diagnostic produces no resolved direct or cap-by-scenario mean-turnaround
-effect; it supports the ceiling as a necessary domain correction without
-constituting an uncapped validation of the selected reference.
+Preserving the ITS schedule-derived stop order stored in XES produces a compact
+sequential Petri net. On 17,892 test visits, the net reaches fitness 0.999992
+and completely fits 99.994\,\% of cases. A separate repair removes a silent
+gate-only bypass and raises precision from 0.7558 to 0.7939, but a matched
+ten-seed experiment finds no change in the generated fidelity results. The
+repair therefore improves the formal language without altering realised
+baseline behaviour.
 
-The thesis contributes a layered validity audit separating event semantics,
+A $2\times2$ validation experiment separates manually constructed static
+demand and utilisation proxies from ProSiT's native workload and queue state.
+No added-state configuration shows a resolved improvement across turnaround,
+frequency-weighted yard-service, activity-rate, and 3-gram errors. The
+parsimonious \textit{visit-only} configuration is consequently rediscovered on
+the complete 80\,\% development period and evaluated once on the untouched
+test period. It reproduces inter-arrival spacing closely and parts of yard
+service timing, but its mean turnaround is 33.812 rather than 39.742 minutes
+and its P90 is 57.900 rather than 71.000 minutes. The narrow Monte-Carlo
+intervals show that this deficit is systematic rather than simulation noise.
+
+Two expert-supported physical requirements are audited separately. Activities
+of one truck must remain sequential, and no more than three RMGs may operate in
+one block. The latter ceiling is imposed transparently because overlap-derived
+capacities exceed the physical maximum. For what-if analysis, a purpose-specific
+\textit{native-only} model supplies the endogenous queue state absent from the
+historical reference. Closing block T22 and increasing working-time demand by
+20\,\% produce no resolved mean-turnaround effect. A matched six-level stress
+test nevertheless reveals a non-linear response at higher realised arrival
+rates. This demonstrates demand propagation inside the fitted simulator, not a
+validated physical congestion threshold.
+
+The thesis contributes a layered validity audit that separates event order,
 control-flow language, historical fidelity, temporal transfer, physical
-resource--space semantics, and scenario response. Data-aware simulation is
-valuable here as an auditable historical and diagnostic model, but direct
-operational decision support requires validated location, movement, resource,
-and queueing mechanisms. With these extensions, the approach could compare
-truck-slot rates and handling priorities under forecast terminal conditions
-before their implementation.
+semantics, and intervention response. The resulting model is useful for
+transparent historical analysis and diagnostic what-if experiments. Direct
+prescriptive use still requires explicit location, movement, equipment, and
+queue mechanisms together with prospective operational validation.

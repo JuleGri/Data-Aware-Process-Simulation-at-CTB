@@ -192,7 +192,7 @@ Terminal Operating System (TOS), Gate Operating System (GOS), Yard Management
 System (YMS), and equipment-control systems. A truck arrival, a storage
 assignment, or the completion of a container move may therefore be recorded in
 different systems and at different levels of detail. At CTB, historically grown
-naming conventions add a further integration problem; Chapter~\ref{chp:case_study_and_data}
+naming conventions add a further integration problem. Chapter~\ref{chp:case_study_and_data}
 describes how these records are reconciled.
 
 Process Mining turns such transactions into a consistent sequence of
@@ -201,7 +201,7 @@ identifies the type of operation, such as \texttt{Gate In}, a container
 delivery, or \texttt{Gate Out}. Repeated occurrences of the same activity are
 therefore separate events. Events are associated with a \emph{case}, the object
 whose process execution is followed. Depending on the analysis, that object
-might be an order, container, or vehicle visit; throughout this thesis, one
+might be an order, container, or vehicle visit. Throughout this thesis, one
 truck visit defines one case. This choice fixes the process boundary from the
 truck's admission to its exit and allows all recorded operations of that visit
 to be analysed together.
@@ -212,7 +212,7 @@ simulation additionally distinguish an observed start timestamp from an
 observed completion timestamp. Their difference is the activity's
 \emph{service time}. A third temporal concept, \emph{enablement}, denotes the
 moment at which the process-model state allows the activity to begin. CTB does
-not record enablement directly; it is reconstructed by replaying the event log
+not record enablement directly. It is reconstructed by replaying the event log
 against the discovered process model
 \cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The simulation-discovery
 framework used in this thesis calls the interval between model-derived
@@ -239,7 +239,7 @@ simplified truck visits.
 
 The CTB input log provides the start and completion timestamps required for
 execution-time modelling, together with resource and operational context.
-Activity enablement is not observed directly; it is reconstructed during
+Activity enablement is not observed directly. It is reconstructed during
 process-model alignment by the simulation-discovery framework
 (Section~\ref{sec:simulation_discovery_methodology}).
 
@@ -296,7 +296,7 @@ operational units and examines how work is allocated among them. The data
 perspective connects behaviour with case and event attributes, such as object
 type, yard location, or operational context, that may influence routing or
 duration. These perspectives are analytically distinct but describe the same
-recorded process; their joint use links process structure with timing,
+recorded process. Their joint use links process structure with timing,
 resources, and operating circumstances.
 
 \subsection{Process Discovery and Model Representations}
@@ -328,7 +328,7 @@ behaviour through nested sequence, exclusive-choice, parallel, and loop
 operators. The Inductive Miner discovers this block-structured representation
 and can convert it into a sound Petri net \cite{Leemans2014InductiveMiner}.
 The Petri net distinguishes places, visible activity transitions, and silent
-routing transitions; its markings determine which activity may execute next.
+routing transitions. Its markings determine which activity may execute next.
 Consequently, the DFG and Petri net answer complementary questions: the DFG
 shows what was frequent in the log, whereas the Petri net states what the model
 allows. The CTB instances of both views are therefore presented separately and
@@ -356,8 +356,8 @@ An important conformance technique is optimal alignment. An alignment relates
 the observed event sequence of a case to an executable run of a process
 model. Formally, it is a sequence of three move types: a
 \emph{synchronous move} consumes an event and fires a transition with the
-same visible label; a \emph{log move} consumes an event without a
-corresponding model transition; and a \emph{model move} fires a model
+same visible label. A \emph{log move} consumes an event without a
+corresponding model transition. A \emph{model move} fires a model
 transition without consuming an observed event. A cost function normally
 assigns zero cost to synchronous moves and positive, configurable costs
 to deviations. An optimal alignment $\lambda^{\star}$ is
@@ -376,7 +376,7 @@ cost and $h$ is an admissible lower bound on the remaining cost. With an
 admissible heuristic, the first complete solution is cost-optimal
 \cite{Adriansyah2011CostFitness}. The resulting event--transition
 correspondence supports conformance diagnostics and timestamp replay for
-performance analysis \cite{aalst2012ConformanceChecking}; it does not
+performance analysis \cite{aalst2012ConformanceChecking}. It does not
 turn a model-derived enablement instant into an independently observed
 timestamp.
 
@@ -410,7 +410,7 @@ the available activities, their possible order, and alternative execution
 paths, using a formalism such as a Petri net, BPMN model, process tree, or
 workflow graph \cite{PMvanDerAalst2016,BPSAalst2015}. The arrival process
 determines when new cases enter and is commonly represented by a distribution
-of inter-arrival times; changing this input alters workload, waiting, and
+of inter-arrival times. Changing this input alters workload, waiting, and
 resource utilisation.
 
 Resources provide the capacity that executes activities and may represent
@@ -575,9 +575,9 @@ discovery. Reconstructing an OCEL and evaluating an object-centric simulation
 would constitute a different model and data-engineering study.
 
 Three related streams must therefore be distinguished. Business-process
-simulation discovery estimates executable process behaviour from event logs;
+simulation discovery estimates executable process behaviour from event logs.
 ASMG reconstructs physical production or material-flow systems from a wider
-range of digital sources; and Process Mining in production and logistics uses
+range of digital sources. Process Mining in production and logistics uses
 event data to analyse and design processes, sometimes as an input to a
 separately constructed simulator
 \cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. The CTB
@@ -621,10 +621,10 @@ activity labels. The repaired model is retained only when held-out fitness,
 precision and simulation-log distances improve. The framework therefore
 treats model repair as a validated model comparison, not as an undocumented
 manual correction. Its currently operationalised repairs add missing
-behaviour; restricting behaviour that is allowed too broadly remains an open
+behaviour. Restricting behaviour that is allowed too broadly remains an open
 extension. This distinction matters when a discovered model is imprecise
 rather than unfit. Across 23 evaluated source models, the harmonic
-fitness--precision score improved in 19 cases; control-flow log distance fell
+fitness--precision score improved in 19 cases. Control-flow log distance fell
 in 16 cases, with a reported average reduction of 31.54\,\%. These results show
 that repair can materially improve simulation behaviour, but also that no
 operator or acceptance rule dominates every model.
@@ -707,14 +707,14 @@ increasingly conditional stochastic behaviour. Basic stochastic process models
 retain variation but apply the same routing probabilities to every case.
 Data-aware models condition those probabilities on recorded attributes, while
 process-state-aware approaches additionally use information accumulated during
-the current execution. The stages are not mutually exclusive model classes;
+the current execution. The stages are not mutually exclusive model classes.
 each adds information that can explain why otherwise similar cases behave
 differently.
 
 López-Pintado et al. \cite{lopez2024} broaden the data representation through
 global, case, and event attributes, attribute-update rules, and data-dependent
 branching conditions. In their evaluated framework, however, attributes
-determine control flow; dependencies between data and activity start or
+determine control flow. Dependencies between data and activity start or
 duration remain future work. This boundary is important for physical logistics:
 a data-aware routing formalism does not by itself represent movement or
 queueing time.
@@ -746,7 +746,7 @@ five simulated logs per model. ProSiT is competitive with a black-box baseline
 while keeping the rules inspectable \cite{Vinci2026prosit}. The authors also
 draw a boundary essential for what-if use: the learned relationships capture
 correlations, not necessarily root causes. White-box inspection shows which
-association the simulator uses; causal and operational validity still require
+association the simulator uses. Causal and operational validity still require
 domain and intervention evidence.
 
 ProSiT is useful for this thesis because its level of contextual conditioning
@@ -760,7 +760,7 @@ Section~\ref{sec:simulation_discovery_methodology}
 \cite{Vinci2026prosit}. The parameter
 \texttt{max\_depth\_tree} limits the depth of the probabilistic decision trees
 used for conditional simulation behaviour. Setting it to zero disables the
-conditional trees and yields an unconditional distribution-based model;
+conditional trees and yields an unconditional distribution-based model.
 increasing it permits more detailed combinations of contextual features but
 also increases complexity and the risk of overfitting.
 \texttt{use\_workload\_features} controls whether the waiting-time and
@@ -849,9 +849,9 @@ whether that conceptual model has been implemented correctly.
 calibrate and evaluate the model are adequate. Finally,
 \emph{operational validity} asks whether the computerised model's
 output behaviour is accurate enough over the domain in which the
-model is intended to be used. Historical-data validation---running the model
-under historical input conditions and comparing its output with observed
-system data---is one technique for assessing operational validity
+model is intended to be used. Historical-data validation, in which the model
+runs under historical input conditions and its output is compared with observed
+system data, is one technique for assessing operational validity
 \cite{Sargent2013Validation}.
 
 Table~\ref{tab:validation_evidence_types} maps these distinctions to the
@@ -910,7 +910,7 @@ resource perspectives, integrate them into a coloured Petri-net
 simulation model, simulate a second event log, and analyse how well that
 generated log approximates the characteristics of the original log
 \cite{PMRozinat2009}. This is stronger than checking whether the
-discovered model can execute; it evaluates whether its generated
+discovered model can execute. It evaluates whether its generated
 behaviour resembles recorded behaviour.
 
 Camargo et al. formalise the same idea as an optimisation objective.
@@ -926,7 +926,7 @@ and their frequencies while performing worse on temporal dynamics
 The implication is that operational fidelity is multi-dimensional.
 Relevant perspectives include control flow, activity and case timing,
 case arrivals, congestion and resource behaviour. A model can be close
-to the real log in one perspective and far away in another; collapsing
+to the real log in one perspective and far away in another. Collapsing
 all discrepancies into one number can hide the mechanism
 that is incorrectly represented
 \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}.
@@ -962,7 +962,7 @@ simulation-oriented log distances \cite{ChapelaCampa2023Trust,
 Chapela2025SimQuality}. Control-Flow Log Distance (CFLD) computes the
 normalised Damerau--Levenshtein distance between pairs of case sequences and uses
 the Hungarian algorithm to find the minimum-cost one-to-one matching
-between the two logs. CFLD compares complete case sequences; it is not
+between the two logs. CFLD compares complete case sequences. It is not
 merely a comparison of variant-frequency vectors. Because this matching
 is computationally expensive, N-Gram Distance (NGD) compares normalised
 frequencies of local activity subsequences. NGD is scalable and detects
@@ -971,7 +971,7 @@ full-case information.
 
 This thesis does not claim to implement the full Chapela-Campa metric
 suite. Its structural evidence combines held-out Petri-net conformance,
-explicit case-language contracts, yard-activity-rate error, and 3-gram NGD;
+explicit case-language contracts, yard-activity-rate error, and 3-gram NGD.
 it does not implement the more expensive CFLD matching. These measures answer
 the CTB-specific structural questions, while the Chapela-Campa framework
 supplies the rationale for keeping structural evidence separate from temporal
@@ -987,8 +987,8 @@ temporal dynamics \cite{Camargo2021}.
 The Chapela-Campa framework distinguishes three event-distribution
 measures \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}.
 \emph{Absolute Event Distribution} (AED) compares event counts across
-absolute calendar-time bins; \emph{Circadian Event Distribution} (CED)
-compares recurring weekday and hour-of-day patterns; and
+absolute calendar-time bins. \emph{Circadian Event Distribution} (CED)
+compares recurring weekday and hour-of-day patterns. Finally,
 \emph{Relative Event Distribution} (RED) offsets timestamps by each
 case's arrival and compares its temporal progression. AED and RED
 mean \emph{event distribution}, not absolute or relative error
@@ -1020,7 +1020,7 @@ yard resources, and simultaneous arrivals result from the minute-resolved
 source data. The evaluation reports
 inter-arrival distance, simultaneous-arrival share and arrivals per
 elapsed hour alongside turnaround and yard-service distributions.
-These measures do not directly observe a physical queue; they assess
+These measures do not directly observe a physical queue. They assess
 whether the generated workload and its resulting temporal behaviour
 match what the available event log can identify.
 
@@ -1076,7 +1076,7 @@ state or workload information rather than using only global
 distributions and branching frequencies
 \cite{Vinci2023Inf.Activ.Prob,lopez2024,Vinci2026prosit}. This adds a
 validation layer. First, every predictor used at a simulated decision
-point must be available at that point; attributes computed from a later
+point must be available at that point. Attributes computed from a later
 outcome create target leakage even if aggregate log similarity is high.
 Second, discovery and model selection must be separated from the final
 test log. Third, the generated log must satisfy process and domain
@@ -1176,9 +1176,9 @@ model assumptions, not as experimentally established causal effects.
 
 Three literature strands are relevant to this setting. Process-mining-based
 simulation research contributes discovery, conformance, and validation methods
-for deriving executable models from event logs; ASMG and related manufacturing
+for deriving executable models from event logs. ASMG and related manufacturing
 studies show how physical-system structure and material-flow dependencies can be
-represented in formal abstractions; and logistics-oriented Process Mining
+represented in formal abstractions. Logistics-oriented Process Mining
 studies highlight the need to account for operational context, queues, and
 resource interactions beyond timestamps alone. The present gap is therefore not
 simply that one method is missing, but that the literature reviewed for this

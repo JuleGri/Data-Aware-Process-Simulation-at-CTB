@@ -5,7 +5,7 @@
 
 This appendix separates visual process inspection from executable model state.
 The complete directly-follows graph exposes every observed training-log
-relation. The graph is descriptive; the discovered Petri net and fitted ProSiT
+relation. The graph is descriptive. The discovered Petri net and fitted ProSiT
 parameters define the executable simulation model.
 
 \section{Unfiltered Training-Log Control Flow}
@@ -38,25 +38,29 @@ net, markings, fitted distributions, resources, capacities and calendars.
 The T22 scenario removes the block from the eligible RMG resource mappings and
 its availability calendar. The demand scenario changes only the empirical
 working-time inter-arrival sample. These state differences are described in
-Section~\ref{sec:what_if_design}; no source-code listing is required to
+Section~\ref{sec:what_if_design}. No source-code listing is required to
 interpret the interventions.
 
 The public ProSiT save-and-load workflow serializes discovered parameters so
 that simulation can be repeated without rerunning discovery
 \cite{ProSiTRepository}. The project follows that workflow and additionally
-retains the exact Python objects used for the CTB experiments. A round-trip
-audit of all three final bundles is stored in
-\path{artifacts/json\_roundtrip\_audit\_final\_ctb\_20260831/}. It found that fitted
-rules, capacities, calendars, workload flags and empirical case-attribute
-distributions survive reconstruction, but the 39 runtime rule nodes and their
-71,530 calibrated arrival samples present in each pickle are absent
-immediately after \texttt{from\_json()}. ProSiT can regenerate such samples
-lazily from the fitted distributions, so the JSON remains a valid portable
-model description. It is not, however, guaranteed to be numerically identical
-to the post-calibration object used for the reported CTB runs. The pickles are
-therefore the authoritative execution snapshots, while JSON is retained for
-inspection and interchange. Pickles must only be loaded from this trusted
-project state and with the recorded environment.
+retains the exact Python objects used for the CTB experiments. A machine-readable
+round-trip audit covers the baseline, T22-closure and increased-demand bundles
+of the final \textit{native-only} scenario model. Fitted rules, capacities,
+calendars, workload settings and empirical case-attribute distributions survive
+reconstruction. Each pickle additionally contains 40 timing or rule nodes with
+stored \texttt{sampled} arrays. This includes 71,530 calibrated inter-arrival
+values in the arrival node. None of these arrays is present immediately after
+\texttt{from\_json()}, and the CTB-specific calibration metadata attached to the
+Python objects is not reconstructed either.
+
+The JSON files consequently remain valid portable descriptions of the
+discovered parameters. Exact numerical reproduction instead uses the trusted
+pickles because they preserve the complete post-calibration in-memory state
+that produced the reported runs. This distinction is specific to the audited
+CTB bundles and software version and is not a general criticism of ProSiT's
+JSON interface. Pickles must only be loaded from this trusted project state and
+with the recorded environment.
 
 The serialized objects and provenance records are retained in the research
 project and can be supplied separately if executable reproduction is requested.
