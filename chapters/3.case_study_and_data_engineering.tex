@@ -595,7 +595,7 @@ percentile of the empirical distribution per transition pair,
 explicit \texttt{enabled:timestamp} in the input event log.  Closer
 inspection revealed two issues. First, the statistical route baselines are
 aggregate quantiles rather than event-specific observations of physical
-arrival. Their values therefore depend on the selected percentile
+arrival. They can therefore provide only a scale check
 (Section~\ref{sec:results_percentile_sens}). Second, the estimated readiness
 timestamp sometimes occurred after the observed start timestamp. This
 produced negative waiting times that had to be clipped to zero.

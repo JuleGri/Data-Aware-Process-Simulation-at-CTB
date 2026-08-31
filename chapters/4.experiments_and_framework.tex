@@ -25,8 +25,8 @@ confidence intervals used throughout Chapter~\ref{chap:results}.
 Section~\ref{sec:evaluation_metrics} defines the evaluation metrics.
 Section~\ref{sec:what_if_design} defines the two operational what-if scenarios
 and the diagnostic demand-saturation ladder.
-Section~\ref{sec:results_percentile_sens_design} defines the
-transition-baseline sensitivity study.
+Section~\ref{sec:results_percentile_sens_design} defines a descriptive
+transition-time scale check.
 Section~\ref{sec:prosit_workarounds} documents the ProSiT workarounds required
 for the CTB event log.
 
@@ -157,7 +157,7 @@ used for RQ1. A separate purpose-specific audit determines the least complex
 configuration that can propagate a demand intervention through endogenous
 simulation state for RQ4. The scenario runner changes only the defined input
 parameters and compares each intervention with a matched-seed baseline.
-The transition-duration sensitivity study and the documented ProSiT
+The transition-time scale check and the documented ProSiT
 workarounds provide additional diagnostic evidence around the main pipeline.
 
 \FloatBarrier
@@ -1249,7 +1249,7 @@ attributable to access to native dynamic state from ordinary Monte-Carlo
 variation in either bundle.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Descriptive Transition-Duration Analysis}
+\section{Descriptive Transition-Time Scale Check}
 \label{sec:results_percentile_sens_design}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1260,17 +1260,12 @@ ProSiT's internal model-derived enablement, the empirical transition
 durations remain informative as descriptive evidence of the physical
 separation between terminal activities.
 
-To characterise this physical component, the same baseline table is
-recomputed with the 5th, 10th, 25th and 50th percentiles as
-alternative choices. For each transition $(a,b)$ with at least twenty
-observations the resulting baseline duration is reported together with
-the shift relative to the 5th percentile and the Pearson correlation
-between percentiles. The analysis is reported in
-Section~\ref{sec:results_percentile_sens}. It does
-\textbf{not} affect ProSiT's simulation-parameter discovery. Its
-purpose is to illustrate that the model-derived pre-service delay
-includes a non-trivial physical-movement component that cannot be
-separated from operational waiting with the available data.
+The fifth-percentile estimates for transition pairs with at least twenty
+observations are retained only as a lower-tail scale check. As reported in
+Section~\ref{sec:results_percentile_sens}, they do \textbf{not} affect ProSiT's
+simulation-parameter discovery. Their sole purpose is to show that the
+modelled pre-service delay contains a non-trivial transition component that
+cannot be separated from operational waiting with the available data.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{ProSiT Implementation Notes and Workarounds}

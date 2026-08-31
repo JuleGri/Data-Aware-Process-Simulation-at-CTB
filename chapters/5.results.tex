@@ -635,126 +635,31 @@ without checking storage or travel feasibility. This limit is central to
 Scenario~A and is discussed in Section~\ref{sec:limitations}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Sensitivity of Transition-Time Baselines}
+\section{Transition Time Within Composite Pre-Service Delay}
 \label{sec:results_percentile_sens}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-An older pipeline version used route-specific transition baselines to
-reconstruct enablement. Section~\ref{sec:lifecycle_events} explains why this
-was replaced by ProSiT's own enablement. The old analysis is kept as a
-sensitivity check. It shows how much an assumed baseline changes with the
-chosen percentile. It does not separate movement, traffic, queueing, or other
-unrecorded delay.
+An earlier pipeline used route-specific transition-time baselines to
+reconstruct enablement, whereas the final simulation uses ProSiT's
+model-derived enablement mechanism (Section~\ref{sec:lifecycle_events}). The
+estimates are therefore retained only as a scale check. Across the 48
+gate-to-yard and yard-to-gate transitions with at least twenty observations,
+fifth-percentile transition times range from 2.16 to 5.28 minutes. The
+frequency-weighted estimates are 3.88 minutes inbound and 3.75 minutes
+outbound, or 7.62 minutes per visit. This is comparable in scale to the
+5.930-minute mean turnaround underprediction in
+Table~\ref{tab:final_kpis}. The comparison indicates that unobserved transition
+time may contribute materially to the residual, but it is neither an additive
+correction nor a causal decomposition.
 
-The check uses percentiles $\{5, 10, 25, 50\}$ and compares them with p5.
-Table~\ref{tab:percentile_sens} covers the 48 transitions with at least twenty
-observations. The reproducible table contains 24 gate-to-yard and 24
-yard-to-gate route pairs. The reported association is Pearson correlation.
-
-\begin{table}[htbp]
-\centering
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{cccccc}
-\toprule
-\textbf{Percentile} &
-\textbf{Mean (s)} &
-\textbf{Median (s)} &
-\textbf{Mean shift (s)} &
-\textbf{P90 shift (s)} &
-\textbf{Pearson $r$ vs.\ p5} \\
-\midrule
-p5   & 225.8 & 223.5 & $0.0$   & $0.0$   & 1.000 \\
-p10  & 254.6 & 254.3 & $28.8$  & $36.0$  & 0.990 \\
-p25  & 318.3 & 311.0 & $92.5$  & $110.3$ & 0.948 \\
-p50  & 435.5 & 426.0 & $209.8$ & $250.9$ & 0.812 \\
-\bottomrule
-\end{tabular}
-\caption{Empirical transition duration under alternative percentiles
-(seconds, based on 48 transitions with $\ge 20$ observations).}
-\label{tab:percentile_sens}
-\end{table}
-
-At p5, the route-specific values range from 129.8 to 317.0 seconds, or 2.16 to
-5.28 minutes. The mean and median are both about 3.7 minutes. The p5 statistic
-is therefore a lower-tail operational baseline rather than a zero-duration
-assumption: even low-delay observations contain a fairly stable, non-trivial
-transition component. The values also keep a similar ordering across
-percentiles. Pearson $r$ is 0.990 between p5 and p10 and 0.812 between p5 and
-p50. Their absolute level still changes. From p5 to p50, the mean baseline
-rises by 209.8 seconds, or about 3.5 minutes.
-
-Route-frequency weighting gives a p5 baseline of 232.5 seconds for the inbound
-gate-to-yard leg and 224.8 seconds for the outbound yard-to-gate leg. Their sum
-is 457.2 seconds, or 7.62 minutes per visit. This is close in scale to the
-5.930-minute mean turnaround under-prediction in
-Table~\ref{tab:final_kpis}. The comparison is diagnostically important: omitted
-physical transition time can plausibly account for a large part of the mean
-bias. It is not an additive correction or a causal decomposition. The p5 values
-come from a descriptive source table, use a lower-tail percentile as a proxy,
-and may still combine movement, traffic, operational delay and timestamp
-resolution. Internal movements in visits with several yard stops would add
-further unobserved structure rather than make the two boundary components
-disappear.
-
-Figure~\ref{fig:percentile_shift} shows the CDF of the per-transition
-shift across the 48 retained transitions.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.75\textwidth]{figures/discovery/percentile_shift.png}
-\caption{CDF of the per-transition duration shift relative to the 5th
-percentile, over the 48 transitions with at least twenty observations.}
-\label{fig:percentile_shift}
-\end{figure}
-
-\medskip
-
-\noindent\textbf{Interpretation.} The lower-tail route values are evidence that
-time between recorded activities is physically meaningful and too large to be
-treated as zero. They do not identify its mechanism. The data do not separate
-movement, traffic, queueing, and other delay, and the real log has no
-enablement timestamp. This is consistent with the simulation-guided
-model-repair distinction \cite{SimulationGuidedRepair2025} between repairing duration or
-inter-activity time and first resolving resource-driven versus exogenous
-waiting. The present model output is consequently called pre-service delay. It
-is not validated queueing time.
-
-The raw timetable source contains 433 positive stop-to-stop observations for
-multi-stop visits. No individual internal route pair reaches the twenty-case
-threshold used for the route table. A route-specific internal-movement model
-would therefore be unstable. Pooling those observations gives a p5 of
-186.8 seconds (3.11 minutes), a p10 of 237.8 seconds (3.96 minutes), and a
-median of 558 seconds (9.30 minutes). The pooled lower tail supports a
-non-zero internal movement component, but the sparse route cells do not
-support a matrix of yard-to-yard distributions. This is why the present
-analysis uses the boundary routes as a scale check and does not insert an
-unvalidated duration for every possible loop transition.
-
-Hard-coding these values into silent Petri-net transitions is not a valid
-shortcut in the present engine. ProSiT fires silent transitions immediately.
-they do not hold a token for a sampled duration. A timed movement step would
-therefore require either a visible auxiliary transition retained in the
-simulation log or an extension of the simulator's firing semantics. More
-importantly, the current pre-service distribution was fitted to the complete
-observed inter-activity gap. Adding a transit draw on top would count part of
-the same time twice.
-
-A defensible extension would first estimate a non-negative, route-dependent
-movement component and then refit the residual:
-\begin{equation}
-D_{\mathrm{pre\text{-}service}}
-=T_{\mathrm{transit}}(r_{\mathrm{from}},r_{\mathrm{to}},z)
-+D_{\mathrm{access/queue}}(s,z),
-\end{equation}
-where $z$ contains only state available at the transition and $s$ is the
-current process/resource state. The components need not be statistically
-independent: traffic can affect both movement and queue arrival. Independence
-would be a simplifying hypothesis to test, not a property implied by the log.
-The existing p5 values can initialise or bound the movement component, but
-trajectory or position data are required to identify it. State-dependent
-transition weights in an SLDPN decide what fires. They cannot supply this
-missing timed movement mechanism by themselves
-\cite{Vinci2023Inf.Activ.Prob}.
+The estimates do not isolate physical movement. The ITS data contain neither
+enablement nor trajectory timestamps, so an observed inter-activity gap may
+combine movement, traffic, dispatching, terminal release, and queueing. The
+fitted pre-service distributions already represent this complete gap.
+Introducing an additional transition-time draw would therefore risk counting
+part of the same delay twice. Simulation output is consequently interpreted as
+\emph{composite pre-service delay}, not as measured queueing time. Separating
+its components would require additional position or trajectory data.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Held-Out Bottleneck Analysis}
