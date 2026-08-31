@@ -493,29 +493,26 @@ of the activity finished. \\
 \label{tab:observed_lifecycle_attributes}
 \end{table}
 
-The \textit{recorded stage duration} is the directly
+The \textit{service time} (or handling duration) is the directly
 identifiable temporal quantity:
 \begin{equation}
     ET_i = t_{\mathrm{complete},i} - t_{\mathrm{start},i}.
 \end{equation}
 For yard activities, $t_{\mathrm{start}}$ is the reported-ready timestamp
 (\texttt{BEREITMELDUNG}) and $t_{\mathrm{complete}}$ is the fulfilment
-timestamp (\texttt{ERFUELLUNG}).  This interval is labelled
-\emph{service time} throughout the thesis for consistency with the ProSiT and
-BPS literature \cite{Vinci2026prosit,Camargo2020}, but a
-qualification is necessary: the ready timestamp marks the moment the handling
-order is reported ready, not necessarily the start of active crane or
-equipment work.  The interval may therefore include resource-access delay,
-dispatching latency, or short operational waits that occur after the order is
-ready but before physical handling begins.  The thesis retains the term
-\emph{service time} to avoid divergence from the simulation-discovery
-conventions it builds on, while noting that it denotes a
-\emph{ready-to-fulfilment stage duration} rather than verified active
-processing time.  This distinction is relevant to the resource-capacity and
-offered-load calculations in
-Section~\ref{sec:what_if_design}: if waiting is partially included in
-the fitted duration, the resulting capacity estimate may understate physical
-service rate and overstate effective utilisation.
+timestamp (\texttt{ERFUELLUNG}).  Operationally, \texttt{BEREITMELDUNG} marks
+the moment the truck driver has arrived at the handover location and is from
+that point onward dependent on terminal handling.  The interval therefore
+covers the time during which the terminal services the truck: crane
+positioning, container retrieval or placement (including any restacking of
+obstructing containers), and completion confirmation.  Longer service times
+reflect heavier handling requirements such as misplaced storage or competing
+equipment priorities, not driver-side waiting.  Physical queueing and transit
+from the previous location to the handover point occur \emph{before} the ready
+timestamp and are consequently part of the model-derived pre-service delay,
+not of the service time.  The label \emph{service time} is therefore used
+throughout the thesis in its standard BPS meaning
+\cite{Vinci2026prosit,Camargo2020}.
 
 An explicit \texttt{enabled:timestamp} is \textbf{not} reconstructed
 in the input event log.  Consistent with ProSiT

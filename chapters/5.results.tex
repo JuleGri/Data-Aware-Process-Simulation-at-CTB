@@ -1401,22 +1401,20 @@ auditable without an independent readiness observation. The activity-specific
 composite-gap comparison therefore tests the temporal consequence of the
 enablement convention, not the latent timestamp itself.
 
-\paragraph{Service-Time Semantics and Downstream Implications}
+\paragraph{Service-Time Semantics}
 
-The interval from \texttt{BEREITMELDUNG} (reported ready) to
-\texttt{ERFUELLUNG} (fulfilled) is labelled \emph{service time} for
-consistency with the BPS literature, but it is more accurately a
-ready-to-fulfilment stage duration.  It may include resource-access delay,
-dispatching latency, or short operational waits that occur between the
-reported-ready instant and the start of active handling.  This distinction
-matters because the same variable enters duration-distribution fitting,
-service-time EMD comparisons, resource-capacity assumptions, and the
-offered-load calculations used for the demand-saturation diagnostic.  If
-congestion-related waiting is partially included in what is called service
-time, then the offered-load estimate may overstate effective utilisation and
-the capacity-saturation region may be shifted.  The thesis retains the term to
-avoid divergence from the framework it builds on, but the downstream
-interpretations should be read with this qualification.
+The interval from \texttt{BEREITMELDUNG} (reported ready at the handover
+location) to \texttt{ERFUELLUNG} (fulfilled) is the period during which the
+truck driver is present at the handling point and dependent on terminal
+operations: crane positioning, container retrieval or placement including
+restacking, and completion confirmation.  Physical queueing and transit from
+the previous location occur \emph{before} the ready timestamp and are
+therefore part of the model-derived pre-service delay, not the service time.
+The label \emph{service time} is consequently used in its standard BPS meaning.
+Longer values reflect heavier terminal handling requirements, not driver-side
+waiting.  The offered-load calculations use this definition; their validity
+depends on the ready timestamp accurately marking the start of terminal
+service rather than an earlier dispatching event.
 
 \paragraph{Resource Assignment Is Not Spatial Container Relocation}
 
