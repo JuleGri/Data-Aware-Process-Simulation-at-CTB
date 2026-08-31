@@ -2,56 +2,44 @@
 
 Container terminals use simulation to evaluate operational changes without
 disrupting live operations, but conventional models are commonly constructed
-and calibrated by hand. Data-aware process simulation instead derives
-executable models from event logs. Its validity in physical logistics remains
-under-evaluated.
+and calibrated manually. Data-aware process simulation instead derives
+executable models from event logs. Its validity in physical logistics is still under-evaluated.
 
-This thesis examines ProSiT for truck operations at HHLA Container Terminal
+This thesis examines ProSiT as a data-aware Process Simulation framework for truck operations at HHLA Container Terminal
 Burchardkai. Two months of operational data were transformed into an event log
-of 89,460 truck visits. The log was divided chronologically into 64\,\%
-discovery, 16\,\% validation, and 20\,\% test data. The final test period was
-not used for configuration selection. To maintain unambiguous block context at
-case level, 1,693 visits involving more than one RMG block were excluded. The
-empirical scope is therefore a defined one-RMG subprocess rather than all
-terminal truck movements.
-
-Preserving the ITS schedule-derived stop order stored in XES avoids a
-timestamp-induced parallelism artefact, but the raw Inductive-Miner model
-still requires an explicit domain repair to enforce sequential truck semantics
-and remove a gate-only bypass.  The resulting expert-repaired sequential Petri
-net fits all 17,892 held-out visits (fitness 1.0) with a test precision of
-0.7641.  This is the single executable control-flow model used by every ProSiT
-configuration and reported throughout the thesis.
+of 89,460 truck visits and divided chronologically into discovery, validation and untouched test datasets. 
+Preserving the ITS schedule-derived stop order prevents a timestamp-induced
+parallelism artefact, but the raw Inductive-Miner model still violates known
+truck semantics through parallel behavior and a gate-only bypass. A transparent
+domain repair therefore enforces sequential yard handling while retaining
+alternative orders and repetitions. The resulting Petri net fits all 17,892
+held-out visits with fitness 1.0 and test precision 0.7641 and serves as the
+common executable control-flow model.
 
 A $2\times2$ validation experiment separates manually constructed static
 demand and utilisation proxies from ProSiT's native workload and queue state.
-No added-state configuration shows a resolved improvement across turnaround,
-frequency-weighted yard-service, activity-rate, and NGD ($N=3$) errors. The
-parsimonious \textit{visit-only} configuration is consequently rediscovered on
-the complete 80\,\% development period and evaluated once on the untouched
+No added-state configuration provides a resolved multi-perspective improvement.
+The parsimonious \textit{visit-only} configuration is therefore rediscovered
+on the complete 80\,\% development period and evaluated once on the final
 test period. It reproduces inter-arrival spacing closely and parts of yard
-service timing, but its mean turnaround is 33.812 rather than 39.742 minutes
-and its P90 is 57.900 rather than 71.000 minutes. The narrow Monte-Carlo
-intervals show that this discrepancy is stable across seeds for the fixed model
-and test period rather than ordinary simulation noise.
-
-Two expert-supported physical requirements are audited separately. Activities
-of one truck must remain sequential, and no more than three RMGs may operate in
-one block. The latter ceiling is imposed transparently because overlap-derived
-capacities exceed the physical maximum. Historical-fidelity selection alone
-chooses the workload-blind \textit{visit-only} benchmark. An adaptive mechanism
-audit therefore uses \textit{native-only} to test whether endogenous queue state
-can transmit changed arrivals to delay. Closing block T22 and increasing
-working-time demand by 20\,\% produce no resolved mean-turnaround effect. A
-matched six-level stress test reveals a non-linear response only at much higher
-realised arrival rates. This establishes an internal response pathway in the
-fitted simulator, not a validated physical CTB congestion response.
-
-The thesis contributes a layered validity audit that separates event order,
-control-flow language, historical fidelity, temporal transfer, physical
-semantics, and intervention response. The case shows that historical fidelity
-is a necessary screen but is not sufficient for selecting a what-if simulator.
-The resulting artefacts support transparent historical analysis and diagnostic
-mechanism tests. Direct prescriptive use still requires explicit location,
-movement, equipment, and queue mechanisms together with prospective
-operational validation.
+service timing, but underestimates mean turnaround by 5.930 minutes
+(33.812 vs.\ 39.742) and P90 by 13.100 minutes (57.900 vs.\ 71.000).
+The discrepancy is stable across Monte-Carlo seeds.
+Physical validity is audited separately. Truck activities must remain
+sequential and no more than three RMGs may operate concurrently in one block;
+the latter upper bound is imposed transparently because overlap-derived capacities
+exceed the physical maximum. Historical fidelity alone selects the
+workload-blind \textit{visit-only} benchmark, which lacks an endogenous pathway
+for demand propagation. A mechanism-focused audit therefore evaluates the
+minimal \textit{native-only} configuration with a dynamic workload state.
+Closing block T22 and increasing working-time demand by 20\,\% produce no
+resolved mean-turnaround effect, while a matched six-level stress test produces
+a non-linear delay response, only at substantially higher realised arrival
+rates. This reflects an internal response pathway in the fitted simulator,
+not a validated physical CTB congestion response.
+The thesis contributes a layered validity audit, separating event order,
+control-flow language, historical fidelity, physical semantics, and
+intervention response. The case shows that good historical fit is an important first step, but is not enough to show that the model is reliable for what-if analysis. For direct
+decision support, the model would need a more explicit representation of
+location, movement, equipment, and queues, as well as further validation with
+future operational data.
