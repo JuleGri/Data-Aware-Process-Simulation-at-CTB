@@ -218,7 +218,14 @@ framework used in this thesis calls the interval between model-derived
 enablement and observed activity start \emph{waiting time}
 \cite{Vinci2026prosit}. In this physical setting it is interpreted more
 cautiously as pre-service delay, because it may combine resource contention,
-queueing, and movement between locations.
+queueing, and movement between locations. Model enablement is a Petri-net
+concept rather than a sensor observation. A transition becomes enabled when
+its input places contain the required tokens. When token timestamps are
+attached to the marking, its structural enablement time is the latest arrival
+time among the required input tokens. Invisible transitions change the marking
+without representing an elapsed physical operation. Consequently, correct
+replay establishes consistency with the process model, but not the physical
+accuracy of the reconstructed readiness time.
 
 Further attributes describe the circumstances of an execution. Resource or
 equipment identifiers indicate where or by which operational unit an activity
@@ -503,8 +510,8 @@ question of how it responds to an intervention. The CTB study follows the same
 logic but adds the event-order, physical-capacity, and logistics-specific
 validation required by a container-terminal setting.
 
-The application also illustrates why automatic discovery is not necessarily
-the final model. Domain experts modify the discovered structure where the
+The application also illustrates why an automatically discovered structure is
+not necessarily ready for simulation. Domain experts modify it where the
 Inductive-Miner abstraction is operationally implausible and assess the
 simulation results for plausibility. Its authors identify external delays,
 fine-grained inter-activity timing, drift, and structured stakeholder
@@ -1137,7 +1144,9 @@ uncertainty about the correctness of a what-if response. Those require
 additional resampling, repeated discovery, sensitivity experiments or
 external domain evidence. Chapter~\ref{chp:experiments_and_framework}
 uses this conditional Monte-Carlo interpretation for its ten-seed
-protocol.
+protocol. The intervals are pointwise summaries for individual metrics and
+contrasts. They are not simultaneous confidence bands, and no family-wise
+multiplicity adjustment is applied.
 
 \subsection{Trustworthiness, Limitations, and Research Gap}
 

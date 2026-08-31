@@ -116,11 +116,13 @@ The chronological development period is divided once more into discovery and
 validation partitions. The four ProSiT configurations are discovered on the
 first partition and compared on the next. The configuration selected for
 historical fidelity is then rediscovered on the combined development data and
-evaluated on the final 20\,\% temporal test period. A separate
-purpose-specific audit asks whether the model used for demand scenarios
-contains an endogenous state through which changed arrivals can affect delay.
-This distinction prevents historical replay quality from being treated as
-sufficient evidence of intervention validity. The test results remain
+evaluated on the final 20\,\% temporal test period. A later exploratory audit
+asks whether adding native dynamic state creates an internal pathway through
+which changed arrivals can affect delay. This audit was introduced after the
+historically selected configuration proved insensitive to demand and is not a
+second confirmatory model-selection stage. It exposes why historical replay
+quality alone is insufficient for selecting a model for intervention analysis.
+The test results remain
 retrospective evidence from one terminal and should not be confused with
 prospective field validation of an intervention.
 
@@ -136,11 +138,12 @@ compares different levels of
 contextual model expressiveness on unseen temporal data rather than assuming
 that additional data awareness necessarily improves simulation quality.
 Finally, two operational interventions and a six-level demand-saturation
-stress test are used to investigate both the capabilities and the boundaries
-of the resulting white-box model for what-if analysis and decision support.
-The experiment separates a parsimonious historical-fidelity reference from a
-minimal state-aware scenario model instead of claiming one globally best
-configuration for both objectives.
+stress test investigate whether the historically selected configuration
+contains the mechanism required by the intended what-if use. Its failure to
+propagate demand motivates an exploratory test of the minimal configuration
+with native dynamic state. This sequence is treated as an empirical finding
+about the limits of historical-fidelity selection, not as evidence that two
+different configurations are validated for past and future use.
 The intended decision-support logic is made
 explicit, when forecast terminal conditions define a scenario, candidate slot or
 resource policies are simulated, and their consequences are compared at both
@@ -174,7 +177,7 @@ remainder of the thesis.
 \item \textbf{RQ1:} To what extent can a ProSiT simulation model discovered from historical CTB truck-operation data reproduce the observed behaviour of an unseen temporal hold-out?
 \item \textbf{RQ2:} To what extent can the discovered and transparently domain-repaired process structure represent held-out CTB truck-handling behaviour while respecting the physical sequential constraints of a truck visit?
 \item \textbf{RQ3:} How does increasing the contextual expressiveness of the simulation model affect held-out simulation fidelity in the CTB truck process?
-\item \textbf{RQ4:} How does the discovered simulation model respond to transparent operational interventions, and what do these responses reveal about its suitability and limitations for what-if decision support?
+\item \textbf{RQ4:} To what extent does the discovered simulation contain the state mechanisms required to propagate selected operational interventions, and what do the responses reveal about the boundary between executable what-if analysis and physically credible decision support?
 \end{enumerate} 
 
 \section{Thesis Outline}
@@ -214,9 +217,9 @@ $2\times2$ feature-source design and documents the executable parameter
 bundles used in the experiments. In addition, it specifies the
 Monte-Carlo replication protocol, the distributional fidelity measures, the
 paired ablation and temporal-transfer audits, the two what-if interventions, and a
-descriptive transition-time scale check. It also defines the separate
-adequacy criteria for a scenario model that must propagate changed demand
-through endogenous state.
+descriptive transition-time scale check. It also defines intervention-specific
+adequacy criteria, including the endogenous-state pathway required to test
+changed demand.
 The final section documents the technical adaptations required to apply
 ProSiT to the CTB event log reproducibly.
 
@@ -228,7 +231,8 @@ rediscovers the historical reference on the complete development period, and
 evaluates its historical fidelity once on the final test period. The comparison
 separates the effects of static workload proxies and ProSiT's native workload
 state. A matched stress test then compares the workload-blind historical
-reference with the minimal native-state model used for the demand scenario.
+reference with the minimal native-state configuration used to probe demand
+propagation.
 Further diagnostic analyses examine
 the predictive signal contained in the available context attributes, the
 strong temporal structure of truck arrivals, the discovered resource
