@@ -8,50 +8,50 @@ process simulation can be transferred to a physically constrained logistics
 environment. Two months of operational truck-handling data from the HHLA
 Container Terminal Burchardkai were transformed into a simulation-ready event
 log and used to discover an executable ProSiT model. The evaluation did not
-equate successful execution with validity. It examined the discovered control
+set successful execution equal with validity. It examined the discovered control
 flow, historical and temporal fidelity, the effect of different state
-representations, physical constraints, and the response to operational
-interventions as separate claims.
+representations, physical constraints and the response to  operational
+interventions as alternative scenarios as separated claims.
 
-The strongest result concerns control flow. Preserving the ITS
+The strongest result concerns the control flow. Preserving the ITS
 schedule-derived stop order stored in XES allows Inductive Miner to discover a
-compact Petri net without parallel behaviour inside a truck visit. Only 11 of
-89,460 visits change sequence under completion-time sorting, yet these rare
+compact Petri net without parallel behavior within a truck visit. Only 11 of
+89,460 visits change sequence under completion-time sorting and yet these rare
 inversions are sufficient to produce an incorrect parallel cut when timestamps
-are treated as the ordering relation. The raw Inductive-Miner result still
-requires an explicit domain repair: on the 64\,\% discovery partition it
+are treated as the ordering relation. The raw Inductive-Miner result therefore
+requires an explicit domain repair. On the 64\,\% discovery partition it
 contains three parallel operators, and the 80\,\% rediscovery retains a
 gate-only bypass (fitness 0.999994, precision 0.7558). Both properties
-conflict with the expert-validated case contract. The common executable
+conflict with the terminal expert validated case contract. The common executable
 control-flow model is the expert-repaired sequential Petri net, which enforces sequential yard
-handling and removes the bypass. On the temporal hold-out it achieves fitness
-1.0 and test precision 0.7641.  This is the single model used by all four
-ProSiT configurations and for every reported simulation result.
+handling and removes the bypass. On the temporal hold-out it achieves a fitness of 
+1.0 and test precision of 0.7641.  This is the single model used by all four
+ProSiT configurations and for every further reported simulation result.
 
-The unusual \texttt{LL\_mixed} branch has a narrow empirical basis. In 57 of
+The discovered unusual \texttt{LL\_mixed} branch has a narrow empirical basis. In 57 of
 64 observed visits containing \texttt{LL\_mixed}, it is the only yard activity.
 Of the seven combined visits, six training cases place it first before
 \texttt{RMG\_receive}, while one held-out case places it after
 \texttt{RMG\_delivery}. An empty-container exchange performed first for routing
 reasons is therefore a plausible interpretation, but not a validated universal
 rule. Its rarity also means that \texttt{LL\_mixed} contributes only
-0.0328\,\% of held-out turnaround burden and does not constitute a
+0.0328\,\% of held-out turnaround burden and does therefore not constitute a
 frequency-weighted bottleneck.
 
 The answer to RQ1 is mixed. The selected cap-three \textit{visit-only}
 historical-reference model
 reproduces arrivals closely, with an inter-arrival EMD of 0.072 minutes. Its
-yard-service EMD is 3.150 minutes without frequency weighting and 2.341 minutes
+yard-service EMD is 3.15 minutes without frequency weighting and 2.34 minutes
 when weighted by the real activity frequencies. Complete truck turnaround is
-less accurate. Mean turnaround is 33.812 minutes in simulation and 39.742
-minutes in the hold-out, a deficit of 5.930 minutes or 14.92\,\%. Simulated P90
-is 57.900 rather than 71.000 minutes. The narrow intervals across ten
+less accurate. Mean turnaround is 33.81 minutes in simulation and 39.742
+minutes in the hold-out, a deficit of 5.93 minutes or 14.92\,\%. Simulated P90
+is 57.9 rather than 71 minutes. The narrow intervals across ten
 Monte-Carlo seeds show that the discrepancy is stable for the fixed model and
 test period rather than ordinary run-to-run simulation noise. They do not
 identify its cause.
 
-Two analyses delimit that error without claiming a causal decomposition. Real
-mean turnaround increases by 2.450 minutes between the training and hold-out
+Two analyses delimit that error without claiming a causally decomposition. Real
+mean turnaround increases by 2.45 minutes between the training and hold-out
 periods, so the temporal evaluation combines model mismatch with operational
 change. Route-specific fifth-percentile transition baselines range from 2.16
 to 5.28 minutes. Their frequency-weighted boundary contribution is 7.62
@@ -67,7 +67,7 @@ The same limitation is visible directly in the main RMG patterns. Relative to
 the observed previous-completion-to-start gap, the \textit{visit-only}
 historical-reference model underpredicts
 mean composite pre-service delay by about 5.75 minutes for receive handling and
-4.04 minutes for delivery handling. ProSiT's enabled timestamp is correct
+4.04 minutes for delivery handling. ProSiT's enabled timestamp is correctly
 relative to the Petri-net marking, but no physical readiness timestamp exists
 against which it could be validated.
 
@@ -76,8 +76,8 @@ The held-out bottleneck decomposition reinforces this interpretation. Of the
 minutes and composite pre-service delay contributes 24.987 minutes. The gap
 before \texttt{Gate Out} is the largest single accumulated component. RMG
 receive is the largest handling-related accumulation point and accounts for
-27.99\,\% of reconstructed held-out time when service and pre-service delay are
-combined. These are time-burden findings, not proof of a physical queue or a
+27.99\,\% of the reconstructed held-out time, when service and pre-service delay are
+combined. These are time-burdening findings, not proof of a physical queue or a
 capacity shortage, because the event log does not observe the mechanisms
 inside the gaps.
 
@@ -87,8 +87,8 @@ demand/utilisation proxies from ProSiT's native workload and queue state.
 No added-state configuration produces a resolved improvement on turnaround,
 weighted yard-service, activity-rate, or NGD ($N=3$) error. The pre-specified rule
 therefore selects \textit{visit-only} as the parsimonious historical reference.
-This is a model-selection result for replay fidelity, not a claim that the
-configuration is adequate for every intervention.
+This is a model-selection result for replay fidelity, it is not a claim that the
+configuration is actually adequate for every intervention.
 
 The intervention audit exposes the limitation of that historical selection.
 Under the same demand ladder, \textit{visit-only} remains effectively invariant
@@ -96,12 +96,12 @@ even at the highest tested rate. The cap-three \textit{native-only} bundle is
 the minimal tested configuration containing the endogenous state pathway
 needed to test whether changed arrivals reach a fitted waiting-time rule. It is
 therefore used as a demand-propagation mechanism probe, not because its
-response proves that it is a better or validated simulator. Its historical
+response proves that it is a better or rather validated simulator. Its historical
 differences from
 \textit{visit-only} are small and unresolved, but this does not establish
 equivalence. The available state still cannot reconstruct truck position,
 container location, equipment movement, spatial queues, or changing
-waterside--landside allocation when those relations are absent from the event
+waterside/landside allocation when those relations are absent from the event
 log.
 
 RQ4 is consequently intervention-specific. The T22 experiment tests executable
@@ -116,33 +116,33 @@ working-time arrival intensity by 20\,\% raises elapsed arrival rate by
 below the model's response region.
 
 The extended demand ladder shows an apparent threshold-like response under
-this fitted simulator and experimental design, rather than a general inability
+this fitted simulator and experimental design, rather than an general inability
 to propagate demand. At a realised
-ratio of 2.825, mean turnaround increases by 1.815 minutes and mean RMG
-pre-service by 2.318 minutes. At ratio 3.504, the increases are 4.069 and
-5.221 minutes.  Because the ladder keeps the case count fixed while
-compressing working-time inter-arrivals, it is a compressed-arrival-horizon
+ratio of 2.83, mean turnaround increases by 1.82 minutes and mean RMG
+pre-service by 2.32 minutes. At ratio 3.504, the increases are 4.07 and
+5.22 minutes.  Because the ladder keeps the case count fixed while
+compressing inter-arrivals, it is a compressed-arrival-horizon
 experiment that also changes calendar exposure and end-of-horizon effects.
-The reported transition region reflects these combined factors, not resource
+The reported transition region reflects these combined factors and not just resource
 capacity alone.
-The T13 waiting-time tree contains one inspectable
+The T13 waiting-time tree contains one inspecable
 \texttt{queue\_length} split at 6.5. Its high-queue leaf has a representative
-value of 52.404 minutes compared with 7.167 minutes in the low-queue leaf.
+value of 52.40 minutes compared with 7.17 minutes in the low-queue leaf.
 This is a statistical state-conditioned rule, not a causal queueing law.
-Neither scenario exercises the complete white-box intervention space because
-no learned threshold or subtree is edited.
+Neither scenario uses the complete white-box intervention space because
+no learned threshold or subtree is manually edited.
 
 The expert-validated ceiling of three RMGs per block illustrates the
 difference between empirical parameter discovery and physical admissibility.
 Overlap-derived capacities above three are retained as discovery evidence but
-are capped in the effective execution bundles. The paired capped-versus-uncapped
+are capped for the effective execution bundles. The paired capped-versus-uncapped
 diagnostic for the historical reference does not resolve a direct
-mean-turnaround effect. The ceiling is therefore retained because the uncapped
-state is physically impossible, not because it produces the headline findings.
+mean-turnaround effect. The ceiling is therefore maintained, because the uncapped
+state is physically impossible and not because it produces the headline findings.
 
 The scientific contribution is the resulting layered audit of automatic
 simulation-model generation in port logistics. The thesis provides a
-reproducible CTB event-log and ProSiT workflow, a temporal and multi-seed
+reproducible CTB event-log engineering pipeline and a ProSiT workflow, a temporal and multi-seed
 evaluation, an empirical comparison of alternative state sources, and a clear
 separation between discovered parameters, expert-supplied constraints, and
 intervention edits. The strongest defensible contribution is not a validated
@@ -151,23 +151,20 @@ methodology for diagnosing when a process-mining-based simulation reproduces
 historical observations and when its state lacks the mechanism required by a
 particular intervention.
 
-The case demonstrates that historical fidelity is a necessary screening
-criterion, not a sufficient selection rule for what-if simulation. The
-workload-blind benchmark reproduces historical process properties but omits an
-endogenous demand pathway. Native state supplies such a pathway in the fitted
-simulator, while the resulting magnitude and threshold remain unvalidated
-against physical CTB congestion. T22 exposes a different boundary because
+The case shows that good historical fit is an important first check, but it is not enough to choose a model for what-if analysis. The workload-blind benchmark reproduces past process behavior, but it does not contain a mechanism through which higher demand can affect delays. Native state demonstrates such a pathway in the fitted
+simulator, while the resulting extend and threshold remain unvalidated
+against physical CTB congestion. T22 exposes a different boundary, as
 resource-pool reallocation is executable but spatial relocation is absent. The
 adaptive mechanism audit is therefore exploratory, and its stress response is
-an outcome rather than a criterion used to select a model. Control-flow
+an outcome, rather than a criterion used to select a model. Control-flow
 conformance, stochastic fidelity, temporal transfer, physical semantics, and
-counterfactual validity must not be collapsed into one claim of simulation
-accuracy. A model can have almost perfect held-out replay fitness while
-underestimating turnaround, and a technically correct intervention can still
+counterfactual validity do not have to be collapsed into one claim of simulation
+accuracy. A model can have almost perfect held-out replay fitness, while
+underestimating turnaround and a technically correct intervention can still
 lack the mechanism required for a physical forecast.
 
 The empirical scope is the retained one-RMG subprocess rather than all CTB
-truck movements. The case-level representation excludes 1,693 multi-RMG visits
+truck movements in order to include the specific target blocks attributes. The case-level representation excludes 1,693 multi-RMG visits
 and 6,820 events because it cannot attach multiple changing block states to one
 truck case. The study may therefore underrepresent movement, cross-block
 interaction, and spatial complexity. Within that boundary, the model is a
@@ -175,8 +172,8 @@ transparent historical and diagnostic simulation. It is not yet a
 decision-valid digital twin. Its present operational value is to make model
 assumptions, scenario mechanics, and evidence gaps inspectable. A future model
 with validated location, movement, equipment, and queue state could support the
-decision loop that motivates terminal simulation by comparing truck-slot,
-resource, and handling policies before their implementation.
+decision loop, that motivates terminal simulation by comparing truckslot,
+resource, and handling policies before another implementation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Future Work}
@@ -188,37 +185,44 @@ while extending the mechanisms and evidence that currently limit physical and
 counterfactual interpretation:
 
 \begin{itemize}
-    \item \textbf{Pre-specify joint model-selection criteria.}
-    Historical fidelity should remain a necessary screen, but parsimony should
-    be evaluated subject to the mechanism required by the intended intervention.
-    Intervention response should then be reported as an outcome of that
-    pre-specified eligible model, not as a reason to search for a more responsive
-    configuration. Explicit equivalence or non-inferiority margins would make
-    the historical screen more informative.
+    \item \textbf{Investigate an object-centric process representation.}
+    Future work could examine whether an object-centric event log is better
+    suited to container-terminal operations than the current truck-visit case
+    representation. In the present model, container characteristics are
+    aggregated to case level, so information such as container type, loading
+    status, reefer status, or hazardous-goods status is combined across all
+    containers handled during one truck visit. An object-centric approach could
+    keep each container as a separate object with its own attributes while
+    linking it to the truck visit, handling activity, yard block, and resource.
+    This would reduce information loss and preserve container-specific information throughout the process
+    and could also support multi-container and multi-block visits without
+    forcing one aggregated context value onto the complete case.
 
-    \item \textbf{Separate physical movement from residual pre-service delay.}
-    Route, position, or equipment observations are required to estimate
-    transition-specific movement and then refit the remaining access and
-    waiting component. This must be done as one decomposition so that physical
-    transit is not added on top of a distribution that already contains it.
+    \item \textbf{Add an explicit spatial and movement representation.}
+    Future work could separate physical movement from the combined
+    pre-service delay by using route, position, or equipment observations.
+    Rather than representing every movement as an additional process activity,
+    a richer simulation formalism could include location directly in the model
+    state, for example through timed or coloured Petri-net tokens and
+    location-dependent transition conditions. This would allow truck or
+    container movement between yard areas to consume time and respect spatial
+    constraints without treating travel as a recorded handling activity.
+    Movement times would then have to be estimated from spatial observations
+    and the remaining access and waiting-time models refitted, so that travel
+    time is not counted twice.
 
-    \item \textbf{Represent spatial assignment, equipment state, and queues.}
-    Containers and truck operations should be bound to physically feasible
-    locations, with explicit resource movement and queue semantics. A coupled
-    discrete-event, agent-based, or object-centric design could retain the
-    discovered process model while representing mechanisms that conventional
-    case-centric event data omit
+   \item \textbf{Represent physical assignment and queueing explicitly.}
+    Future models could bind trucks and containers to physically feasible
+    yard locations and resources instead of treating resource labels as fully
+    interchangeable. Equipment availability and assignment should be represented
+    as dynamic state, and trucks waiting for handling should enter explicit
+    simulated queues rather than having these effects absorbed into a fitted
+    pre-service-delay distribution. An object-centric representation could
+    preserve the relations between trucks, containers, yard blocks, and
+    equipment, while a corresponding simulation model would still need explicit
+    movement, resource-allocation, and queueing rules
     \cite{VanDerAalst2023OCPM,Knopp2023ObjectCentricSimulation}.
 
-    \item \textbf{Evaluate temporal transfer prospectively.}
-    Rolling or recency-weighted discovery should be tested across several later
-    periods. Configuration selection and final validation should use separate
-    temporal windows so that the selected model is evaluated independently.
-
-    \item \textbf{Test an explicit white-box policy.}
-    A context-dependent and expert-validated decision, such as a threshold for
-    truck-slot release or receive/delivery priority, should be represented by a
-    visible ProSiT rule, leaf, or subtree intervention. Its simulated effect
-    should then be compared with historical natural experiments or prospective
-    terminal observations before it is used for operational recommendations.
+    
+    
 \end{itemize}
