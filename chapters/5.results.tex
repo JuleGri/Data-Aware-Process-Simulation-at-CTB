@@ -760,21 +760,20 @@ queue and workload state required by a demand intervention. Both use the same
 expert-repaired Petri net, ten matched seeds (42--51), and 17,892 cases per
 run. The RQ1 results still come from Table~\ref{tab:final_kpis}.
 
-The expert-repaired sequential net also stays fixed. The experiments can change arrival
+The repaired sequential net also stays fixed. The experiments can change arrival
 timing, resource assignment, and model-derived delays, while the loop may still
 generate unseen sequential combinations of the known yard activities. Extra
-activity types, detours represented by new events, and unmodelled exception
-mechanisms remain outside the model. All scenario results are conditional on
+activity types, detours represented by new events, and unmodeled exception
+mechanisms, remain outside the model. All scenario results are conditional on
 this discovered control-flow language.
 
-The operational question is not simply whether a parameter can be changed.
+The operational question is not simply, whether a parameter can be changed.
 For terminal planning, the relevant question is how a forecast condition and a
-candidate response propagate through process executions: for example, whether
-reducing the number of truck slots released per hour under forecast high
-utilisation protects turnaround, or whether a resource policy shifts delay from
+candidate response propagate through process executions. For example, whether reducing the number of truck slots released per hour under forecast high
+utilisation protects turnaround or whether a resource policy shifts delay from
 receive to delivery handling. The scenario KPIs are therefore reported both at
-case level and separately for the principal RMG handling patterns. This makes
-the experiments decision-oriented while retaining the distinction between an
+case level and separately for the categorical RMG handling patterns. This makes
+the experiments decision-oriented, while keeping the distinction between an
 effect inside the simulation and an effect established for the physical
 terminal.
 
@@ -840,7 +839,7 @@ discovered 100 to 66.}
 \subsection{Scenario A: T22 Resource-Pool Reallocation}
 
 T22 is removed from every eligible RMG pool and its calendar is closed. The
-intervention therefore executes as specified. In the
+intervention therefore executes as followed. In the
 \textit{native-only} scenario model, the mean-turnaround change is
 $-0.030\;[-0.168,+0.107]$ minutes and the P90 change is
 $+0.100\;[-0.428,+0.628]$ minutes. Both paired intervals include zero. Mean
@@ -915,23 +914,23 @@ reference model on the test period ($N_{\text{seeds}}=10$).}
 \label{tab:rmg_cap_sensitivity}
 \end{table}
 
-Every interval includes zero. The expert ceiling is therefore retained because
-it represents a validated physical bound, not because it improves historical
+Every interval here includes zero. The expert ceiling is therefore retained because
+it represents a validated physical bound. It does not mean, that it improves historical
 fidelity. Within this abstract pooled-resource model, replacing capacities of
-four or five with three does not materially alter the reported baseline. This
-null sensitivity also warns that the resource abstraction does not generate
-the congestion response that might be expected from a spatially explicit
+four or five with three does not substantially alter the reported baseline. This
+null sensitivity also gives an indication, that the resource abstraction does not generate
+the congestion response that might be expected from a spatially and resource sensitive
 terminal model.
 
 \subsection{Capacity Pressure of the Demand Intervention}
 
-The independent offered-load diagnostic adds an important qualification to
+The independently offered-load diagnostic adds an important qualification to
 that interpretation. Across the 21 RMG blocks observed in the held-out period,
 T13 has the highest nominal utilisation under a ceiling of three concurrent
-tasks: 0.422 at the held-out arrival rate and 0.506 after multiplying arrivals
+tasks, with 0.422 at the held-out arrival rate and 0.506 after multiplying arrivals
 by 1.20. If block routing and service times remained unchanged, the smallest
 arrival multiplier required for any block to reach mean saturation would be
-2.37, not 1.20. Figure~\ref{fig:rmg_capacity_pressure} shows the complete
+2.37, not 1.20. The initial high utilization of Block T13 is supposedly originating from its central location alongside the Quayside, reducing the container movement when its future carrier position is unknown at time of its arrival at the treminal. Figure~\ref{fig:rmg_capacity_pressure} shows the complete
 block-level comparison.
 
 \begin{figure}[htbp]
