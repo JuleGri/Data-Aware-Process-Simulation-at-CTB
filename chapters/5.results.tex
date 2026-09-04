@@ -722,9 +722,9 @@ measured queueing time.
 \label{sec:results_bottlenecks}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-A bottleneck analysis identifies long individual activity compared to a
+A bottleneck analysis must distinguish a long individual activity from a
 frequent activity at which a large amount of system time accumulates. The
-held-out log is therefore decomposed at event level. The recorded handling operations service time
+held-out log is therefore decomposed at event level. Recorded service time
 is completion minus start. The non-negative gap from the previous event's
 completion to the current event's start is called \emph{composite pre-service
 delay}. For the sequential truck process, the sum of both components exactly
@@ -760,8 +760,9 @@ held-out period. Minutes are totals over all 17,892 visits.}
 
 The largest component is the gap before Gate Out: 11.273 minutes per visit on
 average and 201,690 minutes in total. It contains the outbound transition and additionally 
-any unpredictibale human behavior regarding intentional break of truck drivers while still on the treminal, or unobserved releases due to customer communications. Identifying the Gate Out operation as a queueing bottleneck
-would be unsuitable in the given setting. RMG receive is the largest handling-related accumulation
+unpredictable driver behaviour such as intentional breaks while still on the
+terminal, or unobserved release delays due to customer communications.
+Identifying Gate Out as a queueing bottleneck would therefore be misleading. RMG receive is the largest handling-related accumulation
 point. Its mean service is 13.779 minutes and its mean composite pre-service
 delay is 13.974 minutes. Together the activity accounts for 27.99\,\% of all
 reconstructed held-out time. RMG delivery accounts for a further 15.45\,\%.
@@ -1561,3 +1562,28 @@ event recording, and rounding artefacts in other extraction periods.  The
 findings therefore demonstrate validity for the evaluated data-generation
 process, not unconditional reliability of the linkage procedure across
 arbitrary terminal periods or source-system versions.
+
+\paragraph{Multiple Uses of the Test Period}
+
+The final 20\,\% test period is used for the RQ1 historical-fidelity
+evaluation, the native-only role check, the cap sensitivity, both scenario
+experiments, and the demand-saturation ladder.  No parameter is fitted to test
+outcomes, but the repeated inspection creates a risk that operationally
+interesting patterns receive more attention than uninteresting ones.  This is
+not equivalent to data leakage, because no model decision depends on test
+results.  It does, however, mean that the test period is not an independently
+reserved evaluation set in the strongest sense.  A second terminal period
+would provide a cleaner out-of-sample assessment.
+
+\paragraph{HO2 and LL Concurrency Values Are Not Expert-Validated}
+
+The freely discovered source bundle assigns maximum concurrency 15 to HO2 and
+22 to LL.  These values arise from the same timestamp-overlap heuristic that
+produced the RMG values of four and five, which were subsequently capped at
+three based on expert input.  No comparable expert confirmation was obtained
+for HO2 and LL.  If these values are artefacts of the same kind, the
+effective capacity of the empty-container yard and the manual area may be
+overstated.  The present study does not test this because neither the T22 nor
+the demand intervention directly targets HO2 or LL resources.  Future work
+should verify whether the discovered concurrency for these areas reflects
+physical lane or equipment counts.
