@@ -1,0 +1,56 @@
+{
+  "words_approximate": 3904,
+  "unique_cited_sources": 47,
+  "new_bib_entries": 14,
+  "sections": [
+    "Process Discovery as a Basis for Simulation",
+    "From Discovered Processes to Data-Aware Simulation",
+    "Process Mining and Simulation in Logistics",
+    "Object-Centric and Resource-Centric Alternatives",
+    "Validation and Current Research Challenges",
+    "Synthesis and Positioning of This Thesis"
+  ],
+  "checks": [
+    "citation resolution",
+    "unique bibliography keys",
+    "unique new labels",
+    "resolved chapter references",
+    "balanced chapter and new bibliography braces",
+    "matched environments",
+    "no placeholders"
+  ],
+  "no_compilation": true,
+  "layout_verified": false,
+  "changes": [
+    {
+      "relative": "chapters/2.related_work.tex",
+      "sha256_before": null,
+      "sha256_after": "d7f978487f73cb8d401b53b4f07d7015a2cad864169974ec1d9c482db0e0cb70"
+    },
+    {
+      "relative": "related_work.bib",
+      "sha256_before": null,
+      "sha256_after": "5f152ad96b7f34d15240c1b982780c5bb159700788cfaabcebf8e27d27161935"
+    },
+    {
+      "relative": "dissertation.tex",
+      "sha256_before": "abd93b75dd4f924bce3dd4070a7f7906501d2220f494ea8087455c2bfb3346df",
+      "sha256_after": "74bfc4af9b684b6512f4eda1d9d52fdedefc4e41d7055433c97578f184305216"
+    },
+    {
+      "relative": "chapters/2.background.tex",
+      "sha256_before": "ab58a33b9d5872045a735292c4813cf9e9a888adc8c646925b1e641829d99ad3",
+      "sha256_after": "0ea8e1b28cd55d177002d8e3466b81ff92142ac83e75bff8ce72255cf28eaadb"
+    },
+    {
+      "relative": "chapters/1.introduction.tex",
+      "sha256_before": "59721403318ae96eae17cc992a096cf59fc0f84986e3d7d439eb20df52372d7e",
+      "sha256_after": "d88b7b1b9db3bdb199427aad9025145813cecc94fcf748478c7a18f6233661f1"
+    },
+    {
+      "relative": "references.bib",
+      "sha256_before": "fd1493bbe42932311aa8e666ffdbcadf9602c524116ef4d8b4e64452e1852262",
+      "sha256_after": "a485846b4c44d835a377718733a18c58ecabb0606c4da6bf4436cd58d9d91075"
+    }
+  ]
+}
