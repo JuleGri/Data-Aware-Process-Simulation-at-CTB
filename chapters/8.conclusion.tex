@@ -1,0 +1,60 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Conclusion}
+\label{chp:conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textit{Einleitende Conclusion}
+
+\begin{sloppypar}
+    Beantworte jede Forschungsfrage direkt mit den erzielten Ergebnissen und ihrer Reichweite.
+\end{sloppypar}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Future Work}
+\label{sec:future_work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Future work should retain the reproducible discovery-and-validation protocol
+while extending the mechanisms and evidence that currently limit physical and
+counterfactual interpretation:
+
+\begin{itemize}
+    \item \textbf{Investigate an object-centric process representation.}
+    Future work could examine whether an object-centric event log is better
+    suited to container-terminal operations than the current truck-visit case
+    representation. In the present model, container characteristics are
+    aggregated to case level, so information such as container type, loading
+    status, reefer status, or hazardous-goods status is combined across all
+    containers handled during one truck visit. An object-centric approach could
+    keep each container as a separate object with its own attributes while
+    linking it to the truck visit, handling activity, yard block, and resource.
+    This would reduce information loss and preserve container-specific information throughout the process
+    and could also support multi-container and multi-block visits without
+    forcing one aggregated context value onto the complete case.
+
+    \item \textbf{Add an explicit spatial and movement representation.}
+    Future work could separate physical movement from the combined
+    pre-service delay by using route, position, or equipment observations.
+    Rather than representing every movement as an additional process activity,
+    a richer simulation formalism could include location directly in the model
+    state, for example through timed or coloured Petri-net tokens and
+    location-dependent transition conditions. This would allow truck or
+    container movement between yard areas to consume time and respect spatial
+    constraints without treating travel as a recorded handling activity.
+    Movement times would then have to be estimated from spatial observations
+    and the remaining access and waiting-time models refitted, so that travel
+    time is not counted twice.
+
+   \item \textbf{Represent physical assignment and queueing explicitly.}
+    Future models could bind trucks and containers to physically feasible
+    yard locations and resources instead of treating resource labels as fully
+    interchangeable. Equipment availability and assignment should be represented
+    as dynamic state, and trucks waiting for handling should enter explicit
+    simulated queues rather than having these effects absorbed into a fitted
+    pre-service-delay distribution. An object-centric representation could
+    preserve the relations between trucks, containers, yard blocks, and
+    equipment, while a corresponding simulation model would still need explicit
+    movement, resource-allocation, and queueing rules
+    \cite{VanDerAalst2023OCPM,Knopp2023ObjectCentricSimulation}.
+
+    
+    
+\end{itemize}

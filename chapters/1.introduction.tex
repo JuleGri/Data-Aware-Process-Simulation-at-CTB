@@ -10,6 +10,8 @@ terminal are often costly, disruptive, or not feasible. Simulation offers a way
 to assess decisions without interrupting terminal operations.
 
 \section{Motivation}
+
+
 Simulation is used for decision support in container-terminal planning and
 operations research. Its operational purpose is prospective: a terminal can
 compare how alternative process executions and operating conditions affect
@@ -52,35 +54,14 @@ can reproduce these conditions and support decisions. This thesis studies its
 fidelity, structural applicability, and limitations using event logs from real
 container terminal truck operations.
 
-This problem is also visible in the wider research landscape. A recent review
-of 105 studies at the intersection of Process Mining and simulation finds that
-validation remains heterogeneous, that queue and resource modelling often
-requires information outside conventional event logs, and that fully automated
-model generation remains uncommon \cite{Sulis2026SimulationReview}. Work in
-production and logistics similarly stresses that processing timestamps alone
-do not reliably expose transport, waiting, inventory, and physical resource
-interactions. Simulation-ready reconstruction may require harmonised data from
-several operational levels and an object-oriented view
-\cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. The CTB
-case therefore provides a demanding empirical test of both the promise and the
-support boundary of automatic simulation discovery.
-Adjacent ASMG research has already shown that physical-system structure and
-parameters can be reconstructed from manufacturing data, while emphasising
-purpose-dependent abstraction and multi-object material flows
-\cite{Reinhardt2019ASMG,Cimino2025ASMGReview,LugaresiMatta2021,LugaresiMatta2023}.
-Within the literature reviewed for this thesis, the unresolved intersection
-remains a temporally validated, data-aware executable model discovered from
-real terminal event data and subjected to explicit physical and what-if
-validity checks.
+
 
 \section{Problem Statement}
 Container terminal operators make decisions about capacity, truck handling,
 yard use, policies, and infrastructure changes. Experiments in a real terminal
 are often not feasible or involve operational risk, so these decisions are
-often studied with simulation. Most container-terminal simulation models are
-built manually. Their construction and maintenance require domain knowledge
-and modelling work. They may include subjective assumptions about process
-behaviour, resource interactions, and routing logic
+often studied with simulation. 
+TBC
 \cite{CTSteenken2004,OptimizingCTs2023}.
 
 Data-aware process simulation discovers simulation models from historical
@@ -100,84 +81,15 @@ container-terminal truck operations.
 
 \section{Research Objective and Contributions}
 
-The objective of this thesis is to evaluate the fidelity, structural
-applicability, and limitations of data-aware process simulation for container terminal truck operations. The study investigates how far a simulation model derived from historical event data using ProSiT can reproduce unseen truck-handling behaviour at the Container Terminal Burchardkai (CTB), and where the transfer of process-simulation discovery to a physical logistics environment reaches its limits. Trustworthiness motivates this evaluation, but it is not treated as a property that can be established from a single historical case study.
 
-More specifically, the thesis evaluates whether the control-flow
-representation derived from the training data remains applicable to a later
-held-out period while respecting the physical sequence of a truck visit. It
-then assesses the historical fidelity of the resulting simulator, examines
-whether increasing the contextual expressiveness of the ProSiT configuration
-improves this fidelity, and investigates how the data-aware model responds to
-transparent operational interventions. Together, these analyses are intended
-to distinguish between reproducing historical behaviour, constructing an
-executable simulation model, and supporting credible what-if reasoning.
-The chronological development period is divided once more into discovery and
-validation partitions. The four ProSiT configurations are discovered on the
-first partition and compared on the next. The configuration selected for
-historical fidelity is then rediscovered on the combined development data and
-evaluated on the final 20\,\% temporal test period. A later exploratory audit
-asks whether adding native dynamic state creates an internal pathway through
-which changed arrivals can affect delay. This audit was introduced after the
-historically selected configuration proved insensitive to demand and is not a
-second confirmatory model-selection stage. It exposes why historical replay
-quality alone is insufficient for selecting a model for intervention analysis.
-The test results remain
-retrospective evidence from one terminal and should not be confused with
-prospective field validation of an intervention.
-
-The thesis contributes an empirical evaluation of data-aware process
-simulation in container terminal truck operations. First, it examines the
-transfer of a recent process-simulation discovery approach to a logistics
-setting characterised by physical sequencing, shared resources, temporal
-variation, and congestion. Second, it identifies methodological challenges
-that arise when automatically inferred process and resource abstractions do
-not fully correspond to known physical constraints, requiring explicit
-validation and, where justified, documented domain adaptations. Third, it
-compares different levels of
-contextual model expressiveness on unseen temporal data rather than assuming
-that additional data awareness necessarily improves simulation quality.
-Finally, two operational interventions and a six-level demand-saturation
-stress test investigate whether the historically selected configuration
-contains the mechanism required by the intended what-if use. Its failure to
-propagate demand motivates an exploratory test of the minimal configuration
-with native dynamic state. This sequence is treated as an empirical finding
-about the limits of historical-fidelity selection, not as evidence that two
-different configurations are validated for past and future use.
-The intended decision-support logic is made
-explicit: forecast terminal conditions define a scenario, candidate slot or
-resource policies are simulated, and their consequences are compared at both
-activity and case level. The case study evaluates how far the discovered model
-can support that logic without treating mere scenario executability as evidence
-of physical counterfactual validity.
-
-The central methodological contribution is a layered validity audit. Rather
-than reducing simulation quality to one distance between a simulated log and a
-future log, the audit separates event-order semantics, control-flow language,
-state-conditioned stochastic behaviour, temporal transfer, physical
-resource--space semantics, and scenario response. A model can pass an earlier
-layer and fail a later one: near-perfect replay fitness, for example, does not
-show that travel, queues, or an intervention mechanism are represented. This
-separation turns residual errors and null scenario responses into diagnostic
-results and defines the strongest claim that the current model can support.
-This operationalises, for one physical-logistics application, the recent call
-for validation procedures that jointly consider process-model quality,
-historical outcomes, and stakeholder-relevant semantics rather than relying on
-an isolated fit measure \cite{Sulis2026SimulationReview}.
-
-The empirical study is based on operational CTB truck-event data and combines
-process analysis, simulation-model generation, temporal hold-out validation,
-multi-seed simulation, and controlled scenario experiments. The corresponding
-research questions specify how these objectives are evaluated in the
-remainder of the thesis.
 
 \section{Research Questions} To achieve the research objective, the thesis addresses the following research questions:
 
 \begin{enumerate} 
-\item \textbf{RQ1:} To what extent can a ProSiT simulation model discovered from historical CTB truck-operation data reproduce the observed behaviour of an unseen temporal hold-out?
-\item \textbf{RQ2:} To what extent can the discovered and transparently domain-repaired process structure represent held-out CTB truck-handling behaviour while respecting the physical sequential constraints of a truck visit?
-\item \textbf{RQ3:} How does increasing the contextual expressiveness of the simulation model affect held-out simulation fidelity in the CTB truck process?
-\item \textbf{RQ4:} To what extent does the discovered simulation contain the state mechanisms required to propagate selected operational interventions, and what do the responses reveal about the boundary between executable what-if analysis and physically credible decision support?
+\item \textbf{RQ1:} 
+\item \textbf{RQ2:} 
+\item \textbf{RQ3:} 
+
 \end{enumerate} 
 
 \section{Thesis Outline}
@@ -203,47 +115,18 @@ data-aware simulation, including demand, utilisation, container, and
 target-area information. It concludes with the structure and descriptive
 characteristics of the final simulation-ready event log.
 
-Chapter~\ref{chp:experiments_and_framework} defines the experimental and
-evaluation framework used to answer the research questions. It introduces the
-temporal train/validation/test split and describes the control-flow discovery procedure,
-including the preservation of the ITS schedule-derived stop order stored in
-XES, the complementary
-directly-follows and Petri-net views, and the structural domain check applied
-to the raw Inductive-Miner model. It then defines the expert-supported
-sequential source-model repair used consistently for parameter discovery.
-The chapter then defines four ProSiT parameter-discovery configurations in a
-$2\times2$ feature-source design and documents the executable parameter
-bundles used in the experiments. In addition, it specifies the
-Monte-Carlo replication protocol, the distributional fidelity measures, the
-paired ablation and temporal-transfer audits, the two what-if interventions, and a
-descriptive transition-time scale check. It also defines intervention-specific
-adequacy criteria, including the endogenous-state pathway required to test
-changed demand.
-The final section documents the technical adaptations required to apply
-ProSiT to the CTB event log reproducibly.
+Chapter~\ref{chp:experiments_and_framework}
+
 
 Chapter~\ref{chap:results} presents the empirical findings following the logic
-of the four research questions. It first examines the temporal
-train/validation/test design and the stability of the observed control-flow
-language. It then compares the four ProSiT configurations on validation data,
-rediscovers the historical reference on the complete development period, and
-evaluates its historical fidelity once on the final test period. The comparison
-separates the effects of static workload proxies and ProSiT's native workload
-state. A matched stress test then compares the workload-blind historical
-reference with the minimal native-state configuration used to probe demand
-propagation.
-Further diagnostic analyses examine
-the predictive signal contained in the available context attributes, the
-strong temporal structure of truck arrivals, the discovered resource
-capacities, and the interpretation of model-derived pre-service delays. The
-chapter finally reports the two what-if experiments and discusses the
-methodological limitations that constrain their interpretation.
+of the four research questions. 
 
 Chapter~\ref{chp:conclusion} brings together the empirical findings and answers
 the four research questions. It evaluates what the case study demonstrates
-about the transfer of data-aware process simulation to container-terminal truck
-operations and distinguishes historical fidelity and model executability from
-the stronger requirements of physical what-if decision support. The chapter
+about the transfer of data-aware process simulation to container-terminal truck operations 
+
+
+The chapter
 concludes by outlining directions for future work, particularly concerning
 richer spatial and resource-state representations, alternative event-log
 designs, and further validation in other operational settings.

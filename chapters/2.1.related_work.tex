@@ -1,4 +1,4 @@
-% Literature synthesis prepared 17 September 2026. No experimental results are asserted here.
+ % Literature synthesis prepared 17 September 2026. No experimental results are asserted here.
 \chapter{Related Work}
 \label{chp:related_work}
 
@@ -49,6 +49,7 @@ The resource perspective introduces a separate source of heterogeneity. L\'opez-
 Hybrid methods use learned predictors to represent dependencies that are difficult to capture through fixed parameters. Camargo et al. compare data-driven simulation with deep-learning-based generation, exposing differences in accuracy and the ability to represent process behavior~\cite{Camargo2021}. Meneghello et al. integrate prediction with simulation at runtime in RIMS~\cite{runtimeIntegration2024}. This allows predictions to use features calculated from the evolving simulation state, such as current workload and queue information. It avoids the inconsistency of adding context-dependent times only after an entire event sequence has already been generated. However, an executable control-flow model does not make every learned decision transparent, and the behavior of predictors under substantially changed operating conditions remains an evaluation question.
 
 \subsection{Probabilistic White-Box Simulation}
+[INCLUDE GRAPHIC TO EXPLAIN THE TECHNICAL ALGORITHM]
 
 ProSiT adopts probabilistic decision trees to characterise several runtime perspectives while retaining inspectable rules~\cite{Vinci2026prosit}. The approach accepts a Petri-net control-flow model and learns conditional transition weights and temporal behavior. Tree leaves represent probabilities or fitted distributions, enabling the modeler to inspect how attributes and process history influence execution. This creates a direct connection between representation and scenario construction: changing a condition or leaf parameter corresponds to an explicit change in the runtime model.
 
