@@ -1,10 +1,496 @@
 \chapter{Results}
 \label{chap:results}
 
-\textit{This follows the order of the Experiments; Für jedes Experiment gilt: Frage → Ergebnis → Erklärung → begrenzte Schlussfolgerung. Zeige auch erfolglose Varianten und relevante Verschlechterungen. Eine Nullwirkung kann ebenso aussagekräftig sein wie eine Verbesserung.}
+This chapter reports the results in the order of the experiments in
+Chapter~\ref{chp:experiments}. Section~\ref{sec:res_discovery} compares
+the discovered control-flow models (E1). Section~\ref{sec:res_rules}
+audits the selected model against the domain rules and evaluates its
+repair (E2). Section~\ref{sec:res_baseline} executes the candidates in
+ProSiT and compares the generated visits with the validation log (E3).
+Each section ends with a short conclusion that states what the evidence
+supports and what it does not.
 
-\section{Discovery Comparison and Modelchoice}
-\section{Domain Rules and potential Model adaptions}
-\section{baseline and temporal validation}
-\section{Resource-, Workload-, Time Mechanisms}
-\section{Peak Analysis and Policy Effects}
+% Structure for every experiment: question -> result -> explanation ->
+% bounded conclusion. Unsuccessful variants are reported as well.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discovery Comparison and Model Choice (E1)}
+\label{sec:res_discovery}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+All eleven configurations of Table~\ref{tab:exp_grid} completed on the
+restricted population. On the expanded population, the eight native
+PM4Py configurations completed. The Split Miner configurations have not
+yet been repeated on the expanded population.
+% TODO: add expanded Split Miner results or state them as not repeated.
+
+\subsection{Overall Comparison}
+
+Table~\ref{tab:res_grid} reports the validation results on the expanded
+population. Five of the eleven nets are not sound. All three Heuristics
+Miner nets and ILP with alpha 0.9 fail the WOFLAN check. The Split Miner
+nets obtained on the restricted population are not workflow nets after
+the conversion from BPMN. By the protocol, none of these nets receives
+alignment scores, and none is executable in the simulator. Their
+token-replay fitness is reported only as a diagnostic.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{YL{1.0cm}L{1.9cm}L{1.6cm}L{1.5cm}L{1.6cm}}
+\toprule
+\textbf{Model} & \textbf{Sound} & \textbf{Places / trans. (silent)} & \textbf{Fitting visits} & \textbf{Fitness} & \textbf{Precision} \\
+\midrule
+IM, threshold 0.0 (IM0) & yes & 32 / 46 (35) & 99.993\,\% & 0.9998 & 0.813 \\
+IMf, threshold 0.1 & yes & 21 / 34 (23) & 94.64\,\% & 0.9894 & 0.927 \\
+IMf, threshold 0.2 & yes & 19 / 31 (20) & 85.20\,\% & 0.9757 & 0.999 \\
+ILP, alpha 1.0 & yes & 6 / 11 (0) & 100\,\%$^{a}$ & n/a$^{a}$ & n/a$^{a}$ \\
+ILP, alpha 0.9 & no & 13 / 11 (0) & -- & -- & -- \\
+Heuristics, dep.\ 0.5 / 0.7 / 0.9 & no & 7 / 14 (3) & -- & -- & -- \\
+Split Miner, eta 0.2 / 0.4 / 0.6$^{b}$ & no & 20 / 20 (9) & -- & -- & -- \\
+\midrule
+Prefix reference (not a candidate) & yes & 164 / 242 & 99.959\,\% & -- & 0.969 \\
+\bottomrule
+\end{tabularx}
+\caption{Discovery results on the expanded validation partition
+(14,625 visits). Fitting visits are visits whose complete sequence the
+net accepts. $^{a}$The alignment computation for ILP 1.0 failed in the
+execution environment. Acceptance was determined by an exact language
+check instead. $^{b}$Restricted population.}
+\label{tab:res_grid}
+\end{table}
+
+Among the sound nets, the Inductive Miner variants show the expected
+trade-off between fitness and precision. Without filtering, IM0 accepts
+all but one validation visit and reaches a precision of 0.813. Raising
+the noise threshold to 0.2 increases precision to 0.999, but the net
+then rejects 14.8\,\% of the validation visits. A high precision is
+therefore obtained by excluding observed behaviour, not by describing
+it more accurately.
+
+ILP with alpha 1.0 accepts every visit, but its structure explains why
+(Figure~\ref{fig:res_ilp_flower}). Each yard activity sits on a
+self-loop around a place that Gate In marks and Gate Out empties. The
+net therefore allows any sequence of yard activities between the two
+gates. It is a flower model and gives no control-flow structure to the
+simulator. Its permitted language grows from 81 sequences with two yard
+events to 6,561 with four.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.55\textwidth]{figures/discovery_2026/ilp10_expanded.png}
+\caption{ILP net with alpha 1.0 on the expanded population. Every yard
+activity is a self-loop between Gate In and Gate Out.}
+\label{fig:res_ilp_flower}
+\end{figure}
+
+The prefix reference puts the precision values into perspective. A net
+that only memorises the 80 training sequences accepts 99.96\,\% of the
+validation visits with a precision of 0.969. Six validation visits
+follow a sequence that never occurs in training. The validation
+behaviour is therefore almost entirely repetition of known sequences.
+A discovered model with a precision of 0.813 permits considerably more
+than the data require. Section~\ref{sec:res_rules} examines what this
+additional behaviour is.
+
+\subsection{Effect of the Population Correction}
+
+The first run used the restricted population without multiblock
+visits. Checking the restricted nets against the expanded validation log
+showed that IM0 rejects 80.4\,\% of the multiblock visits, although it
+accepts all other visits (Table~\ref{tab:res_groups}). Of the 250
+rejected validation visits, 245 follow the sequence
+\texttt{Gate In > RMG\_delivery > RMG\_receive > Gate Out}.
+
+The cause is the filter itself. A truck that delivers and receives at
+the same block produces one \texttt{RMG\_mixed} event. Separate delivery
+and receive events at RMG therefore occur only when the two containers
+are in different blocks, and exactly these visits had been removed. In
+the restricted log, \texttt{RMG\_delivery} and \texttt{RMG\_receive}
+never occur in the same visit. The Inductive Miner consequently models
+them as an exclusive choice. In the expanded training log, 801 of the
+1,008 multiblock visits deliver at one block and receive at another.
+The author interprets this as a regular double cycle whose two
+containers are stored in different blocks.
+% TODO: cite the terminal confirmation if obtained (questionnaire B4).
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{YL{2.0cm}L{2.0cm}L{2.0cm}}
+\toprule
+\textbf{Net (fitted on)} & \textbf{No RMG} \newline (3,964) & \textbf{One block} \newline (10,350) & \textbf{Several blocks} \newline (311) \\
+\midrule
+IM0 (restricted) & 100\,\% & 99.99\,\% & 19.6\,\% \\
+IMf 0.1 (restricted) & 96.8\,\% & 96.1\,\% & 19.3\,\% \\
+Prefix (restricted) & 99.97\,\% & 99.97\,\% & 19.0\,\% \\
+\midrule
+IM0 (expanded) & 100\,\% & 99.99\,\% & 100\,\% \\
+IMf 0.1 (expanded) & 96.8\,\% & 96.1\,\% & 19.3\,\% \\
+IMf 0.2 (expanded) & 62.0\,\% & 96.1\,\% & 19.3\,\% \\
+ILP 1.0 (expanded) & 100\,\% & 100\,\% & 100\,\% \\
+Prefix (expanded) & 99.97\,\% & 99.97\,\% & 99.4\,\% \\
+\bottomrule
+\end{tabularx}
+\caption{Share of validation visits whose complete sequence is accepted,
+by visit group. Group sizes refer to the expanded validation partition.}
+\label{tab:res_groups}
+\end{table}
+
+After the correction, IM0 accepts all three groups. Its size and its
+aggregate metrics hardly change. Places, transitions and silent
+transitions are identical, and precision moves from 0.8134 to 0.8131.
+The structure, however, is different. \texttt{RMG\_mixed},
+\texttt{RMG\_receive} and \texttt{RMG\_delivery} are now parallel
+branches, and the LL activities have become an exclusive choice. The
+aggregate metrics do not reveal this change.
+
+The filtered variants do not benefit from the correction. On the
+expanded training log, IMf 0.1 and 0.2 produce exactly the same process
+trees as on the restricted log. The cross-block double cycle makes up
+about 1.4\,\% of the training visits and falls below the noise threshold.
+The drop in fitting visits of IMf 0.1 from 96.3\,\% to 94.6\,\% is caused
+entirely by the multiblock visits. A model selected for its higher
+precision would thus be unable to generate a regular operational
+pattern. These visits take longer than single-block visits, with a
+median TTT of 50 instead of 33 minutes in validation.
+
+\subsection{Conclusion of E1}
+
+IM0 is the only sound candidate that accepts all three visit groups and
+has a usable structure. It is retained for E2. Its precision of 0.813
+indicates additional behaviour, which is not addressed by noise
+filtering, because filtering removes the multiblock pattern first. E1
+does not establish that IM0 is suitable for simulation. It establishes
+that among the tested configurations it is the only one that preserves
+the observed behaviour. The comparison also shows that the definition of
+the visit population changed the discovered structure more than the
+choice between the tested algorithms.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/discovery_2026/im0_expanded.png}
+\caption{Inductive Miner net with threshold 0 on the expanded population
+(IM0). Black boxes are silent transitions. The central AND-split lets
+the RMG, LL and HO2 branches occur in any order. The lowest path leads
+from Gate In to Gate Out without any yard activity.}
+\label{fig:res_im0}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Domain-Rule Audit and Repair (E2)}
+\label{sec:res_rules}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Recorded Log}
+
+All 58,262 training visits and all 14,625 validation visits satisfy R1
+to R5, R7, R11 and R12. The largest observed visit has four yard events.
+In the 5,090 training visits with at least two stops, no two stop
+intervals overlap, and start and completion times increase strictly. The
+gate events and the stop aggregation were constructed upstream.
+Conformance of the recorded log can therefore partly follow from that
+construction and is not independent evidence for the rules.
+
+Repeated mixed events at the same unit occur in a few visits, for
+example \texttt{RMG\_mixed} twice at block T19 in eight training visits
+and \texttt{HO2\_mixed} twice in six. They are not counted as violations
+of R12, because it is not clear whether they are two separate approaches
+or an artefact of the stop reconstruction.
+
+\subsection{Model Language}
+
+Table~\ref{tab:res_rule_audit} shows which rules the discovered nets
+violate. All sound nets satisfy the gate rules R1 to R4 by construction.
+R5 is violated by IM0, IMf 0.1 and ILP 1.0. In each case, the shortest
+counterexample is the visit \texttt{Gate In > Gate Out} without any
+handling. None of the counterexamples occurs in the training log.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{YL{2.0cm}L{4.2cm}L{2.2cm}}
+\toprule
+\textbf{Net (expanded)} & \textbf{R1--R4} & \textbf{R5} & \textbf{R7} \\
+\midrule
+IM0 & satisfied & violated (\texttt{Gate In > Gate Out}) & unbounded \\
+IMf 0.1 & satisfied & violated (\texttt{Gate In > Gate Out}) & unbounded \\
+IMf 0.2 & satisfied & satisfied & unbounded \\
+ILP 1.0 & satisfied & violated (\texttt{Gate In > Gate Out}) & unbounded \\
+Prefix reference & satisfied & satisfied & satisfied \\
+\bottomrule
+\end{tabularx}
+\caption{Rule audit of the model languages. ``Unbounded'' means that
+loops allow arbitrarily many yard events.}
+\label{tab:res_rule_audit}
+\end{table}
+
+The empty visit is not the only additional behaviour.
+Table~\ref{tab:res_language} counts the distinct sequences that each net
+permits, by the number of yard events. With one yard event, IM0 permits
+exactly the nine observed sequences. With two yard events, it permits 61
+sequences, of which 38 are observed. With four, it permits 2,009 against
+3 observed. Examples of permitted but unobserved two-stop sequences are
+\texttt{RMG\_mixed > RMG\_delivery} and \texttt{LL\_mixed > LL\_receive}.
+Both contradict R12 when the two events take place at the same unit.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{YL{1.4cm}L{1.4cm}L{1.4cm}L{1.4cm}}
+\toprule
+\textbf{Yard events per visit} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} \\
+\midrule
+Observed training sequences & 9 & 38 & 30 & 3 \\
+IM0 & 9 & 61 & 365 & 2,009 \\
+IM0 + R5 + R12 (repaired) & 9 & 57 & 313 & 1,583 \\
+ILP 1.0 & 9 & 81 & 729 & 6,561 \\
+\bottomrule
+\end{tabularx}
+\caption{Number of distinct sequences permitted by each net, by number
+of yard events. IM0 additionally permits the empty visit.}
+\label{tab:res_language}
+\end{table}
+
+The parallel operators of IM0 express that the order of stops is free.
+They do not mean that a truck is at two places at once. The R11 check
+in the recorded log supports this reading. Whether the simulator
+respects it is examined in Section~\ref{sec:res_baseline}.
+
+\subsection{Mechanism in the Simulator}
+
+The development simulation of the first iteration
+(Section~\ref{sec:exp_selection_logic}) had produced empty visits and
+overlapping stops with an earlier IM net. Inspection of the ProSiT 1.0.3
+source code identified two mechanisms that link these effects to the
+model structure.
+
+The first mechanism concerns parallel branches. ProSiT enables a
+transition at the latest timestamp among its input places. After an
+AND-split, all branches therefore receive the same enabling time. The
+second stop of a visit does not wait for the first to finish, and both
+are scheduled concurrently. This violates R11.
+
+The second mechanism concerns empty visits. IM0 reaches the empty visit
+through a sequence of silent skip transitions. ProSiT learns a separate
+routing model for each transition and draws each skip decision
+independently. The product of several moderately likely skips gives the
+empty path a substantial probability, although it never occurs in the
+training data. Both effects shorten the simulated turnaround time.
+
+\subsection{Repair}
+
+Table~\ref{tab:res_repair} reports the repaired models. All variants
+are sound and accept all 80 observed training sequences. The share of
+fitting validation visits is identical for all of them.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{YL{1.9cm}L{1.9cm}L{1.6cm}L{1.6cm}L{1.6cm}}
+\toprule
+& \textbf{IM0} & \textbf{Control (same language)} & \textbf{+ R5} & \textbf{+ R5, R12} & \textbf{+ R5, R12, R7} \\
+\midrule
+Places / transitions (silent) & 32 / 46 (35) & 10 / 59 (0) & 10 / 58 (0) & 10 / 54 (0) & 51 / 309 (0) \\
+Fitting validation visits & 99.993\,\% & 99.993\,\% & 99.993\,\% & 99.993\,\% & 99.993\,\% \\
+Precision, validation & 0.8131 & 0.8136 & 0.8559 & 0.8644 & 0.8644 \\
+Precision, training & 0.8383 & 0.8386 & 0.8823 & 0.8886 & -- \\
+R5 satisfied & no & no & yes & yes & yes \\
+Concurrent stops possible & yes & no & no & no & no \\
+\bottomrule
+\end{tabularx}
+\caption{Repaired variants of IM0 on the expanded population. The
+control encodes the unrestricted IM0 language as a state machine.}
+\label{tab:res_repair}
+\end{table}
+
+The control isolates the effect of the representation. Encoding the same
+language as a state machine changes precision by only 0.0005. The gain
+of 0.043 from R5 therefore comes from removing the empty visit. After
+Gate In, Gate Out had always been a permitted continuation that the log
+never uses. R12 adds another 0.008 by excluding the four unobserved
+two-stop sequences that combine a mixed event with a separate delivery
+or receive at LL or HO2. The upper bound of eight yard events (R7)
+changes no metric, because no observed visit exceeds four. It enlarges
+the net from 54 to 309 transitions and adds transitions for five to
+eight stops that have no training data. R7 is therefore not used in the
+simulation.
+
+The slightly higher fitness of the state machines (0.99999 against
+0.99976) is a cost artefact of the silent transitions in IM0. The set of
+accepted visits is the same.
+
+The repaired net (Figure~\ref{fig:res_repaired}) still permits 19
+unobserved two-stop sequences, for example
+\texttt{RMG\_delivery > RMG\_mixed}. They are excluded neither by the
+data nor by a confirmed rule. Under the generic labels they are
+admissible when the two events take place at different blocks.
+% TODO: list of the 19 sequences in the appendix, with the terminal's
+% assessment from the questionnaire (part B3).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/discovery_2026/im0_r5_r12_state_machine.png}
+\caption{Repaired control-flow model \texttt{IM0\_R5\_R12} as a state
+machine (10 places, 54 transitions). Each place is a state of the visit.
+Repeated labels belong to different states.}
+\label{fig:res_repaired}
+\end{figure}
+
+\subsection{Conclusion of E2}
+
+IM0 permits the empty visit and, through its parallel branches, allows
+the simulator to schedule two stops of one truck at the same time. The
+repair removes both without losing an observed sequence and raises
+validation precision from 0.813 to 0.864. The remaining
+overgeneralisation consists of unobserved sequences that are plausible
+under the generic labels. E2 shows that the repaired model is a better
+description of the permitted truck behaviour. It does not yet show that
+it produces a better simulation. That is the question of E3.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Control-Flow Candidates in the Simulation (E3)}
+\label{sec:res_baseline}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% PROVISIONAL: values below come from the diagnostic script
+% trucksimulation/analysis/critical_review_20261007/scripts/e3_provisional_kpis.py
+% Replace with the outputs of the final E3 validator before submission.
+
+Table~\ref{tab:res_e3} compares the three candidates with the validation
+log. All values are means over five replications. The range across
+replications is small, with at most one minute for the medians and
+about one percentage point for the structural shares.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{YL{1.7cm}L{1.7cm}L{1.7cm}L{1.9cm}}
+\toprule
+\textbf{Measure} & \textbf{Observed} & \textbf{CONTRACT} & \textbf{IM0} & \textbf{IM0\_R5\_R12} \\
+\midrule
+\multicolumn{5}{l}{\textit{Visit structure}} \\
+Visits without yard event & 0\,\% & 0\,\% & 15.7\,\% & 0\,\% \\
+Visits with 1 / 2 / $\geq$3 stops & 89.8 / 10.1 / 0.1\,\% & 92.9 / 4.8 / 2.3\,\% & 62.6 / 16.2 / 5.5\,\% & 91.1 / 8.2 / 0.7\,\% \\
+Multi-stop visits with overlapping stops & 0\,\% & 0\,\% & 71.6\,\% & 0\,\% \\
+RMG visits with several blocks & 2.9\,\% & 2.9\,\% & 1.2\,\% & 2.1\,\% \\
+\midrule
+\multicolumn{5}{l}{\textit{Turnaround time [min]}} \\
+TTT mean / median / P90 & 42.2 / 34 / 78 & 33.1 / 28 / 57 & 28.0 / 25 / 49 & 31.2 / 27 / 53 \\
+Median TTT, delivery / receive / mixed & 28 / 35 / 48 & 25 / 28 / 39 & 22 / 26 / 31 & 24 / 27 / 38 \\
+Mean approach / exit & 13.2 / 13.6 & 7.0 / 13.2 & 6.4 / 11.2 & 6.0 / 12.8 \\
+Median stop, RMG / LL / HO2 & 9 / 7 / 12 & 8 / 7 / 9 & 8 / 7 / 10 & 8 / 7 / 9 \\
+\midrule
+\multicolumn{5}{l}{\textit{Load and delay peaks}} \\
+Maximum arrivals per hour & 255 & 132 & 132 & 132 \\
+Hours with median TTT $\geq$ 37 min & 26.4\,\% & 0\,\% & 0\,\% & 0\,\% \\
+\bottomrule
+\end{tabularx}
+\caption{Generated visits of the three control-flow candidates compared
+with the validation log. Means over five replications of 14,625 visits.
+Approach is Gate In to the start of the first stop, exit is the end of
+the last stop to Gate Out.}
+\label{tab:res_e3}
+\end{table}
+
+\subsection{Visit Structure}
+
+The unrepaired IM0 reproduces the failure of the first iteration under
+controlled conditions. 15.7\,\% of its simulated visits contain no yard
+activity. Among its multi-stop visits, 71.6\,\% have stops that overlap
+in time. Both values are zero in the recorded log. The stop distribution
+is also distorted. IM0 generates too few single-stop visits and far
+more visits with three or more stops than observed (5.5\,\% against
+0.1\,\%).
+
+The repaired model removes both violations completely, as the
+state-machine encoding guarantees. Its stop distribution is the closest
+to the observed one. The total variation distance to the observed
+distribution is 0.02, against 0.05 for \texttt{CONTRACT} and 0.27 for
+IM0. \texttt{CONTRACT} satisfies R5 and R11 as well, because its
+structure is sequential. It generates too many visits with three or more
+stops (2.3\,\% against 0.1\,\%), since its loop does not restrict how
+often a yard activity is repeated.
+
+The repaired model reproduces the stop distribution partly because its
+routing trees split on the sampled case attributes \texttt{n\_stops}
+and \texttt{visit\_complexity}. In 99\,\% of its simulated visits, the
+number of generated stops equals the sampled \texttt{n\_stops}. For IM0
+the share is 65\,\%. These attributes are part of the planned visit
+manifest and are known at Gate In
+(Section~\ref{sec:entry_known_attributes}). A close stop distribution
+therefore shows that control flow and case attributes are consistent.
+It is weaker evidence that the routing has been learned independently.
+
+The share of RMG visits with more than one block is reproduced by
+\texttt{CONTRACT} and underestimated by the repaired model (2.1\,\%
+against 2.9\,\%). In the simulator the block is chosen per stop by a
+learned resource model. A visit with two RMG stops may therefore be
+assigned the same block twice or two different blocks. This share
+depends on the resource model and not on the control flow alone. It is
+examined in E4.
+
+\subsection{Turnaround Time}
+
+The control-flow model affects the turnaround time in the expected
+direction. Removing empty visits and overlapping stops raises the median
+TTT from 25 to 27 minutes and the P90 from 49 to 53 minutes. The effect
+is largest for mixed visits, which often have two stops. Their median
+rises from 31 minutes with IM0 to 38 minutes with the repaired model.
+For IM0 a large part of the second stop is hidden by the overlap.
+
+The effect is small compared with the remaining error. All three
+candidates underestimate the observed turnaround time. The repaired
+model reaches a median of 27 minutes against 34 observed, and a P90 of 53
+minutes against 78. \texttt{CONTRACT} is about one minute closer in
+median and P90. This is partly due to its additional long visits with
+three or more stops and is therefore not evidence of a better structure.
+
+The decomposition shows where the gap arises. Exit time and stop
+durations are close to the observed values for all candidates. The
+approach from Gate In to the first stop is not. Its observed mean is
+13.2 minutes, the simulated means are 6.0 to 7.0 minutes. In the
+repaired model, the approach accounts for about 7 of the 11 minutes
+difference in mean TTT. The approach time contains the drive to the
+block and the waiting before the stop starts. In ProSiT it is generated
+by the waiting-time model of the first yard resource.
+
+\subsection{Load and Delay Peaks}
+
+None of the candidates generates a single delay-peak hour. In the
+validation log, 26.4\,\% of the Gate-In hours with at least 20 visits
+have a median TTT of 37 minutes or more. The arrival process explains a
+large part of this difference. The simulated arrivals reach at most 132
+trucks per hour, against 255 observed, and no simulated hour reaches the
+arrival-peak threshold of 165. The calibrated arrival model samples
+inter-arrival times from one empirical distribution and gates them only
+by an on/off calendar. It reproduces the average arrival rate but not
+the daily profile. Simulated arrivals are spread nearly evenly over the
+day, whereas the observed arrivals concentrate between 6:00 and 18:00.
+Without the load of the observed peak hours, the simulated resources do
+not congest.
+
+\subsection{Conclusion of E3}
+
+Under identical simulation conditions, the repaired model produces
+visits that respect all checked rules and reproduces the observed visit
+structure most closely. The unrepaired IM0 generates empty visits and
+overlapping stops at a scale that distorts the stop distribution and
+the turnaround time of multi-stop visits. Discovery metrics did not
+anticipate this. IM0 and the repaired model differ by 0.05 in precision
+and not at all in the share of accepted visits, but by 15.7 percentage
+points in simulated empty visits.
+
+The repaired model is therefore selected as the control-flow model for
+the following experiments. The comparison does not show that the
+simulator reproduces the observed turnaround times. For all candidates,
+the remaining error is dominated by the arrival process and the
+approach time, which do not depend on the control-flow model. These two
+components are the subject of E4.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Resource, Workload and Time Mechanisms (E4)}
+\label{sec:res_mechanisms}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO: arrival variant (profile-preserving), block-choice ablation,
+% workload features retrained on/off, arrival scaling response.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Peak Analysis and Policy Effects (E5)}
+\label{sec:res_policy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO: only if E4 shows that simulated TTT responds to arrival load.

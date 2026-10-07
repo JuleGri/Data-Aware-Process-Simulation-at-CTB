@@ -81,7 +81,7 @@ the effect under controlled conditions.
 E1 asks which discovery configuration produces a sound control-flow
 model that reproduces the recorded truck visits without permitting
 much additional behaviour. It is designed as a controlled comparison
-following the recommendations of \textcite{RWRehse2024Experimentation}:
+following the recommendations of Rehse et al.~\cite{RWRehse2024Experimentation}:
 every candidate is fitted on the same cases and evaluated on the same
 cohorts with the same implementation of each metric.
 
@@ -145,17 +145,17 @@ period starts on 10 April 2026, 15:50, and the test period on 20 April
 Four discovery families were compared. They rest on different
 construction principles, so that the comparison covers more than one
 way of trading fitness against precision
-\	te{DiscoveryBenchmark}. The Inductive Miner (IM) recursively
+\cite{DiscoveryBenchmark}. The Inductive Miner (IM) recursively
 splits the log into sequence, choice, parallel and loop operators and
 guarantees a sound, block-structured net. Its infrequent variant (IMf)
 filters behaviour below a noise threshold at each split
-\	te{Leemans2014InductiveMiner}. The Heuristics Miner derives
+\cite{Leemans2014InductiveMiner}. The Heuristics Miner derives
 dependency relations from directly-follows frequencies
-\	te{heuristicsMiner2006}. The ILP Miner constructs places as
+\cite{heuristicsMiner2006}. The ILP Miner constructs places as
 solutions of an integer linear programme over the observed behaviour
-\	te{RWVanZelst2018ILP}. Split Miner filters the directly-follows
+\cite{RWVanZelst2018ILP}. Split Miner filters the directly-follows
 graph and constructs a BPMN model, which is then converted to a Petri net
-\	te{RWSplitMiner2019}.
+\cite{RWSplitMiner2019}.
 
 Table~\ref{tab:exp_grid} shows the parameter grid. It was fixed before
 the full run and is a bounded exploration, not an exhaustive tuning.
@@ -186,7 +186,7 @@ recorded as a failure, not repaired by hand.
 
 \paragraph{Prefix reference.}
 In addition to the miners, a prefix-tree reference model is built
-\	te{DeLaBriandais1959Trie}. Every observed prefix of a training
+\cite{DeLaBriandais1959Trie}. Every observed prefix of a training
 sequence becomes one place, and every observed extension one transition.
 The language of this net equals exactly the set of training sequences.
 It is not a simulation candidate. It shows how well the validation
@@ -205,12 +205,12 @@ zero.
 
 \begin{enumerate}
 \item \textbf{Soundness.} Each net is checked with WOFLAN
-\	te{Verbeek2001Woflan}. Only sound workflow nets are executable
+\cite{Verbeek2001Woflan}. Only sound workflow nets are executable
 in ProSiT without deadlocks or leftover tokens. Alignment metrics are
 computed only for sound nets.
 \item \textbf{Fitness.} Alignment-based fitness and the share of visits
 whose complete sequence is accepted by the net
-\	te{Adriansyah2011CostFitness,aalst2012ConformanceChecking}.
+\cite{Adriansyah2011CostFitness,aalst2012ConformanceChecking}.
 \item \textbf{Precision.} Alignment-based precision, which decreases
 when the net permits continuations that the log does not show.
 \item \textbf{Coverage by visit group.} Exact acceptance of the complete
@@ -242,9 +242,8 @@ without any handling, or two stops of the same truck at the same time.
 The requirements are recorded in a machine-readable rule register.
 Every rule has a status and a source. Table~\ref{tab:exp_rules} lists
 the rules used in this thesis. The flow semantics and rules R11 and
-R12 are based on the domain knowledge of the author, who has worked in
-truck operations at the terminal.
-% TODO: state the author's role and period precisely, and add the date
+R12 are based on the domain knowledge of the author.
+% TODO: state the author's role at CTB and period precisely, and add the date
 % and role of any external confirmation obtained from the terminal.
 They have not yet been confirmed independently by the terminal. This
 limitation is discussed in Chapter~\ref{chap:discussion}.
