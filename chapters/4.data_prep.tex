@@ -2,7 +2,7 @@
 \label{chp:case_study_and_data}
 
 This chapter describes the operational context and the pipeline that turns raw operational
-records into a simulation-ready event log. It covers the data engineering but does not yet fit models, evaluate results, or choose experimental parameters. The resulting event log is the input for Chapters~\ref{chp:experiments_and_framework} and~\ref{chap:results}.
+records into a simulation-ready event log. The resulting event log is the input for Chapters~\ref{chp:experiments} and~\ref{chap:results}.
 
 Section~\ref{sec:cs_environment} introduces HHLA Container Terminal
 Burchardkai (CTB), the truck-handling operations and the data sources.
@@ -10,6 +10,24 @@ Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs 
 \cite{Vinci2026prosit}. The final section describes the event log and its
 characteristics used for the temporal train/validation/test split in
 Section~\ref{sec:train_test_split}.
+
+The Truck schedule serves as the baseline for the data assembly.
+
+In a first step, the raw schedule is cleaned from false or incomplete entries. That includes missing timestamps and total visit times of over 12 hours, as those indicate system errors. 
+
+We are matching container details to each recorded transatction to give each visit with its operations complexity.
+Using ProSiT as the simulation framework in this thesis, we are then aggregating the individual container details to a case level complexity. Container attributes, like dangerous goods, fill status etc. are transformed into a complexity code system attributing each visit with a complexity score and container counts and trafic direction. 
+
+Then the schedules attributes and timestamps are transformed into an event log style.  
+Then the system variables are added by the initial timestamp of the process, aka the moment, the truck enters the terminal. 
+The demand of the gate at moment of entry, as well as the demand at the planned transaction points are calculated. 
+
+To include the terminals utilization into the process behaviour, the utilization of each of the yard sections and blocks is calculated and added to each visit. 
+
+[INCLUDE TARGET FEATURES? SO FILTER OUT DOUBLE BLOCK VISITS?]
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Case Study Environment}
@@ -166,3 +184,4 @@ assigned RMG block.
 
 \section{Domain Rules}
 \textit{Documenting the origin of Domain Rules and operational requirements}
+
