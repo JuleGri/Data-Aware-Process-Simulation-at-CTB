@@ -255,11 +255,10 @@ respects it is examined in Section~\ref{sec:res_baseline}.
 
 \subsection{Mechanism in the Simulator}
 
-The development simulation of the first iteration
-(Section~\ref{sec:exp_selection_logic}) had produced empty visits and
-overlapping stops with an earlier IM net. Inspection of the ProSiT 1.0.3
-source code identified two mechanisms that link these effects to the
-model structure.
+The language audit shows what IM0 permits, not how often the simulator
+will generate it. Inspection of the ProSiT 1.0.3 source code identified
+two mechanisms that turn the structure of IM0 into empty visits and
+overlapping stops.
 
 The first mechanism concerns parallel branches. ProSiT enables a
 transition at the latest timestamp among its input places. After an
@@ -389,9 +388,8 @@ the last stop to Gate Out.}
 
 \subsection{Visit Structure}
 
-The unrepaired IM0 reproduces the failure of the first iteration under
-controlled conditions. 15.7\,\% of its simulated visits contain no yard
-activity. Among its multi-stop visits, 71.6\,\% have stops that overlap
+The unrepaired IM0 generates both effects predicted in E2.
+15.7\,\% of its simulated visits contain no yard activity. Among its multi-stop visits, 71.6\,\% have stops that overlap
 in time. Both values are zero in the recorded log. The stop distribution
 is also distorted. IM0 generates too few single-stop visits and far
 more visits with three or more stops than observed (5.5\,\% against

@@ -39,6 +39,42 @@ E5 & Policy evaluation & Hourly arrival cap. Fixed offered demand and visit mix.
 \label{tab:exp_overview}
 \end{table}
 
+\subsection{Goals of the Experiments}
+\label{sec:exp_goals}
+
+Each experiment has one goal and one deliverable.
+
+\begin{enumerate}[label=\textbf{E\arabic*}]
+\item Identify the tested discovery configurations that yield a sound
+workflow net accepting all three visit groups of the validation log
+(no RMG, one block, several blocks). Report their fitness, precision and
+size. Deliverable: the base model for E2.
+\item Determine which domain rules the base model violates. Remove these
+violations without losing any observed training sequence. Deliverable:
+a repaired, sound model and its rule-compliance evidence.
+\item Measure how the control-flow model alone changes the generated
+visit structure and turnaround time, with all other simulation
+conditions fixed. Deliverable: the control-flow model used in E4 and E5.
+\item Quantify how much of the remaining deviation between simulated
+and observed turnaround time is caused by arrival generation, block
+choice and workload features. Test whether simulated turnaround time
+increases with load as observed. Deliverable: the final simulation
+configuration and the decision whether E5 is admissible.
+\item Estimate the effect of an hourly arrival cap on the share of
+delay-peak hours and on the P90 of turnaround time, together with the
+waiting time displaced before the gate. Deliverable: a conditional
+statement on the policy effect and its cost.
+\end{enumerate}
+
+E1 to E3 answer RQ1. E3 and E4 answer RQ2. E5 answers RQ3. The final
+configuration is run once on the retrospective hold-out period without
+further changes.
+
+The experiments do not aim to rank discovery algorithms in general, to
+optimise the arrival cap, or to show that the simulator is valid for
+purposes other than the turnaround and peak measures defined in
+Section~\ref{sec:exp_kpis}.
+
 \subsection{Simulation-Informed Model Selection}
 \label{sec:exp_selection_logic}
 
@@ -59,19 +95,115 @@ remaining candidates in ProSiT and compares the generated visits with
 the validation log (E3). A model is selected only if it passes all three
 stages.
 
-This procedure is the result of an earlier modelling iteration. In the
-first version of this study, an Inductive Miner net was used directly as
-the ProSiT control flow. A development simulation with that net
-generated visits without any yard activity (29.5\,\% of simulated
-visits) and multi-stop visits whose stops overlapped in time (20.6\,\%).
-Neither occurs in the recorded log. The first submission avoided both
-effects with an expert-defined sequential model. That model is retained
-here as a reference (\texttt{CONTRACT}), but it was not derived from
-the data. The revision instead formulates the violated requirements as
-rules (R5 and R11 in Section~\ref{sec:exp_rules}), identifies their cause
-in the model and in the simulator, and repairs the discovered model in a
-targeted and verifiable way. E3 then tests whether the repair removes
-the effect under controlled conditions.
+The second and third stages are needed because a sound net with high
+fitness and precision can still permit behaviour that a truck cannot
+perform. Two cases are relevant here: a visit without any yard activity,
+and two stops of the same visit executed at the same time. Both are
+formulated as domain rules (R5 and R11 in Section~\ref{sec:exp_rules}).
+E2 checks whether the model language permits them, identifies how they
+arise in the simulator and repairs the model. E3 measures how often they
+occur in the generated log, with and without the repair. As a reference,
+E3 also includes an expert-defined sequential model
+(\texttt{CONTRACT}) that excludes both cases by construction but is not
+derived from the data.
+
+% ======================================================================
+% OUTLINE (to be written): common evaluation design used by E1--E5.
+% The bullets list the content each section should contain.
+% ======================================================================
+
+\section{Data Partitions and Their Use}
+\label{sec:exp_partitions}
+\textit{Outline:}
+\begin{itemize}
+\item Role of each partition: training fits every model (discovery,
+ProSiT parameters, peak thresholds). Validation is used for model
+selection and the baseline comparison. Test is used once, at the end,
+for the final configuration only.
+\item Table: which experiment reads which partition (E1--E5 against
+train / validation / test).
+\item Honest disclosure: validation has influenced development
+decisions. Data from the test period were used in earlier analyses by
+the author, so the final check is a \emph{retrospective hold-out}, not
+an untouched confirmatory test.
+\item Distribution shift: validation is more congested than training
+(daily median TTT 32 vs.\ 29 min, 26.5\,\% vs.\ 10.2\,\% delay-peak
+hours, Section~ef{sec:obs_drift}). Absolute errors therefore mix model error and drift. Model
+variants are compared with each other on the same period.
+\item Boundary handling: Gate-In hours that span the train/validation
+boundary are excluded from hourly statistics (or assigned by rule),
+stated once here.
+\end{itemize}
+
+\section{Outcome Measures and Peak Definitions}
+\label{sec:exp_kpis}
+\textit{Outline:}
+\begin{itemize}
+\item Primary KPI: turnaround time (TTT) per visit, Gate Out minus Gate
+In. Reported as median and P90, overall and by flow type. Why P90: delay
+peaks are a tail phenomenon.
+\item TTT decomposition (approach, stops, transfer between stops, exit)
+as diagnostic measures, with the formula. Note that gate events are
+instantaneous, so the decomposition is complete.
+\item Arrival peak: Gate-In hour with at least the training P90 of
+arrivals (165 trucks/h). Delay peak: Gate-In hour with at least 20
+visits and median TTT at least the training P90 (37 min). Both
+thresholds are frozen from training and reused unchanged in every
+experiment, including the policy scenarios, so that improvement is not
+normalised away.
+\item Attribution rule: hourly TTT is attributed to the hour of Gate In
+(arrival cohort), not to the hour in which the delay occurs.
+\item Disruption episodes (e.g.\ 23 March): defined by a rule fixed in
+advance (delay peak without arrival peak, exit-time dominated). Reported
+separately \emph{and} included in the all-visits result. Never removed
+to improve the fit.
+\item Throughput and backlog: visits completed per day, visits
+unfinished at the end of the horizon, used as guardrails.
+\end{itemize}
+
+\section{Simulation Runs, Replications and Uncertainty}
+\label{sec:exp_runs}
+\textit{Outline:}
+\begin{itemize}
+\item Horizon definition: fixed number of visits from the first
+validation Gate In (current) vs.\ fixed calendar window. State which one
+and why. Initial work in progress at the start (empty terminal at 15:50)
+and how the first hours are treated (warm-up exclusion or reported).
+\item Unfinished visits at the end of the horizon: counted and reported,
+never silently dropped from TTT statistics.
+\item Replications: number per configuration (5 for E3/E4, 10 for E5),
+seeds, and how the number was chosen (precision of the median and P90
+across replications).
+\item Paired comparison: the same seeds for baseline and scenario.
+Note that equal seeds do not guarantee common random numbers in ProSiT.
+\item Reporting: mean over replications with min--max, or a $t$-based
+interval over replication means. Replications quantify stochastic
+variation only, not uncertainty in the fitted parameters.
+\item Event order in generated logs: reconstructed from start
+timestamps. Firing sequences are exported for new runs.
+\item Run hygiene: one new run directory per configuration, hashed
+inputs, recorded versions (details in the appendix).
+\end{itemize}
+
+\section{Domain Review}
+\label{sec:exp_review}
+\textit{Outline:}
+\begin{itemize}
+\item Purpose: an independent check of data meaning, rules and
+simulation plausibility, which the author's own domain knowledge cannot
+provide.
+\item Instrument: structured questionnaire with five parts. A: data
+semantics. B: rules, including the unobserved two-stop sequences. C:
+expected values, collected \emph{before} seeing results. D: assessment
+of the simulation output. E: realistic control levers.
+\item Use of answers: B confirms or changes the rule register (E2).
+C provides acceptance tolerances for E3/E4 that were not chosen by the
+author after seeing the results. D is face validation of E3. E
+selects the lever for E5.
+\item Documentation: reviewer role, date, model version shown, answers,
+disagreements and resulting changes. Summary confirmed by the reviewer.
+\item Limitation: one reviewer is expert opinion, not proof of validity.
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Control-Flow Discovery (E1)}
@@ -108,9 +240,9 @@ evaluation run verifies them. Seven unit tests cover these checks. The
 reserved test partition is not read in E1, E2 or E3.
 
 \paragraph{Population correction.}
-The first version of the log excluded visits that handled containers at
-more than one RMG block. This exclusion was introduced for the old
-case-level target-block feature, which cannot describe several blocks.
+An initial version of the log excluded visits that handled containers
+at more than one RMG block, because a case-level target-block feature
+cannot describe several blocks.
 E1 was first run on this restricted population. The analysis of its
 results (Section~\ref{sec:res_discovery}) showed that the exclusion
 removes a regular operational pattern. The log was therefore rebuilt
@@ -341,10 +473,10 @@ analysed.
 Three control-flow models are simulated.
 
 \begin{itemize}
-\item \texttt{CONTRACT}: the expert-defined model of the first
-submission, retrained on the expanded log. It permits Gate In, one or
-more yard activities in any order, and Gate Out
-(4 places, 12 transitions).
+\item \texttt{CONTRACT}: an expert-defined sequential model. It permits
+Gate In, one or more yard activities in any order, and Gate Out
+(4 places, 12 transitions). It is not discovered from the data and
+serves as a reference.
 \item \texttt{IM0}: the unmodified Inductive Miner net with threshold 0
 (32 places, 46 transitions, 35 of them silent).
 \item \texttt{IM0\_R5\_R12}: the repaired state machine from E2
@@ -413,3 +545,168 @@ descriptive in this sense. Each measure is reported as the mean over the
 five replications with its minimum and maximum. Five replications
 quantify the stochastic variation of the simulator. They do not capture
 uncertainty in the fitted parameters.
+
+\subsection{Additional Checks and Selection Criterion}
+\textit{Outline:}
+\begin{itemize}
+\item Validator self-check: apply the evaluation script to the observed
+validation log itself. All rule-violation shares must be zero and all
+statistics must equal the directly computed values.
+\item Block-level checks: load per RMG block (observed vs.\ simulated),
+repeated visits to the same block, and RMG part of R12 (mixed followed
+by delivery or receive at the \emph{same} block) in the generated log.
+\item Consistency of sampled case attributes with the generated visit
+(\texttt{n\_stops}, flow type vs.\ generated stops).
+\item Selection criterion, fixed before reading the results: the
+selected candidate must produce no rule violations (R5, R11, R12) and
+the smallest distance to the observed stop distribution. TTT is reported
+but not used for selection, because it is dominated by arrivals and
+timing (see E4).
+\item Adequacy tolerances for TTT taken from the domain review (part
+C6), e.g.\ median within $\pm x$ min, P90 within $\pm y$ min.
+\end{itemize}
+
+% ======================================================================
+\section{Mechanism and Sensitivity Analysis (E4)}
+\label{sec:exp_mechanisms}
+% ======================================================================
+\textit{Outline. Question: which model components explain the remaining
+error of the baseline, and does the simulator respond to load through a
+credible mechanism? Base configuration: \texttt{IM0\_R5\_R12} from E3.
+One factor is changed at a time.}
+
+\subsection{Model Inspection}
+\begin{itemize}
+\item Inventory of all learned decision models: routing (per
+transition), resource choice (per activity), waiting time and execution
+time (per resource/activity). Number of leaves and split features.
+\item Key finding to report: all execution-time models and most
+waiting-time models have a single leaf. Only six waiting-time models
+split, all on \texttt{queue\_length}. Routing splits mainly on planned
+visit attributes. Consequence: which parts of the model are
+data-aware and which are not.
+\item Link to the worked example in Chapter~\ref{chp:process_discovery_methodology}.
+\end{itemize}
+
+\subsection{E4a: Arrival Generation}
+\begin{itemize}
+\item Variants: (i) stationary empirical inter-arrival distribution
+(current), (ii) hour-of-week arrival rate learned from training,
+(iii) replay of the observed validation Gate-In times (conditional
+replay, upper bound for what correct arrivals can achieve).
+\item Measures: hourly arrival profile, arrival-peak hours, TTT median
+and P90, delay-peak hours, approach time.
+\item Expected interpretation: how much of the TTT and peak error is
+due to arrivals alone.
+\end{itemize}
+
+\subsection{E4b: Response to Load}
+\begin{itemize}
+\item Arrival intensity scaled by 0.8, 1.0 and 1.2 (on the best
+arrival variant), all else fixed.
+\item Measures: TTT median/P90 and stop duration as a function of
+trucks in the terminal and per block. Compared with the observed
+relation between WIP and TTT (Chapter~\ref{chp:case_study_and_data}).
+\item \textbf{Gate for E5:} simulated TTT must increase with load in
+the same direction as observed, and delay-peak hours must occur at a
+non-trivial rate. Criterion fixed before running E4b.
+\end{itemize}
+
+\subsection{E4c: Block Choice}
+\begin{itemize}
+\item Learned block choice (depends on \texttt{queue\_length}) vs.\
+block drawn from the empirical block distribution, independent of the
+current queue.
+\item Reason: in reality the block is fixed by the container location
+or the yard plan. Load balancing in the simulator can hide congestion.
+\item Measures: per-block load, P90 of RMG stop duration, TTT P90.
+\end{itemize}
+
+\subsection{E4d: Workload Features}
+\begin{itemize}
+\item ProSiT retrained with and without workload features (not only
+switched off at runtime, since that changes the predictor inputs).
+\item Measures: same as E4b. Shows whether congestion effects come from
+the learned \texttt{queue\_length} splits or from capacity alone.
+\end{itemize}
+
+\subsection{E4e: Calendars and Capacity (verification)}
+\begin{itemize}
+\item Small synthetic checks: do activities start in closed hours under
+the full-week resource calendar? Does the RMG cap of three hold in the
+generated log?
+\item One sensitivity on the RMG cap (2 / 3 / 4), stated as an
+assumption check, not a policy.
+\end{itemize}
+
+% ======================================================================
+\section{Policy Evaluation (E5)}
+\label{sec:exp_policy}
+% ======================================================================
+\textit{Outline. Only executed if the gate in E4b is passed. Otherwise
+this section states why the policy cannot be evaluated with the fitted
+model.}
+\begin{itemize}
+\item Question: how does an hourly cap on truck arrivals affect the
+frequency and severity of delay peaks, and what does it cost in
+displaced waiting?
+\item Decision owner and lever: slot allocation by the terminal
+(confirmed in domain review, part E).
+\item Scenarios: baseline (no cap), cap at e.g.\ 150 and 140 trucks per
+hour. Levels justified from the observed arrival distribution.
+\item Displacement rule: trucks above the cap are moved to the next hour
+with free capacity. Offered demand and visit mix stay identical.
+\item Fixed conditions: configuration from E4, same arrivals before
+capping, same seeds, 10 paired replications.
+\item Primary outcomes: share of delay-peak hours (frozen threshold),
+TTT P90 inside the terminal.
+\item Guardrails: displaced waiting time before the gate per truck
+and in total, daily throughput, unfinished visits, end-of-day backlog.
+\item Analysis: paired differences per replication with interval.
+Effect reported as change in peak hours and in TTT P90, together with
+the displaced waiting. A reduction of in-terminal TTT that is fully
+paid by waiting outside is not an improvement.
+\item Sensitivity: cap level, and compliance (share of trucks that
+actually shift).
+\item Limits of interpretation: TTT conditional on the fitted waiting
+models, no gate queue modelled, no waterside interaction.
+\end{itemize}
+
+% ======================================================================
+\section{Final Retrospective Hold-Out Check}
+\label{sec:exp_test}
+% ======================================================================
+\textit{Outline:}
+\begin{itemize}
+\item The final configuration (after E4) is run once on the test period
+(20 April onwards). No changes after seeing the result.
+\item Same measures as E3. Reported in one table next to the validation
+result.
+\end{itemize}
+
+% ======================================================================
+\section{Threats Addressed by the Design}
+\label{sec:exp_threats}
+% ======================================================================
+\textit{Outline (short table: threat, design response, remaining
+limitation; discussed further in the Discussion):}
+\begin{itemize}
+\item Representation vs.\ language change in the repair: control model
+with the same language as a state machine (E2).
+\item Information leakage through case attributes: only attributes from
+the planned visit manifest known at Gate In.
+\item Double counting of waiting: readiness-based stop intervals already
+contain crane waiting, so no additional queue is added on top.
+\item Selection on validation: final hold-out check, criteria fixed
+before reading results.
+\item Drift between periods: model variants compared on the same period.
+\item Single seed or few replications: replication counts and intervals.
+\item Author as domain source: external domain review.
+\end{itemize}
+
+\section{Chapter Summary}
+\textit{Outline: one paragraph. E1--E3 select an executable control
+flow in three stages. E4 explains the remaining error and decides
+whether the policy study is admissible. E5 evaluates one lever with
+fixed demand and guardrails. All thresholds and criteria are fixed
+before the corresponding results are read.}
