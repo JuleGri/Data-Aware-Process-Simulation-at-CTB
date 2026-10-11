@@ -1,6 +1,21 @@
 \chapter{Background}
 \label{chp:background}
+
+\begin{hints}
+\item Target length about 10 pages (currently about 25). Keep only concepts that Chapters 4--7 use.
+\item Target structure: 2.1 Container terminal truck operations; 2.2 Event logs; 2.3 Process discovery and conformance; 2.4 Business process simulation; 2.5 Data-aware simulation and ProSiT (concept only, technical detail in Chapter 5); 2.6 Validation of simulation models (Sargent).
+\item Move comparisons of approaches to Chapter 3, metric definitions to Chapter 6.
+\end{hints}
+
+\section{Container Terminal Truck Operations}
+\label{sec:bg_terminal}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item Terminal layout in one paragraph: gate, yard blocks with RMG cranes, empty-container depot (LL), manual area (HO2).
+\item A truck visit from Gate In to Gate Out: delivery, receive, double cycle. One small figure is enough.
+\item KPIs of truck handling, with truck turnaround time as the main one (keep the existing paragraph).
+\item CTB-specific facts (block numbers, lanes, cranes) belong to Chapter 4, not here.
+\end{hints}
 
 
 
@@ -17,6 +32,10 @@ companies and cargo owners. It is one of four main KPIs used by the HHLA
 container terminals \cite{Bett2024,CTprocessMiningTAS2020}.
 
 \subsection{Simulation-Based Decision Support in Container Terminals}
+\begin{hints}
+\item Which decisions terminals study with simulation (appointments, allocation, capacity), in a few sentences.
+\item Manual DES models: strengths, and the effort that motivates discovery from data. Condense.
+\end{hints}
 Terminal managers make decisions about truck appointments, resources,
 equipment schedules, maintenance, and yard operations while the terminal
 remains active. Because terminal processes are connected, local decisions can
@@ -59,6 +78,11 @@ simulation models closer to the observed process.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Operational Data and Event Logs}
 \label{sec:operational_data_event_logs}
+\begin{hints}
+\item Event, case, activity, timestamp, resource, attribute. Use the CTB truck visit as the running example.
+\item Lifecycle timestamps (start/complete) and why their meaning matters (readiness vs. service).
+\item Keep the example table. Cut general information-system history.
+\end{hints}
 
 \subsection{Information Systems and Event Semantics}
 Operational information systems record transactions in support of daily work,
@@ -156,6 +180,11 @@ checking, and performance analysis \cite{PMvanDerAalst2016}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Process Mining Foundations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item Discovery: what a discovered model is; Petri nets, workflow nets, soundness; process trees and the Inductive Miner (needed for E1/E2).
+\item Conformance: alignments, fitness, precision, generalisation, with one-line intuitions (needed for E1).
+\item Enhancement only briefly. Detailed algorithm comparison belongs to Chapter 3.
+\end{hints}
 \subsection{Process Mining and Its Analytical Perspectives}
 The operational records described in
 Section~\ref{sec:operational_data_event_logs} can be analysed at different
@@ -219,6 +248,125 @@ shows what was frequent in the log, whereas the Petri net states what the model
 allows. The CTB instances of both views are therefore presented separately and
 interpreted in Section~\ref{sec:process_discovery_methodology}.
 
+\subsection{Petri Nets, Workflow Nets and Silent Transitions}
+\label{sec:bg_petri}
+
+A Petri net is a bipartite graph of \emph{places} and \emph{transitions}
+\cite{PMvanDerAalst2016}. Formally, a labelled Petri net is a tuple
+$N=(P,T,F,\lambda)$. $P$ is a finite set of places, $T$ a finite set of
+transitions, and $F\subseteq(P\times T)\cup(T\times P)$ the flow relation,
+drawn as arcs. The labelling function $\lambda: T\rightarrow A\cup\{\tau\}$
+assigns each transition either an activity of the event log or the special
+label $\tau$. The places with an arc to a transition $t$ are its input places
+${\bullet}t$; the places reached by an arc from $t$ are its output places
+$t{\bullet}$.
+
+The state of a net is a \emph{marking}: a distribution of tokens over the
+places. A transition is \emph{enabled} when each of its input places holds at
+least one token. Firing an enabled transition removes one token from each
+input place and adds one token to each output place. A sequence of firings is
+a run of the net. Choice is expressed by a place with several outgoing arcs:
+only one of the enabled transitions can consume the token. Parallelism is
+expressed by a transition with several output places: it creates one token per
+branch, and the branches can then fire independently.
+
+A \emph{workflow net} is a Petri net with one source place $i$ and one sink
+place $o$, in which every place and transition lies on a path from $i$ to $o$.
+A run starts with one token in $i$ and should end with one token in $o$. For a
+truck visit, $i$ represents the truck before the gate and $o$ the completed
+visit. A workflow net is \emph{sound} if three conditions hold
+\cite{PMvanDerAalst2016}. First, from every reachable marking the final
+marking can still be reached (option to complete). Second, when $o$ is marked,
+no other place holds a token (proper completion). Third, every transition can
+fire in at least one run (no dead transitions). Soundness matters for
+simulation, because a simulator executes the net and must reach the end of
+every case.
+
+Transitions labelled $\tau$ are \emph{silent}. They fire like any other
+transition, but they do not correspond to an activity and leave no event in
+the log. They express routing that has no recorded counterpart: skipping an
+optional activity, starting another iteration of a loop, or splitting and
+joining parallel branches. Figure~\ref{fig:bg_petri_silent} shows the smallest
+relevant case. After Gate In, the token can either fire
+\texttt{RMG\_receive} or the silent transition, which skips the yard stop. The
+\emph{language} of a workflow net is the set of visible activity sequences of
+all complete runs, with silent transitions removed. The net in
+Figure~\ref{fig:bg_petri_silent} therefore accepts both
+\texttt{Gate In, RMG\_receive, Gate Out} and \texttt{Gate In, Gate Out}.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  place/.style={circle, draw, minimum size=7mm, inner sep=0pt},
+  trans/.style={rectangle, draw, minimum width=17mm, minimum height=6mm, font=\footnotesize},
+  silent/.style={rectangle, draw, fill=black, minimum width=8mm, minimum height=6mm},
+  arc/.style={-{Stealth[length=2mm]}}]
+\node[place] (i) at (0,0) {$\bullet$};
+\node[font=\footnotesize] at (0,-0.65) {$i$};
+\node[trans] (gi) at (1.75,0) {Gate In};
+\node[place] (p1) at (3.5,0) {};
+\node[trans] (rr) at (5.6,0.8) {RMG\_receive};
+\node[silent] (tau) at (5.6,-0.8) {};
+\node[font=\footnotesize] at (5.6,-1.45) {$\tau$ (skip)};
+\node[place] (p2) at (7.7,0) {};
+\node[trans] (go) at (9.45,0) {Gate Out};
+\node[place] (o) at (11.2,0) {};
+\node[font=\footnotesize] at (11.2,-0.65) {$o$};
+\draw[arc] (i) -- (gi);
+\draw[arc] (gi) -- (p1);
+\draw[arc] (p1) -- (rr);
+\draw[arc] (p1) -- (tau);
+\draw[arc] (rr) -- (p2);
+\draw[arc] (tau) -- (p2);
+\draw[arc] (p2) -- (go);
+\draw[arc] (go) -- (o);
+\end{tikzpicture}
+\caption{A workflow net with a silent transition. Circles are places,
+white boxes visible transitions, and the black box a silent transition
+$\tau$. The token in the source place $i$ represents a truck before the gate.
+The silent transition skips the yard stop, so the net also accepts a visit
+without any handling.}
+\label{fig:bg_petri_silent}
+\end{figure}
+
+Silent transitions are a means of representation, not behaviour. Two nets with
+very different numbers of silent transitions can have exactly the same
+language. The Inductive Miner introduces them systematically when it converts
+a process tree into a Petri net: an exclusive choice with an empty branch
+becomes a silent skip, a loop needs silent transitions to repeat or leave the
+loop, and a parallel block needs a silent split and join
+\cite{Leemans2014InductiveMiner}. The Inductive Miner net of this thesis has
+11 visible and 35 silent transitions (Figure~\ref{fig:res_im0}). Its repaired
+encoding as a state machine has the same visible behaviour without any silent
+transition (Section~\ref{sec:mc_repair}).
+
+Silent transitions have three consequences that matter in this thesis.
+\begin{enumerate}
+\item \textbf{Hidden behaviour.} Because they leave no trace, silent paths are
+easy to overlook when a model is inspected. A combination of silent skips can
+admit behaviour that never occurs in the log, such as the visit without any
+yard activity in Figure~\ref{fig:bg_petri_silent}.
+\item \textbf{Computation.} Alignments
+(Section~\ref{sec:astar_alignment_definition}) must decide for every silent
+transition whether to fire it. Silent moves cost nothing, but each one adds
+alternative paths to the state space the search explores, especially inside
+loops and parallel blocks. ProSiT aligns every training trace with the net to
+obtain its training data, so the number of silent transitions also affects how
+long discovery takes. In this study, discovery took about 25 minutes for the
+Inductive Miner net and 11 minutes for its silent-free repaired encoding, with
+the same data and settings.
+\item \textbf{Simulation.} A simulator has to decide every silent transition
+as well. ProSiT learns a routing weight for each transition, silent or
+visible, conditioned on the case attributes and the activities executed so
+far. At each choice point it draws one enabled transition from these weights,
+without looking ahead to where the path leads \cite{Vinci2026prosit}. A
+sequence of individually likely skips can therefore produce a path that is
+rare or absent in the data. Likewise, a silent
+parallel split enables several branches at the same moment, so one truck can
+be scheduled at two stops at once. Both effects are measured in
+Chapter~\ref{chp:results}.
+\end{enumerate}
+
 \subsection{Conformance Checking and Process Enhancement}
 
 Conformance checking compares recorded process executions with an existing
@@ -272,6 +420,10 @@ the structural model and help analysts identify possible improvements.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Business Process Simulation} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item Components of a BPS model: arrivals, routing, resources and capacity, durations, calendars.
+\item Replications, warm-up, and why results are distributions. Condense to the concepts used in Chapter 6.
+\end{hints}
 
 \subsection{Fundamentals of Business Process Simulation}
 Business Process Simulation (BPS) uses executable models to study process
@@ -349,6 +501,11 @@ the corresponding verification and validation concepts.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Discovery and Data-Aware Simulation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item How simulation models are discovered from logs, in a few paragraphs.
+\item What data-aware means: decisions and durations conditioned on case and state attributes.
+\item ProSiT in concept: Petri net plus probabilistic decision trees with distributions in the leaves. Details go to Chapter 5.
+\end{hints}
 
 The previous sections introduced Business Process Simulation and event logs.
 Simulation discovery connects both by estimating simulation behaviour from
@@ -399,6 +556,9 @@ evaluation as remaining limitations \cite{Hospital2026Vinci}. These are close
 to the validity boundaries investigated in CTB.
 
 \subsection{Adjacent Automatic Simulation Model Generation Research}
+\begin{hints}
+\item Candidate for moving to Chapter 3 or cutting. Keep at most one paragraph here.
+\end{hints}
 
 Process-Mining-based simulation discovery is one route to reducing manual
 model construction, but it is not the only one. The adjacent Automatic
@@ -661,6 +821,10 @@ improves simulation fidelity.
 \section{Explainable and White-Box Simulation}
 \label{sec:explainable_simulation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item Why inspectability matters for decision support (the committee asked for the concrete trees).
+\item Candidate for merging into the ProSiT subsection above.
+\end{hints}
 
 \subsection{Explainability in Simulation-Based Decision Support}
 Business Process Simulation supports decisions about resources, process
@@ -712,6 +876,10 @@ configuration, but does not by itself establish causal effects.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Verification, Validation, and Trustworthiness}
 \label{sec:simulation_validation_background}
+\begin{hints}
+\item Verification vs. validation; Sargent: conceptual, operational and behavioural validity. These three map directly to the validation design in Chapter 6.
+\item Validity is always for an intended use. Here: turnaround time and delay peaks.
+\end{hints}
 Validation asks whether a simulator is accurate enough for its intended use,
 not only whether it runs. A model may reproduce
 historical truck turnaround distributions but still fail to predict an
@@ -817,6 +985,9 @@ that is incorrectly represented
 \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}.
 
 \subsection{Multi-Perspective Event-Log Comparison}
+\begin{hints}
+\item Move the metric definitions to Chapter 6 (Outcome Measures). Keep only the idea here.
+\end{hints}
 
 Chapela-Campa et al. provide a validation framework that matches the
 evaluation problem of this thesis
@@ -1025,13 +1196,16 @@ include event-log sampling uncertainty, input-distribution estimation
 uncertainty, alternative discovery outcomes, measurement error or
 uncertainty about the correctness of a what-if response. Those require
 additional resampling, repeated discovery, sensitivity experiments or
-external domain evidence. Chapter~\ref{chp:experiments_and_framework}
+external domain evidence. Chapter~\ref{chp:experiments}
 uses this conditional Monte-Carlo interpretation for its ten-seed
 protocol. The intervals are pointwise summaries for individual metrics and
 contrasts. They are not simultaneous confidence bands, and no family-wise
 multiplicity adjustment is applied.
 
 \subsection{Trustworthiness, Limitations, and Research Gap}
+\begin{hints}
+\item Move the research gap to Chapter 3 (Synthesis), so that Background stays descriptive.
+\end{hints}
 
 Historical fidelity is necessary for a simulator that claims to
 represent an existing process, but it is not sufficient for unrestricted

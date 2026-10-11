@@ -1,30 +1,20 @@
 \chapter{Case Study and Data Engineering}
 \label{chp:case_study_and_data}
+\begin{hints}
+\item Roadmap: environment, data sources, event-log construction, context attributes, observed behaviour, domain rules.
+\item This chapter only describes the data and the observed system. It does not fit models.
+\end{hints}
 
 This chapter describes the operational context and the pipeline that turns raw operational
-records into a simulation-ready event log. The resulting event log is the input for Chapters~\ref{chp:experiments} and~\ref{chap:results}.
+records into a simulation-ready event log. The resulting event log is the input for Chapters~\ref{chp:experiments} and~\ref{chp:results}.
 
 Section~\ref{sec:cs_environment} introduces HHLA Container Terminal
 Burchardkai (CTB), the truck-handling operations and the data sources.
 Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs lifecycle timestamps and derives the case-level context required by ProSiT
 \cite{Vinci2026prosit}. The final section describes the event log and its
 characteristics used for the temporal train/validation/test split in
-Section~\ref{sec:train_test_split}.
+Section~\ref{sec:exp_partitions}.
 
-The Truck schedule serves as the baseline for the data assembly.
-
-In a first step, the raw schedule is cleaned from false or incomplete entries. That includes missing timestamps and total visit times of over 12 hours, as those indicate system errors. 
-
-We are matching container details to each recorded transatction to give each visit with its operations complexity.
-Using ProSiT as the simulation framework in this thesis, we are then aggregating the individual container details to a case level complexity. Container attributes, like dangerous goods, fill status etc. are transformed into a complexity code system attributing each visit with a complexity score and container counts and trafic direction. 
-
-Then the schedules attributes and timestamps are transformed into an event log style.  
-Then the system variables are added by the initial timestamp of the process, aka the moment, the truck enters the terminal. 
-The demand of the gate at moment of entry, as well as the demand at the planned transaction points are calculated. 
-
-To include the terminals utilization into the process behaviour, the utilization of each of the yard sections and blocks is calculated and added to each visit. 
-
-[INCLUDE TARGET FEATURES? SO FILTER OUT DOUBLE BLOCK VISITS?]
 
 
 
@@ -33,8 +23,15 @@ To include the terminals utilization into the process behaviour, the utilization
 \section{Case Study Environment}
 \label{sec:cs_environment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item Keep it short and concrete (the committee criticised too much port context in the defense).
+\end{hints}
 
     \subsection{HHLA Container Terminal Burchardkai}
+\begin{hints}
+\item Terminal key facts, the truck process, the handling areas (RMG blocks, LL, HO2) and the gate.
+\item Replace ``operational experts confirmed by the exact source (author knowledge or documented terminal review with date).
+\end{hints}
 
     This case study concerns the HHLA Container Terminal Burchardkai (CTB) in the Port of Hamburg. CTB handles approximately 2.6 million TEU
     (Twenty-foot Equivalent Units) annually across 315 hectares
@@ -60,6 +57,9 @@ To include the terminals utilization into the process behaviour, the utilization
 
     \subsection{Data Sources}
     \label{sec:cs_data_sources}
+\begin{hints}
+\item Keep the table. Add the observation period and what each system records about a truck visit.
+\end{hints}
 
     The data come from several systems used in daily terminal operations.
     These systems were developed over time and record different parts of the
@@ -99,21 +99,72 @@ reefer indicators, dwell time and inbound/outbound carriers. \\
     records.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section {Case Construction}
-\textit{
-\begin{enumerate}
-    \item Data Sources
-    \item Visit reconstruction by Keys, Assumptions, Containers, 
-    \item Timestamp Semantics
-    \item Ressource Identities
-    \item Cleaning
-    \item Data Split
-\end{enumerate}
-}
+\section{Event-Log Construction}
+\label{sec:event_log_engineering}
+\begin{hints}
+\item The pipeline from four source systems to one truck-visit event log, as one figure (figures/schemas/event_log_engineering_pipeline.png) and a short walk-through.
+\item Every step that changes the population must be counted (attrition table: raw visits, after cleaning, after matching, final).
+\end{hints}
+
+% Draft text (moved from the chapter introduction):
+The Truck schedule serves as the baseline for the data assembly.
+
+In a first step, the raw schedule is cleaned from false or incomplete entries. That includes missing timestamps and total visit times of over 12 hours, as those indicate system errors. 
+
+We are matching container details to each recorded transatction to give each visit with its operations complexity.
+Using ProSiT as the simulation framework in this thesis, we are then aggregating the individual container details to a case level complexity. Container attributes, like dangerous goods, fill status etc. are transformed into a complexity code system attributing each visit with a complexity score and container counts and trafic direction. 
+
+Then the schedules attributes and timestamps are transformed into an event log style.  
+Then the system variables are added by the initial timestamp of the process, aka the moment, the truck enters the terminal. 
+The demand of the gate at moment of entry, as well as the demand at the planned transaction points are calculated. 
+
+To include the terminals utilization into the process behaviour, the utilization of each of the yard sections and blocks is calculated and added to each visit. 
+
+\todo{Decided: no target features; multiblock visits are restored (expanded population). Describe this in Cleaning and Population.}
+
+\subsection{Visit Reconstruction}
+\label{sec:visit_reconstruction}
+\begin{hints}
+\item Case notion: one completed truck visit from Gate In to Gate Out; the key that links the systems (schedule UID).
+\item How container transactions are matched to visits, and what happens to unmatched records.
+\end{hints}
+
+\subsection{Activities and Event Order}
+\label{sec:activities_order}
+\begin{hints}
+\item The eleven generic labels (table): Gate In, Gate Out, receive/delivery/mixed at RMG, LL and HO2. Why block names are not part of the label.
+\item Event order from case:event:order (schedule sequence), not from timestamps, and why.
+\end{hints}
+
+\subsection{Timestamp Semantics}
+\label{sec:timestamp_semantics}
+\begin{hints}
+\item A stop interval runs from readiness in the handover lane to fulfilment. It can contain waiting for the crane, so it is not pure service time.
+\item Gate events are instantaneous; therefore turnaround time decomposes exactly into approach, stops, transfer and exit.
+\item Minute resolution of all source timestamps; known imprecision at LL and HO2.
+\end{hints}
+
+\subsection{Resource Identities}
+\label{sec:resource_identities}
+\begin{hints}
+\item Resource = RMG block (T06--T27), LL, HO2, gates. One generic label can occur at different blocks.
+\item Physical capacities and their source: three handover lanes and up to three cranes per block shared with waterside and rail; four lanes at LL. Name the source (author knowledge, terminal confirmation with date).
+\end{hints}
+
+\subsection{Cleaning and Population}
+\label{sec:cleaning_population}
+\begin{hints}
+\item Cleaning rules (missing timestamps, visits over 12 hours, unknown activity labels: 184 visits) with counts.
+\item The population correction: visits with several RMG blocks were first excluded for a target feature, then restored, because the exclusion removed a regular pattern (Chapter 7, E1). Final counts per partition.
+\end{hints}
 \FloatBarrier
 
 \subsection{Context Enrichment}
 \label{sec:context_enrichment}
+\begin{hints}
+\item For every attribute: definition, source, and whether it is known at Gate In (planned manifest) or reconstructed. This answers the leakage question.
+\item Note that historical demand and utilisation values are case-constant in the simulation and do not react to simulated load.
+\end{hints}
 
 To enable data-aware simulation, the event log is enriched with
 contextual attributes describing the operational state at the time of
@@ -183,6 +234,9 @@ assigned RMG block.
 \section{Observed Truck-Visit Behaviour}
 \label{sec:observed_behaviour}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item Already written. Keep all thresholds fitted on training data only.
+\end{hints}
 % Source: trucksimulation/peak_analysis/peak_analysis_observed_v2.py,
 % output peak_analysis/observed_20261007_v2. Training and validation only.
 
@@ -340,6 +394,15 @@ this difference, or 88\,\%. The stop intervals grow by only 2.5 minutes.
 Arrival peaks, in contrast, are associated with an increase of only 2.4
 minutes in mean TTT.
 
+The exit share is driven by two disruption days
+(Section~\ref{sec:obs_episodes}). Without 12 and 23 March, the mean TTT
+in delay-peak hours is 17.0 minutes longer. The approach accounts for
+10.1 minutes (59\,\%), the stop intervals for 3.3 minutes (19\,\%) and
+the exit for 3.1 minutes (18\,\%). Under normal operation, the additional
+delay therefore arises mainly before the truck reports ready at its
+first stop.
+% Source: peak_analysis/bottleneck_analysis.py, output bottleneck_20261009.
+
 \begin{table}[htbp]
 \centering
 \begin{tabularx}{\textwidth}{YL{1.5cm}L{1.5cm}L{1.5cm}L{1.5cm}L{1.5cm}}
@@ -398,6 +461,9 @@ deviations are interpreted with this shift in mind.
 
 \subsection{Implications for the Simulation}
 \label{sec:obs_implications}
+\begin{hints}
+\item Add before this subsection a short subsection ``Bottlenecks at the Handover with the evidence used by scenario S1: approach to the first RMG stop by trucks already at the block at Gate In (median 6, 6, 9, 14, 20 min for 0--4 trucks); stop duration growth by block (T18 6 to 19 min); in 11\,\% of arrivals the target block is full while a median of 14 other blocks have at most one truck; exit gate not a bottleneck in normal operation (source: peak\_analysis/bottleneck\_20261009, scenario\_evidence.py).
+\end{hints}
 
 The observed behaviour defines what an adequate simulation must
 reproduce for the purpose of this thesis.
@@ -418,5 +484,17 @@ These requirements are the basis of the comparison measures in
 Chapter~\ref{chp:experiments}.
 
 \section{Domain Rules}
-\textit{Documenting the origin of Domain Rules and operational requirements}
+\label{sec:domain_rules}
+\begin{hints}
+\item The rule register (R1--R12) as a table: statement, status, source and date. Move the table here from Chapter 6 and refer to it from E2.
+\item Provenance per rule: author domain knowledge vs. confirmation by the terminal (questionnaire part B). Never mix the two.
+\item Which rules can be checked on activity labels and which need block identities or timestamps (R11, RMG part of R12).
+\item Open points: repeated mixed events at the same block; eligible blocks for deliveries.
+\end{hints}
+
+\section{Chapter Summary}
+\label{sec:cs_summary}
+\begin{hints}
+\item One paragraph: the event log, the population, the observed delay pattern and bottleneck, and the rules. Hand over to Chapter 5.
+\end{hints}
 

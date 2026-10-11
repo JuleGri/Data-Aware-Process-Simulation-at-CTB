@@ -1,5 +1,5 @@
 \chapter{Results}
-\label{chap:results}
+\label{chp:results}
 
 This chapter reports the results in the order of the experiments in
 Chapter~\ref{chp:experiments}. Section~\ref{sec:res_discovery} compares
@@ -481,14 +481,98 @@ approach time, which do not depend on the control-flow model. These two
 components are the subject of E4.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Resource, Workload and Time Mechanisms (E4)}
+\section{Mechanism Audit (E4)}
 \label{sec:res_mechanisms}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO: arrival variant (profile-preserving), block-choice ablation,
-% workload features retrained on/off, arrival scaling response.
+\begin{hints}
+\item Structure every subsection the same way: what was changed, result table, what the result shows, load-response test (E4b) passed or not.
+\item Central table of the chapter: one row per step (E3 baseline, E4a, E4c, E4d), columns TTT median/P90, approach, delay-peak hours, Spearman hourly arrivals vs. TTT, largest block share. Sources: simulation\_e3/E4A\_ARRIVALS\_20261009.md, E4C\_BLOCKS\_CAPACITY\_20261009.md, runs/e4e\_prosit104\_20261010.
+\end{hints}
+
+\subsection{Learned Models}
+\label{sec:res_inspection}
+\begin{hints}
+\item What ProSiT 1.0.3 learned: all execution-time models and 20 of 26 waiting-time models have a single leaf; routing splits mainly on planned visit attributes; block choice splits first on queue\_length.
+\item Why: the 1.0.3 model selection compares per-leaf stability, not predictive fit. Evidence: on CTB data and on a synthetic example with clearly different groups, it always selects a single distribution; the 1.0.4 criterion selects trees.
+\item What ProSiT 1.0.4 learned (tree inventory of the rediscovery). One real tree as a figure.
+\end{hints}
+
+\subsection{Arrivals (E4a)}
+\label{sec:res_e4a}
+\begin{hints}
+\item E3 arrivals: maximum 132 trucks per hour vs. 255 observed, no arrival peaks, 14\,\% of arrivals on Saturdays.
+\item Hour-of-week model reproduces the profile (67.7\,\% of arrivals between 7 and 16 h vs. 67.2\,\%); replay reproduces it exactly.
+\item Result: TTT unchanged (median 27, P90 54 min), delay-peak hours 0.5--1.8\,\% vs. 26\,\%, Spearman $pprox 0$. Arrivals were necessary but not sufficient. E4b failed.
+\end{hints}
+
+\subsection{Block Choice and Capacity (E4c)}
+\label{sec:res_e4c}
+\begin{hints}
+\item Diagnosis: block choice concentrates 29\,\% of RMG stops on one block (observed maximum 6\,\%); 79\,\% of stops start with four or more trucks at a block, because capacity is checked at enabling time.
+\item With an enforced capacity, the learned block choice sends all RMG stops to one block (runaway, median TTT 15 h). Cause: the training queue length of the chosen block includes the visit's own stop.
+\item With empirical or replayed block choice and capacity checked at start: block loads realistic (correlation 0.97), cap holds, but TTT and delay peaks unchanged. E4b failed.
+\item Remaining cause, quantified: the waiting-time target keeps 6.2 of 11.0 minutes of observed approach time (single-server definition).
+\end{hints}
+
+\subsection{Timing Models and ProSiT Version (E4d)}
+\label{sec:res_e4d}
+\begin{hints}
+\item Results of the ProSiT 1.0.4 rediscovery: which time models now split, on which features; simulation results of the four configurations.
+\item Load-response test (E4b) on the best configuration, including arrival scaling 0.8/1.0/1.2.
+\item If a load-dependent timing extension was needed: its fit to the observed curves (approach vs. block occupancy, stop duration vs. occupancy) and to the system-level behaviour that was not fitted (TTT vs. trucks in terminal, delay peaks).
+\end{hints}
+
+\subsection{Conclusion of E4}
+\label{sec:res_e4_conclusion}
+\begin{hints}
+\item Which layers failed, why, which repairs were needed, and whether the final configuration passes the load-response test.
+\item This is the answer to RQ2. State it without overclaiming: valid for turnaround time and delay peaks, not for everything.
+\end{hints}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Peak Analysis and Policy Effects (E5)}
+\section{Final Baseline and Hold-Out Check}
+\label{sec:res_holdout}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item The frozen configuration on the validation period and once on the test period, same measures, one table. No changes after seeing the test result.
+\item Block congestion in the baseline: share of stops at blocks with three or more trucks, approach by block.
+\end{hints}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Load-Aware Block Allocation (E5)}
 \label{sec:res_policy}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO: only if E4 shows that simulated TTT responds to arrival load.
+\begin{hints}
+\item Only if E4b is passed. Otherwise: what the model would need to evaluate S1, and why the current evidence does not allow a quantitative statement.
+\end{hints}
+
+\subsection{Effect on the KPI}
+\label{sec:res_s1_kpi}
+\begin{hints}
+\item Paired differences (S1 minus baseline) for the three variants $\pm 1$, $\pm 2$, any block: delay-peak hours, TTT P90 and median, with 95\,\% intervals.
+\end{hints}
+
+\subsection{Mechanism and Distribution of Effects}
+\label{sec:res_s1_mechanism}
+\begin{hints}
+\item Where the effect comes from: fewer stops at full blocks, shorter approach. Who benefits: deliveries, receives at relieved blocks, mixed visits.
+\item Costs: share of deliveries moved to another block; what is not modelled.
+\end{hints}
+
+\subsection{Sensitivity}
+\label{sec:res_s1_sensitivity}
+\begin{hints}
+\item Repeat with the occupancy effect halved (if a timing extension is used) and on hour-of-week arrivals. Does the conclusion hold?
+\end{hints}
+
+\subsection{Conclusion of E5}
+\label{sec:res_s1_conclusion}
+\begin{hints}
+\item Conditional recommendation: under which eligibility assumption, with which effect size, and what the terminal must confirm. This is the answer to RQ3.
+\end{hints}
+
+\section{Chapter Summary}
+\label{sec:res_summary}
+\begin{hints}
+\item One paragraph per RQ with the key number. Hand over to the discussion.
+\end{hints}

@@ -1,0 +1,38 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{ProSiT Model Inventory}
+\label{app:prosit_inventory}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item The assessment explicitly asks for the concrete decision trees and all parameters needed to set up the ProSiT simulation. This appendix delivers them for the final model.
+\end{hints}
+
+\section{Discovery Settings and Versions}
+\label{app:prosit_settings}
+\begin{hints}
+\item All hyperparameters, package versions, input hashes and run folders of the final model.
+\end{hints}
+
+\section{Learned Decision Trees}
+\label{app:prosit_trees}
+\begin{hints}
+\item For each component (arrivals, routing per transition, resource choice per resource, waiting time per resource, execution time per activity): tree or single distribution, split features, thresholds, leaf distributions and sample sizes.
+\item Generate the tables automatically from prosit\_params.pkl so that they are exact.
+\end{hints}
+
+\section{Calendars and Capacities}
+\label{app:prosit_calendars}
+\begin{hints}
+\item Arrival calendar, resource calendars, capacity per resource (discovered and after the cap of three).
+\end{hints}
+
+\section{Rule Register and Unobserved Sequences}
+\label{app:rules}
+\begin{hints}
+\item The full rule register with status and sources, and the 19 two-stop sequences that the repaired model allows but the data never shows, with the terminal's assessment.
+\end{hints}
+
+\section{Discovered Models}
+\label{app:model_gallery}
+\begin{hints}
+\item Figures of all candidate nets of E1 on the expanded population (IMf 0.1/0.2, Heuristics, ILP, Split Miner) with their sizes.
+\end{hints}

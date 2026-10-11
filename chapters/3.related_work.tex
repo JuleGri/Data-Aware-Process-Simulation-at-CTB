@@ -1,6 +1,10 @@
  % Literature synthesis prepared 17 September 2026. No experimental results are asserted here.
 \chapter{Related Work}
 \label{chp:related_work}
+\begin{hints}
+\item Purpose: compare approaches and their evidence, and derive why this thesis is needed. About 8 pages.
+\item End every section with one or two sentences on what it means for the CTB study.
+\end{hints}
 
 Research on process mining and simulation addresses two connected problems: reconstructing how a process operates from recorded events, and using an executable representation to assess how its performance might change. Their connection is particularly relevant in logistics, where routing decisions, physical movement and competition for shared resources jointly determine performance. Nevertheless, a model that reproduces recorded activity sequences does not necessarily reproduce the mechanisms that generate waiting times or the consequences of changing resource capacity. The distinction between these objectives provides the organising principle for this chapter.
 
@@ -8,6 +12,10 @@ Building on the concepts introduced in Chapter~\ref{chp:background}, the chapter
 
 \section{Process Discovery as a Basis for Simulation}
 \label{sec:rw_discovery}
+\begin{hints}
+\item Algorithm families and benchmark evidence (Augusto et al.); why several algorithms must be compared (the committee asked for it).
+\item Rules and lifecycle information: rule-guided discovery, repair. Position your rule audit and exact repair here.
+\end{hints}
 
 \subsection{Discovery Algorithms and Their Representational Choices}
 
@@ -29,6 +37,10 @@ Conformance checking complements discovery by identifying discrepancies between 
 
 \section{From Discovered Processes to Data-Aware Simulation}
 \label{sec:rw_data_aware}
+\begin{hints}
+\item SIMOD, ProSiT and related tools: what they learn and how they were evaluated.
+\item Gap to point out: evaluations rarely test the response to load or interventions.
+\end{hints}
 
 \subsection{Data-Driven Construction and Stochastic Behavior}
 
@@ -59,6 +71,10 @@ White-box representation provides inspectability, but not automatic operational 
 
 \section{Process Mining and Simulation in Logistics}
 \label{sec:rw_logistics}
+\begin{hints}
+\item Terminal simulation studies and their KPIs (truck turnaround, appointments).
+\item Waiting-time analysis and delays (Chapela-Campa and Dumas): connects to the bottleneck analysis in Chapter 4.
+\end{hints}
 
 \subsection{Logistics Applications and the Evidence Base}
 
@@ -88,6 +104,9 @@ The main methodological risk is double counting. If a fitted duration already co
 
 \section{Object-Centric and Resource-Centric Alternatives}
 \label{sec:rw_alternatives}
+\begin{hints}
+\item Why they are relevant for trucks, containers and blocks, and why this thesis stays with the truck-visit case (scope).
+\end{hints}
 
 Traditional event logs organise events around one case identifier. Object-centric process mining instead allows events to refer to multiple related objects, addressing the loss of relationships caused by flattening operational records into independent traces~\cite{VanDerAalst2023OCPM}. In logistics, a handling event may concern a truck visit, a container, a task and a resource. Selecting only one perspective can duplicate events or conceal dependencies. However, adding attributes to a truck-visit log does not by itself make the model object-centric.
 
@@ -99,6 +118,9 @@ For CTB, these alternatives identify the limits of the chosen abstraction. If th
 
 \section{Validation and Current Research Challenges}
 \label{sec:rw_validation}
+\begin{hints}
+\item What existing studies validate (event-log similarity) and what they do not (KPI response, intended use).
+\end{hints}
 
 \subsection{Model Quality, Generated Behavior and Intended Use}
 
@@ -124,6 +146,10 @@ The remaining challenge is the response to intervention. A learned association b
 
 \section{Synthesis and Positioning of This Thesis}
 \label{sec:rw_positioning}
+\begin{hints}
+\item Positioning table: approach, what it evaluates, open question for CTB.
+\item Research gap in two or three sentences, leading directly to the RQs of Chapter 1.
+\end{hints}
 
 Table~\ref{tab:rw_comparison} summarises the complementary contributions of the reviewed research. The comparison concerns the cited approaches and their reported scope; it is not an exhaustive feature comparison of current software versions.
 

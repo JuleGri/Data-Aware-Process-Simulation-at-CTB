@@ -75,6 +75,24 @@
 \usepackage{rotating}
 \usepackage{placeins}
 \usepackage{footmisc}
+
+% ---- Writing aids ------------------------------------------------------
+% Gray "To explain" boxes and red TODO notes are visible while writing.
+% Before submission: replace \showhintstrue by \showhintsfalse. All hints
+% and TODOs then disappear from the PDF without deleting them.
+\newif\ifshowhints
+\showhintstrue
+\ifshowhints
+  \newenvironment{hints}%
+    {\par\medskip\begingroup\small\color{gray}\noindent\textbf{To explain:}%
+     \begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}}%
+    {\end{itemize}\endgroup\medskip\par}
+  \newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+  \let\hints=\comment
+  \let\endhints=\endcomment
+  \newcommand{\todo}[1]{}
+\fi
 %------------------------------------------------------------------------%
 \begin{document}
     % the front matter
@@ -99,11 +117,12 @@
 
     \include{chapters/7.results}
 
-    \include{chapters/8.conclusion}
+    \include{chapters/8.discussion}
 
- 
+    \include{chapters/9.conclusion}
 
     \appendix
+    \include{appendices/prosit_model_inventory}
     \include{appendices/model_inspection_and_reproduction}
 
     % afterword

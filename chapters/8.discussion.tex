@@ -1,0 +1,51 @@
+\chapter{Discussion}
+\label{chp:discussion}
+
+\begin{hints}
+\item Bring the results together and judge them. No new results here.
+\item Separate clearly: what the evidence supports, what depends on assumptions, and what remains open.
+\end{hints}
+
+\section{Adequacy for the Intended Use}
+\label{sec:disc_adequacy}
+\begin{hints}
+\item Which decisions can the final model support (and which not)? Validity is judged for turnaround time and delay peaks only.
+\item Where does a policy evaluation depend on uncertain assumptions (eligible blocks, occupancy effect, timing extension)?
+\end{hints}
+
+\section{Discovery Metrics and Simulation Behaviour}
+\label{sec:disc_metrics}
+\begin{hints}
+\item Do good discovery metrics predict a usable simulation? No: IM0 had high fitness and precision but produced empty visits and parallel stops; the leaked block choice was invisible to every discovery metric.
+\item What this means for model selection in simulation studies: validate per layer in the simulator, not only on the log.
+\end{hints}
+
+\section{Data-Aware Simulation in a Physical Logistics Process}
+\label{sec:disc_transfer}
+\begin{hints}
+\item What ProSiT represents well (routing, case attributes) and what it does not represent out of the box (load-dependent timing, block-bound resources, multi-server capacity).
+\item The version issue: model selection in 1.0.3 vs. 1.0.4; the queue-length feature; the capacity check. Formulate as findings about transferability, not as criticism of the tool.
+\item Historical context features vs. dynamic state: case-constant demand and utilisation values do not react to simulated load.
+\end{hints}
+
+\section{Threats to Validity}
+\label{sec:disc_threats}
+\begin{hints}
+\item Construct validity: timestamp semantics (readiness to fulfilment includes waiting), possible double counting of waiting, the KPI definition by Gate-In hour.
+\item Internal validity: model choices made on validation data; criteria fixed in advance; retrospective hold-out.
+\item External validity: one terminal, eight weeks, the selected population (completed visits, known activities); transfer to other periods (validation was more congested).
+\item Conclusion validity: replications, intervals, associational vs. causal relations (occupancy and waiting).
+\end{hints}
+
+\section{Domain Knowledge and Stakeholder Review}
+\label{sec:disc_stakeholders}
+\begin{hints}
+\item Separate the author's domain knowledge from the documented external review (who, when, what was confirmed, what was not).
+\item What the review changed in the rules, the KPI target and the scenario design.
+\end{hints}
+
+\section{Implications for Practice}
+\label{sec:disc_practice}
+\begin{hints}
+\item What the terminal can take from the results (bottleneck at the handover, conditional effect of S1) and what it would need before acting on them.
+\end{hints}

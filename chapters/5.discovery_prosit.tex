@@ -1,9 +1,25 @@
-\chapter{Process Discovery Simulation Methodology}
+\chapter{Model Construction and Simulation}
 \label{chp:process_discovery_methodology}
 
-\textit{erklärt, wie aus den Daten ein ausführbares Model wird und wie es arbeitet? | Modellkonstruktion und Ausführungsmechanismen erklären}
+\begin{hints}
+\item How the event log becomes an executable simulation model, and how that model works when it runs. The committee asked for exactly this: concrete parameters, actual trees, and how they are used.
+\item Methods only. Experimental protocol in Chapter 6, numbers and comparisons in Chapter 7.
+\end{hints}
 
-\section{Process Discovery}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{From Event Log to Executable Model}
+\label{sec:mc_overview}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item One pipeline figure: event log $ightarrow$ control-flow discovery $ightarrow$ rule audit and repair $ightarrow$ ProSiT discovery $ightarrow$ CTB adaptations $ightarrow$ simulation $ightarrow$ evaluation. Mark for each step where its protocol (Ch.~6) and results (Ch.~7) are.
+\item The idea of layers: control flow, arrivals, resources, timing. Each is fitted from data and checked separately.
+\end{hints}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Control-Flow Model}
+\label{sec:process_discovery_methodology}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Draft text by the author (kept verbatim):
 Process Discovery describes the process of extracting the control flow model of a given event log. 
 The discovery follows an algorithms, that learns the control flow in different ways, that can be grouped into a family like structure. Each Family follows a methodology of how from observed sequences, a model structure is constructed. The categories are overlapping in their calculation methods. 
 \cite{DiscoveryBenchmark}.
@@ -17,21 +33,35 @@ A petri net displays the learned process behaviour, that can be different, depen
 DOMAIN RULES / MODEL ADAPTIONS/ REPAIR
 As the control flow will serve as the base for the following simulation models learning and execution, it should display the real processes domain rules, that can be specified by domain experts before the discovery to guide the discovery process [SOURCE - Rules guided discovery] or based on the resulting petri net, a so called process repair [SOURCE Massi. 2025] 
 
-    \textit{
-    \begin{enumerate}
-        \item Candidates and Configuration of the different Discovery Algorithms
-        Inductive Miner / IMf
+\subsection{Petri Nets and Workflow Nets}
+\label{sec:mc_petri}
+\begin{hints}
+\item Places, transitions, tokens, silent transitions; workflow net and soundness, with one small figure of a truck visit (Gate In, yard choice, Gate Out).
+\item Why soundness matters for simulation: ProSiT executes the net, so it must always reach the final marking.
+\item Keep it short if Chapter 2 already defines it; then only refer back.
+\end{hints}
 
-        Heuristics Miner
-        
-        ILP Miner
-        
-        Split Miner
+\subsection{Discovery Algorithms}
+\label{sec:mc_algorithms}
+\begin{hints}
+\item One paragraph per family: Inductive Miner and IMf (process trees, noise threshold), Heuristics Miner (dependency thresholds), ILP Miner (places from an optimisation problem), Split Miner (filtered directly-follows graph, BPMN converted to a Petri net).
+\item For each: the parameter that was varied and what it does. The grid and evaluation protocol are in Chapter 6 (E1).
+\end{hints}
 
-        \item Procedures for Rule checks and ggf. Model adaptions
-    \end{enumerate}}
+\subsection{Rule Audit and Exact Repair}
+\label{sec:mc_repair}
+\begin{hints}
+\item How a rule is checked on a model: rule as a small monitor automaton, product with the reachability graph, shortest counterexample.
+\item How the repair works: intersect the language of the net with the rule monitors, minimise, encode as a state machine (one place per state, one transition per step). Fully automatic, written as a new PNML file; the original net is untouched.
+\item What it guarantees: sound, all observed sequences kept, no other sequences added. Figure: repaired net.
+\item Consequence for ProSiT: one token per visit, so stops cannot run in parallel; repeated labels make routing state-dependent.
+\end{hints}
 
-\section{Prosits Simulation Methodology}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ProSiT Simulation Discovery}
+\label{sec:simulation_discovery_methodology}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Draft text by the author (kept verbatim):
 WIE LERNT UND AREBITET PROSIT?
 
 ProSiT is a probablistic white box simulation model that is...
@@ -57,11 +87,54 @@ Activating the Workload Features, a queing behaviour can be learned, that can ha
 
 [ADD MORE HYPERPARAMETERS]
 
-    \begin{enumerate}
-        \item Ankünfte, Routing, Ressourcenzuordnung, Kalender und Kapazitäten
-        \item gelernte Zeitmodelle und Workload-Features
-        \item Reihenfolge der Entscheidungen während der Simulation
-        \item zusätzliche Diagnoseausgaben und Verifikationsprüfungen
-    \end{enumerate}
+\subsection{Inputs and Learned Components}
+\label{sec:mc_components}
+\begin{hints}
+\item Inputs: the repaired Petri net and the training event log.
+\item Table of all learned components: component, model type, target, features, when it is used in the simulation. Rows: arrival times (tree on hour and weekday), case attributes (joint empirical sample), routing (one model per transition), resource choice (one model per resource), waiting time (per resource), execution time (per activity), arrival and resource calendars, resource capacity (multitasking).
+\item For each component, the CTB result in one sentence (e.g. number of leaves, split features). Full trees in Appendix~ef{app:prosit_inventory}.
+\end{hints}
 
-\textit{Hier gehört ein nachvollziehbares Ausführungsbeispiel hinein: Ein Truck wird aktiviert, benötigt einen bestimmten Stop, erhält eine Ressource und durchläuft die einzelnen Zeitkomponenten. Jede Komponente muss zur Implementierung passen. So beantwortest du die Kritik an der bisher zu abstrakten technischen Darstellung.}
+\subsection{Decision Trees and Model Selection}
+\label{sec:mc_trees}
+\begin{hints}
+\item How a tree is learned (CART) and what a leaf contains: a fitted distribution (fixed, normal, exponential, lognormal, gamma or uniform) and a sample to draw from.
+\item How ProSiT chooses between a tree and a single distribution (cross-validation over depth and minimum leaf size).
+\item The difference between version 1.0.3 (per-leaf Wasserstein, which in effect almost always selects a single distribution) and 1.0.4 (CRPS). State which version the final model uses and why (Chapter 7, E4).
+\item Show one real tree as a figure, e.g. a routing tree or a waiting-time tree, and read it in plain words.
+\end{hints}
+
+\subsection{Hyperparameters}
+\label{sec:mc_hyperparameters}
+\begin{hints}
+\item Table of all discovery parameters with the value used and its meaning: max\_depth\_tree, min\_samples\_leaf\_cv, enable\_multitasking and multitasking\_thr, arrival and resource calendar thresholds, attribute\_mode, use\_workload\_features, incremental\_discovery, random\_state.
+\item Why each value was chosen (default, or a reason from the data). Source: simulation\_e3/PROSIT\_DISCOVERY\_SETTINGS\_20261010.md.
+\item Which features use\_workload\_features actually adds, and where (resource choice and waiting time, not execution time).
+\end{hints}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Execution of a Simulated Visit}
+\label{sec:mc_execution}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item The order of decisions in the simulation loop: arrival time, case attributes, enabled transitions, routing draw, resource choice and capacity check, waiting time, execution time, token update, until Gate Out.
+\item A worked example of one simulated truck with the real fitted values: which leaf of which tree was used, which value was drawn, resulting timestamps. Every step must match the implementation. This answers the committee's criticism that the technical explanation stayed abstract.
+\item Which outputs are recorded (enabled, start and completion timestamps, firing sequence) and how they are used in the evaluation.
+\end{hints}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{CTB-Specific Adaptations}
+\label{sec:mc_ctb_adaptations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item Calibration: resource calendars set to the full week so that admitted trucks are served to completion; timestamps floored to the minute; RMG capacity capped at three.
+\item Arrival model: native ProSiT tree on hour and weekday (version 1.0.4), or the replay of observed arrivals for conditional comparisons.
+\item Changes to the simulation loop (block choice from observed or empirical shares, capacity checked at the actual start): what each change does, which diagnosed defect motivates it (Chapter 7, E4), and the regression test showing that with all changes switched off the loop reproduces ProSiT exactly.
+\item For every adaptation: what remains ProSiT, what is changed, and why. This is the basis for the discussion on transferability.
+\end{hints}
+
+\section{Chapter Summary}
+\label{sec:mc_summary}
+\begin{hints}
+\item One paragraph: the executable model, its learned components and the adaptations. Hand over to the experimental design.
+\end{hints}
