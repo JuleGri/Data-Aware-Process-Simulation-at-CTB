@@ -2,6 +2,10 @@
 \chapter{Model Inspection and Reproduction}
 \label{app:model_inspection}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{hints}
+\item Most of this appendix describes the first version of the study (T22 closure, demand scenario, Train-80 bundles, old figure). Rewrite it as ``Reproduction: repositories, run folders, commands, environments (ProSiT 1.0.3 and 1.0.4), input hashes, and which run produced which table.
+\end{hints}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 This appendix separates visual process inspection from executable model state.
 The complete directly-follows graph exposes every observed training-log
@@ -12,7 +16,7 @@ parameters define the executable simulation model.
 
 Figure~\ref{fig:appendix_full_dfg} shows the unfiltered 59-arc directly-follows
 graph of the order-preserving training log. It is included for audit because
-the dominant-frequency view in Chapter~\ref{chp:experiments_and_framework}
+the dominant-frequency view in Chapter~\ref{chp:experiments}
 deliberately suppresses rare relations. The complete view confirms the fixed
 gate boundary and makes low-frequency repetitions and cross-activity relations
 inspectable. Its density also demonstrates why it is unsuitable as the primary
@@ -38,7 +42,7 @@ net, markings, fitted distributions, resources, capacities and calendars.
 The T22 scenario removes the block from the eligible RMG resource mappings and
 its availability calendar. The demand scenario changes only the empirical
 working-time inter-arrival sample. These state differences are described in
-Section~\ref{sec:what_if_design}. No source-code listing is required to
+Section~\ref{sec:exp_policy}. No source-code listing is required to
 interpret the interventions.
 
 The public ProSiT save-and-load workflow serializes discovered parameters so

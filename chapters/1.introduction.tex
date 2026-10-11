@@ -11,6 +11,13 @@ to assess decisions without interrupting terminal operations.
 
 \section{Motivation}
 
+\begin{hints}
+\item Why terminals need decision support for truck handling, and why live experiments are not an option (one paragraph).
+\item Why simulation, and why building it from event logs (process mining) instead of by hand.
+\item What data-aware, white-box simulation adds (ProSiT): inspectable rules instead of black boxes.
+\item The gap: evidence comes mainly from business processes; physical logistics has capacity, congestion and space. Keep to about 1.5 pages in total.
+\end{hints}
+
 
 Simulation is used for decision support in container-terminal planning and
 operations research. Its operational purpose is prospective: a terminal can
@@ -57,6 +64,14 @@ container terminal truck operations.
 
 
 \section{Problem Statement}
+
+\begin{hints}
+\item The concrete operational problem at CTB: delay peaks in truck turnaround time. Use the observed numbers from Chapter~\ref{chp:case_study_and_data} (10\,\% of training hours, 26\,\% of validation hours are delay peaks).
+\item The KPI: truck turnaround time (median, P90) and share of delay-peak hours. Say where the KPI comes from (HHLA practice, terminal contact).
+\item Why a simulator is needed to evaluate a procedural change against this KPI.
+\item The scientific problem: a discovered simulator can reproduce the visit sequences without reproducing the KPI and its response to load. Nobody has checked this layer by layer for a physical logistics process.
+\item Remove ``TBC''.
+\end{hints}
 Container terminal operators make decisions about capacity, truck handling,
 yard use, policies, and infrastructure changes. Experiments in a real terminal
 are often not feasible or involve operational risk, so these decisions are
@@ -81,19 +96,38 @@ container-terminal truck operations.
 
 \section{Research Objective and Contributions}
 
+\begin{hints}
+\item Objective in one sentence, e.g.: assess layer by layer whether a process-mining-based simulation of CTB truck visits reproduces turnaround time and its response to load, repair the layers that fail, and use the result to evaluate one procedural change against the KPI.
+\item Contributions as a short list, each pointing to a chapter:
+  (C1) controlled control-flow selection with rule audit and exact repair, including the population correction (Ch.~6/7);
+  (C2) layer-wise validation of a ProSiT model for a physical logistics process, with the mechanisms that break and how they were repaired (Ch.~5/7);
+  (C3) evaluation of load-aware block allocation for deliveries against the KPI (Ch.~7);
+  (C4) a reproducible pipeline with frozen inputs and documented runs.
+\item Say explicitly that this is an empirical case study, not a new algorithm.
+\end{hints}
+
 
 
 \section{Research Questions} To achieve the research objective, the thesis addresses the following research questions:
 
-\begin{enumerate} 
-\item \textbf{RQ1:} 
-\item \textbf{RQ2:} 
-\item \textbf{RQ3:} 
+\begin{enumerate}
+\item \textbf{RQ1:} \todo{final wording} Which discovery and rule treatment yields a sound, executable control-flow model that preserves the observed truck-visit behaviour, and do conformance metrics anticipate its behaviour in simulation?
+\item \textbf{RQ2:} \todo{final wording} To what extent does the resulting simulation reproduce truck turnaround time and delay peaks, and which model components cause the remaining error?
+\item \textbf{RQ3:} \todo{final wording} How does load-aware block allocation for deliveries affect truck turnaround time and the share of delay-peak hours?
+\end{enumerate}
 
-\end{enumerate} 
+\begin{hints}
+\item Each RQ is answered by named experiments: RQ1 by E1--E3, RQ2 by E3--E4, RQ3 by E5 (Chapter~\ref{chp:experiments}).
+\item Wording to be agreed with the supervisor. Keep it exactly identical in Chapters 1, 6 and 9.
+\end{hints}
 
 \section{Thesis Outline}
 \label{sec:thesis_outline}
+
+\begin{hints}
+\item One or two sentences per chapter, in the final order: 2 Background, 3 Related Work, 4 Case Study and Data, 5 Model Construction and Simulation, 6 Experimental Design, 7 Results, 8 Discussion, 9 Conclusion. Mention the appendices (ProSiT parameters and trees, reproduction).
+\item Update the existing text: there are three RQs, not four; describe Chapters 5, 6 and 8.
+\end{hints}
 
 Chapter~\ref{chp:background} establishes the concepts and terminology used
 throughout the thesis, covering container-terminal operations, event logs,
@@ -115,10 +149,10 @@ data-aware simulation, including demand, utilisation, container, and
 target-area information. It concludes with the structure and descriptive
 characteristics of the final simulation-ready event log.
 
-Chapter~\ref{chp:experiments_and_framework}
+Chapter~\ref{chp:experiments}
 
 
-Chapter~\ref{chap:results} presents the empirical findings following the logic
+Chapter~\ref{chp:results} presents the empirical findings following the logic
 of the four research questions. 
 
 Chapter~\ref{chp:conclusion} brings together the empirical findings and answers

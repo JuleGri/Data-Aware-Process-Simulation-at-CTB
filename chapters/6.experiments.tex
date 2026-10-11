@@ -6,7 +6,7 @@ states which experiment answers which research question, which inputs
 are held fixed, which factor is varied, and how the outcome is measured.
 The construction of the simulation model itself is described in
 Chapter~\ref{chp:process_discovery_methodology}. The results follow in
-Chapter~\ref{chap:results} in the same order.
+Chapter~\ref{chp:results} in the same order.
 
 % TODO (open items from the original outline, still to be written for E4/E5):
 % KPI and peak definitions, constant arrivals and visit mix for policy
@@ -31,8 +31,8 @@ E5 build on the configuration selected in E3.
 E1 & Control-flow discovery & Discovery algorithm and parameter. Fixed training log, activity abstraction, event order and evaluation cohorts. & RQ1 \\
 E2 & Domain-rule audit and targeted repair & Rule set enforced on the discovered language. Fixed base model (IM, threshold 0). & RQ1 \\
 E3 & Baseline simulation of control-flow candidates & Control-flow model. Fixed ProSiT version, hyperparameters, training log, arrival and calendar calibration, seeds and horizon. & RQ1, RQ2 \\
-E4 & Mechanism and sensitivity analysis & Arrival generation, block choice and workload features, one at a time. & RQ2 \\
-E5 & Policy evaluation & Hourly arrival cap. Fixed offered demand and visit mix. & RQ3 \\
+E4 & Mechanism audit & One simulator layer at a time: arrival generation, block choice and capacity, timing models (ProSiT version). Load-response test after each step. & RQ2 \\
+E5 & Policy evaluation & Block allocation rule for deliveries (S1). Fixed arrivals, visit mix and seeds. & RQ3 \\
 \bottomrule
 \end{tabularx}
 \caption{Experiments, varied factors and the research questions they address.}
@@ -57,13 +57,13 @@ visit structure and turnaround time, with all other simulation
 conditions fixed. Deliverable: the control-flow model used in E4 and E5.
 \item Quantify how much of the remaining deviation between simulated
 and observed turnaround time is caused by arrival generation, block
-choice and workload features. Test whether simulated turnaround time
-increases with load as observed. Deliverable: the final simulation
+choice and capacity, and the timing models. Test after each step
+whether simulated turnaround time increases with load as observed. Deliverable: the final simulation
 configuration and the decision whether E5 is admissible.
-\item Estimate the effect of an hourly arrival cap on the share of
-delay-peak hours and on the P90 of turnaround time, together with the
-waiting time displaced before the gate. Deliverable: a conditional
-statement on the policy effect and its cost.
+\item Estimate the effect of load-aware block allocation for deliveries on
+the share of delay-peak hours and on the P90 of turnaround time, and
+identify which visits benefit. Deliverable: a conditional statement on
+the policy effect, its premises and its costs.
 \end{enumerate}
 
 E1 to E3 answer RQ1. E3 and E4 answer RQ2. E5 answers RQ3. The final
@@ -71,7 +71,7 @@ configuration is run once on the retrospective hold-out period without
 further changes.
 
 The experiments do not aim to rank discovery algorithms in general, to
-optimise the arrival cap, or to show that the simulator is valid for
+optimise the allocation rule, or to show that the simulator is valid for
 purposes other than the turnaround and peak measures defined in
 Section~\ref{sec:exp_kpis}.
 
@@ -114,8 +114,7 @@ derived from the data.
 
 \section{Data Partitions and Their Use}
 \label{sec:exp_partitions}
-\textit{Outline:}
-\begin{itemize}
+\begin{hints}
 \item Role of each partition: training fits every model (discovery,
 ProSiT parameters, peak thresholds). Validation is used for model
 selection and the baseline comparison. Test is used once, at the end,
@@ -128,17 +127,17 @@ the author, so the final check is a \emph{retrospective hold-out}, not
 an untouched confirmatory test.
 \item Distribution shift: validation is more congested than training
 (daily median TTT 32 vs.\ 29 min, 26.5\,\% vs.\ 10.2\,\% delay-peak
-hours, Section~ef{sec:obs_drift}). Absolute errors therefore mix model error and drift. Model
+hours, Section~
+ef{sec:obs_drift}). Absolute errors therefore mix model error and drift. Model
 variants are compared with each other on the same period.
 \item Boundary handling: Gate-In hours that span the train/validation
 boundary are excluded from hourly statistics (or assigned by rule),
 stated once here.
-\end{itemize}
+\end{hints}
 
 \section{Outcome Measures and Peak Definitions}
 \label{sec:exp_kpis}
-\textit{Outline:}
-\begin{itemize}
+\begin{hints}
 \item Primary KPI: turnaround time (TTT) per visit, Gate Out minus Gate
 In. Reported as median and P90, overall and by flow type. Why P90: delay
 peaks are a tail phenomenon.
@@ -159,12 +158,11 @@ separately \emph{and} included in the all-visits result. Never removed
 to improve the fit.
 \item Throughput and backlog: visits completed per day, visits
 unfinished at the end of the horizon, used as guardrails.
-\end{itemize}
+\end{hints}
 
 \section{Simulation Runs, Replications and Uncertainty}
 \label{sec:exp_runs}
-\textit{Outline:}
-\begin{itemize}
+\begin{hints}
 \item Horizon definition: fixed number of visits from the first
 validation Gate In (current) vs.\ fixed calendar window. State which one
 and why. Initial work in progress at the start (empty terminal at 15:50)
@@ -183,12 +181,11 @@ variation only, not uncertainty in the fitted parameters.
 timestamps. Firing sequences are exported for new runs.
 \item Run hygiene: one new run directory per configuration, hashed
 inputs, recorded versions (details in the appendix).
-\end{itemize}
+\end{hints}
 
 \section{Domain Review}
 \label{sec:exp_review}
-\textit{Outline:}
-\begin{itemize}
+\begin{hints}
 \item Purpose: an independent check of data meaning, rules and
 simulation plausibility, which the author's own domain knowledge cannot
 provide.
@@ -203,7 +200,7 @@ selects the lever for E5.
 \item Documentation: reviewer role, date, model version shown, answers,
 disagreements and resulting changes. Summary confirmed by the reviewer.
 \item Limitation: one reviewer is expert opinion, not proof of validity.
-\end{itemize}
+\end{hints}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Control-Flow Discovery (E1)}
@@ -378,7 +375,7 @@ R12 are based on the domain knowledge of the author.
 % TODO: state the author's role at CTB and period precisely, and add the date
 % and role of any external confirmation obtained from the terminal.
 They have not yet been confirmed independently by the terminal. This
-limitation is discussed in Chapter~\ref{chap:discussion}.
+limitation is discussed in Chapter~\ref{chp:discussion}.
 
 \begin{table}[htbp]
 \centering
@@ -547,8 +544,7 @@ quantify the stochastic variation of the simulator. They do not capture
 uncertainty in the fitted parameters.
 
 \subsection{Additional Checks and Selection Criterion}
-\textit{Outline:}
-\begin{itemize}
+\begin{hints}
 \item Validator self-check: apply the evaluation script to the observed
 validation log itself. All rule-violation shares must be zero and all
 statistics must equal the directly computed values.
@@ -564,133 +560,94 @@ but not used for selection, because it is dominated by arrivals and
 timing (see E4).
 \item Adequacy tolerances for TTT taken from the domain review (part
 C6), e.g.\ median within $\pm x$ min, P90 within $\pm y$ min.
-\end{itemize}
+\end{hints}
 
 % ======================================================================
-\section{Mechanism and Sensitivity Analysis (E4)}
+\section{Mechanism Audit (E4)}
 \label{sec:exp_mechanisms}
 % ======================================================================
-\textit{Outline. Question: which model components explain the remaining
-error of the baseline, and does the simulator respond to load through a
-credible mechanism? Base configuration: \texttt{IM0\_R5\_R12} from E3.
-One factor is changed at a time.}
+\begin{hints}
+\item Question: which layer of the simulator causes the remaining error of the E3 baseline, and does the model respond to load the way the terminal does?
+\item Base configuration: the repaired control flow from E3. One layer is changed at a time; all runs in new folders, five seeds, replay or generative arrivals as stated.
+\end{hints}
 
 \subsection{Model Inspection}
-\begin{itemize}
-\item Inventory of all learned decision models: routing (per
-transition), resource choice (per activity), waiting time and execution
-time (per resource/activity). Number of leaves and split features.
-\item Key finding to report: all execution-time models and most
-waiting-time models have a single leaf. Only six waiting-time models
-split, all on \texttt{queue\_length}. Routing splits mainly on planned
-visit attributes. Consequence: which parts of the model are
-data-aware and which are not.
-\item Link to the worked example in Chapter~\ref{chp:process_discovery_methodology}.
-\end{itemize}
+\label{sec:exp_inspection}
+\begin{hints}
+\item Inventory of all learned models (routing per transition, resource choice per resource, waiting time per resource, execution time per activity, arrivals): number of leaves and split features, for ProSiT 1.0.3 and 1.0.4.
+\item Plausibility check of each split (conceptual validity), e.g. block choice split on queue\_length.
+\end{hints}
 
 \subsection{E4a: Arrival Generation}
-\begin{itemize}
-\item Variants: (i) stationary empirical inter-arrival distribution
-(current), (ii) hour-of-week arrival rate learned from training,
-(iii) replay of the observed validation Gate-In times (conditional
-replay, upper bound for what correct arrivals can achieve).
-\item Measures: hourly arrival profile, arrival-peak hours, TTT median
-and P90, delay-peak hours, approach time.
-\item Expected interpretation: how much of the TTT and peak error is
-due to arrivals alone.
-\end{itemize}
+\label{sec:exp_e4a}
+\begin{hints}
+\item Variants: (i) the calibrated stationary arrival model of E3; (ii) an hour-of-week tree learned from training; (iii) replay of the observed validation Gate-In times and visit manifests (conditional comparison, same trucks).
+\item Measures: hourly arrival profile, arrival-peak hours, trucks in the terminal, TTT median and P90, delay-peak hours, approach time.
+\end{hints}
 
-\subsection{E4b: Response to Load}
-\begin{itemize}
-\item Arrival intensity scaled by 0.8, 1.0 and 1.2 (on the best
-arrival variant), all else fixed.
-\item Measures: TTT median/P90 and stop duration as a function of
-trucks in the terminal and per block. Compared with the observed
-relation between WIP and TTT (Chapter~\ref{chp:case_study_and_data}).
-\item \textbf{Gate for E5:} simulated TTT must increase with load in
-the same direction as observed, and delay-peak hours must occur at a
-non-trivial rate. Criterion fixed before running E4b.
-\end{itemize}
+\subsection{E4b: Load-Response Test}
+\label{sec:exp_e4b}
+\begin{hints}
+\item Not a separate model change but the acceptance test applied after each step (after E4a, E4c, E4d). Criteria fixed before running:
+\item (1) Spearman correlation between hourly arrivals and hourly median TTT at least 0.3 (observed 0.45); (2) median TTT rises with the number of trucks in the terminal as in Figure~ef{fig:obs_wip}; (3) share of delay-peak hours comparable to the observed one; (4) median and P90 of TTT within the tolerance named by the terminal.
+\item For the final configuration additionally: arrival intensity scaled by 0.8, 1.0 and 1.2, TTT must increase monotonically.
+\item The scenarios (E5) are run only if the test is passed.
+\end{hints}
 
-\subsection{E4c: Block Choice}
-\begin{itemize}
-\item Learned block choice (depends on \texttt{queue\_length}) vs.\
-block drawn from the empirical block distribution, independent of the
-current queue.
-\item Reason: in reality the block is fixed by the container location
-or the yard plan. Load balancing in the simulator can hide congestion.
-\item Measures: per-block load, P90 of RMG stop duration, TTT P90.
-\end{itemize}
+\subsection{E4c: Block Choice and Capacity}
+\label{sec:exp_e4c}
+\begin{hints}
+\item Patched ProSiT loop with switchable hooks; regression test: with all hooks off the output is identical to ProSiT.
+\item Factors: block choice (learned, empirical shares, replayed observed block) and capacity check (at enabling as in ProSiT, or at the actual start over the whole interval).
+\item Measures: block shares and their correlation with the observed ones, stops starting with four or more trucks at a block, TTT, approach, delay peaks, load response.
+\end{hints}
 
-\subsection{E4d: Workload Features}
-\begin{itemize}
-\item ProSiT retrained with and without workload features (not only
-switched off at runtime, since that changes the predictor inputs).
-\item Measures: same as E4b. Shows whether congestion effects come from
-the learned \texttt{queue\_length} splits or from capacity alone.
-\end{itemize}
+\subsection{E4d: Timing Models and ProSiT Version}
+\label{sec:exp_e4d}
+\begin{hints}
+\item Rediscovery of the repaired model with ProSiT 1.0.4 (CRPS model selection instead of per-leaf Wasserstein) in a separate environment; all other packages and hyperparameters identical; native arrival tree instead of the stationary calibration.
+\item Configurations: native loop, native plus E4c fixes, replay with native loop, replay with E4c fixes.
+\item If the load-response test still fails: a load-dependent timing extension (approach conditional on block occupancy at Gate In, stop duration conditional on block occupancy at start), fitted on training data only. The decision and its justification are documented.
+\end{hints}
 
-\subsection{E4e: Calendars and Capacity (verification)}
-\begin{itemize}
-\item Small synthetic checks: do activities start in closed hours under
-the full-week resource calendar? Does the RMG cap of three hold in the
-generated log?
-\item One sensitivity on the RMG cap (2 / 3 / 4), stated as an
-assumption check, not a policy.
-\end{itemize}
+\subsection{E4e: Verification Checks}
+\label{sec:exp_e4e}
+\begin{hints}
+\item Do activities start in closed hours under the full-week resource calendars? Does the capacity limit of three hold in the generated log? Are replayed arrivals exact?
+\end{hints}
 
 % ======================================================================
 \section{Policy Evaluation (E5)}
 \label{sec:exp_policy}
 % ======================================================================
-\textit{Outline. Only executed if the gate in E4b is passed. Otherwise
-this section states why the policy cannot be evaluated with the fitted
-model.}
-\begin{itemize}
-\item Question: how does an hourly cap on truck arrivals affect the
-frequency and severity of delay peaks, and what does it cost in
-displaced waiting?
-\item Decision owner and lever: slot allocation by the terminal
-(confirmed in domain review, part E).
-\item Scenarios: baseline (no cap), cap at e.g.\ 150 and 140 trucks per
-hour. Levels justified from the observed arrival distribution.
-\item Displacement rule: trucks above the cap are moved to the next hour
-with free capacity. Offered demand and visit mix stay identical.
-\item Fixed conditions: configuration from E4, same arrivals before
-capping, same seeds, 10 paired replications.
-\item Primary outcomes: share of delay-peak hours (frozen threshold),
-TTT P90 inside the terminal.
-\item Guardrails: displaced waiting time before the gate per truck
-and in total, daily throughput, unfinished visits, end-of-day backlog.
-\item Analysis: paired differences per replication with interval.
-Effect reported as change in peak hours and in TTT P90, together with
-the displaced waiting. A reduction of in-terminal TTT that is fully
-paid by waiting outside is not an improvement.
-\item Sensitivity: cap level, and compliance (share of trucks that
-actually shift).
-\item Limits of interpretation: TTT conditional on the fitted waiting
-models, no gate queue modelled, no waterside interaction.
-\end{itemize}
+\begin{hints}
+\item Executed only if the load-response test (E4b) is passed. Otherwise this section states why the policy cannot be evaluated with the model.
+\item Origin: approach to the first RMG stop grows from 6 to 14--20 minutes when three or four trucks are already at the block, while other blocks have free lanes (Section~ef{sec:observed_behaviour}).
+\item Lever and owner: yard planning assigns the storage block of export deliveries. Receive blocks are fixed by the container location.
+\item Scenario S1: deliveries go to the eligible block with the fewest open stops when the stop becomes possible; receives and mixed stops keep their observed block. Variants for the eligible set: observed block $\pm 1$, $\pm 2$, any block (upper bound).
+\item Fixed conditions: frozen baseline from E4, replay of the validation period (same trucks, same manifests), ten paired seeds.
+\item Measures: share of delay-peak hours, TTT P90, approach at RMG stops, stops at blocks with three or more trucks, TTT by flow type. Costs: share of deliveries placed in another block than observed; not modelled: driving distance and later rehandling.
+\item Analysis: paired differences with 95\,\% interval over seeds. Sensitivity: if a load-dependent timing extension is used, repeat S1 with the occupancy effect halved.
+\item Interpretation table: effect already at $\pm 1$/$\pm 2$, effect only with any block, no effect, deliveries better but receives worse. Optional S2: block-level slot quota.
+\end{hints}
 
 % ======================================================================
 \section{Final Retrospective Hold-Out Check}
 \label{sec:exp_test}
 % ======================================================================
-\textit{Outline:}
-\begin{itemize}
+\begin{hints}
 \item The final configuration (after E4) is run once on the test period
 (20 April onwards). No changes after seeing the result.
 \item Same measures as E3. Reported in one table next to the validation
 result.
-\end{itemize}
+\end{hints}
 
 % ======================================================================
 \section{Threats Addressed by the Design}
 \label{sec:exp_threats}
 % ======================================================================
-\textit{Outline (short table: threat, design response, remaining
-limitation; discussed further in the Discussion):}
-\begin{itemize}
+\begin{hints}
+\item Short table: threat, design response, remaining limitation. Discussed further in Chapter~\ref{chp:discussion}.
 \item Representation vs.\ language change in the repair: control model
 with the same language as a state machine (E2).
 \item Information leakage through case attributes: only attributes from
@@ -702,11 +659,9 @@ before reading results.
 \item Drift between periods: model variants compared on the same period.
 \item Single seed or few replications: replication counts and intervals.
 \item Author as domain source: external domain review.
-\end{itemize}
+\end{hints}
 
 \section{Chapter Summary}
-\textit{Outline: one paragraph. E1--E3 select an executable control
-flow in three stages. E4 explains the remaining error and decides
-whether the policy study is admissible. E5 evaluates one lever with
-fixed demand and guardrails. All thresholds and criteria are fixed
-before the corresponding results are read.}
+\begin{hints}
+\item E1--E3 select an executable control flow in three stages. E4 explains the remaining error and decides whether the policy study is admissible. E5 evaluates one lever with fixed demand and guardrails. All thresholds and criteria are fixed before the corresponding results are read.
+\end{hints}
