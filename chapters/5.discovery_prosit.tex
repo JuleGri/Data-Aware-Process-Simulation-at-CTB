@@ -19,19 +19,26 @@
 \section{Control-Flow Model}
 \label{sec:process_discovery_methodology}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Draft text by the author (kept verbatim):
+%%% Draft text by the author (kept verbatim):
 Process Discovery describes the process of extracting the control flow model of a given event log. 
 The discovery follows an algorithms, that learns the control flow in different ways, that can be grouped into a family like structure. Each Family follows a methodology of how from observed sequences, a model structure is constructed. The categories are overlapping in their calculation methods. 
 \cite{DiscoveryBenchmark}.
 
-PETRI NET
-The result of a process discovery can be expressed in a petri net as shown in figure ...[TBC INSERT FIGURE OF BASIC PETRI NET] with a starting point, an endpoint and several transsitions and places namely activities, constructing the process backbone. 
+% PETRI NET
+% The result of a process discovery can be expressed in a petri net as shown in figure ...[TBC INSERT FIGURE OF BASIC PETRI NET] with a starting point, an endpoint and several transsitions and places namely activities, constructing the process backbone. 
 
-ALGORITHM DIFFERENCE IN DOSCOVERY
-A petri net displays the learned process behaviour, that can be different, depending on the used algorithm. 
+% ALGORITHM DIFFERENCE IN DOSCOVERY
+% A petri net displays the learned process behaviour, that can be different, depending on the used algorithm. 
 
-DOMAIN RULES / MODEL ADAPTIONS/ REPAIR
-As the control flow will serve as the base for the following simulation models learning and execution, it should display the real processes domain rules, that can be specified by domain experts before the discovery to guide the discovery process [SOURCE - Rules guided discovery] or based on the resulting petri net, a so called process repair [SOURCE Massi. 2025] 
+% \cite{schuster2022} on domain konwledge inclusion 
+% mention: 
+% "Output process model formalism" - this thesis aims for a Petri Net due to...
+% duplicate labels for several of the same activity labels in one process model
+
+
+
+% DOMAIN RULES / MODEL ADAPTIONS/ REPAIR
+% As the control flow will serve as the base for the following simulation models learning and execution, it should display the real processes domain rules, that can be specified by domain experts before the discovery to guide the discovery process [SOURCE - Rules guided discovery] or based on the resulting petri net, a so called process repair [SOURCE Massi. 2025] 
 
 \subsection{Petri Nets and Workflow Nets}
 \label{sec:mc_petri}
@@ -44,7 +51,7 @@ As the control flow will serve as the base for the following simulation models l
 \subsection{Discovery Algorithms}
 \label{sec:mc_algorithms}
 \begin{hints}
-\item One paragraph per family: Inductive Miner and IMf (process trees, noise threshold), interactive Data-aware Heuristic Miner (causal net from frequency, dependency and binding thresholds; conditions on dependencies; Petri net output), ILP Miner (places from integer linear programmes over the prefix-closed log; sequence encoding filter, where a higher threshold filters less), Alpha, Alpha+ and Alpha++ (places from ordering relations, no noise handling).
+\item One paragraph per family: Inductive Miner and IMf (process trees, noise threshold), Heuristics Miner (dependency thresholds), ILP Miner (places from an optimisation problem), Split Miner (filtered directly-follows graph, BPMN converted to a Petri net).
 \item For each: the parameter that was varied and what it does. The grid and evaluation protocol are in Chapter 6 (E1).
 \end{hints}
 
@@ -66,28 +73,28 @@ As the control flow will serve as the base for the following simulation models l
 % Draft text by the author (kept verbatim):
 WIE LERNT UND AREBITET PROSIT?
 
-ProSiT is a probablistic white box simulation model that is...
-It takes a petri net and an event log as its input and calculates several models accumulating to be one overal simulation model, that can simulate its learned behaviour.
-It uses Probablistic Decision trees, with distributions in its leaves, rather than static values, which gives it a closer to reality set of resulting values for durations and actual final values. 
-The user can decide on th granularity of the learned trees, by setting the maximum tree depth and the minimum amount of values per leaf.
+% ProSiT is a probablistic white box simulation model that is...
+% It takes a petri net and an event log as its input and calculates several models accumulating to be one overal simulation model, that can simulate its learned behaviour.
+% It uses Probablistic Decision trees, with distributions in its leaves, rather than static values, which gives it a closer to reality set of resulting values for durations and actual final values. 
+% The user can decide on th granularity of the learned trees, by setting the maximum tree depth and the minimum amount of values per leaf.
 
 EXPLAIN THE DIFFERENT TIMEMODELS
-ProSiT constructs X seperate models, to generate its simulations.
-Servcetime model
+% ProSiT constructs X seperate models, to generate its simulations.
+% Servcetime model
 
-Waiting time model 
+% Waiting time model 
 
-Inter Arrival time Model
+% Inter Arrival time Model
 
-Ressource Calendar (Model)?
+% Ressource Calendar (Model)?
 
 
-Prosit has several Functional-Hyperarameters that can be configures when starting the simulation discovery. 
-Activiating the Multitaksing, enables Prosit is able to recognise resources and their capacities, by learning simultaniously executed activities at the same resource. 
+% Prosit has several Functional-Hyperarameters that can be configures when starting the simulation discovery. 
+% Activiating the Multitaksing, enables Prosit is able to recognise resources and their capacities, by learning simultaniously executed activities at the same resource. 
 
-Activating the Workload Features, a queing behaviour can be learned, that can have an affect on the affected time models. 
+% Activating the Workload Features, a queing behaviour can be learned, that can have an affect on the affected time models. 
 
-[ADD MORE HYPERPARAMETERS]
+% [ADD MORE HYPERPARAMETERS]
 
 \subsection{Inputs and Learned Components}
 \label{sec:mc_components}
