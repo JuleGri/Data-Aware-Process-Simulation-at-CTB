@@ -120,7 +120,7 @@ event records at least the case, the \emph{activity} (for example
 the events by case and keeps their order. The ordered list of activities of a
 case is its \emph{trace}. Cases with the same trace share a \emph{variant}. The
 set of variants is the observed language of the log
-\cite{PMvanDerAalst2016}. Table~\ref{tab:eventlogexample} shows two simplified
+\cite{Aalst2016}. Table~\ref{tab:eventlogexample} shows two simplified
 truck visits.
 
 \begin{table}[htbp]
@@ -163,7 +163,7 @@ data-aware simulation may only use an attribute at a decision point if its
 value is known at that point. Otherwise the model uses information from the
 future, which is called leakage (Section~\ref{sec:entry_known_attributes}).
 
-Event logs are exchanged between tools in the XES format \cite{PMvanDerAalst2016}.
+Event logs are exchanged between tools in the XES format \cite{Aalst2016}.
 In this thesis, the same log is read by ProM \cite{vanDongen2005ProM} and by
 PM4Py \cite{Berti2023PM4Py}.
 
@@ -173,7 +173,7 @@ PM4Py \cite{Berti2023PM4Py}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Process discovery builds a process model from an event log
-\cite{PMvanDerAalst2016,RWAalst2022Discovery}. The model shows how the process
+\cite{Aalst2016,RWAalst2022Discovery}. The model shows how the process
 was executed, not how it was planned. ProSiT, the simulator used in this
 thesis, needs the model as a Petri net. This section introduces Petri nets,
 the discovery algorithms compared in E1, and the use of rules to restrict a
@@ -183,7 +183,7 @@ discovered model.
 \label{sec:bg_petri}
 
 A Petri net is a graph of \emph{places} (circles) and \emph{transitions}
-(boxes), connected by arcs \cite{Murata1989,PMvanDerAalst2016}. Formally, a
+(boxes), connected by arcs \cite{Murata1989,Aalst2016}. Formally, a
 labelled Petri net is a tuple $N=(P,T,F,\lambda)$. $P$ is a finite set of
 places, $T$ a finite set of transitions, and
 $F\subseteq(P\times T)\cup(T\times P)$ the set of arcs. The labelling function
@@ -204,7 +204,7 @@ A \emph{workflow net} has one source place $i$ and one sink place $o$, and
 every node lies on a path from $i$ to $o$. A run starts with one token in $i$
 and should end with one token in $o$. For a truck visit, the token in $i$ is the
 truck before the gate and the token in $o$ the completed visit. A workflow net
-is \emph{sound} if three conditions hold \cite{PMvanDerAalst2016}. First, from
+is \emph{sound} if three conditions hold \cite{Aalst2016}. First, from
 every reachable marking the final marking can still be reached (option to
 complete). Second, when $o$ is marked, no other place holds a token (proper
 completion). Third, every transition can fire in some run (no dead
@@ -463,8 +463,8 @@ are also simulated (E3).
 \end{hints}
 
 Business process simulation (BPS) runs an executable model of a process to
-study its behaviour without disturbing the real system \cite{BPSAalst2015}. A
-BPS model has five parts \cite{BPSAalst2015,PMRozinat2009}:
+study its behaviour without disturbing the real system \cite{Aalst2015}. A
+BPS model has five parts \cite{Aalst2015,PMRozinat2009}:
 \begin{itemize}
 \item an \emph{arrival process} that decides when new cases start;
 \item a \emph{control-flow model} that decides which activities can follow,
@@ -479,7 +479,7 @@ one possible history. Several runs with different random seeds
 (\emph{replications}) show how much the results vary \cite{Law2015Simulation}.
 Simulation is mainly used for \emph{what-if analysis}: the same model is run
 with and without a change, for example more resources or another allocation
-rule, and the KPIs are compared \cite{BPSAalst2015}.
+rule, and the KPIs are compared \cite{Aalst2015}.
 
 \paragraph{Related work: discovering simulation models}
 Rozinat et al.\ showed early that all five parts can be estimated from an event
