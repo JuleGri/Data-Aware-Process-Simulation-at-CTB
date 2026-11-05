@@ -51,7 +51,7 @@ The discovery follows an algorithms, that learns the control flow in different w
 \subsection{Discovery Algorithms}
 \label{sec:mc_algorithms}
 \begin{hints}
-\item One paragraph per family: Inductive Miner and IMf (process trees, noise threshold), Heuristics Miner (dependency thresholds), ILP Miner (places from an optimisation problem), Split Miner (filtered directly-follows graph, BPMN converted to a Petri net).
+\item One paragraph per family: Inductive Miner and IMf (process trees, noise threshold), interactive Data-aware Heuristic Miner (causal net from frequency, dependency and binding thresholds; conditions on dependencies; Petri net output), ILP Miner (places from integer linear programmes over the prefix-closed log; sequence encoding filter, where a higher threshold filters less), Alpha, Alpha+ and Alpha++ (places from ordering relations, no noise handling).
 \item For each: the parameter that was varied and what it does. The grid and evaluation protocol are in Chapter 6 (E1).
 \end{hints}
 
