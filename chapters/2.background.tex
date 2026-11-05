@@ -1,298 +1,223 @@
-\chapter{Background}
+\chapter{Background and Related Work}
 \label{chp:background}
 
 \begin{hints}
-\item Target length about 10 pages (currently about 25). Keep only concepts that Chapters 4--7 use.
-\item Target structure: 2.1 Container terminal truck operations; 2.2 Event logs; 2.3 Process discovery and conformance; 2.4 Business process simulation; 2.5 Data-aware simulation and ProSiT (concept only, technical detail in Chapter 5); 2.6 Validation of simulation models (Sargent).
-\item Move comparisons of approaches to Chapter 3, metric definitions to Chapter 6.
+\item Target length about 15 pages. Only concepts that later chapters use. Related work is placed in the section where its topic is introduced; Section~\ref{sec:rw_positioning} collects the gap.
+\item Each section ends with one or two sentences on what it means for this thesis.
 \end{hints}
 
+This chapter introduces the concepts that the thesis uses and the research
+related to each of them. It follows the path of the thesis: the terminal
+process and its key performance indicator (Section~\ref{sec:bg_terminal}),
+event logs (Section~\ref{sec:operational_data_event_logs}), process discovery
+with Petri nets (Section~\ref{sec:bg_discovery}), conformance checking
+(Section~\ref{sec:bg_conformance}), business process simulation
+(Section~\ref{sec:bps_models}) and the simulation framework ProSiT
+(Section~\ref{sec:prosit_background}). Section~\ref{sec:rw_positioning} states
+the research gap.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Container Terminal Truck Operations}
 \label{sec:bg_terminal}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{hints}
-\item Terminal layout in one paragraph: gate, yard blocks with RMG cranes, empty-container depot (LL), manual area (HO2).
-\item A truck visit from Gate In to Gate Out: delivery, receive, double cycle. One small figure is enough.
-\item KPIs of truck handling, with truck turnaround time as the main one (keep the existing paragraph).
-\item CTB-specific facts (block numbers, lanes, cranes) belong to Chapter 4, not here.
+\item About two pages. One small figure of a truck visit (Gate In, stops at RMG block / LL / HO2, Gate Out) would help. CTB numbers (blocks, lanes, volumes) stay in Chapter~\ref{chp:case_study_and_data}.
 \end{hints}
 
+A container terminal connects ships, trains and trucks. Containers are stored
+in a yard between the waterside and the landside. In many terminals, including
+the one studied here, the yard consists of storage blocks. Automated
+rail-mounted gantry cranes (RMG) move containers inside a block and hand them
+over to trucks at the landside end of the block. Terminals often have further
+areas, for example a depot for empty containers and a manually operated area.
+Trucks enter and leave through a gate \cite{CTSteenken2004}.
 
+\paragraph{The truck visit}
+A truck visit starts when the truck passes the entry gate (\emph{Gate In}). The
+truck then drives to one or more handling areas. At each \emph{stop}, a
+container is delivered to the terminal, received from it, or both. A visit that
+delivers and receives in one trip is called a double cycle or \emph{mixed}
+visit. After the last stop, the truck leaves through the exit gate (\emph{Gate
+Out}). Most visits have one stop. Visits with two or more stops are less
+frequent but take longer.
 
+\paragraph{Physical constraints}
+A truck visit is a physical process. Several constraints follow from this and
+hold for every visit, whether or not they are visible in the recorded data.
+\begin{itemize}
+\item A truck is one vehicle. Its stops happen one after another and never at
+the same time.
+\item A visit exists to move containers. A visit without any stop between the
+gates does not occur in practice.
+\item A storage block has a limited number of handover lanes and cranes. Trucks
+share them with each other and with the waterside and rail operations.
+\item A truck can carry a limited number of containers.
+\end{itemize}
+These constraints run through the whole thesis. A model that is learned only
+from event frequencies does not know them. Section~\ref{sec:bg_rules} shows how
+such constraints can be written down as rules, and Section~\ref{sec:prosit_limits}
+explains why the simulator needs them explicitly.
 
-\paragraph{Operational Performance Indicators}
-Truck operations are evaluated with operational key performance indicators
-(KPIs). Truck Turnaround Time (TTT) measures the complete interval between
-terminal entry and exit. Waiting-time measures isolate delay before gate or
-yard service, while yard-utilisation measures describe the occupation of
-storage space and operational resources. Among these indicators, TTT is often
-the principal measure of
-truck service quality because it reflects the time experienced by trucking
-companies and cargo owners. It is one of four main KPIs used by the HHLA
-container terminals \cite{Bett2024,CTprocessMiningTAS2020}.
+\paragraph{Key performance indicators}
+Truck operations are measured with key performance indicators (KPIs). The
+\emph{truck turnaround time} (TTT) is the time from Gate In to Gate Out. Waiting
+times isolate the delay before a gate or a yard stop, and utilisation measures
+describe how much of the yard and the equipment is in use. TTT is the main
+measure of service quality for truck handling, because it is the time that
+trucking companies and cargo owners experience. It is one of the four main
+KPIs of the HHLA container terminals \cite{Bett2024,CTprocessMiningTAS2020}.
+The mean alone hides the long waits that cause complaints. This thesis
+therefore also reports the 90th percentile (P90) of TTT and the number of hours
+in which TTT is unusually high (Section~\ref{sec:exp_kpis}).
 
-\subsection{Simulation-Based Decision Support in Container Terminals}
-\begin{hints}
-\item Which decisions terminals study with simulation (appointments, allocation, capacity), in a few sentences.
-\item Manual DES models: strengths, and the effort that motivates discovery from data. Condense.
-\end{hints}
-Terminal managers make decisions about truck appointments, resources,
-equipment schedules, maintenance, and yard operations while the terminal
-remains active. Because terminal processes are connected, local decisions can
-change waiting times, resource use, throughput, and service quality.
-Even experienced terminal managers face uncertainty. Changes to procedures or
-capacity can create congestion, increase handling times, or reduce service
-quality. Simulation allows managers and researchers to evaluate such changes
-without affecting live operations. Common applications include Truck
-Appointment Systems (TAS), equipment allocation, resource planning, yard
-management, and storage strategies. Simulation is useful for congestion,
-bottlenecks, and trade-offs that are difficult to analyse directly. Studies
-have shown its value for truck turnaround time, resource use, and terminal
-performance \cite{Kastner2021,Bett2024,Carboni2025}. Practical use is still
-limited by model complexity, costs, and missing technical expertise in
-terminal teams.
+\paragraph{Related work: simulation in container terminals}
+Terminal managers decide about truck appointments, equipment, staff and yard
+operations while the terminal is running. Because the processes are
+connected, a local change can affect waiting times and service elsewhere.
+Simulation allows such changes to be tested without disturbing live
+operations. Discrete-event simulation (DES) is the most common approach,
+because the terminal can be described by events such as arrivals, gate
+passages and container moves
+\cite{YUN1999DESSimulation,Bruzzone2012,Muravev2019,Carboni2025}. Studies use
+simulation to compare equipment numbers and operating policies
+\cite{Kastner2021}, to generate scenarios \cite{Hartmann2005cenariosforCTSimulation},
+and to evaluate truck appointment systems and double cycles
+\cite{CTprocessMiningTAS2020,Bett2024}. These models are built by hand. This
+needs domain knowledge, much manual work, and recalibration when operations
+change. A hand-built model may also describe how the process is meant to work
+rather than how it actually runs \cite{PMRozinat2009}.
 
-\begin{sloppypar}
-Different simulation approaches are used in terminal research. Discrete Event
-Simulation (DES) is the most common because terminal operations can be modelled
-as events such as truck arrivals, gate processing, container handling, and
-equipment use. System Dynamics, Agent-Based Modelling, and traffic simulation
-are used for other operational and strategic questions
-\cite{Muravev2019,Muravev2021,Carboni2025}. Traditional simulation projects
-have limits. Building a model requires domain knowledge, process
-understanding, and much manual work. Data collection, implementation,
-calibration, and validation take time. Manual models depend on expert
-assumptions, which may describe the intended process rather than its actual
-execution \cite{PMRozinat2009}.
-\end{sloppypar}
+\paragraph{Related work: process mining in logistics}
+Process mining has been applied to logistics, mostly to discover and analyse
+processes rather than to build executable simulation models
+\cite{RWAlnahas2023Logistics}. Reconstructing a logistics process from several
+information systems requires care, because timestamps and identifiers from
+different systems may describe different operational stages
+\cite{RWBecker2017Context}. Grobis and Ihlenfeldt use event data to prepare a
+simulation model for production logistics and split the time between two
+activities into transport and waiting
+\cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. In a
+hospital, Vinci et al.\ discover a simulation model from an event log, check it
+against observed behaviour and only then use it to compare resource
+configurations \cite{Hospital2026Vinci}. This thesis follows the same order.
 
-These differences can reduce the quality of simulation results. Manual models
-must be maintained and calibrated when processes, workloads, and operating
-rules change. This work is costly and requires technical support. At the same
-time, terminal information systems record large amounts of operational data.
-Process Mining can use these data to discover, analyse, and monitor processes
-from their recorded execution. This may reduce manual modelling work and make
-simulation models closer to the observed process.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Implication for this thesis}
+An adequate simulation of the truck process must reproduce TTT, its tail and
+its growth under load. It must also respect the physical constraints listed
+above, because a policy that changes the load on the blocks is only credible
+if the simulated trucks behave like real trucks.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Operational Data and Event Logs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Event Logs}
 \label{sec:operational_data_event_logs}
-\begin{hints}
-\item Event, case, activity, timestamp, resource, attribute. Use the CTB truck visit as the running example.
-\item Lifecycle timestamps (start/complete) and why their meaning matters (readiness vs. service).
-\item Keep the example table. Cut general information-system history.
-\end{hints}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Information Systems and Event Semantics}
-Operational information systems record transactions in support of daily work,
-although their databases are rarely organised as complete process histories.
-Enterprise Resource Planning, Customer Relationship Management, and
-Manufacturing Execution Systems fulfil this role in many organisations. In a
-container terminal, the corresponding evidence is distributed across the
-Terminal Operating System (TOS), Gate Operating System (GOS), Yard Management
-System (YMS), and equipment-control systems. A truck arrival, a storage
-assignment, or the completion of a container move may therefore be recorded in
-different systems and at different levels of detail. At CTB, historically grown
-naming conventions add a further integration problem. Chapter~\ref{chp:case_study_and_data}
-describes how these records are reconciled.
-
-Process Mining turns such transactions into a consistent sequence of
-\emph{events}. An event is one recorded occurrence, whereas its \emph{activity}
-identifies the type of operation, such as \texttt{Gate In}, a container
-delivery, or \texttt{Gate Out}. Repeated occurrences of the same activity are
-therefore separate events. Events are associated with a \emph{case}, the object
-whose process execution is followed. Depending on the analysis, that object
-might be an order, container, or vehicle visit. Throughout this thesis, one
-truck visit defines one case. This choice fixes the process boundary from the
-truck's admission to its exit and allows all recorded operations of that visit
-to be analysed together.
-
-Each event must state at least which case it belongs to, which activity
-occurred, and when it occurred. Performance-oriented Process Mining and
-simulation additionally distinguish an observed start timestamp from an
-observed completion timestamp. Their difference is the activity's
-\emph{service time}. A third temporal concept, \emph{enablement}, denotes the
-moment at which the process-model state allows the activity to begin. CTB does
-not record enablement directly. It is reconstructed by replaying the event log
-against the discovered process model
-\cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The simulation-discovery
-framework used in this thesis calls the interval between model-derived
-enablement and observed activity start \emph{waiting time}
-\cite{Vinci2026prosit}. In this physical setting it is interpreted more
-cautiously as pre-service delay, because it may combine resource contention,
-queueing, and movement between locations. Model enablement is a Petri-net
-concept rather than a sensor observation. A transition becomes enabled when
-its input places contain the required tokens. When token timestamps are
-attached to the marking, its structural enablement time is the latest arrival
-time among the required input tokens. Invisible transitions change the marking
-without representing an elapsed physical operation. Consequently, correct
-replay establishes consistency with the process model, but not the physical
-accuracy of the reconstructed readiness time.
-
-Further attributes describe the circumstances of an execution. Resource or
-equipment identifiers indicate where or by which operational unit an activity
-was performed, while truck ID, container number and type, shipping line, yard
-block, and trucking company describe the case and terminal context. These
-attributes support resource analysis and data-aware simulation only when their
-values would already be available at the corresponding simulated decision
-point. This information-timing requirement prevents later outcomes from being
-used as if they were known in advance.
-
-\subsection{Event Logs}
-An event log groups events into cases and preserves their recorded order. In
-tabular form, each row represents one event, the case identifier links rows from
-the same process instance, and timestamps provide temporal information.
-Table~\ref{tab:eventlogexample} shows this storage-oriented view for two
-simplified truck visits.
-
-The CTB input log provides the start and completion timestamps required for
-execution-time modelling, together with resource and operational context.
-Activity enablement is not observed directly. It is reconstructed during
-process-model alignment by the simulation-discovery framework
-(Section~\ref{sec:simulation_discovery_methodology}).
+Process mining works on \emph{event logs}. An event is one recorded
+occurrence of an activity. Each event belongs to a \emph{case}, the object
+whose process is followed. In this thesis, one truck visit is one case. Each
+event records at least the case, the \emph{activity} (for example
+\texttt{Gate In} or \texttt{RMG\_receive}) and a timestamp. An event log groups
+the events by case and keeps their order. The ordered list of activities of a
+case is its \emph{trace}. Cases with the same trace share a \emph{variant}. The
+set of variants is the observed language of the log
+\cite{PMvanDerAalst2016}. Table~\ref{tab:eventlogexample} shows two simplified
+truck visits.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{llll}
+\begin{tabular}{lllll}
 \toprule
-\textbf{Case ID} & \textbf{Activity} & \textbf{Timestamp} & \textbf{Target block} \\
+\textbf{Case} & \textbf{Activity} & \textbf{Start} & \textbf{Complete} & \textbf{Resource} \\
 \midrule
-T001 & Gate In & 09:13:04 & B06 \\
-T001 & Yard Operation & 09:21:46 & B06 \\
-T001 & Gate Out & 09:42:18 & B06 \\
-T002 & Gate In & 09:17:12 & B08 \\
-T002 & Yard Operation & 09:30:51 & B08 \\
-T002 & Gate Out & 09:58:33 & B08 \\
+T001 & Gate In      & 09:13 & 09:13 & Gate \\
+T001 & RMG\_receive & 09:24 & 09:31 & Block T12 \\
+T001 & Gate Out     & 09:42 & 09:42 & Gate \\
+T002 & Gate In      & 09:17 & 09:17 & Gate \\
+T002 & LL\_delivery & 09:30 & 09:38 & LL \\
+T002 & RMG\_receive & 09:44 & 09:52 & Block T08 \\
+T002 & Gate Out     & 10:03 & 10:03 & Gate \\
 \bottomrule
 \end{tabular}
-\caption{Simplified event log example.}
+\caption{Simplified event log with two truck visits. Case attributes such as the
+number of planned stops are stored once per case and are not shown.}
 \label{tab:eventlogexample}
 \end{table}
 
-Event logs can be stored in standard formats for exchange between Process
-Mining tools. The eXtensible Event Stream (XES) format stores events, cases,
-timestamps, and other attributes in a structured and tool-independent form
-\cite{PMvanDerAalst2016}. By organising database records into cases and ordered event sequences, an event log
-turns raw operational data into input for process discovery, conformance
-checking, and performance analysis \cite{PMvanDerAalst2016}.
+\paragraph{Timestamps}
+Simulation needs more than the order of events. When an event has a
+\emph{start} and a \emph{complete} timestamp, their difference is its
+execution time. A third point in time, \emph{enablement}, is the moment at
+which the process model allows the activity to begin. It is not recorded. It is
+reconstructed by replaying the log on the process model
+\cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The time between enablement
+and start is called waiting time. In a physical process, this interval can
+contain queueing, driving and other delays. The meaning of each timestamp must
+therefore be checked. In the terminal data, a stop starts when the truck
+reports ready in the handover lane. The stop interval can already contain
+waiting for the crane (Section~\ref{sec:timestamp_semantics}).
+
+\paragraph{Attributes}
+Further attributes describe the case and its context, for example the number of
+containers, the planned stops or the load of the terminal at Gate In. A
+data-aware simulation may only use an attribute at a decision point if its
+value is known at that point. Otherwise the model uses information from the
+future, which is called leakage (Section~\ref{sec:entry_known_attributes}).
+
+Event logs are exchanged between tools in the XES format \cite{PMvanDerAalst2016}.
+In this thesis, the same log is read by ProM \cite{vanDongen2005ProM} and by
+PM4Py \cite{Berti2023PM4Py}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Process Mining Foundations}
+\section{Process Discovery and Petri Nets}
+\label{sec:bg_discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item Discovery: what a discovered model is; Petri nets, workflow nets, soundness; process trees and the Inductive Miner (needed for E1/E2).
-\item Conformance: alignments, fitness, precision, generalisation, with one-line intuitions (needed for E1).
-\item Enhancement only briefly. Detailed algorithm comparison belongs to Chapter 3.
-\end{hints}
-\subsection{Process Mining and Its Analytical Perspectives}
-The operational records described in
-Section~\ref{sec:operational_data_event_logs} can be analysed at different
-levels. Business Intelligence summarises past and current performance through
-reports, dashboards, and key performance indicators. Data Mining identifies
-patterns, classifications, and predictive relationships, but conventional
-methods often treat records as independent observations. Process Mining instead
-retains their ordering and connects the event data with an explicit process
-model. It can therefore reconstruct how work was executed, monitor process
-performance, and identify bottlenecks or deviations
-\cite{PMRozinat2009,PMvanDerAalst2016}.
 
-
-Process Mining combines four complementary perspectives
-\cite{PMRozinat2009}. The control-flow perspective reconstructs which
-activities occur, their ordering relations, and the alternative paths followed
-by different cases. The time perspective adds activity durations, waiting and
-throughput times, and recurring bottlenecks. Together they describe how a
-process progresses and how its performance develops over time.
-
-The resource perspective relates execution to people, equipment, or other
-operational units and examines how work is allocated among them. The data
-perspective connects behaviour with case and event attributes, such as object
-type, yard location, or operational context, that may influence routing or
-duration. These perspectives are analytically distinct but describe the same
-recorded process. Their joint use links process structure with timing,
-resources, and operating circumstances.
-
-\subsection{Process Discovery and Model Representations}
-
-The objective of process discovery is to construct a process model from an
-event log without a predefined process model \cite{PMvanDerAalst2016}. The
-output should reproduce the observed behaviour. Depending on the discovery
-algorithm, it can be a Petri net, process tree, BPMN model, or directly-follows
-graph \cite{PMRozinat2009}. The Alpha Miner is an early algorithm for deriving
-causal dependencies and parallel behaviour. The Heuristics Miner adds observed
-frequencies and is consequently more tolerant of noise and infrequent
-behaviour. The Inductive Miner used in this thesis recursively decomposes the
-log through sequence, exclusive-choice, parallel, and loop cuts, producing a
-sound block-structured model while allowing infrequent behaviour to be filtered
-\cite{Leemans2014InductiveMiner}.
-
-Process discovery shows how a recorded process was executed, rather than how it
-was expected to operate \cite{PMvanDerAalst2016}.
-
-A directly-follows graph (DFG) summarises which activity directly follows
-another and can annotate nodes and arcs with observed frequencies or
-performance values. This makes the DFG useful for inspecting dominant flows,
-rare connections, and repetitions. It does not, however, define complete
-execution semantics: a path that can be drawn through a DFG is not necessarily
-a valid process execution \cite{PMvanDerAalst2016}.
-
-Process trees and Petri nets provide such semantics. A process tree represents
-behaviour through nested sequence, exclusive-choice, parallel, and loop
-operators. The Inductive Miner discovers this block-structured representation
-and can convert it into a sound Petri net \cite{Leemans2014InductiveMiner}.
-The Petri net distinguishes places, visible activity transitions, and silent
-routing transitions. Its markings determine which activity may execute next.
-Consequently, the DFG and Petri net answer complementary questions: the DFG
-shows what was frequent in the log, whereas the Petri net states what the model
-allows. The CTB instances of both views are therefore presented separately and
-interpreted in Section~\ref{sec:process_discovery_methodology}.
+Process discovery builds a process model from an event log
+\cite{PMvanDerAalst2016,RWAalst2022Discovery}. The model shows how the process
+was executed, not how it was planned. ProSiT, the simulator used in this
+thesis, needs the model as a Petri net. This section introduces Petri nets,
+the discovery algorithms compared in E1, and the use of rules to restrict a
+discovered model.
 
 \subsection{Petri Nets, Workflow Nets and Silent Transitions}
 \label{sec:bg_petri}
 
-A Petri net is a bipartite graph of \emph{places} and \emph{transitions}
-\cite{PMvanDerAalst2016}. Formally, a labelled Petri net is a tuple
-$N=(P,T,F,\lambda)$. $P$ is a finite set of places, $T$ a finite set of
-transitions, and $F\subseteq(P\times T)\cup(T\times P)$ the flow relation,
-drawn as arcs. The labelling function $\lambda: T\rightarrow A\cup\{\tau\}$
-assigns each transition either an activity of the event log or the special
-label $\tau$. The places with an arc to a transition $t$ are its input places
-${\bullet}t$; the places reached by an arc from $t$ are its output places
-$t{\bullet}$.
+A Petri net is a graph of \emph{places} (circles) and \emph{transitions}
+(boxes), connected by arcs \cite{Murata1989,PMvanDerAalst2016}. Formally, a
+labelled Petri net is a tuple $N=(P,T,F,\lambda)$. $P$ is a finite set of
+places, $T$ a finite set of transitions, and
+$F\subseteq(P\times T)\cup(T\times P)$ the set of arcs. The labelling function
+$\lambda: T\rightarrow A\cup\{\tau\}$ gives each transition either an activity
+of the event log or the label $\tau$. The places with an arc to a transition
+$t$ are its input places ${\bullet}t$. The places with an arc from $t$ are its
+output places $t{\bullet}$.
 
-The state of a net is a \emph{marking}: a distribution of tokens over the
-places. A transition is \emph{enabled} when each of its input places holds at
-least one token. Firing an enabled transition removes one token from each
-input place and adds one token to each output place. A sequence of firings is
-a run of the net. Choice is expressed by a place with several outgoing arcs:
-only one of the enabled transitions can consume the token. Parallelism is
-expressed by a transition with several output places: it creates one token per
-branch, and the branches can then fire independently.
+The state of a net is a \emph{marking}: a number of tokens in each place. A
+transition is \emph{enabled} when each of its input places holds a token.
+Firing it removes one token from each input place and adds one token to each
+output place. A choice is a place with several outgoing arcs: only one of the
+enabled transitions can take the token. Parallelism is a transition with
+several output places: it creates one token per branch, and the branches can
+then fire independently.
 
-A \emph{workflow net} is a Petri net with one source place $i$ and one sink
-place $o$, in which every place and transition lies on a path from $i$ to $o$.
-A run starts with one token in $i$ and should end with one token in $o$. For a
-truck visit, $i$ represents the truck before the gate and $o$ the completed
-visit. A workflow net is \emph{sound} if three conditions hold
-\cite{PMvanDerAalst2016}. First, from every reachable marking the final
-marking can still be reached (option to complete). Second, when $o$ is marked,
-no other place holds a token (proper completion). Third, every transition can
-fire in at least one run (no dead transitions). Soundness matters for
-simulation, because a simulator executes the net and must reach the end of
-every case.
+A \emph{workflow net} has one source place $i$ and one sink place $o$, and
+every node lies on a path from $i$ to $o$. A run starts with one token in $i$
+and should end with one token in $o$. For a truck visit, the token in $i$ is the
+truck before the gate and the token in $o$ the completed visit. A workflow net
+is \emph{sound} if three conditions hold \cite{PMvanDerAalst2016}. First, from
+every reachable marking the final marking can still be reached (option to
+complete). Second, when $o$ is marked, no other place holds a token (proper
+completion). Third, every transition can fire in some run (no dead
+transitions). Soundness matters for simulation, because the simulator executes
+the net and must bring every case to the end.
 
-Transitions labelled $\tau$ are \emph{silent}. They fire like any other
-transition, but they do not correspond to an activity and leave no event in
-the log. They express routing that has no recorded counterpart: skipping an
-optional activity, starting another iteration of a loop, or splitting and
-joining parallel branches. Figure~\ref{fig:bg_petri_silent} shows the smallest
-relevant case. After Gate In, the token can either fire
-\texttt{RMG\_receive} or the silent transition, which skips the yard stop. The
-\emph{language} of a workflow net is the set of visible activity sequences of
-all complete runs, with silent transitions removed. The net in
-Figure~\ref{fig:bg_petri_silent} therefore accepts both
-\texttt{Gate In, RMG\_receive, Gate Out} and \texttt{Gate In, Gate Out}.
+Transitions labelled $\tau$ are \emph{silent}. They fire like other
+transitions but leave no event in the log. They express routing that has no
+recorded counterpart: skipping an activity, repeating a loop, or splitting and
+joining parallel branches. The \emph{language} of a workflow net is the set of
+visible activity sequences of all complete runs. The net in
+Figure~\ref{fig:bg_petri_silent} accepts both \texttt{Gate In, RMG\_receive,
+Gate Out} and \texttt{Gate In, Gate Out}.
 
 \begin{figure}[htbp]
 \centering
@@ -321,955 +246,557 @@ Figure~\ref{fig:bg_petri_silent} therefore accepts both
 \draw[arc] (p2) -- (go);
 \draw[arc] (go) -- (o);
 \end{tikzpicture}
-\caption{A workflow net with a silent transition. Circles are places,
-white boxes visible transitions, and the black box a silent transition
-$\tau$. The token in the source place $i$ represents a truck before the gate.
-The silent transition skips the yard stop, so the net also accepts a visit
-without any handling.}
+\caption{A workflow net with a silent transition. Circles are places, white
+boxes visible transitions, and the black box a silent transition $\tau$. The
+token in the source place $i$ is a truck before the gate. The silent transition
+skips the yard stop, so the net also accepts a visit without any stop.}
 \label{fig:bg_petri_silent}
 \end{figure}
 
-Silent transitions are a means of representation, not behaviour. Two nets with
-very different numbers of silent transitions can have exactly the same
-language. The Inductive Miner introduces them systematically when it converts
-a process tree into a Petri net: an exclusive choice with an empty branch
-becomes a silent skip, a loop needs silent transitions to repeat or leave the
-loop, and a parallel block needs a silent split and join
-\cite{Leemans2014InductiveMiner}. The Inductive Miner net of this thesis has
-11 visible and 35 silent transitions (Figure~\ref{fig:res_im0}). Its repaired
-encoding as a state machine has the same visible behaviour without any silent
-transition (Section~\ref{sec:mc_repair}).
-
-Silent transitions have three consequences that matter in this thesis.
-\begin{enumerate}
-\item \textbf{Hidden behaviour.} Because they leave no trace, silent paths are
-easy to overlook when a model is inspected. A combination of silent skips can
-admit behaviour that never occurs in the log, such as the visit without any
-yard activity in Figure~\ref{fig:bg_petri_silent}.
-\item \textbf{Computation.} Alignments
+Silent transitions are a means of representation. Two nets with very different
+numbers of silent transitions can have the same language. Discovery algorithms
+add them systematically. The Inductive Miner, for example, turns an optional
+activity into a silent skip and a parallel block into a silent split and join
+\cite{Leemans2014InductiveMiner}. They have three consequences in this thesis.
+First, combinations of silent skips can admit behaviour that never occurs,
+such as the visit without a stop in Figure~\ref{fig:bg_petri_silent}. Because
+silent paths leave no trace, this is easy to overlook. Second, alignments
 (Section~\ref{sec:astar_alignment_definition}) must decide for every silent
-transition whether to fire it. Silent moves cost nothing, but each one adds
-alternative paths to the state space the search explores, especially inside
-loops and parallel blocks. ProSiT aligns every training trace with the net to
-obtain its training data, so the number of silent transitions also affects how
-long discovery takes. In this study, discovery took about 25 minutes for the
-Inductive Miner net and 11 minutes for its silent-free repaired encoding, with
-the same data and settings.
-\item \textbf{Simulation.} A simulator has to decide every silent transition
-as well. ProSiT learns a routing weight for each transition, silent or
-visible, conditioned on the case attributes and the activities executed so
-far. At each choice point it draws one enabled transition from these weights,
-without looking ahead to where the path leads \cite{Vinci2026prosit}. A
-sequence of individually likely skips can therefore produce a path that is
-rare or absent in the data. Likewise, a silent
-parallel split enables several branches at the same moment, so one truck can
-be scheduled at two stops at once. Both effects are measured in
-Chapter~\ref{chp:results}.
-\end{enumerate}
+transition whether to fire it, which enlarges the search. Third, the simulator
+must decide them as well. It draws each step separately, without looking ahead
+(Section~\ref{sec:prosit_execution}). A chain of likely skips can therefore
+produce a rare or impossible visit, and a silent parallel split can send one
+truck to two stops at the same time.
 
-\subsection{Conformance Checking and Process Enhancement}
+\paragraph{State machines}
+A \emph{state machine} is a Petri net in which every transition has exactly
+one input place and one output place \cite{Murata1989}. A state machine
+workflow net therefore always holds exactly one token. Each place is a state of
+the process, and each transition a step from one state to the next. A state
+machine cannot express parallelism. For a truck, this is not a loss: its stops
+never run in parallel. Every finite set of sequences, and more generally every
+language accepted by a finite automaton, can be written as a sound state
+machine workflow net. Each automaton state becomes a place and each automaton
+edge a visible transition. This encoding is used for the repaired models in E2
+(Section~\ref{sec:exp_rules}).
 
-Conformance checking compares recorded process executions with an existing
-model and identifies deviations that may indicate exceptional cases,
-inefficiencies, compliance problems, or outdated documentation
-\cite{aalst2012ConformanceChecking}. Discovered models are commonly assessed
-through four related quality criteria
-\cite{aalst2012ConformanceChecking,PMvanDerAalst2016}. \emph{Fitness} measures
-how much observed behaviour the model can replay, whereas \emph{precision}
-penalises additional behaviour allowed without support in the log.
-\emph{Generalisation} rewards a model that captures plausible underlying
-behaviour instead of reproducing only the observed sample, and
-\emph{simplicity} favours structural economy when competing models explain the
-data sufficiently well. The criteria must be interpreted jointly: a perfectly
-fitting model may overgeneralise, while a highly precise model may merely
-memorise the available cases.
+\subsection{Discovery Algorithms}
+\label{sec:bg_algorithms}
 
+Discovery algorithms differ in how they turn observed sequences into a model.
+Experiment E1 compares four families.
+\begin{itemize}
+\item \textbf{Alpha family.} The Alpha Miner derives ordering relations
+(directly follows, causality, parallelism, choice) from the log and builds
+places from them \cite{vanderAalst2004AlphaMiner}. Alpha+ and Alpha++ add short
+loops and non-local dependencies \cite{deMedeiros2004AlphaPlus,Wen2007AlphaPlusPlus}.
+The algorithms do not handle noise and do not guarantee a sound net.
+\item \textbf{Heuristics Miner.} The Heuristics Miner counts how often one
+activity follows another and keeps a dependency when its dependency measure
+exceeds a threshold \cite{heuristicsMiner2006,Weijters2011FHM}. The interactive
+data-aware variant (iDHM) can also keep infrequent dependencies that depend on
+data, and converts the resulting causal net into a Petri net
+\cite{Mannhardt2017DHM,Mannhardt2017iDHM}. The result is not guaranteed to be
+sound.
+\item \textbf{Inductive Miner.} The Inductive Miner splits the log
+recursively by sequence, choice, parallel and loop cuts. The result is a
+process tree, which is converted into a sound workflow net. The variant IMf
+first removes infrequent behaviour below a noise threshold
+\cite{Leemans2014InductiveMiner}.
+\item \textbf{ILP Miner.} Region-based miners add a place for every linear
+inequality that all prefixes of the observed traces satisfy. The ILP Miner
+finds these places with integer linear programming. A filter on the prefixes
+controls how much infrequent behaviour is kept \cite{RWVanZelst2018ILP}.
+\end{itemize}
+
+\paragraph{Related work}
+Benchmarks show that no algorithm is best on every log and every quality
+dimension \cite{RWAugusto2019Review,DiscoveryBenchmark}. Rehse et al.\ argue that
+discovery experiments need explicit assumptions and a controlled design: the
+same input, the same cohorts and the same implementation of each measure
+\cite{RWRehse2024Experimentation}. E1 follows this design. A further point
+concerns time. Two activities that occur in either order are not necessarily
+parallel; they may simply be ordered freely. Lifecycle-aware discovery uses
+start and complete timestamps to make this distinction
+\cite{RWLeemans2016Lifecycle}. For trucks it matters: two stops may occur in
+either order, but never at the same time.
+
+\subsection{Domain Rules and Model Repair}
+\label{sec:bg_rules}
+
+A discovered model generalises beyond the observed traces. Part of this
+generalisation can contradict knowledge that is known independently of the
+data, for example the physical constraints of Section~\ref{sec:bg_terminal}.
+Such knowledge can be written down as rules.
+
+\paragraph{Rules as automata}
+Many rules on activity sequences can be written as Declare constraints, for
+example ``Gate In occurs exactly once'' or ``mixed and delivery do not both
+occur at the same area'' \cite{RWDiCiccio2022Declarative}. Every Declare
+constraint can be translated into a finite automaton that accepts exactly the
+sequences satisfying it \cite{RWDeGiacomo2013LTLf,RWMaggi2011Monitoring}. A
+sound workflow net has a finite reachability graph, so its language is also
+accepted by a finite automaton. Finite automata can be combined: the product of
+two automata accepts exactly the sequences that both accept. Running the net
+and the rule automata in one product therefore answers two questions exactly.
+Does the net accept a sequence that breaks a rule? And which sequences of the
+net satisfy all rules? The product follows the same idea as the synchronous
+product used for alignments \cite{RWCarmona2022Conformance}. A net combined
+with declarative constraints in this way corresponds to a hybrid process model
+\cite{RWSlaats2016Hybrid}.
+
+Not every rule is a rule on sequences. ``Stops never overlap'' is a rule on
+timestamps. ``The number of stops equals the number of planned stops'' depends
+on a case attribute. Such rules cannot be written in the untimed language of a
+net. In data-aware Petri nets they become \emph{guards}: conditions on data
+that a transition must satisfy before it may fire
+\cite{Mannhardt2016Precision}.
+
+\paragraph{Related work: domain knowledge in discovery and repair}
+Schuster et al.\ classify how domain knowledge enters process discovery
+\cite{RWSchuster2022Domain}. Knowledge can be used before discovery, during
+discovery, or \emph{a posteriori} on a discovered model. It can be explicit
+(imperative or declarative) or come from user feedback, and it can be applied
+automatically or interactively. Greco et al.\ enforce precedence constraints
+during discovery \cite{RWGreco2015Precedence}. Norouzifar et al.\ integrate
+rules into the cuts of the Inductive Miner \cite{RWNorouzifar2026Rules}. Dixit
+et al.\ work a posteriori: they edit a discovered model at random and keep the
+candidates that satisfy user-specified Declare constraints best
+\cite{RWDixit2015Domain}. Revoredo discusses how domain knowledge can guide
+the repair of a process model \cite{Revoredo2023DomainRepair}.
+
+Classical model repair changes a model so that it can replay every trace of a
+log while staying close to the original \cite{RWFahland2015Repair,RWdeLeoni2022Enhancement}.
+This adds behaviour. The opposite direction removes behaviour that the log
+does not support, for example by adding non-local places to a Petri net
+\cite{RWKalenkova2020NonLocal} or by refining process trees
+\cite{RWRennert2024Precision}. Vinci and de Leoni repair a model for
+simulation: they simulate it, find behaviour that is missing in the generated
+log and add it \cite{SimulationGuidedRepair2025}. Restricting behaviour that
+the simulator generates too often is named as future work.
+
+\paragraph{Implication for this thesis}
+The repair in E2 uses explicit, declarative domain knowledge a posteriori and
+is fully automatic. It restricts the discovered language to the sequences that
+satisfy the rules and writes the result as a sound state machine. Rules that
+depend on timestamps or attributes are not forced into the net. They are
+handled as guards in the simulator (Section~\ref{sec:prosit_limits}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conformance Checking}
+\label{sec:bg_conformance}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Conformance checking compares a log with a model
+\cite{aalst2012ConformanceChecking,RWCarmona2022Conformance}. Four quality
+dimensions are common \cite{Buijs2014Quality}. \emph{Fitness} measures how much
+of the observed behaviour the model can replay. \emph{Precision} penalises
+behaviour that the model allows but the log does not show.
+\emph{Generalisation} rewards a model that is likely to accept new, unseen
+traces of the same process. \emph{Simplicity} prefers small models. The
+dimensions pull in different directions. A model that accepts every sequence
+has perfect fitness and poor precision; a model that lists every observed trace
+has perfect precision and poor generalisation.
+
+\paragraph{Alignments}
 \label{sec:astar_alignment_definition}
-An important conformance technique is optimal alignment. An alignment relates
-the observed event sequence of a case to an executable run of a process
-model. Formally, it is a sequence of three move types: a
-\emph{synchronous move} consumes an event and fires a transition with the
-same visible label. A \emph{log move} consumes an event without a
-corresponding model transition. A \emph{model move} fires a model
-transition without consuming an observed event. A cost function normally
-assigns zero cost to synchronous moves and positive, configurable costs
-to deviations. An optimal alignment $\lambda^{\star}$ is
+An alignment relates the trace of a case to a complete run of the model. It is
+a sequence of moves of three types. A \emph{synchronous move} consumes an
+event and fires a transition with the same label. A \emph{log move} consumes an
+event that the model cannot follow. A \emph{model move} fires a transition
+without a matching event. Model moves on silent transitions are free. The
+other deviations have a positive cost. An optimal alignment $\gamma^{\star}$ of
+a trace $\sigma$ with a net $N$ is
 \begin{equation}
-\lambda^{\star}=\arg\min_{\lambda\in\Lambda(\sigma,N)} c(\lambda),
+\gamma^{\star}=\arg\min_{\gamma\in\Gamma(\sigma,N)} c(\gamma),
 \end{equation}
-where $\Lambda(\sigma,N)$ is the set of legal alignments between recorded
-sequence $\sigma$ and process model $N$ \cite{aalst2012ConformanceChecking,
-Adriansyah2011CostFitness}.
+where $\Gamma(\sigma,N)$ is the set of all alignments and $c$ the total cost
+\cite{aalst2012ConformanceChecking,Adriansyah2011CostFitness}. Optimal
+alignments are usually computed with the A* search algorithm on the product of
+the trace and the net. With an admissible heuristic, the first complete
+alignment found is optimal \cite{Adriansyah2011CostFitness}.
 
-The qualifier ``A*-based'' refers to the search procedure, not to a
-different kind of alignment. A* explores the product state space of the
-current position in the recorded sequence and the current model state (for a Petri net, its
-marking). It orders candidates by $f=g+h$, where $g$ is accumulated move
-cost and $h$ is an admissible lower bound on the remaining cost. With an
-admissible heuristic, the first complete solution is cost-optimal
-\cite{Adriansyah2011CostFitness}. The resulting event--transition
-correspondence supports conformance diagnostics and timestamp replay for
-performance analysis \cite{aalst2012ConformanceChecking}. It does not
-turn a model-derived enablement instant into an independently observed
-timestamp.
+\paragraph{Fitness}
+Trace fitness is one minus the cost of the optimal alignment divided by the
+cost of the worst case, in which every event is a log move and the model runs
+its shortest path alone. Log fitness averages over all traces. A trace
+\emph{fits} if its optimal alignment has no deviation. This thesis reports
+both log fitness and the share of fitting visits, because a high average can
+hide a whole group of visits that the model cannot replay.
 
-Beyond discovery and conformance checking, process enhancement adds information
-from event data to an existing model \cite{PMvanDerAalst2016}. Waiting times,
-activity durations, resource assignments, bottlenecks, and workload can enrich
-the structural model and help analysts identify possible improvements.
+\paragraph{Precision}
+Escaping-edges precision is based on alignments
+\cite{Adriansyah2012AlignPrecision,Adriansyah2015Precision}. For every prefix
+of an aligned trace, it compares the activities that the model allows next
+with the activities that the log shows after the same prefix. An activity that
+the model allows but the log never shows after that prefix is an
+\emph{escaping edge}. Precision is one minus the share of escaping edges,
+weighted by how often each prefix occurs. Precision measures have known
+weaknesses. Their value depends on how silent transitions are handled after a
+prefix, so two nets with the same language can receive different values.
+Different tools implement this step differently. ProM and PM4Py can therefore
+report different precision for the same net and log
+\cite{Mannhardt2016Precision}. Section~\ref{sec:exp_discovery_eval} states which
+implementation is used and why.
+
+\paragraph{Generalisation}
+Token-based generalisation counts how often each transition is used in the
+replay. A transition that fires many times contributes little uncertainty; a
+transition that fires rarely contributes much \cite{Buijs2014Quality}. The
+measure looks at transitions, not at sequences. A model that allows many
+unobserved sequences through frequently used transitions can still score
+high.
+
+\paragraph{Implication for this thesis}
+Fitness and precision compare the language of a model with the observed
+traces. They do not say how often a simulator will generate each permitted
+sequence. A path that is permitted but never observed may be rare in the
+language and still frequent in the simulation. This is why the selected models
+are also simulated (E3).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Business Process Simulation} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item Components of a BPS model: arrivals, routing, resources and capacity, durations, calendars.
-\item Replications, warm-up, and why results are distributions. Condense to the concepts used in Chapter 6.
-\end{hints}
-
-\subsection{Fundamentals of Business Process Simulation}
-Business Process Simulation (BPS) uses executable models to study process
-behaviour in a virtual environment. Organisations can run these models under
-controlled conditions without disturbing live operations
-\cite{BPSAalst2015}. Simulation can estimate throughput times, waiting times,
-resource use, service levels, and costs before a change is implemented. It is
-often used for \textit{what-if analysis}. Examples include changing the number
-of resources, routing rules, workload, or operational policies. The results of
-different scenarios can then be compared \cite{BPSAalst2015}. BPS is used in
-manufacturing, healthcare, logistics, supply chains, and business-process
-management. Process Mining allows such models to be discovered and
-calibrated from recorded process executions
-\cite{PMRozinat2009,Camargo2020}.
-
-\subsection{Business Process Simulation Models}
+\section{Business Process Simulation}
 \label{sec:bps_models}
-A simulation model is a simplified representation of a process built from five
-connected elements \cite{BPSAalst2015,PMRozinat2009}. Its control flow defines
-the available activities, their possible order, and alternative execution
-paths, using a formalism such as a Petri net, BPMN model, process tree, or
-workflow graph \cite{PMvanDerAalst2016,BPSAalst2015}. The arrival process
-determines when new cases enter and is commonly represented by a distribution
-of inter-arrival times. Changing this input alters workload, waiting, and
-resource utilisation.
-
-Resources provide the capacity that executes activities and may represent
-employees, vehicles, cranes, or other equipment. Their availability,
-capabilities, calendars, and allocation rules determine how cases compete for
-service \cite{BPSAalst2015}. Activity-duration models then represent processing
-and waiting times, usually through probability distributions fitted to
-historical observations. Finally, decision logic resolves alternative routes.
-Traditional models often use fixed branching probabilities, whereas data-aware
-approaches can condition route, time, or resource choices on case context and
-the current process state
-\cite{PMRozinat2009,mannhardt2023stochasticProcessesModelling}. Manual
-modelling and simulation discovery differ in how these elements are obtained,
-not in the need to represent them coherently.
-
-
-\subsection{Decision Support and Model Calibration}
-Container terminal demand changes over time, resource capacity is limited, and
-operational processes depend on each other. Managers make decisions about
-equipment, workforce, storage, truck appointments, and capacity while the
-terminal remains active. Tests in the live terminal can affect service quality
-and throughput. Simulation allows alternatives to be assessed before they are
-implemented \cite{Bruzzone2012,Kastner2021,Carboni2025}. It is used to evaluate
-truck-appointment policies, plan workforce and equipment, compare capacity
-investments, test yard-layout and storage strategies, allocate cranes, identify
-congestion, and schedule maintenance.
-
-Simulation supports what-if analysis by comparing scenarios under the same
-conditions. Measures can include truck turnaround time, resource use,
-throughput, waiting time, and service levels. This is useful in container
-terminals because a change in gate, yard, or vessel operations can affect other
-areas \cite{CTSteenken2004,Bruzzone2012,Kastner2021}. Truck-operation studies
-have assessed Truck Appointment Systems (TAS), gate capacity, yard use, and
-equipment allocation \cite{Bett2024,CTprocessMiningTAS2020}.
-
-A credible comparison requires calibration, which estimates or adjusts
-simulation parameters to describe the
-observed operating conditions. Typical tasks
-include fitting arrival and duration distributions, estimating resource
-capacities, and learning routing probabilities or context-dependent
-decision rules from historical observations
-\cite{PMRozinat2009,Camargo2020}. In simulation discovery, many of these
-steps form part of the automated discovery procedure itself. Calibration
-must still be distinguished from validation: agreement with the
-data used to fit a model shows in-sample fit, whereas an
-independent assessment requires data that did not determine those
-parameters. Section~\ref{sec:simulation_validation_background} develops
-the corresponding verification and validation concepts.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Simulation Discovery and Data-Aware Simulation}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{hints}
-\item How simulation models are discovered from logs, in a few paragraphs.
-\item What data-aware means: decisions and durations conditioned on case and state attributes.
-\item ProSiT in concept: Petri net plus probabilistic decision trees with distributions in the leaves. Details go to Chapter 5.
+\item One to one and a half pages. Concepts only; the measures and replications used are defined in Chapter~\ref{chp:experiments}.
 \end{hints}
 
-The previous sections introduced Business Process Simulation and event logs.
-Simulation discovery connects both by estimating simulation behaviour from
-recorded process executions. The estimated parameters are integrated into an
-executable process model \cite{PMRozinat2009,Camargo2020,simod2024}. Research
-has moved from basic stochastic parameters towards context-dependent and
-data-aware behaviour.
+Business process simulation (BPS) runs an executable model of a process to
+study its behaviour without disturbing the real system \cite{BPSAalst2015}. A
+BPS model has five parts \cite{BPSAalst2015,PMRozinat2009}:
+\begin{itemize}
+\item an \emph{arrival process} that decides when new cases start;
+\item a \emph{control-flow model} that decides which activities can follow,
+together with \emph{routing} probabilities or rules at each choice;
+\item \emph{resources} with their capacity and working calendars;
+\item \emph{time models} for the execution and waiting times of activities;
+\item \emph{case attributes} that describe each case.
+\end{itemize}
+Most BPS tools use discrete-event simulation: time jumps from one event to the
+next. Because arrivals, routing and durations are drawn at random, one run is
+one possible history. Several runs with different random seeds
+(\emph{replications}) show how much the results vary \cite{Law2015Simulation}.
+Simulation is mainly used for \emph{what-if analysis}: the same model is run
+with and without a change, for example more resources or another allocation
+rule, and the KPIs are compared \cite{BPSAalst2015}.
 
-\paragraph{From Simulation Discovery to Data-Driven Simulation}
+\paragraph{Related work: discovering simulation models}
+Rozinat et al.\ showed early that all five parts can be estimated from an event
+log \cite{PMRozinat2009}. Camargo et al.\ automate this and search for the
+configuration whose generated log is most similar to the real log
+\cite{Camargo2020,simod2024}. L\'opez-Pintado and Dumas show that modelling
+resources individually, with their own calendars and performance, brings the
+simulated cycle times closer to the real ones
+\cite{BPSdifferentiatedResources2022,Prosimos2023}. Stochastic process models
+add probabilities to the paths of a model \cite{stochastikPetriNets2013Solti,burke2020stochasticPD}.
+Deep-learning generators can learn more complex dependencies, but they are hard
+to inspect and to change for a scenario \cite{Camargo2021}.
 
-Rozinat et al. proposed an early approach for deriving simulation models from
-event logs \cite{PMRozinat2009}. It extracts control flow, timing, resource
-assignments, arrivals, and routing probabilities from historical executions.
+\paragraph{Related work: data-aware simulation}
+A classical BPS model uses the same routing probability for every case. A
+\emph{data-aware} model lets routing, times or resource choice depend on data,
+for example case attributes or the current workload. Mannhardt et al.\ define
+stochastic Petri nets whose transition weights depend on data
+\cite{mannhardt2023stochasticProcessesModelling}. De Leoni et al.\ add the
+history of the case to this \emph{process state} and show that the best state
+depends on the process \cite{Vinci2023Inf.Activ.Prob}. L\'opez-Pintado et al.\
+also model how attributes change during a case \cite{lopez2024}. RIMS calls
+predictive models at run time, so that they can use the current state of the
+simulation \cite{runtimeIntegration2024}. ProSiT, introduced in
+Section~\ref{sec:prosit_background}, applies data awareness to all parts of the
+model.
 
-Later research extended this idea. Solti et al.
-\cite{stochastikPetriNets2013Solti} study stochastic Petri nets with flexible
-delay distributions. Camargo et al. \cite{Camargo2020} proposed a framework
-that discovers process structure, activity durations, resource pools,
-calendars, and arrival behaviour from event logs. Simod further automates the
-discovery and calibration of simulation models \cite{simod2024}.
-
-Another research branch studies generative process models. Camargo et al.
-\cite{Camargo2021} compare conventional data-driven simulation with
-deep-learning models. These models can learn dependencies beyond separately
-fitted distributions, but they are harder to inspect and configure. This issue
-is discussed in Section~\ref{sec:explainable_simulation}.
-
-Research has moved from extracting standard simulation parameters to learning
-relations between process state and simulated behaviour
-\cite{PMRozinat2009,Camargo2020,Camargo2021}.
-
-A recent healthcare application makes the resulting methodological sequence
-explicit: an event log is prepared, a process-simulation model is discovered,
-simulated and observed behaviour are compared, and only a sufficiently accurate
-model is used to examine alternative resource configurations
-\cite{Hospital2026Vinci}. This order matters beyond healthcare. It separates
-evidence that a model reproduces its historical operating regime from the later
-question of how it responds to an intervention. The CTB study follows the same
-logic but adds the event-order, physical-capacity, and logistics-specific
-validation required by a container-terminal setting.
-
-The application also illustrates why an automatically discovered structure is
-not necessarily ready for simulation. Domain experts modify it where the
-Inductive-Miner abstraction is operationally implausible and assess the
-simulation results for plausibility. Its authors identify external delays,
-fine-grained inter-activity timing, drift, and structured stakeholder
-evaluation as remaining limitations \cite{Hospital2026Vinci}. These are close
-to the validity boundaries investigated in CTB.
-
-\subsection{Adjacent Automatic Simulation Model Generation Research}
-\begin{hints}
-\item Candidate for moving to Chapter 3 or cutting. Keep at most one paragraph here.
-\end{hints}
-
-Process-Mining-based simulation discovery is one route to reducing manual
-model construction, but it is not the only one. The adjacent Automatic
-Simulation Model Generation (ASMG) literature studies how simulation structure
-and parameters can be derived from manufacturing data, engineering models,
-sensor records, or system descriptions. Earlier and recent reviews treat ASMG
-as a distinct research field motivated by the effort, error risk, and rapid
-obsolescence of manually maintained material-flow simulations
-\cite{Reinhardt2019ASMG,Cimino2025ASMGReview}. This literature is important for
-the CTB study because it addresses the same practical objective from a
-physical-system perspective, whereas business-process simulation discovery
-often begins with a case-centric event log.
-
-Lugaresi and Matta demonstrate that event data can support automatic discovery
-of both manufacturing-system structure and parameters, but also show that the
-most detailed data-derived model is not necessarily the most appropriate
-simulation abstraction. Their tuning step selects a level of detail suited to
-the intended performance question \cite{LugaresiMatta2021}. Their later work
-uses object-centric Process Mining to reconstruct systems with converging
-material flows, for which a single case identifier loses relevant interaction
-structure \cite{LugaresiMatta2023}. These results reinforce a central
-distinction in this thesis: automation of discovery does not establish the
-physical semantics or purpose-validity of the resulting abstraction.
-
-Object-centric Process Mining (OCPM) provides a related but distinct response
-to the limitations of case-centric event data. Instead of assigning every event
-to one selected case, object-centric event data allow an event to refer to
-multiple related objects and preserve their separate identities, attributes,
-and relations
-\cite{VanDerAalst2023OCPM}. In a container-terminal setting, a handling event
-could therefore link a truck visit, truck, container, yard block, and handling
-resource rather than reducing all of them to attributes of the truck-visit
-case. This representation can avoid convergence and divergence distortions and
-retain the lifecycles through which the same container or resource participates
-in multiple operations.
-
-Initial work has extended this perspective from analysis towards executable
-simulation by discovering object-centric process-simulation models
-\cite{Knopp2023ObjectCentricSimulation}. At the same time, current discovery
-research continues to address the interpretability of object-centric models.
-For example, Object-Centric Causal Nets aggregate redundant edges across object
-types to reduce visual complexity \cite{FigueiredoJalali2025OCCN}. The latter
-approach is a process-discovery and visualisation method rather than a
-simulation formalism, and its current implementation does not explicitly
-discover causal bindings that span different object types. Object-centric
-simulation must additionally define executable multi-object synchronisation,
-changing relations, resource participation, object creation, and timing.
-
-OCPM consequently identifies a promising alternative event-data and modelling
-architecture, but it does not infer physical information that was never
-recorded. Container positions, equipment movement, queues, route occupancy,
-and changing block assignments would still require stable object identifiers,
-timestamped state observations, and suitable execution semantics. Moreover,
-the CTB data pipeline and ProSiT interface used in this thesis are organised
-around a conventional truck-visit case and case-level contextual attributes.
-The empirical scope is therefore deliberately confined to evaluating the
-fidelity and operational limits of case-centric, data-aware simulation
-discovery. Reconstructing an OCEL and evaluating an object-centric simulation
-would constitute a different model and data-engineering study.
-
-Three related streams must therefore be distinguished. Business-process
-simulation discovery estimates executable process behaviour from event logs.
-ASMG reconstructs physical production or material-flow systems from a wider
-range of digital sources. Process Mining in production and logistics uses
-event data to analyse and design processes, sometimes as an input to a
-separately constructed simulator
-\cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. The CTB
-study lies at their intersection: it evaluates an automatically discovered,
-data-aware executable process simulator in a physical logistics system and
-tests where event-log automation ceases to supply the state required for
-credible operational intervention.
-
-
-\subsection{Discovery of Simulation Behavior}
-
-Simulation discovery still models the parts introduced in
-Section~\ref{sec:bps_models}, but later methods represent them in different
-ways.
-
-\paragraph{Control-Flow and Stochastic Routing}
-
-Early simulation-discovery approaches combined a discovered process model with
-stochastic information from observed executions \cite{PMRozinat2009}. The
-process model defines which activities may occur, while stochastic weights
-estimate the probability of alternative paths
-\cite{stochastikPetriNets2013Solti,burke2020stochasticPD}.
-
-The discovered control-flow structure defines the behaviour that the simulator
-can generate. Too much generalisation may allow
-implausible paths, while a restrictive model may miss valid process variation
-\cite{PMvanDerAalst2016,SimulationGuidedRepair2025}. The balance between fitness
-and precision defines the behavioural range of the simulator
-\cite{SimulationGuidedRepair2025}.
-
-The simulation-guided control-flow repair framework
-\cite{SimulationGuidedRepair2025} makes this link explicit in four steps. An
-initial stochastic Petri net is
-simulated, directly-follows features are used to train a discriminator between
-real and simulated traces, and explainable feature importance identifies
-behaviour that is systematically missing from or over-represented in the
-simulation. Three repair strategies then add selected directly-follows
-relations while preserving soundness and safeness: a complete basic repair, a
-smaller greedy repair, and an alignment-based repair that also handles repeated
-activity labels. The repaired model is retained only when held-out fitness,
-precision and simulation-log distances improve. The framework therefore
-treats model repair as a validated model comparison, not as an undocumented
-manual correction. Its currently operationalised repairs add missing
-behaviour. Restricting behaviour that is allowed too broadly remains an open
-extension. This distinction matters when a discovered model is imprecise
-rather than unfit. Across 23 evaluated source models, the harmonic
-fitness--precision score improved in 19 cases. Control-flow log distance fell
-in 16 cases, with a reported average reduction of 31.54\,\%. These results show
-that repair can materially improve simulation behaviour, but also that no
-operator or acceptance rule dominates every model.
-
-\paragraph{Temporal and Resource Behavior}
-
-Early simulation-discovery approaches estimate execution times, waiting
-behaviour, and resource characteristics from event-log distributions
-\cite{PMRozinat2009,stochastikPetriNets2013Solti}. Later approaches model
-calendars, resource pools, allocation rules, and differences between resources
-\cite{Camargo2020,BPSdifferentiatedResources2022}.
-
-Timing often depends on operational context. Execution and waiting times may
-change with workload, resource availability, case characteristics, or earlier
-process behaviour. Resource selection may depend on more than a fixed
-activity-resource mapping \cite{BPSdifferentiatedResources2022,Vinci2026prosit}.
-Recent approaches model these aspects conditionally instead of using one
-global distribution per activity or resource.
-
-Resource differentiation is not a cosmetic detail. In five synthetic and five
-real logs, López-Pintado and Dumas report a mean cycle-time EMD of 4.63 for the
-fully differentiated setting, compared with 9.45 for pooled undifferentiated
-resources and 13.42 for unpooled undifferentiated resources
-\cite{BPSdifferentiatedResources2022}. Their evaluation concerns historical
-replication rather than proven what-if accuracy, but it establishes that
-resource availability and individual performance can materially change
-simulation fidelity.
-
-\paragraph{Arrival Behaviour}
-
-Classical simulation-discovery approaches estimate inter-arrival times from
-historical case-start timestamps \cite{PMRozinat2009,Camargo2020}. Later
-approaches condition arrivals on time or context. This allows the simulator to
-model demand that changes across hours, weekdays, or operating periods instead
-of using one pooled arrival process \cite{Vinci2026prosit}.
-
-
-\subsection{Data-Aware and Process-State-Aware Simulation}
-
-Classical stochastic simulation models often estimate one set of routing
-probabilities for all cases. For example, if two paths occur with frequencies
-of 70\,\% and 30\,\%, the model may use these probabilities for every case.
-This describes how often each path occurred, but not why cases followed
-different paths \cite{PMRozinat2009,burke2020stochasticPD}.
-
-Data-aware simulation conditions stochastic behaviour on process data.
-Mannhardt et al. \cite{mannhardt2023stochasticProcessesModelling} extend
-stochastic Petri nets with transition weights that depend on process variables.
-The model can then capture differences between types of cases.
-
-The state-aware stochastic Petri-net approach
-\cite{Vinci2023Inf.Activ.Prob} extends this idea through the concept of the
-\textit{process state}. Rather than conditioning decisions only
-on static case attributes, the process state may also describe information
-accumulated during the execution of the case, including process-variable values
-and the history of previously executed activities. For every enabled
-transition, its conditional weight is estimated from the state immediately
-before firing and normalised over all transitions enabled in the current Petri
-net marking. Their two case studies show that a suitable state abstraction can
-improve simulated control-flow frequencies relative to constant branching
-probabilities. The best state reduced the reported control-flow distance by
-7.5\,\% for the road-fines process and 9.4\,\% for sepsis. The best abstraction
-is process-dependent, however: data alone, history, and their combination do
-not dominate uniformly, and one history-based configuration produced a
-livelock. The study also repaired a permissive source
-model before simulation because it allowed a one-activity execution absent
-from the log. Data-aware routing therefore complements, but does not replace,
-validation of the control-flow language itself.
-
-The corresponding stochastic labelled data Petri-net formalism assigns
-state-dependent weights to enabled transitions. It is deliberately not a full
-simulation formalism for every operational aspect: transition choice can depend
-on state without representing spatial movement, resource queues, or separate
-traffic delays. These mechanisms require additional timing and resource models
-rather than more transition weights alone
-\cite{Vinci2023Inf.Activ.Prob}.
-
-Conceptually, this research develops from fixed branching frequencies towards
-increasingly conditional stochastic behaviour. Basic stochastic process models
-retain variation but apply the same routing probabilities to every case.
-Data-aware models condition those probabilities on recorded attributes, while
-process-state-aware approaches additionally use information accumulated during
-the current execution. The stages are not mutually exclusive model classes.
-each adds information that can explain why otherwise similar cases behave
-differently.
-
-López-Pintado et al. \cite{lopez2024} broaden the data representation through
-global, case, and event attributes, attribute-update rules, and data-dependent
-branching conditions. In their evaluated framework, however, attributes
-determine control flow. Dependencies between data and activity start or
-duration remain future work. This boundary is important for physical logistics:
-a data-aware routing formalism does not by itself represent movement or
-queueing time.
-
-
-\subsection{ProSiT as a Probabilistic Data-Aware Simulation Framework}
-\label{sec:prosit_background}
-
-ProSiT (\textit{PROcess SImulation Tool}) applies data awareness to several simulation dimensions
-\cite{Vinci2026prosit}. Its probabilistic white-box predictors model
-control-flow decisions, execution times, waiting times, resource selection, and
-arrival behaviour.
-
-The framework uses probabilistic decision trees to split the feature space.
-Each leaf contains a local probability distribution. Simulation behaviour can
-vary by context while remaining stochastic. This differs from both a model
-with one global distribution per parameter and a deterministic model that
-returns one value.
-
-ProSiT can use case-level attributes, execution history, resource information,
-temporal information, and workload features \cite{Vinci2026prosit}. It does
-not support every event-level attribute that changes during execution. The
-state-dependent stochastic Petri-net formulations
-\cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}
-cover a broader range of context than the current ProSiT implementation.
-
-The published evaluation uses five case studies, an 80/20 temporal split, and
-five simulated logs per model. ProSiT is competitive with a black-box baseline
-while keeping the rules inspectable \cite{Vinci2026prosit}. The authors also
-draw a boundary essential for what-if use: the learned relationships capture
-correlations, not necessarily root causes. White-box inspection shows which
-association the simulator uses. Causal and operational validity still require
-domain and intervention evidence.
-
-ProSiT is useful for this thesis because its level of contextual conditioning
-can be changed. This allows a comparison of model expressiveness and held-out
-fidelity in the CTB truck process.
-
-
-The framework's expressiveness can be varied through two parameters that are
-central to the experimental design in
-Section~\ref{sec:simulation_discovery_methodology}
-\cite{Vinci2026prosit}. The parameter
-\texttt{max\_depth\_tree} limits the depth of the probabilistic decision trees
-used for conditional simulation behaviour. Setting it to zero disables the
-conditional trees and yields an unconditional distribution-based model.
-increasing it permits more detailed combinations of contextual features but
-also increases complexity and the risk of overfitting.
-\texttt{use\_workload\_features} controls whether the waiting-time and
-resource-selection models may additionally condition on current workload and
-queue state.
-
-These parameters define the later comparison between a distribution-based
-configuration, a data-aware configuration, and a data-aware configuration with
-workload information. The evaluation tests whether the added model detail
-improves simulation fidelity.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Explainable and White-Box Simulation}
-\label{sec:explainable_simulation}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item Why inspectability matters for decision support (the committee asked for the concrete trees).
-\item Candidate for merging into the ProSiT subsection above.
-\end{hints}
-
-\subsection{Explainability in Simulation-Based Decision Support}
-Business Process Simulation supports decisions about resources, process
-design, capacity, and investments. Decision makers need to understand why a
-model produces an outcome and how that outcome changes when parameters are
-modified. Traditional BPS models are transparent because their control flow,
-routing probabilities, resources, and timing assumptions are defined by hand
-\cite{BPSAalst2015}.
-
-Machine-learning models can learn behaviour from historical event data and may
-improve prediction \cite{Camargo2020,Camargo2021}. However, their internal
-logic can be difficult to inspect. A model may reproduce historical behaviour
-without showing why it selected a route, waiting time, or resource. This makes
-validation and what-if analysis harder \cite{runtimeIntegration2024}. For
-what-if analysis, users must be able to change parameters or rules and judge
-whether the model response is reasonable. Explainable simulation tries to
-combine data-driven prediction with visible decision logic.
-
-\subsection{Probabilistic White-Box Simulation Models}
-Probabilistic white-box models make learned decisions visible without removing
-the variation required for simulation. The RIMS framework, for example,
-combines discrete-event simulation with predictive models evaluated at runtime
-while retaining an inspectable simulation structure
-\cite{runtimeIntegration2024}.
-
-ProSiT applies this principle to the simulation dimensions introduced in
-Section~\ref{sec:prosit_background}. Each decision tree routes the current
-simulated state through visible conditions to a leaf containing a probability
-distribution. The resulting draw remains stochastic, but the reason that a
-particular local distribution was selected can be inspected. Users can also
-change the conditions or distributions directly instead of retraining an opaque
-deep-learning model \cite{Vinci2026prosit}.
-
-Published evaluations show that probabilistic white-box models can reach
-similar accuracy to black-box alternatives while being easier to inspect and
-configure \cite{Vinci2026prosit}. However, the evidence mainly comes from
-benchmarks and business-process settings. There is little evidence from
-physical logistics systems such as container terminals. Explainability is
-difficult to measure. A decision tree is easier to read than a neural network,
-but this does not prove that its rules are correct or useful. White-box
-simulation must balance accuracy, explainability, and configurability.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-For terminological precision, the relationships exposed by such learned
-rules are statistical associations conditional on the training data and
-model specification. Their visibility supports inspection and deliberate
-configuration, but does not by itself establish causal effects.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Simulation Verification, Validation, and Trustworthiness}
+\paragraph{Validation}
 \label{sec:simulation_validation_background}
+A simulation model is valid only for an intended use \cite{Sargent2013Validation}.
+Sargent separates \emph{conceptual validity} (are the assumptions reasonable
+for the purpose?), \emph{verification} (is the model implemented correctly?),
+\emph{data validity} and \emph{operational validity} (is the output accurate
+enough for the purpose?). For discovered BPS models, operational validity is
+usually checked by comparing logs generated by the model with a real log that
+was not used for discovery. Chapela-Campa et al.\ recommend separate measures
+for the control flow, the timing and the congestion of the generated logs,
+because one aggregate score hides which part of the model is wrong
+\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. A comparison with a
+historical log shows that the model reproduces the current process. It does not
+show that the model predicts the effect of a change correctly. Evidence for a
+what-if use needs more: plausible mechanisms, a model that responds to load as
+the real system does, and the judgement of people who know the process. Such
+\emph{face validation} by domain experts is a recognised technique
+\cite{Sargent2013Validation}. A review of 105 studies on simulation and process
+mining found that 36 report no validation at all \cite{Sulis2026SimulationReview}.
+
+\paragraph{Replications}
+\label{sec:stochastic_replication_ci}
+A model is run $N$ times with different seeds. For a measure with replication
+values $x_1,\dots,x_N$, the mean $\bar{x}$ is reported with the interval
+$\bar{x}\pm t_{0.975,N-1}\,s/\sqrt{N}$, where $s$ is the standard deviation
+across replications \cite{Law2015Simulation}. This interval describes the
+random variation of the simulator for one fitted model. It does not cover the
+uncertainty of the fitted parameters or of the model structure.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ProSiT}
+\label{sec:prosit_background}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{hints}
-\item Verification vs. validation; Sargent: conceptual, operational and behavioural validity. These three map directly to the validation design in Chapter 6.
-\item Validity is always for an intended use. Here: turnaround time and delay peaks.
+\item Core section, three to four pages. Describes ProSiT 1.0.4 as implemented (\texttt{prosit-pm}); every statement must match the code. The values chosen for CTB are in Section~\ref{sec:exp_baseline}, the full trees in Appendix~\ref{app:prosit_inventory}.
 \end{hints}
-Validation asks whether a simulator is accurate enough for its intended use,
-not only whether it runs. A model may reproduce
-historical truck turnaround distributions but still fail to predict an
-intervention outside the
-range of the observed data \cite{Sargent2013Validation,BPSAalst2015}.
-Automatically discovered simulation models do not remove this
-requirement. They replace some manual assumptions with assumptions about
-event-log semantics, discovery algorithms, data attributes and fitted
-distributions, all of which require examination.
 
-\subsection{Distinction Between Verification and Validation}
+ProSiT (\textit{PROcess SImulation Tool}) discovers a data-aware simulation
+model from a Petri net and an event log \cite{Vinci2026prosit,ProSiTRepository}.
+Every part of the model is learned as a \emph{probabilistic decision tree}: a
+decision tree whose leaves hold a probability or a distribution instead of a
+single value. The model is called white-box, because every learned rule can be
+read and changed. This section describes what ProSiT learns, how a tree is
+built and used, how a simulated case runs, and where the framework stops.
 
-Sargent separates several questions that are often conflated under the
-single term \emph{validation} \cite{Sargent2013Validation}.
-\emph{Conceptual-model validity} asks whether the theories, assumptions
-and logical relationships in the conceptual model are reasonable for
-the intended purpose. \emph{Computerized-model verification} asks
-whether that conceptual model has been implemented correctly.
-\emph{Data validity} concerns whether the data used to construct,
-calibrate and evaluate the model are adequate. Finally,
-\emph{operational validity} asks whether the computerised model's
-output behaviour is accurate enough over the domain in which the
-model is intended to be used. Historical-data validation, in which the model
-runs under historical input conditions and its output is compared with observed
-system data, is one technique for assessing operational validity
-\cite{Sargent2013Validation}.
+\subsection{Inputs and Learned Components}
+\label{sec:prosit_components}
 
-Table~\ref{tab:validation_evidence_types} maps these distinctions to the
-type of evidence needed in an automatically discovered BPS study. The
-categories complement one another. For example, a low event-log distance is
-evidence of operational fidelity, but it cannot show that a timestamp proxy has
-the correct physical meaning or that the simulator implemented a resource
-constraint as intended.
+ProSiT needs a sound workflow net and an event log with start and complete
+timestamps, a resource per event and case attributes. It first aligns every
+trace with the net. The alignment tells, for every event, which transition
+fired, which transitions were enabled at that moment and since when. From this
+replay, ProSiT builds one training table per component.
+Table~\ref{tab:prosit_components} lists the components.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{L{0.21\textwidth}L{0.26\textwidth}L{0.39\textwidth}}
+\small
+\begin{tabularx}{\textwidth}{L{2.4cm}L{3.0cm}L{3.3cm}Y}
 \toprule
-\textbf{Question} & \textbf{Validity concept} & \textbf{Typical evidence} \\
+\textbf{Component} & \textbf{Learned model} & \textbf{Predicts} & \textbf{Features} \\
 \midrule
-Is the abstraction reasonable? & Conceptual-model validity &
-Domain review of case boundaries, event semantics, resource meanings
-and physical constraints \\
-Was the abstraction implemented correctly? & Computerized-model
-verification & Unit and integration tests, structural contracts,
-reproducible seeds and parameter-provenance checks \\
-Are discovery and evaluation data suitable? & Data validity &
-Event-log quality checks, timestamp semantics, leakage prevention and a
-training/test separation \\
-Does the model reproduce observed behaviour? & Operational validity &
-Comparison of simulated and held-out real logs across multiple process
-perspectives and stochastic replications \\
-Does a scenario predict the true intervention effect? & Predictive
-validity outside the historical regime & Intervention observations,
-controlled field evidence or additional domain-supported sensitivity
-analysis \\
+Arrivals & one regression tree & gap until the next case starts & hour and weekday of the previous arrival \\
+Arrival calendar & table & open or closed per weekday and hour & -- \\
+Case attributes & observed tuples or one distribution per attribute & attributes of a new case & -- \\
+Routing & one classification tree per transition & whether the transition fires when it is enabled & case attributes, number of times each activity has occurred so far \\
+Resource choice & one classification tree per resource & whether the resource is chosen & activity, case attributes, resources used so far (optional: workload, queue length) \\
+Capacity & number per resource & how many activities can run at once & -- \\
+Waiting time & one regression tree per resource & time from ``enabled and resource free'' to start & activity, hour, weekday, case attributes, activity counts (optional: workload, queue length) \\
+Execution time & one regression tree per activity & time from start to complete & resource, hour, weekday, case attributes, activity counts \\
+Resource calendars & table per resource & open or closed per weekday and hour & -- \\
 \bottomrule
-\end{tabular}
-\caption{Validation questions and corresponding evidence in an
-event-log-discovered simulation study, based on Sargent's framework
-\cite{Sargent2013Validation}.}
-\label{tab:validation_evidence_types}
+\end{tabularx}
+\caption{Components of a ProSiT simulation model (version 1.0.4). Times are
+counted in open minutes of the relevant calendar.}
+\label{tab:prosit_components}
 \end{table}
 
-This distinction clarifies the scope of this thesis. The
-real-versus-simulated event-log comparison is a form of held-out
-historical-data or operational validation. The event-log construction
-and the physical RMG capacity constraint contribute data- and
-conceptual-validity evidence, while executable case contracts and
-provenance checks contribute verification evidence. None of these alone
-proves that every what-if response is the true causal response of the
-terminal.
+A few components need a short explanation.
+\begin{itemize}
+\item \textbf{Arrivals.} The gaps between consecutive case starts are
+computed in open minutes of the arrival calendar. The calendar marks a weekday
+and hour as open if enough arrivals fall into it. It decides only \emph{whether}
+cases can arrive; the tree decides \emph{how often}.
+\item \textbf{Routing.} For every transition, ProSiT collects all moments in
+the replay at which it was enabled. The class is 1 if it fired and 0 if another
+transition fired. The tree then predicts the probability that the transition
+fires, given the case attributes and how often each activity has occurred so
+far. Silent transitions get a routing tree like visible ones.
+\item \textbf{Capacity.} By default every resource handles one activity at a
+time. With \emph{multitasking} enabled, a resource whose activities overlap in
+at least a given share of cases gets a capacity of the largest observed overlap
+plus one.
+\item \textbf{Waiting time.} The waiting time of an event is the time between
+its start and the later of two points: the moment the transition was enabled,
+and the moment the resource became free. Waiting caused by a busy resource is
+therefore not part of the target. The simulator produces it through the
+capacity check.
+\end{itemize}
 
-\subsection{From Historical Logs to Operational Validation}
+\subsection{Probabilistic Decision Trees}
+\label{sec:prosit_trees}
 
-Process Mining provides a natural representation for historical-data
-validation because both the observed system and the simulator can be
-represented by event logs. Rozinat et al. established an early version
-of this principle: they discover control-flow, data, performance and
-resource perspectives, integrate them into a coloured Petri-net
-simulation model, simulate a second event log, and analyse how well that
-generated log approximates the characteristics of the original log
-\cite{PMRozinat2009}. This is stronger than checking whether the
-discovered model can execute. It evaluates whether its generated
-behaviour resembles recorded behaviour.
+A decision tree splits the training data step by step on one feature at a
+time, for example ``hour $\le$ 21''. Each split is chosen so that the groups
+become as different as possible in the target (CART). The groups at the end
+are the \emph{leaves}. In ProSiT, a routing leaf stores a probability. A time
+leaf stores a distribution: ProSiT fits a fixed value, a normal, exponential,
+lognormal, gamma and uniform distribution to the values in the leaf and keeps
+the one closest to the data in Wasserstein distance. Values drawn from it are
+limited to the smallest and largest observed value.
 
-Camargo et al. formalise the same idea as an optimisation objective.
-Candidate BPS configurations generate event logs and hyperparameter
-optimisation searches for the configuration that maximises similarity
-to observed log behaviour \cite{Camargo2020}. Their later comparison of
-data-driven simulation and deep generative models further shows
-why quality must not be inferred from case-sequence frequencies alone:
-conventional data-driven simulators may reproduce activity sequences
-and their frequencies while performing worse on temporal dynamics
-\cite{Camargo2021}.
+\paragraph{Model selection}
+A tree is not always better than one distribution for all cases. ProSiT
+therefore chooses by five-fold cross-validation. It tries every tree depth
+from one to \texttt{max\_depth\_tree} and every minimum leaf size in
+\texttt{min\_samples\_leaf\_cv}, and compares them with a single distribution
+without splits. For routing, the score is the log loss of the predicted
+probabilities. For time models, version 1.0.4 uses the continuous ranked
+probability score (CRPS). For an observed value $y$ and a predicted
+distribution $F$,
+\begin{equation}
+\mathrm{CRPS}(F,y)=\mathbb{E}\,|X-y|-\tfrac{1}{2}\,\mathbb{E}\,|X-X'|,
+\end{equation}
+where $X$ and $X'$ are independent draws from $F$ \cite{Gneiting2007CRPS}. The
+first term rewards distributions close to the observation, the second rewards
+spread where the data are spread. A lower score is better. Version 1.0.3 used
+the Wasserstein distance between training and test values inside each leaf.
+That criterion measures only how stable a leaf is, so it almost always chose a
+single distribution. This thesis uses version 1.0.4
+(Section~\ref{sec:exp_e4d}).
 
-The implication is that operational fidelity is multi-dimensional.
-Relevant perspectives include control flow, activity and case timing,
-case arrivals, congestion and resource behaviour. A model can be close
-to the real log in one perspective and far away in another. Collapsing
-all discrepancies into one number can hide the mechanism
-that is incorrectly represented
-\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}.
+\paragraph{Example}
+Figure~\ref{fig:bg_prosit_arrival_tree} shows the arrival tree that ProSiT
+learned from the training data of this thesis. Read from the top: if the
+previous truck arrived on a weekday between 5 and 21~h, the gap to the next
+truck is drawn from a normal distribution with a mean of 0.65 minutes, about
+90 trucks per hour. At night, the mean gap is about two minutes. On Saturday
+after 10~h, it is 13 minutes. The tree has depth three, so it cannot separate
+the morning ramp-up, the daytime plateau and the evening; the leaf from 5 to
+21~h pools them. Whether this is good enough is tested in E4a
+(Section~\ref{sec:exp_e4a}).
 
-\subsection{Multi-Perspective Event-Log Comparison}
+\input{figures/schemas/prosit_arrival_tree}
+
+\subsection{Execution of a Simulated Case}
+\label{sec:prosit_execution}
+
+The simulator processes all cases in one loop, always continuing with the case
+whose next step is enabled earliest. A case runs as follows.
+\begin{enumerate}
+\item \textbf{Arrival.} The start time is the start of the previous case plus a
+gap drawn from the arrival tree, counted in open minutes of the arrival
+calendar.
+\item \textbf{Attributes.} The case receives its attributes, in empirical mode
+as one complete tuple of a randomly drawn training case.
+\item \textbf{Enabled transitions.} The token sits in the source place. A
+transition is enabled if all its input places hold a token. Its enabling time
+is the latest time stamp of these tokens.
+\item \textbf{Routing.} Each enabled transition gets the probability from its
+routing tree, given the case attributes and the activities so far. The
+simulator draws one transition in proportion to these weights. Silent
+transitions are drawn in the same way and take no time.
+\item \textbf{Resource.} For a visible transition, the candidate resources are
+those that executed this activity in the log. Of these, the ones with free
+capacity at the enabling time are kept, and one is drawn from the resource
+trees. If none is free, the resource that becomes free first is taken and the
+start moves to that moment.
+\item \textbf{Times.} A waiting time is drawn from the tree of the resource
+(zero for the first activity of a case). The start is the enabling time plus
+the waiting time; the complete time is the start plus an execution time drawn
+from the tree of the activity. Both are counted in open minutes of the
+resource calendar.
+\item \textbf{Token update.} The tokens move to the output places and carry the
+complete time. Steps 3 to 7 repeat until the final marking is reached.
+\end{enumerate}
+The generated log contains, for each event, the case, activity, resource,
+enabling, start and complete time and the case attributes. The firing sequence
+of each case is stored as well.
+
+\subsection{Hyperparameters}
+\label{sec:prosit_hyperparameters}
+
+Table~\ref{tab:prosit_hyperparameters} lists the hyperparameters of the
+discovery. The values used in this thesis and the reasons are given in
+Section~\ref{sec:exp_baseline}.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{L{4.4cm}L{2.2cm}Y}
+\toprule
+\textbf{Parameter} & \textbf{Default} & \textbf{Meaning} \\
+\midrule
+\texttt{max\_depth\_tree} & 5 & Largest tree depth tried in cross-validation. A value below 1 switches all trees off (one distribution or probability per component). \\
+\texttt{min\_samples\_leaf\_cv} & 50, 100, 200 & Minimum leaf sizes tried in cross-validation. \\
+\texttt{use\_workload\_features} & off & Adds the current workload and queue length of a resource as features of the resource choice and the waiting time. Execution times do not use them. \\
+\texttt{enable\_multitasking} & off & Allows a capacity above one (see above). \\
+\texttt{multitasking\_thr} & 0.05 & Share of cases with overlapping activities above which multitasking is assumed. \\
+\texttt{attribute\_mode} & distribution & \emph{distribution}: each attribute drawn on its own; \emph{empirical}: complete observed attribute tuples. \\
+Arrival calendar thresholds & 0.1, 0.7 & Minimum confidence of a slot and minimum share of arrivals the open slots must cover. \\
+Resource calendar thresholds & 0.1, 0.1, 0.4 & Minimum confidence, support and participation of a resource slot. \\
+\texttt{random\_state} & 72 & Seed of the discovery. \\
+\bottomrule
+\end{tabularx}
+\caption{Discovery hyperparameters of ProSiT 1.0.4.}
+\label{tab:prosit_hyperparameters}
+\end{table}
+
+\subsection{Evidence and Limitations}
+\label{sec:prosit_limits}
+
+The ProSiT paper evaluates the framework on five case studies with a temporal
+80/20 split and five simulated logs per model. ProSiT reaches an accuracy
+comparable to a black-box baseline while its rules stay readable
+\cite{Vinci2026prosit}. The authors also stress a boundary: the trees capture
+associations in the training data, not causes. A readable rule shows which
+association the simulator uses. Whether it holds after an intervention needs
+other evidence.
+
+For this thesis, five properties of the implementation matter.
+\begin{enumerate}
+\item \textbf{No hard rules.} A transition can fire whenever its input places
+hold tokens and its weight is above zero. ProSiT has no guards. A rule that
+the net does not encode, such as ``at least one stop'' or ``as many stops as
+planned'', is followed only as often as the routing trees happen to respect it.
+\item \textbf{No look-ahead.} Each routing draw is local. A sequence of likely
+steps can lead to a visit that never occurs in the data.
+\item \textbf{Parallel branches run in parallel.} A silent parallel split
+enables several stops at the same time, and the simulator can start them at
+the same time.
+\item \textbf{Capacity at enabling time.} The capacity of a resource is checked
+when the transition is enabled, not over the interval in which the activity
+actually runs.
+\item \textbf{Load enters through few features.} Workload features act on the
+resource choice and the waiting time only. Execution times do not react to the
+load of the terminal.
+\end{enumerate}
+The first three properties are the reason why the control-flow model matters
+more for a simulator than for a descriptive model. This thesis addresses them
+with the rule repair of E2 and with a data-aware \emph{stop guard}: before each
+routing draw, transitions that would break a data rule get the weight zero
+(Section~\ref{sec:exp_baseline}). This is the guard of a data-aware Petri net
+(Section~\ref{sec:bg_rules}), evaluated inside the ProSiT loop. Properties four
+and five are examined in E4.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Research Gap and Positioning}
+\label{sec:rw_positioning}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{hints}
-\item Move the metric definitions to Chapter 6 (Outcome Measures). Keep only the idea here.
+\item About one page. End with the research questions of Chapter~\ref{chp:introduction}.
 \end{hints}
 
-Chapela-Campa et al. provide a validation framework that matches the
-evaluation problem of this thesis
-\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. Their starting point
-is that the true BPS model is normally unavailable and that different
-simulation engines use incomparable internal formats. They evaluate a model
-indirectly as a generator: multiple logs generated by
-the BPS model are compared with an actual event log that was not used
-to construct the model. The framework separates control-flow, temporal
-and congestion perspectives and reports a measure for each instead of
-using one aggregate score for overall model quality.
-The measures are evaluated using controlled perturbations and by
-comparing alternative automatically discovered BPS models, showing that
-perspective-specific measures can identify the source of a discrepancy
-\cite{Chapela2025SimQuality}.
+Table~\ref{tab:rw_comparison} summarises what the reviewed research
+contributes and which question remains open for a terminal like CTB.
 
-From the control-flow perspective, output quality asks whether the simulator
-generates activity sequences and sequence frequencies resembling the observed
-process. It is distinct from replay fitness of a control-flow model:
-fitness asks whether real case sequences are allowed by the model, whereas
-output validation asks which sequences the stochastic simulator actually
-generates and with what frequency.
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.6cm}YY@{}}
+\toprule
+\textbf{Research direction} & \textbf{Main contribution} & \textbf{Open question for CTB} \\
+\midrule
+Terminal simulation \cite{Kastner2021,Bett2024} & Hand-built models that compare operating policies on KPIs such as TTT. & Can a model discovered from data support the same kind of comparison? \\
+Discovery benchmarks \cite{RWAugusto2019Review,RWRehse2024Experimentation} & Compare fitness, precision and size of discovered models. & Which model is adequate when it is \emph{executed}, not only described? \\
+Domain knowledge and repair \cite{RWSchuster2022Domain,RWDixit2015Domain,SimulationGuidedRepair2025} & Use rules in discovery or repair; repair for simulation adds missing behaviour. & Can physical rules remove impossible behaviour exactly, and which rules belong in the net and which in the simulator? \\
+Data-aware simulation \cite{mannhardt2023stochasticProcessesModelling,lopez2024,Vinci2026prosit} & Routing and times depend on data and process state; evaluated on business processes. & Does it reproduce a physical process with shared capacity and congestion? \\
+Simulation validation \cite{ChapelaCampa2023Trust,Chapela2025SimQuality,Sargent2013Validation} & Multi-perspective comparison of generated and real logs. & Does the model respond to load like the terminal, and do domain experts find it plausible? \\
+\bottomrule
+\end{tabularx}
+\caption{Research directions and the questions they leave open for the CTB case study.}
+\label{tab:rw_comparison}
+\end{table}
 
-Stochastic conformance work applies transport distances to probability
-distributions over case sequences or other behavioural abstractions
-\cite{leeman2013EarthMovers}. Chapela-Campa et al. instead define two
-simulation-oriented log distances \cite{ChapelaCampa2023Trust,
-Chapela2025SimQuality}. Control-Flow Log Distance (CFLD) computes the
-normalised Damerau--Levenshtein distance between pairs of case sequences and uses
-the Hungarian algorithm to find the minimum-cost one-to-one matching
-between the two logs. CFLD compares complete case sequences. It is not
-merely a comparison of variant-frequency vectors. Because this matching
-is computationally expensive, N-Gram Distance (NGD) compares normalised
-frequencies of local activity subsequences. NGD is scalable and detects
-local ordering differences, although it loses some
-full-case information.
+Three gaps follow. First, discovered models are usually selected by fitness
+and precision. These measures do not show what a simulator does with behaviour
+that the model permits but the log never shows, and physical rules are not part
+of the discovered model. Second, data-aware simulation discovery has been
+evaluated mainly on administrative and healthcare processes. Its behaviour in a
+physical logistics system with shared capacity and congestion is largely
+untested. Third, validation of discovered simulation models focuses on
+similarity to a historical log. Whether the model responds to load like the
+real system, which is needed before a what-if analysis, is rarely tested, and
+the judgement of domain experts is rarely documented.
 
-This thesis does not claim to implement the full Chapela-Campa metric
-suite. Its structural evidence combines held-out Petri-net conformance,
-explicit case-language contracts, yard-activity-rate error, and N-Gram
-Distance (NGD) with $N=3$.
-it does not implement the more expensive CFLD matching. These measures answer
-the CTB-specific structural questions, while the Chapela-Campa framework
-supplies the rationale for keeping structural evidence separate from temporal
-fidelity.
-
-Identical or similar case sequences do not imply similar process performance. From the
-temporal perspective, validation considers whether the simulator reproduces when
-events occur, how cases progress after arrival and how long activities
-and complete cases take. Camargo et al. show empirically that a
-generative model may reproduce control-flow frequencies but still miss
-temporal dynamics \cite{Camargo2021}.
-
-The Chapela-Campa framework distinguishes three event-distribution
-measures \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}.
-\emph{Absolute Event Distribution} (AED) compares event counts across
-absolute calendar-time bins. \emph{Circadian Event Distribution} (CED)
-compares recurring weekday and hour-of-day patterns. Finally,
-\emph{Relative Event Distribution} (RED) offsets timestamps by each
-case's arrival and compares its temporal progression. AED and RED
-mean \emph{event distribution}, not absolute or relative error
-distance. For end-to-end performance, Cycle Time Distribution (CTD)
-compares the empirical distributions of complete case durations.
-
-The CTB evaluation uses more directly interpretable distributions at
-the level of its research questions: inter-arrival time, per-activity
-yard service time, model-derived pre-service delay and case turnaround
-time. Reporting complete distributions rather than only their means is
-useful because equal averages can conceal differences in dispersion,
-skewness or tails. Per-activity results prevent common RMG
-events from concealing weaker fidelity for less frequent yard
-activities.
-
-The arrival and congestion perspectives address system-level consequences of
-the interaction between demand, service requirements and resource availability.
-These consequences cannot be
-validated from activity-duration marginals alone. Chapela-Campa et al.
-use Case Arrival Rate (CAR) to compare binned arrival counts and shapes,
-and CTD to compare another congestion component, the length of
-time cases remain in the system
-\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. An arrival model can
-be temporally unrealistic even if it generates the correct
-total number of cases.
-
-This issue matters at CTB: truck demand determines competition for
-yard resources, and simultaneous arrivals result from the minute-resolved
-source data. The evaluation reports
-inter-arrival distance, simultaneous-arrival share and arrivals per
-elapsed hour alongside turnaround and yard-service distributions.
-These measures do not directly observe a physical queue. They assess
-whether the generated workload and its resulting temporal behaviour
-match what the available event log can identify.
-
-\paragraph{Wasserstein Distance}
-
-For two one-dimensional distributions $F$ and $G$ with finite first
-moments, the first Wasserstein distance can be written as
-\begin{equation}
-    W_1(F,G)=\int_{-\infty}^{\infty}|F(x)-G(x)|\,\mathrm{d}x .
-\end{equation}
-It has the optimal-transport interpretation of the minimum cost of
-moving probability mass from one distribution to the other. For
-durations measured in minutes, $W_1$ is expressed in minutes,
-which gives the discrepancy an operational scale.
-
-Earth Mover's Distance (EMD) is related, but it is not always the same
-measure. In the formulation used
-by Chapela-Campa et al., EMD may compare time series with unequal total
-mass and penalise the creation of missing mass, whereas first
-Wasserstein distance assumes equal normalised mass
-\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. For empirical
-probability distributions with unit mass, the formulations coincide.
-In Process Mining, related transport distances have been used for
-stochastic conformance checking over behavioural distributions
-\cite{leeman2013EarthMovers}. In this thesis, the term \emph{EMD} for
-service, inter-arrival and turnaround samples denotes the
-one-dimensional $W_1$ distance between empirical distributions.
-
-\paragraph{Kolmogorov--Smirnov Statistic}
-
-The two-sample Kolmogorov--Smirnov (KS) statistic is the maximum
-vertical difference between the empirical cumulative distribution
-functions of the simulated and observed samples
-\cite{Massey1951KS}:
-\begin{equation}
-    D_{n,m}=\sup_x
-    \left|F_{n,\mathrm{sim}}(x)-F_{m,\mathrm{real}}(x)\right|.
-\end{equation}
-Unlike $W_1$, it is dimensionless and bounded by zero and one. The two
-statistics are complementary: $W_1$ measures integrated displacement
-on the operational scale, while KS reports the largest local CDF gap.
-The KS statistic can be accompanied by a significance-test $p$-value, but
-that $p$-value answers a different question from practical fidelity.
-With large event logs, small and operationally unimportant differences
-can be statistically significant. The magnitude of the statistic and
-the distributional plots must be interpreted separately from
-binary significance decisions.
-
-\paragraph{Additional Requirements for Data-Aware Discovery}
-
-A data-aware simulator conditions behaviour on case attributes, process
-state or workload information rather than using only global
-distributions and branching frequencies
-\cite{Vinci2023Inf.Activ.Prob,lopez2024,Vinci2026prosit}. This adds a
-validation layer. First, every predictor used at a simulated decision
-point must be available at that point. Attributes computed from a later
-outcome create target leakage even if aggregate log similarity is high.
-Second, discovery and model selection must be separated from the final
-test log. Third, the generated log must satisfy process and domain
-invariants that aggregate distances may overlook.
-
-White-box rules help because their split conditions and leaf
-distributions can be inspected and modified
-\cite{Vinci2026prosit}. Interpretability, however, is not equivalent to
-validity or causality. A readable rule may encode a spurious association,
-and two differently specified models may reproduce the same marginal
-distribution. Validation should combine held-out output
-fidelity with rule inspection, leakage checks, structural contracts,
-domain constraints and sensitivity analysis. This matters in the CTB
-application because timestamp fields are operational proxies and a resource
-label does not always denote a
-physically interchangeable crane or storage position.
-
-\paragraph{Stochastic Replication and Confidence Intervals}
-\label{sec:stochastic_replication_ci}
-
-A BPS model is a stochastic generator. One fixed model can generate
-many possible event logs, whereas the real test log is only one observed
-realisation. A single simulated log mixes model fidelity
-with the random draws of that run. Chapela-Campa et al. address this
-problem directly: they generate $K$ logs from $K$ simulation runs,
-match their case count and start point to an actual test log that was
-not used for model construction, compare every generated log with that
-test log, and construct confidence intervals for each perspective-
-specific distance \cite{ChapelaCampa2023Trust}. Their controlled
-evaluation uses $K=10$ replications and reports means and 95\,\%
-intervals.
-
-This design is consistent with classical simulation-output analysis,
-where independent replications with different random-number streams
-provide observations for estimating a mean and its Monte-Carlo
-uncertainty \cite{Law2015Simulation}. For replication-level values
-$x_1,\ldots,x_N$, a two-sided Student-$t$ interval is
-\begin{equation}
-    \bar{x}\ \pm\
-    t_{0.975,N-1}\frac{s}{\sqrt{N}},
-\end{equation}
-where $s$ is the sample standard deviation across replications.
-
-This Monte-Carlo interval is different from an interval for a change between
-two observed periods. When the observations in two periods are independent and
-their variances and sample sizes may differ, a Welch interval estimates the
-difference between their means without imposing equal variances
-\cite{Welch1947}. A percentile such as P90 is not a sample mean and does not use
-the same standard-error formula. Its sampling uncertainty can instead be
-estimated with a non-parametric bootstrap. Complete cases are repeatedly drawn
-with replacement within each period, the percentile difference is recalculated
-and empirical quantiles of those differences form the interval
-\cite{EfronTibshirani1993}. The unit of resampling must match the independent
-observational unit. In the CTB study this unit is one truck visit, not one event.
-
-The interpretation of this interval must remain narrow. Conditional on
-one frozen discovered parameter bundle and one fixed real test log, it
-quantifies the variability caused by simulation sampling. It does not
-include event-log sampling uncertainty, input-distribution estimation
-uncertainty, alternative discovery outcomes, measurement error or
-uncertainty about the correctness of a what-if response. Those require
-additional resampling, repeated discovery, sensitivity experiments or
-external domain evidence. Chapter~\ref{chp:experiments}
-uses this conditional Monte-Carlo interpretation for its ten-seed
-protocol. The intervals are pointwise summaries for individual metrics and
-contrasts. They are not simultaneous confidence bands, and no family-wise
-multiplicity adjustment is applied.
-
-\subsection{Trustworthiness, Limitations, and Research Gap}
-\begin{hints}
-\item Move the research gap to Chapter 3 (Synthesis), so that Background stays descriptive.
-\end{hints}
-
-Historical fidelity is necessary for a simulator that claims to
-represent an existing process, but it is not sufficient for unrestricted
-decision support. Chapela-Campa et al. identify this limit as a
-comparison with an original event log assesses replication of the
-\emph{as-is} process, not the accuracy of predictions after a process
-change \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. Similarly,
-Sargent's purpose-relative view implies that evidence collected in one
-operating region cannot automatically validate use in another
-\cite{Sargent2013Validation}.
-
-Trustworthiness cannot be measured with one metric. Evidence is needed for
-data and conceptual validity, implementation, held-out fidelity,
-reproducibility, assumptions, stochastic robustness, domain review, and the
-limits of extrapolation. ProSiT provides probabilistic rules that can be
-inspected and configured \cite{Vinci2026prosit}. Applied work shows how a
-discovered simulation model can be connected to a resource-allocation problem
-\cite{Hospital2026Vinci}. These properties support validation and scenario
-analysis, but they do not replace evidence for each intervention.
-
-This thesis does not claim to solve the general
-trustworthiness problem of simulation discovery. It contributes a
-container-terminal case study, where the model is tested against an unseen
-historical period, across structural, temporal and arrival perspectives,
-with repeated stochastic runs and explicit domain constraints. Scenario
-results are interpreted as conditional consequences of the documented
-model assumptions, not as experimentally established causal effects.
-
-\paragraph{Research Gap}
-
-Three literature strands are relevant to this setting. Process-mining-based
-simulation research contributes discovery, conformance, and validation methods
-for deriving executable models from event logs. ASMG and related manufacturing
-studies show how physical-system structure and material-flow dependencies can be
-represented in formal abstractions. Logistics-oriented Process Mining
-studies highlight the need to account for operational context, queues, and
-resource interactions beyond timestamps alone. The present gap is therefore not
-simply that one method is missing, but that the literature reviewed for this
-thesis does not yet provide a temporally validated, data-aware executable model
-for a container-terminal operation that is also checked against physical
-resource constraints and what-if validity conditions.
-
-Container terminals are dynamic logistics systems in which truck, yard,
-storage, and equipment processes interact under limited resource capacities.
-Simulation is therefore widely used to support operational and tactical
-decision making in this environment
-\cite{Bruzzone2012,Kastner2021,Carboni2025}. Most existing terminal
-simulation models, however, are developed manually, which requires substantial
-modelling effort, calibration, maintenance, and domain knowledge
-\cite{PMRozinat2009}. Simulation-discovery research offers an alternative by
-deriving simulation models and parameters directly from event logs. Recent
-approaches increasingly incorporate data-aware decision logic, contextual
-information, process state, and automated model construction
-\cite{Camargo2020,simod2024,mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob,Vinci2026prosit}.
-ProSiT extends this development through probabilistic white-box models whose
-decision logic remains inspectable and configurable
-\cite{Vinci2026prosit}. Despite these advances, empirical evaluations have
-largely focused on healthcare, administration, and conventional business
-processes, while evidence from large-scale physical logistics environments
-such as container terminals remains limited. It is therefore still unclear how
-robustly automatically derived simulation models transfer to settings
-characterised by congestion, shared physical resources, spatial dependencies,
-and changing operational workloads, and to what extent such models can support
-credible what-if analysis and decision support. This thesis addresses this gap
-through a case study of truck-handling operations at HHLA Container Terminal
-Burchardkai (CTB), evaluating both the strengths and the limitations of
-data-aware simulation discovery in this setting.
+This thesis addresses these gaps in a case study of truck operations at HHLA
+Container Terminal Burchardkai. It does not propose a new discovery algorithm or
+a new simulator. It compares discovery algorithms for their use in simulation
+(E1), restricts the selected models with physical rules (E2), measures how the
+control-flow model changes the simulated visits (E3), audits the simulation
+mechanisms and their response to load (E4), and evaluates one operational
+policy only if the model passes these checks (E5).

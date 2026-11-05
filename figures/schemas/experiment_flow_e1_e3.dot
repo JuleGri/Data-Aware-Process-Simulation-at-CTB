@@ -1,0 +1,40 @@
+// Experiment flow E1 -> E2 -> E3. Render:
+//   dot -Tpdf experiment_flow_e1_e3.dot -o experiment_flow_e1_e3.pdf
+//   dot -Tpng -Gdpi=200 experiment_flow_e1_e3.dot -o experiment_flow_e1_e3.png
+digraph flow {
+  graph [rankdir=TB, fontname="Helvetica", fontsize=11, nodesep=0.35, ranksep=0.32, newrank=true];
+  node  [shape=box, style="rounded,filled", fillcolor="white", color="#52514e", fontname="Helvetica", fontsize=10, margin="0.15,0.07", width=4.6];
+  edge  [color="#52514e", arrowsize=0.7];
+
+  subgraph cluster_e1 {
+    label="E1  Control-flow discovery"; labeljust=l; fontsize=11; style="rounded,filled"; fillcolor="#eaf2fb"; color="#2a78d6";
+    disc  [label="Discovery in ProM on the training partition\n18 nets: Inductive Miner (5), iDHM (4), ILP Miner (6), Alpha (3)\n+ prefix-tree reference"];
+    eval1 [label="Evaluation in PM4Py, training and validation\nsoundness  ·  exact alignments (fitness)  ·  escaping-edges precision\nsequences kept  ·  multi-block visits  ·  unseen sequences"];
+    sel1  [label="Selection: sound, >= 90 % fitting validation visits,\nnot dominated in fitting visits vs. precision\n5 candidates: IM 0.0  ·  ILP 1.00  ·  HM 0.7  ·  HM 0.8  ·  HM 0.9", fillcolor="#d5e5f7"];
+    disc -> eval1 -> sel1;
+  }
+
+  subgraph cluster_e2 {
+    label="E2  Rule audit and repair"; labeljust=l; fontsize=11; style="rounded,filled"; fillcolor="#fdeee7"; color="#eb6834";
+    audit [label="Rule audit on the model language\nrules 1, 2, 3, 5 and the stop bound of rule 6\nshortest counterexample per violated rule"];
+    rep   [label="Exact repair for rules 3 and 5\nL(net) intersected with L(rules), encoded as a sound state machine\none token per truck: stops cannot overlap (rule 4)"];
+    eval2 [label="Re-evaluation\nfitting visits  ·  sequences kept  ·  multi-block visits\nprecision compared with the same language as a state machine"];
+    sel2  [label="Selection of 3 nets for E3 along the fitness-precision trade-off\nILP 1.00 repaired (most permissive)  ·  IM 0.0 repaired (balanced)\nHM 0.7 (most precise; already satisfies rules 3 and 5)", fillcolor="#fad7c7"];
+    audit -> rep -> eval2 -> sel2;
+  }
+
+  subgraph cluster_e3 {
+    label="E3  Baseline simulation"; labeljust=l; fontsize=11; style="rounded,filled"; fillcolor="#e3f5ee"; color="#1baf7a";
+    sim  [label="ProSiT on each selected net + data-aware guards\nrule 5 at RMG (block)  ·  rule 6 (planned stops)  ·  rule 7 (capacity, where data exist)"];
+    cmp  [label="Comparison with the validation period\nvisit structure  ·  turnaround time  ·  load and delay peaks  ·  rule checks on simulated logs"];
+    sim -> cmp;
+  }
+
+  note [shape=note, style=filled, fillcolor="#f6f6f4", width=2.9, fontsize=9,
+        label="Precision measure throughout:\nescaping-edges precision\n(visible activities, forward silent closure).\nProM measures based on backward silent\nclosure or on silent steps are reported\nonly as a cross-check, because they depend\non how silent transitions are placed."];
+  { rank=same; eval1; note; }
+  note -> eval1 [style=dashed, arrowhead=none];
+
+  sel1 -> audit;
+  sel2 -> sim;
+}

@@ -1,0 +1,145 @@
+% Structural repair patterns for rules 3 and 5 (Section sec:mc_repair).
+% Reference implementation: trucksimulation/process_discovery/structural_repair_im00.py
+
+Two patterns repair the net locally instead of replacing it by a state
+machine. Rule~5 links two exclusive choices in different parts of the net by a
+decision token (Figure~\ref{fig:mc_repair_xor}). Places that connect distant
+choices in this way are known as non-local or long-distance dependencies
+\cite{Wen2007AlphaPlusPlus,RWKalenkova2020NonLocal}. Rule~3 requires that at
+least one of several independent optional stops occurs. This is an inclusive
+choice, the multi-choice pattern \cite{Russell2006WorkflowPatterns}, and in a
+plain Petri net it needs additional control places. A marker records whether a
+stop has happened (Figure~\ref{fig:mc_repair_stop}). The marker alone can block
+a visit in which every stop is skipped, so the complete construction also
+forbids skipping the last open stop. Both repaired nets were checked against the
+exact repair: they accept exactly the same sequences, are sound and hold at
+most one token per place.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  place/.style={circle, draw, minimum size=7mm, inner sep=0pt},
+  ctrl/.style={circle, draw, dashed, minimum size=7mm, inner sep=0pt},
+  trans/.style={rectangle, draw, minimum width=17mm, minimum height=6mm, font=\footnotesize},
+  silent/.style={rectangle, draw, fill=black, minimum width=8mm, minimum height=6mm},
+  arc/.style={-{Stealth[length=2mm]}},
+  carc/.style={-{Stealth[length=2mm]}, dashed}]
+% first choice: LL_mixed or skip
+\node[place] (a1) at (0,0) {};
+\node[trans] (mix) at (2,0.9) {LL\_mixed};
+\node[silent] (s1) at (2,-0.9) {};
+\node[font=\footnotesize] at (2,-1.55) {$\tau$ (skip)};
+\node[place] (a2) at (4,0) {};
+% control places
+\node[ctrl] (cm) at (5.7,1.1) {};
+\node[font=\footnotesize] at (5.7,1.75) {mixed};
+\node[ctrl] (cn) at (5.7,-1.1) {};
+\node[font=\footnotesize] at (5.7,-1.75) {no mixed};
+% second choice: LL stop or skip
+\node[place] (b1) at (7.4,0) {};
+\node[silent] (s2) at (9.4,1.4) {};
+\node[font=\footnotesize] at (9.4,2.05) {$\tau$ (skip)};
+\node[trans] (del) at (9.4,0) {LL\_delivery};
+\node[silent] (s3) at (9.4,-1.4) {};
+\node[font=\footnotesize] at (9.4,-2.05) {$\tau$ (skip)};
+\node[place] (b2) at (11.4,0) {};
+\node[font=\footnotesize, align=center] at (2,-2.6) {first choice};
+\node[font=\footnotesize, align=center] at (9.4,-2.6) {second choice, later in the net};
+\draw[arc] (a1) -- (mix);
+\draw[arc] (a1) -- (s1);
+\draw[arc] (mix) -- (a2);
+\draw[arc] (s1) -- (a2);
+\draw[arc] (b1) -- (s2);
+\draw[arc] (b1) -- (del);
+\draw[arc] (b1) -- (s3);
+\draw[arc] (s2) -- (b2);
+\draw[arc] (del) -- (b2);
+\draw[arc] (s3) -- (b2);
+\draw[carc] (mix) -- (cm);
+\draw[carc] (s1) -- (cn);
+\draw[carc] (cm) -- (s2);
+\draw[carc] (cn) -- (del);
+\draw[carc] (cn) -- (s3);
+\end{tikzpicture}
+\caption{Repair pattern for rule~5: one exclusive choice across two parts of the
+net. The first choice leaves a token that records the decision (dashed places
+and arcs). \texttt{LL\_delivery} can only fire if \texttt{LL\_mixed} was
+skipped. The skip of the second choice exists twice, once for each token, so no
+control token remains at the end. \texttt{LL\_receive} is connected like
+\texttt{LL\_delivery}, and HO2 is repaired in the same way. Per handling area,
+the pattern adds two places and one silent transition.}
+\label{fig:mc_repair_xor}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  place/.style={circle, draw, minimum size=7mm, inner sep=0pt},
+  ctrl/.style={circle, draw, dashed, minimum size=7mm, inner sep=0pt},
+  trans/.style={rectangle, draw, minimum width=21mm, minimum height=6mm, font=\footnotesize},
+  gate/.style={rectangle, draw, minimum width=17mm, minimum height=6mm, font=\footnotesize},
+  silent/.style={rectangle, draw, fill=black, minimum width=8mm, minimum height=6mm},
+  arc/.style={-{Stealth[length=2mm]}},
+  carc/.style={-{Stealth[length=2mm]}, dashed},
+  rarc/.style={<->, >={Stealth[length=2mm]}, dashed}]
+\node[place] (i) at (0,0) {$\bullet$};
+\node[font=\footnotesize] at (0,-0.65) {$i$};
+\node[gate] (gi) at (1.5,0) {Gate In};
+\node[place] (pa) at (3.2,1.7) {};
+\node[place] (pb) at (3.2,-1.7) {};
+\node[ctrl] (c1) at (3.9,0) {};
+\node[font=\footnotesize] at (3.9,-0.6) {no stop yet};
+% stop A (upper branch): first, further, skip
+\node[trans] (af) at (6.0,0.75) {Stop A, first};
+\node[trans] (an) at (6.0,1.7) {Stop A, further};
+\node[silent] (as) at (6.0,2.65) {};
+\node[font=\footnotesize] at (7.0,2.65) {$\tau$ (skip)};
+% stop B (lower branch)
+\node[trans] (bf) at (6.0,-0.75) {Stop B, first};
+\node[trans] (bn) at (6.0,-1.7) {Stop B, further};
+\node[silent] (bs) at (6.0,-2.65) {};
+\node[font=\footnotesize] at (7.0,-2.65) {$\tau$ (skip)};
+\node[place] (qa) at (8.6,1.7) {};
+\node[place] (qb) at (8.6,-1.7) {};
+\node[ctrl] (c2) at (8.1,0) {};
+\node[font=\footnotesize] at (8.1,-0.6) {stop done};
+\node[gate] (go) at (10.2,0) {Gate Out};
+\node[place] (o) at (12.0,0) {};
+\node[font=\footnotesize] at (12.0,-0.65) {$o$};
+\draw[arc] (i) -- (gi);
+\draw[arc] (gi) -- (pa);
+\draw[arc] (gi) -- (pb);
+\draw[carc] (gi) -- (c1);
+\draw[arc] (pa) -- (af);
+\draw[arc] (pa) -- (an);
+\draw[arc] (pa) -- (as);
+\draw[arc] (af) -- (qa);
+\draw[arc] (an) -- (qa);
+\draw[arc] (as) -- (qa);
+\draw[arc] (pb) -- (bf);
+\draw[arc] (pb) -- (bn);
+\draw[arc] (pb) -- (bs);
+\draw[arc] (bf) -- (qb);
+\draw[arc] (bn) -- (qb);
+\draw[arc] (bs) -- (qb);
+\draw[carc] (c1) -- (af);
+\draw[carc] (c1) -- (bf);
+\draw[carc] (af) -- (c2);
+\draw[carc] (bf) -- (c2);
+\draw[rarc] (c2) -- (an);
+\draw[rarc] (c2) -- (bn);
+\draw[carc] (c2) -- (go);
+\draw[arc] (qa) -- (go);
+\draw[arc] (qb) -- (go);
+\draw[arc] (go) -- (o);
+\end{tikzpicture}
+\caption{Marker logic for rule~3 (at least one stop), shown for two optional
+stops in parallel. Gate In puts a token into \emph{no stop yet}. Each stop
+exists twice: the first stop moves the token to \emph{stop done}, a further stop
+only reads it (double arrow). Gate Out needs \emph{stop done}, so a visit
+cannot leave without a stop. If both stops are skipped, however, the token stays
+in \emph{no stop yet} and the visit can never finish. The complete construction
+therefore also forbids skipping the last open stop, with one more control place
+per stop (not shown).}
+\label{fig:mc_repair_stop}
+\end{figure}

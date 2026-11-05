@@ -11,7 +11,7 @@
 \label{sec:mc_overview}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{hints}
-\item One pipeline figure: event log $ightarrow$ control-flow discovery $ightarrow$ rule audit and repair $ightarrow$ ProSiT discovery $ightarrow$ CTB adaptations $ightarrow$ simulation $ightarrow$ evaluation. Mark for each step where its protocol (Ch.~6) and results (Ch.~7) are.
+\item One pipeline figure: event log $\rightarrow$ control-flow discovery $\rightarrow$ rule audit and repair $\rightarrow$ ProSiT discovery $\rightarrow$ CTB adaptations $\rightarrow$ simulation $\rightarrow$ evaluation. Mark for each step where its protocol (Ch.~6) and results (Ch.~7) are.
 \item The idea of layers: control flow, arrivals, resources, timing. Each is fitted from data and checked separately.
 \end{hints}
 
@@ -44,18 +44,20 @@ As the control flow will serve as the base for the following simulation models l
 \subsection{Discovery Algorithms}
 \label{sec:mc_algorithms}
 \begin{hints}
-\item One paragraph per family: Inductive Miner and IMf (process trees, noise threshold), Heuristics Miner (dependency thresholds), ILP Miner (places from an optimisation problem), Split Miner (filtered directly-follows graph, BPMN converted to a Petri net).
+\item One paragraph per family: Inductive Miner and IMf (process trees, noise threshold), interactive Data-aware Heuristic Miner (causal net from frequency, dependency and binding thresholds; conditions on dependencies; Petri net output), ILP Miner (places from integer linear programmes over the prefix-closed log; sequence encoding filter, where a higher threshold filters less), Alpha, Alpha+ and Alpha++ (places from ordering relations, no noise handling).
 \item For each: the parameter that was varied and what it does. The grid and evaluation protocol are in Chapter 6 (E1).
 \end{hints}
 
 \subsection{Rule Audit and Exact Repair}
 \label{sec:mc_repair}
 \begin{hints}
-\item How a rule is checked on a model: rule as a small monitor automaton, product with the reachability graph, shortest counterexample.
-\item How the repair works: intersect the language of the net with the rule monitors, minimise, encode as a state machine (one place per state, one transition per step). Fully automatic, written as a new PNML file; the original net is untouched.
+\item How a rule is checked on a model: rule as a Declare constraint (its semantics is a small transition system), product with the reachability graph of the net, shortest counterexample.
+\item How the repair works: product of the reachability graph (silent steps resolved) with the constraint transition systems, merge states with identical continuations, convert to a state-machine workflow net (one place per state, one transition per edge). Fully automatic, written as a new PNML file; the original net is untouched. Cite \cite{RWDiCiccio2022Declarative,RWAugusto2022Advanced}; closest predecessor \cite{RWDixit2015Domain}.
 \item What it guarantees: sound, all observed sequences kept, no other sequences added. Figure: repaired net.
 \item Consequence for ProSiT: one token per visit, so stops cannot run in parallel; repeated labels make routing state-dependent.
 \end{hints}
+
+\input{figures/schemas/repair_patterns}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{ProSiT Simulation Discovery}
@@ -92,7 +94,7 @@ Activating the Workload Features, a queing behaviour can be learned, that can ha
 \begin{hints}
 \item Inputs: the repaired Petri net and the training event log.
 \item Table of all learned components: component, model type, target, features, when it is used in the simulation. Rows: arrival times (tree on hour and weekday), case attributes (joint empirical sample), routing (one model per transition), resource choice (one model per resource), waiting time (per resource), execution time (per activity), arrival and resource calendars, resource capacity (multitasking).
-\item For each component, the CTB result in one sentence (e.g. number of leaves, split features). Full trees in Appendix~ef{app:prosit_inventory}.
+\item For each component, the CTB result in one sentence (e.g. number of leaves, split features). Full trees in Appendix~\ref{app:prosit_inventory}.
 \end{hints}
 
 \subsection{Decision Trees and Model Selection}

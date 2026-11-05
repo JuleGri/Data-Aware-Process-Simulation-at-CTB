@@ -17,167 +17,351 @@ supports and what it does not.
 \section{Discovery Comparison and Model Choice (E1)}
 \label{sec:res_discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sources (trucksimulation repository):
+%   nets: data/processed/CTB/Full Log ProM Petri Nets (ProM Lite 1.4, discovered on
+%         xes_files/full_train_prom_no_nan.xes)
+%   metrics: process_discovery/evaluate_prom_nets.py --log-set full
+%            -> process_discovery/outputs/runs/prom_nets_full_20261102 (SUMMARY.md, conformance_overview.csv)
+%   figure: process_discovery/plot_e1_tradeoff.py
+%   ILP nets: prom_nets_full_ilp_20261103; prefix reference: build_prefix_reference.py
+%         -> data/processed/CTB/Reference Nets, evaluated in prom_nets_full_prefix_20261103
+%   ProM/PM4Py cross-check: process_discovery/outputs/runs/prom_nets_20261102 (restricted logs)
+%   ProM precision plugin: process_discovery/prom_precision.py re-implements
+%         PNetAlignmentAnalysis 6.10.114 AlignmentPrecGen (source in the jar)
+%         -> prom_nets_full_20261102/prom_precision_train.csv (also per-sequence ETC: pm4py_etc_variants)
 
-All eleven configurations of Table~\ref{tab:exp_grid} completed on the
-restricted population. On the expanded population, the eight native
-PM4Py configurations completed. The Split Miner configurations have not
-yet been repeated on the expanded population.
-% TODO: add expanded Split Miner results or state them as not repeated.
+The eighteen nets of Table~\ref{tab:exp_grid} were discovered in ProM on the
+training partition of the expanded population (58,262 visits, 80 distinct
+activity sequences). They were evaluated with PM4Py as described in
+Section~\ref{sec:exp_discovery_eval} on the training partition and on the
+validation partition (14,625 visits, 59 sequences, six of which never occur in
+training).
+
+ProM's own replayer serves as a cross-check of the alignments. It was run on
+the validation partition for the five Inductive Miner nets with the standard
+cost function and penalised improper completion, using the splitting replayer,
+an A$^*$ search that guarantees optimal alignments and is the default of ProM's
+replay plugin \cite{vanDongen2018Splitting,vanDongen2018Datastructures}
+(Table~\ref{tab:res_prom_replay}). ProM and PM4Py return the same number of
+fitting visits and the same total deviation cost for every net, and the same
+mean trace fitness to the two decimals that ProM reports. They differ only in
+how equally cheap deviations are split between log and model moves, and in the
+number of silent moves, which cost nothing in ProM.
+% ProM values: "Replay a Log on Petri Net for Conformance Analysis" (PNetReplayer 6.9.179),
+% full validation log on the full-population IM nets, 2026-11-03 (screenshots of the user).
+% Wizard: "Measuring fitness", improper completion penalised: yes, algorithm "Splitting replayer
+% assuming at most 127 tokens in each place" (Alignment package 6.10.122, IterativeAStarPlugin).
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{YL{1.3cm}L{1.15cm}L{1.75cm}L{1.75cm}L{1.25cm}L{1.3cm}}
+\toprule
+& \multicolumn{2}{l}{\textbf{Fitting visits}} & \multicolumn{2}{l}{\textbf{Log / model moves}} & \textbf{Mean trace} & \textbf{Precision} \\
+\textbf{Net} & \textbf{ProM} & \textbf{share} & \textbf{ProM} & \textbf{PM4Py} & \textbf{fitness} & \textbf{(PM4Py)} \\
+\midrule
+IM 0.0 & 14,624 & 99.99\,\% & 1 / 0 & 1 / 0 & 1.00 & 0.869 \\
+IMf 0.1 & 13,535 & 92.55\,\% & 1,105 / 0 & 881 / 224 & 0.99 & 0.914 \\
+IMf 0.2 & 13,667 & 93.45\,\% & 966 / 0 & 742 / 224 & 0.99 & 0.896 \\
+IMf 0.3 & 13,897 & 95.02\,\% & 735 / 0 & 735 / 0 & 0.99 & 0.900 \\
+IMf 0.4 & 9,249 & 63.24\,\% & 1,181 / 4,730 & 1,177 / 4,734 & 0.93 & 0.973 \\
+\bottomrule
+\end{tabularx}
+\caption{ProM replay of the validation partition (14,625 visits) on the five
+Inductive Miner nets. PM4Py returns the same number of fitting visits and the
+same total deviation cost (log plus model moves) for every net. Mean trace
+fitness as reported by ProM. The last column adds the PM4Py precision: the
+filtered nets reject 5.0 to 7.5\,\% of the visits for at most 0.045 more
+precision, and IMf 0.4 rejects more than a third.}
+\label{tab:res_prom_replay}
+\end{table}
+
+ProM's precision plugins compute measures that differ from the
+escaping-edges precision used here. \emph{Measure Precision/Generalization}
+(package PNetAlignmentAnalysis) reports lower values: 0.664 instead of 0.897
+for IMf 0.2 on the training partition. By
+default, the plugin counts every distinct sequence once and averages a ratio
+per event. It also counts an activity as enabled if it becomes enabled after
+silent transitions are fired backwards, provided their output places are
+marked, whether or not they occurred in the trace. This re-opens choices that
+the visit has already passed. Before \texttt{Gate Out}, for example, IMf 0.2
+is credited with ten enabled activities instead of one. This step penalises
+silent transitions rather than additional behaviour. The precision of the
+Multi-perspective Process Explorer \cite{Mannhardt2016Precision} weights by
+frequency and has no backward step, but it treats every silent transition as
+a step of its own. It reports 0.958 for IMf 0.2 and 0.612 for IM 0.0. For
+IM 0.0, the value depends on the alignment: the same measure, computed on two
+other optimal alignments that contain the same 749,230 moves in a different
+order, gives 0.534 and 0.394. In nets with silent transitions in concurrent
+branches, this measure therefore reflects where the alignment places the
+silent moves rather than the behaviour of the net. The escaping-edges
+precision avoids both effects because it compares visible activities only.
+All precision values in this thesis are computed with PM4Py, and values of
+different tools are not mixed.
+% MPE values: ProM Lite 1.4, Multi-perspective Process Explorer, precision mode,
+% full training log (179,970 events), 2026-11-03. IM 0.0: 1,705,595 moves observed,
+% 2,788,292 possible. Alternative alignments: prom_precision.py (dpn_precision) with
+% PM4Py state-equation A* and Dijkstra (less memory).
+% ProM value: Measure Precision/Generalization (PNetAlignmentAnalysis 6.10.114, default
+% "one trace class per sequence" ticked) on the full-population IMf 0.2 net with the
+% alignment on the full training log, 2026-11-03: precision 0.664, generalization 0.995.
+% Re-implementation in prom_precision.py: precision 0.633 to 0.667 depending on which
+% equally cheap alignment is chosen for non-fitting sequences, generalization 0.995.
 
 \subsection{Overall Comparison}
 
-Table~\ref{tab:res_grid} reports the validation results on the expanded
-population. Five of the eleven nets are not sound. All three Heuristics
-Miner nets and ILP with alpha 0.9 fail the WOFLAN check. The Split Miner
-nets obtained on the restricted population are not workflow nets after
-the conversion from BPMN. By the protocol, none of these nets receives
-alignment scores, and none is executable in the simulator. Their
-token-replay fitness is reported only as a diagnostic.
+Table~\ref{tab:res_grid} reports soundness, size, fitness and precision.
+Figure~\ref{fig:res_tradeoff} places every net in the plane of fitting
+validation visits and validation precision.
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{YL{1.0cm}L{1.9cm}L{1.6cm}L{1.5cm}L{1.6cm}}
+\small
+\begin{tabularx}{\textwidth}{YL{0.8cm}L{1.9cm}L{1.15cm}L{1.15cm}L{1.15cm}L{1.15cm}L{1.15cm}}
 \toprule
-\textbf{Model} & \textbf{Sound} & \textbf{Places / trans. (silent)} & \textbf{Fitting visits} & \textbf{Fitness} & \textbf{Precision} \\
+& & & \multicolumn{2}{l}{\textbf{Fitting visits}} & \textbf{Fitness} & \multicolumn{2}{l}{\textbf{Precision}} \\
+\textbf{Net} & \textbf{Sound} & \textbf{Places / trans. (silent)} & \textbf{train} & \textbf{val.} & \textbf{val.} & \textbf{train} & \textbf{val.} \\
 \midrule
-IM, threshold 0.0 (IM0) & yes & 32 / 46 (35) & 99.993\,\% & 0.9998 & 0.813 \\
-IMf, threshold 0.1 & yes & 21 / 34 (23) & 94.64\,\% & 0.9894 & 0.927 \\
-IMf, threshold 0.2 & yes & 19 / 31 (20) & 85.20\,\% & 0.9757 & 0.999 \\
-ILP, alpha 1.0 & yes & 6 / 11 (0) & 100\,\%$^{a}$ & n/a$^{a}$ & n/a$^{a}$ \\
-ILP, alpha 0.9 & no & 13 / 11 (0) & -- & -- & -- \\
-Heuristics, dep.\ 0.5 / 0.7 / 0.9 & no & 7 / 14 (3) & -- & -- & -- \\
-Split Miner, eta 0.2 / 0.4 / 0.6$^{b}$ & no & 20 / 20 (9) & -- & -- & -- \\
+IM 0.0 & yes & 28 / 38 (27) & 100\,\% & 99.99\,\% & 0.9998 & 0.903 & 0.869 \\
+IMf 0.1 & yes & 10 / 17 (6) & 95.07\,\% & 92.55\,\% & 0.9851 & 0.914 & 0.914 \\
+IMf 0.2 & yes & 7 / 15 (4) & 95.58\,\% & 93.45\,\% & 0.9870 & 0.897 & 0.896 \\
+IMf 0.3 & yes & 11 / 18 (7) & 96.51\,\% & 95.02\,\% & 0.9901 & 0.906 & 0.900 \\
+IMf 0.4 & yes & 11 / 17 (6) & 68.48\,\% & 63.24\,\% & 0.9338 & 0.982 & 0.973 \\
 \midrule
-Prefix reference (not a candidate) & yes & 164 / 242 & 99.959\,\% & -- & 0.969 \\
+HM 0.7 & yes & 22 / 45 (34) & 99.45\,\% & 99.02\,\% & 0.9983 & 0.998 & 0.994 \\
+HM 0.8 & yes & 22 / 42 (31) & 98.34\,\% & 97.69\,\% & 0.9961 & 0.999 & 0.997 \\
+HM 0.9 & yes & 22 / 37 (26) & 97.98\,\% & 97.29\,\% & 0.9955 & 1.000 & 0.998 \\
+HM 0.9, freq.\ 0.1 & yes & 10 / 11 (6) & 71.62\,\% & 66.65\,\% & 0.9066 & 1.000 & 1.000 \\
+\midrule
+ILP 0.00, 0.25 & yes & 6 / 5 (2) & 40.64\,\% & 34.86\,\% & 0.7935 & 1.000 & 1.000 \\
+ILP 0.55 & yes & 6 / 6 (2) & 63.84\,\% & 58.42\,\% & 0.8770 & 1.000 & 1.000 \\
+ILP 0.75 & yes & 8 / 7 (2) & 78.16\,\% & 73.80\,\% & 0.9481 & 0.855 & 0.842 \\
+ILP 0.95 & yes & 12 / 11 (2) & 99.05\,\% & 98.37\,\% & 0.9967 & 0.838 & 0.805 \\
+ILP 1.00 & yes & 24 / 13 (2) & 100\,\% & 100\,\% & 1.0000 & 0.773 & 0.747 \\
+\midrule
+Prefix tree$^{b}$ & yes & 164 / 242 (80) & 100\,\% & 99.96\,\% & 0.9999 & 1.000 & 0.969 \\
+\midrule
+Alpha$^{a}$ & no & 4 / 11 (0) & 15.91\,\% & 16.05\,\% & 0.8625 & 0.633 & 0.612 \\
+Alpha+$^{a}$ & no & 5 / 11 (0) & 15.91\,\% & 16.05\,\% & 0.8625 & 0.718 & 0.693 \\
+Alpha++ & no & 22 / 11 (0) & -- & -- & -- & -- & -- \\
 \bottomrule
 \end{tabularx}
-\caption{Discovery results on the expanded validation partition
-(14,625 visits). Fitting visits are visits whose complete sequence the
-net accepts. $^{a}$The alignment computation for ILP 1.0 failed in the
-execution environment. Acceptance was determined by an exact language
-check instead. $^{b}$Restricted population.}
+\caption{Discovered nets on the training partition (58,262 visits) and the
+validation partition (14,625 visits). Fitting visits: share of visits whose
+alignment has no deviation. Fitness: alignment-based log fitness. IM: Inductive
+Miner, IMf with the noise threshold given; HM: iDHM with the dependency
+threshold given; ILP: ILP Miner with the filter threshold given (0.00 and 0.25
+yield the same net). $^{a}$Unsound, values reported as a diagnostic only. Alpha++
+has no reachable final marking, so no alignment exists. $^{b}$Reference net that
+accepts exactly the training sequences (Section~\ref{sec:exp_candidates}).}
 \label{tab:res_grid}
 \end{table}
 
-Among the sound nets, the Inductive Miner variants show the expected
-trade-off between fitness and precision. Without filtering, IM0 accepts
-all but one validation visit and reaches a precision of 0.813. Raising
-the noise threshold to 0.2 increases precision to 0.999, but the net
-then rejects 14.8\,\% of the validation visits. A high precision is
-therefore obtained by excluding observed behaviour, not by describing
-it more accurately.
+None of the three Alpha nets is sound. Alpha++ cannot reach its final marking
+at all, and Alpha and Alpha+ accept only 16\,\% of the visits. By the protocol
+they are not executable in the simulator and are not considered further. All
+Inductive Miner, Heuristics and ILP nets are sound.
 
-ILP with alpha 1.0 accepts every visit, but its structure explains why
-(Figure~\ref{fig:res_ilp_flower}). Each yard activity sits on a
-self-loop around a place that Gate In marks and Gate Out empties. The
-net therefore allows any sequence of yard activities between the two
-gates. It is a flower model and gives no control-flow structure to the
-simulator. Its permitted language grows from 81 sequences with two yard
-events to 6,561 with four.
+Without filtering, IM 0.0 accepts every training visit and all but one
+validation visit. Its validation precision is 0.869. Filtering trades this
+coverage for little precision. With thresholds 0.1 to 0.3, precision rises to
+at most 0.914, while 5.0 to 7.5\,\% of the validation visits are rejected. The
+effect is not monotone: IMf 0.2 is less precise than IMf 0.1. At 0.4,
+precision reaches 0.973, but more than a third of the visits are rejected.
+
+The Heuristics nets reach almost perfect precision (0.994 to 0.998) and still
+accept 97 to 99\,\% of the validation visits. On these two measures, HM 0.7
+is better than every filtered Inductive Miner net. The net with frequency
+threshold 0.1 contains only 5 of the 11 activities (the gates,
+\texttt{RMG\_delivery}, \texttt{RMG\_receive} and \texttt{LL\_delivery}) and
+rejects every visit with any other stop.
+
+For the ILP Miner, a higher filter threshold keeps more behaviour. At 0.00
+and 0.25 the miner returns the same net, which permits only the most frequent
+sequence, \texttt{Gate In > RMG\_receive > Gate Out} (40.6\,\% of the training
+visits). At 0.55 the net adds \texttt{RMG\_delivery} as an alternative stop.
+These nets reach a precision of 1.000 because they permit only one or two
+sequences. Without filtering, ILP 1.00 accepts every training and every
+validation visit, including the visit that IM 0.0 rejects. Its validation
+precision of 0.747 is the lowest among the sound nets. At 0.95, 1.6\,\% of the
+validation visits are rejected, and precision rises only to 0.805.
+
+In Figure~\ref{fig:res_tradeoff}, only ILP 1.00, IM 0.0 and the Heuristics
+nets lie on the front of non-dominated nets: ILP 1.00 and IM 0.0 with the
+highest fitness, the Heuristics nets with the highest precision. ILP 1.00 is
+ahead of IM 0.0 by a single validation visit and behind it by 0.122 in
+precision.
+
+The prefix tree only memorises the 80 training sequences. It accepts 99.96\,\%
+of the validation visits and rejects exactly the six visits whose sequence
+never occurs in training. Its precision is 1.000 on the training partition by
+construction and 0.969 on the validation partition, where only 53 of the 80
+training sequences recur. Together with ILP 1.00, it marks the range for nets
+that keep every training sequence: 0.969 if nothing else is permitted, 0.747 if
+every sequence of stops is permitted. IM 0.0 lies between the two at 0.869.
+The Heuristics nets are more precise than the prefix tree, which is only
+possible because they reject observed sequences.
+
+For all sound nets with more than 90\,\% fitting visits, the share of fitting
+visits drops by at most 2.6 percentage points from training to validation. The
+validation period contains few new sequences: 53 of its 59 sequences also
+occur in training.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.55\textwidth]{figures/discovery_2026/ilp10_expanded.png}
-\caption{ILP net with alpha 1.0 on the expanded population. Every yard
-activity is a self-loop between Gate In and Gate Out.}
-\label{fig:res_ilp_flower}
+\includegraphics[width=\textwidth]{figures/discovery_prom/e1_fitness_precision.pdf}
+\caption{Fitness--precision trade-off of the discovered nets on the validation
+partition. Left: all nets with an alignment; the dashed rectangle marks the
+zoomed region. Right: the candidates with more than 91\,\% fitting visits.
+Boxes summarise soundness, size and the coverage measures of
+Table~\ref{tab:res_coverage}. Hollow grey markers: the unsound Alpha nets.
+The prefix tree is a reference, not a candidate.}
+\label{fig:res_tradeoff}
 \end{figure}
 
-The prefix reference puts the precision values into perspective. A net
-that only memorises the 80 training sequences accepts 99.96\,\% of the
-validation visits with a precision of 0.969. Six validation visits
-follow a sequence that never occurs in training. The validation
-behaviour is therefore almost entirely repetition of known sequences.
-A discovered model with a precision of 0.813 permits considerably more
-than the data require. Section~\ref{sec:res_rules} examines what this
-additional behaviour is.
+\subsection{What the Aggregate Measures Hide}
 
-\subsection{Effect of the Population Correction}
-
-The first run used the restricted population without multiblock
-visits. Checking the restricted nets against the expanded validation log
-showed that IM0 rejects 80.4\,\% of the multiblock visits, although it
-accepts all other visits (Table~\ref{tab:res_groups}). Of the 250
-rejected validation visits, 245 follow the sequence
-\texttt{Gate In > RMG\_delivery > RMG\_receive > Gate Out}.
-
-The cause is the filter itself. A truck that delivers and receives at
-the same block produces one \texttt{RMG\_mixed} event. Separate delivery
-and receive events at RMG therefore occur only when the two containers
-are in different blocks, and exactly these visits had been removed. In
-the restricted log, \texttt{RMG\_delivery} and \texttt{RMG\_receive}
-never occur in the same visit. The Inductive Miner consequently models
-them as an exclusive choice. In the expanded training log, 801 of the
-1,008 multiblock visits deliver at one block and receive at another.
-The author interprets this as a regular double cycle whose two
-containers are stored in different blocks.
-% TODO: cite the terminal confirmation if obtained (questionnaire B4).
+The share of fitting visits weights each sequence by its frequency. A net can
+therefore reject many observed sequences and still fit 99\,\% of the visits.
+Table~\ref{tab:res_coverage} counts the distinct sequences that each net
+accepts and the acceptance of multi-block visits, the visit group that the
+restricted population had excluded (Section~\ref{sec:exp_discovery_input}).
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{YL{2.0cm}L{2.0cm}L{2.0cm}}
+\small
+\begin{tabularx}{\textwidth}{YL{1.9cm}L{1.9cm}L{2.1cm}L{2.4cm}}
 \toprule
-\textbf{Net (fitted on)} & \textbf{No RMG} \newline (3,964) & \textbf{One block} \newline (10,350) & \textbf{Several blocks} \newline (311) \\
+\textbf{Net} & \textbf{Training sequences accepted (of 80)} & \textbf{Validation sequences accepted (of 59)} & \textbf{Unseen validation sequences accepted (of 6)} & \textbf{Multi-block visits accepted, train / val.} \\
 \midrule
-IM0 (restricted) & 100\,\% & 99.99\,\% & 19.6\,\% \\
-IMf 0.1 (restricted) & 96.8\,\% & 96.1\,\% & 19.3\,\% \\
-Prefix (restricted) & 99.97\,\% & 99.97\,\% & 19.0\,\% \\
+IM 0.0 & 80 & 58 & 5 & 100 / 100\,\% \\
+IMf 0.1 & 14 & 13 & 0 & 0 / 0\,\% \\
+IMf 0.2 & 15 & 16 & 1 & 1.2 / 1.0\,\% \\
+IMf 0.3 & 19 & 19 & 1 & 1.2 / 1.0\,\% \\
+IMf 0.4 & 7 & 7 & 0 & 1.2 / 1.0\,\% \\
 \midrule
-IM0 (expanded) & 100\,\% & 99.99\,\% & 100\,\% \\
-IMf 0.1 (expanded) & 96.8\,\% & 96.1\,\% & 19.3\,\% \\
-IMf 0.2 (expanded) & 62.0\,\% & 96.1\,\% & 19.3\,\% \\
-ILP 1.0 (expanded) & 100\,\% & 100\,\% & 100\,\% \\
-Prefix (expanded) & 99.97\,\% & 99.97\,\% & 99.4\,\% \\
+HM 0.7 & 38 & 28 & 0 & 99.4 / 99.0\,\% \\
+HM 0.8 & 32 & 24 & 0 & 98.9 / 98.7\,\% \\
+HM 0.9 & 25 & 19 & 0 & 98.6 / 98.7\,\% \\
+HM 0.9, freq.\ 0.1 & 3 & 3 & 0 & 0 / 0\,\% \\
+\midrule
+ILP 0.00, 0.25 & 1 & 1 & 0 & 0 / 0\,\% \\
+ILP 0.55 & 2 & 2 & 0 & 0 / 0\,\% \\
+ILP 0.75 & 21 & 14 & 0 & 97.6 / 98.1\,\% \\
+ILP 0.95 & 73 & 50 & 3 & 100 / 100\,\% \\
+ILP 1.00 & 80 & 59 & 6 & 100 / 100\,\% \\
+\midrule
+Prefix tree & 80 & 53 & 0 & 100 / 99.4\,\% \\
 \bottomrule
 \end{tabularx}
-\caption{Share of validation visits whose complete sequence is accepted,
-by visit group. Group sizes refer to the expanded validation partition.}
-\label{tab:res_groups}
+\caption{Behaviour preserved by the sound nets and the prefix-tree reference. A sequence is accepted if the
+net replays it without deviation. Multi-block visits handle containers at more
+than one RMG block (1,008 training and 311 validation visits).}
+\label{tab:res_coverage}
 \end{table}
 
-After the correction, IM0 accepts all three groups. Its size and its
-aggregate metrics hardly change. Places, transitions and silent
-transitions are identical, and precision moves from 0.8134 to 0.8131.
-The structure, however, is different. \texttt{RMG\_mixed},
-\texttt{RMG\_receive} and \texttt{RMG\_delivery} are now parallel
-branches, and the LL activities have become an exclusive choice. The
-aggregate metrics do not reveal this change.
+The Heuristics nets reach their precision by excluding observed behaviour.
+HM 0.7 accepts 99.45\,\% of the training visits but only 38 of the 80
+training sequences. The 42 rejected sequences cover 322 visits, and all of them
+contain at least two stops. Of the 13 pairs of stops that occur in both orders
+in training, HM 0.7 accepts nine in one order only and four in neither order.
+Examples are \texttt{RMG\_delivery > LL\_delivery} (40 visits) and
+\texttt{RMG\_receive > LL\_receive} (36 visits). The Heuristics nets accept
+none of the six validation sequences that are new in this period. A net of
+this kind can only reproduce the most frequent order of every combination of
+stops.
 
-The filtered variants do not benefit from the correction. On the
-expanded training log, IMf 0.1 and 0.2 produce exactly the same process
-trees as on the restricted log. The cross-block double cycle makes up
-about 1.4\,\% of the training visits and falls below the noise threshold.
-The drop in fitting visits of IMf 0.1 from 96.3\,\% to 94.6\,\% is caused
-entirely by the multiblock visits. A model selected for its higher
-precision would thus be unable to generate a regular operational
-pattern. These visits take longer than single-block visits, with a
-median TTT of 50 instead of 33 minutes in validation.
+The filtered Inductive Miner nets lose a regular operational pattern. IMf 0.1
+accepts none of the multi-block visits, IMf 0.2 to 0.4 accept about
+1\,\%. The most frequent multi-block sequence,
+\texttt{Gate In > RMG\_delivery > RMG\_receive > Gate Out}, is a double cycle
+whose two containers are stored in different blocks (799 training visits).
+With 1.7\,\% of the training visits, the multi-block group falls below every
+tested noise threshold. These visits are also the longest ones, with a median
+turnaround time of 50 minutes in validation against 33 minutes for visits with
+one RMG block. IMf 0.1 additionally rejects the single-stop visit
+\texttt{Gate In > HO2\_mixed > Gate Out} (486 training visits).
 
-\subsection{Conclusion of E1}
+IM 0.0 keeps every training sequence and every multi-block visit, and it
+accepts five of the six new validation sequences. The one rejected validation
+visit, \texttt{Gate In > HO2\_mixed > RMG\_delivery > Gate Out}, follows a
+sequence that never occurs in training.
 
-IM0 is the only sound candidate that accepts all three visit groups and
-has a usable structure. It is retained for E2. Its precision of 0.813
-indicates additional behaviour, which is not addressed by noise
-filtering, because filtering removes the multiblock pattern first. E1
-does not establish that IM0 is suitable for simulation. It establishes
-that among the tested configurations it is the only one that preserves
-the observed behaviour. The comparison also shows that the definition of
-the visit population changed the discovered structure more than the
-choice between the tested algorithms.
+ILP 1.00 keeps all observed behaviour as well, but only because it permits
+every sequence of stops between \texttt{Gate In} and \texttt{Gate Out}.
+Counted on its reachability graph, it accepts $9^k$ sequences with $k$ stops,
+that is, 6,561 sequences with four stops. IM 0.0 accepts 2,009 sequences with
+four stops, and three occur in training. ILP 1.00 is therefore a flower model
+for the stops. Its precision of 0.747 is the value that a net reaches when it
+keeps the gates but imposes no constraint on the stops.
+% Source: process_discovery/count_language.py -> prom_nets_full_ilp_20261103/language_counts.json
+% (k = 0..4 stops: IM 0.0 1/9/61/365/2009; ILP 1.00 1/9/81/729/6561; training 0/9/38/30/3).
+
+Precision is weighted by frequency as well. On the training partition, IM 0.0
+is as precise as the filtered nets when weighted by visits (0.903 against 0.897
+to 0.914). With every training sequence counted once, its precision falls to
+0.665, while IMf 0.1 to 0.3 reach 0.874 to 0.895 and the Heuristics nets 0.970
+to 0.989. The additional behaviour of IM 0.0 is therefore concentrated in the
+rare sequences with several stops. The filtered nets are not penalised in the
+same way for the sequences they reject, because these enter the measure only
+through their alignments.
+
+\subsection{The Selected Net}
+
+Figure~\ref{fig:res_im0} shows IM 0.0. After \texttt{Gate In} and an optional
+\texttt{LL\_mixed}, a silent AND-split opens five branches: \texttt{RMG\_mixed},
+\texttt{RMG\_receive}, \texttt{RMG\_delivery}, a choice between
+\texttt{LL\_receive} and \texttt{LL\_delivery}, and a choice between
+\texttt{HO2\_receive} and \texttt{HO2\_delivery}. An optional
+\texttt{HO2\_mixed} follows the last three branches. Every branch can be
+skipped, and all activities except the LL activities can be repeated through
+silent loops. The parallel operators express that the order of the stops is
+free. Two consequences follow directly from the structure. The net permits the
+visit \texttt{Gate In > Gate Out} without any handling, and it permits any
+number of stops, for example five consecutive \texttt{RMG\_delivery} events.
+Neither occurs in the data. These are the additional behaviour behind the
+precision of 0.869, and they are examined in E2.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/discovery_2026/im0_expanded.png}
-\caption{Inductive Miner net with threshold 0 on the expanded population
-(IM0). Black boxes are silent transitions. The central AND-split lets
-the RMG, LL and HO2 branches occur in any order. The lowest path leads
-from Gate In to Gate Out without any yard activity.}
+\includegraphics[width=\textwidth]{figures/discovery_prom/im00_full.pdf}
+\caption{Selected net IM 0.0 (Inductive Miner without filtering, discovered in
+ProM on the full training partition): 28 places, 11 visible and 27 silent
+transitions (black). The silent AND-split after \texttt{Gate In} lets the
+branches occur in any order. Every branch can be skipped.}
 \label{fig:res_im0}
 \end{figure}
+
+\subsection{Conclusion of E1}
+
+Two sound nets preserve all observed behaviour, that is, every training
+sequence and every visit group including the multi-block visits: IM 0.0 and
+ILP 1.00. ILP 1.00 does so by permitting every sequence of stops, so its
+precision is that of a flower model for the stops. IM 0.0 restricts the order
+and repetition of the stops (2,009 instead of 6,561 sequences with four
+stops), is clearly more precise (0.869 against 0.747) and rejects a single
+validation visit, whose sequence never occurs in training. IM 0.0 is retained
+for E2. All other candidates obtain their higher precision by rejecting
+observed behaviour. Noise filtering in IMf and ILP removes rare but regular
+visit types first, and the Heuristics nets restrict most combinations of
+stops to a single order. For a
+simulation model this matters more than the aggregate scores suggest: a
+sequence that the net rejects can never be generated.
+
+E1 does not show that IM 0.0 is a good simulation model. Its precision of
+0.869 reflects behaviour that the data do not contain, including visits
+without handling and unbounded repetitions. The results also concern the
+tested configurations only, not the algorithm families in general. Finally,
+the comparison depends on the population. On the restricted population
+without multi-block visits, the loss of this visit group by the filtered nets
+would not have been visible.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Domain-Rule Audit and Repair (E2)}
 \label{sec:res_rules}
+egin{hints}
+\item OUTDATED (PM4Py era, single base model IM0, rule names R1--R12). Rewrite with the E2 run on the five E1 candidates (process\_discovery/outputs/runs/e2\_top5\_20261104) and the rule numbers 1--7 of Table~ef{tab:domain_rules}.
+\end{hints}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Recorded Log}
@@ -331,6 +515,51 @@ Repeated labels belong to different states.}
 \label{fig:res_repaired}
 \end{figure}
 
+\subsection{Contribution of the Base Model}
+
+The restricted model is the language of the base model intersected with
+the rules. The rules can only remove behaviour. The base model therefore
+decides two things: which observed sequences are already lost, and which
+unobserved sequences remain. Table~\ref{tab:res_ladder} applies the same
+restriction (R5 and R12) to every sound base model.
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{YL{2.6cm}L{1.6cm}L{1.6cm}L{2.0cm}}
+\toprule
+\textbf{Base model} & \textbf{Permitted sequences, 1 / 2 / 3 / 4 yard events} & \textbf{Training sequences kept (of 80)} & \textbf{Validation visits accepted} & \textbf{Precision (validation), base $\rightarrow$ restricted} \\
+\midrule
+Observed training log & 9 / 38 / 30 / 3 & 80 & -- & -- \\
+\midrule
+Prefix reference & 9 / 38 / 30 / 3 & 80 & 99.96\,\% & 0.969 $\rightarrow$ 0.969 \\
+Heuristics, no AND & 9 / 7 / 1 / 0 & 17 & 97.26\,\% & 0.9999 $\rightarrow$ 0.9999 \\
+Split Miner, $\varepsilon = 0$ & 4 / 0 / 6 / 12 & 4 & 40.33\,\% & 0.938 $\rightarrow$ 0.961 \\
+IMf 0.2 & 6 / 16 / 18 / 20 & 24 & 85.20\,\% & 0.999 $\rightarrow$ 0.999 \\
+IMf 0.1 & 9 / 16 / 18 / 20 & 27 & 94.64\,\% & 0.927 $\rightarrow$ 0.999 \\
+IM0 & 9 / 57 / 313 / 1,583 & 80 & 99.99\,\% & 0.813 $\rightarrow$ 0.864 \\
+ILP, alpha 1.0 & 9 / 73 / 549 / 3,937 & 80 & 100\,\% & 0.747 $\rightarrow$ 0.800 \\
+\bottomrule
+\end{tabularx}
+\caption{The same rule restriction (R5, R12) applied to every sound base
+model. Permitted sequences are counted after the restriction. Validation
+visits accepted refers to the restricted model.}
+\label{tab:res_ladder}
+\end{table}
+
+Three observations follow. First, the restriction cannot restore what
+the base model has already excluded. Base models that filter observed
+behaviour keep only 4 to 27 of the 80 training sequences. Second, among
+the base models that keep all observed sequences, the choice of base
+model is a choice of how far the model generalises. The prefix reference
+keeps only the observed sequences and rejects the six validation visits
+whose sequence never occurs in training. The restricted IM0 accepts five
+of them. The restricted ILP net accepts all of them, but permits 3,937
+sequences with four yard events against three observed. Third, IM0 lies
+between these extremes. It generalises to unobserved combinations of
+observed stop types, at a precision of 0.864, without becoming a flower
+model. Selecting IM0 is thus a choice of a moderate level of
+generalisation, supported by its acceptance of new validation sequences.
+
 \subsection{Conclusion of E2}
 
 IM0 permits the empty visit and, through its parallel branches, allows
@@ -345,6 +574,9 @@ it produces a better simulation. That is the question of E3.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Control-Flow Candidates in the Simulation (E3)}
 \label{sec:res_baseline}
+egin{hints}
+\item OUTDATED (ProSiT 1.0.3, candidates CONTRACT/IM0/IM0\_R5\_R12). Rewrite with the E3 runs on ILP 1.00 repaired, IM 0.0 repaired and HM 0.7 and the $2	imes2$ contrast (simulation\_e3/runs/e3\_prom\_20261104, e3\_prom\_noguard\_20261104, e3\_prom\_guard\_original\_20261104).
+\end{hints}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % PROVISIONAL: values below come from the diagnostic script
@@ -502,7 +734,7 @@ components are the subject of E4.
 \begin{hints}
 \item E3 arrivals: maximum 132 trucks per hour vs. 255 observed, no arrival peaks, 14\,\% of arrivals on Saturdays.
 \item Hour-of-week model reproduces the profile (67.7\,\% of arrivals between 7 and 16 h vs. 67.2\,\%); replay reproduces it exactly.
-\item Result: TTT unchanged (median 27, P90 54 min), delay-peak hours 0.5--1.8\,\% vs. 26\,\%, Spearman $pprox 0$. Arrivals were necessary but not sufficient. E4b failed.
+\item Result: TTT unchanged (median 27, P90 54 min), delay-peak hours 0.5--1.8\,\% vs. 26\,\%, Spearman $\approx 0$. Arrivals were necessary but not sufficient. E4b failed.
 \end{hints}
 
 \subsection{Block Choice and Capacity (E4c)}

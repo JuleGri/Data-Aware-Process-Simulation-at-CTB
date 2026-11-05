@@ -125,35 +125,29 @@ container-terminal truck operations.
 \label{sec:thesis_outline}
 
 \begin{hints}
-\item One or two sentences per chapter, in the final order: 2 Background, 3 Related Work, 4 Case Study and Data, 5 Model Construction and Simulation, 6 Experimental Design, 7 Results, 8 Discussion, 9 Conclusion. Mention the appendices (ProSiT parameters and trees, reproduction).
-\item Update the existing text: there are three RQs, not four; describe Chapters 5, 6 and 8.
+\item One or two sentences per chapter, in the final order: 2 Background and Related Work, 3 Data Preparation, 4 Methodology and Experimental Setup, 5 Results, 6 Discussion, 7 Conclusion. Mention the appendices (observed behaviour, ProSiT parameters and trees, reproduction).
+\item There are three RQs, not four; update the descriptions of Results and Conclusion accordingly.
 \end{hints}
 
-Chapter~\ref{chp:background} establishes the concepts and terminology used
-throughout the thesis, covering container-terminal operations, event logs,
-process mining, simulation models and their evaluation.
+Chapter~\ref{chp:background} introduces the concepts that the thesis uses:
+truck operations in a container terminal and their key performance indicator,
+event logs, process discovery with Petri nets, domain rules and model repair,
+conformance checking, business process simulation and the simulation
+framework ProSiT. Related work is discussed together with each concept. The
+chapter ends with the research gap.
 
-Chapter~\ref{chp:related_work} compares research on process discovery,
-data-aware simulation and logistics applications. It discusses object-centric
-and resource-centric alternatives, distinguishes the evidence required for
-different validation claims, and positions the CTB case study within the
-remaining methodological challenges.
+Chapter~\ref{chp:case_study_and_data} introduces HHLA Container Terminal
+Burchardkai and its data. It explains how records from several terminal
+systems are turned into one truck-visit event log, gives the key facts of
+this log and states the domain rules that every truck visit must satisfy.
 
-Chapter~\ref{chp:case_study_and_data} introduces the HHLA Container Terminal
-Burchardkai as the empirical case study and describes the operational data
-used in the analysis. It explains how records from several terminal systems
-are cleaned, matched, and transformed into a process-oriented truck event log.
-The chapter defines the case and activity structure, the lifecycle timestamps
-used for service-time modelling, and the contextual attributes required for
-data-aware simulation, including demand, utilisation, container, and
-target-area information. It concludes with the structure and descriptive
-characteristics of the final simulation-ready event log.
+Chapter~\ref{chp:experiments} describes the five experiments: control-flow
+discovery (E1), rule audit and repair (E2), baseline simulation (E3),
+mechanism audit (E4) and policy evaluation (E5), together with the outcome
+measures and the domain review.
 
-Chapter~\ref{chp:experiments}
-
-
-Chapter~\ref{chp:results} presents the empirical findings following the logic
-of the four research questions. 
+Chapter~\ref{chp:results} presents the results of the experiments in the
+same order.
 
 Chapter~\ref{chp:conclusion} brings together the empirical findings and answers
 the four research questions. It evaluates what the case study demonstrates

@@ -1,7 +1,7 @@
-\chapter{Case Study and Data Engineering}
+\chapter{Data Preparation}
 \label{chp:case_study_and_data}
 \begin{hints}
-\item Roadmap: environment, data sources, event-log construction, context attributes, observed behaviour, domain rules.
+\item Roadmap: environment, data sources, event-log construction, context attributes, key facts of the event log, domain rules. Keep the chapter short; details go to Appendix~\ref{app:observed_behaviour}.
 \item This chapter only describes the data and the observed system. It does not fit models.
 \end{hints}
 
@@ -11,8 +11,10 @@ records into a simulation-ready event log. The resulting event log is the input 
 Section~\ref{sec:cs_environment} introduces HHLA Container Terminal
 Burchardkai (CTB), the truck-handling operations and the data sources.
 Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs lifecycle timestamps and derives the case-level context required by ProSiT
-\cite{Vinci2026prosit}. The final section describes the event log and its
-characteristics used for the temporal train/validation/test split in
+\cite{Vinci2026prosit}. Section~\ref{sec:observed_behaviour} gives the key
+facts of the resulting event log, and Section~\ref{sec:domain_rules} the
+domain rules that every truck visit must satisfy. The use of the
+train/validation/test partitions is described in
 Section~\ref{sec:exp_partitions}.
 
 
@@ -231,21 +233,18 @@ assigned RMG block.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Observed Truck-Visit Behaviour}
+\section{Event Log Overview}
 \label{sec:observed_behaviour}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item Already written. Keep all thresholds fitted on training data only.
-\end{hints}
 % Source: trucksimulation/peak_analysis/peak_analysis_observed_v2.py,
 % output peak_analysis/observed_20261007_v2. Training and validation only.
 
-This section describes the recorded behaviour that the simulation must
-reproduce. It covers the visit structure, the arrival pattern, the
-turnaround time and the conditions under which delays occur. All
-statements are descriptive associations. They do not establish causes.
-Thresholds are fitted on the training partition and applied unchanged
-to the validation partition. The test partition is not used.
+This section gives the key facts of the event log that later chapters use.
+The full description of the observed behaviour, with the arrival pattern,
+congestion over the day, delay peaks, disruption episodes and the differences
+between the partitions, is in Appendix~\ref{app:observed_behaviour}.
+Thresholds are fitted on the training partition and applied unchanged to the
+validation partition. The test partition is not used.
 
 \subsection{Visit Structure and Turnaround Time}
 \label{sec:obs_structure}
@@ -291,179 +290,36 @@ two thirds. Since a stop interval begins when the truck reports ready in
 the handover lane, it can already contain waiting for the crane. Driving
 and any queueing before the truck reports ready fall into the approach.
 
-\subsection{Arrival Pattern}
-\label{sec:obs_arrivals}
+\subsection{Load and Delay}
+\label{sec:obs_summary}
 
-Trucks arrive in a stable weekly and daily pattern
-(Figure~\ref{fig:obs_calendar}). Arrivals take place from Monday to
-Friday, with few visits on Saturdays and none on Sundays. On weekdays,
-about 22 trucks per hour arrive between midnight and 5:00. The rate
-rises to about 118 per hour at 6:00 and stays on a plateau of 126 to 152
-trucks per hour between 7:00 and 16:00. After 17:00 it falls again. The
-week around Easter (1 to 7 April) has a markedly lower volume.
+Trucks arrive from Monday to Friday, with few visits on Saturdays and none on
+Sundays. On weekdays, between 126 and 152 trucks per hour arrive from 7:00 to
+16:00. Hours with at least 165 arrivals, the 90th percentile of the training
+hours, are called \emph{arrival peaks}.
 
-An \emph{arrival peak} is a Gate-In hour with at least 165 arrivals, the
-90th percentile of all training hours with arrivals. Arrival peaks are
-short spikes on top of the daytime plateau. They make up 70 of 610
-training hours with at least 20 visits (11.5\,\%) and 18 of 147
-validation hours. The highest hourly count is 255 trucks, in the
-validation period.
+The turnaround time grows with the number of trucks in the terminal, and the
+growth is non-linear (Figure~\ref{fig:obs_wip}). Up to about 100 trucks, the
+median TTT rises slowly from 23 to 34 minutes. Between 140 and 160 trucks it
+reaches 43 minutes, and above 160 trucks the P90 exceeds two hours.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/observed/hourly_arrivals_ttt.png}
-\caption{Hourly arrivals (top) and median turnaround time by Gate-In hour
-(bottom) for the training and validation periods. Dots mark arrival peaks
-and delay peaks. Dashed lines show the thresholds of 165 arrivals and
-37 minutes. The vertical line marks the start of the validation period.}
-\label{fig:obs_calendar}
-\end{figure}
+Hours in which the median TTT is at least 37 minutes, the 90th percentile of
+the training hours, are called \emph{delay peaks}. They make up 10.2\,\% of the
+training hours and 26.5\,\% of the validation hours. Delay peaks and arrival
+peaks rarely coincide. The additional time in delay peaks lies mainly in the
+approach to the first stop and in the exit, not in the stop intervals. A few
+disruption days, such as 23 March 2026, show very long exit times at normal
+arrival rates. They are reported separately but never removed.
 
-\subsection{Congestion over the Day}
-\label{sec:obs_congestion}
-
-The turnaround time grows over the working day, although the arrival
-rate stays on its plateau. On training weekdays, the median TTT rises
-from 26 minutes for trucks arriving at 7:00 to 34 minutes at 14:00. The
-P90 rises from 57 to 81 minutes at 13:00. The mean number of trucks
-already inside the terminal at Gate In grows from 69 at 7:00 to 106 at
-15:00. Figure~\ref{fig:obs_components} shows that this growth comes mainly
-from the approach and the exit. The stop intervals change comparatively
-little over the day.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.85\textwidth]{figures/observed/ttt_components_by_hour.png}
-\caption{Mean turnaround time by Gate-In hour, split into approach, stop
-intervals, transfer and exit. Training weekdays.}
-\label{fig:obs_components}
-\end{figure}
-
-The turnaround time increases with the number of trucks in the terminal,
-and the increase is non-linear (Figure~\ref{fig:obs_wip}). Up to about
-100 trucks, the median TTT rises slowly from 23 to 34 minutes. Between
-140 and 160 trucks, the median reaches 43 minutes and the P90 about 100
-minutes. Above 160 trucks, the P90 exceeds two hours. Such occupancy
-levels are rare and occur on a few days only. The
-Spearman correlation between hourly arrivals and the median TTT of the
-same hour is 0.51. It is 0.53 for the arrivals of the preceding three
-hours and drops to 0.05 for a lag of six hours.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.85\textwidth]{figures/observed/ttt_vs_wip.png}
-\caption{Median and P90 of the turnaround time by the number of trucks
-in the terminal at Gate In, in classes of 20. Training, classes with at
-least 50 visits.}
-\label{fig:obs_wip}
-\end{figure}
-
-The same pattern appears at the handling units
-(Figure~\ref{fig:obs_unit}). At an RMG block, the median stop interval
-is 5 minutes when the truck is alone at the block. It is 9, 13 and 18
-minutes when two, three or four trucks have an open interval at the same
-block. The Spearman correlation between unit occupancy and stop duration
-is 0.49 for RMG, 0.45 for LL and 0.32 for HO2. Up to four concurrent
-intervals occur at an RMG block, although a block has three handover
-lanes. How a fourth interval arises is not yet clear. At LL and HO2,
-more than ten concurrent intervals occur. This confirms that the
-timestamps of these areas do not represent physical occupancy.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.85\textwidth]{figures/observed/stop_vs_unit_wip.png}
-\caption{Median stop interval by the number of trucks with an open
-interval at the same handling unit when the stop starts. Training.}
-\label{fig:obs_unit}
-\end{figure}
-
-\subsection{Delay Peaks}
-\label{sec:obs_delay_peaks}
-
-A \emph{delay peak} is a Gate-In hour with at least 20 visits whose
-median TTT is at least 37 minutes, the 90th percentile of the training
-hours. Delay peaks are a different phenomenon from arrival peaks.
-Training contains 62 delay-peak hours (10.2\,\%) and validation 39
-(26.5\,\%). Only nine delay-peak hours in each partition are also
-arrival-peak hours.
-
-Table~\ref{tab:obs_peak_components} decomposes the turnaround time in
-and outside delay peaks. In training, the mean TTT in delay-peak hours
-is 24.4 minutes longer. Approach and exit account for 21.4 minutes of
-this difference, or 88\,\%. The stop intervals grow by only 2.5 minutes.
-Arrival peaks, in contrast, are associated with an increase of only 2.4
-minutes in mean TTT.
-
-The exit share is driven by two disruption days
-(Section~\ref{sec:obs_episodes}). Without 12 and 23 March, the mean TTT
-in delay-peak hours is 17.0 minutes longer. The approach accounts for
-10.1 minutes (59\,\%), the stop intervals for 3.3 minutes (19\,\%) and
-the exit for 3.1 minutes (18\,\%). Under normal operation, the additional
-delay therefore arises mainly before the truck reports ready at its
-first stop.
-% Source: peak_analysis/bottleneck_analysis.py, output bottleneck_20261009.
-
-\begin{table}[htbp]
-\centering
-\begin{tabularx}{\textwidth}{YL{1.5cm}L{1.5cm}L{1.5cm}L{1.5cm}L{1.5cm}}
-\toprule
-\textbf{Training, mean [min]} & \textbf{Approach} & \textbf{Stops} & \textbf{Transfer} & \textbf{Exit} & \textbf{TTT} \\
-\midrule
-Delay-peak hours (7,273 visits) & 19.3 & 14.2 & 1.6 & 22.9 & 57.9 \\
-Other hours (50,989 visits) & 9.8 & 11.7 & 1.1 & 11.0 & 33.5 \\
-Difference & +9.5 & +2.5 & +0.5 & +11.9 & +24.4 \\
-\midrule
-Arrival-peak hours (12,732 visits) & 12.0 & 12.4 & 1.2 & 12.9 & 38.4 \\
-Other hours (45,530 visits) & 10.7 & 11.9 & 1.1 & 12.3 & 36.0 \\
-\bottomrule
-\end{tabularx}
-\caption{Turnaround-time components in and outside peak hours. Visits
-are assigned to the hour of their Gate In.}
-\label{tab:obs_peak_components}
-\end{table}
-
-Not all visits are affected equally. In arrival peaks, the median TTT of
-receive visits rises from 28 to 34 minutes, that of delivery visits only
-from 23 to 25 minutes. Multiblock visits rise from 45 to 52 minutes.
-Visits without RMG are almost unaffected (27 to 28 minutes). Among the
-RMG blocks, T18 shows the largest increase of the median stop interval,
-from 10 to 17 minutes. Most other blocks increase by at most three
-minutes, and HO2 stops are not longer in arrival peaks.
-
-\subsection{Disruption Episodes}
-\label{sec:obs_episodes}
-
-A few delay peaks follow a different pattern. On Monday, 23 March 2026,
-the hourly median TTT rose to between 112 and 146 minutes from about
-9:30, while arrivals stayed at a normal 85 to 126 trucks per hour. Up to
-306 trucks were inside the terminal. The additional time lies almost
-entirely in the exit, with approach and stop intervals at normal values.
-Similar but shorter episodes occur on 12 March and on 13 April
-(validation). Possible explanations include a disruption at the exit
-gate or in exit processing, or an artefact of the Gate Out recording.
-% TODO: add the explanation from the domain review (questionnaire D9).
-Such episodes are not driven by demand. A simulation learned from normal
-operations cannot be expected to reproduce them. They are therefore
-identified by a rule fixed in advance and reported separately, but they
-are never removed from the evaluation.
-
-\subsection{Differences between the Partitions}
-\label{sec:obs_drift}
-
-The validation period is more congested than the training period. Its
-daily median TTT is 32 minutes against 29, and the share of delay-peak
-hours is 26.5\,\% against 10.2\,\%. Visits without RMG show the largest
-shift, with a median TTT of 39 against 27 minutes. A model fitted on the
-training period is therefore expected to underestimate the validation
-TTT, independently of its control flow. For this reason, model variants
-are compared with each other on the same period, and absolute
-deviations are interpreted with this shift in mind.
+The validation period is more congested than the training period, with a
+daily median TTT of 32 against 29 minutes (Section~\ref{sec:obs_drift}). The
+set of activity sequences, however, hardly changes: only six validation visits
+follow a sequence that does not occur in training. A model fitted on the
+training period is therefore expected to underestimate the validation TTT,
+independently of its control flow.
 
 \subsection{Implications for the Simulation}
 \label{sec:obs_implications}
-\begin{hints}
-\item Add before this subsection a short subsection ``Bottlenecks at the Handover with the evidence used by scenario S1: approach to the first RMG stop by trucks already at the block at Gate In (median 6, 6, 9, 14, 20 min for 0--4 trucks); stop duration growth by block (T18 6 to 19 min); in 11\,\% of arrivals the target block is full while a median of 14 other blocks have at most one truck; exit gate not a bottleneck in normal operation (source: peak\_analysis/bottleneck\_20261009, scenario\_evidence.py).
-\end{hints}
 
 The observed behaviour defines what an adequate simulation must
 reproduce for the purpose of this thesis.
@@ -486,15 +342,49 @@ Chapter~\ref{chp:experiments}.
 \section{Domain Rules}
 \label{sec:domain_rules}
 \begin{hints}
-\item The rule register (R1--R12) as a table: statement, status, source and date. Move the table here from Chapter 6 and refer to it from E2.
-\item Provenance per rule: author domain knowledge vs. confirmation by the terminal (questionnaire part B). Never mix the two.
-\item Which rules can be checked on activity labels and which need block identities or timestamps (R11, RMG part of R12).
+\item Add per rule the share of training and validation visits that satisfy it (audit level 1 in E2).
 \item Open points: repeated mixed events at the same block; eligible blocks for deliveries.
 \end{hints}
+
+The physical constraints of Section~\ref{sec:bg_terminal} are written down as
+seven rules (Table~\ref{tab:domain_rules}). They are based on the domain
+knowledge of the author.
+% TODO: state the author's role at CTB and the period precisely.
+They have not yet been confirmed independently by the terminal. Confirmation
+is requested in part B of the domain review (Section~\ref{sec:exp_review}).
+Until then the rules are working assumptions. Rule 7 is tentative, because
+the truck type and its capacity are not recorded.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{L{0.5cm}YL{2.6cm}L{3.2cm}}
+\toprule
+\textbf{\#} & \textbf{Rule} & \textbf{Type} & \textbf{Needs} \\
+\midrule
+1 & Gate In occurs exactly once and is the first event. & sequence & activity labels \\
+2 & Gate Out occurs exactly once and is the last event. & sequence & activity labels \\
+3 & A visit has at least one yard stop between Gate In and Gate Out. & sequence & activity labels \\
+4 & The stops of a visit never overlap in time. & time & start and complete timestamps \\
+5 & A mixed stop handles all moves of the visit at its unit. The visit has no separate delivery or receive at the same unit. & sequence (LL, HO2); data (RMG) & activity labels; block of each RMG stop \\
+6 & The number of stops equals the number of planned stops in the manifest, at most four. & data; the bound is a sequence rule & planned stops (case attribute) \\
+7 & The load of the truck stays within its capacity after every stop (tentative). & data & container counts and truck type (not recorded) \\
+\bottomrule
+\end{tabularx}
+\caption{Domain rules for truck visits. Source: domain knowledge of the
+author; confirmation by the terminal pending. The type decides where a rule
+can be enforced (Section~\ref{sec:exp_rules}).}
+\label{tab:domain_rules}
+\end{table}
+
+For LL and HO2, the area is the handling unit, so rule 5 can be read from the
+activity labels. For RMG, the unit is the block, which the generic activity
+label does not show. The RMG part of rule 5 therefore needs the block of each
+stop, which is the resource of the event.
 
 \section{Chapter Summary}
 \label{sec:cs_summary}
 \begin{hints}
-\item One paragraph: the event log, the population, the observed delay pattern and bottleneck, and the rules. Hand over to Chapter 5.
+\item One paragraph: the event log, the population, the observed delay pattern and bottleneck, and the rules. Hand over to the methodology (Chapter~\ref{chp:experiments}).
 \end{hints}
 

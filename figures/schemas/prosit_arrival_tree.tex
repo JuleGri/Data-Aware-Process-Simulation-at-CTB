@@ -1,0 +1,52 @@
+% Arrival tree learned by ProSiT 1.0.4 on the CTB training partition.
+% Source: trucksimulation/simulation_e3/runs/e3_prom_20261104/IM_0.0/prosit_params.pkl
+%         (params.arrival_time_distribution.rules). Means are those of the values the
+%         simulator draws (leaf 'sampled' list), rounded to one decimal (0.65 kept).
+% Weekday: 0 = Monday ... 6 = Sunday. Thresholds weekday <= 4.5, hour <= 21.5, hour <= 4.5,
+% weekday <= 2.5, hour <= 9.5 are shown as integer conditions.
+\begin{figure}[htbp]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  split/.style={rectangle, rounded corners=2pt, draw, font=\footnotesize, inner sep=3pt, align=center},
+  leaf/.style={rectangle, draw, fill=black!6, font=\scriptsize, text width=19mm, align=center, inner sep=2pt},
+  edge/.style={-{Stealth[length=1.6mm]}},
+  yes/.style={font=\scriptsize, midway, fill=white, inner sep=1pt}]
+% split nodes
+\node[split] (root) at (7.25,0)    {weekday is Mon--Fri?};
+\node[split] (n2)   at (3.225,-1.4) {hour $\le$ 21?};
+\node[split] (n5)   at (11.3,-1.4)  {hour $\le$ 9?};
+\node[split] (n3)   at (1.075,-2.8) {hour $\le$ 4?};
+\node[split] (n4)   at (5.375,-2.8) {weekday is Mon--Wed?};
+\node[split] (n6)   at (9.675,-2.8) {hour $\le$ 4?};
+% leaves
+\node[leaf] (a) at (0,-4.3)     {Mon--Fri, 0--4\,h\\ exponential\\ mean 2.1\,min};
+\node[leaf] (b) at (2.15,-4.3)  {Mon--Fri, 5--21\,h\\ normal\\ mean 0.65\,min};
+\node[leaf] (c) at (4.3,-4.3)   {Mon--Wed, 22--23\,h\\ exponential\\ mean 1.9\,min};
+\node[leaf] (d) at (6.45,-4.3)  {Thu--Fri, 22--23\,h\\ exponential\\ mean 2.5\,min};
+\node[leaf] (e) at (8.6,-4.3)   {Sat, 0--4\,h\\ exponential\\ mean 4.8\,min};
+\node[leaf] (f) at (10.75,-4.3) {Sat, 5--9\,h\\ exponential\\ mean 2.6\,min};
+\node[leaf] (g) at (12.9,-4.3)  {Sat, from 10\,h\\ exponential\\ mean 13.0\,min};
+% edges
+\draw[edge] (root) -- node[yes] {yes} (n2);
+\draw[edge] (root) -- node[yes] {no}  (n5);
+\draw[edge] (n2) -- node[yes] {yes} (n3);
+\draw[edge] (n2) -- node[yes] {no}  (n4);
+\draw[edge] (n5) -- node[yes] {yes} (n6);
+\draw[edge] (n5) -- node[yes] {no}  (g);
+\draw[edge] (n3) -- node[yes] {yes} (a);
+\draw[edge] (n3) -- node[yes] {no}  (b);
+\draw[edge] (n4) -- node[yes] {yes} (c);
+\draw[edge] (n4) -- node[yes] {no}  (d);
+\draw[edge] (n6) -- node[yes] {yes} (e);
+\draw[edge] (n6) -- node[yes] {no}  (f);
+\end{tikzpicture}}
+\caption{A real ProSiT tree: the arrival model learned from the CTB training
+partition (ProSiT 1.0.4, Section~\ref{sec:exp_baseline}). The tree predicts the gap
+until the next truck arrives, in open minutes of the arrival calendar, from the
+hour and weekday of the previous arrival. Each leaf holds a fitted distribution.
+The simulator follows the conditions from the top to one leaf and draws the gap
+from that leaf. The means are those of the values the simulator draws. Sunday is
+closed in the arrival calendar, so no gaps are drawn there.}
+\label{fig:bg_prosit_arrival_tree}
+\end{figure}
