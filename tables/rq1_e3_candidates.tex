@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrr|rrrrr}
+\toprule
+ & \multicolumn{3}{c|}{\textbf{Conformance (training log)}} & \multicolumn{5}{c}{\textbf{Simulation (test period)}} \\
+\textbf{Net (repaired)} & \textbf{Precision} & \textbf{Seq.} & \textbf{Multi-block} & \textbf{Stop-count} & \textbf{Sequence} & \textbf{2 stops} & \textbf{RMG visits to} & \textbf{TTT median} \\
+ & & \textbf{accepted} & \textbf{accepted [\%]} & \textbf{TVD} & \textbf{TVD} & \textbf{[\%]} & \textbf{2 blocks [\%]} & \textbf{/ P90 [min]} \\
+\midrule
+Observed (test log) & -- & -- & -- & 0 & 0 & 10.66 & 2.86 & 33 / 75 \\
+\midrule
+ILP 1.00 & 0.825 & 82 of 82 & 100.00 & 0.021 & 0.098 & 8.61 & 1.11 & 59 / 141 \\
+IM 0.0 & 0.888 & 82 of 82 & 100.00 & 0.021 & 0.097 & 8.62 & 1.16 & 58 / 141 \\
+IMf 0.3 & 0.993 & 19 of 82 & 1.16 & 0.054 & 0.114 & 5.46 & 0.04 & 45 / 104 \\
+HM 0.7 & 0.998 & 38 of 82 & 99.22 & 0.025 & 0.096 & 8.26 & 1.17 & 58 / 136 \\
+\bottomrule
+\end{tabular}
+\caption{The four repaired nets taken to E3, ordered by precision. Left: conformance on the training log (E1, E2). Right: simulated visits in the test period with stop guard, means over five seeds. TVD: total-variation distance to the observed test log (0 = identical). RMG visits to 2 blocks: share of the visits with an RMG stop that use two different blocks. The turnaround time is far too long for every net; the cause lies outside the control flow (Section~\ref{sec:res_mechanisms}).}
+\label{tab:rq1_e3_candidates}
+\end{table}

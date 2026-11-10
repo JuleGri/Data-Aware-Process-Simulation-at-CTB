@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\begin{tabular}{lrrrrrrr}
+\toprule
+& & & & & & \multicolumn{2}{c}{\textbf{Stops split}} \\ \cmidrule(lr){7-8}
+\textbf{Comparison} & \textbf{Mean TTT} & \textbf{Approach} & \textbf{Stops} & \textbf{Transfer} & \textbf{Exit} & \textbf{Count} & \textbf{Duration} \\
+\midrule
+Final, test period & -6.3 & -2.2 & -3.6 & -0.5 & 0.0 & -0.2 & -3.4 \\
+Final, training period & -2.7 & -0.5 & -1.5 & -0.2 & -0.5 & 0.0 & -1.5 \\
+Real: training vs.\ test period & -4.6 & -1.8 & -2.3 & -0.6 & 0.0 & -0.3 & -2.0 \\
+\bottomrule
+\end{tabular}
+\caption{Error of the mean turnaround time (simulated minus observed, minutes) and its parts; the four parts add up to the TTT error up to rounding. The stop error is split into a count part (stops per visit by area, i.e.\ routing) and a duration part (mean stop duration by area). Last row: training log minus test log.}
+\label{tab:rq2_attribution}
+\end{table}

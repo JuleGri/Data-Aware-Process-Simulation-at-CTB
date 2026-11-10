@@ -29,6 +29,58 @@ supports and what it does not.
 %   ProM precision plugin: process_discovery/prom_precision.py re-implements
 %         PNetAlignmentAnalysis 6.10.114 AlignmentPrecGen (source in the jar)
 %         -> prom_nets_full_20261102/prom_precision_train.csv (also per-sequence ETC: pm4py_etc_variants)
+% Current sources (split at Monday 13 April 2026, 6 Nov 2026):
+%   nets: data/processed/CTB/ProM Petri Nets 65-35 Split (ProM Lite, training log only)
+%   metrics: process_discovery/run_e1_split13apr.sh -> outputs/runs/e1_split13apr_20261106
+%   figures: plot_e1_split13apr.py (notes: figures/discovery_prom/e1_split13apr_figure_notes.md),
+%            plot_e1_variant_coverage.py; tables: make_rq1_tables.py, analyse_tail_relevance.py
+\begin{hints}
+\item OUTDATED: the text of this section after the figures still describes the old
+split (training, validation and test partitions, 80 training sequences). Rewrite it
+with the split at 13 April (Section~\ref{sec:exp_partitions}). Already current:
+Figures~\ref{fig:res_e1_tradeoff_train}, \ref{fig:res_e1_tradeoff_test} and
+\ref{fig:res_e1_variant_coverage}, Tables~\ref{tab:rq1_e2_candidates},
+\ref{tab:rq1_tail_relevance} and \ref{tab:app_e1_conformance}, and the summary in
+Section~\ref{sec:res_rq1}.
+\end{hints}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/discovery_prom/e1_split13apr_fitness_precision_train.pdf}
+\caption{Share of fitting visits and precision of the discovered nets on the
+training log, which is the basis for the selection. Left: all nets. Right: the
+nets with more than 91\,\% fitting visits and a precision above 0.7. Hollow
+markers: unsound nets, values for diagnosis only. The prefix tree accepts
+exactly the training sequences and serves as a reference.}
+\label{fig:res_e1_tradeoff_train}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/discovery_prom/e1_split13apr_fitness_precision_test.pdf}
+\caption{The same nets on the test log (13 to 30 April 2026). The test log was
+not used for any decision. Precision hardly changes. IM 0.0 and ILP 1.00 still
+fit (almost) all visits, while the nets that accept few sequences lose more
+fitting visits than on the training log (IMf 0.3: 96.5\,\% $\rightarrow$
+94.9\,\%).}
+\label{fig:res_e1_tradeoff_test}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/discovery_prom/e1_split13apr_variant_coverage.pdf}
+\caption{Which training sequences each sound candidate accepts. Top: share of
+the training visits per sequence (logarithmic scale), from the most to the least
+frequent sequence. Middle: number of stops of each sequence. Bottom: one row per
+net; a coloured cell means that the net accepts the complete sequence. The six
+most frequent sequences cover 88.5\,\% of the visits, so a net that accepts few
+sequences can still fit most visits.}
+\label{fig:res_e1_variant_coverage}
+\end{figure}
+
+\input{tables/rq1_e2_candidates}
+
+\input{tables/rq1_tail_relevance}
 
 The eighteen nets of Table~\ref{tab:exp_grid} were discovered in ProM on the
 training partition of the expanded population (58,262 visits, 80 distinct
@@ -359,10 +411,12 @@ would not have been visible.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Domain-Rule Audit and Repair (E2)}
 \label{sec:res_rules}
-egin{hints}
-\item OUTDATED (PM4Py era, single base model IM0, rule names R1--R12). Rewrite with the E2 run on the five E1 candidates (process\_discovery/outputs/runs/e2\_top5\_20261104) and the rule numbers 1--7 of Table~ef{tab:domain_rules}.
+\begin{hints}
+\item OUTDATED (PM4Py era, single base model IM0, rule names R1--R12). Rewrite with the E2 run on the five E1 candidates on the split at 13 April (process\_discovery/outputs/runs/e2\_split13apr\_20261106) and the rule numbers 1--7 of Table~\ref{tab:domain_rules}. Already current: Table~\ref{tab:rq1_e2_repair} and the summary in Section~\ref{sec:res_rq1}.
 \end{hints}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{tables/rq1_e2_repair}
 
 \subsection{Recorded Log}
 
@@ -574,10 +628,14 @@ it produces a better simulation. That is the question of E3.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Control-Flow Candidates in the Simulation (E3)}
 \label{sec:res_baseline}
-egin{hints}
-\item OUTDATED (ProSiT 1.0.3, candidates CONTRACT/IM0/IM0\_R5\_R12). Rewrite with the E3 runs on ILP 1.00 repaired, IM 0.0 repaired and HM 0.7 and the $2	imes2$ contrast (simulation\_e3/runs/e3\_prom\_20261104, e3\_prom\_noguard\_20261104, e3\_prom\_guard\_original\_20261104).
+\begin{hints}
+\item OUTDATED (ProSiT 1.0.3, candidates CONTRACT/IM0/IM0\_R5\_R12, validation partition). Rewrite with the E3 runs on the split at 13 April: ILP 1.00, IM 0.0, HM 0.7 and IMf 0.3 repaired, the $2\times2$ contrast and the same-language control (simulation\_e3/runs/split13apr\_20261106: main, noguard, guard\_orig, samelang). Already current: Tables~\ref{tab:rq1_e3_candidates} and \ref{tab:rq1_e3_2x2} and the summary in Section~\ref{sec:res_rq1}.
 \end{hints}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{tables/rq1_e3_candidates}
+
+\input{tables/rq1_e3_2x2}
 
 % PROVISIONAL: values below come from the diagnostic script
 % trucksimulation/analysis/critical_review_20261007/scripts/e3_provisional_kpis.py
@@ -713,62 +771,655 @@ approach time, which do not depend on the control-flow model. These two
 components are the subject of E4.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Mechanism Audit (E4)}
+\section{Answer to RQ1}
+\label{sec:res_rq1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Numbers: tables/rq1_e2_candidates.tex, rq1_e2_repair.tex, rq1_e1_conformance.tex (make_rq1_tables.py),
+%   rq1_tail_relevance.tex (analyse_tail_relevance.py), figures/discovery_prom/e1_split13apr_*
+%   Lifecycle IM: process_discovery/check_concurrency.py and compare_languages.py on the capped IMlc nets.
+\begin{hints}
+\item Short answer, part~1: the unfiltered Inductive Miner net (IM 0.0),
+restricted exactly to rules 3 and 5 and written as a state machine, with the stop
+guard in ProSiT for rule 6. It is the only sound net that accepts every observed
+sequence with a precision clearly above that of a flower-like net, and the repair
+raises its precision from 0.838 to 0.888 without losing a visit. Justified by E1
+(Section~\ref{sec:res_discovery}, Figures~\ref{fig:res_e1_tradeoff_train} and
+\ref{fig:res_e1_variant_coverage}, Tables~\ref{tab:rq1_e2_candidates} and
+\ref{tab:rq1_tail_relevance}) and E2 (Section~\ref{sec:res_rules},
+Table~\ref{tab:rq1_e2_repair}). Measures and selection rule:
+Section~\ref{sec:exp_discovery_eval}; coverage measures:
+Section~\ref{sec:bg_coverage}; repair: Section~\ref{sec:mc_repair}.
+\item Short answer, part~2: only partly. Precision did not anticipate the
+simulation (same precision, very different simulation; higher precision, same
+simulation). Coverage did: IMf 0.3, the net with the lowest coverage, is the only
+one with a clearly worse simulated structure. The state-machine encoding, which
+no language measure sees, decided whether impossible visits were generated.
+Justified by E3 (Section~\ref{sec:res_baseline}, Tables~\ref{tab:rq1_e3_2x2} and
+\ref{tab:rq1_e3_candidates}).
+\end{hints}
+
+RQ1 has two parts. The first asks which discovery and rule treatment yields a
+sound, executable control-flow model that preserves the observed truck-visit
+behaviour. The second asks whether conformance metrics anticipate the behaviour
+of this model in simulation. This section answers the first part with E1 and E2.
+The second part needs the simulation results of E3.
+
+\subsection{Part 1: Discovery and Rule Treatment}
+
+The best basis is the unfiltered Inductive Miner net (IM 0.0). Its language is
+restricted exactly to the sequence rules 3 and 5 and written as a state machine.
+In the simulator, a data-aware guard makes every truck perform as many stops as
+its manifest plans (rule 6). Each of the three parts solves a different problem.
+
+\paragraph{Discovery: keep all observed behaviour.}
+Only two sound nets accept every training sequence: IM 0.0 and ILP 1.00
+(Figure~\ref{fig:res_e1_variant_coverage}, Table~\ref{tab:app_e1_conformance}).
+ILP 1.00 allows every sequence of stops, for example all 6,561 sequences with four
+stops, and reaches a precision of 0.773. IM 0.0 restricts the order and the
+repetition of the stops (2,009 sequences with four stops) and reaches 0.838.
+Every discovered net with a higher precision gets it by rejecting observed
+sequences (Figure~\ref{fig:res_e1_tradeoff_train}). The usual measures hide this
+loss. Because the six most frequent sequences cover 88.5\,\% of the visits,
+IMf 0.3 fits 96.5\,\% of the visits and reaches a log fitness of 0.993, although
+it accepts only 19 of the 82 sequences and 1.2\,\% of the multi-block visits
+(Table~\ref{tab:rq1_e2_candidates}). The Heuristics nets keep more visits
+(HM 0.7: 99.4\,\%), but still reject 44 of the 82 sequences. Discovery from
+start and complete events does not help either: with corrected timestamps, the
+lifecycle Inductive Miner yields exactly the language of IM 0.0
+(Section~\ref{sec:timestamp_semantics}).
+
+\paragraph{Is keeping every observed sequence overfitting?}
+One could object that preferring the net that accepts every observed sequence is
+overfitting. In general, discovery balances fitness, precision, generalisation
+and simplicity, and perfect fitness is not a goal in itself
+\cite{Buijs2014Quality}. A net overfits if it allows only the behaviour of the
+training log and fails on new behaviour \cite{Aalst2016}. The prefix tree is such
+a net: it accepts all 82 training sequences, but none of the 16 test sequences
+that do not occur in training. IM 0.0 is not: its precision is the same on the
+training and the test log (0.838), it fits 99.99\,\% of the test visits, and it
+accepts 13 of the 16 new test sequences. Its problem is the opposite: it allows
+too much. The rule treatment removes this surplus with domain knowledge, not with
+frequencies.
+
+Noise filtering, as in IMf, assumes that rare behaviour is noise
+\cite{Leemans2014InductiveMiner}. Here it is not. Every training sequence
+satisfies the sequence rules 1, 2, 3 and 5, since the repaired net still accepts
+all of them. Most sequences that the filtered nets reject occur again in the test
+log (IMf 0.3: 41 of 63; Table~\ref{tab:rq1_tail_relevance}). Not all rare
+sequences matter for the simulation, though. The simulation has to reproduce the
+turnaround time and the load of the terminal, and for these the truly rare
+sequences count little: the 47 sequences with fewer than ten visits in six weeks
+make up 0.19\,\% of the visits and 0.42\,\% of the truck-minutes. But the
+filtered nets do not cut only this tail. IMf 0.3 also rejects the ninth most
+frequent sequence, a delivery and a receive at two different RMG blocks (814
+visits). Its
+filter removes steps between two activities that are rare compared with the most
+frequent step from the same activity, no matter how often the whole sequence
+occurs. The visits that IMf 0.3 rejects are 3.5\,\% of all visits, but 5.5\,\%
+of the truck-minutes, 10\,\% of the visits above the P90 turnaround time of 64
+minutes and 98.8\,\% of the multi-block visits. They are long visits, and the
+multi-block visits are directly affected by the block allocation studied in E5.
+
+The two errors also have different costs in the simulation. A sequence that the
+net rejects can never be generated. A sequence that the net accepts is generated
+only as often as the learned routing probabilities allow, and these are small
+for rare branches. Keeping rare but valid sequences therefore costs little, while
+removing them takes away long visits that matter for the KPIs. The preference
+for IM 0.0 is thus not a preference for perfect fitness. It follows from the
+purpose of the model.
+
+\paragraph{Rule treatment: remove what is physically impossible.}
+IM 0.0 allows too much. Its language contains visits without a stop (rule 3), a
+mixed stop together with a separate delivery or receive at the same LL or HO2
+area (rule 5), and more than four stops (bound of rule 6). Through its parallel
+branches, it would also let the simulator start two stops of the same truck at
+the same time (rule 4). The exact repair restricts the language to rules 3 and 5
+and writes it as a state machine (Section~\ref{sec:mc_repair}). It keeps every
+observed sequence: 100\,\% of the training visits and 99.99\,\% of the test
+visits still fit. Precision rises from 0.838 to 0.888 on the training log and to
+0.889 on the test log (Table~\ref{tab:rq1_e2_repair}). The unrepaired language
+written as a state machine has the same precision as the original net (0.838).
+The gain therefore comes from the removed behaviour, not from the new encoding.
+The state machine holds one token per truck, so the stops of a truck can no
+longer overlap (rule 4). The bound of rule 6 is not encoded in the net. The stop
+guard enforces the stronger equality with the planned stops in the simulator.
+
+\paragraph{Why not another candidate.}
+The repair does not change the ranking. HM 0.7 and HM 0.9 already satisfy rules 3
+and 5. The repair leaves them unchanged, and they still reject 44 and 55 of the
+82 training sequences. The repaired ILP 1.00 keeps all sequences, but it stays
+less precise than the repaired IM 0.0 (0.825 against 0.888) and permits 3,937
+instead of 1,583 sequences with four stops. The repaired IMf 0.3 reaches a
+precision of 0.993, but only because it still rejects 63 of the 82 training
+sequences and 98.8\,\% of the multi-block visits.
+
+\paragraph{Limits of the answer.}
+The answer holds for the tested configurations of four miner families
+(Table~\ref{tab:exp_grid}) and for the domain rules of
+Table~\ref{tab:domain_rules}, which the terminal has not yet confirmed. The
+repaired IM 0.0 still permits sequences that never occur: 1,583 sequences with
+four stops, of which five occur in training. They are plausible under the generic
+activity labels, and the learned routing probabilities decide how often the
+simulator generates them. In the simulation with the stop guard, visits with an
+unobserved sequence make up 0.05\,\% of the generated visits
+(Table~\ref{tab:rq1_e3_2x2}).
+
+\subsection{Part 2: Do Conformance Metrics Anticipate the Simulation?}
+% Sources: trucksimulation/simulation_e3/runs/split13apr_20261106/{main,noguard,guard_orig,samelang}
+%   (validation/e3_summary.csv; guard statistics in run_summary.json, means over seeds 42-46).
+%   Block concentration (rmg_block_share_max) and approach_mean: evaluation_candidates/summary_means.csv
+%   (evaluate_e4.py, means over seeds 42-46); control run without workload features:
+%   ablation/evaluation/summary_means.csv, configuration "B trees".
+
+Only partly. Precision did not anticipate the simulated behaviour. Coverage
+did. And the way a language is written as a net decides behaviour that no
+measure on the language can see.
+
+\paragraph{Same language, same scores, different simulation.}
+The original IM 0.0 and its same-language state machine accept exactly the same
+sequences. They therefore have the same fitness and the same precision (0.838).
+In the simulation they differ strongly (Table~\ref{tab:rq1_e3_2x2}). Without the
+stop guard, the original net generates 15.1\,\% visits without a stop,
+overlapping stops in 22.7\,\% of the visits with more than one stop, and
+19.0\,\% visits whose sequence never occurs. The state machine generates no
+visit of the first two kinds and 0.5\,\% of the third. The reason is where the
+decisions sit. In the original net, every type of stop is a parallel branch that
+a silent transition can skip. ProSiT learns each skip on its own, and in every
+branch skipping is the more frequent choice, because most visits have only one
+stop. Together, these separate choices
+produce empty visits and parallel stops, although no observed visit has them. In
+the state machine, each decision is a choice between the next visible steps,
+learned from the observed sequences. Precision cannot show this difference,
+because it is computed on the language, and the language is the same.
+
+\paragraph{Higher precision, same simulation.}
+The repair raises precision from 0.838 to 0.888, but it does not change the
+simulation. The repaired net and the same-language state machine generate
+practically the same visits (stop-count TVD 0.027 for both, sequence TVD 0.103
+and 0.100). The behaviour that the repair removes was almost never generated
+anyway, because ProSiT learns the routing from the observed visits and gives
+unobserved branches little weight. The precision gain comes from the restricted
+language; the gain in the simulation comes from the state-machine encoding. The
+same holds across the candidates (Table~\ref{tab:rq1_e3_candidates}). ILP 1.00,
+IM 0.0 and HM 0.7 range from 0.825 to 0.998 in precision, but they generate
+nearly the same sequences (sequence TVD 0.096 to 0.098). With the stop guard,
+the number of stops follows the plan of each truck whenever the net allows it.
+The stop-count distribution therefore mainly shows whether a net can produce the
+planned stops.
+
+\paragraph{Coverage anticipated the one structural failure.}
+IMf 0.3 has the second highest precision (0.993 after the repair) and the lowest
+coverage: it accepts 19 of the 82 training sequences and 1.2\,\% of the
+multi-block visits. It is also the only candidate whose simulated structure is
+clearly worse. Its stop-count TVD is about 2.5 times that of the other nets
+(0.054). It generates 5.5\,\% instead of 10.7\,\% visits with two stops, and
+almost no RMG visits to two blocks (0.04\,\% against 2.86\,\% observed). The stop
+guard shows the mechanism directly. When a truck plans a number of stops that
+the net cannot produce, the guard finds no permitted step and falls back to the
+learned routing. This happens about 1,050 times per run with IMf 0.3, about 117
+times with HM 0.7, about 4 times with ILP 1.00 and never with IM 0.0. This is the
+order of their coverage. It also answers the objection discussed in Part 1: the
+behaviour that the filtered net loses becomes visible in the simulation.
+
+\paragraph{Repair and guard.}
+The $2\times2$ contrast separates the two rule treatments
+(Table~\ref{tab:rq1_e3_2x2}). The guard alone hardly changes the original net
+(15.1\,\% visits without a stop in both cases). The original net makes its
+decisions with silent transitions, which the guard does not see, so the guard
+falls back to the learned routing about 10,000 times per run. On the state
+machine, every decision is visible and the guard works as intended. It removes
+the visits with more than four stops (0.06\,\% $\rightarrow$ 0) and reduces the
+unseen sequences from 0.5\,\% to 0.05\,\%. The data-aware guard therefore needs
+the state-machine encoding.
+
+\paragraph{Turnaround time.}
+No candidate reproduces the turnaround time. ILP 1.00, IM 0.0 and HM 0.7 reach a
+median of 58 to 59 minutes and a P90 of 136 to 141 minutes, against 33 and 75
+minutes observed. The stops themselves have about the right duration (medians
+within one to four minutes of the observed values). The difference is waiting.
+About 55\,\% of all simulated RMG stops go to a single block (observed:
+6.3\,\%), and the time from Gate In to the start of the first stop is 43 minutes
+on average (observed: 13 minutes). IMf 0.3 comes closer (45 and 104 minutes), but
+not because of its control flow: it sends somewhat fewer stops to this block
+(50\,\%), and its trucks need 30 minutes to the first stop. The concentration on
+one block is caused by the simulator, not by the control-flow model. In a control
+run without ProSiT's workload features, the largest block receives 6.0\,\% of the
+RMG stops, as observed. This mechanism is examined in E4
+(Section~\ref{sec:res_mechanisms}). At this stage, the turnaround time is
+therefore not a usable criterion for the control flow.
+
+\paragraph{Answer to part 2.}
+Conformance metrics anticipate the simulation only partly. Precision did not:
+higher precision did not lead to a better simulated structure, and two nets with
+the same precision behaved very differently. Coverage did: the only candidate
+with low coverage was the only one with a clearly worse structure, and its
+errors concern exactly the visits it does not accept. What the measures cannot
+see is how a language is written as a net, and this decided whether the
+simulator generated impossible visits. A control-flow model for simulation
+should therefore be judged by its coverage and its representation, and then
+checked in the simulation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Mechanism Audit and Simulation Validity (E4)}
 \label{sec:res_mechanisms}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sources: trucksimulation/simulation_e3/runs/rq2_20261107
+%   evaluate_rq2.py: eval_test_* (against the test log), eval_train (training period), eval_2d (first two days),
+%   eval_floor_* (real against real); verify_rq2_counts.py: count_check; analyse_block_overlap.py: block_overlap;
+%   analyse_waiting_target.py: waiting_target; decompose_rq2.py: stop_decomposition;
+%   components/identity_check.json and component_inventory.json (rq2_components.py); regression_check.json.
+%   Tables: make_rq2_tables.py --final d3x --final-train f0. Design: simulation_e3/E4_RQ2_DESIGN_20261107.md.
 \begin{hints}
-\item Structure every subsection the same way: what was changed, result table, what the result shows, load-response test (E4b) passed or not.
-\item Central table of the chapter: one row per step (E3 baseline, E4a, E4c, E4d), columns TTT median/P90, approach, delay-peak hours, Spearman hourly arrivals vs. TTT, largest block share. Sources: simulation\_e3/E4A\_ARRIVALS\_20261009.md, E4C\_BLOCKS\_CAPACITY\_20261009.md, runs/e4e\_prosit104\_20261010.
+\item Short answer: under replay of the observed trucks and blocks, the simulation reproduces the turnaround time
+to within 5 minutes at the median and 13 minutes at the P90 (28 against 33, 62 against 75 minutes) and reproduces
+the rise of the approach with the block load. It needs four changes to get there. The error of the E3 baseline
+(median 58, P90 141 minutes) came from the block choice (self-count in its queue feature, amplified by a too low
+concurrency count), and the remaining error under load came from the queue (capacity checked at enabling,
+single-server waiting target) and the service (no load in the execution time). The remaining error is mainly in
+the stop durations; part of it is the change between the periods.
+\item Tables: \ref{tab:rq2_chain} (path of the truck), \ref{tab:rq2_loo} (each change reversed),
+\ref{tab:rq2_selection} (choice on the training period), \ref{tab:rq2_profiles} (load profiles),
+\ref{tab:rq2_attribution} (where the error is), \ref{tab:rq2_acceptance} (acceptance).
 \end{hints}
 
-\subsection{Learned Models}
+E4 follows the three levels of the evaluation design
+(Section~\ref{sec:exp_e4_design}): verification, conceptual validity and
+operational validity. The operational results follow the path of a truck
+through the simulator, from the demand to the service
+(Table~\ref{tab:rq2_chain}). The final configuration is then chosen on the
+training period, each of its changes is reversed alone, and it is checked
+against the acceptance criteria.
+
+\subsection{Verification}
+\label{sec:res_e4_verification}
+
+Four checks passed. With all changes switched off, the modified simulation loop
+generates exactly the same log as ProSiT. Every component that is retrained on
+unchanged training data is identical to the fitted one. The replayed arrivals
+are exact: every simulated visit starts at the Gate-In time of its observed visit
+and carries its manifest, and the case-arrival distance to the test log is zero.
+No configuration generates a visit without a stop, overlapping stops of one truck
+or more than four stops.
+
+One check failed. The number of stops in progress at a block, recomputed from
+the generated log, is larger than the number the simulator used for 13 to 14\,\%
+of the RMG stops (five seeds), by one or two. ProSiT counts the activities in
+progress at a resource by walking backwards through its schedule and stops at the
+first activity that has already ended. The simulation loop stores the activities
+in the order in which it processes them, not by their end time, so the walk can
+stop too early. In training, the same quantities are computed exactly. The
+simulated trucks therefore see less load than the models were trained on, in the
+workload and queue features and in the capacity check. All configurations from
+b3 on were repeated with an exact count (suffix x), and only these are reported
+below. The effect is large where a model reacts strongly to load: with the exact
+count alone, the E3 baseline sends 29\,\% instead of 55\,\% of the RMG stops to a
+single block (a0x in Table~\ref{tab:rq2_chain}).
+
+\subsection{Conceptual Validity: What the Components Learned}
 \label{sec:res_inspection}
-\begin{hints}
-\item What ProSiT 1.0.3 learned: all execution-time models and 20 of 26 waiting-time models have a single leaf; routing splits mainly on planned visit attributes; block choice splits first on queue\_length.
-\item Why: the 1.0.3 model selection compares per-leaf stability, not predictive fit. Evidence: on CTB data and on a synthetic example with clearly different groups, it always selects a single distribution; the 1.0.4 criterion selects trees.
-\item What ProSiT 1.0.4 learned (tree inventory of the rediscovery). One real tree as a figure.
-\end{hints}
 
-\subsection{Arrivals (E4a)}
-\label{sec:res_e4a}
-\begin{hints}
-\item E3 arrivals: maximum 132 trucks per hour vs. 255 observed, no arrival peaks, 14\,\% of arrivals on Saturdays.
-\item Hour-of-week model reproduces the profile (67.7\,\% of arrivals between 7 and 16 h vs. 67.2\,\%); replay reproduces it exactly.
-\item Result: TTT unchanged (median 27, P90 54 min), delay-peak hours 0.5--1.8\,\% vs. 26\,\%, Spearman $\approx 0$. Arrivals were necessary but not sufficient. E4b failed.
-\end{hints}
+The fitted models were inspected to see whether they use plausible features and
+targets for the terminal.
 
-\subsection{Block Choice and Capacity (E4c)}
-\label{sec:res_e4c}
-\begin{hints}
-\item Diagnosis: block choice concentrates 29\,\% of RMG stops on one block (observed maximum 6\,\%); 79\,\% of stops start with four or more trucks at a block, because capacity is checked at enabling time.
-\item With an enforced capacity, the learned block choice sends all RMG stops to one block (runaway, median TTT 15 h). Cause: the training queue length of the chosen block includes the visit's own stop.
-\item With empirical or replayed block choice and capacity checked at start: block loads realistic (correlation 0.97), cap holds, but TTT and delay peaks unchanged. E4b failed.
-\item Remaining cause, quantified: the waiting-time target keeps 6.2 of 11.0 minutes of observed approach time (single-server definition).
-\end{hints}
+\paragraph{Block choice.} Of the 26 block-choice models, 22 split on the queue
+length of a block and 16 on its workload. In training, ProSiT counts the queue of
+a block at the moment a stop is enabled, and it includes the stop itself whenever
+the stop starts later than it was enabled. This is the case for 99.98\,\% of the
+training stops. The chosen block therefore always has a queue of at least one,
+and the models learn that trucks go to the block with the longer queue. In the
+simulation, the new stop is not yet in any queue, so the rule becomes a positive
+feedback: the more trucks a block has, the more new trucks choose it. Retrained
+without this self-count, only 4 of the 26 models split on the queue length. The
+others split on the manifest, for example on reefer containers, the share of
+full containers and the visit complexity.
 
-\subsection{Timing Models and ProSiT Version (E4d)}
-\label{sec:res_e4d}
-\begin{hints}
-\item Results of the ProSiT 1.0.4 rediscovery: which time models now split, on which features; simulation results of the four configurations.
-\item Load-response test (E4b) on the best configuration, including arrival scaling 0.8/1.0/1.2.
-\item If a load-dependent timing extension was needed: its fit to the observed curves (approach vs. block occupancy, stop duration vs. occupancy) and to the system-level behaviour that was not fitted (TTT vs. trucks in terminal, delay peaks).
-\end{hints}
+\paragraph{Waiting time.} The waiting-time models split mainly on the queue
+length (25 of 26 models) and the workload (24). The features are plausible, but
+the target is not. ProSiT measures the waiting time from the moment the block
+was last completely free, that is, from the latest end of all stops in progress
+when the stop is enabled. A block serves up to three trucks at once, so a truck
+often starts while others are still served. The target is then zero or negative.
+Table~\ref{tab:rq2_waiting_target} shows the consequence. The busier the block,
+the shorter the learned waiting time, although the real delay grows.
 
-\subsection{Conclusion of E4}
-\label{sec:res_e4_conclusion}
-\begin{hints}
-\item Which layers failed, why, which repairs were needed, and whether the final configuration passes the load-response test.
-\item This is the answer to RQ2. State it without overclaiming: valid for turnaround time and delay peaks, not for everything.
-\end{hints}
+\begin{table}[htbp]
+\centering
+\footnotesize
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Other stops in progress at enabling} & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3+} \\
+\midrule
+RMG stops in training & 23,080 & 12,136 & 7,267 & 4,499 \\
+ProSiT waiting target, median (min) & 6 & 3 & 1 & 0 \\
+Share of targets $\leq 0$ & 0\,\% & 31\,\% & 50\,\% & 54\,\% \\
+Observed delay from enabling to start, median (min) & 6 & 7 & 9 & 16 \\
+\bottomrule
+\end{tabular}
+\caption{ProSiT's waiting-time target at the RMG blocks by the load of the block
+when the stop is enabled, training log. The target is measured from the moment the block
+was last completely free (single server).}
+\label{tab:rq2_waiting_target}
+\end{table}
+
+\paragraph{Execution time.} The 11 execution-time models split mainly on the
+hour (7 models) and the weekday (6). They have no load feature, because ProSiT
+does not offer one for execution times. Retrained with the number of other stops
+in progress at the block, 8 of the 11 models split on it.
+
+\paragraph{Capacity.} ProSiT checks the capacity of a block when a stop is
+enabled, not when it starts. A stop can therefore be enabled at a free block and
+start much later at a full one. In the E3 baseline, up to 23 trucks are at one
+block at the same time (Table~\ref{tab:rq2_chain}), although a block serves at
+most three.
+
+\subsection{Operational Validity Along the Path of the Truck}
+\label{sec:res_e4_chain}
+
+\input{tables/rq2_chain}
+
+\paragraph{Demand (E4a).} The E3 baseline overestimates the turnaround time
+strongly: median 58 and P90 141 minutes, against 33 and 75 observed. A realistic
+arrival profile (a1) and even the exact observed arrivals and manifests (a2)
+hardly change this (median 55, P90 136 minutes). The demand is therefore not the
+cause. The time is lost before the first stop: the approach takes 43 minutes on
+average instead of 13, because 55\,\% of the RMG stops go to a single block.
+With an exact count, this share falls to 29\,\% (a0x). The median TTT is then
+close to the observed one (34 minutes), but for the wrong reason: the P90 is still
+110 minutes, and the turnaround time does not rise with the arrivals (Spearman
+$-0.02$). A single summary measure would have hidden this.
+
+\paragraph{Block allocation (E4b).} Without the self-count, the learned block
+choice no longer concentrates the trucks (b1): the busiest block receives 5.8\,\%
+of the RMG stops, as observed (6.3\,\%). The self-count is therefore the cause of
+the concentration. But no block choice learned on the training period reproduces
+which blocks are busy in the test period. The correlation of the block shares
+with the observed ones is $-0.03$ for the retrained model and 0.02 for the
+training shares (b2), and it is also low between two real periods ($-0.004$). With
+the observed block of each stop (b3x), the correlation is 0.96; it is not 1
+because the routing stays learned, and a simulated visit with more RMG stops than
+its observed visit draws the extra block from the training shares.
+
+With the observed demand and blocks, the error changes its sign. The turnaround
+time is now too short (median 24, P90 51 minutes), the approach takes 4 instead of
+13 minutes, and it falls when the block is busy (Table~\ref{tab:rq2_profiles}):
+from 6 minutes at an empty block to 0 minutes with three trucks, while the
+observed approach rises from 6 to 16 minutes. This is the single-server target of
+Table~\ref{tab:rq2_waiting_target}. At the same time, up to eight trucks are at
+one block, because the capacity is checked at enabling.
+
+\paragraph{Queue at the block (E4c).} Checking the capacity over the whole stop
+interval at its start (c1x) keeps at most three trucks at a block, but it does not
+create waiting: the approach stays at 5 minutes, and the turnaround time still
+falls with the arrivals (Spearman $-0.25$). Removing the self-count from the queue
+feature of the waiting time (c2x) changes little. Only the lane-free waiting
+target together with the capacity at start (c3x) lets the queue arise where it
+arises at the terminal, when all three lanes are busy. The approach now rises with
+the block load (7, 7, 9 and 11 minutes for 0 to 3 trucks at the block, observed 6,
+6, 9 and 16), and the median and P90 rise to 29 and 64 minutes. The turnaround time
+now rises with the arrivals (Spearman 0.38). Four lanes (c4x) or a learned whole
+delay without capacity (c5x) give similar turnaround times, but allow four and up
+to seven trucks at a block; they are not admissible.
+
+\paragraph{Service under load (E4d).} In c3x, an RMG stop takes 8 minutes no
+matter how many trucks are at the block, while the observed median grows from 6
+to 9 and 14 minutes. With the load feature in the execution time (d3x), the
+simulated stop takes 6, 8 and 11 minutes. The turnaround time follows the hourly
+arrivals more closely (Spearman 0.48, observed 0.55), and the hourly median TTT of
+the simulation correlates with the observed one at 0.56. The level, however, falls
+slightly (median 28, P90 62 minutes), because the simulated stops are shorter on
+average (10.8 instead of 14.4 minutes per visit).
+
+\subsection{Choice of the Final Configuration (E4f)}
+\label{sec:res_e4_selection}
+
+\input{tables/rq2_selection}
+
+The rule of Section~\ref{sec:exp_e4_runs} was applied on the training period
+(Table~\ref{tab:rq2_selection}). The four admissible configurations were run with
+the replayed training visits and their observed blocks and compared with the
+training log. All four keep at most three trucks at a block and produce no rule
+violation. The configuration with lane-free waiting and load-dependent service
+(d3x) has the smallest sum of the profile gaps (5.6 minutes) and is the final
+configuration. Without the load-dependent service (c3x), the sum is 7.1 minutes,
+because the stop duration does not grow with the load (gap 3.0 minutes). Without
+the lane-free waiting (c1x, c2x), it is about 12 minutes, because the approach
+does not grow with the load. The ranking is the same on the test period
+(Table~\ref{tab:rq2_chain}), so the choice does not depend on the period. The
+training period also shows the price of the load-dependent service: the
+cycle-time distance of c3x is smaller (2.1 against 2.7 minutes). The rule puts the
+load response first, because E5 depends on it.
+
+\subsection{Is Every Change Needed? (E4e)}
+\label{sec:res_e4_loo}
+
+\input{tables/rq2_loo}
+
+Each change of the final configuration was reversed alone
+(Table~\ref{tab:rq2_loo}). Every reversal makes the load response worse. With
+ProSiT's count instead of the exact count, the sum of the profile gaps rises from
+8.7 to 12.1 minutes and the Spearman correlation falls from 0.48 to 0.32. With the
+capacity checked at enabling, up to seven trucks are at a block again, and the
+configuration is no longer admissible. With the single-server waiting target, the
+approach falls to 5 minutes and the turnaround time no longer follows the arrivals
+(Spearman 0.08); this is the largest single effect. Without the load in the
+service time, the stop-duration gap rises from 1.3 to 3.0 minutes and the
+Spearman correlation falls to 0.38. This last change is the only one that costs
+level: without it, the cycle-time distance is 5.4 instead of 6.3 minutes, because
+the load-dependent stops are shorter on average (Section~\ref{sec:res_e4_remaining}).
+
+\paragraph{Block allocation.} If the blocks are not taken from the log, the
+level of the turnaround time stays the same (median 28 minutes) and the profiles
+change little, both with the training shares and with the learned choice without
+the self-count. What is lost is which block is busy: the
+correlation of the block shares with the observed ones falls to about zero, and
+the correlation of the hourly median TTT with the observed one falls from 0.56 to
+0.47 and 0.50. The learned choice of ProSiT, with the self-count, cannot be used
+together with the real capacity. Because the chosen block attracts further trucks
+while it can serve only three, its queue grows without bound. On the first day of
+the test period, this choice sends every RMG stop to a single block, the capacity
+check delays a stop by 71 hours on average, and the median turnaround time is 53
+hours (Table~\ref{tab:rq2_loo}). The self-count must therefore be removed before
+the learned block choice can be used with a realistic capacity. The same day also
+shows the limit of the final configuration: the observed median is 49 minutes on
+this very busy Monday, the simulated one 30 minutes.
+
+\paragraph{Arrival intensity.} The extreme-condition test passes. With the
+arrivals stretched to an intensity of 0.8, the median and mean TTT fall to 27.0 and
+32.8 minutes; with the arrivals compressed to 1.2, they rise to 33.2 and 42.7
+minutes, and the share of delay-peak hours rises from 1.4\,\% to 22.8\,\%. At an
+intensity of 1.2, the simulated turnaround time matches the observed one (median
+33 against 33, P90 80 against 75 minutes, cycle-time distance 1.8 minutes). The
+simulated terminal therefore needs about 20\,\% more trucks to become as congested
+as the real terminal.
+
+\paragraph{Fully generative.} Without replay, the arrivals come from the training
+period. With the hour-of-week arrivals and the training block shares (eG), the
+median is 26 and the P90 54 minutes (cycle-time distance 9.9 minutes); with
+ProSiT's arrival model (eGn), 25 and 51 minutes. The turnaround time still follows
+the arrivals with the hour-of-week model (Spearman 0.43), but not with ProSiT's
+arrival model (0.15), which has no daily peaks (E4a). There are no delay-peak
+hours, and the terminal holds 58 instead of 92 trucks on average, because the
+training period had less demand than the test period. The profile gaps of these
+runs are not comparable with the others: the high-load bins are missing, and the
+gaps are computed only over the bins that both logs reach.
+
+\subsection{The Final Model at a Glance}
+\label{sec:res_e4_glance}
+% Figures and table: trucksimulation/simulation_e3/plot_simulation_validation.py (d3x seeds 42-46, f0 seeds 42-46).
+
+Table~\ref{tab:sim_kpis} and Figures~\ref{fig:sim_ttt_distribution} to
+\ref{fig:sim_ttt_decomposition} show the final model (Chapter~\ref{chp:process_discovery_methodology})
+against the observed logs. The simulated turnaround time has the right shape but
+a shorter tail (Figure~\ref{fig:sim_ttt_distribution}). Over the hours of the test
+period, the simulated median follows the observed one (Spearman 0.57 for seed 42),
+but it does not reach the observed peaks of 80 minutes and more
+(Figure~\ref{fig:sim_hourly_ttt}). Under load, the approach to the first stop
+rises as observed; the stop duration rises, but less than observed; and the
+turnaround time falls behind when more than 100 trucks are in the terminal
+(Figure~\ref{fig:sim_load_profiles}). The time that is missing is mainly stop time
+(Figure~\ref{fig:sim_ttt_decomposition}).
+
+\input{tables/sim_kpis}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_ttt_distribution.png}
+\caption{Turnaround time, observed and simulated (final model; replayed visits
+and observed blocks; five seeds pooled).}
+\label{fig:sim_ttt_distribution}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_hourly_ttt.png}
+\caption{Median turnaround time per Gate-In hour over the test period, observed
+and simulated with the same trucks (seed 42).}
+\label{fig:sim_hourly_ttt}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_load_profiles.png}
+\caption{Load profiles, observed and simulated, in the test period (solid) and the
+training period (dotted); medians, means over five seeds. With three lanes, the
+states ``4+ trucks at the block'' and ``3+ other trucks'' cannot
+occur in the simulation.}
+\label{fig:sim_load_profiles}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_ttt_decomposition.png}
+\caption{Where the time of a visit is spent, observed and simulated (means).}
+\label{fig:sim_ttt_decomposition}
+\end{figure}
+
+\subsection{Where the Remaining Error Lies}
+\label{sec:res_e4_remaining}
+
+\input{tables/rq2_profiles}
+\input{tables/rq2_attribution}
+
+\paragraph{In-sample and out-of-sample.} On the training period, the final
+configuration is close to the log (f0): median 28 against 29 minutes, P90 59
+against 64 minutes, and a cycle-time distance of 2.7 minutes, which is within the
+variation between two real weeks. The approach profile is reproduced (gap 0.8
+minutes), the stop-duration profile almost (gap 1.3 minutes). On the test period,
+the cycle-time distance is 6.3 minutes. Table~\ref{tab:rq2_attribution} shows where
+the difference comes from. The mean error grows from $-2.7$ to $-6.3$ minutes,
+mainly in the approach ($-0.5$ to $-2.2$) and in the stop durations ($-1.5$ to
+$-3.4$). These are the parts in which the real terminal changed between the
+periods: from training to test, the approach grew by 1.8 minutes, and the stops
+took 2.0 minutes longer per visit with nearly the same routing. The stops took
+longer at every load: an RMG stop with no other truck at the block took 8.2
+instead of 7.5 minutes on average, one with two others 17.7 instead of 15.9
+minutes. A model learned on the training period cannot know this. The replayed
+demand captures the higher number of trucks, but not the slower service.
+Following Özdemir et al.\ \cite{Oezdemir2025RethinkingBPS}, the error on the test
+period is therefore not only model error.
+
+\paragraph{The model error.} In both periods the routing is right and the stops
+are too short. The count of stops per area explains less than 0.2 minutes of the
+error per visit; the durations explain the rest. Part of this is how the load is
+distributed. With three lanes, the simulation never has a fourth truck at a block,
+while the training log records one at 5.6\,\% of the RMG stops, with a mean
+duration of 21 minutes; these recorded stops include the waiting for a lane
+(Section~\ref{sec:exp_e4_mechanisms}). The simulated stops are also slightly
+shorter in each load state (0.2 to 1.7 minutes on average). Shorter stops mean
+fewer trucks in the terminal (68 against 74 on average in training), which again
+means less load at the blocks. The TTT by trucks in the terminal shows the same
+weakness: up to 100 trucks the simulated median is within 3 minutes of the
+observed one, but with 150 or more trucks it is 39 to 43 minutes against 58 to 59.
+The simulation reproduces the congestion of normal hours, but not the worst
+hours. This is also why it has almost no delay-peak hours (1.4\,\% against
+25.7\,\% in the test period).
+
+\subsection{Acceptance for the Intended Use}
+\label{sec:res_e4_acceptance}
+
+\input{tables/rq2_acceptance}
+
+Table~\ref{tab:rq2_acceptance} applies the criteria that were fixed before the
+results were read. The final configuration is physically admissible: no rule
+violations and never more than three trucks at a block. It passes the extreme
+condition. It reproduces the rise of the approach with the block load within the
+variation between real weeks, in both periods. It fails the other parts of the
+load-response criterion narrowly: the Spearman correlation is 0.48 on the test
+period and 0.46 on the training period (threshold 0.49), the stop-duration gap is
+1.3 minutes (threshold 1.0), and on the test period the gap of the TTT by trucks in
+the terminal is 6.2 minutes (threshold 5.75). The level criterion holds on the
+training period (2.7 minutes, within the variation between weeks), but not on the
+test period (6.3 minutes) or in the fully generative run (9.9 minutes).
+
+By the rule of Section~\ref{sec:exp_e4_runs}, E5 is admissible only if criteria 1
+to 3 hold under replay. Criterion 2 does not hold. The model reproduces the
+mechanism that E5 acts on, the waiting for a lane at a busy block, but it
+underestimates how much the stops slow down at the busiest blocks and hours. An
+effect of moving trucks away from these blocks would therefore be underestimated
+rather than overestimated.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Final Baseline and Hold-Out Check}
-\label{sec:res_holdout}
+\section{Answer to RQ2}
+\label{sec:res_rq2}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{hints}
-\item The frozen configuration on the validation period and once on the test period, same measures, one table. No changes after seeing the test result.
-\item Block congestion in the baseline: share of stops at blocks with three or more trucks, approach by block.
+\item Short answer: with the observed trucks and blocks replayed and four changes to ProSiT's queue and service,
+the simulation reproduces the turnaround time to within 5 minutes at the median (in-sample within 1 minute) and the
+rise of the approach with the block load. It underestimates the slowdown at the busiest blocks and hours. The
+error of the E3 baseline came from the block choice; the remaining errors came from the queue and the service
+mechanisms. Justified by E4 (Tables~\ref{tab:rq2_chain} to \ref{tab:rq2_acceptance}).
 \end{hints}
+
+RQ2 asks to what extent the ProSiT simulation reproduces the turnaround time of
+the trucks and its response to load at the capacity-limited yard blocks, and
+which model components cause the remaining error.
+
+\paragraph{To what extent.} As fitted in E3, the simulation does not reproduce
+the turnaround time: the median is 58 instead of 33 minutes and the P90 141 instead
+of 75. With the observed trucks and blocks replayed and four changes to the
+simulation, it does to a large extent. The median is 28 and the P90 62 minutes on
+the test period, and 28 and 59 minutes against 29 and 64 on the training period,
+where the cycle-time distance (2.7 minutes) lies within the variation between two
+real weeks. The waiting before a stop rises with the number of trucks at the
+block, as at the terminal, and the turnaround time rises with the arrival
+intensity. Two things are not reproduced. The simulation underestimates the
+slowdown at the busiest blocks and hours, so it has almost no delay-peak hours.
+And no model learned on the training period reproduces which blocks are busy in
+the test period, nor the slower service of that period.
+
+\paragraph{Which components.} The components are listed in the order in which a
+truck meets them.
+\begin{itemize}
+\item \textbf{Demand.} Not a cause of the E3 error: replaying the exact arrivals
+changes the median TTT by 3 minutes. ProSiT's arrival model has no daily peaks,
+which matters when the simulation runs without replay.
+\item \textbf{Block choice.} The main cause of the E3 error. The queue feature
+counts the stop itself in training, so the learned rule sends trucks to the
+longest queue. ProSiT's count of the activities in progress, which is too low for
+13 to 14\,\% of the RMG stops in the simulation, makes this concentration stronger.
+Even without the self-count, the block loads of a later period cannot be learned.
+\item \textbf{Queue at the block.} Two mechanisms prevent waiting under load: the
+capacity is checked at enabling, and the waiting time is measured as if a block
+had one server. With three lanes, capacity at start and the waiting measured from
+a free lane, the waiting arises where it arises at the terminal.
+\item \textbf{Service.} The execution time does not depend on the load. Adding
+the number of trucks at the block reproduces most of the observed slowdown, but
+not the slowest states.
+\item \textbf{Exit.} Not a cause: it does not depend on the load and is
+reproduced within half a minute.
+\end{itemize}
+The physical limit of the blocks connects these findings. A block serves at most
+three trucks. Every mechanism that ignores this limit, a capacity check at
+enabling or a single-server waiting target, produces either physically impossible
+states or no waiting at all. In the log, the limit is visible only indirectly,
+because the recorded stop interval includes the waiting for a lane.
+
+\paragraph{Limits of the answer.} The final configuration uses two oracles: the
+observed arrivals and the observed blocks. Without them, the error is larger
+(median 26 against 33 minutes, cycle-time distance 9.9 minutes). The load-response
+criterion is missed narrowly, so the model does not pass the pre-registered test
+for the intended use of E5. The answer holds for the turnaround time and its
+parts; other measures, such as the use of the cranes, were not examined.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Load-Aware Block Allocation (E5)}

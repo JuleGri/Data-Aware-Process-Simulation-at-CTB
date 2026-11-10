@@ -1,0 +1,109 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\citation{Vinci2026prosit}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Model Construction and Simulation}{35}{chapter.4}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chp:process_discovery_methodology}{{4}{35}{Model Construction and Simulation}{chapter.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}From Event Log to Executable Model}{35}{section.4.1}\protected@file@percent }
+\newlabel{sec:sim_overview}{{4.1}{35}{From Event Log to Executable Model}{section.4.1}{}}
+\citation{Murata1989}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Steps of one simulated visit in the final model and where each value comes from. Blue: learned by ProSiT from the training log. Orange border: adaptation to the terminal (Section~\ref {sec:sim_adaptations}). Grey: structure and output.}}{36}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:sim_architecture}{{4.1}{36}{Steps of one simulated visit in the final model and where each value comes from. Blue: learned by ProSiT from the training log. Orange border: adaptation to the terminal (Section~\ref {sec:sim_adaptations}). Grey: structure and output}{figure.caption.19}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Control Flow}{36}{section.4.2}\protected@file@percent }
+\newlabel{sec:sim_controlflow}{{4.2}{36}{Control Flow}{section.4.2}{}}
+\citation{Vinci2023Inf.Activ.Prob,Vinci2026prosit}
+\citation{PMRozinat2009}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Control flow of the simulation model: IM 0.0 restricted to rules 3 and 5 as a state machine (10 places, 54 transitions, no silent transitions). The labels show the stop guard of the simulator: $n$ is the number of planned stops from the manifest and $c$ the number of stops done; a yard transition may fire only if $c < n$, Gate Out only if $c = n$.}}{37}{figure.caption.20}\protected@file@percent }
+\newlabel{fig:sim_controlflow}{{4.2}{37}{Control flow of the simulation model: IM 0.0 restricted to rules 3 and 5 as a state machine (10 places, 54 transitions, no silent transitions). The labels show the stop guard of the simulator: $n$ is the number of planned stops from the manifest and $c$ the number of stops done; a yard transition may fire only if $c < n$, Gate Out only if $c = n$}{figure.caption.20}{}}
+\citation{FelliDeLeoniMontali2021}
+\citation{Vinci2026prosit}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Learned Components}{38}{section.4.3}\protected@file@percent }
+\newlabel{sec:sim_components}{{4.3}{38}{Learned Components}{section.4.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Arrivals and manifests.}{38}{table.caption.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Routing.}{38}{figure.caption.23}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Learned components of the final simulation model (ProSiT 1.0.4 on the repaired IM 0.0 state machine, training log). Waiting and execution time are the retrained components of the final configuration (Section~\ref {sec:exp_e4_mechanisms}); the inventory of every model is in Appendix~\ref {app:prosit_inventory}.}}{39}{table.caption.21}\protected@file@percent }
+\newlabel{tab:sim_components}{{4.1}{39}{Learned components of the final simulation model (ProSiT 1.0.4 on the repaired IM 0.0 state machine, training log). Waiting and execution time are the retrained components of the final configuration (Section~\ref {sec:exp_e4_mechanisms}); the inventory of every model is in Appendix~\ref {app:prosit_inventory}}{table.caption.21}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Discovery settings of the simulation model.}}{39}{table.caption.22}\protected@file@percent }
+\newlabel{tab:sim_hyperparameters}{{4.2}{39}{Discovery settings of the simulation model}{table.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Arrival tree: minutes to the next Gate In by weekday (0 = Monday) and hour of the last arrival. Each leaf shows the training values (bars) and the fitted distribution (line), each on its own scale.}}{40}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:sim_tree_arrivals}{{4.3}{40}{Arrival tree: minutes to the next Gate In by weekday (0 = Monday) and hour of the last arrival. Each leaf shows the training values (bars) and the fitted distribution (line), each on its own scale}{figure.caption.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Routing tree of the transition \texttt  {RMG\_receive} at the first decision after Gate In: probability that it fires when enabled, by manifest attributes.}}{40}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:sim_tree_routing}{{4.4}{40}{Routing tree of the transition \texttt {RMG\_receive} at the first decision after Gate In: probability that it fires when enabled, by manifest attributes}{figure.caption.24}{}}
+\@writefile{toc}{\contentsline {paragraph}{Block choice.}{40}{figure.caption.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Waiting time.}{40}{figure.caption.25}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces First stop of a visit by flow type: share in the training log and probability under the learned routing (normalised weights of the enabled transitions, averaged over 8,000 training manifests).}}{41}{figure.caption.25}\protected@file@percent }
+\newlabel{fig:sim_routing_first}{{4.5}{41}{First stop of a visit by flow type: share in the training log and probability under the learned routing (normalised weights of the enabled transitions, averaged over 8,000 training manifests)}{figure.caption.25}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Waiting-time tree of block T13 (final model): minutes from a free lane to the start of the stop. All leaves on one scale.}}{41}{figure.caption.26}\protected@file@percent }
+\newlabel{fig:sim_tree_waiting}{{4.6}{41}{Waiting-time tree of block T13 (final model): minutes from a free lane to the start of the stop. All leaves on one scale}{figure.caption.26}{}}
+\@writefile{toc}{\contentsline {paragraph}{Execution time.}{41}{figure.caption.26}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Execution-time tree of RMG receives (final model). The first splits are on the number of other trucks at the block when the stop starts.}}{42}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:sim_tree_exec}{{4.7}{42}{Execution-time tree of RMG receives (final model). The first splits are on the number of other trucks at the block when the stop starts}{figure.caption.27}{}}
+\@writefile{toc}{\contentsline {paragraph}{Calendars and capacities.}{42}{figure.caption.27}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Capacities and calendars. The discovered resource calendars cover 122 to 128 of the 168 hours of a week; they are set to the full week so that trucks already inside are served to completion. The gate calendar still controls admission.}}{42}{table.caption.28}\protected@file@percent }
+\newlabel{tab:sim_capacities}{{4.3}{42}{Capacities and calendars. The discovered resource calendars cover 122 to 128 of the 168 hours of a week; they are set to the full week so that trucks already inside are served to completion. The gate calendar still controls admission}{table.caption.28}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Execution of a Simulated Visit}{42}{section.4.4}\protected@file@percent }
+\newlabel{sec:sim_execution}{{4.4}{42}{Execution of a Simulated Visit}{section.4.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces One simulated truck of the final model (configuration of E4, seed 42), step by step. The leaf of each tree follows from the features at that moment; the waiting and execution times are drawn from the distribution of that leaf; the waiting time includes any delay until a lane is free (capacity checked over the whole stop at its start).}}{43}{table.caption.29}\protected@file@percent }
+\newlabel{tab:sim_worked_example}{{4.4}{43}{One simulated truck of the final model (configuration of E4, seed 42), step by step. The leaf of each tree follows from the features at that moment; the waiting and execution times are drawn from the distribution of that leaf; the waiting time includes any delay until a lane is free (capacity checked over the whole stop at its start)}{table.caption.29}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}Adaptations to the Terminal}{43}{section.4.5}\protected@file@percent }
+\newlabel{sec:sim_adaptations}{{4.5}{43}{Adaptations to the Terminal}{section.4.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.6}Chapter Summary}{43}{section.4.6}\protected@file@percent }
+\newlabel{sec:sim_summary}{{4.6}{43}{Chapter Summary}{section.4.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces Differences between the ProSiT simulation loop and the final model.}}{44}{table.caption.30}\protected@file@percent }
+\newlabel{tab:sim_adaptations}{{4.5}{44}{Differences between the ProSiT simulation loop and the final model}{table.caption.30}{}}
+\@setckpt{chapters/5.discovery_prosit}{
+\setcounter{page}{45}
+\setcounter{equation}{0}
+\setcounter{enumi}{5}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{0}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{chapter}{4}
+\setcounter{section}{6}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{7}
+\setcounter{table}{5}
+\setcounter{section@level}{0}
+\setcounter{Item}{22}
+\setcounter{Hfootnote}{0}
+\setcounter{Hy@AnnotLevel}{0}
+\setcounter{bookmark@seq@number}{31}
+\setcounter{DefaultLines}{2}
+\setcounter{DefaultDepth}{0}
+\setcounter{L@lines}{0}
+\setcounter{L@depth}{0}
+\setcounter{parentequation}{0}
+\setcounter{eu@}{0}
+\setcounter{eu@i}{0}
+\setcounter{mkern}{4}
+\setcounter{caption@flags}{2}
+\setcounter{continuedfloat}{0}
+\setcounter{subfigure}{0}
+\setcounter{subtable}{0}
+\setcounter{float@type}{8}
+\setcounter{algorithm}{0}
+\setcounter{ALG@line}{0}
+\setcounter{ALG@rem}{0}
+\setcounter{ALG@nested}{0}
+\setcounter{ALG@Lnr}{2}
+\setcounter{ALG@blocknr}{10}
+\setcounter{ALG@storecount}{0}
+\setcounter{ALG@tmpcounter}{0}
+\setcounter{lofdepth}{1}
+\setcounter{lotdepth}{1}
+\setcounter{@pps}{0}
+\setcounter{@ppsavesec}{0}
+\setcounter{@ppsaveapp}{0}
+\setcounter{NAT@ctr}{0}
+\setcounter{note}{0}
+\setcounter{example}{0}
+\setcounter{nlinenum}{0}
+\setcounter{r@tfl@t}{0}
+}

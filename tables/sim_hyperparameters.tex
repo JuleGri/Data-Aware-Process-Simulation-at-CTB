@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{L{4.2cm}L{3.4cm}Y}
+\toprule
+\textbf{Setting} & \textbf{Value} & \textbf{Reason} \\
+\midrule
+ProSiT version & prosit-pm 1.0.4 & Selects between tree and single distribution by CRPS. \\
+\texttt{max\_depth\_tree} & 3 (cross-validated 1--3) & Readable trees. \\
+\texttt{min\_samples\_leaf\_cv} & 50, 100, 200 & Default grid. \\
+\texttt{attribute\_mode} & empirical & Manifests are drawn as a whole, so they stay consistent. \\
+\texttt{use\_workload\_features} & on & Queue length and workload of a resource as features. \\
+\texttt{enable\_multitasking}, threshold & on, 0.05 & A block serves several trucks at once. \\
+Case attributes & 9 manifest attributes & Known at Gate In: flow type, containers, planned stops, deliveries, receives, hazardous, reefer, full ratio, visit complexity. \\
+\texttt{random\_state} & 42 & Reproducibility. \\
+Replications & seeds 42--46 (E5: 42--51) & Random variation of the simulator. \\
+\bottomrule
+\end{tabularx}
+\caption{Discovery settings of the simulation model.}
+\label{tab:sim_hyperparameters}
+\end{table}

@@ -173,7 +173,7 @@ PM4Py \cite{Berti2023PM4Py}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Process discovery builds a process model from an event log
-\cite{Aalst2016,RWAalst2022Discovery}. The model shows how the process
+\cite{Aalst2016,Aalst2022Foundations}. The model shows how the process
 was executed, not how it was planned. ProSiT, the simulator used in this
 thesis, needs the model as a Petri net. This section introduces Petri nets,
 the discovery algorithms compared in E1, and the use of rules to restrict a
@@ -280,6 +280,14 @@ machine workflow net. Each automaton state becomes a place and each automaton
 edge a visible transition. This encoding is used for the repaired models in E2
 (Section~\ref{sec:exp_rules}).
 
+In such an encoding, the same activity label usually appears on several
+transitions, one for each state in which the activity can happen. These are
+called \emph{duplicate labels}. The four discovery families compared in E1
+create one visible transition per activity. For ProSiT the difference matters,
+because it learns one routing tree per transition
+(Section~\ref{sec:prosit_components}). With duplicate labels, the routing of
+an activity can therefore differ from state to state.
+
 \subsection{Discovery Algorithms}
 \label{sec:bg_algorithms}
 
@@ -311,7 +319,7 @@ controls how much infrequent behaviour is kept \cite{RWVanZelst2018ILP}.
 
 \paragraph{Related work}
 Benchmarks show that no algorithm is best on every log and every quality
-dimension \cite{RWAugusto2019Review,DiscoveryBenchmark}. Rehse et al.\ argue that
+dimension \cite{DiscoveryBenchmark}. Rehse et al.\ argue that
 discovery experiments need explicit assumptions and a controlled design: the
 same input, the same cohorts and the same implementation of each measure
 \cite{RWRehse2024Experimentation}. E1 follows this design. A further point
@@ -354,10 +362,21 @@ that a transition must satisfy before it may fire
 
 \paragraph{Related work: domain knowledge in discovery and repair}
 Schuster et al.\ classify how domain knowledge enters process discovery
-\cite{RWSchuster2022Domain}. Knowledge can be used before discovery, during
+\cite{schuster2022}. Knowledge can be used before discovery, during
 discovery, or \emph{a posteriori} on a discovered model. It can be explicit
-(imperative or declarative) or come from user feedback, and it can be applied
-automatically or interactively. Greco et al.\ enforce precedence constraints
+or come from user feedback, and it can be applied automatically or
+interactively. Explicit knowledge is written in one of two kinds of formalism.
+An \emph{imperative} formalism, such as a Petri net, follows a closed-world
+assumption: only the behaviour it describes is allowed. A \emph{declarative}
+formalism, such as Declare, follows an open-world assumption: everything is
+allowed that does not break one of its constraints \cite{schuster2022}. This
+thesis uses both. The discovered net is imperative, the domain rules are
+declarative, and the repair keeps only the behaviour that both allow. Schuster
+et al.\ also classify approaches by the formalism of the output model. Here
+the output must be a sound workflow net, because ProSiT executes Petri nets
+and learns its routing per transition (Section~\ref{sec:prosit_background}).
+
+Greco et al.\ enforce precedence constraints
 during discovery \cite{RWGreco2015Precedence}. Norouzifar et al.\ integrate
 rules into the cuts of the Inductive Miner \cite{RWNorouzifar2026Rules}. Dixit
 et al.\ work a posteriori: they edit a discovered model at random and keep the
@@ -420,9 +439,7 @@ alignment found is optimal \cite{Adriansyah2011CostFitness}.
 Trace fitness is one minus the cost of the optimal alignment divided by the
 cost of the worst case, in which every event is a log move and the model runs
 its shortest path alone. Log fitness averages over all traces. A trace
-\emph{fits} if its optimal alignment has no deviation. This thesis reports
-both log fitness and the share of fitting visits, because a high average can
-hide a whole group of visits that the model cannot replay.
+\emph{fits} if its optimal alignment has no deviation.
 
 \paragraph{Precision}
 Escaping-edges precision is based on alignments
@@ -447,12 +464,54 @@ measure looks at transitions, not at sequences. A model that allows many
 unobserved sequences through frequently used transitions can still score
 high.
 
+\paragraph{Coverage}
+\label{sec:bg_coverage}
+Fitness gives partial credit. A trace with one deviation among six events
+still reaches a trace fitness of about 0.8, and log fitness averages such
+values over all traces. Coverage measures ask a stricter question about whole
+cases: does the model accept the complete sequence, yes or no? This thesis uses
+three of them.
+\begin{itemize}
+\item \textbf{Share of fitting cases.} The share of traces whose optimal
+alignment has no deviation. It is the simplest fitness measure
+\cite{Aalst2016} and counts every case, so frequent sequences weigh more.
+\item \textbf{Share of accepted sequences.} The share of the distinct sequences
+(variants) of the log that the model accepts, each counted once. This is recall
+on the level of the language: the log is read as a set of sequences, not as a
+collection of cases. Entropy-based recall extends the same idea to models with
+infinitely many sequences \cite{Polyvyanyy2020Monotone}.
+\item \textbf{Coverage per group.} The share of fitting cases within a group of
+cases, for example the visits that use two RMG blocks. A dominant variant can
+hide that a smaller but regular group is not accepted
+\cite{RWNorouzifar2026Rules}.
+\end{itemize}
+On a hold-out log, a fourth view checks generalisation directly: how many of the
+sequences that occur in the hold-out log but not in the training log does the
+model accept?
+
+When cases follow a long-tailed distribution, the measures can differ a lot. A
+model that accepts only the few frequent sequences fits almost all cases but
+accepts only a small share of the sequences. For a simulator the unweighted view
+matters as well, because a sequence that the model does not accept can never be
+generated.
+
+High coverage is not the same as overfitting. A model \emph{overfits} if it
+allows only the observed sequences and fails on new ones; it \emph{underfits} if
+it allows much more than the log shows \cite{Aalst2016}. Precision measures the
+second error. The first can only be seen on a hold-out log, which is why the
+fourth view above matters. Noise filtering, as in the Inductive Miner with
+filtering, removes rare behaviour because it treats it as noise
+\cite{Leemans2014InductiveMiner}. Whether rare behaviour is noise or regular
+behaviour cannot be decided from its frequency alone. It is a question of the
+data quality and of the domain.
+
 \paragraph{Implication for this thesis}
-Fitness and precision compare the language of a model with the observed
-traces. They do not say how often a simulator will generate each permitted
-sequence. A path that is permitted but never observed may be rare in the
-language and still frequent in the simulation. This is why the selected models
-are also simulated (E3).
+Fitness, precision and coverage compare the language of a model with the
+observed traces. Coverage shows which observed behaviour a simulator built on the
+model could never generate. None of the measures says how often a simulator will
+generate each permitted sequence. A path that is permitted but never observed
+may be rare in the language and still frequent in the simulation. This is why
+the selected models are also simulated (E3).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Business Process Simulation}
@@ -518,7 +577,13 @@ usually checked by comparing logs generated by the model with a real log that
 was not used for discovery. Chapela-Campa et al.\ recommend separate measures
 for the control flow, the timing and the congestion of the generated logs,
 because one aggregate score hides which part of the model is wrong
-\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. A comparison with a
+\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. Özdemir et al.\ add two
+cautions \cite{Oezdemir2025RethinkingBPS}: a later test log mixes the error of
+the model with changes of the process between the periods, and distances based
+on the Wasserstein distance can hide temporal patterns. Law recommends
+\emph{trace-driven} comparisons, in which the model is fed with the observed
+inputs of the comparison period, for example the observed arrivals, so that
+model and system face the same demand \cite{Law2015Simulation}. A comparison with a
 historical log shows that the model reproduces the current process. It does not
 show that the model predicts the effect of a change correctly. Evidence for a
 what-if use needs more: plausible mechanisms, a model that responds to load as
@@ -637,7 +702,7 @@ spread where the data are spread. A lower score is better. Version 1.0.3 used
 the Wasserstein distance between training and test values inside each leaf.
 That criterion measures only how stable a leaf is, so it almost always chose a
 single distribution. This thesis uses version 1.0.4
-(Section~\ref{sec:exp_e4d}).
+(Section~\ref{sec:mc_hyperparameters}).
 
 \paragraph{Example}
 Figure~\ref{fig:bg_prosit_arrival_tree} shows the arrival tree that ProSiT
@@ -648,7 +713,7 @@ truck is drawn from a normal distribution with a mean of 0.65 minutes, about
 after 10~h, it is 13 minutes. The tree has depth three, so it cannot separate
 the morning ramp-up, the daytime plateau and the evening; the leaf from 5 to
 21~h pools them. Whether this is good enough is tested in E4a
-(Section~\ref{sec:exp_e4a}).
+(Section~\ref{sec:exp_e4_runs}).
 
 \input{figures/schemas/prosit_arrival_tree}
 
@@ -727,7 +792,7 @@ associations in the training data, not causes. A readable rule shows which
 association the simulator uses. Whether it holds after an intervention needs
 other evidence.
 
-For this thesis, five properties of the implementation matter.
+For this thesis, seven properties of the implementation matter.
 \begin{enumerate}
 \item \textbf{No hard rules.} A transition can fire whenever its input places
 hold tokens and its weight is above zero. ProSiT has no guards. A rule that
@@ -744,6 +809,17 @@ actually runs.
 \item \textbf{Load enters through few features.} Workload features act on the
 resource choice and the waiting time only. Execution times do not react to the
 load of the terminal.
+\item \textbf{The queue feature counts the activity itself.} In training, the
+queue length of a resource counts the activities that are enabled and not yet
+started. An activity that waited is therefore counted in the queue of the
+resource that performed it, but not in the queues of the other candidates. In
+the simulation the activity is not yet in any queue when the resource is
+chosen.
+\item \textbf{Waiting is measured against one server.} The waiting time is the
+time from the moment the resource was last completely free, that is, from the
+latest end of all its activities in progress at the enabling time. For a
+resource that serves several cases side by side, a lane may already be free much
+earlier.
 \end{enumerate}
 The first three properties are the reason why the control-flow model matters
 more for a simulator than for a descriptive model. This thesis addresses them
@@ -751,7 +827,8 @@ with the rule repair of E2 and with a data-aware \emph{stop guard}: before each
 routing draw, transitions that would break a data rule get the weight zero
 (Section~\ref{sec:exp_baseline}). This is the guard of a data-aware Petri net
 (Section~\ref{sec:bg_rules}), evaluated inside the ProSiT loop. Properties four
-and five are examined in E4.
+to seven concern the physical constraints of the blocks and are examined in E4
+(Section~\ref{sec:exp_mechanisms}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Research Gap and Positioning}
@@ -772,8 +849,8 @@ contributes and which question remains open for a terminal like CTB.
 \textbf{Research direction} & \textbf{Main contribution} & \textbf{Open question for CTB} \\
 \midrule
 Terminal simulation \cite{Kastner2021,Bett2024} & Hand-built models that compare operating policies on KPIs such as TTT. & Can a model discovered from data support the same kind of comparison? \\
-Discovery benchmarks \cite{RWAugusto2019Review,RWRehse2024Experimentation} & Compare fitness, precision and size of discovered models. & Which model is adequate when it is \emph{executed}, not only described? \\
-Domain knowledge and repair \cite{RWSchuster2022Domain,RWDixit2015Domain,SimulationGuidedRepair2025} & Use rules in discovery or repair; repair for simulation adds missing behaviour. & Can physical rules remove impossible behaviour exactly, and which rules belong in the net and which in the simulator? \\
+Discovery benchmarks \cite{DiscoveryBenchmark,RWRehse2024Experimentation} & Compare fitness, precision and size of discovered models. & Which model is adequate when it is \emph{executed}, not only described? \\
+Domain knowledge and repair \cite{schuster2022,RWDixit2015Domain,SimulationGuidedRepair2025} & Use rules in discovery or repair; repair for simulation adds missing behaviour. & Can physical rules remove impossible behaviour exactly, and which rules belong in the net and which in the simulator? \\
 Data-aware simulation \cite{mannhardt2023stochasticProcessesModelling,lopez2024,Vinci2026prosit} & Routing and times depend on data and process state; evaluated on business processes. & Does it reproduce a physical process with shared capacity and congestion? \\
 Simulation validation \cite{ChapelaCampa2023Trust,Chapela2025SimQuality,Sargent2013Validation} & Multi-perspective comparison of generated and real logs. & Does the model respond to load like the terminal, and do domain experts find it plausible? \\
 \bottomrule

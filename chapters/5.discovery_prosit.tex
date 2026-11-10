@@ -1,149 +1,294 @@
 \chapter{Model Construction and Simulation}
 \label{chp:process_discovery_methodology}
+% Sources (trucksimulation): simulation_e3/export_simulation_model.py (trees, routing, tables),
+%   plot_simulation_architecture.py, worked_example.py, plot_simulation_validation.py (Chapter 7 figures);
+%   final model: runs/split13apr_20261106/main/IM_0.0/prosit_params.pkl + runs/rq2_20261107/components
+%   (waiting_M3, exec_L); switches: ctb_engine.py. Earlier draft notes of the author are kept as comments below.
 
-\begin{hints}
-\item How the event log becomes an executable simulation model, and how that model works when it runs. The committee asked for exactly this: concrete parameters, actual trees, and how they are used.
-\item Methods only. Experimental protocol in Chapter 6, numbers and comparisons in Chapter 7.
-\end{hints}
+This chapter describes the simulation model: how it is built from the event log,
+what it has learned, and how it produces one simulated truck visit. The
+experiments that selected and tested its parts are described in
+Chapter~\ref{chp:experiments}; their results are in Chapter~\ref{chp:results}.
+The model described here is the final configuration of E4
+(Section~\ref{sec:exp_e4_runs}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{From Event Log to Executable Model}
-\label{sec:mc_overview}
+\label{sec:sim_overview}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item One pipeline figure: event log $\rightarrow$ control-flow discovery $\rightarrow$ rule audit and repair $\rightarrow$ ProSiT discovery $\rightarrow$ CTB adaptations $\rightarrow$ simulation $\rightarrow$ evaluation. Mark for each step where its protocol (Ch.~6) and results (Ch.~7) are.
-\item The idea of layers: control flow, arrivals, resources, timing. Each is fitted from data and checked separately.
-\end{hints}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Control-Flow Model}
-\label{sec:process_discovery_methodology}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Draft text by the author (kept verbatim):
-Process Discovery describes the process of extracting the control flow model of a given event log. 
-The discovery follows an algorithms, that learns the control flow in different ways, that can be grouped into a family like structure. Each Family follows a methodology of how from observed sequences, a model structure is constructed. The categories are overlapping in their calculation methods. 
-\cite{DiscoveryBenchmark}.
+The model has two parts. The \emph{control flow} says which sequences of stops
+a truck may perform. It is a Petri net discovered from the training log and
+repaired with domain rules (E1, E2). The \emph{simulation parameters} say how
+often each path is taken, which block a stop goes to, and how long trucks wait
+and are served. ProSiT learns them from the same training log
+\cite{Vinci2026prosit}. A small number of changes adapt the simulation loop to
+the physical limits of the terminal (Section~\ref{sec:sim_adaptations}).
 
-% PETRI NET
-% The result of a process discovery can be expressed in a petri net as shown in figure ...[TBC INSERT FIGURE OF BASIC PETRI NET] with a starting point, an endpoint and several transsitions and places namely activities, constructing the process backbone. 
+Figure~\ref{fig:sim_architecture} shows how these parts produce one simulated
+visit. A truck arrives and receives its manifest. It then moves through the
+control flow one step at a time. At each step, the learned routing gives every
+possible next step a probability, the stop guard removes the steps that would
+break the planned number of stops, and one step is drawn. For a yard stop, the
+block, the waiting time and the execution time follow. The visit ends with Gate
+Out.
 
-% ALGORITHM DIFFERENCE IN DOSCOVERY
-% A petri net displays the learned process behaviour, that can be different, depending on the used algorithm. 
-
-% \cite{schuster2022} on domain konwledge inclusion 
-% mention: 
-% "Output process model formalism" - this thesis aims for a Petri Net due to...
-% duplicate labels for several of the same activity labels in one process model
-
-
-
-% DOMAIN RULES / MODEL ADAPTIONS/ REPAIR
-% As the control flow will serve as the base for the following simulation models learning and execution, it should display the real processes domain rules, that can be specified by domain experts before the discovery to guide the discovery process [SOURCE - Rules guided discovery] or based on the resulting petri net, a so called process repair [SOURCE Massi. 2025] 
-
-\subsection{Petri Nets and Workflow Nets}
-\label{sec:mc_petri}
-\begin{hints}
-\item Places, transitions, tokens, silent transitions; workflow net and soundness, with one small figure of a truck visit (Gate In, yard choice, Gate Out).
-\item Why soundness matters for simulation: ProSiT executes the net, so it must always reach the final marking.
-\item Keep it short if Chapter 2 already defines it; then only refer back.
-\end{hints}
-
-\subsection{Discovery Algorithms}
-\label{sec:mc_algorithms}
-\begin{hints}
-\item One paragraph per family: Inductive Miner and IMf (process trees, noise threshold), interactive Data-aware Heuristic Miner (causal net from frequency, dependency and binding thresholds; conditions on dependencies; Petri net output), ILP Miner (places from integer linear programmes over the prefix-closed log; sequence encoding filter, where a higher threshold filters less), Alpha, Alpha+ and Alpha++ (places from ordering relations, no noise handling).
-\item For each: the parameter that was varied and what it does. The grid and evaluation protocol are in Chapter 6 (E1).
-\end{hints}
-
-\subsection{Rule Audit and Exact Repair}
-\label{sec:mc_repair}
-\begin{hints}
-\item How a rule is checked on a model: rule as a Declare constraint (its semantics is a small transition system), product with the reachability graph of the net, shortest counterexample.
-\item How the repair works: product of the reachability graph (silent steps resolved) with the constraint transition systems, merge states with identical continuations, convert to a state-machine workflow net (one place per state, one transition per edge). Fully automatic, written as a new PNML file; the original net is untouched. Cite \cite{RWDiCiccio2022Declarative,RWAugusto2022Advanced}; closest predecessor \cite{RWDixit2015Domain}.
-\item What it guarantees: sound, all observed sequences kept, no other sequences added. Figure: repaired net.
-\item Consequence for ProSiT: one token per visit, so stops cannot run in parallel; repeated labels make routing state-dependent.
-\end{hints}
-
-\input{figures/schemas/repair_patterns}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/simulation_model/sim_architecture.png}
+\caption{Steps of one simulated visit in the final model and where each value
+comes from. Blue: learned by ProSiT from the training log. Orange border:
+adaptation to the terminal (Section~\ref{sec:sim_adaptations}). Grey: structure
+and output.}
+\label{fig:sim_architecture}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{ProSiT Simulation Discovery}
-\label{sec:simulation_discovery_methodology}
+\section{Control Flow}
+\label{sec:sim_controlflow}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Draft text by the author (kept verbatim):
-WIE LERNT UND AREBITET PROSIT?
+%%% Draft text by the author (kept):
+% Process Discovery describes the process of extracting the control flow model of a given event log.
+% The discovery follows an algorithms, that learns the control flow in different ways, that can be grouped into a
+% family like structure. Each Family follows a methodology of how from observed sequences, a model structure is
+% constructed. The categories are overlapping in their calculation methods. \cite{DiscoveryBenchmark}.
+% DOMAIN RULES / MODEL ADAPTIONS/ REPAIR: rules can be specified before the discovery to guide it
+% [SOURCE - Rules guided discovery] or applied to the resulting net, a so called process repair [SOURCE Massi. 2025]
 
-% ProSiT is a probablistic white box simulation model that is...
-% It takes a petri net and an event log as its input and calculates several models accumulating to be one overal simulation model, that can simulate its learned behaviour.
-% It uses Probablistic Decision trees, with distributions in its leaves, rather than static values, which gives it a closer to reality set of resulting values for durations and actual final values. 
-% The user can decide on th granularity of the learned trees, by setting the maximum tree depth and the minimum amount of values per leaf.
+The control flow is a workflow net: a Petri net with one start and one end
+place, in which every truck visit is one token that moves from Gate In to Gate
+Out (Section~\ref{sec:bg_petri}). ProSiT executes the net, so it must be sound:
+from every reachable state the visit can still end, and no token is left behind.
 
-EXPLAIN THE DIFFERENT TIMEMODELS
-% ProSiT constructs X seperate models, to generate its simulations.
-% Servcetime model
+The net used in the simulation is the unfiltered Inductive Miner net IM 0.0,
+restricted exactly to two domain rules and written as a state machine
+(Figure~\ref{fig:sim_controlflow}). Its selection is described in E1 and E2
+(Sections~\ref{sec:exp_discovery} and \ref{sec:exp_rules}). It accepts all 82
+sequences of the training log and has ten places and 54 visible transitions.
+Every place is a state of the visit, and every transition one possible next
+step. A state machine is a Petri net in which every transition has exactly one
+input and one output place \cite{Murata1989}. Several transitions can carry the
+same activity label, which the labelled nets of ProSiT allow.
 
-% Waiting time model 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_control_flow_guard.png}
+\caption{Control flow of the simulation model: IM 0.0 restricted to rules 3 and
+5 as a state machine (10 places, 54 transitions, no silent transitions). The
+labels show the stop guard of the simulator: $n$ is the number of planned stops
+from the manifest and $c$ the number of stops done; a yard transition may fire
+only if $c < n$, Gate Out only if $c = n$.}
+\label{fig:sim_controlflow}
+\end{figure}
 
-% Inter Arrival time Model
+Two properties of this form matter for the simulation. First, a truck holds one
+token, so two of its stops can never be scheduled at the same time (rule 4).
+Second, every decision is one choice among the visible next steps at one place.
+ProSiT gives every transition a weight that depends on the case attributes and
+on the activities done so far, but not on the marking of the net
+\cite{Vinci2023Inf.Activ.Prob,Vinci2026prosit}. In a state machine, each
+transition has one input place, so its weight automatically refers to one state
+of the visit. In the original Inductive Miner net, the free order of the stops is
+expressed by parallel branches that can be skipped by silent transitions, and
+the skip decisions are then taken independently of each other. Decision points
+are places with several outgoing arcs, and silent transitions are a known
+difficulty for learning them \cite{PMRozinat2009}. The consequences for the
+simulated visits are analysed in E3 (Section~\ref{sec:res_rq1}).
 
-% Ressource Calendar (Model)?
+The stop guard is the only data condition of the model. It is not part of the
+net, because ProSiT has no guards; it is applied in the simulation loop before
+every routing draw. Together with the state machine it forms a simple data
+Petri net with the planned stops $n$ and a counter $c$. From every reachable
+state, a visit can still end with exactly $n$ stops, for every $n$ from one to
+four, so the net with the guard is sound in the data-aware sense
+\cite{FelliDeLeoniMontali2021}.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Learned Components}
+\label{sec:sim_components}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Draft notes by the author (kept):
+% ProSiT is a probabilistic white box simulation model ... takes a petri net and an event log as its input and
+% calculates several models accumulating to be one overall simulation model. It uses probabilistic decision trees,
+% with distributions in its leaves, rather than static values ... the user can decide on the granularity of the
+% learned trees (maximum tree depth, minimum amount of values per leaf). Multitasking: resources and their
+% capacities from simultaneously executed activities. Workload features: queuing behaviour as features.
 
-% Prosit has several Functional-Hyperarameters that can be configures when starting the simulation discovery. 
-% Activiating the Multitaksing, enables Prosit is able to recognise resources and their capacities, by learning simultaniously executed activities at the same resource. 
+ProSiT learns every simulation parameter as a probabilistic decision tree
+\cite{Vinci2026prosit}. The training log is first aligned with the net, so that
+every event is assigned to a transition. For each component, a tree is then
+trained on the features that are known at the moment the value is needed, for
+example the manifest of the visit, the hour, or the number of trucks at a
+resource. Each leaf holds a fitted distribution (exponential, normal, lognormal,
+gamma, uniform or a constant) and the sample of training values it was fitted
+on. In the simulation, the features of the current situation select one leaf,
+and the value is drawn from its distribution, truncated to the range observed
+in the leaf. ProSiT 1.0.4 chooses by cross-validation between a tree (depth one
+to three, at least 50, 100 or 200 cases per leaf) and a single distribution,
+using the continuous ranked probability score. Table~\ref{tab:sim_components}
+lists the components; the settings are in Table~\ref{tab:sim_hyperparameters}.
 
-% Activating the Workload Features, a queing behaviour can be learned, that can have an affect on the affected time models. 
+\input{tables/sim_components}
+\input{tables/sim_hyperparameters}
 
-% [ADD MORE HYPERPARAMETERS]
+\paragraph{Arrivals and manifests.} In generative runs, the time to the next
+arrival is drawn from a tree on the weekday and hour of the last arrival
+(Figure~\ref{fig:sim_tree_arrivals}). On weekdays between 5 and 21 hours, the
+next truck follows after 0.5 minutes on average; at night and at weekends, the
+mean gap is 2 to 35 minutes. The manifest of a generated visit is one training
+manifest drawn as a whole, so that its attributes stay consistent. In the final
+configuration, both are replayed from the period that is simulated: every
+simulated truck arrives at the Gate-In time of one observed truck and carries
+its manifest (Section~\ref{sec:exp_e4_design}).
 
-\subsection{Inputs and Learned Components}
-\label{sec:mc_components}
-\begin{hints}
-\item Inputs: the repaired Petri net and the training event log.
-\item Table of all learned components: component, model type, target, features, when it is used in the simulation. Rows: arrival times (tree on hour and weekday), case attributes (joint empirical sample), routing (one model per transition), resource choice (one model per resource), waiting time (per resource), execution time (per activity), arrival and resource calendars, resource capacity (multitasking).
-\item For each component, the CTB result in one sentence (e.g. number of leaves, split features). Full trees in Appendix~\ref{app:prosit_inventory}.
-\end{hints}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_tree_arrivals.png}
+\caption{Arrival tree: minutes to the next Gate In by weekday (0 = Monday) and
+hour of the last arrival. Each leaf shows the training values (bars) and the
+fitted distribution (line), each on its own scale.}
+\label{fig:sim_tree_arrivals}
+\end{figure}
 
-\subsection{Decision Trees and Model Selection}
-\label{sec:mc_trees}
-\begin{hints}
-\item How a tree is learned (CART) and what a leaf contains: a fitted distribution (fixed, normal, exponential, lognormal, gamma or uniform) and a sample to draw from.
-\item How ProSiT chooses between a tree and a single distribution (cross-validation over depth and minimum leaf size).
-\item The difference between version 1.0.3 (per-leaf Wasserstein, which in effect almost always selects a single distribution) and 1.0.4 (CRPS). State which version the final model uses and why (Chapter 7, E4).
-\item Show one real tree as a figure, e.g. a routing tree or a waiting-time tree, and read it in plain words.
-\end{hints}
+\paragraph{Routing.} Every transition with alternatives has its own tree; it
+predicts the probability that the transition fires when it is enabled. The
+weights of the enabled transitions are then normalised. Of the 54 transitions,
+38 have a tree and 16 a constant weight, mostly those without alternatives. The
+trees split on the manifest. Figure~\ref{fig:sim_tree_routing} shows the tree
+for an RMG receive as the first stop: for a receive visit with one planned stop
+and mostly full containers, its probability is 0.88; for a delivery visit it is
+practically zero. Figure~\ref{fig:sim_routing_first} compares the first stop that
+the learned routing chooses with the training log, by flow type: the shares
+agree within one percentage point.
 
-\subsection{Hyperparameters}
-\label{sec:mc_hyperparameters}
-\begin{hints}
-\item Table of all discovery parameters with the value used and its meaning: max\_depth\_tree, min\_samples\_leaf\_cv, enable\_multitasking and multitasking\_thr, arrival and resource calendar thresholds, attribute\_mode, use\_workload\_features, incremental\_discovery, random\_state.
-\item Why each value was chosen (default, or a reason from the data). Source: simulation\_e3/PROSIT\_DISCOVERY\_SETTINGS\_20261010.md.
-\item Which features use\_workload\_features actually adds, and where (resource choice and waiting time, not execution time).
-\end{hints}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/simulation_model/sim_tree_routing_first_rmg_receive.png}
+\caption{Routing tree of the transition \texttt{RMG\_receive} at the first
+decision after Gate In: probability that it fires when enabled, by manifest
+attributes.}
+\label{fig:sim_tree_routing}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_routing_first_stop.png}
+\caption{First stop of a visit by flow type: share in the training log and
+probability under the learned routing (normalised weights of the enabled
+transitions, averaged over 8,000 training manifests).}
+\label{fig:sim_routing_first}
+\end{figure}
+
+\paragraph{Block choice.} ProSiT learns one tree per block for the probability
+that a stop goes there, with the queue length and the workload of the block as
+features. These trees learned that trucks prefer the block with the longer
+queue, because the training data count a stop in the queue of its own block (E4,
+Section~\ref{sec:res_mechanisms}). The final configuration therefore uses the
+observed block of each stop; generative runs draw the block from the training
+shares.
+
+\paragraph{Waiting time.} One tree per resource predicts the time from the moment
+a stop can start until it starts. In the final model, this time is measured from
+the moment a lane of the block was free, not from the moment the whole block was
+free (Section~\ref{sec:exp_e4_mechanisms}). The trees split mainly on the queue
+length and the workload of the resource. At block T13
+(Figure~\ref{fig:sim_tree_waiting}), the expected waiting time is 7 minutes with
+at most one truck in the queue, 12 to 28 minutes with two to six, and more than
+50 minutes with seven or more.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_tree_waiting_block.png}
+\caption{Waiting-time tree of block T13 (final model): minutes from a free lane to
+the start of the stop. All leaves on one scale.}
+\label{fig:sim_tree_waiting}
+\end{figure}
+
+\paragraph{Execution time.} One tree per activity predicts the duration of a
+stop. In the final model, it has one more feature: the number of other trucks at
+the block when the stop starts (Section~\ref{sec:exp_e4_mechanisms}). For RMG
+receives this feature makes the first two splits (Figure~\ref{fig:sim_tree_exec}).
+Without reefer containers, a receive takes 7.5 minutes on average when the truck
+is alone at the block, 11.7 minutes with one other truck, 16.0 with two and 20.8
+with three; block T18 is slower. The tree for RMG deliveries has the same
+structure.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_tree_exec_rmg_receive.png}
+\caption{Execution-time tree of RMG receives (final model). The first splits are
+on the number of other trucks at the block when the stop starts.}
+\label{fig:sim_tree_exec}
+\end{figure}
+
+\paragraph{Calendars and capacities.} Table~\ref{tab:sim_capacities} lists the
+capacities and calendars. The capacity of LL and HO2 is discovered from the
+number of trucks served at the same time; the RMG blocks have three lanes.
+
+\input{tables/sim_capacities}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Execution of a Simulated Visit}
-\label{sec:mc_execution}
+\label{sec:sim_execution}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item The order of decisions in the simulation loop: arrival time, case attributes, enabled transitions, routing draw, resource choice and capacity check, waiting time, execution time, token update, until Gate Out.
-\item A worked example of one simulated truck with the real fitted values: which leaf of which tree was used, which value was drawn, resulting timestamps. Every step must match the implementation. This answers the committee's criticism that the technical explanation stayed abstract.
-\item Which outputs are recorded (enabled, start and completion timestamps, firing sequence) and how they are used in the evaluation.
-\end{hints}
+
+The simulation processes the visits in the order of their arrival. For each
+visit, the loop repeats four steps until Gate Out: determine the enabled
+transitions of the current state; compute their routing weights and apply the
+stop guard; draw one transition; for a yard stop, choose the block, determine
+the start (waiting time, then the earliest time at which fewer than three trucks
+are at the block during the whole stop) and draw the execution time. Every event
+is written with its enabling, start and end time; times are floored to the
+minute, as in the source systems.
+
+Table~\ref{tab:sim_worked_example} follows one simulated truck of the final model
+through these steps, with the values the simulator used and the leaf of each
+tree that produced them.
+
+\input{tables/sim_worked_example}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{CTB-Specific Adaptations}
-\label{sec:mc_ctb_adaptations}
+\section{Adaptations to the Terminal}
+\label{sec:sim_adaptations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item Calibration: resource calendars set to the full week so that admitted trucks are served to completion; timestamps floored to the minute; RMG capacity capped at three.
-\item Arrival model: native ProSiT tree on hour and weekday (version 1.0.4), or the replay of observed arrivals for conditional comparisons.
-\item Changes to the simulation loop (block choice from observed or empirical shares, capacity checked at the actual start): what each change does, which diagnosed defect motivates it (Chapter 7, E4), and the regression test showing that with all changes switched off the loop reproduces ProSiT exactly.
-\item For every adaptation: what remains ProSiT, what is changed, and why. This is the basis for the discussion on transferability.
-\end{hints}
 
+The simulation loop of ProSiT is not re-implemented. Its source is read at run
+time, a few marked lines are changed by exact text replacement, and each change
+can be switched off. With all changes switched off, the loop produces exactly the
+same log as ProSiT. Table~\ref{tab:sim_adaptations} lists what each change does
+and why it is needed; the evidence is in E3 and E4.
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\begin{tabularx}{\textwidth}{L{2.0cm}L{3.2cm}L{3.4cm}Y}
+\toprule
+\textbf{Part} & \textbf{ProSiT 1.0.4} & \textbf{Final model} & \textbf{Why} \\
+\midrule
+Control flow & discovered net as given & IM 0.0 restricted to rules 3 and 5, as a state machine & no physically impossible visits; one token per truck (E2, E3) \\
+Number of stops & no guard & stop guard: as many stops as planned & rule 6; ProSiT has no guards (E3) \\
+Resource calendars & discovered (122--128 of 168 hours) & full week for trucks already inside & a stop is not interrupted at the end of a shift \\
+Timestamps & continuous & floored to the minute & as in the source systems \\
+Arrivals and manifests & arrival tree, random training manifest & replayed (final); arrival tree (generative) & separates the model error from the demand (E4) \\
+Block choice & learned trees (queue feature counts the stop itself) & observed block (final); training shares (generative) & the learned rule sends trucks to the longest queue (E4) \\
+Capacity & discovered 4--5; checked when a stop is enabled & 3 lanes; checked over the whole stop at its start & at most three trucks at a block (E4) \\
+Waiting time & measured from a completely free block & measured from a free lane & otherwise the learned waiting time falls with the load (E4) \\
+Execution time & no load feature & other trucks at the block as a feature & stops take longer when the block is busy (E4) \\
+Counting & stops at the first finished activity in the schedule & every activity counted & 13--14\,\% of the counts were too low (E4) \\
+\bottomrule
+\end{tabularx}
+\caption{Differences between the ProSiT simulation loop and the final model.}
+\label{tab:sim_adaptations}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Chapter Summary}
-\label{sec:mc_summary}
-\begin{hints}
-\item One paragraph: the executable model, its learned components and the adaptations. Hand over to the experimental design.
-\end{hints}
+\label{sec:sim_summary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The simulation model combines a repaired control flow, written as a state machine
+with one data guard, and the probabilistic trees that ProSiT learns for routing,
+arrivals, blocks, waiting and execution times. Its adaptations to the terminal
+keep the physical limits: one stop of a truck at a time, as many stops as planned,
+and at most three trucks at a block. How well the model reproduces the terminal is
+reported in Section~\ref{sec:res_mechanisms}.

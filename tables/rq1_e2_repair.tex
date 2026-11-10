@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrrrr}
+\toprule
+ & & & \multicolumn{3}{c}{\textbf{Precision (train / test)}} & \multicolumn{2}{c}{\textbf{Sequences with 4 stops}} \\
+\textbf{Net} & \textbf{Rules violated} & \textbf{Fitting visits [\%]} & \textbf{original} & \textbf{same language} & \textbf{repaired} & \textbf{original} & \textbf{repaired} \\
+\midrule
+IM 0.0 & 3, 5, 6 (bound) $\rightarrow$ 6 (bound) & 100.00 / 99.99 & 0.838 / 0.838 & 0.838 / 0.838 & 0.888 / 0.889 & 2009 & 1583 \\
+HM 0.7 & 6 (bound) $\rightarrow$ 6 (bound) & 99.44 / 99.14 & 0.998 / 0.995 & 0.998 / 0.995 & 0.998 / 0.995 & 27 & 27 \\
+HM 0.9 & 6 (bound) $\rightarrow$ 6 (bound) & 98.02 / 97.48 & 1.000 / 0.997 & 1.000 / 0.997 & 1.000 / 0.997 & 13 & 13 \\
+ILP 1.00 & 3, 5, 6 (bound) $\rightarrow$ 6 (bound) & 100.00 / 100.00 & 0.773 / 0.780 & 0.773 / 0.780 & 0.825 / 0.835 & 6561 & 3937 \\
+IMf 0.3 & 3, 5, 6 (bound) $\rightarrow$ none & 96.50 / 94.86 & 0.906 / 0.902 & 0.906 / 0.902 & 0.993 / 0.990 & 11 & 1 \\
+\bottomrule
+\end{tabular}
+\caption{Rule audit and exact repair for rules 3 and 5 (E2). Rules violated: rules whose violation the language of the net permits, before $\rightarrow$ after the repair (6 (bound): more than four stops; enforced in the simulator by the stop guard, not in the net). Fitting visits (train / test) are the same before and after the repair. Same language: the unrepaired language written as a state machine, the control for the change of encoding. Sequences with 4 stops: distinct sequences the net permits; 5 occur in training.}
+\label{tab:rq1_e2_repair}
+\end{table}

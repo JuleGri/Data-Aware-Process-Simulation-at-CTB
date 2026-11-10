@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{lrrrrY}
+\toprule
+\textbf{Net} & \textbf{Fitting visits} & \textbf{Precision} & \textbf{Seq.} & \textbf{Multi-block} & \textbf{Reason} \\
+ & \textbf{[\%]} & & \textbf{accepted} & \textbf{accepted [\%]} & \\
+\midrule
+IM 0.0 & 100.00 & 0.838 & 82 of 82 & 100.00 & non-dominated; the only net that accepts all training sequences with precision above 0.8 \\
+HM 0.7 & 99.44 & 0.998 & 38 of 82 & 99.22 & non-dominated; most fitting visits among the Heuristics nets \\
+HM 0.9 & 98.02 & 1.000 & 27 of 82 & 98.45 & non-dominated; most precise sound net with at least 90\,\% fitting visits \\
+ILP 1.00 & 100.00 & 0.773 & 82 of 82 & 100.00 & reference: most permissive net (accepts every sequence of stops); dominated by IM 0.0 \\
+IMf 0.3 & 96.50 & 0.906 & 19 of 82 & 1.16 & reference: filtered Inductive Miner; dominated by the Heuristics nets \\
+\bottomrule
+\end{tabularx}
+\caption{Nets taken to the rule audit and repair (E2), with their values on the training log. Selection on training values only: sound, at least 90\,\% fitting visits and not dominated in fitting visits and precision. HM 0.8 is also non-dominated but lies between HM 0.7 and HM 0.9 and is left out. ILP 1.00 and IMf 0.3 are added as references for a permissive and a filtered net.}
+\label{tab:rq1_e2_candidates}
+\end{table}

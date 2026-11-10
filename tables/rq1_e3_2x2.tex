@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{Yrrrrrr}
+\toprule
+\textbf{IM 0.0, simulated with ProSiT} & \textbf{Visits without stop [\%]} & \textbf{Overlapping stops [\%]} & \textbf{Visits with 5+ stops [\%]} & \textbf{Unseen sequences [\%]} & \textbf{Sequence TVD} & \textbf{Stop-count TVD} \\
+\midrule
+Observed (test log) & 0.00 & 0.00 & 0.000 & 0.00 & 0.000 & 0.000 \\
+\midrule
+Naive: original net, no guard & 15.07 & 22.71 & 0.031 & 19.02 & 0.360 & 0.277 \\
+Guard only: original net + guard & 15.08 & 21.30 & 0.022 & 17.62 & 0.323 & 0.239 \\
+Repair only: repaired net, no guard & 0.00 & 0.00 & 0.061 & 0.53 & 0.103 & 0.027 \\
+Both: repaired net + guard & 0.00 & 0.00 & 0.000 & 0.05 & 0.097 & 0.021 \\
+\midrule
+Control: same language as state machine, no guard & 0.00 & 0.00 & 0.061 & 0.50 & 0.100 & 0.027 \\
+\bottomrule
+\end{tabularx}
+\caption{Effect of the rule treatment on the simulated visits (E3), test period, means over five seeds. Original net: IM 0.0 as discovered (parallel branches that silent transitions can skip). Repaired net: language restricted to rules 3 and 5, written as a state machine. Guard: data-aware stop guard for rule 6. Control: the unrepaired language written as a state machine. Overlapping stops: share of the visits with more than one stop. Unseen sequences: generated visits whose sequence never occurs in the training log. TVD: total-variation distance to the distribution of the observed test log (0 = identical).}
+\label{tab:rq1_e3_2x2}
+\end{table}

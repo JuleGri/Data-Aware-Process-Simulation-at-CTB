@@ -104,7 +104,7 @@ reefer indicators, dwell time and inbound/outbound carriers. \\
 \section{Event-Log Construction}
 \label{sec:event_log_engineering}
 \begin{hints}
-\item The pipeline from four source systems to one truck-visit event log, as one figure (figures/schemas/event_log_engineering_pipeline.png) and a short walk-through.
+\item The pipeline from four source systems to one truck-visit event log, as one figure (figures/schemas/event\_log\_engineering\_pipeline.png) and a short walk-through.
 \item Every step that changes the population must be counted (attrition table: raw visits, after cleaning, after matching, final).
 \end{hints}
 
@@ -145,6 +145,33 @@ To include the terminals utilization into the process behaviour, the utilization
 \item Gate events are instantaneous; therefore turnaround time decomposes exactly into approach, stops, transfer and exit.
 \item Minute resolution of all source timestamps; known imprecision at LL and HO2.
 \end{hints}
+
+\paragraph{Order of stops and imprecise LL timestamps}
+The stops of a visit never overlap in the data: in no training or test visit
+does a stop start before the previous stop has ended. This supports domain
+rule~4 (Section~\ref{sec:domain_rules}). The gate events are less clean. In 6 of
+the 59,139 training visits and 5 of the 32,014 test visits, an
+\texttt{LL\_delivery} stop ends about two minutes after the truck has passed
+Gate Out. Such a stop cannot be physical; the timestamps of the empty-container
+depot are known to be imprecise. The event log used for discovery orders the
+events of a visit by the recorded sequence (\texttt{case:event:order}), in which
+Gate Out is always last, so these timestamps do not affect it.
+
+They do matter for discovery methods that read start and end timestamps. The
+lifecycle variant of the Inductive Miner \cite{RWLeemans2016Lifecycle} treats
+overlapping intervals as concurrency. Without a noise filter, the six
+overlapping training visits, 0.01\,\% of the training log, were enough for it to place Gate Out in
+parallel with the stops: the resulting net accepts a stop after Gate Out, which
+breaks rule~2. For this experiment, the end of a stop is therefore capped at the
+Gate Out time of its visit. With this correction the lifecycle variant returns a
+net with exactly the same language and the same concurrency as the Inductive
+Miner without lifecycle information (Section~\ref{sec:exp_discovery}).
+Lifecycle-based discovery thus depends on reliable start and end timestamps: a
+few imprecise timestamps at one area are enough to produce a physically
+impossible model.
+% Source: trucksimulation/process_discovery/export_lifecycle_xes.py (--cap-at-gate-out),
+% check_concurrency.py, compare_languages.py; nets in data/processed/CTB/ProM Petri Nets 65-35 Split
+% (Petri net IM Lifecycle 0.0 / 0.0 capped). 6 Nov 2026.
 
 \subsection{Resource Identities}
 \label{sec:resource_identities}

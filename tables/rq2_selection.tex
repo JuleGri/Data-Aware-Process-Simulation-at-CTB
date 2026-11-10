@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\begin{tabular}{lcrrrrr}
+\toprule
+\textbf{Configuration (training period)} & \textbf{Admissible} & \textbf{G-appr.} & \textbf{G-stop} & \textbf{G-WIP} & \textbf{Sum} & \textbf{CTD} \\
+\midrule
+c1x capacity at start & yes (max 3) & 4.8 & 3.0 & 4.8 & 12.6 & 7.4 \\
+c2x + waiting queue without self-count & yes (max 3) & 4.8 & 3.0 & 4.2 & 12.1 & 7.4 \\
+c3x lane-free waiting & yes (max 3) & 1.1 & 3.0 & 3.0 & 7.1 & 2.1 \\
+d3x = c3x + load-dependent service $\leftarrow$ & yes (max 3) & 0.8 & 1.3 & 3.5 & 5.6 & 2.7 \\
+\bottomrule
+\end{tabular}
+\caption{Choice of the final configuration on the training period (E4f): replayed training visits with their observed blocks, compared with the training log, means over five seeds. Admissible: no rule violation and at most three trucks at a block at once. The configuration with the smallest sum of the profile gaps is chosen ($\leftarrow$). Gaps and CTD in minutes.}
+\label{tab:rq2_selection}
+\end{table}

@@ -1,0 +1,180 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Methodology and Experimental Setup}{45}{chapter.5}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chp:experiments}{{5}{45}{Methodology and Experimental Setup}{chapter.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Overview of the Experiments}{45}{section.5.1}\protected@file@percent }
+\newlabel{sec:exp_overview}{{5.1}{45}{Overview of the Experiments}{section.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Goals of the Experiments}{45}{subsection.5.1.1}\protected@file@percent }
+\newlabel{sec:exp_goals}{{5.1.1}{45}{Goals of the Experiments}{subsection.5.1.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces Flow of the experiments E1 to E3. Each stage reduces the set of candidate models and passes it on. E4 and E5 continue with the configuration selected in E3.}}{46}{figure.caption.31}\protected@file@percent }
+\newlabel{fig:exp_flow}{{5.1}{46}{Flow of the experiments E1 to E3. Each stage reduces the set of candidate models and passes it on. E4 and E5 continue with the configuration selected in E3}{figure.caption.31}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Experiments, varied factors and the research questions they address.}}{47}{table.caption.32}\protected@file@percent }
+\newlabel{tab:exp_overview}{{5.1}{47}{Experiments, varied factors and the research questions they address}{table.caption.32}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Simulation-Informed Model Selection}{48}{subsection.5.1.2}\protected@file@percent }
+\newlabel{sec:exp_selection_logic}{{5.1.2}{48}{Simulation-Informed Model Selection}{subsection.5.1.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Data Partitions and Their Use}{49}{section.5.2}\protected@file@percent }
+\newlabel{sec:exp_partitions}{{5.2}{49}{Data Partitions and Their Use}{section.5.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Outcome Measures and Peak Definitions}{49}{section.5.3}\protected@file@percent }
+\newlabel{sec:exp_kpis}{{5.3}{49}{Outcome Measures and Peak Definitions}{section.5.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Simulation Runs, Replications and Uncertainty}{50}{section.5.4}\protected@file@percent }
+\newlabel{sec:exp_runs}{{5.4}{50}{Simulation Runs, Replications and Uncertainty}{section.5.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}Domain Review}{50}{section.5.5}\protected@file@percent }
+\newlabel{sec:exp_review}{{5.5}{50}{Domain Review}{section.5.5}{}}
+\citation{RWRehse2024Experimentation}
+\citation{DiscoveryBenchmark}
+\citation{Leemans2014InductiveMiner}
+\citation{Mannhardt2017DHM,Mannhardt2017iDHM}
+\citation{Weijters2011FHM}
+\citation{vanderAalst2004AlphaMiner,deMedeiros2004AlphaPlus,Wen2007AlphaPlusPlus}
+\citation{RWVanZelst2018ILP}
+\@writefile{toc}{\contentsline {section}{\numberline {5.6}Control-Flow Discovery (E1)}{51}{section.5.6}\protected@file@percent }
+\newlabel{sec:exp_discovery}{{5.6}{51}{Control-Flow Discovery (E1)}{section.5.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6.1}Discovery Input}{51}{subsection.5.6.1}\protected@file@percent }
+\newlabel{sec:exp_discovery_input}{{5.6.1}{51}{Discovery Input}{subsection.5.6.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Population correction.}{51}{subsection.5.6.1}\protected@file@percent }
+\citation{vanDongen2005ProM}
+\citation{DeLaBriandais1959Trie}
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Visits per partition for the restricted and the expanded population. Partitions are chronological by Gate In. The validation period starts on 10 April 2026, 15:50, and the test period on 20 April 2026, 18:17. The 184 visits with unknown activity labels remain excluded.}}{52}{table.caption.33}\protected@file@percent }
+\newlabel{tab:exp_population}{{5.2}{52}{Visits per partition for the restricted and the expanded population. Partitions are chronological by Gate In. The validation period starts on 10 April 2026, 15:50, and the test period on 20 April 2026, 18:17. The 184 visits with unknown activity labels remain excluded}{table.caption.33}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6.2}Candidate Algorithms and Parameter Grid}{52}{subsection.5.6.2}\protected@file@percent }
+\newlabel{sec:exp_candidates}{{5.6.2}{52}{Candidate Algorithms and Parameter Grid}{subsection.5.6.2}{}}
+\citation{Berti2023PM4Py}
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Discovery configurations of E1, all run in ProM Lite 1.4 on the training partition of the expanded population (58,262 visits). The iDHM frequency threshold is relative to the number of visits: at 0.1, only the 7 of 60 directly-follows relations that occur at least 5,827 times are used. Because no data attributes were selected, iDHM discovers no conditional dependencies, and the conditional heuristic (C4.5 with F1 score, condition threshold 0.5) has no effect.}}{53}{table.caption.34}\protected@file@percent }
+\newlabel{tab:exp_grid}{{5.3}{53}{Discovery configurations of E1, all run in ProM Lite 1.4 on the training partition of the expanded population (58,262 visits). The iDHM frequency threshold is relative to the number of visits: at 0.1, only the 7 of 60 directly-follows relations that occur at least 5,827 times are used. Because no data attributes were selected, iDHM discovers no conditional dependencies, and the conditional heuristic (C4.5 with F1 score, condition threshold 0.5) has no effect}{table.caption.34}{}}
+\@writefile{toc}{\contentsline {paragraph}{Prefix reference.}{53}{table.caption.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6.3}Evaluation Protocol}{53}{subsection.5.6.3}\protected@file@percent }
+\newlabel{sec:exp_discovery_eval}{{5.6.3}{53}{Evaluation Protocol}{subsection.5.6.3}{}}
+\citation{Verbeek2001Woflan}
+\citation{Adriansyah2011CostFitness,aalst2012ConformanceChecking}
+\citation{Taymouri2020LocalSearch}
+\citation{Adriansyah2012AlignPrecision,Adriansyah2015Precision}
+\citation{Buijs2014Quality}
+\@writefile{toc}{\contentsline {section}{\numberline {5.7}Domain-Rule Audit and Targeted Repair (E2)}{55}{section.5.7}\protected@file@percent }
+\newlabel{sec:exp_rules}{{5.7}{55}{Domain-Rule Audit and Targeted Repair (E2)}{section.5.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7.1}Rule Types and Where They Are Enforced}{55}{subsection.5.7.1}\protected@file@percent }
+\citation{RWMaggi2011Monitoring,RWCarmona2022Conformance}
+\citation{RWDixit2015Domain}
+\citation{schuster2022}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7.2}Audit at Three Levels}{56}{subsection.5.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7.3}Targeted Repair}{56}{subsection.5.7.3}\protected@file@percent }
+\newlabel{sec:mc_repair}{{5.7.3}{56}{Targeted Repair}{subsection.5.7.3}{}}
+\citation{Wen2007AlphaPlusPlus,RWKalenkova2020NonLocal}
+\citation{Russell2006WorkflowPatterns}
+\@writefile{toc}{\contentsline {paragraph}{What the repair means in Petri net terms}{57}{Item.39}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Control for the change of representation}{57}{figure.caption.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Acceptance and selection}{57}{figure.caption.36}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces Repair pattern for rule~5: one exclusive choice across two parts of the net. The first choice leaves a token that records the decision (dashed places and arcs). \texttt  {LL\_delivery} can only fire if \texttt  {LL\_mixed} was skipped. The skip of the second choice exists twice, once for each token, so no control token remains at the end. \texttt  {LL\_receive} is connected like \texttt  {LL\_delivery}, and HO2 is repaired in the same way. Per handling area, the pattern adds two places and one silent transition.}}{58}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:mc_repair_xor}{{5.2}{58}{Repair pattern for rule~5: one exclusive choice across two parts of the net. The first choice leaves a token that records the decision (dashed places and arcs). \texttt {LL\_delivery} can only fire if \texttt {LL\_mixed} was skipped. The skip of the second choice exists twice, once for each token, so no control token remains at the end. \texttt {LL\_receive} is connected like \texttt {LL\_delivery}, and HO2 is repaired in the same way. Per handling area, the pattern adds two places and one silent transition}{figure.caption.35}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces Marker logic for rule~3 (at least one stop), shown for two optional stops in parallel. Gate In puts a token into \emph  {no stop yet}. Each stop exists twice: the first stop moves the token to \emph  {stop done}, a further stop only reads it (double arrow). Gate Out needs \emph  {stop done}, so a visit cannot leave without a stop. If both stops are skipped, however, the token stays in \emph  {no stop yet} and the visit can never finish. The complete construction therefore also forbids skipping the last open stop, with one more control place per stop (not shown).}}{58}{figure.caption.36}\protected@file@percent }
+\newlabel{fig:mc_repair_stop}{{5.3}{58}{Marker logic for rule~3 (at least one stop), shown for two optional stops in parallel. Gate In puts a token into \emph {no stop yet}. Each stop exists twice: the first stop moves the token to \emph {stop done}, a further stop only reads it (double arrow). Gate Out needs \emph {stop done}, so a visit cannot leave without a stop. If both stops are skipped, however, the token stays in \emph {no stop yet} and the visit can never finish. The complete construction therefore also forbids skipping the last open stop, with one more control place per stop (not shown)}{figure.caption.36}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.8}Baseline Simulation of Control-Flow Candidates (E3)}{59}{section.5.8}\protected@file@percent }
+\newlabel{sec:exp_baseline}{{5.8}{59}{Baseline Simulation of Control-Flow Candidates (E3)}{section.5.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.8.1}Candidates and Contrast}{59}{subsection.5.8.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces $2\times 2$ contrast for IM 0.0 in E3. All four cells use the same ProSiT settings and seeds.}}{59}{table.caption.37}\protected@file@percent }
+\newlabel{tab:exp_e3_contrast}{{5.4}{59}{$2\times 2$ contrast for IM 0.0 in E3. All four cells use the same ProSiT settings and seeds}{table.caption.37}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.8.2}ProSiT Configuration and CTB Adaptations}{60}{subsection.5.8.2}\protected@file@percent }
+\newlabel{sec:mc_hyperparameters}{{5.8.2}{60}{ProSiT Configuration and CTB Adaptations}{subsection.5.8.2}{}}
+\newlabel{sec:mc_ctb_adaptations}{{5.8.2}{60}{ProSiT Configuration and CTB Adaptations}{subsection.5.8.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Stop guard}{60}{table.caption.38}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.8.3}Comparison Measures}{60}{subsection.5.8.3}\protected@file@percent }
+\newlabel{sec:exp_e3_measures}{{5.8.3}{60}{Comparison Measures}{subsection.5.8.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces Fixed simulation conditions in E3.}}{61}{table.caption.38}\protected@file@percent }
+\newlabel{tab:exp_e3_config}{{5.5}{61}{Fixed simulation conditions in E3}{table.caption.38}{}}
+\citation{Sargent2013Validation}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.8.4}Additional Checks and Selection Criterion}{62}{subsection.5.8.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.9}Mechanism Audit and Simulation Validity (E4)}{62}{section.5.9}\protected@file@percent }
+\newlabel{sec:exp_mechanisms}{{5.9}{62}{Mechanism Audit and Simulation Validity (E4)}{section.5.9}{}}
+\citation{Sargent2013Validation}
+\citation{Chapela2025SimQuality}
+\citation{Vinci2026prosit,Chapela2025SimQuality}
+\citation{Oezdemir2025RethinkingBPS}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.9.1}Evaluation Design}{63}{subsection.5.9.1}\protected@file@percent }
+\newlabel{sec:exp_e4_design}{{5.9.1}{63}{Evaluation Design}{subsection.5.9.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Reference values}{63}{table.caption.39}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Two weaknesses of the usual comparison}{63}{table.caption.39}\protected@file@percent }
+\citation{Law2015Simulation}
+\@writefile{lot}{\contentsline {table}{\numberline {5.6}{\ignorespaces Measures of operational validity in E4. For each load profile in P4, the \emph  {profile gap} is the mean absolute difference of the simulated medians to the observed ones over the bins.}}{64}{table.caption.39}\protected@file@percent }
+\newlabel{tab:exp_e4_measures}{{5.6}{64}{Measures of operational validity in E4. For each load profile in P4, the \emph {profile gap} is the mean absolute difference of the simulated medians to the observed ones over the bins}{table.caption.39}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.9.2}Error Attribution by Component Substitution}{64}{subsection.5.9.2}\protected@file@percent }
+\newlabel{sec:exp_e4_attribution}{{5.9.2}{64}{Error Attribution by Component Substitution}{subsection.5.9.2}{}}
+\citation{RWChapela2024Delays}
+\@writefile{toc}{\contentsline {paragraph}{Retraining protocol}{65}{subsection.5.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.9.3}Mechanisms and Design Decisions}{65}{subsection.5.9.3}\protected@file@percent }
+\newlabel{sec:exp_e4_mechanisms}{{5.9.3}{65}{Mechanisms and Design Decisions}{subsection.5.9.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Design decisions}{65}{table.caption.40}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.7}{\ignorespaces Mechanisms examined in E4. Observed values from the test log; the training log gives the same profiles within one to two minutes.}}{66}{table.caption.40}\protected@file@percent }
+\newlabel{tab:exp_e4_mechanisms}{{5.7}{66}{Mechanisms examined in E4. Observed values from the test log; the training log gives the same profiles within one to two minutes}{table.caption.40}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.9.4}Experiments}{67}{subsection.5.9.4}\protected@file@percent }
+\newlabel{sec:exp_e4_runs}{{5.9.4}{67}{Experiments}{subsection.5.9.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Choice of the final configuration}{67}{table.caption.41}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.8}{\ignorespaces Configurations of E4. ProSiT: component as fitted in E3. No self-count: retrained without counting the stop in its own queue. Lane free: waiting measured from the moment a lane became free. Whole delay: waiting measured from enabling to start. Every configuration from b3 on, and the baseline a0, is also run with an exact count of the activities in progress (suffix x, see the design decisions).}}{68}{table.caption.41}\protected@file@percent }
+\newlabel{tab:exp_e4_configs}{{5.8}{68}{Configurations of E4. ProSiT: component as fitted in E3. No self-count: retrained without counting the stop in its own queue. Lane free: waiting measured from the moment a lane became free. Whole delay: waiting measured from enabling to start. Every configuration from b3 on, and the baseline a0, is also run with an exact count of the activities in progress (suffix x, see the design decisions)}{table.caption.41}{}}
+\@writefile{toc}{\contentsline {paragraph}{Acceptance criteria for the intended use}{69}{table.caption.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.10}What-If Demonstration (E5)}{69}{section.5.10}\protected@file@percent }
+\newlabel{sec:exp_policy}{{5.10}{69}{What-If Demonstration (E5)}{section.5.10}{}}
+\@writefile{toc}{\contentsline {paragraph}{Status after E4}{70}{section.5.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Scenario S1}{70}{section.5.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Fixed conditions}{70}{section.5.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Measures}{70}{section.5.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Robustness (Z5)}{71}{section.5.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Rules for the claims}{71}{section.5.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.11}Threats Addressed by the Design}{71}{section.5.11}\protected@file@percent }
+\newlabel{sec:exp_threats}{{5.11}{71}{Threats Addressed by the Design}{section.5.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.12}Chapter Summary}{72}{section.5.12}\protected@file@percent }
+\@setckpt{chapters/6.experiments}{
+\setcounter{page}{73}
+\setcounter{equation}{0}
+\setcounter{enumi}{3}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{0}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{chapter}{5}
+\setcounter{section}{12}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{3}
+\setcounter{table}{8}
+\setcounter{section@level}{0}
+\setcounter{Item}{52}
+\setcounter{Hfootnote}{0}
+\setcounter{Hy@AnnotLevel}{0}
+\setcounter{bookmark@seq@number}{44}
+\setcounter{DefaultLines}{2}
+\setcounter{DefaultDepth}{0}
+\setcounter{L@lines}{0}
+\setcounter{L@depth}{0}
+\setcounter{parentequation}{0}
+\setcounter{eu@}{0}
+\setcounter{eu@i}{0}
+\setcounter{mkern}{4}
+\setcounter{caption@flags}{2}
+\setcounter{continuedfloat}{0}
+\setcounter{subfigure}{0}
+\setcounter{subtable}{0}
+\setcounter{float@type}{8}
+\setcounter{algorithm}{0}
+\setcounter{ALG@line}{0}
+\setcounter{ALG@rem}{0}
+\setcounter{ALG@nested}{0}
+\setcounter{ALG@Lnr}{2}
+\setcounter{ALG@blocknr}{10}
+\setcounter{ALG@storecount}{0}
+\setcounter{ALG@tmpcounter}{0}
+\setcounter{lofdepth}{1}
+\setcounter{lotdepth}{1}
+\setcounter{@pps}{0}
+\setcounter{@ppsavesec}{0}
+\setcounter{@ppsaveapp}{0}
+\setcounter{NAT@ctr}{0}
+\setcounter{note}{0}
+\setcounter{example}{0}
+\setcounter{nlinenum}{0}
+\setcounter{r@tfl@t}{0}
+}

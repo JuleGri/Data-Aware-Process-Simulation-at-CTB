@@ -1,0 +1,22 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrrrr}
+\toprule
+ & & \multicolumn{4}{c}{\textbf{Share of the training \ldots\ [\%]}} & \textbf{Mean} & \textbf{Again} \\
+\textbf{Visits} & \textbf{Seq.} & \textbf{visits} & \textbf{truck-minutes} & \textbf{visits $>$ P90} & \textbf{multi-block} & \textbf{TTT} & \textbf{in test} \\
+\midrule
+Sequences seen once & 21 & 0.04 & 0.09 & 0.24 & 0.78 & 91 & 7 of 21 \\
+Sequences with fewer than 10 visits & 47 & 0.19 & 0.42 & 1.23 & 2.62 & 82 & 25 of 47 \\
+All but the 15 most frequent sequences & 67 & 1.23 & 2.00 & 4.02 & 10.95 & 59 & 44 of 67 \\
+\midrule
+Rejected by IMf 0.3 & 63 & 3.50 & 5.46 & 9.99 & 98.84 & 57 & 41 of 63 \\
+Rejected by HM 0.9 & 55 & 1.98 & 2.89 & 4.73 & 1.55 & 54 & 38 of 55 \\
+Rejected by HM 0.7 & 44 & 0.56 & 0.96 & 2.17 & 0.78 & 62 & 29 of 44 \\
+Rejected by IM 0.0 & 0 & 0.00 & 0.00 & 0.00 & 0.00 & -- & -- \\
+\bottomrule
+\end{tabular}
+\caption{What the rare sequences and the sequences a net rejects stand for (training log, 59,139 visits, 82 sequences). Truck-minutes: sum of the turnaround times. Visits $>$ P90: visits with a turnaround time above the training P90 of 64 minutes. Multi-block: visits to two or more RMG blocks (1.75\,\% of the visits). Mean TTT in minutes (all visits: 37). Again in test: sequences that occur again in the test log.}
+\label{tab:rq1_tail_relevance}
+\end{table}

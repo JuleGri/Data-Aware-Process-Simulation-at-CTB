@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lrrrrrrrr}
+\toprule
+& \textbf{Median} & \textbf{P90} & \textbf{Mean} & \textbf{CTD} & \textbf{Approach} & \textbf{Stops} & \textbf{Spearman} & \textbf{Max at block} \\
+\midrule
+\multicolumn{9}{l}{\textit{Test period (13--30 April)}} \\
+Observed & 33 & 75 & 41.2 & -- & 12.7 & 14.4 & 0.55 & 4 \\
+Simulated & 28 & 62 & 34.9 & 6.3 & 10.5 & 10.8 & 0.48 & 3 \\
+\midrule
+\multicolumn{9}{l}{\textit{Training period (in-sample)}} \\
+Observed & 29 & 64 & 36.6 & -- & 11.0 & 12.1 & 0.49 & 4 \\
+Simulated & 28 & 59 & 33.8 & 2.7 & 10.5 & 10.6 & 0.46 & 3 \\
+\bottomrule
+\end{tabular}
+\caption{Key values of the final simulation model against the observed logs (replayed visits and observed blocks, means over five seeds). Times in minutes; CTD: cycle-time distance; Spearman: hourly arrivals against hourly median TTT; Max at block: largest number of trucks at one block at once (the log records 4 because of short recording overlaps, Section~\ref{sec:exp_e4_mechanisms}).}
+\label{tab:sim_kpis}
+\end{table}

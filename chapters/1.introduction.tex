@@ -97,13 +97,13 @@ container-terminal truck operations.
 \section{Research Objective and Contributions}
 
 \begin{hints}
-\item Objective in one sentence, e.g.: assess layer by layer whether a process-mining-based simulation of CTB truck visits reproduces turnaround time and its response to load, repair the layers that fail, and use the result to evaluate one procedural change against the KPI.
+\item Objective in one sentence: investigate whether, and under which conditions, a data-aware process simulation learned from event logs can represent a physically constrained logistics process, using truck handling at CTB as the case. The aim is a scientific statement about the technique, not a recommendation for the terminal.
 \item Contributions as a short list, each pointing to a chapter:
-  (C1) controlled control-flow selection with rule audit and exact repair, including the population correction (Ch.~6/7);
-  (C2) layer-wise validation of a ProSiT model for a physical logistics process, with the mechanisms that break and how they were repaired (Ch.~5/7);
-  (C3) evaluation of load-aware block allocation for deliveries against the KPI (Ch.~7);
+  (C1) controlled control-flow selection with rule audit and exact repair, and evidence that coverage and the encoding, not precision, anticipate the simulated behaviour (Ch.~6/7);
+  (C2) a mechanism-level validation of a ProSiT model for a capacity-limited logistics process: which assumptions of the technique break under physical limits, why, and what is needed to repair them (Ch.~6/7);
+  (C3) a demonstration of what-if use under physical constraints: what the validated simulation can and cannot show about one allocation rule, with its conditions of validity (Ch.~7);
   (C4) a reproducible pipeline with frozen inputs and documented runs.
-\item Say explicitly that this is an empirical case study, not a new algorithm.
+\item Say explicitly that this is an empirical case study, not a new algorithm. The limits of the technique and the approaches to overcome them are part of the result (Chapter~\ref{chp:discussion}).
 \end{hints}
 
 
@@ -112,8 +112,8 @@ container-terminal truck operations.
 
 \begin{enumerate}
 \item \textbf{RQ1:} \todo{final wording} Which discovery and rule treatment yields a sound, executable control-flow model that preserves the observed truck-visit behaviour, and do conformance metrics anticipate its behaviour in simulation?
-\item \textbf{RQ2:} \todo{final wording} To what extent does the resulting simulation reproduce truck turnaround time and delay peaks, and which model components cause the remaining error?
-\item \textbf{RQ3:} \todo{final wording} How does load-aware block allocation for deliveries affect truck turnaround time and the share of delay-peak hours?
+\item \textbf{RQ2:} \todo{final wording} To what extent does the ProSiT simulation reproduce truck turnaround time and its response to load at the capacity-limited yard blocks, and which model components cause the remaining error?
+\item \textbf{RQ3:} \todo{final wording} To what extent can the simulation be used to analyse a load-aware block allocation for deliveries under the physical limits of the yard blocks, and what does it indicate about the effect on truck turnaround time?
 \end{enumerate}
 
 \begin{hints}
@@ -143,7 +143,7 @@ this log and states the domain rules that every truck visit must satisfy.
 
 Chapter~\ref{chp:experiments} describes the five experiments: control-flow
 discovery (E1), rule audit and repair (E2), baseline simulation (E3),
-mechanism audit (E4) and policy evaluation (E5), together with the outcome
+mechanism audit (E4) and what-if demonstration (E5), together with the outcome
 measures and the domain review.
 
 Chapter~\ref{chp:results} presents the results of the experiments in the

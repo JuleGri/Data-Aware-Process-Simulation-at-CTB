@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{L{3.6cm}L{1.6cm}L{2.6cm}Y}
+\toprule
+\textbf{Resource} & \textbf{Capacity} & \textbf{Active hours per week (discovered)} & \textbf{Note} \\
+\midrule
+Gate In, Gate Out & 1 & 127 / 128 & Gate events are instantaneous. \\
+LL (empty-container depot) & 23 & 127 & Discovered by multitasking. \\
+HO2 (handling area) & 14 & 126 & Discovered by multitasking. \\
+RMG blocks (22) & 3 & 122--168 & Three lanes per block (domain); the discovered values were 4 or 5. \\
+\bottomrule
+\end{tabularx}
+\caption{Capacities and calendars. The discovered resource calendars cover 122 to 128 of the 168 hours of a week; they are set to the full week so that trucks already inside are served to completion. The gate calendar still controls admission.}
+\label{tab:sim_capacities}
+\end{table}

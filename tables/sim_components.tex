@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\begin{tabularx}{\textwidth}{L{1.7cm}L{2.2cm}L{2.3cm}YL{2.6cm}}
+\toprule
+\textbf{Component} & \textbf{Model} & \textbf{Target} & \textbf{When it is used} & \textbf{Fitted (models / trees / median leaves; main split features)} \\
+\midrule
+Arrival times & Regression tree, distribution per leaf & Minutes to the next Gate In & Arrival tree (generative runs); replayed arrivals in the final configuration & 1 / 1 / 7; hour, weekday \\
+Case attributes & Joint empirical sample & Manifest of a visit & Gate In: one training manifest drawn as a whole (replayed manifest in the final configuration) & 9 attributes, 59,139 training manifests \\
+Routing & Classification tree per transition & Probability that an enabled transition fires & Every step of the token game; weights normalised over the enabled transitions; stop guard masks forbidden steps & 54 / 38 / 5; planned stops, visit complexity, receives, full ratio \\
+Block choice & Classification tree per block & Probability of a block & Every RMG stop (generative runs); observed blocks in the final configuration & 26 / 22 / 5; queue length, workload, reefer, visit complexity \\
+Waiting time & Regression tree per resource & Minutes from enabling (lane free) to start & After the resource is chosen; capacity checked over the whole stop at its start & 26 / 25 / 6; queue length, workload, hour, weekday \\
+Execution time & Regression tree per activity & Minutes from start to completion & After the start time is known & 11 / 8 / 7; other trucks at block, hour, block T18, visit complexity \\
+\bottomrule
+\end{tabularx}
+\caption{Learned components of the final simulation model (ProSiT 1.0.4 on the repaired IM 0.0 state machine, training log). Waiting and execution time are the retrained components of the final configuration (Section~\ref{sec:exp_e4_mechanisms}); the inventory of every model is in Appendix~\ref{app:prosit_inventory}.}
+\label{tab:sim_components}
+\end{table}

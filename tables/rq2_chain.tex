@@ -1,0 +1,41 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.4pt}
+\begin{tabular}{lrrrrrrrrrrr}
+\toprule
+\textbf{Configuration} & \textbf{Med.} & \textbf{P90} & \textbf{CTD} & \textbf{Appr.} & \textbf{Stops} & \textbf{Top bl.} & \textbf{Max} & \textbf{Spear.} & \textbf{G-appr.} & \textbf{G-stop} & \textbf{G-WIP} \\
+\midrule
+Observed (test log) & 33 & 75 & 0.0 & 12.7 & 14.4 & 6.3 & 4 & 0.55 & 0.0 & 0.0 & 0.0 \\
+\textit{Real: week 2 vs.\ week 1} & 32 & 72 & 3.1 & 13.0 & 14.7 & 6.7 & 4 & 0.54 & 2.0 & 0.5 & 5.8 \\
+\textit{Real: training vs.\ test period} & 29 & 64 & 5.5 & 11.0 & 12.1 & 6.1 & 4 & 0.49 & 1.2 & 1.0 & 2.0 \\
+\midrule
+\multicolumn{12}{l}{\textit{E4a Demand}} \\
+a0 E3 baseline & 58 & 141 & 29.8 & 42.5 & 11.8 & 54.9 & 23 & -0.35 & 24.5 & 5.5 & 29.9 \\
+a0x E3 baseline, exact count & 34 & 110 & 9.8 & 23.4 & 11.9 & 28.6 & 16 & -0.02 & 12.1 & 5.2 & 6.1 \\
+a1 hour-of-week arrivals & 56 & 137 & 27.6 & 40.3 & 12.1 & 48.2 & 27 & -0.49 & 23.2 & 5.3 & 24.8 \\
+a2 replayed arrivals & 55 & 136 & 26.5 & 37.7 & 12.2 & 44.4 & 26 & -0.59 & 22.2 & 5.3 & 27.4 \\
+\midrule
+\multicolumn{12}{l}{\textit{E4b Block allocation}} \\
+b1 learned blocks, no self-count & 25 & 53 & 11.5 & 4.6 & 12.0 & 5.8 & 7 & -0.33 & 9.8 & 5.2 & 6.8 \\
+b2 training block shares & 25 & 53 & 11.6 & 4.6 & 12.0 & 5.8 & 7 & -0.28 & 9.8 & 5.2 & 7.0 \\
+b3x observed blocks & 24 & 51 & 12.3 & 4.0 & 11.9 & 5.8 & 8 & -0.39 & 8.7 & 5.2 & 7.0 \\
+\midrule
+\multicolumn{12}{l}{\textit{E4c Queue at the block}} \\
+c1x capacity at start & 24 & 52 & 11.8 & 4.5 & 11.9 & 6.0 & 3 & -0.25 & 5.4 & 2.9 & 6.4 \\
+c2x + waiting queue without self-count & 25 & 53 & 11.6 & 4.6 & 11.9 & 6.0 & 3 & -0.18 & 5.4 & 2.9 & 5.8 \\
+c3x lane-free waiting & 29 & 64 & 5.4 & 10.5 & 11.9 & 6.0 & 3 & 0.38 & 1.6 & 3.0 & 7.0 \\
+\midrule
+\multicolumn{12}{l}{\textit{E4d Service under load}} \\
+d3x = c3x + load-dependent service & 28 & 62 & 6.3 & 10.5 & 10.8 & 6.0 & 3 & 0.48 & 1.2 & 1.3 & 6.2 \\
+\midrule
+\multicolumn{12}{l}{\textit{Sensitivity (more than three trucks at a block, not admissible)}} \\
+c4x lane-free waiting, 4 lanes & 29 & 63 & 5.4 & 10.4 & 11.9 & 6.0 & 4 & 0.36 & 3.5 & 5.2 & 7.8 \\
+c5x whole delay, no capacity & 29 & 63 & 5.6 & 10.2 & 11.9 & 6.0 & 7 & 0.34 & 3.4 & 5.2 & 7.0 \\
+d4x = c4x + load-dependent service & 28 & 62 & 6.2 & 10.5 & 11.0 & 6.0 & 4 & 0.49 & 2.7 & 2.4 & 7.0 \\
+d5x = c5x + load-dependent service & 28 & 62 & 6.4 & 10.5 & 10.9 & 6.0 & 9 & 0.45 & 3.5 & 2.5 & 7.3 \\
+\bottomrule
+\end{tabular}
+\caption{Error attribution along the path of the truck (E4a--E4d), against the test log, means over five seeds. From b3x on, the observed demand and the observed blocks are used, so that only the queue and the service vary. The rows in italics are differences between real periods. Med., P90: median and P90 of the TTT; CTD: cycle-time distance; Appr., Stops: mean approach and stop time per visit (all in minutes). Top bl.: share of the RMG stops at the busiest block in \%. Max: largest number of trucks at one block at once. Spear.: Spearman correlation of hourly arrivals and hourly median TTT. G-appr., G-stop, G-WIP: profile gaps for the approach by trucks at the block, the RMG stop duration by other trucks at the block and the TTT by trucks in the terminal (minutes).}
+\label{tab:rq2_chain}
+\end{table}

@@ -1,0 +1,87 @@
+This is BibTeX, Version 0.99e
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: dissertation.aux
+Reallocating 'name_of_file' (item size: 1) to 9 items.
+The style file: IEEEtran.bst
+Reallocating 'name_of_file' (item size: 1) to 28 items.
+A level-1 auxiliary file: chapters/1.introduction.aux
+Reallocating 'name_of_file' (item size: 1) to 26 items.
+A level-1 auxiliary file: chapters/2.background.aux
+Reallocating 'name_of_file' (item size: 1) to 25 items.
+A level-1 auxiliary file: chapters/4.data_prep.aux
+Reallocating 'name_of_file' (item size: 1) to 32 items.
+A level-1 auxiliary file: chapters/5.discovery_prosit.aux
+Reallocating 'name_of_file' (item size: 1) to 27 items.
+A level-1 auxiliary file: chapters/6.experiments.aux
+Reallocating 'name_of_file' (item size: 1) to 23 items.
+A level-1 auxiliary file: chapters/7.results.aux
+Reallocating 'name_of_file' (item size: 1) to 26 items.
+A level-1 auxiliary file: chapters/8.discussion.aux
+Reallocating 'name_of_file' (item size: 1) to 26 items.
+A level-1 auxiliary file: chapters/9.conclusion.aux
+Reallocating 'name_of_file' (item size: 1) to 34 items.
+A level-1 auxiliary file: appendices/observed_behaviour.aux
+Reallocating 'name_of_file' (item size: 1) to 33 items.
+A level-1 auxiliary file: appendices/discovery_results.aux
+Reallocating 'name_of_file' (item size: 1) to 38 items.
+A level-1 auxiliary file: appendices/prosit_model_inventory.aux
+Reallocating 'name_of_file' (item size: 1) to 49 items.
+A level-1 auxiliary file: appendices/model_inspection_and_reproduction.aux
+Reallocating 'name_of_file' (item size: 1) to 11 items.
+Reallocating 'name_of_file' (item size: 1) to 13 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Database file #1: references.bib
+Database file #2: related_work.bib
+-- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--missing publisher in Aalst2016
+Warning--missing publisher in heuristicsMiner2006
+
+Done.
+You've used 88 entries,
+            4087 wiz_defined-function locations,
+            1436 strings with 27846 characters,
+and the built_in function-call counts, 70063 in all, are:
+= -- 5857
+> -- 1624
+< -- 532
++ -- 848
+- -- 292
+* -- 3405
+:= -- 10509
+add.period$ -- 204
+call.type$ -- 88
+change.case$ -- 110
+chr.to.int$ -- 1125
+cite$ -- 90
+duplicate$ -- 5193
+empty$ -- 5618
+format.name$ -- 373
+if$ -- 16430
+int.to.chr$ -- 0
+int.to.str$ -- 88
+missing$ -- 930
+newline$ -- 307
+num.names$ -- 108
+pop$ -- 2051
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 5513
+stack$ -- 0
+substring$ -- 2906
+swap$ -- 4261
+text.length$ -- 157
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 88
+warning$ -- 2
+while$ -- 311
+width$ -- 90
+write$ -- 945
+(There were 2 warnings)

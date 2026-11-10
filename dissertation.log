@@ -1,0 +1,3913 @@
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  9 NOV 2026 18:12
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**./dissertation.tex
+(dissertation.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-12-24>
+(Dissertate.cls
+Document Class: Dissertate Dissertate Class
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/base\book.cls
+Document Class: book 2025/01/22 v1.4n Standard LaTeX document class
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/base\bk12.clo
+File: bk12.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count271
+\c@chapter=\count272
+\c@section=\count273
+\c@subsection=\count274
+\c@subsubsection=\count275
+\c@paragraph=\count276
+\c@subparagraph=\count277
+\c@figure=\count278
+\c@table=\count279
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen148
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
+Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count280
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pdfx\pdfx.sty
+Package: pdfx 2024/06/24 v1.6.5f PDF/X and PDF/A support (CVR/HTH/RRM/PS)
+\pdfx@minorversion=\count281
+\pdfx@majorversion=\count282
+\pdfmajorversion=\count283
+\pdfminorversion=\count284
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifluatex.sty
+Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
+Package: iftex 2024/12/12 v1.0g TeX engine tests
+))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifpdf.sty
+Package: ifpdf 2019/10/25 v3.4 ifpdf legacy package. Use iftex instead.
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifxetex.sty
+Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/everyshi\everyshi.sty
+Package: everyshi 2020/11/18 v4.00 EveryShipout Package
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pdfx\l8u-penc.def
+File: l8u-penc.def 2017/06/23 v0.8 Custom LaTeX file, for UTF8 encoded letters 
+and symbols
+LaTeX Encoding Info:    Redeclaring text command \textdoubletilde (encoding L8U
+) on input line 210.
+LaTeX Encoding Info:    Redeclaring text command \texttipaG (encoding L8U) on i
+nput line 256.
+LaTeX Encoding Info:    Redeclaring text command \texttipam (encoding L8U) on i
+nput line 257.
+LaTeX Encoding Info:    Redeclaring text command \texttipaM (encoding L8U) on i
+nput line 258.
+LaTeX Encoding Info:    Redeclaring text command \b (encoding L8U) on input lin
+e 278.
+LaTeX Encoding Info:    Text composite with undeclared \b in encoding L8U on in
+put line 278.
+LaTeX Encoding Info:    Redeclaring text command \textacutemacron (encoding L8U
+) on input line 323.
+LaTeX Encoding Info:    Redeclaring text command \textgravemacron (encoding L8U
+) on input line 334.
+LaTeX Encoding Info:    Redeclaring text command \textacutemacron (encoding L8U
+) on input line 336.
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pdfx\l8ugrk-penc.def
+File: l8ugrk-penc.def 2018/11/28 v0.6 Greek support for UTF8 in XMP metadata
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pdfx\l8umath-penc.def
+File: l8umath-penc.def 2017/06/23 v0.6 Custom LaTeX file, for UTF8 encoded math
+ symbols
+LaTeX Encoding Info:    Redeclaring text command \textmathnormal (encoding L8U)
+ on input line 1340.
+)
+LaTeX Encoding Info:    Redeclaring text command \textellipsis (encoding L8U) o
+n input line 2514.
+LaTeX Encoding Info:    Redeclaring text command \textfractionsolidus (encoding
+ L8U) on input line 2529.
+LaTeX Encoding Info:    Redeclaring text command \texthinferior (encoding L8U) 
+on input line 2618.
+LaTeX Encoding Info:    Redeclaring text command \texthslash (encoding L8U) on 
+input line 2678.
+LaTeX Encoding Info:    Redeclaring text command \texttrademark (encoding L8U) 
+on input line 2687.
+LaTeX Encoding Info:    Redeclaring text command \textleftarrow (encoding L8U) 
+on input line 2780.
+LaTeX Encoding Info:    Redeclaring text command \textuparrow (encoding L8U) on
+ input line 2781.
+LaTeX Encoding Info:    Redeclaring text command \textrightarrow (encoding L8U)
+ on input line 2782.
+LaTeX Encoding Info:    Redeclaring text command \textdownarrow (encoding L8U) 
+on input line 2783.
+LaTeX Encoding Info:    Redeclaring text command \textleftrightarrow (encoding 
+L8U) on input line 2784.
+LaTeX Encoding Info:    Redeclaring text command \textupdownarrow (encoding L8U
+) on input line 2785.
+LaTeX Encoding Info:    Redeclaring text command \textnwarrow (encoding L8U) on
+ input line 2786.
+LaTeX Encoding Info:    Redeclaring text command \textnearrow (encoding L8U) on
+ input line 2787.
+LaTeX Encoding Info:    Redeclaring text command \textsearrow (encoding L8U) on
+ input line 2788.
+LaTeX Encoding Info:    Redeclaring text command \textswarrow (encoding L8U) on
+ input line 2789.
+LaTeX Encoding Info:    Redeclaring text command \textnleftarrow (encoding L8U)
+ on input line 2790.
+LaTeX Encoding Info:    Redeclaring text command \textnrightarrow (encoding L8U
+) on input line 2791.
+LaTeX Encoding Info:    Redeclaring text command \texttwoheadleftarrow (encodin
+g L8U) on input line 2792.
+LaTeX Encoding Info:    Redeclaring text command \textntwoheadleftarrow (encodi
+ng L8U) on input line 2793.
+LaTeX Encoding Info:    Redeclaring text command \texttwoheaduparrow (encoding 
+L8U) on input line 2794.
+LaTeX Encoding Info:    Redeclaring text command \texttwoheadrightarrow (encodi
+ng L8U) on input line 2795.
+LaTeX Encoding Info:    Redeclaring text command \textntwoheadrightarrow (encod
+ing L8U) on input line 2796.
+LaTeX Encoding Info:    Redeclaring text command \texttwoheaddownarrow (encodin
+g L8U) on input line 2797.
+LaTeX Encoding Info:    Redeclaring text command \textleftarrowtail (encoding L
+8U) on input line 2798.
+LaTeX Encoding Info:    Redeclaring text command \textrightarrowtail (encoding 
+L8U) on input line 2799.
+LaTeX Encoding Info:    Redeclaring text command \textmapsto (encoding L8U) on 
+input line 2800.
+LaTeX Encoding Info:    Redeclaring text command \texthookleftarrow (encoding L
+8U) on input line 2801.
+LaTeX Encoding Info:    Redeclaring text command \texthookrightarrow (encoding 
+L8U) on input line 2802.
+LaTeX Encoding Info:    Redeclaring text command \textlooparrowleft (encoding L
+8U) on input line 2803.
+LaTeX Encoding Info:    Redeclaring text command \textlooparrowright (encoding 
+L8U) on input line 2804.
+LaTeX Encoding Info:    Redeclaring text command \textnleftrightarrow (encoding
+ L8U) on input line 2805.
+LaTeX Encoding Info:    Redeclaring text command \textlightning (encoding L8U) 
+on input line 2806.
+LaTeX Encoding Info:    Redeclaring text command \textdlsh (encoding L8U) on in
+put line 2807.
+LaTeX Encoding Info:    Redeclaring text command \textcurvearrowleft (encoding 
+L8U) on input line 2808.
+LaTeX Encoding Info:    Redeclaring text command \textcurvearrowright (encoding
+ L8U) on input line 2809.
+LaTeX Encoding Info:    Redeclaring text command \textleftharpoonup (encoding L
+8U) on input line 2810.
+LaTeX Encoding Info:    Redeclaring text command \textleftharpoondown (encoding
+ L8U) on input line 2811.
+LaTeX Encoding Info:    Redeclaring text command \textupharpoonright (encoding 
+L8U) on input line 2812.
+LaTeX Encoding Info:    Redeclaring text command \textupharpoonleft (encoding L
+8U) on input line 2813.
+LaTeX Encoding Info:    Redeclaring text command \textrightharpoonup (encoding 
+L8U) on input line 2814.
+LaTeX Encoding Info:    Redeclaring text command \textrightharpoondown (encodin
+g L8U) on input line 2815.
+LaTeX Encoding Info:    Redeclaring text command \textdownharpoonright (encodin
+g L8U) on input line 2816.
+LaTeX Encoding Info:    Redeclaring text command \textdownharpoonleft (encoding
+ L8U) on input line 2817.
+LaTeX Encoding Info:    Redeclaring text command \textrightleftarrows (encoding
+ L8U) on input line 2818.
+LaTeX Encoding Info:    Redeclaring text command \textupdownarrows (encoding L8
+U) on input line 2819.
+LaTeX Encoding Info:    Redeclaring text command \textleftrightarrows (encoding
+ L8U) on input line 2820.
+LaTeX Encoding Info:    Redeclaring text command \textleftleftarrows (encoding 
+L8U) on input line 2821.
+LaTeX Encoding Info:    Redeclaring text command \textupuparrows (encoding L8U)
+ on input line 2822.
+LaTeX Encoding Info:    Redeclaring text command \textrightrightarrows (encodin
+g L8U) on input line 2823.
+LaTeX Encoding Info:    Redeclaring text command \textdowndownarrows (encoding 
+L8U) on input line 2824.
+LaTeX Encoding Info:    Redeclaring text command \textleftrightharpoons (encodi
+ng L8U) on input line 2825.
+LaTeX Encoding Info:    Redeclaring text command \textrightleftharpoons (encodi
+ng L8U) on input line 2826.
+LaTeX Encoding Info:    Redeclaring text command \textnLeftarrow (encoding L8U)
+ on input line 2827.
+LaTeX Encoding Info:    Redeclaring text command \textnLeftrightarrow (encoding
+ L8U) on input line 2828.
+LaTeX Encoding Info:    Redeclaring text command \textnRightarrow (encoding L8U
+) on input line 2829.
+LaTeX Encoding Info:    Redeclaring text command \textLeftarrow (encoding L8U) 
+on input line 2830.
+LaTeX Encoding Info:    Redeclaring text command \textUparrow (encoding L8U) on
+ input line 2831.
+LaTeX Encoding Info:    Redeclaring text command \textRightarrow (encoding L8U)
+ on input line 2832.
+LaTeX Encoding Info:    Redeclaring text command \textDownarrow (encoding L8U) 
+on input line 2833.
+LaTeX Encoding Info:    Redeclaring text command \textLeftrightarrow (encoding 
+L8U) on input line 2834.
+LaTeX Encoding Info:    Redeclaring text command \textUpdownarrow (encoding L8U
+) on input line 2835.
+LaTeX Encoding Info:    Redeclaring text command \textNwarrow (encoding L8U) on
+ input line 2836.
+LaTeX Encoding Info:    Redeclaring text command \textNearrow (encoding L8U) on
+ input line 2837.
+LaTeX Encoding Info:    Redeclaring text command \textSearrow (encoding L8U) on
+ input line 2838.
+LaTeX Encoding Info:    Redeclaring text command \textSwarrow (encoding L8U) on
+ input line 2839.
+LaTeX Encoding Info:    Redeclaring text command \textLleftarrow (encoding L8U)
+ on input line 2840.
+LaTeX Encoding Info:    Redeclaring text command \textRrightarrow (encoding L8U
+) on input line 2841.
+LaTeX Encoding Info:    Redeclaring text command \textleftsquigarrow (encoding 
+L8U) on input line 2842.
+LaTeX Encoding Info:    Redeclaring text command \textrightsquigarrow (encoding
+ L8U) on input line 2843.
+LaTeX Encoding Info:    Redeclaring text command \textdashleftarrow (encoding L
+8U) on input line 2844.
+LaTeX Encoding Info:    Redeclaring text command \textdasheduparrow (encoding L
+8U) on input line 2845.
+LaTeX Encoding Info:    Redeclaring text command \textdashrightarrow (encoding 
+L8U) on input line 2846.
+LaTeX Encoding Info:    Redeclaring text command \textdasheddownarrow (encoding
+ L8U) on input line 2847.
+LaTeX Encoding Info:    Redeclaring text command \textpointer (encoding L8U) on
+ input line 2848.
+LaTeX Encoding Info:    Redeclaring text command \textdownuparrows (encoding L8
+U) on input line 2849.
+LaTeX Encoding Info:    Redeclaring text command \textleftarrowtriangle (encodi
+ng L8U) on input line 2850.
+LaTeX Encoding Info:    Redeclaring text command \textrightarrowtriangle (encod
+ing L8U) on input line 2851.
+LaTeX Encoding Info:    Redeclaring text command \textleftrightarrowtriangle (e
+ncoding L8U) on input line 2852.
+LaTeX Encoding Info:    Redeclaring text command \textforall (encoding L8U) on 
+input line 2859.
+LaTeX Encoding Info:    Redeclaring text command \textcomplement (encoding L8U)
+ on input line 2860.
+LaTeX Encoding Info:    Redeclaring text command \textpartial (encoding L8U) on
+ input line 2861.
+LaTeX Encoding Info:    Redeclaring text command \textexists (encoding L8U) on 
+input line 2862.
+LaTeX Encoding Info:    Redeclaring text command \textnexists (encoding L8U) on
+ input line 2863.
+LaTeX Encoding Info:    Redeclaring text command \textemptyset (encoding L8U) o
+n input line 2864.
+LaTeX Encoding Info:    Redeclaring text command \texttriangle (encoding L8U) o
+n input line 2865.
+LaTeX Encoding Info:    Redeclaring text command \textnabla (encoding L8U) on i
+nput line 2866.
+LaTeX Encoding Info:    Redeclaring text command \textin (encoding L8U) on inpu
+t line 2867.
+LaTeX Encoding Info:    Redeclaring text command \textnotin (encoding L8U) on i
+nput line 2868.
+LaTeX Encoding Info:    Redeclaring text command \textsmallin (encoding L8U) on
+ input line 2869.
+LaTeX Encoding Info:    Redeclaring text command \textni (encoding L8U) on inpu
+t line 2870.
+LaTeX Encoding Info:    Redeclaring text command \textnotowner (encoding L8U) o
+n input line 2871.
+LaTeX Encoding Info:    Redeclaring text command \textsmallowns (encoding L8U) 
+on input line 2872.
+LaTeX Encoding Info:    Redeclaring text command \textprod (encoding L8U) on in
+put line 2874.
+LaTeX Encoding Info:    Redeclaring text command \textamalg (encoding L8U) on i
+nput line 2875.
+LaTeX Encoding Info:    Redeclaring text command \textsum (encoding L8U) on inp
+ut line 2876.
+LaTeX Encoding Info:    Redeclaring text command \textminus (encoding L8U) on i
+nput line 2877.
+LaTeX Encoding Info:    Redeclaring text command \textmp (encoding L8U) on inpu
+t line 2878.
+LaTeX Encoding Info:    Redeclaring text command \textdotplus (encoding L8U) on
+ input line 2879.
+LaTeX Encoding Info:    Redeclaring text command \textDivides (encoding L8U) on
+ input line 2880.
+LaTeX Encoding Info:    Redeclaring text command \textDividesNot (encoding L8U)
+ on input line 2881.
+LaTeX Encoding Info:    Redeclaring text command \textsetminus (encoding L8U) o
+n input line 2882.
+LaTeX Encoding Info:    Redeclaring text command \textast (encoding L8U) on inp
+ut line 2883.
+LaTeX Encoding Info:    Redeclaring text command \textcirc (encoding L8U) on in
+put line 2884.
+LaTeX Encoding Info:    Redeclaring text command \textbulletoperator (encoding 
+L8U) on input line 2885.
+LaTeX Encoding Info:    Redeclaring text command \textsurd (encoding L8U) on in
+put line 2886.
+LaTeX Encoding Info:    Redeclaring text command \textpropto (encoding L8U) on 
+input line 2888.
+LaTeX Encoding Info:    Redeclaring text command \textinfty (encoding L8U) on i
+nput line 2889.
+LaTeX Encoding Info:    Redeclaring text command \textangle (encoding L8U) on i
+nput line 2891.
+LaTeX Encoding Info:    Redeclaring text command \textmeasuredangle (encoding L
+8U) on input line 2892.
+LaTeX Encoding Info:    Redeclaring text command \textsphericalangle (encoding 
+L8U) on input line 2893.
+LaTeX Encoding Info:    Redeclaring text command \textmid (encoding L8U) on inp
+ut line 2894.
+LaTeX Encoding Info:    Redeclaring text command \textnmid (encoding L8U) on in
+put line 2895.
+LaTeX Encoding Info:    Redeclaring text command \textparallel (encoding L8U) o
+n input line 2896.
+LaTeX Encoding Info:    Redeclaring text command \textnparallel (encoding L8U) 
+on input line 2897.
+LaTeX Encoding Info:    Redeclaring text command \textwedge (encoding L8U) on i
+nput line 2898.
+LaTeX Encoding Info:    Redeclaring text command \textowedge (encoding L8U) on 
+input line 2899.
+LaTeX Encoding Info:    Redeclaring text command \textvee (encoding L8U) on inp
+ut line 2900.
+LaTeX Encoding Info:    Redeclaring text command \textovee (encoding L8U) on in
+put line 2901.
+LaTeX Encoding Info:    Redeclaring text command \textcap (encoding L8U) on inp
+ut line 2902.
+LaTeX Encoding Info:    Redeclaring text command \textcup (encoding L8U) on inp
+ut line 2903.
+LaTeX Encoding Info:    Redeclaring text command \textint (encoding L8U) on inp
+ut line 2904.
+LaTeX Encoding Info:    Redeclaring text command \textiint (encoding L8U) on in
+put line 2905.
+LaTeX Encoding Info:    Redeclaring text command \textiiint (encoding L8U) on i
+nput line 2906.
+LaTeX Encoding Info:    Redeclaring text command \textoint (encoding L8U) on in
+put line 2907.
+LaTeX Encoding Info:    Redeclaring text command \textoiint (encoding L8U) on i
+nput line 2908.
+LaTeX Encoding Info:    Redeclaring text command \textointclockwise (encoding L
+8U) on input line 2910.
+LaTeX Encoding Info:    Redeclaring text command \textointctrclockwise (encodin
+g L8U) on input line 2911.
+LaTeX Encoding Info:    Redeclaring text command \texttherefore (encoding L8U) 
+on input line 2912.
+LaTeX Encoding Info:    Redeclaring text command \textbecause (encoding L8U) on
+ input line 2913.
+LaTeX Encoding Info:    Redeclaring text command \textvdotdot (encoding L8U) on
+ input line 2914.
+LaTeX Encoding Info:    Redeclaring text command \textsquaredots (encoding L8U)
+ on input line 2915.
+LaTeX Encoding Info:    Redeclaring text command \textdotminus (encoding L8U) o
+n input line 2916.
+LaTeX Encoding Info:    Redeclaring text command \texteqcolon (encoding L8U) on
+ input line 2917.
+LaTeX Encoding Info:    Redeclaring text command \textsim (encoding L8U) on inp
+ut line 2919.
+LaTeX Encoding Info:    Redeclaring text command \textbacksim (encoding L8U) on
+ input line 2920.
+LaTeX Encoding Info:    Redeclaring text command \textnbacksim (encoding L8U) o
+n input line 2921.
+LaTeX Encoding Info:    Redeclaring text command \textwr (encoding L8U) on inpu
+t line 2922.
+LaTeX Encoding Info:    Redeclaring text command \textnsim (encoding L8U) on in
+put line 2923.
+LaTeX Encoding Info:    Redeclaring text command \texteqsim (encoding L8U) on i
+nput line 2924.
+LaTeX Encoding Info:    Redeclaring text command \textneqsim (encoding L8U) on 
+input line 2925.
+LaTeX Encoding Info:    Redeclaring text command \textsimeq (encoding L8U) on i
+nput line 2926.
+LaTeX Encoding Info:    Redeclaring text command \textnsimeq (encoding L8U) on 
+input line 2927.
+LaTeX Encoding Info:    Redeclaring text command \textcong (encoding L8U) on in
+put line 2928.
+LaTeX Encoding Info:    Redeclaring text command \textncong (encoding L8U) on i
+nput line 2930.
+LaTeX Encoding Info:    Redeclaring text command \textapprox (encoding L8U) on 
+input line 2931.
+LaTeX Encoding Info:    Redeclaring text command \textnapprox (encoding L8U) on
+ input line 2932.
+LaTeX Encoding Info:    Redeclaring text command \textapproxeq (encoding L8U) o
+n input line 2933.
+LaTeX Encoding Info:    Redeclaring text command \textnapproxeq (encoding L8U) 
+on input line 2934.
+LaTeX Encoding Info:    Redeclaring text command \texttriplesim (encoding L8U) 
+on input line 2935.
+LaTeX Encoding Info:    Redeclaring text command \textntriplesim (encoding L8U)
+ on input line 2936.
+LaTeX Encoding Info:    Redeclaring text command \textbackcong (encoding L8U) o
+n input line 2937.
+LaTeX Encoding Info:    Redeclaring text command \textnbackcong (encoding L8U) 
+on input line 2938.
+LaTeX Encoding Info:    Redeclaring text command \textasymp (encoding L8U) on i
+nput line 2939.
+LaTeX Encoding Info:    Redeclaring text command \textnasymp (encoding L8U) on 
+input line 2940.
+LaTeX Encoding Info:    Redeclaring text command \textBumpeq (encoding L8U) on 
+input line 2941.
+LaTeX Encoding Info:    Redeclaring text command \textnBumpeq (encoding L8U) on
+ input line 2942.
+LaTeX Encoding Info:    Redeclaring text command \textbumpeq (encoding L8U) on 
+input line 2943.
+LaTeX Encoding Info:    Redeclaring text command \textnbumpeq (encoding L8U) on
+ input line 2944.
+LaTeX Encoding Info:    Redeclaring text command \textdoteq (encoding L8U) on i
+nput line 2945.
+LaTeX Encoding Info:    Redeclaring text command \textndoteq (encoding L8U) on 
+input line 2946.
+LaTeX Encoding Info:    Redeclaring text command \textdoteqdot (encoding L8U) o
+n input line 2947.
+LaTeX Encoding Info:    Redeclaring text command \textnDoteq (encoding L8U) on 
+input line 2948.
+LaTeX Encoding Info:    Redeclaring text command \textfallingdoteq (encoding L8
+U) on input line 2949.
+LaTeX Encoding Info:    Redeclaring text command \textnfallingdoteq (encoding L
+8U) on input line 2950.
+LaTeX Encoding Info:    Redeclaring text command \textrisingdoteq (encoding L8U
+) on input line 2951.
+LaTeX Encoding Info:    Redeclaring text command \textnrisingdoteq (encoding L8
+U) on input line 2952.
+LaTeX Encoding Info:    Redeclaring text command \textcolonequals (encoding L8U
+) on input line 2953.
+LaTeX Encoding Info:    Redeclaring text command \textequalscolon (encoding L8U
+) on input line 2954.
+LaTeX Encoding Info:    Redeclaring text command \texteqcirc (encoding L8U) on 
+input line 2955.
+LaTeX Encoding Info:    Redeclaring text command \textneqcirc (encoding L8U) on
+ input line 2956.
+LaTeX Encoding Info:    Redeclaring text command \textcirceq (encoding L8U) on 
+input line 2957.
+LaTeX Encoding Info:    Redeclaring text command \textncirceq (encoding L8U) on
+ input line 2958.
+LaTeX Encoding Info:    Redeclaring text command \texthateq (encoding L8U) on i
+nput line 2960.
+LaTeX Encoding Info:    Redeclaring text command \textnhateq (encoding L8U) on 
+input line 2961.
+LaTeX Encoding Info:    Redeclaring text command \texttriangleeq (encoding L8U)
+ on input line 2963.
+LaTeX Encoding Info:    Redeclaring text command \textneq (encoding L8U) on inp
+ut line 2965.
+LaTeX Encoding Info:    Redeclaring text command \textne (encoding L8U) on inpu
+t line 2966.
+LaTeX Encoding Info:    Redeclaring text command \textequiv (encoding L8U) on i
+nput line 2967.
+LaTeX Encoding Info:    Redeclaring text command \textnequiv (encoding L8U) on 
+input line 2968.
+LaTeX Encoding Info:    Redeclaring text command \textleq (encoding L8U) on inp
+ut line 2970.
+LaTeX Encoding Info:    Redeclaring text command \textle (encoding L8U) on inpu
+t line 2971.
+LaTeX Encoding Info:    Redeclaring text command \textgeq (encoding L8U) on inp
+ut line 2972.
+LaTeX Encoding Info:    Redeclaring text command \textge (encoding L8U) on inpu
+t line 2973.
+LaTeX Encoding Info:    Redeclaring text command \textleqq (encoding L8U) on in
+put line 2974.
+LaTeX Encoding Info:    Redeclaring text command \textnleqq (encoding L8U) on i
+nput line 2975.
+LaTeX Encoding Info:    Redeclaring text command \textgeqq (encoding L8U) on in
+put line 2976.
+LaTeX Encoding Info:    Redeclaring text command \textngeqq (encoding L8U) on i
+nput line 2977.
+LaTeX Encoding Info:    Redeclaring text command \textlneqq (encoding L8U) on i
+nput line 2978.
+LaTeX Encoding Info:    Redeclaring text command \textgneqq (encoding L8U) on i
+nput line 2979.
+LaTeX Encoding Info:    Redeclaring text command \textll (encoding L8U) on inpu
+t line 2980.
+LaTeX Encoding Info:    Redeclaring text command \textnll (encoding L8U) on inp
+ut line 2981.
+LaTeX Encoding Info:    Redeclaring text command \textgg (encoding L8U) on inpu
+t line 2982.
+LaTeX Encoding Info:    Redeclaring text command \textngg (encoding L8U) on inp
+ut line 2983.
+LaTeX Encoding Info:    Redeclaring text command \textbetween (encoding L8U) on
+ input line 2984.
+LaTeX Encoding Info:    Redeclaring text command \textnless (encoding L8U) on i
+nput line 2986.
+LaTeX Encoding Info:    Redeclaring text command \textngtr (encoding L8U) on in
+put line 2987.
+LaTeX Encoding Info:    Redeclaring text command \textnleq (encoding L8U) on in
+put line 2988.
+LaTeX Encoding Info:    Redeclaring text command \textngeq (encoding L8U) on in
+put line 2989.
+LaTeX Encoding Info:    Redeclaring text command \textlesssim (encoding L8U) on
+ input line 2990.
+LaTeX Encoding Info:    Redeclaring text command \textgtrsim (encoding L8U) on 
+input line 2991.
+LaTeX Encoding Info:    Redeclaring text command \textnlesssim (encoding L8U) o
+n input line 2992.
+LaTeX Encoding Info:    Redeclaring text command \textngtrsim (encoding L8U) on
+ input line 2993.
+LaTeX Encoding Info:    Redeclaring text command \textlessgtr (encoding L8U) on
+ input line 2994.
+LaTeX Encoding Info:    Redeclaring text command \textgtrless (encoding L8U) on
+ input line 2995.
+LaTeX Encoding Info:    Redeclaring text command \textngtrless (encoding L8U) o
+n input line 2996.
+LaTeX Encoding Info:    Redeclaring text command \textnlessgtr (encoding L8U) o
+n input line 2997.
+LaTeX Encoding Info:    Redeclaring text command \textprec (encoding L8U) on in
+put line 2998.
+LaTeX Encoding Info:    Redeclaring text command \textsucc (encoding L8U) on in
+put line 2999.
+LaTeX Encoding Info:    Redeclaring text command \textpreccurlyeq (encoding L8U
+) on input line 3000.
+LaTeX Encoding Info:    Redeclaring text command \textsucccurlyeq (encoding L8U
+) on input line 3001.
+LaTeX Encoding Info:    Redeclaring text command \textprecsim (encoding L8U) on
+ input line 3002.
+LaTeX Encoding Info:    Redeclaring text command \textnprecsim (encoding L8U) o
+n input line 3003.
+LaTeX Encoding Info:    Redeclaring text command \textsuccsim (encoding L8U) on
+ input line 3004.
+LaTeX Encoding Info:    Redeclaring text command \textnsuccsim (encoding L8U) o
+n input line 3005.
+LaTeX Encoding Info:    Redeclaring text command \textnprec (encoding L8U) on i
+nput line 3006.
+LaTeX Encoding Info:    Redeclaring text command \textnsucc (encoding L8U) on i
+nput line 3007.
+LaTeX Encoding Info:    Redeclaring text command \textsubset (encoding L8U) on 
+input line 3008.
+LaTeX Encoding Info:    Redeclaring text command \textsupset (encoding L8U) on 
+input line 3009.
+LaTeX Encoding Info:    Redeclaring text command \textnsubset (encoding L8U) on
+ input line 3010.
+LaTeX Encoding Info:    Redeclaring text command \textnsupset (encoding L8U) on
+ input line 3011.
+LaTeX Encoding Info:    Redeclaring text command \textsubseteq (encoding L8U) o
+n input line 3012.
+LaTeX Encoding Info:    Redeclaring text command \textsupseteq (encoding L8U) o
+n input line 3013.
+LaTeX Encoding Info:    Redeclaring text command \textnsubseteq (encoding L8U) 
+on input line 3014.
+LaTeX Encoding Info:    Redeclaring text command \textnsupseteq (encoding L8U) 
+on input line 3015.
+LaTeX Encoding Info:    Redeclaring text command \textsubsetneq (encoding L8U) 
+on input line 3016.
+LaTeX Encoding Info:    Redeclaring text command \textsupsetneq (encoding L8U) 
+on input line 3017.
+LaTeX Encoding Info:    Redeclaring text command \textcupdot (encoding L8U) on 
+input line 3019.
+LaTeX Encoding Info:    Redeclaring text command \textcupplus (encoding L8U) on
+ input line 3020.
+LaTeX Encoding Info:    Redeclaring text command \textsqsubset (encoding L8U) o
+n input line 3021.
+LaTeX Encoding Info:    Redeclaring text command \textnsqsubset (encoding L8U) 
+on input line 3022.
+LaTeX Encoding Info:    Redeclaring text command \textsqsupset (encoding L8U) o
+n input line 3023.
+LaTeX Encoding Info:    Redeclaring text command \textnsqsupset (encoding L8U) 
+on input line 3024.
+LaTeX Encoding Info:    Redeclaring text command \textsqsubseteq (encoding L8U)
+ on input line 3025.
+LaTeX Encoding Info:    Redeclaring text command \textnsqsubseteq (encoding L8U
+) on input line 3026.
+LaTeX Encoding Info:    Redeclaring text command \textsqsupseteq (encoding L8U)
+ on input line 3027.
+LaTeX Encoding Info:    Redeclaring text command \textnsqsupseteq (encoding L8U
+) on input line 3028.
+LaTeX Encoding Info:    Redeclaring text command \textsqcap (encoding L8U) on i
+nput line 3029.
+LaTeX Encoding Info:    Redeclaring text command \textsqcup (encoding L8U) on i
+nput line 3030.
+LaTeX Encoding Info:    Redeclaring text command \textoplus (encoding L8U) on i
+nput line 3031.
+LaTeX Encoding Info:    Redeclaring text command \textominus (encoding L8U) on 
+input line 3032.
+LaTeX Encoding Info:    Redeclaring text command \textotimes (encoding L8U) on 
+input line 3033.
+LaTeX Encoding Info:    Redeclaring text command \textoslash (encoding L8U) on 
+input line 3034.
+LaTeX Encoding Info:    Redeclaring text command \textodot (encoding L8U) on in
+put line 3035.
+LaTeX Encoding Info:    Redeclaring text command \textcircledcirc (encoding L8U
+) on input line 3036.
+LaTeX Encoding Info:    Redeclaring text command \textcircledast (encoding L8U)
+ on input line 3037.
+LaTeX Encoding Info:    Redeclaring text command \textcircleddash (encoding L8U
+) on input line 3039.
+LaTeX Encoding Info:    Redeclaring text command \textboxplus (encoding L8U) on
+ input line 3040.
+LaTeX Encoding Info:    Redeclaring text command \textboxminus (encoding L8U) o
+n input line 3041.
+LaTeX Encoding Info:    Redeclaring text command \textboxtimes (encoding L8U) o
+n input line 3042.
+LaTeX Encoding Info:    Redeclaring text command \textboxdot (encoding L8U) on 
+input line 3043.
+LaTeX Encoding Info:    Redeclaring text command \textvdash (encoding L8U) on i
+nput line 3044.
+LaTeX Encoding Info:    Redeclaring text command \textdashv (encoding L8U) on i
+nput line 3045.
+LaTeX Encoding Info:    Redeclaring text command \textndashv (encoding L8U) on 
+input line 3046.
+LaTeX Encoding Info:    Redeclaring text command \texttop (encoding L8U) on inp
+ut line 3047.
+LaTeX Encoding Info:    Redeclaring text command \textndownvdash (encoding L8U)
+ on input line 3048.
+LaTeX Encoding Info:    Redeclaring text command \textbot (encoding L8U) on inp
+ut line 3049.
+LaTeX Encoding Info:    Redeclaring text command \textnupvdash (encoding L8U) o
+n input line 3050.
+LaTeX Encoding Info:    Redeclaring text command \textvDash (encoding L8U) on i
+nput line 3052.
+LaTeX Encoding Info:    Redeclaring text command \textVdash (encoding L8U) on i
+nput line 3053.
+LaTeX Encoding Info:    Redeclaring text command \textVvdash (encoding L8U) on 
+input line 3054.
+LaTeX Encoding Info:    Redeclaring text command \textnVvash (encoding L8U) on 
+input line 3055.
+LaTeX Encoding Info:    Redeclaring text command \textVDash (encoding L8U) on i
+nput line 3056.
+LaTeX Encoding Info:    Redeclaring text command \textnvdash (encoding L8U) on 
+input line 3057.
+LaTeX Encoding Info:    Redeclaring text command \textnvDash (encoding L8U) on 
+input line 3058.
+LaTeX Encoding Info:    Redeclaring text command \textnVdash (encoding L8U) on 
+input line 3059.
+LaTeX Encoding Info:    Redeclaring text command \textnVDash (encoding L8U) on 
+input line 3060.
+LaTeX Encoding Info:    Redeclaring text command \textlhd (encoding L8U) on inp
+ut line 3062.
+LaTeX Encoding Info:    Redeclaring text command \textrhd (encoding L8U) on inp
+ut line 3063.
+LaTeX Encoding Info:    Redeclaring text command \textunlhd (encoding L8U) on i
+nput line 3064.
+LaTeX Encoding Info:    Redeclaring text command \textunrhd (encoding L8U) on i
+nput line 3065.
+LaTeX Encoding Info:    Redeclaring text command \textmultimapdotbothA (encodin
+g L8U) on input line 3066.
+LaTeX Encoding Info:    Redeclaring text command \textmultimapdotbothB (encodin
+g L8U) on input line 3067.
+LaTeX Encoding Info:    Redeclaring text command \textmultimap (encoding L8U) o
+n input line 3068.
+LaTeX Encoding Info:    Redeclaring text command \textveebar (encoding L8U) on 
+input line 3070.
+LaTeX Encoding Info:    Redeclaring text command \textbarwedge (encoding L8U) o
+n input line 3071.
+LaTeX Encoding Info:    Redeclaring text command \textstar (encoding L8U) on in
+put line 3073.
+LaTeX Encoding Info:    Redeclaring text command \textdivideontimes (encoding L
+8U) on input line 3074.
+LaTeX Encoding Info:    Redeclaring text command \textbowtie (encoding L8U) on 
+input line 3075.
+LaTeX Encoding Info:    Redeclaring text command \textltimes (encoding L8U) on 
+input line 3076.
+LaTeX Encoding Info:    Redeclaring text command \textrtimes (encoding L8U) on 
+input line 3077.
+LaTeX Encoding Info:    Redeclaring text command \textleftthreetimes (encoding 
+L8U) on input line 3078.
+LaTeX Encoding Info:    Redeclaring text command \textrightthreetimes (encoding
+ L8U) on input line 3079.
+LaTeX Encoding Info:    Redeclaring text command \textbacksimeq (encoding L8U) 
+on input line 3080.
+LaTeX Encoding Info:    Redeclaring text command \textnbacksimeq (encoding L8U)
+ on input line 3081.
+LaTeX Encoding Info:    Redeclaring text command \textcurlyvee (encoding L8U) o
+n input line 3082.
+LaTeX Encoding Info:    Redeclaring text command \textcurlywedge (encoding L8U)
+ on input line 3083.
+LaTeX Encoding Info:    Redeclaring text command \textSubset (encoding L8U) on 
+input line 3084.
+LaTeX Encoding Info:    Redeclaring text command \textnSubset (encoding L8U) on
+ input line 3085.
+LaTeX Encoding Info:    Redeclaring text command \textSupset (encoding L8U) on 
+input line 3086.
+LaTeX Encoding Info:    Redeclaring text command \textnSupset (encoding L8U) on
+ input line 3087.
+LaTeX Encoding Info:    Redeclaring text command \textCap (encoding L8U) on inp
+ut line 3088.
+LaTeX Encoding Info:    Redeclaring text command \textCup (encoding L8U) on inp
+ut line 3089.
+LaTeX Encoding Info:    Redeclaring text command \textpitchfork (encoding L8U) 
+on input line 3090.
+LaTeX Encoding Info:    Redeclaring text command \textlessdot (encoding L8U) on
+ input line 3092.
+LaTeX Encoding Info:    Redeclaring text command \textgtrdot (encoding L8U) on 
+input line 3093.
+LaTeX Encoding Info:    Redeclaring text command \textlll (encoding L8U) on inp
+ut line 3094.
+LaTeX Encoding Info:    Redeclaring text command \textggg (encoding L8U) on inp
+ut line 3095.
+LaTeX Encoding Info:    Redeclaring text command \textlesseqgtr (encoding L8U) 
+on input line 3096.
+LaTeX Encoding Info:    Redeclaring text command \textgtreqless (encoding L8U) 
+on input line 3097.
+LaTeX Encoding Info:    Redeclaring text command \textcurlyeqprec (encoding L8U
+) on input line 3098.
+LaTeX Encoding Info:    Redeclaring text command \textncurlyeqprec (encoding L8
+U) on input line 3099.
+LaTeX Encoding Info:    Redeclaring text command \textcurlyeqsucc (encoding L8U
+) on input line 3100.
+LaTeX Encoding Info:    Redeclaring text command \textncurlyeqsucc (encoding L8
+U) on input line 3101.
+LaTeX Encoding Info:    Redeclaring text command \textnpreccurlyeq (encoding L8
+U) on input line 3102.
+LaTeX Encoding Info:    Redeclaring text command \textnsucccurlyeq (encoding L8
+U) on input line 3103.
+LaTeX Encoding Info:    Redeclaring text command \textnqsubseteq (encoding L8U)
+ on input line 3104.
+LaTeX Encoding Info:    Redeclaring text command \textnqsupseteq (encoding L8U)
+ on input line 3105.
+LaTeX Encoding Info:    Redeclaring text command \textsqsubsetneq (encoding L8U
+) on input line 3106.
+LaTeX Encoding Info:    Redeclaring text command \textsqsupsetneq (encoding L8U
+) on input line 3107.
+LaTeX Encoding Info:    Redeclaring text command \textlnsim (encoding L8U) on i
+nput line 3108.
+LaTeX Encoding Info:    Redeclaring text command \textgnsim (encoding L8U) on i
+nput line 3109.
+LaTeX Encoding Info:    Redeclaring text command \textprecnsim (encoding L8U) o
+n input line 3110.
+LaTeX Encoding Info:    Redeclaring text command \textsuccnsim (encoding L8U) o
+n input line 3111.
+LaTeX Encoding Info:    Redeclaring text command \textntriangleleft (encoding L
+8U) on input line 3112.
+LaTeX Encoding Info:    Redeclaring text command \textntriangleright (encoding 
+L8U) on input line 3113.
+LaTeX Encoding Info:    Redeclaring text command \textntrianglelefteq (encoding
+ L8U) on input line 3114.
+LaTeX Encoding Info:    Redeclaring text command \textntrianglerighteq (encodin
+g L8U) on input line 3115.
+LaTeX Encoding Info:    Redeclaring text command \textvdots (encoding L8U) on i
+nput line 3116.
+LaTeX Encoding Info:    Redeclaring text command \textcdots (encoding L8U) on i
+nput line 3117.
+LaTeX Encoding Info:    Redeclaring text command \textudots (encoding L8U) on i
+nput line 3118.
+LaTeX Encoding Info:    Redeclaring text command \textddots (encoding L8U) on i
+nput line 3119.
+LaTeX Encoding Info:    Redeclaring text command \textbarin (encoding L8U) on i
+nput line 3120.
+LaTeX Encoding Info:    Redeclaring text command \textperp (encoding L8U) on in
+put line 3541.
+LaTeX Encoding Info:    Redeclaring text command \textnotperp (encoding L8U) on
+ input line 3542.
+LaTeX Encoding Info:    Redeclaring text command \textveedot (encoding L8U) on 
+input line 3543.
+LaTeX Encoding Info:    Redeclaring text command \textwedgedot (encoding L8U) o
+n input line 3544.
+LaTeX Encoding Info:    Redeclaring text command \textleftspoon (encoding L8U) 
+on input line 3545.
+LaTeX Encoding Info:    Redeclaring text command \textlbrackdbl (encoding L8U) 
+on input line 3546.
+LaTeX Encoding Info:    Redeclaring text command \textrbrackdbl (encoding L8U) 
+on input line 3547.
+LaTeX Encoding Info:    Redeclaring text command \textcirclearrowleft (encoding
+ L8U) on input line 3552.
+LaTeX Encoding Info:    Redeclaring text command \textcirclearrowright (encodin
+g L8U) on input line 3553.
+LaTeX Encoding Info:    Redeclaring text command \textlongleftarrow (encoding L
+8U) on input line 3555.
+LaTeX Encoding Info:    Redeclaring text command \textlongrightarrow (encoding 
+L8U) on input line 3556.
+LaTeX Encoding Info:    Redeclaring text command \textlongleftrightarrow (encod
+ing L8U) on input line 3557.
+LaTeX Encoding Info:    Redeclaring text command \textLongleftarrow (encoding L
+8U) on input line 3558.
+LaTeX Encoding Info:    Redeclaring text command \textLongrightarrow (encoding 
+L8U) on input line 3559.
+LaTeX Encoding Info:    Redeclaring text command \textLongleftrightarrow (encod
+ing L8U) on input line 3560.
+LaTeX Encoding Info:    Redeclaring text command \textlongmapsto (encoding L8U)
+ on input line 3562.
+LaTeX Encoding Info:    Redeclaring text command \textLongmapsfrom (encoding L8
+U) on input line 3563.
+LaTeX Encoding Info:    Redeclaring text command \textLongmapsto (encoding L8U)
+ on input line 3564.
+LaTeX Encoding Info:    Redeclaring text command \textnwsearrow (encoding L8U) 
+on input line 3570.
+LaTeX Encoding Info:    Redeclaring text command \textneswarrow (encoding L8U) 
+on input line 3571.
+LaTeX Encoding Info:    Redeclaring text command \textlhooknwarrow (encoding L8
+U) on input line 3572.
+LaTeX Encoding Info:    Redeclaring text command \textrhooknearrow (encoding L8
+U) on input line 3573.
+LaTeX Encoding Info:    Redeclaring text command \textlhooksearrow (encoding L8
+U) on input line 3574.
+LaTeX Encoding Info:    Redeclaring text command \textrhookswarrow (encoding L8
+U) on input line 3575.
+LaTeX Encoding Info:    Redeclaring text command \textleadsto (encoding L8U) on
+ input line 3577.
+LaTeX Encoding Info:    Redeclaring text command \textrcurvearrowne (encoding L
+8U) on input line 3578.
+LaTeX Encoding Info:    Redeclaring text command \textlcurvearrowse (encoding L
+8U) on input line 3579.
+LaTeX Encoding Info:    Redeclaring text command \textlcurvearrowsw (encoding L
+8U) on input line 3580.
+LaTeX Encoding Info:    Redeclaring text command \textrcurvearrowse (encoding L
+8U) on input line 3581.
+LaTeX Encoding Info:    Redeclaring text command \textlcurvearrowdown (encoding
+ L8U) on input line 3582.
+LaTeX Encoding Info:    Redeclaring text command \textrcurvearrowdown (encoding
+ L8U) on input line 3583.
+LaTeX Encoding Info:    Redeclaring text command \textrcurvearrowleft (encoding
+ L8U) on input line 3584.
+LaTeX Encoding Info:    Redeclaring text command \textrcurvearrowright (encodin
+g L8U) on input line 3585.
+LaTeX Encoding Info:    Redeclaring text command \textleftrightharpoon (encodin
+g L8U) on input line 3587.
+LaTeX Encoding Info:    Redeclaring text command \textrightleftharpoon (encodin
+g L8U) on input line 3588.
+LaTeX Encoding Info:    Redeclaring text command \textupdownharpoonrightleft (e
+ncoding L8U) on input line 3589.
+LaTeX Encoding Info:    Redeclaring text command \textupdownharpoonleftright (e
+ncoding L8U) on input line 3590.
+LaTeX Encoding Info:    Redeclaring text command \textleftleftharpoons (encodin
+g L8U) on input line 3592.
+LaTeX Encoding Info:    Redeclaring text command \textupupharpoons (encoding L8
+U) on input line 3593.
+LaTeX Encoding Info:    Redeclaring text command \textrightrightharpoons (encod
+ing L8U) on input line 3594.
+LaTeX Encoding Info:    Redeclaring text command \textdowndownharpoons (encodin
+g L8U) on input line 3595.
+LaTeX Encoding Info:    Redeclaring text command \textleftbarharpoon (encoding 
+L8U) on input line 3597.
+LaTeX Encoding Info:    Redeclaring text command \textbarleftharpoon (encoding 
+L8U) on input line 3598.
+LaTeX Encoding Info:    Redeclaring text command \textrightbarharpoon (encoding
+ L8U) on input line 3599.
+LaTeX Encoding Info:    Redeclaring text command \textbarrightharpoon (encoding
+ L8U) on input line 3600.
+LaTeX Encoding Info:    Redeclaring text command \textupdownharpoons (encoding 
+L8U) on input line 3601.
+LaTeX Encoding Info:    Redeclaring text command \textdownupharpoons (encoding 
+L8U) on input line 3602.
+LaTeX Encoding Info:    Redeclaring text command \textmoo (encoding L8U) on inp
+ut line 3604.
+LaTeX Encoding Info:    Redeclaring text command \textllparenthesis (encoding L
+8U) on input line 3609.
+LaTeX Encoding Info:    Redeclaring text command \textrrparenthesis (encoding L
+8U) on input line 3610.
+LaTeX Encoding Info:    Redeclaring text command \textinvdiameter (encoding L8U
+) on input line 3612.
+LaTeX Encoding Info:    Redeclaring text command \textobar (encoding L8U) on in
+put line 3614.
+LaTeX Encoding Info:    Redeclaring text command \textobslash (encoding L8U) on
+ input line 3616.
+LaTeX Encoding Info:    Redeclaring text command \textobot (encoding L8U) on in
+put line 3618.
+LaTeX Encoding Info:    Redeclaring text command \textNoChemicalCleaning (encod
+ing L8U) on input line 3619.
+LaTeX Encoding Info:    Redeclaring text command \textolessthan (encoding L8U) 
+on input line 3621.
+LaTeX Encoding Info:    Redeclaring text command \textogreaterthan (encoding L8
+U) on input line 3622.
+LaTeX Encoding Info:    Redeclaring text command \textboxslash (encoding L8U) o
+n input line 3624.
+LaTeX Encoding Info:    Redeclaring text command \textboxbslash (encoding L8U) 
+on input line 3625.
+LaTeX Encoding Info:    Redeclaring text command \textboxast (encoding L8U) on 
+input line 3626.
+LaTeX Encoding Info:    Redeclaring text command \textboxcircle (encoding L8U) 
+on input line 3627.
+LaTeX Encoding Info:    Redeclaring text command \textboxbox (encoding L8U) on 
+input line 3628.
+LaTeX Encoding Info:    Redeclaring text command \textValve (encoding L8U) on i
+nput line 3630.
+LaTeX Encoding Info:    Redeclaring text command \textmultimapboth (encoding L8
+U) on input line 3631.
+LaTeX Encoding Info:    Redeclaring text command \textshuffle (encoding L8U) on
+ input line 3633.
+LaTeX Encoding Info:    Redeclaring text command \textuplus (encoding L8U) on i
+nput line 3638.
+LaTeX Encoding Info:    Redeclaring text command \textbigdoublewedge (encoding 
+L8U) on input line 3639.
+LaTeX Encoding Info:    Redeclaring text command \textbigdoublevee (encoding L8
+U) on input line 3640.
+LaTeX Encoding Info:    Redeclaring text command \textJoin (encoding L8U) on in
+put line 3641.
+LaTeX Encoding Info:    Redeclaring text command \textfatsemi (encoding L8U) on
+ input line 3643.
+LaTeX Encoding Info:    Redeclaring text command \textcircplus (encoding L8U) o
+n input line 3644.
+LaTeX Encoding Info:    Redeclaring text command \textminusdot (encoding L8U) o
+n input line 3645.
+LaTeX Encoding Info:    Redeclaring text command \textdottimes (encoding L8U) o
+n input line 3646.
+LaTeX Encoding Info:    Redeclaring text command \textdtimes (encoding L8U) on 
+input line 3647.
+LaTeX Encoding Info:    Redeclaring text command \textodiv (encoding L8U) on in
+put line 3648.
+LaTeX Encoding Info:    Redeclaring text command \textinvneg (encoding L8U) on 
+input line 3649.
+LaTeX Encoding Info:    Redeclaring text command \textcapdot (encoding L8U) on 
+input line 3650.
+LaTeX Encoding Info:    Redeclaring text command \textsqdoublecap (encoding L8U
+) on input line 3651.
+LaTeX Encoding Info:    Redeclaring text command \textsqdoublecup (encoding L8U
+) on input line 3652.
+LaTeX Encoding Info:    Redeclaring text command \textdoublewedge (encoding L8U
+) on input line 3653.
+LaTeX Encoding Info:    Redeclaring text command \textdoublevee (encoding L8U) 
+on input line 3654.
+LaTeX Encoding Info:    Redeclaring text command \textdoublebarwedge (encoding 
+L8U) on input line 3655.
+LaTeX Encoding Info:    Redeclaring text command \textveedoublebar (encoding L8
+U) on input line 3656.
+LaTeX Encoding Info:    Redeclaring text command \texteqdot (encoding L8U) on i
+nput line 3657.
+LaTeX Encoding Info:    Redeclaring text command \textneqdot (encoding L8U) on 
+input line 3658.
+LaTeX Encoding Info:    Redeclaring text command \textcoloncolonequals (encodin
+g L8U) on input line 3659.
+LaTeX Encoding Info:    Redeclaring text command \textleqslant (encoding L8U) o
+n input line 3660.
+LaTeX Encoding Info:    Redeclaring text command \textnleqslant (encoding L8U) 
+on input line 3661.
+LaTeX Encoding Info:    Redeclaring text command \textgeqslant (encoding L8U) o
+n input line 3662.
+LaTeX Encoding Info:    Redeclaring text command \textngeqslant (encoding L8U) 
+on input line 3663.
+LaTeX Encoding Info:    Redeclaring text command \textlessapprox (encoding L8U)
+ on input line 3664.
+LaTeX Encoding Info:    Redeclaring text command \textnlessapprox (encoding L8U
+) on input line 3665.
+LaTeX Encoding Info:    Redeclaring text command \textgtrapprox (encoding L8U) 
+on input line 3666.
+LaTeX Encoding Info:    Redeclaring text command \textngtrapprox (encoding L8U)
+ on input line 3667.
+LaTeX Encoding Info:    Redeclaring text command \textlneq (encoding L8U) on in
+put line 3668.
+LaTeX Encoding Info:    Redeclaring text command \textgneq (encoding L8U) on in
+put line 3669.
+LaTeX Encoding Info:    Redeclaring text command \textlnapprox (encoding L8U) o
+n input line 3670.
+LaTeX Encoding Info:    Redeclaring text command \textgnapprox (encoding L8U) o
+n input line 3671.
+LaTeX Encoding Info:    Redeclaring text command \textlesseqqgtr (encoding L8U)
+ on input line 3672.
+LaTeX Encoding Info:    Redeclaring text command \textgtreqqless (encoding L8U)
+ on input line 3673.
+LaTeX Encoding Info:    Redeclaring text command \texteqslantless (encoding L8U
+) on input line 3674.
+LaTeX Encoding Info:    Redeclaring text command \texteqslantgtr (encoding L8U)
+ on input line 3675.
+LaTeX Encoding Info:    Redeclaring text command \textleftslice (encoding L8U) 
+on input line 3676.
+LaTeX Encoding Info:    Redeclaring text command \textrightslice (encoding L8U)
+ on input line 3677.
+LaTeX Encoding Info:    Redeclaring text command \textpreceq (encoding L8U) on 
+input line 3678.
+LaTeX Encoding Info:    Redeclaring text command \textnpreceq (encoding L8U) on
+ input line 3679.
+LaTeX Encoding Info:    Redeclaring text command \textsucceq (encoding L8U) on 
+input line 3680.
+LaTeX Encoding Info:    Redeclaring text command \textnsucceq (encoding L8U) on
+ input line 3681.
+LaTeX Encoding Info:    Redeclaring text command \textprecneq (encoding L8U) on
+ input line 3682.
+LaTeX Encoding Info:    Redeclaring text command \textsuccneq (encoding L8U) on
+ input line 3683.
+LaTeX Encoding Info:    Redeclaring text command \textpreceqq (encoding L8U) on
+ input line 3684.
+LaTeX Encoding Info:    Redeclaring text command \textnpreceqq (encoding L8U) o
+n input line 3685.
+LaTeX Encoding Info:    Redeclaring text command \textsucceqq (encoding L8U) on
+ input line 3686.
+LaTeX Encoding Info:    Redeclaring text command \textnsucceqq (encoding L8U) o
+n input line 3687.
+LaTeX Encoding Info:    Redeclaring text command \textprecneqq (encoding L8U) o
+n input line 3688.
+LaTeX Encoding Info:    Redeclaring text command \textsuccneqq (encoding L8U) o
+n input line 3689.
+LaTeX Encoding Info:    Redeclaring text command \textprecapprox (encoding L8U)
+ on input line 3690.
+LaTeX Encoding Info:    Redeclaring text command \textnprecapprox (encoding L8U
+) on input line 3691.
+LaTeX Encoding Info:    Redeclaring text command \textsuccapprox (encoding L8U)
+ on input line 3692.
+LaTeX Encoding Info:    Redeclaring text command \textnsuccapprox (encoding L8U
+) on input line 3693.
+LaTeX Encoding Info:    Redeclaring text command \textprecnapprox (encoding L8U
+) on input line 3694.
+LaTeX Encoding Info:    Redeclaring text command \textsuccnapprox (encoding L8U
+) on input line 3695.
+LaTeX Encoding Info:    Redeclaring text command \textsubseteqq (encoding L8U) 
+on input line 3696.
+LaTeX Encoding Info:    Redeclaring text command \textnsubseteqq (encoding L8U)
+ on input line 3697.
+LaTeX Encoding Info:    Redeclaring text command \textsupseteqq (encoding L8U) 
+on input line 3698.
+LaTeX Encoding Info:    Redeclaring text command \textnsupseteqq (encoding L8U)
+ on input line 3699.
+LaTeX Encoding Info:    Redeclaring text command \textdashV (encoding L8U) on i
+nput line 3700.
+LaTeX Encoding Info:    Redeclaring text command \textndashV (encoding L8U) on 
+input line 3701.
+LaTeX Encoding Info:    Redeclaring text command \textDashv (encoding L8U) on i
+nput line 3702.
+LaTeX Encoding Info:    Redeclaring text command \textnDashv (encoding L8U) on 
+input line 3703.
+LaTeX Encoding Info:    Redeclaring text command \textDashV (encoding L8U) on i
+nput line 3704.
+LaTeX Encoding Info:    Redeclaring text command \textnDashV (encoding L8U) on 
+input line 3705.
+LaTeX Encoding Info:    Redeclaring text command \textdownmodels (encoding L8U)
+ on input line 3706.
+LaTeX Encoding Info:    Redeclaring text command \textndownmodels (encoding L8U
+) on input line 3707.
+LaTeX Encoding Info:    Redeclaring text command \textupmodels (encoding L8U) o
+n input line 3708.
+LaTeX Encoding Info:    Redeclaring text command \textnupmodels (encoding L8U) 
+on input line 3709.
+LaTeX Encoding Info:    Redeclaring text command \textupspoon (encoding L8U) on
+ input line 3710.
+LaTeX Encoding Info:    Redeclaring text command \textinterleave (encoding L8U)
+ on input line 3711.
+LaTeX Encoding Info:    Redeclaring text command \textsslash (encoding L8U) on 
+input line 3712.
+LaTeX Encoding Info:    Redeclaring text command \textupstep (encoding L8U) on 
+input line 3739.
+LaTeX Encoding Info:    Redeclaring text command \textdownstep (encoding L8U) o
+n input line 3740.
+LaTeX Encoding Info:    Redeclaring text command \textcopyleft (encoding L8U) o
+n input line 3810.
+)
+\pdfxsafeforxmp@toks=\toks17
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
+Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+
+Package xcolor Warning: Package option `hyperref' is obsolete and ignored on in
+put line 265.
+
+Package xcolor Info: Driver file: xetex.def on input line 274.
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\xetex.def
+File: xetex.def 2025/11/01 v5.0p Graphics/color driver for xetex
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
+Package xcolor Info: Model `RGB' extended on input line 1365.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1367.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
+)
+\pdfx@tmptoks=\toks18
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.sty
+Package: hyperref 2025-07-12 v7.01o Hypertext links for LaTeX
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks19
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekeys\kvdefinek
+eys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pdfescape\pdfescape.st
+y
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+ (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds.
+sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.st
+y
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode not found.
+)) (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+) (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
+Package: nameref 2025-06-21 v2.57 Cross-referencing by name of section
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/gettitlestring\gettitl
+estring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+))
+\c@section@level=\count285
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/stringenc\stringenc.st
+y
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
+)
+)
+\@linkdim=\dimen149
+\Hy@linkcounter=\count286
+\Hy@pagecounter=\count287
+ (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
+File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+\Hy@SavedSpaceFactor=\count288
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
+File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/greek-fontenc\puenc-gree
+k.def
+File: puenc-greek.def 2023-09-12 2.5 Greek LICRs for PDF strings
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/greek-fontenc\greek-font
+enc.def
+File: greek-fontenc.def 2023-09-12 2.5 Common Greek font encoding definitions
+)
+LaTeX Encoding Info:    Redeclaring text command \textmu (encoding PU) on input
+ line 179.
+)
+LaTeX Encoding Info:    Redeclaring text command \textohm (encoding PU) on inpu
+t line 1176.
+)
+Package hyperref Info: Option `pdfa' set `true' on input line 4066.
+Package hyperref Info: Hyper figures OFF on input line 4195.
+Package hyperref Info: Link nesting OFF on input line 4200.
+Package hyperref Info: Hyper index ON on input line 4203.
+Package hyperref Info: Plain pages OFF on input line 4210.
+Package hyperref Info: Backreferencing OFF on input line 4215.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4462.
+\c@Hy@tempcnt=\count289
+ (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4801.
+\XeTeXLinkMargin=\dimen150
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/bigintcalc\bigintcalc.
+sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count290
+\Field@Width=\dimen151
+\Fld@charsize=\dimen152
+Package hyperref Info: Hyper figures OFF on input line 6078.
+Package hyperref Info: Link nesting OFF on input line 6083.
+Package hyperref Info: Hyper index ON on input line 6086.
+Package hyperref Info: backreferencing OFF on input line 6093.
+Package hyperref Info: Link coloring OFF on input line 6098.
+Package hyperref Info: Link coloring with OCG OFF on input line 6103.
+Package hyperref Info: PDF/A mode ON on input line 6106.
+\Hy@abspage=\count291
+\c@Item=\count292
+\c@Hfootnote=\count293
+)
+Package hyperref Info: Driver: hxetex.
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hxetex.def
+File: hxetex.def 2025-07-12 v7.01o Hyperref driver for XeTeX
+\pdfm@box=\box53
+\c@Hy@AnnotLevel=\count294
+\HyField@AnnotCount=\count295
+\Fld@listcount=\count296
+\c@bookmark@seq@number=\count297
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfile
+check.sty
+Package: rerunfilecheck 2025-06-21 v1.11 Rerun checks for auxiliary files (HO)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/uniquecounter\uniqueco
+unter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+84.
+)
+\Hy@SectionHShift=\skip51
+)
+Package hyperref Info: Option `psdextra' set `true' on input line 1535.
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\psdextra.def
+File: psdextra.def 2025-07-12 v7.01o Hyperref: Additions to PDF string support
+LaTeX Encoding Info:    Redeclaring text command \textGamma (encoding PU) on in
+put line 39.
+LaTeX Encoding Info:    Redeclaring text command \textDelta (encoding PU) on in
+put line 40.
+LaTeX Encoding Info:    Redeclaring text command \textTheta (encoding PU) on in
+put line 41.
+LaTeX Encoding Info:    Redeclaring text command \textLambda (encoding PU) on i
+nput line 42.
+LaTeX Encoding Info:    Redeclaring text command \textXi (encoding PU) on input
+ line 43.
+LaTeX Encoding Info:    Redeclaring text command \textPi (encoding PU) on input
+ line 44.
+LaTeX Encoding Info:    Redeclaring text command \textSigma (encoding PU) on in
+put line 45.
+LaTeX Encoding Info:    Redeclaring text command \textUpsilon (encoding PU) on 
+input line 46.
+LaTeX Encoding Info:    Redeclaring text command \textPhi (encoding PU) on inpu
+t line 47.
+LaTeX Encoding Info:    Redeclaring text command \textChi (encoding PU) on inpu
+t line 48.
+LaTeX Encoding Info:    Redeclaring text command \textPsi (encoding PU) on inpu
+t line 49.
+LaTeX Encoding Info:    Redeclaring text command \textOmega (encoding PU) on in
+put line 50.
+LaTeX Encoding Info:    Redeclaring text command \textalpha (encoding PU) on in
+put line 51.
+LaTeX Encoding Info:    Redeclaring text command \textbeta (encoding PU) on inp
+ut line 52.
+LaTeX Encoding Info:    Redeclaring text command \textgamma (encoding PU) on in
+put line 53.
+LaTeX Encoding Info:    Redeclaring text command \textdelta (encoding PU) on in
+put line 54.
+LaTeX Encoding Info:    Redeclaring text command \textepsilon (encoding PU) on 
+input line 55.
+LaTeX Encoding Info:    Redeclaring text command \textzeta (encoding PU) on inp
+ut line 56.
+LaTeX Encoding Info:    Redeclaring text command \texteta (encoding PU) on inpu
+t line 57.
+LaTeX Encoding Info:    Redeclaring text command \texttheta (encoding PU) on in
+put line 58.
+LaTeX Encoding Info:    Redeclaring text command \textiota (encoding PU) on inp
+ut line 59.
+LaTeX Encoding Info:    Redeclaring text command \textkappa (encoding PU) on in
+put line 60.
+LaTeX Encoding Info:    Redeclaring text command \textlambda (encoding PU) on i
+nput line 61.
+LaTeX Encoding Info:    Redeclaring text command \textmugreek (encoding PU) on 
+input line 62.
+LaTeX Encoding Info:    Redeclaring text command \textnu (encoding PU) on input
+ line 63.
+LaTeX Encoding Info:    Redeclaring text command \textxi (encoding PU) on input
+ line 64.
+LaTeX Encoding Info:    Redeclaring text command \textpi (encoding PU) on input
+ line 65.
+LaTeX Encoding Info:    Redeclaring text command \textrho (encoding PU) on inpu
+t line 66.
+LaTeX Encoding Info:    Redeclaring text command \textvarsigma (encoding PU) on
+ input line 67.
+LaTeX Encoding Info:    Redeclaring text command \textsigma (encoding PU) on in
+put line 68.
+LaTeX Encoding Info:    Redeclaring text command \texttau (encoding PU) on inpu
+t line 69.
+LaTeX Encoding Info:    Redeclaring text command \textupsilon (encoding PU) on 
+input line 70.
+LaTeX Encoding Info:    Redeclaring text command \textphi (encoding PU) on inpu
+t line 71.
+LaTeX Encoding Info:    Redeclaring text command \textchi (encoding PU) on inpu
+t line 72.
+LaTeX Encoding Info:    Redeclaring text command \textpsi (encoding PU) on inpu
+t line 73.
+LaTeX Encoding Info:    Redeclaring text command \textomega (encoding PU) on in
+put line 74.
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/colorprofiles\colorpro
+files.sty
+Package: colorprofiles 2018/11/01 v1.0.1 color profiles for PDF/X and PDF/A sup
+port
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/colorprofiles\colorpro
+files.tex))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pdfx\AdobeColorProfiles.
+tex)
+** pdfx: Metadata file dissertation.xmpdata read successfully.
+(dissertation.xmpdata)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
+Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/xmpincl\xmpincl.sty
+Package: xmpincl 2021/09/22 v2.4 Include XMP data in pdflatex
+)
+Using XMP template file: pdfa.xmp
+\xmpinclWrite=\write3
+\xmpinclRead=\read2
+\openout3 = `pdfa.xmpi'.
+
+
+Package pdfx Warning: Setting all color commands to rgb,
+consistent with the Color Model for PDF/A  on input line 3126.
+
+) (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+Package: geometry 2026/03/07 v6.0 Page Geometry
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+)
+\Gm@cnth=\count298
+\Gm@cntv=\count299
+\c@Gm@tempcnt=\count300
+\Gm@bindingoffset=\dimen153
+\Gm@wd@mp=\dimen154
+\Gm@odd@mp=\dimen155
+\Gm@even@mp=\dimen156
+\Gm@layoutwidth=\dimen157
+\Gm@layoutheight=\dimen158
+\Gm@layouthoffset=\dimen159
+\Gm@layoutvoffset=\dimen160
+\Gm@dimlist=\toks20
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/ragged2e\ragged2e.sty
+Package: ragged2e 2023/06/22 v3.6 ragged2e Package
+\CenteringLeftskip=\skip52
+\RaggedLeftLeftskip=\skip53
+\RaggedRightLeftskip=\skip54
+\CenteringRightskip=\skip55
+\RaggedLeftRightskip=\skip56
+\RaggedRightRightskip=\skip57
+\CenteringParfillskip=\skip58
+\RaggedLeftParfillskip=\skip59
+\RaggedRightParfillskip=\skip60
+\JustifyingParfillskip=\skip61
+\CenteringParindent=\skip62
+\RaggedLeftParindent=\skip63
+\RaggedRightParindent=\skip64
+\JustifyingParindent=\skip65
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.cf
+g
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: xetex.def on input line 106.
+)
+\Gin@req@height=\dimen161
+\Gin@req@width=\dimen162
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/lettrine\lettrine.sty
+File: lettrine.sty 2025-12-06 v2.83 (Daniel Flipo)
+\c@DefaultLines=\count301
+\c@DefaultDepth=\count302
+\DefaultFindent=\dimen163
+\DefaultNindent=\dimen164
+\DefaultSlope=\dimen165
+\DiscardVskip=\dimen166
+\L@lbox=\box54
+\c@L@lines=\count303
+\c@L@depth=\count304
+\L@Pindent=\dimen167
+\L@Findent=\dimen168
+\L@Nindent=\dimen169
+\L@lraise=\dimen170
+\L@first=\dimen171
+\L@next=\dimen172
+\L@slope=\dimen173
+\L@height=\dimen174
+\L@novskip=\dimen175
+\L@target@ht=\dimen176
+\L@target@dp=\dimen177
+\L@target@tht=\dimen178
+\LettrineWidth=\dimen179
+\LettrineHeight=\dimen180
+\LettrineDepth=\dimen181
+\L@finalht=\dimen182
+\L@finaldp=\dimen183
+
+Loading lettrine.cfg
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/lettrine\lettrine.cfg)
+\Lettrine@tweaks=\toks21
+\Llist@everypar=\toks22
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/setspace\setspace.sty
+Package: setspace 2022/12/04 v6.7b set line spacing
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/tools\verbatim.sty
+Package: verbatim 2024-01-22 v1.5x LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks23
+\verbatim@line=\toks24
+\verbatim@in@stream=\read3
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
+Package: amsmath 2025/07/09 v2.17z AMS math features
+\@mathmargin=\skip66
+
+For additional information on amsmath, use the `?' option.
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+Package: amstext 2024/11/17 v2.01 AMS text
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks25
+\ex@=\dimen184
+))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen185
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count305
+LaTeX Info: Redefining \frac on input line 233.
+\uproot@=\count306
+\leftroot@=\count307
+LaTeX Info: Redefining \overline on input line 398.
+LaTeX Info: Redefining \colon on input line 409.
+\classnum@=\count308
+\DOTSCASE@=\count309
+LaTeX Info: Redefining \ldots on input line 495.
+LaTeX Info: Redefining \dots on input line 498.
+LaTeX Info: Redefining \cdots on input line 619.
+\Mathstrutbox@=\box55
+\strutbox@=\box56
+LaTeX Info: Redefining \big on input line 721.
+LaTeX Info: Redefining \Big on input line 722.
+LaTeX Info: Redefining \bigg on input line 723.
+LaTeX Info: Redefining \Bigg on input line 724.
+\big@size=\dimen186
+LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
+\macc@depth=\count310
+LaTeX Info: Redefining \bmod on input line 904.
+LaTeX Info: Redefining \pmod on input line 909.
+LaTeX Info: Redefining \smash on input line 939.
+LaTeX Info: Redefining \relbar on input line 969.
+LaTeX Info: Redefining \Relbar on input line 970.
+\c@MaxMatrixCols=\count311
+\dotsspace@=\muskip18
+\c@parentequation=\count312
+\dspbrk@lvl=\count313
+\tag@help=\toks26
+\row@=\count314
+\column@=\count315
+\maxfields@=\count316
+\andhelp@=\toks27
+\eqnshift@=\dimen187
+\alignsep@=\dimen188
+\tagshift@=\dimen189
+\tagwidth@=\dimen190
+\totwidth@=\dimen191
+\lineht@=\dimen192
+\@envbody=\toks28
+\multlinegap=\skip67
+\multlinetaggap=\skip68
+\mathdisplay@stack=\toks29
+LaTeX Info: Redefining \[ on input line 2950.
+LaTeX Info: Redefining \] on input line 2951.
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/mathtools\mathtools.sty
+Package: mathtools 2024/10/04 v1.31 mathematical typesetting tools
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/tools\calc.sty
+Package: calc 2025/03/01 v4.3b Infix arithmetic (KKT,FJ)
+\calc@Acount=\count317
+\calc@Bcount=\count318
+\calc@Adimen=\dimen193
+\calc@Bdimen=\dimen194
+\calc@Askip=\skip69
+\calc@Bskip=\skip70
+LaTeX Info: Redefining \setlength on input line 86.
+LaTeX Info: Redefining \addtolength on input line 87.
+\calc@Ccount=\count319
+\calc@Cskip=\skip71
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/mathtools\mhsetup.sty
+Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
+)
+\g_MT_multlinerow_int=\count320
+\l_MT_multwidth_dim=\dimen195
+\origjot=\skip72
+\l_MT_shortvdotswithinadjustabove_dim=\dimen196
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen197
+\l_MT_above_intertext_sep=\dimen198
+\l_MT_below_intertext_sep=\dimen199
+\l_MT_above_shortintertext_sep=\dimen256
+\l_MT_below_shortintertext_sep=\dimen257
+\xmathstrut@box=\box57
+\xmathstrut@dim=\dimen258
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/siunitx\siunitx.sty
+Package: siunitx 2026-05-15 v3.5.5 A comprehensive (SI) units package
+\l__siunitx_number_uncert_offset_int=\count321
+\l__siunitx_number_exponent_fixed_int=\count322
+\l__siunitx_number_min_decimal_int=\count323
+\l__siunitx_number_min_integer_int=\count324
+\l__siunitx_number_round_precision_int=\count325
+\l__siunitx_number_lower_threshold_int=\count326
+\l__siunitx_number_upper_threshold_int=\count327
+\l__siunitx_number_group_first_int=\count328
+\l__siunitx_number_group_size_int=\count329
+\l__siunitx_number_group_min_int=\count330
+\l__siunitx_number_group_minimum_int=\count331
+\l__siunitx_compound_count_int=\count332
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/translations\translation
+s.sty
+Package: translations 2022/02/05 v1.12 internationalization of LaTeX2e packages
+ (CN)
+)
+\l__siunitx_table_tmp_box=\box58
+\l__siunitx_table_tmp_dim=\dimen259
+\l__siunitx_table_column_width_dim=\dimen260
+\l__siunitx_table_integer_box=\box59
+\l__siunitx_table_decimal_box=\box60
+\l__siunitx_table_uncert_box=\box61
+\l__siunitx_table_before_box=\box62
+\l__siunitx_table_after_box=\box63
+\l__siunitx_table_before_dim=\dimen261
+\l__siunitx_table_carry_dim=\dimen262
+\l__siunitx_unit_tmp_int=\count333
+\l__siunitx_unit_position_int=\count334
+\l__siunitx_unit_total_int=\count335
+\l__siunitx_sexagesimal_tmp_dim=\dimen263
+\l__siunitx_sexagesimal_marker_box=\box64
+\l__siunitx_sexagesimal_unit_box=\box65
+ (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
+Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
+\col@sep=\dimen264
+\ar@mcellbox=\box66
+\extrarowheight=\dimen265
+\NC@list=\toks30
+\extratabsurround=\skip73
+\backup@length=\skip74
+\ar@cellbox=\box67
+)) (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/xelatex/mathspec\mathspec.sty
+Package: mathspec 2016/12/22 v0.2b LaTeX Package (Mathematics font selection fo
+r XeLaTeX)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec.sty
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xparse\xparse
+.sty (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3.sty
+Package: expl3 2025-12-24 L3 programming layer (loader) 
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-xete
+x.def
+File: l3backend-xetex.def 2025-10-09 L3 backend support: XeTeX
+\g__graphics_track_int=\count336
+\g__pdfannot_backend_int=\count337
+\g__pdfannot_backend_link_int=\count338
+))
+Package: xparse 2025-10-09 L3 Experimental document command parser
+)
+Package: fontspec 2025/09/29 v2.9g Font selection for XeLaTeX and LuaLaTeX
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec-xetex.
+sty
+Package: fontspec-xetex 2025/09/29 v2.9g Font selection for XeLaTeX and LuaLaTe
+X
+\l__fontspec_script_int=\count339
+\l__fontspec_language_int=\count340
+\l__fontspec_strnum_int=\count341
+\l__fontspec_tmp_int=\count342
+\l__fontspec_tmpa_int=\count343
+\l__fontspec_tmpb_int=\count344
+\l__fontspec_tmpc_int=\count345
+\l__fontspec_em_int=\count346
+\l__fontspec_emdef_int=\count347
+\l__fontspec_strong_int=\count348
+\l__fontspec_strongdef_int=\count349
+\l__fontspec_tmpa_dim=\dimen266
+\l__fontspec_tmpb_dim=\dimen267
+\l__fontspec_tmpc_dim=\dimen268
+ (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec.cfg)))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/xkeyval\xkeyval.sty
+Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\xkeyval.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\xkvutils.tex
+\XKV@toks=\toks31
+\XKV@tempa@toks=\toks32
+)
+\XKV@depth=\count350
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+\c@eu@=\count351
+\c@eu@i=\count352
+\c@mkern=\count353
+)
+
+Package fontspec Info: 
+(fontspec)             Font family 'EBGaramond12-Regular.otf(0)' created for
+(fontspec)             font 'EBGaramond12-Regular.otf' with options
+(fontspec)             [Path={fonts/EB Garamond/},Numbers={Proportional}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.: <->"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Regular.otf]/OT:script=latn;langua
+ge=dflt;+pnum;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: <->"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Regular.otf]/OT:script=latn;langua
+ge=dflt;+pnum;+smcp;"
+
+\symDigits:m:n=\mathgroup6
+\symLatin:m:n=\mathgroup7
+\symLatin:m:it=\mathgroup8
+\symGreek:m:n=\mathgroup9
+\symGreek:m:it=\mathgroup10
+
+Package fontspec Info: 
+(fontspec)             Font family 'EBGaramond12-Regular.otf(1)' created for
+(fontspec)             font 'EBGaramond12-Regular.otf' with options
+(fontspec)             [Path={fonts/EB
+(fontspec)             Garamond/},ItalicFont={EBGaramond12-Italic.otf}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.: <->"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Regular.otf]/OT:script=latn;langua
+ge=dflt;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: <->"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Regular.otf]/OT:script=latn;langua
+ge=dflt;+smcp;"
+(fontspec)             - 'italic' (m/it) with NFSS spec.: <->"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Italic.otf]/OT:script=latn;languag
+e=dflt;"
+(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.:
+(fontspec)             <->"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Italic.otf]/OT:script=latn;languag
+e=dflt;+smcp;"
+
+LaTeX Font Info:    Redeclaring math alphabet \mathrm on input line 90.
+LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
+(Font)                  TU/EBGaramond12-Regular.otf(1)/m/n --> TU/EBGaramond12-
+Regular.otf(1)/bx/n on input line 90.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 90.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> TU/EBGaramond12-Regular.otf(1)/m/it on
+ input line 90.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> TU/EBGaramond12-Regular.otf(1)/m/it o
+n input line 90.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 90.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> TU/EBGaramond12-Regular.otf(1)/bx/n on
+ input line 90.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> TU/EBGaramond12-Regular.otf(1)/bx/n on
+ input line 90.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  TU/EBGaramond12-Regular.otf(1)/m/it --> TU/EBGaramond12
+-Regular.otf(1)/bx/it on input line 90.
+\symOperators:m:n=\mathgroup11
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond-SemiBold scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond-SemiBold scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Italic scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Italic scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond-SemiBoldItalic scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond-SemiBoldItalic scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             Font family 'EBGaramond12-Regular.otf(2)' created for
+(fontspec)             font 'EBGaramond12-Regular.otf' with options
+(fontspec)             [Ligatures=TeX,Path={fonts/EB
+(fontspec)             Garamond/},ItalicFont={EBGaramond12-Italic.otf},BoldFont
+={EBGaramond-SemiBold.otf},BoldItalicFont={EBGaramond-SemiBoldItalic.otf},Numbe
+rs=OldStyle,Ligatures={Common,
+(fontspec)             TeX},Scale=1.0].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.: <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Regular.otf]/OT:script=latn;langua
+ge=dflt;+onum;+liga;mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.:
+(fontspec)             <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Regular.otf]/OT:script=latn;langua
+ge=dflt;+onum;+liga;+smcp;mapping=tex-text;"
+(fontspec)             - 'bold' (b/n) with NFSS spec.: <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond-SemiBold.otf]/OT:script=latn;languag
+e=dflt;+onum;+liga;mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.:
+(fontspec)             <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond-SemiBold.otf]/OT:script=latn;languag
+e=dflt;+onum;+liga;+smcp;mapping=tex-text;"
+(fontspec)             - 'italic' (m/it) with NFSS spec.: <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Italic.otf]/OT:script=latn;languag
+e=dflt;+onum;+liga;mapping=tex-text;"
+(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.:
+(fontspec)             <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Italic.otf]/OT:script=latn;languag
+e=dflt;+onum;+liga;+smcp;mapping=tex-text;"
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
+(fontspec)             <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond-SemiBoldItalic.otf]/OT:script=latn;l
+anguage=dflt;+onum;+liga;mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.:
+(fontspec)             <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond-SemiBoldItalic.otf]/OT:script=latn;l
+anguage=dflt;+onum;+liga;+smcp;mapping=tex-text;"
+
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
+(Font)              scaled to size 12.0pt on input line 103.
+
+Package fontspec Info: 
+(fontspec)             Font family 'EBGaramond12-Regular.otf(3)' created for
+(fontspec)             font 'EBGaramond12-Regular.otf' with options
+(fontspec)             [Path={fonts/EB Garamond/},RawFeature={+c2sc,+scmp}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.: <->"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Regular.otf]/OT:script=latn;langua
+ge=dflt;+c2sc,+scmp;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: <->"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Regular.otf]/OT:script=latn;langua
+ge=dflt;+c2sc,+scmp;+smcp;"
+
+
+Package fontspec Info: 
+(fontspec)             Lato-Reg scale = 0.8094740779606807.
+
+
+Package fontspec Info: 
+(fontspec)             Lato-Reg scale = 0.8094740779606807.
+
+
+Package fontspec Info: 
+(fontspec)             Lato-Bol scale = 0.799217233746694.
+
+
+Package fontspec Info: 
+(fontspec)             Lato-RegIta scale = 0.8094740779606807.
+
+
+Package fontspec Info: 
+(fontspec)             Lato-BolIta scale = 0.799217233746694.
+
+
+Package fontspec Info: 
+(fontspec)             Font family 'Lato-Reg.ttf(0)' created for font
+(fontspec)             'Lato-Reg.ttf' with options
+(fontspec)             [Ligatures=TeX,Path={fonts/Lato/},ItalicFont={Lato-RegIt
+a.ttf},BoldFont={Lato-Bol.ttf},BoldItalicFont={Lato-BolIta.ttf},Scale=MatchLowe
+rcase].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[0.8094740779606807]"[fonts/Lato/Lato-Reg.ttf]/OT:s
+cript=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.799217233746694]"[fonts/Lato/Lato-Bol.ttf]/OT:sc
+ript=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'italic' (m/it) with NFSS spec.:
+(fontspec)             <->s*[0.8094740779606807]"[fonts/Lato/Lato-RegIta.ttf]/O
+T:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
+(fontspec)             <->s*[0.799217233746694]"[fonts/Lato/Lato-BolIta.ttf]/OT
+:script=latn;language=dflt;mapping=tex-text;"
+
+
+Package fontspec Info: 
+(fontspec)             SourceCodePro-Regular scale = 0.8541649006061119.
+
+
+Package fontspec Info: 
+(fontspec)             SourceCodePro-Regular scale = 0.8541649006061119.
+
+
+Package fontspec Info: 
+(fontspec)             SourceCodePro-Bold scale = 0.8541649006061119.
+
+
+Package fontspec Info: 
+(fontspec)             Font family 'SourceCodePro-Regular.ttf(0)' created for
+(fontspec)             font 'SourceCodePro-Regular.ttf' with options
+(fontspec)             [WordSpace={1,0,0},HyphenChar=None,PunctuationSpace=Word
+Space,Path={fonts/Source
+(fontspec)             Code
+(fontspec)             Pro/},BoldFont={SourceCodePro-Bold.ttf},Scale=MatchLower
+case].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[0.8541649006061119]"[fonts/Source Code
+(fontspec)             Pro/SourceCodePro-Regular.ttf]/OT:script=latn;language=d
+flt;"
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.8541649006061119]"[fonts/Source Code
+(fontspec)             Pro/SourceCodePro-Bold.ttf]/OT:script=latn;language=dflt
+;"
+
+ (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+Package: caption 2023/08/05 v3.6o Customizing captions (AR)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
+\caption@tempdima=\dimen269
+\captionmargin=\dimen270
+\caption@leftmargin=\dimen271
+\caption@rightmargin=\dimen272
+\caption@width=\dimen273
+\caption@indent=\dimen274
+\caption@parindent=\dimen275
+\caption@hangindent=\dimen276
+Package caption Info: Standard document class detected.
+)
+Package caption Info: Option `figurewithin=chapter' requires the `newfloat' pac
+kage on input line 172.
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/newfloat\newfloat.sty
+Package: newfloat 2023/10/01 v1.2 Defining new floating environments (AR)
+Package newfloat Info: Unsupported document class, or \@chapter 
+(newfloat)             was already redefined by another package.
+Package newfloat Info: \@chapter = macro:->\def \Hy@next {\Hy@MakeCurrentHrefAu
+to {\Hy@chapapp *}\Hy@raisedlink {\hyper@anchorstart {\@currentHref }\hyper@anc
+horend }}\ifnum \c@secnumdepth >\m@ne \@ifundefined {if@mainmatter}\iftrue {\cs
+name if@mainmatter\endcsname }\let \Hy@next \relax \fi \fi \Hy@next \Hy@org@cha
+pter .
+Package newfloat Info: \Hy@org@chapter = macro:[#1]#2->\NR@gettitle {#1}\NR@cha
+pter [{#1}]{#2}.
+Package newfloat Info: \algocf@original@chapter = undefined.
+)
+\c@caption@flags=\count354
+\c@continuedfloat=\count355
+Package caption Info: hyperref package is loaded.
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype.sty
+Package: microtype 2026/03/01 v3.2d Micro-typographical refinements (RS)
+\MT@toks=\toks33
+\MT@tempbox=\box68
+\MT@count=\count356
+LaTeX Info: Redefining \noprotrusionifhmode on input line 1084.
+LaTeX Info: Redefining \leftprotrusion on input line 1085.
+\MT@prot@toks=\toks34
+LaTeX Info: Redefining \rightprotrusion on input line 1104.
+LaTeX Info: Redefining \textls on input line 1449.
+\MT@outer@kern=\dimen277
+LaTeX Info: Redefining \microtypecontext on input line 2053.
+LaTeX Info: Redefining \textmicrotypecontext on input line 2070.
+\MT@listname@count=\count357
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype-xete
+x.def
+File: microtype-xetex.def 2026/03/01 v3.2d Definitions specific to xetex (RS)
+LaTeX Info: Redefining \lsstyle on input line 443.
+LaTeX Info: Redefining \lslig on input line 451.
+\MT@outer@space=\skip75
+)
+Package microtype Info: Loading configuration file microtype.cfg.
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype.cfg
+File: microtype.cfg 2026/03/01 v3.2d microtype main configuration file (RS)
+)
+LaTeX Info: Redefining \microtypesetup on input line 3065.
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz.s
+ty
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgf.sty
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfrcs.sty
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil-
+common.tex
+\pgfutil@everybye=\toks35
+\pgfutil@tempdima=\dimen278
+\pgfutil@tempdimb=\dimen279
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil-
+latex.def
+\pgfutil@abb=\box69
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfrcs.c
+ode.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf\pgf.revision.tex)
+Package: pgfrcs 2025-08-29 v3.1.11a (3.1.11a)
+))
+Package: pgf 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgfcore.s
+ty
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgf/systemlayer\pgfsys.s
+ty
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
+.code.tex
+Package: pgfsys 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys.
+code.tex
+\pgfkeys@pathtoks=\toks36
+\pgfkeys@temptoks=\toks37
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeysl
+ibraryfiltered.code.tex
+\pgfkeys@tmptoks=\toks38
+))
+\pgf@x=\dimen280
+\pgf@y=\dimen281
+\pgf@xa=\dimen282
+\pgf@ya=\dimen283
+\pgf@xb=\dimen284
+\pgf@yb=\dimen285
+\pgf@xc=\dimen286
+\pgf@yc=\dimen287
+\pgf@xd=\dimen288
+\pgf@yd=\dimen289
+\w@pgf@writea=\write4
+\r@pgf@reada=\read4
+\c@pgf@counta=\count358
+\c@pgf@countb=\count359
+\c@pgf@countc=\count360
+\c@pgf@countd=\count361
+\t@pgf@toka=\toks39
+\t@pgf@tokb=\toks40
+\t@pgf@tokc=\toks41
+\pgf@sys@id@count=\count362
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgf.cf
+g
+File: pgf.cfg 2025-08-29 v3.1.11a (3.1.11a)
+)
+Driver file for pgf: pgfsys-xetex.def
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
+-xetex.def
+File: pgfsys-xetex.def 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
+-dvipdfmx.def
+File: pgfsys-dvipdfmx.def 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
+-common-pdf.def
+File: pgfsys-common-pdf.def 2025-08-29 v3.1.11a (3.1.11a)
+)
+\pgfsys@objnum=\count363
+)))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
+softpath.code.tex
+File: pgfsyssoftpath.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfsyssoftpath@smallbuffer@items=\count364
+\pgfsyssoftpath@bigbuffer@items=\count365
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
+protocol.code.tex
+File: pgfsysprotocol.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+.code.tex
+Package: pgfcore 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code.
+tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathutil.c
+ode.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathparser
+.code.tex
+\pgfmath@dimen=\dimen290
+\pgfmath@count=\count366
+\pgfmath@box=\box70
+\pgfmath@toks=\toks42
+\pgfmath@stack@operand=\toks43
+\pgfmath@stack@operation=\toks44
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
+ons.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
+ons.basic.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
+ons.trigonometric.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
+ons.random.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
+ons.comparison.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
+ons.base.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
+ons.round.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
+ons.misc.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
+ons.integerarithmetics.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathcalc.c
+ode.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloat.
+code.tex
+\c@pgfmathroundto@lastzeros=\count367
+))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfint.code.t
+ex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+points.code.tex
+File: pgfcorepoints.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@picminx=\dimen291
+\pgf@picmaxx=\dimen292
+\pgf@picminy=\dimen293
+\pgf@picmaxy=\dimen294
+\pgf@pathminx=\dimen295
+\pgf@pathmaxx=\dimen296
+\pgf@pathminy=\dimen297
+\pgf@pathmaxy=\dimen298
+\pgf@xx=\dimen299
+\pgf@xy=\dimen300
+\pgf@yx=\dimen301
+\pgf@yy=\dimen302
+\pgf@zx=\dimen303
+\pgf@zy=\dimen304
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+pathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@path@lastx=\dimen305
+\pgf@path@lasty=\dimen306
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+pathusage.code.tex
+File: pgfcorepathusage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@shorten@end@additional=\dimen307
+\pgf@shorten@start@additional=\dimen308
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+scopes.code.tex
+File: pgfcorescopes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfpic=\box71
+\pgf@hbox=\box72
+\pgf@layerbox@main=\box73
+\pgf@picture@serial@count=\count368
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+graphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgflinewidth=\dimen309
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+transformations.code.tex
+File: pgfcoretransformations.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@pt@x=\dimen310
+\pgf@pt@y=\dimen311
+\pgf@pt@temp=\dimen312
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+quick.code.tex
+File: pgfcorequick.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+objects.code.tex
+File: pgfcoreobjects.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+pathprocessing.code.tex
+File: pgfcorepathprocessing.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+arrows.code.tex
+File: pgfcorearrows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfarrowsep=\dimen313
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+shade.code.tex
+File: pgfcoreshade.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@max=\dimen314
+\pgf@sys@shading@range@num=\count369
+\pgf@shadingcount=\count370
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+image.code.tex
+File: pgfcoreimage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+external.code.tex
+File: pgfcoreexternal.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfexternal@startupbox=\box74
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+layers.code.tex
+File: pgfcorelayers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+transparency.code.tex
+File: pgfcoretransparency.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+patterns.code.tex
+File: pgfcorepatterns.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
+rdf.code.tex
+File: pgfcorerdf.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodules
+hapes.code.tex
+File: pgfmoduleshapes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfnodeparttextbox=\box75
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulep
+lot.code.tex
+File: pgfmoduleplot.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfcom
+p-version-0-65.sty
+Package: pgfcomp-version-0-65 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@nodesepstart=\dimen315
+\pgf@nodesepend=\dimen316
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfcom
+p-version-1-18.sty
+Package: pgfcomp-version-1-18 2025-08-29 v3.1.11a (3.1.11a)
+))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgffor.sty
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfkeys.st
+y
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys.
+code.tex))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgf/math\pgfmath.sty
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code.
+tex))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgffor.c
+ode.tex
+Package: pgffor 2025-08-29 v3.1.11a (3.1.11a)
+\pgffor@iter=\dimen317
+\pgffor@skip=\dimen318
+\pgffor@stack=\toks45
+\pgffor@toks=\toks46
+))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+\tikz.code.tex
+Package: tikz 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibra
+ryplothandlers.code.tex
+File: pgflibraryplothandlers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@plot@mark@count=\count371
+\pgfplotmarksize=\dimen319
+)
+\tikz@lastx=\dimen320
+\tikz@lasty=\dimen321
+\tikz@lastxsaved=\dimen322
+\tikz@lastysaved=\dimen323
+\tikz@lastmovetox=\dimen324
+\tikz@lastmovetoy=\dimen325
+\tikzleveldistance=\dimen326
+\tikzsiblingdistance=\dimen327
+\tikz@figbox=\box76
+\tikz@figbox@bg=\box77
+\tikz@tempbox=\box78
+\tikz@tempbox@bg=\box79
+\tikztreelevel=\count372
+\tikznumberofchildren=\count373
+\tikznumberofcurrentchild=\count374
+\tikz@fig@count=\count375
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulem
+atrix.code.tex
+File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfmatrixcurrentrow=\count376
+\pgfmatrixcurrentcolumn=\count377
+\pgf@matrix@numberofcolumns=\count378
+)
+\tikz@expandcount=\count379
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+/libraries\tikzlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/pgfplots\pgfplots.sty
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.revi
+sion.tex)
+Package: pgfplots 2021/05/15 v1.18.1 Data Visualization (1.18.1)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.code
+.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotscore.
+code.tex
+\t@pgfplots@toka=\toks47
+\t@pgfplots@tokb=\toks48
+\t@pgfplots@tokc=\toks49
+\pgfplots@tmpa=\dimen328
+\c@pgfplots@coordindex=\count380
+\c@pgfplots@scanlineindex=\count381
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/sys\pgfplotss
+ysgeneric.code.tex))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/libs\pgfplots
+library.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/oldpgfcompati
+b\pgfplotsoldpgfsupp_loader.code.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibra
+ryfpu.code.tex)
+Package pgfplots: loading complementary utilities for your pgf version...
+\t@pgf@toka=\toks50
+\t@pgf@tokb=\toks51
+\t@pgf@tokc=\toks52
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/oldpgfcompati
+b\pgfplotsoldpgfsupp_pgfutil-common-lists.tex))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplots
+util.code.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/liststructure
+\pgfplotsliststructure.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/liststructure
+\pgfplotsliststructureext.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/liststructure
+\pgfplotsarray.code.tex
+\c@pgfplotsarray@tmp=\count382
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/liststructure
+\pgfplotsmatrix.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/numtable\pgfp
+lotstableshared.code.tex
+\c@pgfplotstable@counta=\count383
+\t@pgfplotstable@a=\toks53
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/liststructure
+\pgfplotsdeque.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplots
+binary.code.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplots
+binary.data.code.tex))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplots
+util.verb.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/libs\pgflibra
+rypgfplots.surfshading.code.tex
+\c@pgfplotslibrarysurf@no=\count384
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/sys\pgflibrar
+ypgfplots.surfshading.pgfsys-xetex.def
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/sys\pgflibrar
+ypgfplots.surfshading.pgfsys-dvipdfmx.def
+\c@pgfplotslibrarysurf@streamlen=\count385
+))))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplots
+colormap.code.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplots
+color.code.tex))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotsstack
+edplots.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotsploth
+andlers.code.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotsmeshp
+lothandler.code.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotsmeshp
+lotimage.code.tex)))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.scal
+ing.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotscoord
+processing.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.erro
+rbars.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.mark
+ers.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotsticks
+.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.path
+s.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+/libraries\tikzlibrarydecorations.code.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmoduled
+ecorations.code.tex
+\pgfdecoratedcompleteddistance=\dimen329
+\pgfdecoratedremainingdistance=\dimen330
+\pgfdecoratedinputsegmentcompleteddistance=\dimen331
+\pgfdecoratedinputsegmentremainingdistance=\dimen332
+\pgf@decorate@distancetomove=\dimen333
+\pgf@decorate@repeatstate=\count386
+\pgfdecorationsegmentamplitude=\dimen334
+\pgfdecorationsegmentlength=\dimen335
+)
+\tikz@lib@dec@box=\box80
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+/libraries\tikzlibrarydecorations.pathmorphing.code.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/decorati
+ons\pgflibrarydecorations.pathmorphing.code.tex))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+/libraries\tikzlibrarydecorations.pathreplacing.code.tex
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/decorati
+ons\pgflibrarydecorations.pathreplacing.code.tex))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/libs\tikzlibr
+arypgfplots.contourlua.code.tex)
+\pgfplots@numplots=\count387
+\pgfplots@xmin@reg=\dimen336
+\pgfplots@xmax@reg=\dimen337
+\pgfplots@ymin@reg=\dimen338
+\pgfplots@ymax@reg=\dimen339
+\pgfplots@zmin@reg=\dimen340
+\pgfplots@zmax@reg=\dimen341
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+/libraries\tikzlibraryplotmarks.code.tex
+File: tikzlibraryplotmarks.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibra
+ryplotmarks.code.tex
+File: pgflibraryplotmarks.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)))
+\fheight=\skip76
+\fwidth=\skip77
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen342
+\lightrulewidth=\dimen343
+\cmidrulewidth=\dimen344
+\belowrulesep=\dimen345
+\belowbottomsep=\dimen346
+\aboverulesep=\dimen347
+\abovetopsep=\dimen348
+\cmidrulesep=\dimen349
+\cmidrulekern=\dimen350
+\defaultaddspace=\dimen351
+\@cmidla=\count388
+\@cmidlb=\count389
+\@aboverulesep=\dimen352
+\@belowrulesep=\dimen353
+\@thisruleclass=\count390
+\@lastruleclass=\count391
+\@thisrulewidth=\dimen354
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/multirow\multirow.sty
+Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
+\multirow@colwidth=\skip78
+\multirow@cntb=\count392
+\multirow@dima=\skip79
+\bigstrutjot=\dimen355
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.sty
+Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
+Package caption Info: New subtype `subfigure' on input line 238.
+\c@subfigure=\count393
+Package caption Info: New subtype `subtable' on input line 238.
+\c@subtable=\count394
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+/libraries\tikzlibrarypatterns.code.tex
+File: tikzlibrarypatterns.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibra
+rypatterns.code.tex
+File: pgflibrarypatterns.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+/libraries\tikzlibrarybackgrounds.code.tex
+File: tikzlibrarybackgrounds.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@layerbox@background=\box81
+\pgf@layerboxsaved@background=\box82
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+/libraries\tikzlibrarycalc.code.tex
+File: tikzlibrarycalc.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/tools\afterpage.sty
+Package: afterpage 2023/07/04 v1.08 After-Page Package (DPC)
+\AP@output=\toks54
+\AP@partial=\box83
+\AP@footins=\box84
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/tabulary\tabulary.sty
+Package: tabulary 2024/06/04 v0.11 tabulary package (DPC)
+\TY@count=\count395
+\TY@linewidth=\dimen356
+\tymin=\dimen357
+\tymax=\dimen358
+\TY@tablewidth=\dimen359
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithm.sty
+Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count396
+\float@exts=\toks55
+\float@box=\box85
+\@float@everytoks=\toks56
+\@floatcapt=\box86
+)
+\@float@every@algorithm=\toks57
+\c@algorithm=\count397
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/algorithmicx\algpseudoco
+de.sty
+Package: algpseudocode 
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/algorithmicx\algorithmic
+x.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count398
+\c@ALG@rem=\count399
+\c@ALG@nested=\count400
+\ALG@tlm=\skip80
+\ALG@thistlm=\skip81
+\c@ALG@Lnr=\count401
+\c@ALG@blocknr=\count402
+\c@ALG@storecount=\count403
+\c@ALG@tmpcounter=\count404
+\ALG@tmplength=\skip82
+)
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/graphics\lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fancyhdr.sty
+Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
+
+\f@nch@headwidth=\skip83
+\f@nch@offset@elh=\skip84
+\f@nch@offset@erh=\skip85
+\f@nch@offset@olh=\skip86
+\f@nch@offset@orh=\skip87
+\f@nch@offset@elf=\skip88
+\f@nch@offset@erf=\skip89
+\f@nch@offset@olf=\skip90
+\f@nch@offset@orf=\skip91
+\f@nch@height=\skip92
+\f@nch@footalignment=\skip93
+\f@nch@widthL=\skip94
+\f@nch@widthC=\skip95
+\f@nch@widthR=\skip96
+\@temptokenb=\toks58
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/titlesec\titlesec.sty
+Package: titlesec 2025/01/04 v2.17 Sectioning titles
+\ttl@box=\box87
+\beforetitleunit=\skip97
+\aftertitleunit=\skip98
+\ttl@plus=\dimen360
+\ttl@minus=\dimen361
+\ttl@toksa=\toks59
+\titlewidth=\dimen362
+\titlewidthlast=\dimen363
+\titlewidthfirst=\dimen364
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/titling\titling.sty
+Package: titling 2009/09/04 v2.1d maketitle typesetting
+\thanksmarkwidth=\skip99
+\thanksmargin=\skip100
+\droptitle=\skip101
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/tocloft\tocloft.sty
+Package: tocloft 2017/08/31 v2.3i parameterised ToC, etc., typesetting
+Package tocloft Info: The document has chapter divisions on input line 51.
+\cftparskip=\skip102
+\cftbeforetoctitleskip=\skip103
+\cftaftertoctitleskip=\skip104
+\cftbeforepartskip=\skip105
+\cftpartnumwidth=\skip106
+\cftpartindent=\skip107
+\cftbeforechapskip=\skip108
+\cftchapindent=\skip109
+\cftchapnumwidth=\skip110
+\cftbeforesecskip=\skip111
+\cftsecindent=\skip112
+\cftsecnumwidth=\skip113
+\cftbeforesubsecskip=\skip114
+\cftsubsecindent=\skip115
+\cftsubsecnumwidth=\skip116
+\cftbeforesubsubsecskip=\skip117
+\cftsubsubsecindent=\skip118
+\cftsubsubsecnumwidth=\skip119
+\cftbeforeparaskip=\skip120
+\cftparaindent=\skip121
+\cftparanumwidth=\skip122
+\cftbeforesubparaskip=\skip123
+\cftsubparaindent=\skip124
+\cftsubparanumwidth=\skip125
+\cftbeforeloftitleskip=\skip126
+\cftafterloftitleskip=\skip127
+\cftbeforefigskip=\skip128
+\cftfigindent=\skip129
+\cftfignumwidth=\skip130
+\c@lofdepth=\count405
+\c@lotdepth=\count406
+\cftbeforelottitleskip=\skip131
+\cftafterlottitleskip=\skip132
+\cftbeforetabskip=\skip133
+\cfttabindent=\skip134
+\cfttabnumwidth=\skip135
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/appendix\appendix.sty
+Package: appendix 2020/02/08 v1.2c extra appendix facilities
+\c@@pps=\count407
+\c@@ppsavesec=\count408
+\c@@ppsaveapp=\count409
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/natbib\natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip136
+\bibsep=\skip137
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count410
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/quotchap\quotchap.sty
+Package: quotchap 2020/11/13 v1.3 Decorative Chapter Headings with Quotes
+\@quotebox=\box88
+)
+\mybibindent=\skip138
+Package hyperref Info: Option `colorlinks' set `true' on input line 244.
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/circuitikz\circuitikz.st
+y
+Package: circuitikz 2026/05/24{} The CircuiTikz circuit drawing package version
+ 1.8.6
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibra
+ryarrows.meta.code.tex
+File: pgflibraryarrows.meta.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfarrowinset=\dimen365
+\pgfarrowlength=\dimen366
+\pgfarrowwidth=\dimen367
+\pgfarrowlinewidth=\dimen368
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+/libraries\tikzlibrarybending.code.tex
+File: tikzlibrarybending.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmoduleb
+ending.code.tex
+File: pgfmodulebending.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulen
+onlineartransformations.code.tex
+File: pgfmodulenonlineartransformations.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgftransformnonlinearflatness=\dimen369
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibra
+rycurvilinear.code.tex
+File: pgflibrarycurvilinear.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@curvilinear@time@a=\dimen370
+\pgf@curvilinear@length@a=\dimen371
+\pgf@curvilinear@length@b=\dimen372
+\pgf@curvilinear@length@c=\dimen373
+\pgf@curvilinear@length@d=\dimen374
+)
+\pgf@arrows@the@rigidity=\dimen375
+))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
+/libraries\tikzlibraryfpu.code.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcirc.def
+ines.tex
+\pgf@circ@count@a=\count411
+\pgf@circ@count@b=\count412
+\pgf@circ@count@c=\count413
+\pgf@circ@res@up=\dimen376
+\pgf@circ@res@down=\dimen377
+\pgf@circ@res@zero=\dimen378
+\pgf@circ@res@left=\dimen379
+\pgf@circ@res@right=\dimen380
+\pgf@circ@res@other=\dimen381
+\pgf@circ@res@step=\dimen382
+\pgf@circ@res@temp=\dimen383
+\pgf@circ@Rlen=\dimen384
+\pgf@circ@scaled@Rlen=\dimen385
+\pgfstartlinewidth=\dimen386
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcircutil
+s.tex
+\ctikz@scratchbox=\box89
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcircpath
+.tex
+\ctikz@vif@count=\count414
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcircshap
+es.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcircmono
+poles.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcircbipo
+les.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcirctrip
+oles.tex
+\pgf@circ@res@count=\count415
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcircquad
+poles.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcircmult
+ipoles.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcirclabe
+l.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcircvolt
+age.tex
+\pgfcirc@labelshift=\dimen387
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcirccurr
+ent.tex)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/generic/circuitikz\pgfcircflow
+.tex))
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/enumitem\enumitem.sty
+Package: enumitem 2025/02/06 v3.11 Customized lists
+\labelindent=\skip139
+\enit@outerparindent=\dimen388
+\enit@toks=\toks60
+\enit@inbox=\box90
+\enit@count@id=\count416
+\enitdp@description=\count417
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/tools\tabularx.sty
+Package: tabularx 2023/12/11 v2.12a `tabularx' package (DPC)
+\TX@col@width=\dimen389
+\TX@old@table=\dimen390
+\TX@old@col=\dimen391
+\TX@target=\dimen392
+\TX@delta=\dimen393
+\TX@cols=\count418
+\TX@ftn=\toks61
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amscls\amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks62
+\thm@bodyfont=\toks63
+\thm@headfont=\toks64
+\thm@notefont=\toks65
+\thm@headpunct=\toks66
+\thm@preskip=\skip140
+\thm@postskip=\skip141
+\thm@headsep=\skip142
+\dth@everypar=\toks67
+)
+\c@note=\count419
+\c@example=\count420
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/makecell\makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+\rotheadsize=\dimen394
+\c@nlinenum=\count421
+\TeXr@lab=\toks68
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/wrapfig\wrapfig.sty
+\wrapoverhang=\dimen395
+\WF@size=\dimen396
+\c@WF@wrappedlines=\count422
+\WF@box=\box91
+\WF@everypar=\toks69
+Package: wrapfig 2003/01/31  v 3.6
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/graphics\rotating.sty
+Package: rotating 2025/01/14 v2.16e rotated objects in LaTeX
+\c@r@tfl@t=\count423
+\rotFPtop=\skip143
+\rotFPbot=\skip144
+\rot@float@box=\box92
+\rot@mess@toks=\toks70
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/placeins\placeins.sty
+Package: placeins 2005/04/18  v 2.2
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/footmisc\footmisc.sty
+Package: footmisc 2025/05/09 v7.0b a miscellany of footnote facilities
+\FN@temptoken=\toks71
+\footnotemargin=\dimen397
+Package footmisc Info: Declaring symbol style bringhurst on input line 549.
+Package footmisc Info: Declaring symbol style chicago on input line 557.
+Package footmisc Info: Declaring symbol style wiley on input line 566.
+Package footmisc Info: Declaring symbol style lamport-robust on input line 577.
+
+Package footmisc Info: Declaring symbol style lamport* on input line 597.
+Package footmisc Info: Declaring symbol style lamport*-robust on input line 618
+.
+)
+Package translations Info: No language package found. I am going to use `englis
+h' as default language. on input line 97.
+
+(dissertation.aux (chapters/1.introduction.aux) (chapters/2.background.aux)
+(chapters/4.data_prep.aux) (chapters/5.discovery_prosit.aux)
+(chapters/6.experiments.aux) (chapters/7.results.aux)
+(chapters/8.discussion.aux) (chapters/9.conclusion.aux)
+(appendices/observed_behaviour.aux) (appendices/discovery_results.aux)
+(appendices/prosit_model_inventory.aux)
+(appendices/model_inspection_and_reproduction.aux))
+\openout1 = `dissertation.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+Package hyperref Info: Link coloring ON on input line 97.
+ (dissertation.out)
+(dissertation.out)
+\@outlinefile=\write5
+\openout5 = `dissertation.out'.
+
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+*geometry* verbose mode - [ preamble ] result:
+* driver: xetex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(86.72377pt, 424.06033pt, 86.72377pt)
+* v-part:(T,H,B)=(101.40665pt, 591.5302pt, 152.11pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=424.06033pt
+* \textheight=591.5302pt
+* \oddsidemargin=14.45378pt
+* \evensidemargin=14.45378pt
+* \topmargin=-2.73714pt
+* \headheight=15.0pt
+* \headsep=19.8738pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=88.0pt
+* \marginparsep=7.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/translations/dicts\trans
+lations-basic-dictionary-english.trsl
+File: translations-basic-dictionary-english.trsl (english translation file `tra
+nslations-basic-dictionary')
+)
+Package translations Info: loading dictionary `translations-basic-dictionary' f
+or `english'. on input line 97.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
+Package caption Info: rotating package is loaded.
+Package caption Info: wrapfig package is loaded.
+Package caption Info: End \AtBeginDocument code.
+Package newfloat Info: Trying Plan B...
+Package newfloat Info: `float' package detected.
+Package newfloat Info: `rotating' package detected.
+Package newfloat Info: `wrapfig' package detected.
+LaTeX Info: Redefining \microtypecontext on input line 97.
+Package microtype Info: Applying patch `item' on input line 97.
+Package microtype Info: Applying patch `toc' on input line 97.
+Package microtype Info: Applying patch `eqnum' on input line 97.
+
+
+Package microtype Warning: Unable to apply patch `footnote' on input line 97.
+
+Package microtype Info: Applying patch `verbatim' on input line 97.
+LaTeX Info: Redefining \microtypesetup on input line 97.
+Package microtype Info: Character protrusion enabled (level 2).
+Package microtype Info: Using default protrusion set `alltext'.
+Package microtype Info: No adjustment of tracking.
+Package microtype Info: No adjustment of spacing.
+Package microtype Info: No adjustment of kerning.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `EBGaramond12-Regular.otf' (encoding: TU).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+Package pgfplots notification 'compat/show suggested version=true': document ha
+s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
+
+(frontmatter/personalize.tex) (frontmatter/personalize.tex)
+File: resources/unipd-light.jpg Graphic file (type bmp)
+<resources/unipd-light.jpg>
+File: resources/unipd-bn.png Graphic file (type bmp)
+<resources/unipd-bn.png>
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
+(Font)              scaled to size 24.88pt on input line 100.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/b/n' will be
+(Font)              scaled to size 24.88pt on input line 100.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/b/sc' will be
+(Font)              scaled to size 24.88pt on input line 100.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
+(Font)              scaled to size 14.4pt on input line 100.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/sc' will be
+(Font)              scaled to size 14.4pt on input line 100.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/it' will be
+(Font)              scaled to size 14.4pt on input line 100.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
+(Font)              scaled to size 17.5pt on input line 100.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/b/n' will be
+(Font)              scaled to size 17.5pt on input line 100.
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-cmr.cfg
+File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
+(RS)
+)
+LaTeX Font Info:    Trying to load font information for U+msa on input line 100
+.
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
+File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 100
+.
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msb.cfg
+File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
+)
+
+LaTeX Font Warning: Font shape `TU/EBGaramond12-Regular.otf(0)/m/it' undefined
+(Font)              using `TU/EBGaramond12-Regular.otf(0)/m/n' instead on input
+ line 100.
+
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
+(Font)              scaled to size 10.95pt on input line 100.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/it' will be
+(Font)              scaled to size 10.95pt on input line 100.
+[1
+
+] [2
+
+
+]
+LaTeX Font Info:    Trying to load font information for TU+ppl on input line 10
+0.
+LaTeX Font Info:    No file TUppl.fd. on input line 100.
+
+
+LaTeX Font Warning: Font shape `TU/ppl/b/n' undefined
+(Font)              using `TU/lmr/m/n' instead on input line 100.
+
+
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-LatinModern
+Roman.cfg
+File: mt-LatinModernRoman.cfg 2026/02/26 v1.2 microtype config. file: Latin Mod
+ern Roman (RS)
+)
+(C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-ppl.cfg
+File: mt-ppl.cfg 2005/11/16 v1.6 microtype config. file: Palatino (RS)
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `ppl' (encoding: TU).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+
+(frontmatter/abstract.tex
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/it' will be
+(Font)              scaled to size 12.0pt on input line 22.
+) [3
+
+] [4
+
+] (dissertation.toc
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/sc' will be
+(Font)              scaled to size 12.0pt on input line 1.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/b/n' will be
+(Font)              scaled to size 12.0pt on input line 1.
+ [5
+
+]
+Underfull \vbox (badness 1303) has occurred while \output is active []
+
+ [6])
+\tf@toc=\write6
+\openout6 = `dissertation.toc'.
+
+
+[7] [8
+
+] (dissertation.lof
+LaTeX Font Info:    Font shape `TU/SourceCodePro-Regular.ttf(0)/m/n' will be
+(Font)              scaled to size 10.25006pt on input line 3.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `SourceCodePro-Regular.ttf' (encoding: TU).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+
+
+LaTeX Font Warning: Font shape `TU/SourceCodePro-Regular.ttf(0)/m/it' undefined
+
+(Font)              using `TU/SourceCodePro-Regular.ttf(0)/m/n' instead on inpu
+t line 3.
+
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
+(Font)              scaled to size 8.0pt on input line 3.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
+(Font)              scaled to size 6.0pt on input line 3.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [9
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [10])
+\tf@lof=\write7
+\openout7 = `dissertation.lof'.
+
+
+[11] [12
+
+] (dissertation.lot
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [13
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [14]
+Overfull \hbox (2.19582pt too wide) in paragraph at lines 34--34
+ [][] [][][]\TU/EBGaramond12-Regular.otf(2)/m/n/12 Number of distinct sequences
+ permitted by each net, by number of yard events. 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [15]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [16])
+\tf@lot=\write8
+\openout8 = `dissertation.lot'.
+
+
+[17] [18
+
+] (frontmatter/abbr.tex [19
+
+]) [20]
+\openout2 = `chapters/1.introduction.aux'.
+
+ (chapters/1.introduction.tex
+Chapter 1.
+Package newfloat Info: Setting Plan B file extension to `lof'... on input line 
+1.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/sc' will be
+(Font)              scaled to size 17.28pt on input line 12.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/b/n' will be
+(Font)              scaled to size 10.95pt on input line 14.
+[1
+
+
+
+] [2] [3] [4])
+Overfull \hbox (4.13577pt too wide) in paragraph at lines 157--106
+[]\TU/EBGaramond12-Regular.otf(2)/m/n/12 The chapter concludes by outlining dir
+ections for future work, particularly concerning richer
+ []
+
+[5]
+\openout2 = `chapters/2.background.aux'.
+
+ (chapters/2.background.tex
+Chapter 2.
+[6
+
+
+
+
+]
+Overfull \hbox (2.04364pt too wide) in paragraph at lines 74--89
+[] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Related work: simulation in contai
+ner terminals[] \TU/EBGaramond12-Regular.otf(2)/m/n/12 Terminal managers decide
+ about
+ []
+
+[7]
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
+(Font)              scaled to size 10.0pt on input line 126.
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond-SemiBold scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond-SemiBold scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Italic scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Italic scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond-SemiBoldItalic scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             EBGaramond-SemiBoldItalic scale = 1.0.
+
+
+Package fontspec Info: 
+(fontspec)             Font family 'EBGaramond12-Regular.otf(4)' created for
+(fontspec)             font 'EBGaramond12-Regular.otf' with options
+(fontspec)             [Ligatures=TeX,Path={fonts/EB
+(fontspec)             Garamond/},ItalicFont={EBGaramond12-Italic.otf},BoldFont
+={EBGaramond-SemiBold.otf},BoldItalicFont={EBGaramond-SemiBoldItalic.otf},Numbe
+rs=OldStyle,Ligatures={Common,
+(fontspec)             TeX},Scale=1.0,RawFeature=+tnum].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.: <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Regular.otf]/OT:script=latn;langua
+ge=dflt;+onum;+liga;+tnum;mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.:
+(fontspec)             <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Regular.otf]/OT:script=latn;langua
+ge=dflt;+onum;+liga;+tnum;+smcp;mapping=tex-text;"
+(fontspec)             - 'bold' (b/n) with NFSS spec.: <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond-SemiBold.otf]/OT:script=latn;languag
+e=dflt;+onum;+liga;+tnum;mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.:
+(fontspec)             <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond-SemiBold.otf]/OT:script=latn;languag
+e=dflt;+onum;+liga;+tnum;+smcp;mapping=tex-text;"
+(fontspec)             - 'italic' (m/it) with NFSS spec.: <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Italic.otf]/OT:script=latn;languag
+e=dflt;+onum;+liga;+tnum;mapping=tex-text;"
+(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.:
+(fontspec)             <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond12-Italic.otf]/OT:script=latn;languag
+e=dflt;+onum;+liga;+tnum;+smcp;mapping=tex-text;"
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
+(fontspec)             <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond-SemiBoldItalic.otf]/OT:script=latn;l
+anguage=dflt;+onum;+liga;+tnum;mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.:
+(fontspec)             <->s*[1.0]"[fonts/EB
+(fontspec)             Garamond/EBGaramond-SemiBoldItalic.otf]/OT:script=latn;l
+anguage=dflt;+onum;+liga;+tnum;+smcp;mapping=tex-text;"
+
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/n' will be
+(Font)              scaled to size 12.0pt on input line 128.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/b/n' will be
+(Font)              scaled to size 12.0pt on input line 130.
+LaTeX Font Info:    Font shape `TU/Lato-Reg.ttf(0)/b/n' will be
+(Font)              scaled to size 9.5907pt on input line 142.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `Lato-Reg.ttf' (encoding: TU).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+LaTeX Font Info:    Font shape `TU/Lato-Reg.ttf(0)/b/n' will be
+(Font)              scaled to size 7.99225pt on input line 142.
+LaTeX Font Info:    Font shape `TU/Lato-Reg.ttf(0)/m/n' will be
+(Font)              scaled to size 9.71375pt on input line 142.
+LaTeX Font Info:    Font shape `TU/Lato-Reg.ttf(0)/m/n' will be
+(Font)              scaled to size 8.09479pt on input line 142.
+ [8] [9]
+LaTeX Font Info:    Font shape `TU/SourceCodePro-Regular.ttf(0)/m/n' will be
+(Font)              scaled to size 8.54172pt on input line 235.
+LaTeX Font Info:    Font shape `TU/SourceCodePro-Regular.ttf(0)/m/it' will be
+(Font)              scaled to size 8.54172pt on input line 235.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
+(Font)              scaled to size 7.0pt on input line 235.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
+(Font)              scaled to size 5.0pt on input line 235.
+LaTeX Font Info:    Font shape `TU/Lato-Reg.ttf(0)/m/n' will be
+(Font)              scaled to size 5.66635pt on input line 252.
+LaTeX Font Info:    Font shape `TU/Lato-Reg.ttf(0)/m/n' will be
+(Font)              scaled to size 4.0474pt on input line 252.
+ [10] [11] [12] [13]
+Overfull \hbox (1.95619pt too wide) in paragraph at lines 469--475
+[] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Coverage[] \TU/EBGaramond12-Regula
+r.otf(2)/m/n/12 Fitness gives partial credit. A trace with one deviation among 
+six events still reaches
+ []
+
+
+Underfull \vbox (badness 3492) has occurred while \output is active []
+
+ [14]
+[15] [16]
+LaTeX Font Info:    Font shape `TU/SourceCodePro-Regular.ttf(0)/m/n' will be
+(Font)              scaled to size 9.35316pt on input line 609.
+ [17]
+Underfull \vbox (badness 1117) has occurred while \output is active []
+
+ [18]
+Overfull \hbox (28.09363pt too wide) in paragraph at lines 688--696
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 therefore chooses by five-fold cross-val
+idation. It tries every tree depth from one to \TU/SourceCodePro-Regular.ttf(0)
+/m/it/12 max_depth_tree
+ []
+
+[19] (figures/schemas/prosit_arrival_tree.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [20]
+[21] [22] [23]) [24]
+\openout2 = `chapters/4.data_prep.aux'.
+
+ (chapters/4.data_prep.tex
+Chapter 3.
+[25
+
+
+
+
+] [26]
+Overfull \hbox (155.42159pt too wide) in paragraph at lines 107--108
+[]\TU/EBGaramond12-Regular.otf(2)/m/n/10.95 The pipeline from four source syste
+ms to one truck-visit event log, as one figure (figures/schemas/event_log_engin
+eering_pipeline.png)
+ []
+
+[27] [28] [29]
+Overfull \hbox (1.85698pt too wide) in paragraph at lines 230--239
+\TU/SourceCodePro-Regular.ttf(0)/m/it/12 has_reefer \TU/EBGaramond12-Regular.ot
+f(2)/m/n/12 are aggregated using a logical OR across the complete manifest. The
+ \TU/SourceCodePro-Regular.ttf(0)/m/it/12 full_ratio
+ []
+
+
+Overfull \hbox (95.19153pt too wide) in paragraph at lines 230--239
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 records the share of loaded containers, 
+while \TU/SourceCodePro-Regular.ttf(0)/m/it/12 container_complexity_mean \TU/EB
+Garamond12-Regular.otf(2)/m/n/12 and \TU/SourceCodePro-Regular.ttf(0)/m/it/12 c
+ontainer_complexity_sum
+ []
+
+
+Overfull \hbox (38.1074pt too wide) in paragraph at lines 242--250
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 overall \TU/SourceCodePro-Regular.ttf(0)
+/m/it/12 gate_utilization\TU/EBGaramond12-Regular.otf(2)/m/n/12 , the aggregate
+d \TU/SourceCodePro-Regular.ttf(0)/m/it/12 rmg_utilization\TU/EBGaramond12-Regu
+lar.otf(2)/m/n/12 , and the area-level \TU/SourceCodePro-Regular.ttf(0)/m/it/12
+ vc_utilization
+ []
+
+
+Overfull \hbox (27.8019pt too wide) in paragraph at lines 253--260
+\TU/SourceCodePro-Regular.ttf(0)/m/it/12 mt_demand \TU/EBGaramond12-Regular.otf
+(2)/m/n/12 attributes separate this load by operational area. For single-block 
+visits, \TU/SourceCodePro-Regular.ttf(0)/m/it/12 target_demand
+ []
+
+[30] [31] [32]
+Overfull \hbox (6.15575pt too wide) in paragraph at lines 362--364
+[]\TU/EBGaramond12-Regular.otf(2)/m/n/12 Delay peaks at a frequency comparable 
+to the observed one, excluding disruption episodes,
+ []
+
+) [33] [34]
+\openout2 = `chapters/5.discovery_prosit.aux'.
+
+ (chapters/5.discovery_prosit.tex
+Chapter 4.
+File: figures/simulation_model/sim_architecture.png Graphic file (type bmp)
+<figures/simulation_model/sim_architecture.png>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [35
+
+
+
+
+]
+File: figures/simulation_model/sim_control_flow_guard.png Graphic file (type bm
+p)
+<figures/simulation_model/sim_control_flow_guard.png>
+
+Underfull \vbox (badness 4416) has occurred while \output is active []
+
+ [36]
+[37] (tables/sim_components.tex) (tables/sim_hyperparameters.tex)
+File: figures/simulation_model/sim_tree_arrivals.png Graphic file (type bmp)
+<figures/simulation_model/sim_tree_arrivals.png>
+ [38] [39]
+File: figures/simulation_model/sim_tree_routing_first_rmg_receive.png Graphic f
+ile (type bmp)
+<figures/simulation_model/sim_tree_routing_first_rmg_receive.png>
+File: figures/simulation_model/sim_routing_first_stop.png Graphic file (type bm
+p)
+<figures/simulation_model/sim_routing_first_stop.png>
+
+[40]
+File: figures/simulation_model/sim_tree_waiting_block.png Graphic file (type bm
+p)
+<figures/simulation_model/sim_tree_waiting_block.png>
+File: figures/simulation_model/sim_tree_exec_rmg_receive.png Graphic file (type
+ bmp)
+<figures/simulation_model/sim_tree_exec_rmg_receive.png>
+ [41] (tables/sim_capacities.tex) [42] (tables/sim_worked_example.tex))
+[43] [44]
+\openout2 = `chapters/6.experiments.aux'.
+
+ (chapters/6.experiments.tex
+Chapter 5.
+File: figures/schemas/experiment_flow_e1_e3.pdf Graphic file (type pdf)
+<use figures/schemas/experiment_flow_e1_e3.pdf>
+[45
+
+
+
+
+] [46]
+Overfull \hbox (21.61574pt too wide) in paragraph at lines 74--80
+[]\TU/EBGaramond12-Regular.otf(2)/m/n/12 Quantify how much of the remaining dev
+iation between simulated and observed turnaround
+ []
+
+[47]
+Underfull \vbox (badness 3148) has occurred while \output is active []
+
+ [48]
+[49] [50]
+Overfull \hbox (31.61234pt too wide) in paragraph at lines 245--260
+[]\TU/EBGaramond12-Regular.otf(2)/m/n/12 The sequence of events within a case i
+s taken from the explicit order attribute \TU/SourceCodePro-Regular.ttf(0)/m/it
+/12 case:event:order\TU/EBGaramond12-Regular.otf(2)/m/n/12 .
+ []
+
+[51] [52] [53] [54] [55] [56] (figures/schemas/repair_patterns.tex
+LaTeX Font Info:    Font shape `TU/Lato-Reg.ttf(0)/m/it' will be
+(Font)              scaled to size 8.09479pt on input line 143.
+) [57]
+[58]
+Overfull \hbox (0.48045pt too wide) in paragraph at lines 556--556
+|[]\TU/EBGaramond12-Regular.otf(2)/m/sc/17.28 Baseline Simulation of Control-Fl
+ow Candidates
+ []
+
+[59]
+
+LaTeX Warning: Float too large for page by 50.86424pt on input line 637.
+
+[60] [61] [62] [63] [64] [65] [66]
+
+LaTeX Warning: Float too large for page by 158.31989pt on input line 952.
+
+[67] [68]
+Overfull \hbox (3.09169pt too wide) in paragraph at lines 1006--1014
+[] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Status after E4[] \TU/EBGaramond12
+-Regular.otf(2)/m/n/12 The final configuration of E4 passed the physical and th
+e extreme-condition
+ []
+
+[69] [70] [71]) [72]
+\openout2 = `chapters/7.results.aux'.
+
+ (chapters/7.results.tex
+Chapter 6.
+File: figures/discovery_prom/e1_split13apr_fitness_precision_train.pdf Graphic 
+file (type pdf)
+<use figures/discovery_prom/e1_split13apr_fitness_precision_train.pdf>
+File: figures/discovery_prom/e1_split13apr_fitness_precision_test.pdf Graphic f
+ile (type pdf)
+<use figures/discovery_prom/e1_split13apr_fitness_precision_test.pdf>
+File: figures/discovery_prom/e1_split13apr_variant_coverage.pdf Graphic file (t
+ype pdf)
+<use figures/discovery_prom/e1_split13apr_variant_coverage.pdf>
+(tables/rq1_e2_candidates.tex) (tables/rq1_tail_relevance.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/n' will be
+(Font)              scaled to size 10.0pt on input line 5.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/b/n' will be
+(Font)              scaled to size 10.0pt on input line 7.
+
+Overfull \hbox (18.76761pt too wide) in paragraph at lines 5--20
+ [][] 
+ []
+
+) [73
+
+
+
+
+] [74] [75]
+Overfull \hbox (3.99718pt too wide) in paragraph at lines 121--121
+[]|\TU/EBGaramond12-Regular.otf(2)/b/n/10.95 Precision|  
+ []
+
+
+Overfull \hbox (3.25258pt too wide) in paragraph at lines 121--121
+[]|\TU/EBGaramond12-Regular.otf(2)/b/n/10.95 (PM4Py)|  
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [76]
+Overfull \hbox (5.99242pt too wide) in paragraph at lines 200--200
+[]|\TU/EBGaramond12-Regular.otf(2)/b/n/10.95 Sound|  
+ []
+
+
+Overfull \hbox (0.87083pt too wide) in paragraph at lines 200--200
+[]|\TU/EBGaramond12-Regular.otf(2)/m/n/10.95 40.64%|  
+ []
+
+[77] [78]
+Overfull \hbox (44.26656pt too wide) in paragraph at lines 231--240
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 miner returns the same net, which permit
+s only the most frequent sequence, \TU/SourceCodePro-Regular.ttf(0)/m/it/12 Gat
+e In > RMG_receive
+ []
+
+
+Overfull \hbox (4.36621pt too wide) in paragraph at lines 241--246
+[]\TU/EBGaramond12-Regular.otf(2)/m/n/12 In Figure [][]6.4[][], only ILP 1.00, 
+IM 0.0 and the Heuristics nets lie on the front of non-dominated
+ []
+
+File: figures/discovery_prom/e1_fitness_precision.pdf Graphic file (type pdf)
+<use figures/discovery_prom/e1_fitness_precision.pdf>
+[79]
+Overfull \hbox (7.39146pt too wide) in paragraph at lines 326--336
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 quence, \TU/SourceCodePro-Regular.ttf(0)
+/m/it/12 Gate In > RMG_delivery > RMG_receive > Gate Out\TU/EBGaramond12-Regula
+r.otf(2)/m/n/12 , is a double cycle whose
+ []
+
+
+Underfull \vbox (badness 1072) has occurred while \output is active []
+
+ [80]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [81]
+File: figures/discovery_prom/im00_full.pdf Graphic file (type pdf)
+<use figures/discovery_prom/im00_full.pdf>
+
+[82]
+Overfull \hbox (35.11028pt too wide) in paragraph at lines 415--416
+\TU/EBGaramond12-Regular.otf(2)/m/n/10.95 on the five E1 candidates on the spli
+t at 13 April (process_discovery/outputs/runs/e2_split13apr_20261106)
+ []
+
+(tables/rq1_e2_repair.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+
+Overfull \hbox (79.99982pt too wide) in paragraph at lines 5--17
+ [][] 
+ []
+
+) [83]
+Overfull \hbox (5.9327pt too wide) in paragraph at lines 463--471
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 two-stop sequences are \TU/SourceCodePro
+-Regular.ttf(0)/m/it/12 RMG_mixed > RMG_delivery \TU/EBGaramond12-Regular.otf(2
+)/m/n/12 and \TU/SourceCodePro-Regular.ttf(0)/m/it/12 LL_mixed > LL_receive\TU/
+EBGaramond12-Regular.otf(2)/m/n/12 . Both
+ []
+
+[84] [85]
+File: figures/discovery_2026/im0_r5_r12_state_machine.png Graphic file (type bm
+p)
+<figures/discovery_2026/im0_r5_r12_state_machine.png>
+
+Overfull \hbox (5.04343pt too wide) in paragraph at lines 596--596
+[]|\TU/EBGaramond12-Regular.otf(2)/b/n/12 Validation 
+ []
+
+[86] [87] [88]
+Overfull \hbox (1.83179pt too wide) in paragraph at lines 632--633
+[]\TU/EBGaramond12-Regular.otf(2)/m/n/10.95 OUTDATED (ProSiT 1.0.3, candidates 
+CONTRACT/IM0/IM0_R5_R12, validation partition).
+ []
+
+(tables/rq1_e3_candidates.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+
+Overfull \hbox (46.35983pt too wide) in paragraph at lines 5--19
+ [][] 
+ []
+
+) (tables/rq1_e3_2x2.tex
+
+Package tabularx Warning: X Columns too narrow (table too wide)
+(tabularx)                 on input line 18.
+
+
+Overfull \hbox (2.68001pt too wide) in paragraph at lines 18--18
+[]|\TU/EBGaramond12-Regular.otf(2)/b/n/10 IM 
+ []
+
+
+Overfull \hbox (3.89pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/b/n/10 0.0, 
+ []
+
+
+Overfull \hbox (5.75pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/b/n/10 sim- 
+ []
+
+
+Overfull \hbox (9.91pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/b/n/10 lated 
+ []
+
+
+Overfull \hbox (8.72pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/b/n/10 with 
+ []
+
+
+Overfull \hbox (18.97pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/b/n/10 ProSiT|  
+ []
+
+
+Overfull \hbox (26.45pt too wide) in paragraph at lines 18--18
+[]|\TU/EBGaramond12-Regular.otf(2)/m/n/10 Observed 
+ []
+
+
+Overfull \hbox (6.23001pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 (test 
+ []
+
+
+Overfull \hbox (4.86pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 log)|  
+ []
+
+
+Overfull \hbox (13.54pt too wide) in paragraph at lines 18--18
+[]|\TU/EBGaramond12-Regular.otf(2)/m/n/10 Naive: 
+ []
+
+
+Overfull \hbox (6.46pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 orig- 
+ []
+
+
+Overfull \hbox (1.67pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 nal 
+ []
+
+
+Overfull \hbox (3.44pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 net, 
+ []
+
+
+Overfull \hbox (12.01pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 guard|  
+ []
+
+
+Overfull \hbox (14.95pt too wide) in paragraph at lines 18--18
+[]|\TU/EBGaramond12-Regular.otf(2)/m/n/10 Guard 
+ []
+
+
+Overfull \hbox (8.25pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 only: 
+ []
+
+
+Overfull \hbox (6.46pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 orig- 
+ []
+
+
+Overfull \hbox (1.67pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 nal 
+ []
+
+
+Overfull \hbox (2.3pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 net 
+ []
+
+
+Overfull \hbox (12.01pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 guard|  
+ []
+
+
+Overfull \hbox (15.57pt too wide) in paragraph at lines 18--18
+[]|\TU/EBGaramond12-Regular.otf(2)/m/n/10 Repair 
+ []
+
+
+Overfull \hbox (8.25pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 only: 
+ []
+
+
+Overfull \hbox (13.91pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 paired 
+ []
+
+
+Overfull \hbox (3.44pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 net, 
+ []
+
+
+Overfull \hbox (12.01pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 guard|  
+ []
+
+
+Overfull \hbox (10.26pt too wide) in paragraph at lines 18--18
+[]|\TU/EBGaramond12-Regular.otf(2)/m/n/10 Both: 
+ []
+
+
+Overfull \hbox (13.91pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 paired 
+ []
+
+
+Overfull \hbox (2.3pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 net 
+ []
+
+
+Overfull \hbox (12.01pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 guard|  
+ []
+
+
+Overfull \hbox (21.7pt too wide) in paragraph at lines 18--18
+[]|\TU/EBGaramond12-Regular.otf(2)/m/n/10 Control: 
+ []
+
+
+Overfull \hbox (8.88pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 same 
+ []
+
+
+Overfull \hbox (3.04001pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 lan- 
+ []
+
+
+Overfull \hbox (11.84pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 guage 
+ []
+
+
+Overfull \hbox (7.38pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 state 
+ []
+
+
+Overfull \hbox (3.14pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 ma- 
+ []
+
+
+Overfull \hbox (11.67pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 chine, 
+ []
+
+
+Overfull \hbox (12.01pt too wide) in paragraph at lines 18--18
+\TU/EBGaramond12-Regular.otf(2)/m/n/10 guard|  
+ []
+
+
+Overfull \hbox (127.23978pt too wide) in alignment at lines 18--18
+[][][][][][][] 
+ []
+
+
+LaTeX Warning: Float too large for page by 95.93314pt on input line 21.
+
+)
+Overfull \hbox (21.32642pt too wide) in paragraph at lines 671--671
+[]|\TU/EBGaramond12-Regular.otf(2)/b/n/12 CONTRACT|  
+ []
+
+[89] [90]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [91]
+Overfull \hbox (6.80379pt too wide) in paragraph at lines 757--765
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 Under identical simulation conditions, t
+he repaired model produces visits that respect all checked
+ []
+
+[92] [93] [94]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [95]
+[96] [97] [98]
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+ [99] (tables/rq2_chain.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/n' will be
+(Font)              scaled to size 8.0pt on input line 5.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/b/n' will be
+(Font)              scaled to size 8.0pt on input line 7.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
+(Font)              scaled to size 8.0pt on input line 10.
+) [100]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [101]
+(tables/rq2_selection.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+) (tables/rq2_loo.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+) [102] [103]
+(tables/sim_kpis.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/n' will be
+(Font)              scaled to size 10.95pt on input line 4.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/b/n' will be
+(Font)              scaled to size 10.95pt on input line 6.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
+(Font)              scaled to size 10.95pt on input line 8.
+)
+File: figures/simulation_model/sim_ttt_distribution.png Graphic file (type bmp)
+
+<figures/simulation_model/sim_ttt_distribution.png>
+File: figures/simulation_model/sim_hourly_ttt.png Graphic file (type bmp)
+<figures/simulation_model/sim_hourly_ttt.png>
+File: figures/simulation_model/sim_load_profiles.png Graphic file (type bmp)
+<figures/simulation_model/sim_load_profiles.png>
+File: figures/simulation_model/sim_ttt_decomposition.png Graphic file (type bmp
+)
+<figures/simulation_model/sim_ttt_decomposition.png>
+ (tables/rq2_profiles.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
+(Font)              scaled to size 10.0pt on input line 9.
+ [104] [105])
+(tables/rq2_attribution.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+) [106] [107] (tables/rq2_acceptance.tex) [108]
+[109] [110]) [111]
+\openout2 = `chapters/8.discussion.aux'.
+
+ (chapters/8.discussion.tex
+Chapter 7.
+[112
+
+
+
+
+]
+Overfull \hbox (11.43027pt too wide) in paragraph at lines 23--23
+|[]\TU/EBGaramond12-Regular.otf(2)/m/sc/17.28 Data-Aware Simulation in a Physic
+al Logistics Pro-
+ []
+
+[113]) [114]
+\openout2 = `chapters/9.conclusion.aux'.
+
+ (chapters/9.conclusion.tex
+Chapter 8.
+[115
+
+
+
+
+] [116]
+Overfull \hbox (3.85175pt too wide) in paragraph at lines 53--65
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 process activity, a richer simulation fo
+rmalism could include location directly in the model
+ []
+
+
+Overfull \hbox (6.37306pt too wide) in paragraph at lines 66--77
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 ing resource labels as fully interchange
+able. Equipment availability and assignment should
+ []
+
+
+Overfull \hbox (6.29707pt too wide) in paragraph at lines 66--77
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 distribution. An object-centric represen
+tation could preserve the relations between trucks,
+ []
+
+) [117]
+\openout2 = `appendices/observed_behaviour.aux'.
+
+ (appendices/observed_behaviour.tex
+Appendix A.
+File: figures/observed/hourly_arrivals_ttt.png Graphic file (type bmp)
+<figures/observed/hourly_arrivals_ttt.png>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [118
+
+
+
+
+]
+File: figures/observed/ttt_components_by_hour.png Graphic file (type bmp)
+<figures/observed/ttt_components_by_hour.png>
+File: figures/observed/ttt_vs_wip.png Graphic file (type bmp)
+<figures/observed/ttt_vs_wip.png>
+
+[119] [120]
+File: figures/observed/stop_vs_unit_wip.png Graphic file (type bmp)
+<figures/observed/stop_vs_unit_wip.png>
+
+Overfull \hbox (5.77689pt too wide) in paragraph at lines 145--145
+[]|\TU/EBGaramond12-Regular.otf(2)/b/n/12 Approach|  
+ []
+
+[121] [122]
+Overfull \hbox (5.20459pt too wide) in paragraph at lines 230--231
+\TU/EBGaramond12-Regular.otf(2)/m/n/10.95 truck; exit gate not a bottleneck in 
+normal operation (source: peak_analysis/bottleneck_20261009,
+ []
+
+[123]) [124]
+\openout2 = `appendices/discovery_results.aux'.
+
+ (appendices/discovery_results.tex
+Appendix B.
+(tables/rq1_e1_conformance.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+
+Overfull \hbox (17.11986pt too wide) in paragraph at lines 5--32
+ [][] 
+ []
+
+)) [125
+
+
+
+
+] [126]
+\openout2 = `appendices/prosit_model_inventory.aux'.
+
+ (appendices/prosit_model_inventory.tex
+Appendix C.
+[127
+
+
+
+
+]) [128]
+\openout2 = `appendices/model_inspection_and_reproduction.aux'.
+
+ (appendices/model_inspection_and_reproduction.tex
+Appendix D.
+File: figures/discovery/dfg_frequency_inductive_training.png Graphic file (type
+ bmp)
+<figures/discovery/dfg_frequency_inductive_training.png>
+
+Overfull \hbox (7.43576pt too wide) in paragraph at lines 39--47
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 The baseline, T22-closure and increased-
+demand models are retained as separate serialized ProSiT
+ []
+
+[129
+
+
+
+
+] [130]) [131] (dissertation.bbl
+** WARNING: IEEEtran.bst: No hyphenation pattern has been
+** loaded for the language `English'. Using the pattern for
+** the default language instead.
+** WARNING: IEEEtran.bst: No hyphenation pattern has been
+** loaded for the language `English'. Using the pattern for
+** the default language instead.
+[132
+
+
+
+
+] [133] [134] [135] [136] [137] [138] [139]
+Underfull \hbox (badness 10000) in paragraph at lines 460--465
+[]\TU/EBGaramond12-Regular.otf(2)/m/n/12 D. Chapela-Campa, I. Benchekroun, O. B
+aron, M. Dumas, D. Krass, and
+ []
+
+
+Underfull \hbox (badness 2426) in paragraph at lines 460--465
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 A. Senderovich, “Can i trust my simulati
+on model? measuring the quality of
+ []
+
+[140]) [141] (dissertation.aux (chapters/1.introduction.aux)
+(chapters/2.background.aux) (chapters/4.data_prep.aux)
+(chapters/5.discovery_prosit.aux) (chapters/6.experiments.aux)
+(chapters/7.results.aux) (chapters/8.discussion.aux) (chapters/9.conclusion.aux
+) (appendices/observed_behaviour.aux) (appendices/discovery_results.aux)
+(appendices/prosit_model_inventory.aux)
+(appendices/model_inspection_and_reproduction.aux))
+ ***********
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-12-24>
+ ***********
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+Package rerunfilecheck Info: File `dissertation.out' has not changed.
+(rerunfilecheck)             Checksum: 1DDA01862EFA52B84BDD47F9351B6A28;15186.
+ ) 
+Here is how much of TeX's memory you used:
+ 71656 strings out of 402986
+ 1792987 string characters out of 5448710
+ 2578600 words of memory out of 5000000
+ 99346 multiletter control sequences out of 15000+600000
+ 636685 words of font info for 162 fonts, out of 8000000 for 9000
+ 1348 hyphenation exceptions out of 8191
+ 103i,12n,131p,1039b,2965s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+Output written on dissertation.xdv (161 pages, 3384868 bytes).
