@@ -202,6 +202,11 @@ S.~J.~J. Leemans, D.~Fahland, and W.~M.~P. van~der Aalst, ``Discovering
   Notes in Business Information Processing, vol. 171.\hskip 1em plus 0.5em
   minus 0.4em\relax Springer, 2014, pp. 66--78.
 
+\bibitem{Hopcroft2006Automata}
+J.~E. Hopcroft, R.~Motwani, and J.~D. Ullman, \emph{Introduction to Automata
+  Theory, Languages, and Computation}, 3rd~ed.\hskip 1em plus 0.5em minus
+  0.4em\relax Pearson Addison-Wesley, 2006.
+
 \bibitem{vanderAalst2004AlphaMiner}
 W.~M.~P. van~der Aalst, T.~Weijters, and L.~Maruster, ``Workflow mining:
   Discovering process models from event logs,'' \emph{IEEE Transactions on
@@ -309,6 +314,11 @@ F.~Mannhardt, M.~de~Leoni, H.~A. Reijers, and W.~M.~P. van~der Aalst,
   in Business Information Processing, vol. 256.\hskip 1em plus 0.5em minus
   0.4em\relax Springer, 2016.
 
+\bibitem{FelliDeLeoniMontali2021}
+P.~Felli, M.~de~Leoni, and M.~Montali, ``Soundness verification of data-aware
+  process models with variable-to-variable conditions,'' \emph{Fundamenta
+  Informaticae}, vol. 182, no.~1, 2021.
+
 \bibitem{schuster2022}
 D.~Schuster, S.~J. van Zelst, and W.~M.~P. van~der Aalst, ``Utilizing domain
   knowledge in data-driven process discovery: A literature review,''
@@ -338,15 +348,15 @@ P.~M. Dixit, J.~C. A.~M. Buijs, W.~M.~P. van~der Aalst, B.~F.~A. Hompes, and
 K.~Revoredo, ``On the use of domain knowledge for process model repair,''
   \emph{Software and Systems Modeling}, 2023.
 
-\bibitem{RWFahland2015Repair}
-D.~Fahland and W.~M.~P. van~der Aalst, ``Model repair -- aligning process
-  models to reality,'' \emph{Information Systems}, vol.~47, pp. 220--243, 2015.
-
 \bibitem{RWdeLeoni2022Enhancement}
 M.~de~Leoni, ``Foundations of process enhancement,'' in \emph{Process Mining
   Handbook}, ser. Lecture Notes in Business Information Processing, W.~M.~P.
   van~der Aalst and J.~Carmona, Eds.\hskip 1em plus 0.5em minus 0.4em\relax
   Cham: Springer, 2022, vol. 448, pp. 243--273.
+
+\bibitem{RWFahland2015Repair}
+D.~Fahland and W.~M.~P. van~der Aalst, ``Model repair -- aligning process
+  models to reality,'' \emph{Information Systems}, vol.~47, pp. 220--243, 2015.
 
 \bibitem{RWKalenkova2020NonLocal}
 A.~Kalenkova, J.~Carmona, A.~Polyvyanyy, and M.~La~Rosa, ``Automated repair of
@@ -386,6 +396,12 @@ A.~Adriansyah, B.~F. van Dongen, and W.~M.~P. van~der Aalst, ``Conformance
   International Enterprise Distributed Object Computing Conference}.\hskip 1em
   plus 0.5em minus 0.4em\relax IEEE, 2011, pp. 55--64.
 
+\bibitem{MunozGama2010FreshLook}
+J.~Mu{\~n}oz-Gama and J.~Carmona, ``A fresh look at precision in process
+  conformance,'' in \emph{Business Process Management (BPM 2010)}, ser. Lecture
+  Notes in Computer Science, vol. 6336.\hskip 1em plus 0.5em minus 0.4em\relax
+  Springer, 2010, pp. 211--226.
+
 \bibitem{Adriansyah2012AlignPrecision}
 A.~Adriansyah, J.~Munoz-Gama, J.~Carmona, B.~F. van Dongen, and W.~M.~P.
   van~der Aalst, ``Alignment based precision checking,'' in \emph{Business
@@ -396,6 +412,27 @@ A.~Adriansyah, J.~Munoz-Gama, J.~Carmona, B.~F. van Dongen, and W.~M.~P.
 \bibitem{Adriansyah2015Precision}
 ------, ``Measuring precision of modeled behavior,'' \emph{Information Systems
   and e-Business Management}, vol.~13, no.~1, pp. 37--67, 2015.
+
+\bibitem{Tax2018Imprecisions}
+N.~Tax, X.~Lu, N.~Sidorova, D.~Fahland, and W.~M.~P. van~der Aalst, ``The
+  imprecisions of precision measures in process mining,'' \emph{Information
+  Processing Letters}, vol. 135, pp. 1--8, 2018.
+
+\bibitem{Syring2019Propositions}
+A.~F. Syring, N.~Tax, and W.~M.~P. van~der Aalst, ``Evaluating conformance
+  measures in process mining using conformance propositions,'' in
+  \emph{Transactions on Petri Nets and Other Models of Concurrency XIV}, ser.
+  Lecture Notes in Computer Science.\hskip 1em plus 0.5em minus 0.4em\relax
+  Springer, 2019, vol. 11790, pp. 192--221.
+
+\bibitem{vanderAalst2018Propositions}
+\BIBentryALTinterwordspacing
+W.~M.~P. van~der Aalst, ``Relating process models and event logs -- 21
+  conformance propositions,'' in \emph{Proceedings of the International
+  Workshop on Algorithms \& Theories for the Analysis of Event Data (ATAED
+  2018)}, ser. CEUR Workshop Proceedings, vol. 2115, 2018, pp. 56--74.
+  [Online]. Available: \url{https://ceur-ws.org/Vol-2115/ATAED2018-56-74.pdf}
+\BIBentrySTDinterwordspacing
 
 \bibitem{Polyvyanyy2020Monotone}
 A.~Polyvyanyy, A.~Solti, M.~Weidlich, C.~Di~Ciccio, and J.~Mendling, ``Monotone
@@ -497,11 +534,6 @@ T.~Gneiting and A.~E. Raftery, ``Strictly proper scoring rules, prediction, and
   \url{https://bericht.hhla.de/geschaeftsbericht-2025/_assets/downloads/HHLA_2025_Geschaeftsbericht.pdf}
 \BIBentrySTDinterwordspacing
 
-\bibitem{FelliDeLeoniMontali2021}
-P.~Felli, M.~de~Leoni, and M.~Montali, ``Soundness verification of data-aware
-  process models with variable-to-variable conditions,'' \emph{Fundamenta
-  Informaticae}, vol. 182, no.~1, 2021.
-
 \bibitem{DeLaBriandais1959Trie}
 R.~de~la Briandais, ``File searching using variable length keys,'' in
   \emph{Proceedings of the Western Joint Computer Conference}.\hskip 1em plus
@@ -511,11 +543,6 @@ R.~de~la Briandais, ``File searching using variable length keys,'' in
 H.~M.~W. Verbeek, T.~Basten, and W.~M.~P. van~der Aalst, ``Diagnosing workflow
   processes using {Woflan},'' \emph{The Computer Journal}, vol.~44, no.~4, pp.
   246--279, 2001.
-
-\bibitem{Taymouri2020LocalSearch}
-F.~Taymouri and J.~Carmona, ``Computing alignments of well-formed process
-  models using local search,'' \emph{ACM Transactions on Software Engineering
-  and Methodology}, vol.~29, no.~3, pp. 15:1--15:41, 2020.
 
 \bibitem{Russell2006WorkflowPatterns}
 N.~Russell, A.~H.~M. ter Hofstede, W.~M.~P. van~der Aalst, and N.~Mulyar,

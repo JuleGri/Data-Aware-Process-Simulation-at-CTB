@@ -262,11 +262,9 @@ First, combinations of silent skips can admit behaviour that never occurs,
 such as the visit without a stop in Figure~\ref{fig:bg_petri_silent}. Because
 silent paths leave no trace, this is easy to overlook. Second, alignments
 (Section~\ref{sec:astar_alignment_definition}) must decide for every silent
-transition whether to fire it, which enlarges the search. Third, the simulator
-must decide them as well. It draws each step separately, without looking ahead
-(Section~\ref{sec:prosit_execution}). A chain of likely skips can therefore
-produce a rare or impossible visit, and a silent parallel split can send one
-truck to two stops at the same time.
+transition whether to fire it, which enlarges the search. Third, a simulator
+has to decide them as well, although they leave no trace in the training data
+(Section~\ref{sec:prosit_limits}).
 
 \paragraph{State machines}
 A \emph{state machine} is a Petri net in which every transition has exactly
@@ -277,8 +275,11 @@ machine cannot express parallelism. For a truck, this is not a loss: its stops
 never run in parallel. Every finite set of sequences, and more generally every
 language accepted by a finite automaton, can be written as a sound state
 machine workflow net. Each automaton state becomes a place and each automaton
-edge a visible transition. This encoding is used for the repaired models in E2
-(Section~\ref{sec:exp_rules}).
+edge a visible transition. Among the deterministic automata that accept a
+language there is a unique smallest one, up to renaming of states
+\cite{Hopcroft2006Automata}. Its state machine is therefore a canonical
+representation of the language: two nets with the same language give the same
+state machine. This encoding is used in E2 (Section~\ref{sec:exp_rules}).
 
 In such an encoding, the same activity label usually appears on several
 transitions, one for each state in which the activity can happen. These are
@@ -358,7 +359,9 @@ timestamps. ``The number of stops equals the number of planned stops'' depends
 on a case attribute. Such rules cannot be written in the untimed language of a
 net. In data-aware Petri nets they become \emph{guards}: conditions on data
 that a transition must satisfy before it may fire
-\cite{Mannhardt2016Precision}.
+\cite{Mannhardt2016Precision}. With guards, soundness also depends on the data:
+every case must still be able to complete under the guards
+\cite{FelliDeLeoniMontali2021}.
 
 \paragraph{Related work: domain knowledge in discovery and repair}
 Schuster et al.\ classify how domain knowledge enters process discovery
@@ -384,8 +387,11 @@ candidates that satisfy user-specified Declare constraints best
 \cite{RWDixit2015Domain}. Revoredo discusses how domain knowledge can guide
 the repair of a process model \cite{Revoredo2023DomainRepair}.
 
+Process enhancement changes a discovered model in two ways: \emph{repair}
+changes the model so that it reflects reality better, and \emph{extension} adds
+a perspective such as data, time or resources \cite{Aalst2016,RWdeLeoni2022Enhancement}.
 Classical model repair changes a model so that it can replay every trace of a
-log while staying close to the original \cite{RWFahland2015Repair,RWdeLeoni2022Enhancement}.
+log while staying close to the original \cite{RWFahland2015Repair}.
 This adds behaviour. The opposite direction removes behaviour that the log
 does not support, for example by adding non-local places to a Petri net
 \cite{RWKalenkova2020NonLocal} or by refining process trees
@@ -395,11 +401,9 @@ log and add it \cite{SimulationGuidedRepair2025}. Restricting behaviour that
 the simulator generates too often is named as future work.
 
 \paragraph{Implication for this thesis}
-The repair in E2 uses explicit, declarative domain knowledge a posteriori and
-is fully automatic. It restricts the discovered language to the sequences that
-satisfy the rules and writes the result as a sound state machine. Rules that
-depend on timestamps or attributes are not forced into the net. They are
-handled as guards in the simulator (Section~\ref{sec:prosit_limits}).
+E2 uses explicit, declarative domain knowledge a posteriori and fully
+automatically: sequence rules restrict the language, data rules become guards
+(Section~\ref{sec:exp_rules}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conformance Checking}
@@ -442,19 +446,36 @@ its shortest path alone. Log fitness averages over all traces. A trace
 \emph{fits} if its optimal alignment has no deviation.
 
 \paragraph{Precision}
-Escaping-edges precision is based on alignments
-\cite{Adriansyah2012AlignPrecision,Adriansyah2015Precision}. For every prefix
-of an aligned trace, it compares the activities that the model allows next
-with the activities that the log shows after the same prefix. An activity that
-the model allows but the log never shows after that prefix is an
-\emph{escaping edge}. Precision is one minus the share of escaping edges,
-weighted by how often each prefix occurs. Precision measures have known
-weaknesses. Their value depends on how silent transitions are handled after a
-prefix, so two nets with the same language can receive different values.
-Different tools implement this step differently. ProM and PM4Py can therefore
-report different precision for the same net and log
-\cite{Mannhardt2016Precision}. Section~\ref{sec:exp_discovery_eval} states which
-implementation is used and why.
+Escaping-edges precision replays the log on the model
+\cite{MunozGama2010FreshLook}. For every prefix of a trace, it compares the
+activities that the model allows next with the activities that the log shows
+after the same prefix. An activity that the model allows but the log never shows
+after that prefix is an \emph{escaping edge}. Precision is one minus the share of
+escaping edges, weighted by how often each prefix occurs. The alignment-based
+variant first aligns every trace with the model, so that non-fitting traces can
+be included \cite{Adriansyah2012AlignPrecision,Adriansyah2015Precision}.
+
+The measure can be read on two levels. On the level of transitions, the
+automaton is built from fired transitions, silent ones included
+\cite{Adriansyah2012AlignPrecision}. Two nets with the same language can then
+receive different values \cite{Tax2018Imprecisions,Syring2019Propositions}. On
+the level of activities, the model side after a prefix is the set of activities
+that the language allows next, over every marking the prefix can reach.
+Precision then depends only on the language and the log. This is what the
+proposition BehPro+ asks of a quality measure: the representation of the model
+must not matter \cite{vanderAalst2018Propositions}. The activity level is the
+reference in this thesis, because the thesis compares nets with the same language
+but different representations.
+
+A tool has to know the state of the model after each prefix. The token-based
+implementation keeps one marking per prefix. In a deterministic net without
+silent transitions, this marking is unique, and the value equals the
+activity-level value. With silent transitions, a prefix can reach several
+markings. The tool then chooses one by a heuristic \cite{MunozGama2010FreshLook},
+and the value can deviate from the activity-level value. For the same reason,
+multi-perspective precision assumes that the executed silent transitions are
+known, for example from alignments \cite{Mannhardt2016Precision}.
+Section~\ref{sec:exp_discovery_eval} states how this is handled.
 
 \paragraph{Generalisation}
 Token-based generalisation counts how often each transition is used in the
@@ -660,7 +681,9 @@ cases can arrive; the tree decides \emph{how often}.
 the replay at which it was enabled. The class is 1 if it fired and 0 if another
 transition fired. The tree then predicts the probability that the transition
 fires, given the case attributes and how often each activity has occurred so
-far. Silent transitions get a routing tree like visible ones.
+far. These features describe the case, not the marking of the net. Silent
+transitions get a routing tree like visible ones; when they fired is known only
+from the alignment.
 \item \textbf{Capacity.} By default every resource handles one activity at a
 time. With \emph{multitasking} enabled, a resource whose activities overlap in
 at least a given share of cases gets a capacity of the largest observed overlap
@@ -754,32 +777,10 @@ of each case is stored as well.
 
 \subsection{Hyperparameters}
 \label{sec:prosit_hyperparameters}
-
-Table~\ref{tab:prosit_hyperparameters} lists the hyperparameters of the
-discovery. The values used in this thesis and the reasons are given in
-Section~\ref{sec:exp_baseline}.
-
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabularx}{\textwidth}{L{4.4cm}L{2.2cm}Y}
-\toprule
-\textbf{Parameter} & \textbf{Default} & \textbf{Meaning} \\
-\midrule
-\texttt{max\_depth\_tree} & 5 & Largest tree depth tried in cross-validation. A value below 1 switches all trees off (one distribution or probability per component). \\
-\texttt{min\_samples\_leaf\_cv} & 50, 100, 200 & Minimum leaf sizes tried in cross-validation. \\
-\texttt{use\_workload\_features} & off & Adds the current workload and queue length of a resource as features of the resource choice and the waiting time. Execution times do not use them. \\
-\texttt{enable\_multitasking} & off & Allows a capacity above one (see above). \\
-\texttt{multitasking\_thr} & 0.05 & Share of cases with overlapping activities above which multitasking is assumed. \\
-\texttt{attribute\_mode} & distribution & \emph{distribution}: each attribute drawn on its own; \emph{empirical}: complete observed attribute tuples. \\
-Arrival calendar thresholds & 0.1, 0.7 & Minimum confidence of a slot and minimum share of arrivals the open slots must cover. \\
-Resource calendar thresholds & 0.1, 0.1, 0.4 & Minimum confidence, support and participation of a resource slot. \\
-\texttt{random\_state} & 72 & Seed of the discovery. \\
-\bottomrule
-\end{tabularx}
-\caption{Discovery hyperparameters of ProSiT 1.0.4.}
-\label{tab:prosit_hyperparameters}
-\end{table}
+The discovery has a few hyperparameters: the largest tree depth and the leaf sizes tried in cross-validation,
+whether workload features and multitasking are used, and whether case attributes are drawn as observed
+tuples or one by one. Their defaults, the values used in this thesis and the reasons are listed in
+Table~\ref{tab:exp_e3_config} (Section~\ref{sec:exp_baseline}).
 
 \subsection{Evidence and Limitations}
 \label{sec:prosit_limits}
@@ -821,13 +822,10 @@ latest end of all its activities in progress at the enabling time. For a
 resource that serves several cases side by side, a lane may already be free much
 earlier.
 \end{enumerate}
-The first three properties are the reason why the control-flow model matters
-more for a simulator than for a descriptive model. This thesis addresses them
-with the rule repair of E2 and with a data-aware \emph{stop guard}: before each
-routing draw, transitions that would break a data rule get the weight zero
-(Section~\ref{sec:exp_baseline}). This is the guard of a data-aware Petri net
-(Section~\ref{sec:bg_rules}), evaluated inside the ProSiT loop. Properties four
-to seven concern the physical constraints of the blocks and are examined in E4
+The first three properties make the control-flow model more important for a
+simulator than for a descriptive model; E2 addresses them
+(Section~\ref{sec:exp_rules}). Properties four to seven concern the physical
+constraints of the blocks and are examined in E4
 (Section~\ref{sec:exp_mechanisms}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

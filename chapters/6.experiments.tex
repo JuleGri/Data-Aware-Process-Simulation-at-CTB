@@ -41,9 +41,9 @@ configuration selected in E3.}
 \toprule
 \textbf{ID} & \textbf{Experiment} & \textbf{Varied factor and fixed conditions} & \textbf{RQ} \\
 \midrule
-E1 & Control-flow discovery & Discovery algorithm and parameter. Fixed training log, activity abstraction, event order and evaluation cohorts. & RQ1 \\
-E2 & Domain-rule audit and targeted repair & Rules enforced on the discovered language. Fixed: the five candidates of E1. & RQ1 \\
-E3 & Baseline simulation of control-flow candidates & Control-flow model, and for one net the use of repair and guard ($2\times2$). Fixed ProSiT version, hyperparameters, training log, calibration, seeds and horizon. & RQ1, RQ2 \\
+E1 & Control-flow discovery & Discovery algorithm and parameter. Fixed training log, activity labels, event order and evaluation logs. & RQ1 \\
+E2 & Rule-based improvement & Language repair, state-machine encoding and stop guard, applied to every admissible net. Fixed rules and construction. & RQ1 \\
+E3 & Simulation of the shortlist & Control-flow model (at most three nets); for IM 0.0 also net and guard ($2\times2$). Fixed ProSiT version, hyperparameters, training log, seeds and horizon. & RQ1, RQ2 \\
 E4 & Mechanism audit and simulation validity & One component at a time, in the order a truck meets them: demand, block allocation, queue at the block, service under load. Oracle and repaired variants; fixed fitted model, seeds and period. & RQ2 \\
 E5 & What-if demonstration & Block allocation rule for deliveries (S1), three eligible sets, four robustness runs. Fixed final configuration of E4, replayed trucks, ten paired seeds. & RQ3 \\
 \bottomrule
@@ -58,19 +58,15 @@ E5 & What-if demonstration & Block allocation rule for deliveries (S1), three el
 Each experiment has one goal and one deliverable.
 
 \begin{enumerate}[label=\textbf{E\arabic*}]
-\item Identify the tested discovery configurations that yield a sound
-workflow net accepting all three visit groups of the validation log
-(no RMG, one block, several blocks). Report their fitness, precision and
-size. Deliverable: the candidates for E2.
-\item Determine which domain rules each candidate violates. Remove these
-violations without losing any observed sequence that satisfies the
-rules. Deliverable: repaired, sound models and their rule-compliance
-evidence.
-\item Measure how the control-flow model alone changes the generated
-visit structure and turnaround time, with all other simulation
-conditions fixed, and separate the effect of the repair from that of
-the data-aware guard. Deliverable: the control-flow model used in E4 and
-E5.
+\item Evaluate the discovered nets on two levels and keep those that are sound
+and accept every sequence above the noise threshold. Deliverable: the
+admissible nets.
+\item Remove forbidden behaviour from the admissible nets, encode them as state
+machines and add the stop guard, without losing observed behaviour.
+Deliverable: the repaired nets and a shortlist of at most three.
+\item Simulate the shortlist under identical conditions, select the
+control-flow model with the decision matrix, and test the encoding decision.
+Deliverable: the control-flow model used in E4 and E5.
 \item Quantify how much of the remaining deviation between simulated
 and observed turnaround time is caused by the demand, the block
 allocation, the queue at the block and the service time, and whether the
@@ -85,42 +81,35 @@ conditions of validity, not a recommendation for the terminal.
 \end{enumerate}
 
 E1 to E3 answer RQ1. E3 and E4 answer RQ2. E5 answers RQ3. Every selection
-uses the training log only; the test log reports the selected configurations.
+uses the training log only; the test log reports the results. The one exception
+is the generalisation check of the shortlist (Section~\ref{sec:exp_rules}).
 
 The experiments do not aim to rank discovery algorithms in general, to
 optimise the allocation rule, or to show that the simulator is valid for
 purposes other than the turnaround and peak measures defined in
 Section~\ref{sec:exp_kpis}.
 
-\subsection{Simulation-Informed Model Selection}
+\subsection{Model Selection}
 \label{sec:exp_selection_logic}
 
-The control-flow model is not selected on discovery metrics alone. A
-discovered model is a language of permitted activity sequences.
-Discovery metrics measure how well this language matches the recorded
-sequences. A simulator, in contrast, executes the model. It draws routing
-decisions, assigns resources and schedules time. Behaviour that is
-permitted by the language but never observed can therefore become
-frequent in the generated log. For this reason the selection procedure
-has three stages, applied in the order of E1, E2 and E3.
-
-The first stage screens the discovered models for soundness, coverage of
-the observed visit groups and precision (E1). The second stage expresses
-operational requirements as explicit domain rules and checks whether
-each model's language violates them (E2). The third stage executes the
-remaining candidates in ProSiT and compares the generated visits with
-the validation log (E3). A model is selected only if it passes all three
-stages.
-
-The second and third stages are needed because a sound net with high
-fitness and precision can still permit behaviour that a truck cannot
-perform. Two cases are relevant here: a visit without any yard stop, and
-two stops of the same visit executed at the same time. Both are domain
-rules (rules 3 and 4 in Table~\ref{tab:domain_rules}). E2 checks whether
-the model language permits them and repairs the model. E3 measures how
-often they occur in the generated log. For one net, E3 crosses repair
-and guard in a $2\times2$ design, so that the contribution of each can be
-seen.
+The control-flow model is selected in four steps with criteria fixed in
+advance (Figure~\ref{fig:exp_flow}).
+\begin{enumerate}
+\item \textbf{E1, gates.} A1: the net is sound. A2: it accepts every sequence
+above the noise threshold. Nets that pass are admissible.
+\item \textbf{E2, treatment.} Every admissible net is repaired, encoded as a
+state machine and given the stop guard. A4: no observed behaviour is lost.
+\item \textbf{E2, shortlist.} A3: the repaired nets not dominated in precision
+and generalisation, at most three.
+\item \textbf{E3, decision.} The shortlist is simulated and judged with a
+decision matrix. Rule A selects the most precise net unless the simulation
+rejects it; Rule B, selection by simulation, is reported as a sensitivity.
+\end{enumerate}
+Discovery metrics alone are not enough, because a simulator executes the
+model: behaviour that the language permits but the log never shows can become
+frequent in the generated log (Section~\ref{sec:bg_coverage}). The last step
+therefore takes place in the simulator.
+\todo{Redraw Figure~\ref{fig:exp_flow} as this funnel (gates, treatment, shortlist, decision).}
 
 % ======================================================================
 % OUTLINE (to be written): common evaluation design used by E1--E5.
@@ -367,221 +356,224 @@ discovered models.
 \subsection{Evaluation Protocol}
 \label{sec:exp_discovery_eval}
 
-All nets are evaluated with PM4Py 2.7.22.3 \cite{Berti2023PM4Py} on
-the complete training log and the complete test log
-(Section~\ref{sec:exp_partitions}). The evaluation is scripted. Each metric runs in a separate process with
-a time limit of 1,800 seconds. A failure or timeout is recorded with its
-status and never replaced by a score of zero.
+Every net is evaluated on the training log (59,139 visits) and on the test log
+(32,014 visits) of the split at 13 April 2026 (Section~\ref{sec:exp_partitions}).
+The selection uses training values only. Test values are reported. The
+evaluation has two levels: the quality of the net as a model of the log
+(Section~\ref{sec:bg_conformance}), and its fitness for the purpose of
+simulation (Section~\ref{sec:bg_coverage}).
 
-\begin{enumerate}
-\item \textbf{Soundness.} Each net is checked with WOFLAN
-\cite{Verbeek2001Woflan}. Only sound workflow nets are executable
-in ProSiT without deadlocks or leftover tokens.
-\item \textbf{Fitness.} Alignments are computed with the state-equation
-A$^*$ search of PM4Py
-\cite{Adriansyah2011CostFitness,aalst2012ConformanceChecking}. A log or
-model move on a visible transition costs 10,000, a move on a silent
-transition 1 and a synchronous move 0. Fitness counts only the visible
-deviations and therefore equals fitness under the standard cost function.
-The small cost of silent moves only selects, among equally good
-alignments, the one with the fewest silent moves. The search is exact. Fitness
-and precision are defined on optimal alignments, and for candidate nets with
-at most 45 transitions and visits of at most six events the exact search is
-fast.
-Techniques that give up optimality to scale to large models
-\cite{Taymouri2020LocalSearch} are therefore not needed. Every alignment must
-end in the final marking. A visit \emph{fits} if its alignment contains
-no deviation. The share of fitting visits and the alignment-based log
-fitness are reported.
-\item \textbf{Precision.} Escaping-edges precision on alignments
-\cite{Adriansyah2012AlignPrecision,Adriansyah2015Precision}. For every prefix of a log trace, the
-visible activities that the net enables after the prefix, including
-those reached through silent transitions, are compared with the
-activities that follow the prefix in the log. Each prefix is weighted by
-its frequency. Precision is computed separately on the training and the
-test log. PM4Py's helper that follows silent transitions after a prefix can
-miss silent paths and overstated the precision of IM 0.0. It is replaced by an
-exhaustive search over all markings reachable by silent transitions. The values
-were checked against an independent implementation of the same definition
-(identical for all nets) and against ProM's ETConformance plugin, which gives
-the same values for nets without silent transitions.
-\item \textbf{Coverage} (Section~\ref{sec:bg_coverage}). The share of fitting
-visits; the share of the distinct training sequences that the net accepts; the
-share of fitting visits per visit group (without RMG, one RMG block, two RMG
-blocks); and, on the test log, the number of sequences that do not occur in
-training and that the net accepts. Because the visits follow a long-tailed
-distribution, log fitness and the share of fitting visits are dominated by a few
-frequent single-stop sequences; the share of accepted sequences and the coverage
-per group show what a net loses in the tail. For the visits that a net rejects,
-the share of the truck-minutes (sum of the turnaround times), of the visits above
-the training P90 turnaround time and of the multi-block visits is reported as
-well. This states the lost behaviour in terms of the KPIs that the simulation
-has to reproduce (Section~\ref{sec:exp_kpis}).
-\item \textbf{Generalisation.} Token-based generalisation
-\cite{Buijs2014Quality} on the training log. It is reported for completeness
-but not used for the selection: it rewards nets that use few transitions often
-and barely separates the nets. Generalisation is checked directly on the test
-log instead.
-\item \textbf{Structure.} Places, visible and silent transitions, and
-arc-degree simplicity.
-\end{enumerate}
+\paragraph{Noise threshold}
+A sequence counts as noise if it accounts for less than 0.1\,\% of the training
+visits. The 17 sequences above this threshold cover 99\,\% of the 59,139 visits;
+the threshold removes all 21 sequences that occur only once. The simulation has
+to reproduce the long turnaround times, not only the average. The rare sequences
+are long visits: their mean turnaround time is 62 minutes, against 37 minutes for
+all visits. A higher threshold would treat more of these long visits as noise
+(Table~\ref{tab:exp_noise_threshold}). The threshold does not filter the logs:
+Level 1 uses all visits. It only decides which sequences the selected net must
+accept (Level 2 and selection).
 
-For unsound nets, alignment values are reported as a diagnostic only, and
-only if the final marking is reachable. ProM's own replayer and its
-precision plugins serve as cross-checks (Section~\ref{sec:res_discovery}).
-No automatic winner is computed. All selection decisions use training values;
-the test log is only reported. A net is eligible for E2 if it is sound and fits
-at least 90\,\% of the training visits. Among the eligible nets, those that are
-not dominated in the share of fitting visits and precision are candidates. The
-coverage measures are reported for every candidate and show which observed
-behaviour it rejects. Two nets are added as references: the most permissive net
-that accepts all sequences, and a filtered Inductive Miner net.
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lrrrrr}
+\toprule
+\textbf{Noise: sequences} & \textbf{Sequences} & \textbf{Visits} & \textbf{Mean TTT} & \multicolumn{2}{c}{\textbf{Share removed of all \ldots}} \\
+\textbf{below} & \textbf{removed} & \textbf{removed} & \textbf{removed} & \textbf{visits $>$ P90} & \textbf{multi-block visits} \\
+\midrule
+0.1\,\% & 65 & 0.9\,\% & 62 min & 3.4\,\% & 5.0\,\% \\
+0.5\,\% & 69 & 1.8\,\% & 62 min & 6.4\,\% & 21.1\,\% \\
+1\,\% & 73 & 4.3\,\% & 58 min & 12.5\,\% & 21.1\,\% \\
+\bottomrule
+\end{tabular}
+\caption{What a noise threshold removes from the training log (59,139 visits,
+82 sequences). A sequence below the threshold is noise. Mean TTT of all visits:
+37 minutes. P90: 64 minutes. Multi-block visits: visits to two or more RMG
+blocks.}
+\label{tab:exp_noise_threshold}
+\end{table}
+
+\paragraph{Level 1: quality of the net}
+\begin{itemize}
+\item \textbf{Soundness.} WOFLAN \cite{Verbeek2001Woflan}. Required for the
+execution in ProSiT.
+\item \textbf{Fitness.} Alignment-based trace fitness
+\cite{Adriansyah2011CostFitness}, averaged over the visits. ProM 6.15, ``Replay a
+Log on Petri Net for Conformance Analysis'' (exact A$^*$ with ILP). Costs: 1 for a
+move on the log or on a visible transition, 0 for a silent move.
+\item \textbf{Precision.} Escaping-edges precision \cite{MunozGama2010FreshLook},
+ETConformance in ProM 6.15, on the discovered net. Same settings for every net:
+``Lazy Invisibles'' and ``First Indeterminism Solving''. A non-fitting visit
+counts only up to its first deviation. Used for the shortlist (A3, E2).
+\item \textbf{Generalisation.} New test sequences that the net accepts (of 16),
+from the same replay on the test log. Used for the shortlist (A3, E2).
+Token-based generalisation \cite{Buijs2014Quality} is not used: it depends on the
+representation of the net.
+\item \textbf{Structure.} Places, visible and silent transitions.
+\end{itemize}
+
+\paragraph{Level 2: fitness for simulation}
+A sequence that a net rejects is never generated by the simulator.
+\begin{itemize}
+\item \textbf{Rejected sequences.} Above and below the noise threshold, with the
+share of fitting visits overall and per visit group (no RMG stop, one RMG block,
+two or more RMG blocks).
+\item \textbf{Rejected visits in KPI terms.} Their share of the truck-minutes
+(sum of the turnaround times), of the visits above the training P90 turnaround
+time, and of the multi-block visits.
+\end{itemize}
+
+\paragraph{Check of the precision values}
+In a net with silent transitions, ETConformance can keep a wrong marking after a
+prefix (Section~\ref{sec:bg_conformance}). Each value is therefore compared with
+ETConformance on the same-language state machine (E2b). The tables report the
+value of the discovered net and any deviation.
+
+\paragraph{Tools}
+Fitness, fitting visits, accepted sequences and precision: ProM 6.15
+\cite{vanDongen2005ProM} (PNetReplayer 6.11.191, ETConformance 6.9.52), on the
+PNML files exported from ProM and the XES files of the partitions. Soundness:
+WOFLAN as implemented in PM4Py 2.7.22.3 \cite{Berti2023PM4Py}. Cross-check: the
+unmodified alignment functions of PM4Py give the same fitting visits and accepted
+sequences for every net. For unsound nets, alignment values are a diagnostic only.
+
+\paragraph{Gates}
+A net of the discovery grid (Table~\ref{tab:exp_grid}) is \emph{admissible} if it
+passes two gates: \textbf{A1}, it is sound; \textbf{A2}, it accepts every sequence
+above the noise threshold. The prefix tree is a reference only. The admissible
+nets go to E2.
+\todo{Results (Ch.~7), E4, E5 and Ch.~5 still describe IM 0.0 as the selected net; the funnel selects HM 0.7.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Domain-Rule Audit and Targeted Repair (E2)}
+\section{Rule-Based Improvement (E2)}
 \label{sec:exp_rules}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-E2 asks which behaviour without justification the five E1 candidates
-permit, and whether it can be removed without losing observed behaviour.
-Discovery algorithms do not know what a truck can physically do. A model
-can reach high fitness and precision and still allow a visit without any
-stop, or two stops of the same truck at the same time. The inputs are the
-five nets chosen in E1 (Section~\ref{sec:exp_discovery_eval}): the candidates
-IM 0.0, HM 0.7 and HM 0.9, and the two references ILP 1.00 (most permissive)
-and IMf 0.3 (filtered).
+E2 treats every admissible net of E1 in the same way. It is a treatment, not a
+selection criterion. Discovery algorithms do not know what a truck can physically
+do: a net can reach high fitness and precision and still allow a visit without a
+stop, or two stops of one truck at the same time. Each domain rule
+(Table~\ref{tab:domain_rules}) is therefore enforced where it can be expressed
+exactly (Table~\ref{tab:exp_e2_steps}).
 
-\subsection{Rule Types and Where They Are Enforced}
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{L{2.6cm}L{1.6cm}YL{2.4cm}L{2.9cm}}
+\toprule
+\textbf{Step} & \textbf{Rules} & \textbf{What changes} & \textbf{Type} & \textbf{Check} \\
+\midrule
+E2a Language repair & 3; 5 (LL, HO2) & Removes the sequences that break the rules; the observed sequences that satisfy them stay & repair with domain knowledge & A4: no observed behaviour lost \\
+E2b Encoding as a state machine & 4 & Representation only; the language stays the same & none (executability in ProSiT) & language equal by construction; effect tested in E3 \\
+E2c Stop guard & 6 (and thereby 3) & Guard in the simulator: a yard stop only if $c<n$, Gate Out only if $c=n$ & extension by the data perspective & every visit can complete \\
+\bottomrule
+\end{tabularx}
+\caption{Interventions of E2. $n$: planned stops from the manifest; $c$: stops
+done. Type after the two kinds of process enhancement (Section~\ref{sec:bg_rules}).
+Rules 1 and 2 hold in every net. The RMG part of rule 5 is checked in the
+generated log; rule 7 needs data that are not recorded.}
+\label{tab:exp_e2_steps}
+\end{table}
 
-The rules are listed in Table~\ref{tab:domain_rules}
-(Section~\ref{sec:domain_rules}). They are of three types, and each type is
-handled where it can be expressed exactly (Section~\ref{sec:bg_rules}).
-\begin{itemize}
-\item \textbf{Sequence rules} speak only about activity labels: rules 1, 2
-and 3, the LL and HO2 part of rule 5, and the upper bound of four stops in
-rule 6. They are checked and enforced on the language of the net.
-\item \textbf{The time rule} (rule 4, stops never overlap) speaks about
-timestamps. It cannot be checked on the untimed language. A state machine
-holds one token per visit, so the simulator cannot start two stops of the
-same truck at once. Rule 4 is therefore enforced by the encoding of the
-repaired net and checked in the generated log.
-\item \textbf{Data rules} depend on attributes: the RMG part of rule 5 (same
-block), the equality of rule 6 (as many stops as planned) and rule 7 (load
-capacity). They are guards in the simulator or are checked in the generated
-log (Section~\ref{sec:exp_baseline}).
-\end{itemize}
+\subsection{Audit}
+Each rule is checked on three levels, because conformance on one level does not
+imply conformance on the next: the recorded log (a violation would question the
+rule or the data), the language of the net, and the generated log (E3; the only
+level for rule 4 and the data rules). On the language, each sequence rule is a
+small automaton (a monitor) that runs in a product with the reachability graph of
+the net (Section~\ref{sec:bg_rules}). If the net can complete a run that a monitor
+rejects, the shortest such sequence is reported. The check is exact for bounded
+nets, including nets with loops \cite{RWMaggi2011Monitoring,RWCarmona2022Conformance}.
 
-\subsection{Audit at Three Levels}
-
-Each rule is checked at three levels, because conformance at one level does
-not imply conformance at the next.
-\begin{enumerate}
-\item \textbf{Recorded log.} Does every training and test visit satisfy
-the rule? A violation here would question the rule or the data.
-\item \textbf{Model language.} Does the net permit a sequence that breaks the
-rule? Each sequence rule is written as a small automaton over activity labels
-(a monitor). The reachability graph of the net, with silent steps resolved, is
-explored together with each monitor. If the net can complete a run that the
-monitor rejects, the shortest such sequence is reported as a counterexample.
-The check is exact for bounded nets, including nets with loops
-\cite{RWMaggi2011Monitoring,RWCarmona2022Conformance}. In addition, the
-number of distinct permitted sequences is counted for one to four stops and
-compared with the observed sequences.
-\item \textbf{Generated log.} Does the simulation produce visits that break the
-rule? This level is part of E3 and is the only level for rule 4 and the data
-rules.
-\end{enumerate}
-
-\subsection{Targeted Repair}
+\subsection{Language Repair (E2a)}
 \label{sec:mc_repair}
+The repair restricts the language to the sequences that satisfy the rules, in
+three steps. First, the reachability graph of the net, with silent steps
+resolved, is combined with the rule monitors. Second, states with the same
+continuations are merged, which gives the smallest automaton of the restricted
+language. Third, each state becomes one place and each edge one visible
+transition. The result is a sound state machine without silent transitions. It
+keeps every sequence of the original net that satisfies the rules and adds none.
+The construction is closest to Dixit et al.~\cite{RWDixit2015Domain}, but builds
+the restricted model exactly instead of searching among random edits.
 
-A candidate that breaks a sequence rule is repaired by restricting its
-language to the sequences that satisfy the rule. The repair has three steps.
-\begin{enumerate}
-\item The reachability graph of the net, with silent steps resolved, is
-combined with the monitors of the selected rules. Only sequences that the net
-and all selected rules allow remain.
-\item States with the same possible continuations are merged (automaton
-minimisation). This gives the smallest automaton with the same language.
-\item The automaton is written as a Petri net in the simplest way: each state
-becomes one place and each edge one visible transition. The result is a state
-machine workflow net without silent transitions (Section~\ref{sec:bg_petri}).
-\end{enumerate}
-The repair is exact. Every sequence of the original net that satisfies the
-rules is kept, and no other sequence is added. The result is sound by
-construction. The procedure runs automatically and writes a new PNML file;
-the original net is not changed. It is closest to Dixit et
-al.~\cite{RWDixit2015Domain}, who edit a discovered model until it satisfies
-Declare constraints. The difference is that the restricted model is built
-exactly instead of being searched among random edits. In the classification of
-Schuster et al.~\cite{schuster2022}, the repair uses explicit,
-declarative knowledge a posteriori and is fully automated.
-
-The repair is applied for rule 3 and the LL and HO2 part of rule 5. Rules 1
-and 2 hold in every candidate. The bound of rule 6 is broken by every
-candidate with a loop. It is not encoded in the net, for two reasons. The stop
-guard in E3 enforces the stronger equality with the planned stops, which
-implies the bound. And encoding the bound would make the state machine much
-larger, so ProSiT would learn each routing tree from fewer observations.
-
-\paragraph{What the repair means in Petri net terms}
-The same restriction can also be built by hand on the original net. Two local
-patterns are enough (Figures~\ref{fig:mc_repair_xor} and
-\ref{fig:mc_repair_stop}). They show what the exact repair does, and they make
-the repaired behaviour readable in ProM or WoPeD.
+The bound of rule 6 (at most four stops) is not encoded in the net. The stop guard
+enforces the stronger equality with the planned stops, and the bound would enlarge
+the state machine and leave fewer observations per routing tree.
+Figures~\ref{fig:mc_repair_xor} and~\ref{fig:mc_repair_stop} show the same
+restriction as two local patterns on the original net.
 
 \input{figures/schemas/repair_patterns}
 
-\paragraph{Control for the change of representation}
-The state machine encoding changes two things at once: the language and the
-representation. Precision depends on the representation as well
-(Section~\ref{sec:bg_conformance}). To separate the two, the unrepaired
-language of each candidate is also written as a state machine. The precision
-of a repaired net is compared with this \emph{same-language} state machine,
-not with the original net.
+\subsection{Encoding as a State Machine (E2b)}
+Every admissible net is written as a state machine with the same language, also
+when the repair does not change it. The reason lies in the routing of ProSiT
+(Section~\ref{sec:prosit_execution}). It draws the next transition from weights
+learned per transition and normalised over the enabled transitions. The weights
+see the case attributes and how often each activity has occurred, but not the
+marking of the net. In a net with silent transitions and parallel branches this
+has three consequences, which the state machine removes by construction:
+\begin{enumerate}
+\item \textbf{Unobserved decisions.} Silent transitions are not in the log, so
+their weights are learned from a replay that has to guess when they fired. In the
+state machine every transition is visible, and every routing decision is learned
+from observed events.
+\item \textbf{No state.} Choices that are each observed can be combined into
+sequences that the log never shows; skipping every stop gives a visit without a
+stop. In the state machine each transition has one input place, which is one state
+of the minimal automaton of the language, so the weights become state-dependent.
+\item \textbf{Concurrency within a visit.} A parallel split lets ProSiT start two
+stops of one truck at the same time. The state machine holds one token per truck
+and thereby enforces rule 4.
+\end{enumerate}
+The stop guard (E2c) can act only at a visible decision as well. Because the
+language is unchanged, the measures of E1 do not change, and any difference in the
+simulation comes from the encoding. E3 tests this with a control condition
+(Section~\ref{sec:exp_baseline}). Encoding all nets in the same way makes E3
+compare languages, not encodings. The cost is a larger net with repeated labels;
+readability is judged on the discovered net.
 
-\paragraph{Acceptance and selection}
-A repaired net must be sound and must keep its coverage
-(Section~\ref{sec:bg_coverage}): every training sequence that it accepted
-before and that satisfies the rules is still accepted, and the share of fitting
-training and test visits does not change. Its precision is compared with the
-same-language state machine. Four repaired nets are taken to E3: ILP 1.00 (most
-permissive), IM 0.0 (all observed sequences with the highest precision), HM 0.7
-(most precise net with at least 99\,\% fitting visits) and IMf 0.3 (high
-precision with low coverage). HM 0.9 is left out because it is close to HM 0.7
-and accepts fewer sequences. Taking IMf 0.3 to E3 tests whether a net with high
-precision but low coverage is a good basis for simulation.
+\subsection{Stop Guard (E2c)}
+ProSiT has no guards (Section~\ref{sec:prosit_limits}). The stop guard adds one
+guard to the simulation loop, as in a data Petri net (Section~\ref{sec:bg_rules}).
+Before each routing draw it compares the stops done, $c$, with the planned stops,
+$n$, known at Gate In. While $c<n$, Gate Out gets the weight zero; once $c=n$,
+every yard transition gets the weight zero. If all enabled transitions then have
+weight zero, Gate Out fires when $c=n$ (forced exit); otherwise the learned
+weights are kept and the draw counts as an \emph{override}. Before any
+simulation, the reachability graph of each net is combined with the counter $c$
+for every $n$ from 1 to 4, and every reachable state is checked for whether the
+visit can still end with exactly $n$ stops \cite{FelliDeLeoniMontali2021}.
+
+\subsection{Acceptance and Shortlist}
+\begin{itemize}
+\item \textbf{A4, acceptance.} A repaired net keeps every fitting training and
+test visit, every accepted training sequence and every accepted new test
+sequence. Otherwise a rule or the construction is wrong.
+\item \textbf{A3, shortlist.} The repaired nets that are not dominated in
+precision and generalisation go to E3, at most three. A net is dominated if
+another net is at least as good on both and better on one. Precision is measured
+on the state machines, where ETConformance needs no heuristic
+(Section~\ref{sec:bg_conformance}). Generalisation needs sequences that discovery
+has not seen; it is the only criterion read from the test log. It decides which
+nets enter E3, not which net is selected (Rule A, Section~\ref{sec:exp_e3_measures}).
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Baseline Simulation of Control-Flow Candidates (E3)}
+\section{Simulation of the Shortlist (E3)}
 \label{sec:exp_baseline}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-E3 asks how the choice of control-flow model affects the generated visits
-when everything else in the simulation is held constant. It also establishes
-the baseline against which the mechanisms in E4 are analysed.
+E3 selects the control-flow model in the simulator, with all other conditions
+held constant. It is also the baseline for the mechanisms analysed in E4.
 
 \subsection{Candidates and Contrast}
-
-Three control-flow models are simulated. All three are state machines
-without silent transitions.
-\begin{itemize}
-\item \textbf{ILP 1.00 repaired} (12 places, 82 transitions): the most
-permissive net that keeps all observed sequences.
-\item \textbf{IM 0.0 repaired} (10 places, 54 transitions): the balanced
-candidate.
-\item \textbf{HM 0.7} (9 places, 29 transitions): the most precise candidate.
-It already satisfies rules 3 and 5, so the repair does not change its
-language; it is used in its state machine encoding.
-\end{itemize}
-
-The title of this thesis puts the physical constraints at the centre. To show
-what they contribute, IM 0.0 is also simulated in a $2\times2$ design
-(Table~\ref{tab:exp_e3_contrast}). One factor is the net: the original
-Inductive Miner net (28 places, 38 transitions, 27 of them silent) or the
-repaired state machine. The other factor is the stop guard: off or on. The
-naive cell, original net without guard, is what a direct use of discovery and
-ProSiT produces.
+The repaired nets of the shortlist are simulated with the stop guard. A
+$2\times2$ contrast tests the encoding decision of E2b
+(Table~\ref{tab:exp_e3_contrast}): one factor is the net (original or state
+machine), the other the stop guard (off or on). It uses IM 0.0, whose original
+net has parallel branches with silent skips (28 places, 38 transitions, 27 of
+them silent), where the encoding should matter most. The cell ``original net,
+guard off'' is what a direct use of discovery and ProSiT produces.
 
 \begin{table}[htbp]
 \centering
@@ -590,120 +582,92 @@ ProSiT produces.
  & \textbf{Guard off} & \textbf{Guard on} \\
 \midrule
 \textbf{Original IM 0.0} & naive: discovery and ProSiT as they are & rules only as data guards \\
-\textbf{Repaired IM 0.0} & rules only in the net & rules in the net and as guards (main configuration) \\
+\textbf{Repaired IM 0.0} & rules only in the net & rules in the net and as guards \\
 \bottomrule
 \end{tabularx}
-\caption{$2\times2$ contrast for IM 0.0 in E3. All four cells use the same
-ProSiT settings and seeds.}
+\caption{$2\times2$ contrast for IM 0.0 in E3. The same-language state machine
+without repair is a fifth cell (control). All cells use the same ProSiT settings
+and seeds.}
 \label{tab:exp_e3_contrast}
 \end{table}
 
-\subsection{ProSiT Configuration and CTB Adaptations}
+\subsection{ProSiT Configuration}
 \label{sec:mc_hyperparameters}
 \label{sec:mc_ctb_adaptations}
-
 ProSiT learns its parameters separately for each net, with the settings in
 Table~\ref{tab:exp_e3_config}. Identical settings therefore do not imply
-identical fitted routing, timing or resource models. E3 compares the complete
-fitted simulators.
+identical fitted routing, timing or resource models; E3 compares the complete
+fitted simulators. The test period only sets the number of simulated visits and
+the start time; no parameter is fitted on it.
 
 \begin{table}[htbp]
 \centering
 \small
 \begin{tabularx}{\textwidth}{L{3.6cm}L{3.4cm}Y}
 \toprule
-\textbf{Element} & \textbf{Setting} & \textbf{Reason} \\
+\textbf{Element} & \textbf{Setting (default)} & \textbf{Reason} \\
 \midrule
 Software & ProSiT 1.0.4, PM4Py 2.7.22.3, Python 3.11 & Version 1.0.4 selects trees by CRPS; 1.0.3 almost always chose single distributions (Section~\ref{sec:prosit_trees}). \\
-Training data & training partition, 58,262 visits & Test partition not read. \\
-\texttt{max\_depth\_tree} & 3 (default 5) & Trees stay readable; cross-validation can still choose depth 1 or 2. \\
-\texttt{min\_samples\_leaf\_cv} & 50, 100, 200 & Default. \\
-\texttt{attribute\_mode} & empirical & Keeps consistent manifests, e.g.\ flow type, numbers of stops, deliveries and receives. Independent draws would create impossible visits. \\
-Case attributes & flow type, containers, planned stops, deliveries, receives, hazardous and reefer flags, full ratio, visit complexity, demand and utilisation at Gate In & All known at Gate In (Section~\ref{sec:entry_known_attributes}). \\
-\texttt{use\_workload\_features} & on & Delay grows with load (Section~\ref{sec:observed_behaviour}), so resource choice and waiting time should see the workload. \\
-\texttt{enable\_multitasking}, threshold & on, 0.05 & A block serves several trucks at once. Without multitasking every resource has capacity one. \\
+Training data & training partition, 59,139 visits & Test partition not used for fitting. \\
+\texttt{max\_depth\_tree} & 3 (5) & Trees stay readable; cross-validation can still choose depth 1 or 2. \\
+\texttt{min\_samples\_leaf\_cv} & 50, 100, 200 (same) & Default. \\
+\texttt{attribute\_mode} & empirical (distribution) & Keeps consistent manifests, e.g.\ flow type, numbers of stops, deliveries and receives. Independent draws would create impossible visits. \\
+Case attributes & flow type, containers, planned stops, deliveries, receives, hazardous and reefer flags, full ratio, visit complexity & All known at Gate In (Section~\ref{sec:entry_known_attributes}). \\
+\texttt{use\_workload\_features} & on (off) & Delay grows with load (Section~\ref{sec:observed_behaviour}), so resource choice and waiting time should see the workload. \\
+\texttt{enable\_multitasking}, threshold & on (off), 0.05 & A block serves several trucks at once. Without multitasking every resource has capacity one. \\
 RMG capacity & at most 3 per block & Three handover lanes per block; the discovered capacities were 4 or 5. \\
 Arrivals & native arrival tree on hour and weekday & The learned profile is part of the baseline; alternatives follow in E4a. \\
 Resource calendars & open for the full week & Trucks already inside are served to completion. \\
-Timestamps & floored to the minute & As in the source systems. \\
-Simulation loop & native ProSiT loop: learned block choice, capacity checked at enabling & Changes to the loop are tested in E4c. \\
-Stop guard & on (off in two cells of Table~\ref{tab:exp_e3_contrast}) & Enforces rule 6 and thereby rule 3 (see below). \\
-\texttt{random\_state} & 42 & Fixed for reproducibility. \\
-Replications & seeds 42--46, 14,625 visits each, from the first validation Gate In & Same number of visits as the validation partition. \\
+Simulation loop & native ProSiT loop: learned block choice, capacity checked at enabling & Changes to the loop are tested in E4. \\
+Stop guard & on (off in two cells of Table~\ref{tab:exp_e3_contrast}) & Enforces rule 6 and thereby rule 3 (Section~\ref{sec:exp_rules}). \\
+\texttt{random\_state} & 42 (72) & Fixed for reproducibility. \\
+Replications & seeds 42--46, 32,014 visits each, from the first test Gate In & Same number of visits as the test partition. \\
 \bottomrule
 \end{tabularx}
 \caption{Fixed simulation conditions in E3.}
 \label{tab:exp_e3_config}
 \end{table}
 
-The validation log is used only to set the number of simulated visits and the
-start time. It is not used to fit any parameter.
-
-\paragraph{Stop guard}
-ProSiT has no guards (Section~\ref{sec:prosit_limits}). The stop guard adds one
-data-aware guard to the simulation loop. Before each routing draw, it compares
-the number of stops the visit has done with the number of planned stops from
-the manifest, which is known at Gate In. While stops are missing, Gate Out gets
-the weight zero. Once all planned stops are done, every yard transition gets the
-weight zero. Silent transitions are not affected. If all enabled transitions
-then have weight zero, Gate Out is fired when the planned stops are done
-(forced exit). Otherwise the learned weights are used, and the case is counted
-as a fallback. The guard leaves the net and the learned models unchanged. With
-the guard switched off, the loop reproduces ProSiT exactly.
-
-\begin{hints}
-\item Add a worked example of one simulated truck with the real fitted values of IM 0.0 repaired: arrival leaf, attributes, routing weights at each step (with and without guard), chosen block, waiting and execution draws, resulting timestamps. Every step must match the implementation (Section~\ref{sec:prosit_execution}). This answers the committee's request for concrete parameters.
-\item Full trees and calendars in Appendix~\ref{app:prosit_inventory}.
-\end{hints}
-
-\subsection{Comparison Measures}
+\subsection{Decision Matrix}
 \label{sec:exp_e3_measures}
+The candidates are compared on the criteria of Table~\ref{tab:exp_e3_matrix}.
+The decision measures compare the generated visits with the training log; the
+test log is reported. A difference counts only if it exceeds the range over the
+five seeds.
 
-The generated logs are compared with the test log on three groups of
-measures. The coverage of each net (E1) sets a limit for this comparison: a
-sequence that the net rejects can never appear in the generated log.
-\begin{enumerate}
-\item \textbf{Visit structure.} Share of visits without a yard stop (rule 3),
-share of multi-stop visits with overlapping stops (rule 4), violations of
-rule 5, distribution of the number of stops and agreement with the planned
-stops (rule 6), share of visits whose sequence never occurs in training, and
-share of RMG visits that use more than one block.
-\item \textbf{Turnaround time.} TTT is reported as mean, median and P90, in
-total and by flow type (delivery, receive, mixed). It is decomposed into the
-approach from Gate In to the start of the first stop, the stop intervals, the
-transfer between stops, and the exit from the end of the last stop to Gate
-Out.
-\item \textbf{Delay peaks.} Share of Gate-In hours with at least 20 visits
-whose median TTT is at least 37 minutes, and the number of hours with at least
-165 arrivals. Both thresholds are the 90th percentiles of the training hours
-(Section~\ref{sec:exp_kpis}).
-\end{enumerate}
-For the stop guard, the number of changed draws, forced exits and fallbacks
-per run is reported.
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{L{2.3cm}L{3.3cm}Y}
+\toprule
+\textbf{Role} & \textbf{Criterion} & \textbf{Measure} \\
+\midrule
+Gate & physical admissibility & no visit without stop, no overlapping stops, at most four stops, at most three trucks at a block \\
+Primary & control-flow fidelity & total-variation distance (TVD) between the distributions of sequences: half the sum of the absolute differences of their shares \\
+Secondary 1 & visit structure & TVD of the number of stops per visit \\
+Secondary 2 & realisable plans & guard overrides per run (the net cannot produce the planned stops) \\
+Secondary 3 & unobserved behaviour & share of generated visits whose sequence does not occur in training \\
+Reported only & turnaround time & mean, median and P90, by flow type and decomposed into approach, stops, transfer and exit; delay peaks (Section~\ref{sec:exp_kpis}); judged in E4 \\
+\bottomrule
+\end{tabularx}
+\caption{Decision matrix of E3.}
+\label{tab:exp_e3_matrix}
+\end{table}
 
-The simulated log records start and completion timestamps. The order of events
-within a simulated visit is reconstructed from the start timestamps; for equal
-timestamps the completion time decides. Each measure is reported as the mean
-over the five replications with its minimum and maximum. Five replications
-quantify the random variation of the simulator. They do not capture
-uncertainty in the fitted parameters.
+\paragraph{Decision rule}
+\textbf{Rule A (applied): precision first, simulation as veto.} The most precise
+net of the shortlist is selected, unless it fails the gate or is worse in the
+primary criterion beyond the seed range. Standard model quality decides
+\cite{Buijs2014Quality}; the simulation only rejects a net that does not work in
+ProSiT. \textbf{Rule B (shown, not applied): simulation first,} as in automated
+discovery of simulation models \cite{Camargo2020}: the primary criterion, then the
+secondary criteria in their order. If the two rules select different nets, the
+net selected by Rule B is carried through E4 and E5 as a sensitivity run.
 
-\subsection{Additional Checks and Selection Criterion}
-\begin{hints}
-\item Validator self-check: apply the evaluation script to the observed
-validation log itself. All rule-violation shares must be zero and all
-statistics must equal the directly computed values.
-\item Block-level checks: load per RMG block (observed vs.\ simulated),
-repeated visits to the same block, and the RMG part of rule 5 (mixed
-followed by delivery or receive at the \emph{same} block) in the generated
-log.
-\item Selection criterion, fixed before reading the results: the selected
-candidate must produce no violations of rules 3, 4 and 5 and the smallest
-distance to the observed stop distribution. TTT is reported but not used
-for selection, because it is dominated by arrivals and timing (see E4).
-\item Adequacy tolerances for TTT taken from the domain review (part
-C6), e.g.\ median within $\pm x$ min, P90 within $\pm y$ min.
-\end{hints}
+The order of events within a simulated visit is taken from the start
+timestamps; for equal timestamps the completion time decides. Each measure is the
+mean over the five replications with its minimum and maximum. The replications
+show the random variation of the simulator, not the uncertainty of the fitted
+parameters.
 
 % ======================================================================
 \section{Mechanism Audit and Simulation Validity (E4)}
