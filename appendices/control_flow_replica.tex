@@ -1,0 +1,130 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Rewritten Nets and Control-Flow Replica}
+\label{app:replica}
+\label{app:rewritten}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sources: trucksimulation/process_discovery/outputs/runs/e2_split13apr_20261106 (repair, rewritten nets);
+%   simulation_e3/runs/split13apr_20261106/{main,noguard,guard_orig,samelang,ablation_flower},
+%   runs/hm07_raw_20261111/{noguard,guard,sm_noguard}; tables: process_discovery/make_rq1_tables.py (app_rewritten_*);
+%   replica: process_discovery/ablation_silent_guard.py --reference train -> analysis/ablation_silent_guard_20261113,
+%   table: process_discovery/make_replica_table.py -> tables/app_control_flow_replica.tex
+
+In an earlier stage of this work, the admissible nets were not simulated as
+discovered. They were repaired and rewritten first, and the stop guard acted only
+on visible transitions. This appendix reports that stage, because it explains why
+the final design looks ahead on the discovered net (Section~\ref{sec:exp_guard})
+and what a simulator does with the language of a net.
+
+\section{Repair and Rewriting}
+\label{app:rewritten_repair}
+The languages of IM 0.0 and ILP 1.00 were restricted exactly to rules 3 and 5:
+the reachability graph of each net was combined with automata for the rules, and
+states with the same continuations were merged. Each of the three admissible nets
+was then rewritten without silent transitions, with one place for each state of
+the visit and one transition for each activity that can happen in that state. The
+language stayed the same; an activity therefore appears on several transitions.
+The repair kept every observed sequence and raised the precision of IM 0.0 from
+0.842 to 0.888 and that of ILP 1.00 from 0.773 to 0.825
+(Table~\ref{tab:app_rewritten_funnel}).
+
+\input{tables/app_rewritten_funnel}
+
+\paragraph{Precision and simulation.} Simulated with the same settings as in E3,
+the three rewritten nets generated the same distribution of sequences (sequence
+TVD 0.015 to the training log for all three), although their precision ranged
+from 0.825 to 0.998 (Table~\ref{tab:app_rewritten_matrix}). The behaviour that
+precision counts against a net was hardly generated, because the routing is
+learned from the observed visits. The exception is the unrepaired language of
+ILP 1.00: rewritten, it has a single state for all stops, from which every stop
+and Gate Out can follow (precision 0.773). It combined the stops wrongly
+(sequence TVD 0.077, 0.36\,\% unseen sequences, against 0.015 and 0.01 to
+0.05\,\%).
+
+\input{tables/app_rewritten_matrix}
+
+\paragraph{The simple guard and silent decisions.} On the discovered HM 0.7, the
+simple guard, which masks only the visible stops and Gate Out, changed no draw: the
+decisions are taken by silent transitions, and when a stop or Gate Out becomes
+enabled it is often the only step left (449 overrides per run). On the rewritten
+net it changed 3,206 draws per run, but still had to give up 117 times, in states
+from which the plan could no longer be completed
+(Table~\ref{tab:app_rewritten_2x2_hm}). The sequences were the same in all four
+conditions. The look-ahead guard of the final design reaches the same on the
+discovered net without rewriting it, and never has to give up (E3).
+
+\input{tables/app_rewritten_2x2_hm}
+
+\paragraph{Parallel branches.} For IM 0.0, whose discovered net expresses the
+free order of the stops by parallel branches that silent transitions can skip,
+the representation decided much more (Table~\ref{tab:app_rewritten_2x2_im}; test
+log). The discovered net generated 15.1\,\% visits without a stop and overlapping
+stops in 22.7\,\% of the multi-stop visits; the same language rewritten without
+silent transitions generated none.
+
+\input{tables/app_rewritten_2x2_im}
+
+\paragraph{E4 and E5 with two nets.} In this stage, E4 and E5 were run with the
+rewritten HM 0.7 and with the rewritten IM 0.0, the net that a selection by
+simulation measures would have chosen. Both needed the same four changes to the
+queue and the service, the same configuration was chosen, the same acceptance
+criterion was missed narrowly, and the scenario S1 shortened the moved visits by
+9.3 minutes with both nets.
+
+\paragraph{Outdated enabling times.} The rewritten IM 0.0 has seven loops, against
+three for HM 0.7. In the earlier comparison, its final E4 configuration reached a
+smaller cycle-time distance than that of HM 0.7 (6.3 against 7.9 minutes on the
+test period). The advantage came from a defect of the training data: ProSiT keeps
+the enabling time of a transition until it fires, also across loops, so the
+waiting before Gate Out of multi-stop visits was measured from the first stop
+(mean target 32.6 minutes, against 12.7 observed from the last stop). With the
+enabling time reset whenever its token is consumed, the advantage disappeared
+(cycle-time distance 8.5 against 8.0 minutes; training period 4.2 against 4.3),
+while HM 0.7 changed by no more than the range of the seeds
+(Section~\ref{sec:res_inspection}).
+
+\section{Control-Flow Replica}
+\label{app:replica_token_game}
+To see why the representation matters, the routing of ProSiT was rebuilt as a
+token game without time and resources. In every marking, one enabled transition
+is drawn with a probability proportional to its weight, as in stochastic labelled
+Petri nets \cite{burke2020stochasticPD,mannhardt2023stochasticProcessesModelling}.
+The weights are the probability that a transition fires when it is enabled,
+estimated by counting on the aligned training log. Every training visit is
+simulated with its own manifest, with three seeds. The replica reproduces ProSiT
+on the discovered IM 0.0: 15.7\,\% of its visits have no stop, against 15.1\,\% in
+ProSiT. Table~\ref{tab:app_control_flow_replica} gives the results.
+
+\input{tables/app_control_flow_replica}
+
+\paragraph{The weights do not see the marking.} On the discovered IM 0.0, adding
+the marking to the state of the weights removes every visit without a stop
+(15.7\,\% $\rightarrow$ 0) and lowers the sequence TVD from 0.232 to 0.004. Each
+skip of a parallel branch is learned on its own, without knowing whether another
+branch has already produced a stop. In a rewritten net, every transition has one
+input place, so its weight depends on the state anyway, and adding the marking
+changes nothing.
+
+\paragraph{Silent transitions alone are not the cause.} The discovered HM 0.7 has
+34 silent transitions but no parallel branches, and it generates the same visits
+as its rewritten version. The silent steps only make the simple guard leak: on the
+discovered HM 0.7 it has to fall back 1.7 times per 1,000 visits.
+
+\paragraph{A guard has to act where the decision is taken.} On the discovered
+IM 0.0, a look-ahead guard or rejection sampling gives every truck its planned
+number of stops, but the stops are combined wrongly (sequence TVD 0.167 and 0.068,
+against 0.006 for the repaired and rewritten net). For a net with parallel
+branches, no guard repairs the combination of stops; for a net without them, such
+as HM 0.7, the look-ahead guard is enough.
+
+\paragraph{The flower needs the history in the weights.} With weights from
+frequencies only, the flower and the discovered ILP 1.00, which has the same
+language, generate 48\,\% visits without a stop. With the planned stops and the
+history of the visit in the weights, the flower is as good as the other nets
+(sequence TVD 0.005). In ProSiT it is not (sequence TVD 0.077). ProSiT's routing
+trees, with at most three splits, do not recover the history of a visit as
+completely as a count over the full history.
+
+\paragraph{Limits.} The counting estimator is more flexible than ProSiT's trees,
+so the replica shows what the representation allows, not what ProSiT learns.
+Without time, overlapping stops are not measured. The alignment gives only one
+order for steps in parallel branches.

@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{Yrrrrrrr}
+\toprule
+\textbf{HM 0.7 in ProSiT} & \textbf{Without stop [\%]} & \textbf{Overlap [\%]} & \textbf{5+ stops [\%]} & \textbf{Unseen [\%]} & \textbf{Seq.\ TVD} & \textbf{Stop-count TVD} & \textbf{Guard: changed / overr.} \\
+\midrule
+Original net, no guard & 0.00 & 0.00 & 0.017 & 0.080 & 0.016 & 0.003 & -- \\
+Original net, guard & 0.00 & 0.00 & 0.011 & 0.054 & 0.016 & 0.005 & 0 / 449 \\
+State machine, no guard & 0.00 & 0.00 & 0.013 & 0.075 & 0.015 & 0.005 & -- \\
+State machine, guard (main) & 0.00 & 0.00 & 0.000 & 0.010 & 0.015 & 0.004 & 3,206 / 117 \\
+\bottomrule
+\end{tabularx}
+\caption{$2\times2$ contrast for HM 0.7 in E3 (Table~\ref{tab:exp_e3_contrast}): original net (22 places, 45 transitions, 34 silent) or state machine with the same language, stop guard off or on; mean over five seeds, against the training log. Overlap: share of the multi-stop visits with overlapping stops. Unseen: generated visits whose sequence does not occur in the training log. Guard: draws whose weights the guard changed, and draws it could not decide (overrides), per run.}
+\label{tab:rq1_e3_2x2_hm}
+\end{table}

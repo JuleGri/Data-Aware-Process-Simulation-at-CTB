@@ -98,6 +98,16 @@ F.~Vinci, G.~Park, W.~M.~P. van~der Aalst, and M.~de~Leoni, ``Reliable and
   Notes in Computer Science, vol. 16321.\hskip 1em plus 0.5em minus 0.4em\relax
   Springer Singapore, 2026, pp. 337--352.
 
+\bibitem{Sulis2026SimulationReview}
+E.~Sulis, L.~Genga, and N.~Martin, ``Simulation and process mining: Review and
+  outlook,'' \emph{International Journal of Data Science and Analytics},
+  vol.~22, p. 198, 2026.
+
+\bibitem{Camargo2020}
+M.~Camargo, M.~Dumas, and O.~González-Rojas, ``Automated discovery of business
+  process simulation models from event logs,'' \emph{Decision Support Systems},
+  vol. 134, p. 113284, 03 2020.
+
 \bibitem{Hospital2026Vinci}
 \BIBentryALTinterwordspacing
 F.~Vinci, D.~Aloini, E.~Benevento, A.~Stefanini, F.~Zen, and M.~{de Leoni},
@@ -107,11 +117,6 @@ F.~Vinci, D.~Aloini, E.~Benevento, A.~Stefanini, F.~Zen, and M.~{de Leoni},
   [Online]. Available:
   \url{https://www.sciencedirect.com/science/article/pii/S0933365726000436}
 \BIBentrySTDinterwordspacing
-
-\bibitem{Camargo2020}
-M.~Camargo, M.~Dumas, and O.~González-Rojas, ``Automated discovery of business
-  process simulation models from event logs,'' \emph{Decision Support Systems},
-  vol. 134, p. 113284, 03 2020.
 
 \bibitem{CTprocessMiningTAS2020}
 M.~Gracia, J.~Mar-Ortiz, C.~Caballini, and S.~Sacone, ``A combined data mining
@@ -171,6 +176,12 @@ M.~Grobis and S.~Ihlenfeldt, ``Process mining for supporting data processing
   development: A use case in production planning,'' \emph{Procedia CIRP}, vol.
   142, pp. 992--997, 2026.
 
+\bibitem{Wang2014BulkPort}
+Y.~Wang, F.~Caron, J.~Vanthienen, L.~Huang, and Y.~Guo, ``Acquiring logistics
+  process intelligence: Methodology and an application for a {C}hinese bulk
+  port,'' \emph{Expert Systems with Applications}, vol.~41, no.~1, pp.
+  195--209, 2014.
+
 \bibitem{Aalst2016}
 W.~Van~der Aalst, \emph{Process Mining: Data Science in Action}, 01 2016.
 
@@ -201,11 +212,6 @@ S.~J.~J. Leemans, D.~Fahland, and W.~M.~P. van~der Aalst, ``Discovering
   behaviour,'' in \emph{Business Process Management Workshops}, ser. Lecture
   Notes in Business Information Processing, vol. 171.\hskip 1em plus 0.5em
   minus 0.4em\relax Springer, 2014, pp. 66--78.
-
-\bibitem{Hopcroft2006Automata}
-J.~E. Hopcroft, R.~Motwani, and J.~D. Ullman, \emph{Introduction to Automata
-  Theory, Languages, and Computation}, 3rd~ed.\hskip 1em plus 0.5em minus
-  0.4em\relax Pearson Addison-Wesley, 2006.
 
 \bibitem{vanderAalst2004AlphaMiner}
 W.~M.~P. van~der Aalst, T.~Weijters, and L.~Maruster, ``Workflow mining:
@@ -489,6 +495,38 @@ M.~Camargo, M.~Dumas, and O.~González-Rojas, ``Discovering generative models
   from event logs: data-driven simulation vs deep learning,'' \emph{PeerJ
   Computer Science}, vol.~7, p. e577, 07 2021.
 
+\bibitem{Senderovich2015QueueMining}
+A.~Senderovich, M.~Weidlich, A.~Gal, and A.~Mandelbaum, ``Queue mining for
+  delay prediction in multi-class service processes,'' \emph{Information
+  Systems}, vol.~53, pp. 278--295, 2015.
+
+\bibitem{LugaresiMatta2021}
+G.~Lugaresi and A.~Matta, ``Automated manufacturing system discovery and
+  digital twin generation,'' \emph{Journal of Manufacturing Systems}, vol.~59,
+  pp. 51--66, 2021.
+
+\bibitem{LugaresiMatta2023}
+------, ``Automated digital twin generation of manufacturing systems with
+  complex material flows: Graph model completion,'' \emph{Computers in
+  Industry}, vol. 151, p. 103977, 2023.
+
+\bibitem{Reinhardt2019ASMG}
+H.~Reinhardt, M.~Weber, and M.~Putz, ``A survey on automatic model generation
+  for material flow simulation in discrete manufacturing,'' \emph{Procedia
+  CIRP}, vol.~81, pp. 121--126, 2019.
+
+\bibitem{Cimino2025ASMGReview}
+A.~Cimino, M.~Elbasheer, F.~Longo, G.~Mirabelli, V.~Solina, and P.~Veltri,
+  ``Automatic simulation models generation in industrial systems: A systematic
+  literature review and outlook towards simulation technology in the industry
+  5.0,'' \emph{Journal of Manufacturing Systems}, vol.~80, pp. 859--882, 2025.
+
+\bibitem{Knopp2023ObjectCentricSimulation}
+B.~Knopp, M.~Pourbafrani, and W.~M.~P. van~der Aalst, ``Discovering
+  object-centric process simulation models,'' in \emph{2023 5th International
+  Conference on Process Mining (ICPM)}.\hskip 1em plus 0.5em minus 0.4em\relax
+  IEEE, 2023, pp. 81--88.
+
 \bibitem{Sargent2013Validation}
 R.~G. Sargent, ``Verification and validation of simulation models,''
   \emph{Journal of Simulation}, vol.~7, no.~1, pp. 12--24, 2013.
@@ -509,11 +547,6 @@ K.~{\"O}zdemir, L.~Kirchdorfer, K.~Amiri~Elyasi, H.~van~der Aa, and
   H.~Stuckenschmidt, ``Rethinking business process simulation: A utility-based
   evaluation framework,'' 2025, arXiv preprint.
 
-\bibitem{Sulis2026SimulationReview}
-E.~Sulis, L.~Genga, and N.~Martin, ``Simulation and process mining: Review and
-  outlook,'' \emph{International Journal of Data Science and Analytics},
-  vol.~22, p. 198, 2026.
-
 \bibitem{ProSiTRepository}
 \BIBentryALTinterwordspacing
 {ProSiT Project}, ``Prosit: Process simulation tool---save and load
@@ -526,6 +559,10 @@ E.~Sulis, L.~Genga, and N.~Martin, ``Simulation and process mining: Review and
 T.~Gneiting and A.~E. Raftery, ``Strictly proper scoring rules, prediction, and
   estimation,'' \emph{Journal of the American Statistical Association}, vol.
   102, no. 477, pp. 359--378, 2007.
+
+\bibitem{Flyvbjerg2006CaseStudy}
+B.~Flyvbjerg, ``Five misunderstandings about case-study research,''
+  \emph{Qualitative Inquiry}, vol.~12, no.~2, pp. 219--245, 2006.
 
 \bibitem{hhla2025}
 \BIBentryALTinterwordspacing
@@ -544,34 +581,24 @@ H.~M.~W. Verbeek, T.~Basten, and W.~M.~P. van~der Aalst, ``Diagnosing workflow
   processes using {Woflan},'' \emph{The Computer Journal}, vol.~44, no.~4, pp.
   246--279, 2001.
 
-\bibitem{Russell2006WorkflowPatterns}
-N.~Russell, A.~H.~M. ter Hofstede, W.~M.~P. van~der Aalst, and N.~Mulyar,
-  ``Workflow control-flow patterns: A revised view,'' BPMcenter.org, BPM Center
-  Report BPM-06-22, 2006.
-
 \bibitem{RWChapela2024Delays}
 D.~Chapela-Campa and M.~Dumas, ``Enhancing business process simulation models
   with extraneous activity delays,'' \emph{Information Systems}, vol. 122, p.
   102346, 2024.
 
-\bibitem{vanDongen2018Splitting}
-B.~F. van Dongen, ``Efficiently computing alignments: Using the extended
-  marking equation,'' in \emph{Business Process Management (BPM 2018)}, ser.
-  Lecture Notes in Computer Science, vol. 11080.\hskip 1em plus 0.5em minus
-  0.4em\relax Springer, 2018.
-
-\bibitem{vanDongen2018Datastructures}
-------, ``Efficiently computing alignments: Algorithm and datastructures,''
-  2018.
-
 \bibitem{VanDerAalst2023OCPM}
 W.~M.~P. van~der Aalst, ``Object-centric process mining: Unraveling the fabric
   of real processes,'' \emph{Mathematics}, vol.~11, no.~12, p. 2691, 2023.
 
-\bibitem{Knopp2023ObjectCentricSimulation}
-B.~Knopp, M.~Pourbafrani, and W.~M.~P. van~der Aalst, ``Discovering
-  object-centric process simulation models,'' in \emph{2023 5th International
-  Conference on Process Mining (ICPM)}.\hskip 1em plus 0.5em minus 0.4em\relax
-  IEEE, 2023, pp. 81--88.
+\bibitem{Wohlin2012Experimentation}
+C.~Wohlin, P.~Runeson, M.~H{\"o}st, M.~C. Ohlsson, B.~Regnell, and
+  A.~Wessl{\'e}n, \emph{Experimentation in Software Engineering}.\hskip 1em
+  plus 0.5em minus 0.4em\relax Berlin, Heidelberg: Springer, 2012.
+
+\bibitem{RWSplitMiner2019}
+A.~Augusto, R.~Conforti, M.~Dumas, M.~La~Rosa, and A.~Polyvyanyy, ``Split
+  miner: Automated discovery of accurate and simple business process models
+  from event logs,'' \emph{Knowledge and Information Systems}, vol.~59, pp.
+  251--284, 2019.
 
 \end{thebibliography}

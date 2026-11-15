@@ -96,10 +96,20 @@ different systems may describe different operational stages
 \cite{RWBecker2017Context}. Grobis and Ihlenfeldt use event data to prepare a
 simulation model for production logistics and split the time between two
 activities into transport and waiting
-\cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. In a
+\cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. In
+ports, process mining has been used to describe operations, for example the
+performance and the deviations of a bulk port, but not to build simulation
+models \cite{Wang2014BulkPort}. Across 105 studies that combine simulation and
+process mining, Sulis et al.\ found one in logistics and one in transportation;
+most concern healthcare and manufacturing \cite{Sulis2026SimulationReview}. In a
 hospital, Vinci et al.\ discover a simulation model from an event log, check it
 against observed behaviour and only then use it to compare resource
 configurations \cite{Hospital2026Vinci}. This thesis follows the same order.
+They argue that queueing models suit capacity problems of a single activity,
+whereas processes with several activities and several resource pools need
+simulation. Their method assumes that delays arise only from limited resources,
+and the simulation was judged in discussions with the staff rather than by a
+structured procedure; the authors name both as limitations.
 
 \paragraph{Implication for this thesis}
 An adequate simulation of the truck process must reproduce TTT, its tail and
@@ -266,28 +276,6 @@ transition whether to fire it, which enlarges the search. Third, a simulator
 has to decide them as well, although they leave no trace in the training data
 (Section~\ref{sec:prosit_limits}).
 
-\paragraph{State machines}
-A \emph{state machine} is a Petri net in which every transition has exactly
-one input place and one output place \cite{Murata1989}. A state machine
-workflow net therefore always holds exactly one token. Each place is a state of
-the process, and each transition a step from one state to the next. A state
-machine cannot express parallelism. For a truck, this is not a loss: its stops
-never run in parallel. Every finite set of sequences, and more generally every
-language accepted by a finite automaton, can be written as a sound state
-machine workflow net. Each automaton state becomes a place and each automaton
-edge a visible transition. Among the deterministic automata that accept a
-language there is a unique smallest one, up to renaming of states
-\cite{Hopcroft2006Automata}. Its state machine is therefore a canonical
-representation of the language: two nets with the same language give the same
-state machine. This encoding is used in E2 (Section~\ref{sec:exp_rules}).
-
-In such an encoding, the same activity label usually appears on several
-transitions, one for each state in which the activity can happen. These are
-called \emph{duplicate labels}. The four discovery families compared in E1
-create one visible transition per activity. For ProSiT the difference matters,
-because it learns one routing tree per transition
-(Section~\ref{sec:prosit_components}). With duplicate labels, the routing of
-an activity can therefore differ from state to state.
 
 \subsection{Discovery Algorithms}
 \label{sec:bg_algorithms}
@@ -305,8 +293,9 @@ activity follows another and keeps a dependency when its dependency measure
 exceeds a threshold \cite{heuristicsMiner2006,Weijters2011FHM}. The interactive
 data-aware variant (iDHM) can also keep infrequent dependencies that depend on
 data, and converts the resulting causal net into a Petri net
-\cite{Mannhardt2017DHM,Mannhardt2017iDHM}. The result is not guaranteed to be
-sound.
+\cite{Mannhardt2017DHM,Mannhardt2017iDHM}. In this Petri net every activity
+appears once, and every dependency between two activities becomes a silent
+transition between them. The result is not guaranteed to be sound.
 \item \textbf{Inductive Miner.} The Inductive Miner splits the log
 recursively by sequence, choice, parallel and loop cuts. The result is a
 process tree, which is converted into a sound workflow net. The variant IMf
@@ -401,8 +390,9 @@ log and add it \cite{SimulationGuidedRepair2025}. Restricting behaviour that
 the simulator generates too often is named as future work.
 
 \paragraph{Implication for this thesis}
-E2 uses explicit, declarative domain knowledge a posteriori and fully
-automatically: sequence rules restrict the language, data rules become guards
+E2 uses explicit, declarative domain knowledge a posteriori: the sequence rules
+are checked on the language of each discovered net, which is not changed, and the
+data rule on the planned stops becomes a guard in the simulator
 (Section~\ref{sec:exp_rules}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -463,9 +453,7 @@ the level of activities, the model side after a prefix is the set of activities
 that the language allows next, over every marking the prefix can reach.
 Precision then depends only on the language and the log. This is what the
 proposition BehPro+ asks of a quality measure: the representation of the model
-must not matter \cite{vanderAalst2018Propositions}. The activity level is the
-reference in this thesis, because the thesis compares nets with the same language
-but different representations.
+must not matter \cite{vanderAalst2018Propositions}.
 
 A tool has to know the state of the model after each prefix. The token-based
 implementation keeps one marking per prefix. In a deterministic net without
@@ -586,6 +574,30 @@ predictive models at run time, so that they can use the current state of the
 simulation \cite{runtimeIntegration2024}. ProSiT, introduced in
 Section~\ref{sec:prosit_background}, applies data awareness to all parts of the
 model.
+
+\paragraph{Related work: queues and physical resources}
+Discovered simulation models are weakest where queues and shared resources
+shape a process. Among the specific risks of BPS, van der Aalst lists models that
+ignore the process context, such as the number of cases that compete for the
+same resources, and working speeds that depend on the workload \cite{Aalst2015}.
+In the review of Sulis et al., process mining supports arrivals, durations and
+the control flow well, but the modelling tasks around queues and resources
+receive limited or no support, partly because the data do not record them
+\cite{Sulis2026SimulationReview}. Queue mining takes a queueing perspective on
+event logs and predicts the delay of a case from the congestion it meets
+\cite{Senderovich2015QueueMining}. In manufacturing, simulation models are
+generated from event logs of the material flow: the structure is discovered
+from the data, while physical elements such as buffers and capacities are added
+and calibrated explicitly
+\cite{LugaresiMatta2021,LugaresiMatta2023,Reinhardt2019ASMG,Cimino2025ASMGReview}.
+Grobis and Ihlenfeldt note that logs at the business level are usually too
+coarse for queues, which need data from the operational level
+\cite{Grobis2025ProductionLogistics}. RIMS computes queue features during the
+simulation and simulates waiting times better where resources are congested
+\cite{runtimeIntegration2024}. Object-centric simulation models represent
+several interacting objects instead of one case notion
+\cite{Knopp2023ObjectCentricSimulation}; Sulis et al.\ found only one such
+study.
 
 \paragraph{Validation}
 \label{sec:simulation_validation_background}
@@ -823,8 +835,8 @@ resource that serves several cases side by side, a lane may already be free much
 earlier.
 \end{enumerate}
 The first three properties make the control-flow model more important for a
-simulator than for a descriptive model; E2 addresses them
-(Section~\ref{sec:exp_rules}). Properties four to seven concern the physical
+simulator than for a descriptive model; E2 and E3 address them
+(Sections~\ref{sec:exp_rules} and \ref{sec:exp_baseline}). Properties four to seven concern the physical
 constraints of the blocks and are examined in E4
 (Section~\ref{sec:exp_mechanisms}).
 
@@ -850,6 +862,8 @@ Terminal simulation \cite{Kastner2021,Bett2024} & Hand-built models that compare
 Discovery benchmarks \cite{DiscoveryBenchmark,RWRehse2024Experimentation} & Compare fitness, precision and size of discovered models. & Which model is adequate when it is \emph{executed}, not only described? \\
 Domain knowledge and repair \cite{schuster2022,RWDixit2015Domain,SimulationGuidedRepair2025} & Use rules in discovery or repair; repair for simulation adds missing behaviour. & Can physical rules remove impossible behaviour exactly, and which rules belong in the net and which in the simulator? \\
 Data-aware simulation \cite{mannhardt2023stochasticProcessesModelling,lopez2024,Vinci2026prosit} & Routing and times depend on data and process state; evaluated on business processes. & Does it reproduce a physical process with shared capacity and congestion? \\
+Queues and physical resources \cite{Senderovich2015QueueMining,Aalst2015,Sulis2026SimulationReview} & Queueing view of delays; known risks of ignoring workload and shared resources; little process-mining support for queues. & Which assumptions of a discovered simulator break when capacity is physical, and what must be added? \\
+Data-driven simulation in manufacturing \cite{LugaresiMatta2021,Grobis2025ProductionLogistics} & Structure discovered from logs; buffers and capacities added explicitly. & Does this split between learned and added parts work for a data-aware simulator of truck visits? \\
 Simulation validation \cite{ChapelaCampa2023Trust,Chapela2025SimQuality,Sargent2013Validation} & Multi-perspective comparison of generated and real logs. & Does the model respond to load like the terminal, and do domain experts find it plausible? \\
 \bottomrule
 \end{tabularx}
@@ -863,15 +877,33 @@ that the model permits but the log never shows, and physical rules are not part
 of the discovered model. Second, data-aware simulation discovery has been
 evaluated mainly on administrative and healthcare processes. Its behaviour in a
 physical logistics system with shared capacity and congestion is largely
-untested. Third, validation of discovered simulation models focuses on
-similarity to a historical log. Whether the model responds to load like the
-real system, which is needed before a what-if analysis, is rarely tested, and
-the judgement of domain experts is rarely documented.
+untested. The assumptions that decide it, how queues, capacity and load enter the
+learned models, are exactly those that process mining supports least. Third,
+validation of discovered simulation models focuses on similarity to a
+historical log. Whether the model responds to load like the real system, which
+is needed before a what-if analysis, is rarely tested, and the judgement of
+domain experts is rarely documented.
+
+Queue mining, data-driven simulation in manufacturing and the validation
+literature point to a hybrid design: process mining learns what the log records, the physical limits enter as explicit mechanisms, and the model is
+validated with the methods of simulation research. This thesis tests whether
+such a design works for a data-aware simulator and what it costs. Truck
+operations at HHLA Container Terminal Burchardkai serve as a \emph{critical case}
+in the sense of Flyvbjerg \cite{Flyvbjerg2006CaseStudy}. The conditions are
+favourable: the log is large and complete, the case notion is clear, the
+manifest of a visit is known at Gate In, and the physical limits are known and
+can be checked in every generated log. If a data-aware simulator needs
+additional mechanisms under these conditions, other capacity-limited processes
+will need them as well; the mechanisms that work here are candidates for those
+processes. The control flow, in contrast, is simple, so the case says less about
+discovery algorithms than about what a simulator does with their models. The
+result is therefore a statement about the technique, not a recommendation for
+the terminal.
 
 This thesis addresses these gaps in a case study of truck operations at HHLA
 Container Terminal Burchardkai. It does not propose a new discovery algorithm or
 a new simulator. It compares discovery algorithms for their use in simulation
-(E1), restricts the selected models with physical rules (E2), measures how the
-control-flow model changes the simulated visits (E3), audits the simulation
+(E1), checks the nets against physical rules (E2), measures how the
+control-flow model shapes the simulated visits (E3), audits the simulation
 mechanisms and their response to load (E4), and evaluates one operational
 policy only if the model passes these checks (E5).

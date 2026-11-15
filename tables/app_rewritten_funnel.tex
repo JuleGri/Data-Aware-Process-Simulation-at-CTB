@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrrcc}
+\toprule
+ & & \textbf{Sequences} & \multicolumn{2}{c}{\textbf{Precision (training)}} & \textbf{Gen.} & & \\
+\textbf{Net} & \textbf{Rules violated} & \textbf{with 4 stops} & \textbf{discovered} & \textbf{rewritten} & \textbf{(of 16)} & \textbf{A4} & \textbf{A3} \\
+\midrule
+HM 0.7 & 6 (bound) $\rightarrow$ 6 (bound) & 27 $\rightarrow$ 27 & 0.998 & 0.998 & 2 $\rightarrow$ 2 & yes & non-dominated \\
+IM 0.0 & 3, 5, 6 (bound) $\rightarrow$ 6 (bound) & 2009 $\rightarrow$ 1583 & 0.842 & 0.888 & 13 $\rightarrow$ 13 & yes & non-dominated \\
+ILP 1.00 & 3, 5, 6 (bound) $\rightarrow$ 6 (bound) & 6561 $\rightarrow$ 3937 & 0.773 & 0.825 & 16 $\rightarrow$ 16 & yes & non-dominated \\
+\bottomrule
+\end{tabular}
+\caption{E2 on the three admissible nets. Rules violated: rules whose violation the language of the net permits, before $\rightarrow$ after the repair (6 (bound): more than four stops, enforced by the stop guard). Sequences with 4 stops: distinct sequences the language permits (5 occur in training). Precision: ETConformance in ProM 6.15 on the discovered net and on the repaired net without silent transitions. Gen.: new test sequences accepted, before $\rightarrow$ after the repair. A4: fitting visits (training and test), accepted training sequences and accepted new test sequences unchanged by the repair. A3: not dominated in precision of the rewritten net and generalisation.}
+\label{tab:app_rewritten_funnel}
+\end{table}

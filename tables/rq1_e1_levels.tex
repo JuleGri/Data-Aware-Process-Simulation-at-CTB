@@ -1,0 +1,33 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrr|rrrrrc}
+\toprule
+ & \multicolumn{3}{c|}{\textbf{Level 1}} & \multicolumn{5}{c}{\textbf{Level 2: rejected training \ldots}} & \\
+ & \textbf{Fitting} & & & \multicolumn{2}{c}{\textbf{sequences}} & \multicolumn{3}{c}{\textbf{visits, share of [\%]}} & \\
+\textbf{Net} & \textbf{visits [\%]} & \textbf{Prec.} & \textbf{Gen.} & $\geq$0.1\,\% & $<$0.1\,\% & \textbf{truck-min.} & \textbf{$>$ P90} & \textbf{multi-bl.} & \textbf{A2} \\
+\midrule
+IM 0.0 & 100.00 & 0.842\textsuperscript{a} & 13 & 0 & 0 & 0.00 & 0.00 & 0.00 & yes \\
+IMf 0.1 & 95.02 & 0.914 & 1 & 8 & 60 & 7.96 & 14.83 & 100.00 & no \\
+IMf 0.2 & 95.56 & 0.897 & 2 & 7 & 60 & 7.00 & 12.71 & 98.84 & no \\
+IMf 0.3 & 96.50 & 0.906 & 2 & 6 & 57 & 5.46 & 9.99 & 98.84 & no \\
+IMf 0.4 & 68.46 & 0.982 & 1 & 13 & 62 & 34.44 & 40.66 & 98.84 & no \\
+HM 0.7 & 99.44 & 0.998 & 2 & 0 & 44 & 0.96 & 2.17 & 0.78 & yes \\
+HM 0.8 & 98.33 & 0.999 & 0 & 2 & 48 & 2.47 & 4.14 & 1.26 & no \\
+HM 0.9 & 98.02 & 1.000 & 0 & 3 & 52 & 2.89 & 4.73 & 1.55 & no \\
+HM 0.9 / f0.1 & 71.53 & 1.000 & 0 & 14 & 65 & 35.40 & 46.71 & 100.00 & no \\
+HM 1.0 & 68.98 & 1.000 & 0 & 12 & 62 & 34.04 & 41.10 & 83.82 & no \\
+ILP 0.00 & 40.82 & 1.000 & 0 & 16 & 65 & 59.66 & 62.94 & 100.00 & no \\
+ILP 0.25 & 40.82 & 1.000 & 0 & 16 & 65 & 59.66 & 62.94 & 100.00 & no \\
+ILP 0.55 & 63.85 & 1.000 & 0 & 15 & 65 & 40.90 & 50.22 & 100.00 & no \\
+ILP 0.75 & 78.02 & 0.855 & 2 & 9 & 52 & 26.22 & 32.93 & 2.52 & no \\
+ILP 0.95 & 99.03 & 0.838 & 10 & 1 & 6 & 1.56 & 2.79 & 0.00 & no \\
+ILP 1.00 & 100.00 & 0.773 & 16 & 0 & 0 & 0.00 & 0.00 & 0.00 & yes \\
+\midrule
+Prefix tree & 100.00 & 1.000 & 0 & 0 & 0 & 0.00 & 0.00 & 0.00 & yes \\
+\bottomrule
+\end{tabular}
+\caption{E1 in two levels for the sound nets, training log (59,139 visits, 82 sequences). Level 1: share of fitting visits and escaping-edges precision (ProM 6.15, Section~\ref{sec:exp_discovery_eval}); Gen.: new test sequences accepted, of 16. Level 2: training sequences the net rejects, above the noise threshold (of 17) and below it (of 65), and the share of the truck-minutes (sum of the turnaround times), of the visits above the training P90 of 64 minutes and of the multi-block visits that the rejected visits make up. A2: accepts every sequence above the noise threshold. \textsuperscript{a}\,ETConformance rejects 30 fitting visits of IM 0.0 (Section~\ref{sec:res_e1_level1}). The prefix tree is a reference, not a candidate.}
+\label{tab:rq1_e1_levels}
+\end{table}

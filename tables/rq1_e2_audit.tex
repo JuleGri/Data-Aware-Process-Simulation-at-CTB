@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrlllll}
+\toprule
+\textbf{Net} & \textbf{Places / trans.} & \textbf{Prec.} & \textbf{Rule 3} & \textbf{Rule 4} & \textbf{Rule 5} & \textbf{Bound of rule 6} & \textbf{A3} \\
+\midrule
+HM 0.7 & 22 / 45 (34 silent) & 0.998 & holds & holds & holds & violated & yes \\
+IM 0.0 & 28 / 38 (27 silent) & 0.842 & violated & violated & violated & violated & no \\
+ILP 1.00 & 15 / 13 (2 silent) & 0.773 & violated & violated & violated & violated & no \\
+\bottomrule
+\end{tabular}
+\caption{Rule audit of the three nets that pass gates A1 and A2, as discovered. Rule 3: a visit without a stop is in the language (shortest witness \texttt{Gate In > Gate Out}). Rule 4: a reachable marking enables two stops at the same time. Rule 5: a mixed stop together with a separate delivery or receive at the same LL or HO2 area is in the language. Bound of rule 6: loops permit any number of stops; the stop guard enforces the planned number in the simulator. A3: rules 3 to 5 hold. Prec.: ETConformance (training).}
+\label{tab:rq1_e2_audit}
+\end{table}

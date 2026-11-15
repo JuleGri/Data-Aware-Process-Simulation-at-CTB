@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{lrcllrr|lr}
+\toprule
+ & & & \multicolumn{4}{c|}{\textbf{Decision (against the training log)}} & \multicolumn{2}{c}{\textbf{Reported (test log)}} \\
+\textbf{Net} & \textbf{Prec.} & \textbf{Gate} & \textbf{Sequence TVD} & \textbf{Stop-count TVD} & \textbf{Overr.} & \textbf{Unseen [\%]} & \textbf{Sequence TVD} & \textbf{TTT med./P90} \\
+\midrule
+HM 0.7 & 0.998 & yes & 0.015 [0.013, 0.018] & 0.004 [0.003, 0.007] & 117 & 0.01 & 0.096 [0.094, 0.097] & 58 / 136 \\
+IM 0.0 & 0.888 & yes & 0.015 [0.014, 0.016] & 0.002 [0.001, 0.002] & 0 & 0.04 & 0.097 [0.093, 0.100] & 58 / 141 \\
+ILP 1.00 & 0.825 & yes & 0.015 [0.013, 0.017] & 0.002 [0.001, 0.002] & 4 & 0.05 & 0.098 [0.096, 0.099] & 59 / 141 \\
+\bottomrule
+\end{tabular}
+\caption{Earlier comparison of the three admissible nets, each repaired, rewritten without silent transitions, with the stop guard on the visible transitions; mean over five seeds with [minimum, maximum]. Prec.: ETConformance on the rewritten net (training). Gate: no visit without stop, no overlapping stops of one truck, at most four stops, in every seed. TVD: total-variation distance to the training log (sequences; number of stops per visit). Overr.: guard overrides per run. Unseen: generated visits whose sequence does not occur in the training log. Right: against the test log. Observed test log: TTT median 33, P90 75 minutes.}
+\label{tab:app_rewritten_matrix}
+\end{table}

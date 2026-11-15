@@ -23,6 +23,8 @@ Reallocating 'name_of_file' (item size: 1) to 34 items.
 A level-1 auxiliary file: appendices/observed_behaviour.aux
 Reallocating 'name_of_file' (item size: 1) to 33 items.
 A level-1 auxiliary file: appendices/discovery_results.aux
+Reallocating 'name_of_file' (item size: 1) to 36 items.
+A level-1 auxiliary file: appendices/control_flow_replica.aux
 Reallocating 'name_of_file' (item size: 1) to 38 items.
 A level-1 auxiliary file: appendices/prosit_model_inventory.aux
 Reallocating 'name_of_file' (item size: 1) to 49 items.
@@ -43,45 +45,45 @@ Warning--missing publisher in Aalst2016
 Warning--missing publisher in heuristicsMiner2006
 
 Done.
-You've used 92 entries,
+You've used 97 entries,
             4087 wiz_defined-function locations,
-            1465 strings with 28823 characters,
-and the built_in function-call counts, 73158 in all, are:
-= -- 6101
-> -- 1692
-< -- 554
-+ -- 883
-- -- 304
-* -- 3559
-:= -- 10970
-add.period$ -- 214
-call.type$ -- 92
-change.case$ -- 114
-chr.to.int$ -- 1176
-cite$ -- 94
-duplicate$ -- 5420
-empty$ -- 5903
-format.name$ -- 388
-if$ -- 17161
+            1496 strings with 30066 characters,
+and the built_in function-call counts, 78868 in all, are:
+= -- 6598
+> -- 1850
+< -- 622
++ -- 973
+- -- 329
+* -- 3840
+:= -- 11770
+add.period$ -- 223
+call.type$ -- 97
+change.case$ -- 118
+chr.to.int$ -- 1332
+cite$ -- 99
+duplicate$ -- 5791
+empty$ -- 6266
+format.name$ -- 419
+if$ -- 18509
 int.to.chr$ -- 0
-int.to.str$ -- 92
-missing$ -- 972
-newline$ -- 321
-num.names$ -- 112
-pop$ -- 2150
+int.to.str$ -- 97
+missing$ -- 1024
+newline$ -- 336
+num.names$ -- 117
+pop$ -- 2252
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 5760
+skip$ -- 6207
 stack$ -- 0
-substring$ -- 3022
-swap$ -- 4431
-text.length$ -- 162
+substring$ -- 3410
+swap$ -- 4801
+text.length$ -- 178
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 92
+type$ -- 97
 warning$ -- 2
-while$ -- 328
-width$ -- 94
-write$ -- 987
+while$ -- 361
+width$ -- 99
+write$ -- 1043
 (There were 2 warnings)

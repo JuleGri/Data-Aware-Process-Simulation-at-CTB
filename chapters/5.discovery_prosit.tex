@@ -2,7 +2,7 @@
 \label{chp:process_discovery_methodology}
 % Sources (trucksimulation): simulation_e3/export_simulation_model.py (trees, routing, tables),
 %   plot_simulation_architecture.py, worked_example.py, plot_simulation_validation.py (Chapter 7 figures);
-%   final model: runs/split13apr_20261106/main/IM_0.0/prosit_params.pkl + runs/rq2_20261107/components
+%   final model: runs/split13apr_20261106/main/HM_0.7/prosit_params.pkl + runs/hm07_20261110/components/components
 %   (waiting_M3, exec_L); switches: ctb_engine.py. Earlier draft notes of the author are kept as comments below.
 
 This chapter describes the simulation model: how it is built from the event log,
@@ -43,6 +43,36 @@ and output.}
 \label{fig:sim_architecture}
 \end{figure}
 
+The model is a hybrid in the sense of Section~\ref{sec:rw_positioning}.
+Table~\ref{tab:sim_learned_added} shows for each part what is learned from the
+training log, what is added from domain knowledge to respect the physical
+limits, and which experiment checks it. The routing and the times, and how they
+depend on the manifest and the load, stay learned. The added parts are rules and
+mechanisms that the log cannot express; the observed blocks and arrivals are
+replayed so that the remaining error can be attributed.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{L{2.1cm}YYL{1.3cm}}
+\toprule
+\textbf{Part} & \textbf{Learned from the training log} & \textbf{Added from domain knowledge} & \textbf{Checked in} \\
+\midrule
+Arrivals and manifests & arrival tree on hour and weekday; manifests drawn as whole training tuples & replayed from the simulated period in the final model, so that demand is not part of the error & E4a \\
+Control flow & net (HM 0.7, as discovered) and one routing tree per transition, on the manifest and the stops done & rule audit of the net; stop guard for rule 6 & E1--E3 \\
+Block of a stop & one tree per block on queue and workload & observed block (final) or training shares; learned choice only without the self-count & E4b \\
+Capacity & concurrency per resource (4--5 trucks per block) & three handover lanes per block, checked over the whole stop when it starts & E4c \\
+Waiting time & one tree per resource on queue, workload and manifest & target measured from a free lane instead of a completely free block & E4c \\
+Execution time & one tree per activity on hour, weekday and manifest & number of other trucks at the block as a feature & E4d \\
+Load features & queue length and workload at enabling & exact count of the stops in progress & E4a, E4e \\
+\bottomrule
+\end{tabularx}
+\caption{What the final model learns from the log, what is added to respect the
+physical limits of the terminal, and where it is checked. Details of the
+added parts: Table~\ref{tab:sim_adaptations}.}
+\label{tab:sim_learned_added}
+\end{table}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Control Flow}
 \label{sec:sim_controlflow}
@@ -60,48 +90,73 @@ place, in which every truck visit is one token that moves from Gate In to Gate
 Out (Section~\ref{sec:bg_petri}). ProSiT executes the net, so it must be sound:
 from every reachable state the visit can still end, and no token is left behind.
 
-The net used in the simulation is the unfiltered Inductive Miner net IM 0.0,
-restricted exactly to two domain rules and written as a state machine
-(Figure~\ref{fig:sim_controlflow}). Its selection is described in E1 and E2
-(Sections~\ref{sec:exp_discovery} and \ref{sec:exp_rules}). It accepts all 82
-sequences of the training log and has ten places and 54 visible transitions.
-Every place is a state of the visit, and every transition one possible next
-step. A state machine is a Petri net in which every transition has exactly one
-input and one output place \cite{Murata1989}. Several transitions can carry the
-same activity label, which the labelled nets of ProSiT allow.
+The net used in the simulation is the Heuristics Miner net HM 0.7, exactly as ProM
+discovered it (Figure~\ref{fig:sim_controlflow}). Its selection is described in
+E1 and E2 (Sections~\ref{sec:exp_discovery} and \ref{sec:exp_rules}). It accepts
+every sequence above the noise threshold and 38 of the 82 training sequences
+(99.4\,\% of the training visits), and its language satisfies the domain rules 3
+to 5 without any change. The net has 22 places and 45 transitions: one visible
+transition per activity and 34 silent ones.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/simulation_model/sim_control_flow_guard.png}
-\caption{Control flow of the simulation model: IM 0.0 restricted to rules 3 and
-5 as a state machine (10 places, 54 transitions, no silent transitions). The
-labels show the stop guard of the simulator: $n$ is the number of planned stops
-from the manifest and $c$ the number of stops done; a yard transition may fire
-only if $c < n$, Gate Out only if $c = n$.}
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_control_flow.png}
+\caption{Control flow of the simulation model: HM 0.7 as discovered in ProM (22
+places, 11 visible and 34 silent transitions, the silent ones drawn as black
+bars). Each silent transition stands for one dependency between two activities;
+the loops at RMG receive, RMG delivery and HO2 receive allow repeated stops of
+one kind.}
 \label{fig:sim_controlflow}
 \end{figure}
 
-Two properties of this form matter for the simulation. First, a truck holds one
-token, so two of its stops can never be scheduled at the same time (rule 4).
-Second, every decision is one choice among the visible next steps at one place.
-ProSiT gives every transition a weight that depends on the case attributes and
-on the activities done so far, but not on the marking of the net
-\cite{Vinci2023Inf.Activ.Prob,Vinci2026prosit}. In a state machine, each
-transition has one input place, so its weight automatically refers to one state
-of the visit. In the original Inductive Miner net, the free order of the stops is
-expressed by parallel branches that can be skipped by silent transitions, and
-the skip decisions are then taken independently of each other. Decision points
-are places with several outgoing arcs, and silent transitions are a known
-difficulty for learning them \cite{PMRozinat2009}. The consequences for the
-simulated visits are analysed in E3 (Section~\ref{sec:res_rq1}).
+The silent transitions come from the way ProM writes a heuristics net as a Petri
+net: every dependency between two activities, for example ``after Gate In, an RMG
+receive'', becomes a silent transition between them. ProSiT learns one routing
+model per transition, so the decisions of the simulation sit on these silent
+transitions. 33 of them have a decision tree; the visible transitions get a
+constant weight, because each of them is the only way to continue from its input
+place. Table~\ref{tab:sim_routing_edges} names some of them by the step they
+stand for. ProSiT gives a transition a weight that depends on the case attributes
+and on the activities done so far, but not on the marking of the net
+\cite{Vinci2023Inf.Activ.Prob,Vinci2026prosit}. In HM 0.7 this is enough: the net
+has no parallel branches, so a truck holds one token, its stops follow one
+another (rule 4), and each silent transition stands for one step of the visit. In
+a net with parallel branches that silent transitions can skip, such as the
+Inductive Miner net IM 0.0, the skips of the branches would be learned
+independently of each other; E3 shows what follows from this
+(Section~\ref{sec:res_baseline}).
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{L{1.6cm}L{5.4cm}Y}
+\toprule
+\textbf{Transition} & \textbf{Step it stands for} & \textbf{Features of its routing tree} \\
+\midrule
+n60 & after Gate In: RMG receive (first stop) & full ratio, planned stops, flow type, visit complexity \\
+n26 & after Gate In: RMG delivery (first stop) & full ratio, planned stops, flow type, visit complexity \\
+n43 & after Gate In: LL delivery (first stop) & full ratio, deliveries, planned stops, flow type, visit complexity \\
+n35 & after RMG delivery: RMG receive & full ratio, flow type \\
+n57 & after RMG delivery: another RMG delivery & RMG deliveries done, containers, deliveries, visit complexity \\
+n47 & after RMG receive: another RMG receive & receives, LL receives done \\
+n38 & after RMG receive: Gate Out & receives, LL receives done \\
+n44 & after RMG delivery: Gate Out & flow type \\
+\bottomrule
+\end{tabularx}
+\caption{Where ProSiT learns the routing of HM 0.7: some of the 33 silent
+transitions with a decision tree, named by the step they stand for. All 34 are
+listed in \texttt{routing\_edges.csv} of the reproduction package.}
+\label{tab:sim_routing_edges}
+\end{table}
 
 The stop guard is the only data condition of the model. It is not part of the
 net, because ProSiT has no guards; it is applied in the simulation loop before
-every routing draw. Together with the state machine it forms a simple data
-Petri net with the planned stops $n$ and a counter $c$. From every reachable
-state, a visit can still end with exactly $n$ stops, for every $n$ from one to
-four, so the net with the guard is sound in the data-aware sense
-\cite{FelliDeLeoniMontali2021}.
+every routing draw (Section~\ref{sec:exp_guard}). Together with the net it forms
+a simple data Petri net with the planned stops $n$ and the stops done $c$. The
+guard looks ahead on the reachability graph of the net: a transition, silent or
+visible, may fire only if the visit can still end with exactly $n$ stops
+afterwards. It therefore never lets a truck enter a state from which its plan can
+no longer be completed, and in E3 it never had to give up.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Learned Components}
@@ -152,9 +207,8 @@ fitted distribution (line), each on its own scale.}
 
 \paragraph{Routing.} Every transition with alternatives has its own tree; it
 predicts the probability that the transition fires when it is enabled. The
-weights of the enabled transitions are then normalised. Of the 54 transitions,
-38 have a tree and 16 a constant weight, mostly those without alternatives. The
-trees split on the manifest. Figure~\ref{fig:sim_tree_routing} shows the tree
+weights of the enabled transitions are then normalised. Of the 29 transitions,
+27 have a tree and 2 a constant weight. The trees split on the manifest. Figure~\ref{fig:sim_tree_routing} shows the tree
 for an RMG receive as the first stop: for a receive visit with one planned stop
 and mostly full containers, its probability is 0.88; for a delivery visit it is
 practically zero. Figure~\ref{fig:sim_routing_first} compares the first stop that
@@ -193,8 +247,8 @@ the moment a lane of the block was free, not from the moment the whole block was
 free (Section~\ref{sec:exp_e4_mechanisms}). The trees split mainly on the queue
 length and the workload of the resource. At block T13
 (Figure~\ref{fig:sim_tree_waiting}), the expected waiting time is 7 minutes with
-at most one truck in the queue, 12 to 28 minutes with two to six, and more than
-50 minutes with seven or more.
+at most one truck in the queue, 12 minutes with two, 17 to 28 minutes with three
+to five, 53 minutes with six or seven and 101 minutes with eight or more.
 
 \begin{figure}[htbp]
 \centering
@@ -209,9 +263,9 @@ stop. In the final model, it has one more feature: the number of other trucks at
 the block when the stop starts (Section~\ref{sec:exp_e4_mechanisms}). For RMG
 receives this feature makes the first two splits (Figure~\ref{fig:sim_tree_exec}).
 Without reefer containers, a receive takes 7.5 minutes on average when the truck
-is alone at the block, 11.7 minutes with one other truck, 16.0 with two and 20.8
-with three; block T18 is slower. The tree for RMG deliveries has the same
-structure.
+is alone at the block, 11.7 minutes with one other truck, 16.0 with two and 20.7
+with three; block T18 is slower. The tree for RMG deliveries also splits first on
+the other trucks at the block, then on the number of deliveries.
 
 \begin{figure}[htbp]
 \centering
@@ -265,8 +319,8 @@ and why it is needed; the evidence is in E3 and E4.
 \toprule
 \textbf{Part} & \textbf{ProSiT 1.0.4} & \textbf{Final model} & \textbf{Why} \\
 \midrule
-Control flow & discovered net as given & IM 0.0 restricted to rules 3 and 5, as a state machine & no physically impossible visits; one token per truck (E2, E3) \\
-Number of stops & no guard & stop guard: as many stops as planned & rule 6; ProSiT has no guards (E3) \\
+Control flow & discovered net as given & HM 0.7 as discovered (rules 3 to 5 hold) & no change (E2) \\
+Number of stops & no guard & stop guard that looks ahead on the net: as many stops as planned & rule 6; ProSiT has no guards; decisions sit on silent transitions (E3) \\
 Resource calendars & discovered (122--128 of 168 hours) & full week for trucks already inside & a stop is not interrupted at the end of a shift \\
 Timestamps & continuous & floored to the minute & as in the source systems \\
 Arrivals and manifests & arrival tree, random training manifest & replayed (final); arrival tree (generative) & separates the model error from the demand (E4) \\
@@ -286,8 +340,8 @@ Counting & stops at the first finished activity in the schedule & every activity
 \label{sec:sim_summary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The simulation model combines a repaired control flow, written as a state machine
-with one data guard, and the probabilistic trees that ProSiT learns for routing,
+The simulation model combines the control flow discovered by the Heuristics
+Miner, used as it is, with one data guard, and the probabilistic trees that ProSiT learns for routing,
 arrivals, blocks, waiting and execution times. Its adaptations to the terminal
 keep the physical limits: one stop of a truck at a time, as many stops as planned,
 and at most three trucks at a block. How well the model reproduces the terminal is

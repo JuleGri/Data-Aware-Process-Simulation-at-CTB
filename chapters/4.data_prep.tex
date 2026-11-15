@@ -394,7 +394,7 @@ the truck type and its capacity are not recorded.
 3 & A visit has at least one yard stop between Gate In and Gate Out. & sequence & activity labels \\
 4 & The stops of a visit never overlap in time. & time & start and complete timestamps \\
 5 & A mixed stop handles all moves of the visit at its unit. The visit has no separate delivery or receive at the same unit. & sequence (LL, HO2); data (RMG) & activity labels; block of each RMG stop \\
-6 & The number of stops equals the number of planned stops in the manifest, at most four. & data; the bound is a sequence rule & planned stops (case attribute) \\
+6 & The number of stops equals the number of planned stops in the manifest. A truck delivers and receives at most four containers each, so a visit has at most eight stops; the data show at most four. & data; the bound is a sequence rule & planned stops (case attribute) \\
 7 & The load of the truck stays within its capacity after every stop (tentative). & data & container counts and truck type (not recorded) \\
 \bottomrule
 \end{tabularx}

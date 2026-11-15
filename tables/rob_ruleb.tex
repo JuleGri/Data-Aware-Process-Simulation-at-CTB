@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Measure} & \textbf{Observed} & \textbf{HM 0.7 (Rule A)} & \textbf{IM 0.0 (Rule B)} \\
+\midrule
+\multicolumn{4}{l}{\textit{E4 final configuration, test period (5 seeds)}} \\
+TTT median / P90 (min) & 33 / 75 & 28.0 / 56.0 & 28.4 / 62.2 \\
+Cycle-time distance (min) & -- & 7.9 & 6.3 \\
+Spearman arrivals and TTT & 0.55 & 0.54 & 0.48 \\
+Gaps approach / stop / WIP (min) & -- & 1.1 / 1.3 / 5.9 & 1.2 / 1.3 / 6.2 \\
+Exit, mean (min) & 12.4 & 10.5 & 12.4 \\
+\midrule
+\multicolumn{4}{l}{\textit{E4 final configuration, training period (5 seeds)}} \\
+TTT median / P90 (min) & 29 / 64 & 27.2 / 54.0 & 27.8 / 59.4 \\
+Cycle-time distance (min) & -- & 4.3 & 2.7 \\
+Wait before Gate Out, 1 / 2+ stops (min) & 12.4 / 12.7 & 10.4 / 13.2 & 10.1 / 30.9 \\
+\midrule
+\multicolumn{4}{l}{\textit{Control: E4 final configuration with enabling times reset in training (5 seeds)}} \\
+Test: TTT median / P90 (min) & 33 / 75 & 27.8 / 58.2 & 28.0 / 55.0 \\
+Test: cycle-time distance / exit (min) & -- / 12.4 & 8.0 / 10.3 & 8.5 / 9.9 \\
+Training: cycle-time distance (min) & -- & 4.3 & 4.2 \\
+Training: wait before Gate Out, 1 / 2+ stops (min) & 12.4 / 12.7 & 10.4 / 11.4 & 9.9 / 10.9 \\
+\midrule
+\multicolumn{4}{l}{\textit{E5, S1 $\pm 2$ minus baseline (10 seeds, 95\,\% interval)}} \\
+TTT of visits with a moved delivery (min) & -- & $-$9.3 [$-$9.9, $-$8.8] & $-$9.3 [$-$9.7, $-$8.8] \\
+Mean TTT, all visits (min) & -- & $-$2.20 [$-$2.52, $-$1.88] & $-$2.17 [$-$2.51, $-$1.84] \\
+Approach to the first RMG stop (min) & -- & $-$2.50 [$-$2.72, $-$2.27] & $-$2.50 [$-$2.75, $-$2.25] \\
+Robustness runs with the same sign & -- & 4 of 4 & 4 of 4 \\
+\bottomrule
+\end{tabular}
+\caption{The answers to RQ2 and RQ3 with the net of Rule A (HM 0.7, main runs) and the net of Rule B (IM 0.0), each as a state machine with the stop guard; same configurations, settings and seeds. Wait before Gate Out: from the end of the last stop, training log and the five training runs. Control: the waiting-time and execution-time models retrained after the enabling time of a transition is reset when its token is consumed (ProSiT keeps it across loops). Robustness runs: the four runs of Z5 whose 95\,\% interval for the visits with a moved delivery lies below zero.}
+\label{tab:rob_ruleb}
+\end{table}
