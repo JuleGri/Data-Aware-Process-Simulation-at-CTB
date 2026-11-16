@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{YL{3.0cm}L{3.0cm}}
+\toprule
+\textbf{Measure} & \textbf{Training} & \textbf{Test} \\
+\midrule
+Period & 2 Mar -- 11 Apr 2026 & 13 -- 30 Apr 2026 \\
+Visits & 59,139 & 32,014 \\
+Visits with 1 / 2 / $\geq$3 stops (\%) & 91.3 / 8.6 / 0.2 & 89.2 / 10.7 / 0.1 \\
+Delivery / receive / mixed visits (\%) & 38.3 / 48.5 / 13.2 & 44.2 / 40.8 / 14.9 \\
+No RMG / one block / several blocks (\%) & 22.5 / 75.8 / 1.7 & 27.8 / 70.1 / 2.1 \\
+\midrule
+TTT mean / median / P90 (min) & 36.6 / 29 / 64 & 41.2 / 33 / 75 \\
+Median TTT delivery / receive / mixed & 23 / 30 / 41 & 27 / 35 / 48 \\
+Median TTT one block / several blocks & 29 / 47 & 33 / 50 \\
+Mean approach / stops / transfer / exit & 11.0 / 12.1 / 1.1 / 12.4 & 12.7 / 14.4 / 1.7 / 12.4 \\
+Mean trucks in the terminal at Gate In & 77 & 95 \\
+Delay-peak hours (\%) & 10.4 & 25.7 \\
+\bottomrule
+\end{tabularx}
+\caption{Visit structure and turnaround time (TTT) of the event log. Approach: Gate In to the start of the first stop; exit: end of the last stop to Gate Out; transfer: time between stops. Gate events are instantaneous, so the four parts add up to the TTT. Delay-peak hours: Gate-In hours with at least 20 visits and a median TTT of at least 37 minutes, the 90th percentile of the training hours.}
+\label{tab:obs_descriptives}
+\end{table}

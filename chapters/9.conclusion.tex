@@ -2,31 +2,89 @@
 \chapter{Conclusion}
 \label{chp:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item One page summary of what was done: data, model construction, layer-wise validation, scenario.
-\end{hints}
+
+This thesis built a simulation of truck handling at HHLA Container Terminal
+Burchardkai from two months of operational event data and examined whether it
+can support the assessment of a load-aware allocation of truck deliveries to
+yard blocks. It selected the control-flow model from a grid of discovered nets,
+fitted ProSiT on the planned visit manifest, validated the simulation layer by
+layer against the recorded turnaround times and their response to load, and
+applied one allocation rule within the limits that this validation established.
 
 \section{Answers to the Research Questions}
 \label{sec:concl_rq}
-\begin{hints}
-\item One paragraph per RQ, in the pattern: the question in one sentence, the direct answer, the key evidence (one or two numbers), the qualification. Same RQ wording as in Chapter~\ref{chp:introduction}.
-\item RQ1 (12 Nov 2026, HM 0.7 selected): take the short answer of Section~\ref{sec:res_rq1}. Part~1: HM 0.7 written as a state machine, plus the stop guard; the most precise sound net (0.998) that accepts every sequence above the noise threshold of 0.1\,\%; it gives up 44 rare sequences (0.96\,\% of the truck-minutes). IM 0.0 and ILP 1.00 needed the exact repair of rules 3 and 5. Part~2: only partly; precision did not anticipate the simulation (0.825 to 0.998, nearly the same simulated sequences), coverage did (guard overrides follow the coverage); the state-machine encoding decided whether the guard acts (HM 0.7) and whether impossible visits arise (IM 0.0, robustness).
-\item RQ2: take the short answer of Section~\ref{sec:res_rq2}. As fitted, no (median 58 vs.\ 33 min, P90 136 vs.\ 75); with replayed trucks and blocks and four changes (exact count, capacity at start with three lanes, lane-free waiting target, load-dependent service) to a large extent: median 28, P90 56 min on the test period, in-sample CTD 4.3 min (within the change between periods); the approach rises with the block load and the TTT with the arrivals (Spearman 0.54). Causes in the order of the truck: block choice (self-count, amplified by the too low concurrency count); capacity at enabling and single-server waiting; no load in the service time; exit about 2 min too short (Gate-Out waiting; outdated enabling times in loops). Qualification: underestimates the slowdown at the busiest blocks and hours; stop-duration and WIP gaps miss narrowly, so E5 is not admissible by the acceptance rule; part of the test error is the slower service of the test period.
-\item RQ3: take the answer of Section~\ref{sec:res_rq3}. The simulation shows direction and mechanism, not size: S1 $\pm 2$ shortens the moved visits by 9.3 min [8.8, 9.9] and the mean of all visits by 2.2 min; robust in all four robustness runs and with IM 0.0; about one fifth of the RMG deliveries move; no recommendation for the terminal.
-\item Earlier stage (Appendix~\ref{app:rewritten}): with the nets repaired and rewritten, and with IM 0.0 instead of HM 0.7, the answers to RQ2 and RQ3 were the same; IM 0.0's better level came from a ProSiT defect (stale enabling times).
-\end{hints}
+
+\paragraph{RQ1: Which discovery and rule treatment yields a sound, executable
+control-flow model that preserves the observed truck-visit behaviour, and do
+conformance metrics anticipate its behaviour in simulation?} The Heuristics
+Miner net HM 0.7, used as discovered, with a stop guard in the simulator that
+looks ahead on the net. Of 18 discovered nets, it is the most precise sound net
+that accepts every sequence above a noise threshold of 0.1\,\% (precision 0.998),
+and the only admissible net whose language respects the rules of the truck
+visit. It gives up 44 rare sequences, 0.96\,\% of the truck-minutes. Conformance
+metrics anticipate the simulation only in part: coverage of the frequent
+behaviour and the structure of the net, parallel branches and where its decisions
+sit, decided more than precision. A net with parallel branches produced visits
+that no truck can perform, and under the final configuration these visits even
+brought it closest to the observed turnaround time.
+
+\paragraph{RQ2: To what extent does the ProSiT simulation reproduce truck
+turnaround time and its response to load, and which components explain the
+discrepancies?} As fitted, it does not: the median turnaround time is 57 instead
+of 33 minutes, because the learned block choice sends most trucks to one block.
+With the observed trucks and blocks replayed and four changes to the queue and
+the service (an exact count of the trucks at a block, capacity checked at the
+start of a stop with three lanes, a waiting time measured from a free lane, and
+the load as a feature of the service time), it reproduces the median within 5
+minutes, the rise of the waiting with the load of a block, and a convex response
+to the arrival intensity. In-sample, its cycle-time distance (3.9 minutes) lies
+within the change between the two periods. It does not reproduce the slowdown in
+the busiest hours and misses two thresholds of the load-response criterion; part
+of the test error is the slower service of the test period.
+
+\paragraph{RQ3: To what extent can the simulation be used to analyse a
+load-aware block allocation for deliveries, and what does it indicate about the
+effect on turnaround time?} It can show the direction and the mechanism of such
+a change within the examined model variants, but not its size. Moving a delivery
+to a block within two block numbers when all lanes of its block are taken
+shortens the moved visits by about 9.5 minutes, reduces the share of visits above
+the corridor of 25 to 35 minutes by 3.7 percentage points and the minutes above
+the corridor by about a fifth, and does not slow down the receiving blocks. The
+effect on the mean turnaround time ranges from 0.9 to 4.9 minutes across the
+robustness runs, and the model leaves out the costs of a move.
 
 \section{Contributions}
 \label{sec:concl_contributions}
-\begin{hints}
-\item Restate the contributions from Chapter~\ref{chp:introduction}, now with the evidence that supports each.
-\end{hints}
+
+\paragraph{(C1) A justified simulation model for the CTB case.} The control-flow
+model was chosen by explicit gates on the training log, soundness, acceptance of
+every frequent sequence and the domain rules, and the price of the choice was
+measured: the rare sequences it gives up, the generalisation it lacks, and their
+small effect on the turnaround time. The learned trees, their parameters and the
+four adaptations to the terminal are documented and interpreted
+(Chapter~\ref{chp:process_discovery_methodology} and
+Appendix~\ref{app:prosit_inventory}).
+
+\paragraph{(C2) An empirical assessment of validity and decision-support
+potential.} The validation separated the components a truck meets, located the
+causes of the error in the block choice, the queue and the service, and judged
+the final model against criteria fixed in advance. It showed that a model with a
+plausible level can still lack the mechanism a scenario needs, and that a net
+with impossible visits can fit the level better. The scenario analysis then
+stated only what this validation supports: a direction and a mechanism, not a
+forecast.
 
 \section{Limitations}
 \label{sec:concl_limitations}
-\begin{hints}
-\item The three or four most important limitations, short (details in Chapter~\ref{chp:discussion}).
-\end{hints}
+
+Four limitations matter most (Chapter~\ref{chp:discussion}). First, the final
+model replays the observed arrivals and blocks; without them its error is larger.
+Second, it underestimates the slowdown in the busiest hours, so the size of a
+scenario effect is not established. Third, the event log records time at the
+block, not the use of lanes and cranes, so waiting and service cannot be fully
+separated. Fourth, the domain rules, the three lanes and the decision point of
+the allocation rest on the author's knowledge of the terminal, and the costs of a
+move, driving, rehandling and the yard plan, are not modelled.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Future Work}

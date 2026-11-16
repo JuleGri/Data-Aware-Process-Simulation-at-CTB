@@ -36,24 +36,24 @@ sequences while representing these dependencies inadequately. The model must
 therefore be evaluated for the particular decision it is intended to support.
 
 \section{Problem Statement}
+\label{sec:prob_statement}
 
 The primary performance measure in this study is truck turnaround time (TTT),
-defined as the time between Gate In and Gate Out. In the test period used in
-the current evaluation, the observed median is 33 minutes and the 90th
-percentile is 75 minutes. These values show that typical visits and long visits
-require separate attention; the data and performance measures are described in
+defined as the time between Gate In and Gate Out. In the test period, the
+observed median is 33 minutes, the mean 41 minutes and the 90th percentile
+75 minutes. The data and performance measures are described in
 Chapters~\ref{chp:case_study_and_data} and~\ref{chp:experiments}.
 
-The operational objective agreed with the terminal is a mean TTT of 30 minutes
-\todo{document the agreement: who, when, in which form}. It concerns the visits
-that take longer than 30 minutes: why they take longer, and whether a different
-allocation of deliveries to the yard blocks can reduce them. Because the recorded
-data contain implausible durations, the terminal reads the median as the robust
-central value; the mean, the share of visits above 30 minutes and the P90 describe
-the long visits that the target is about. In both observed periods the target is
-missed: about half of the visits take longer than 30 minutes
-(Section~\ref{sec:exp_kpis}). The study does not optimise the balance between
-truck handling and waterside performance.
+The terminal aims at a TTT within a corridor of about 25 to 35 minutes
+\todo{Name the source of the corridor: role, date and form of the statement.}.
+Shorter visits are not a goal in themselves: the cranes of a block also serve the
+waterside and the rail, and faster truck handling can cost capacity there. The
+problem is the visits above the corridor. In the test period, 47\,\% of the visits
+take longer than 35 minutes, and on average a visit spends 12.5 minutes above the
+corridor (Section~\ref{sec:exp_kpis}). This thesis therefore asks why these
+visits take longer and whether a different allocation of deliveries to the yard
+blocks can shorten them. It does not optimise the balance between truck handling
+and waterside operations.
 
 The candidate intervention is a load-aware allocation of deliveries to yard
 blocks. The operational account supplied for this study places the assignment

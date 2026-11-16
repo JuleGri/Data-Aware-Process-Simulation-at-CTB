@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{L{3.0cm}YYYYYYYYYY}
+\toprule
+\textbf{Net} & \textbf{Mean} & \textbf{Med.} & \textbf{P90} & \textbf{CTD} & \textbf{Appr.} & \textbf{Exit} & \textbf{NGD-3} & \textbf{Overlap [\%]} & \textbf{Spear.} & \textbf{TTT at 150+} \\
+\midrule
+Observed (test log) & 41.2 & 33 & 75 & -- & 12.7 & 12.4 & -- & 0.0 & 0.55 & 58 \\
+\midrule
+HM 0.7 (selected) & 33.1 & 28 & 58 & 8.0 & 10.8 & 10.3 & 0.033 & 0.0 & 0.51 & 40 \\
+HM 0.8 (fails A2) & 32.8 & 28 & 55 & 8.3 & 10.8 & 10.0 & 0.037 & 0.0 & 0.49 & 35 \\
+IMf 0.3 (fails A2) & 34.6 & 28 & 60 & 6.6 & 12.5 & 10.0 & 0.049 & 0.3 & 0.57 & 40 \\
+IM 0.0 (fails A3) & 42.9 & 31 & 89 & 3.7 & 18.1 & 9.9 & 0.100 & 20.6 & 0.62 & 36 \\
+ILP 1.00 (fails A3) & 65.9 & 55 & 114 & 24.7 & 12.2 & 41.1 & 0.065 & 2.6 & 0.66 & 62 \\
+\bottomrule
+\end{tabularx}
+\caption{The final configuration with each net of the E3 contrasts, against the test log, means over five seeds. Times in minutes. Overlap: share of multi-stop visits with overlapping stops. TTT at 150+: median TTT of the visits with 150 or more trucks in the terminal at Gate In.}
+\label{tab:rq2_nets}
+\end{table}

@@ -1,72 +1,71 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Model Inspection and Reproduction}
+\chapter{Reproduction}
 \label{app:model_inspection}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item Most of this appendix describes the first version of the study (T22 closure, demand scenario, Train-80 bundles, old figure). Rewrite it as ``Reproduction: repositories, run folders, commands, environments (ProSiT 1.0.3 and 1.0.4), input hashes, and which run produced which table.
-\end{hints}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This appendix separates visual process inspection from executable model state.
-The complete directly-follows graph exposes every observed training-log
-relation. The graph is descriptive. The discovered Petri net and fitted ProSiT
-parameters define the executable simulation model.
+This appendix states how the results can be reproduced: the environments, the
+inputs, the run folders and the script behind every table and figure. Paths are
+relative to the project repository \texttt{trucksimulation}.
 
-\section{Unfiltered Training-Log Control Flow}
+\section{Environments and Inputs}
 
-Figure~\ref{fig:appendix_full_dfg} shows the unfiltered 59-arc directly-follows
-graph of the order-preserving training log. It is included for audit because
-the dominant-frequency view in Chapter~\ref{chp:experiments}
-deliberately suppresses rare relations. The complete view confirms the fixed
-gate boundary and makes low-frequency repetitions and cross-activity relations
-inspectable. Its density also demonstrates why it is unsuitable as the primary
-explanatory figure. It is a descriptive view and should not be interpreted as a Petri net. In particular,
-a directly-follows arc records observed succession but does not encode choice,
-concurrency, markings, or firing rules.
+Discovery uses ProM Lite~1.4; conformance values use ProM~6.15 (PNetReplayer
+6.11.191, ETConformance 6.9.52), run headless on the PNML files exported from
+ProM. Soundness is checked with WOFLAN as implemented in PM4Py 2.7.22.3. The
+simulation runs in a Python 3.11 environment with ProSiT~1.0.4 and PM4Py 2.7.22.3
+(\texttt{envs/prosit104}). The training and test logs are in
+\texttt{data/processed/CTB/split13apr\_20261106}, with a manifest that records the
+split rule, the counts and the SHA-256 hash of each file. Before discovery, the
+logs are checked for missing labels, duplicate order positions, cases in both logs
+and chronological order, and they are written to XES with a check that each file
+reproduces its log sequence by sequence and is read correctly by OpenXES.
+\todo{State the availability of the operational data and of the derived event logs.}
 
-\begin{sidewaysfigure}[p]
+\section{Fitted Models and Simulation Runs}
+
+The fitted ProSiT models are stored as Python pickles: the model of each net in
+\texttt{simulation\_e3/runs/hm07orig\_20261115/e3/<net>/prosit\_params.pkl}, and the
+retrained components of E4 in \texttt{components/components}. The pickles keep the
+complete fitted state, including the training samples stored in the leaves;
+exact numerical reproduction uses them together with the recorded environment
+and the seeds. All simulation runs of E3 to E5 and the controls are in the same
+run folder: \texttt{e3} (main condition and contrasts), \texttt{e3\_noguard} and
+\texttt{e3\_simpleguard} (guard ablation), \texttt{e4} (all configurations of E4),
+\texttt{netx} (final configuration with the contrast nets), \texttt{stale\_final}
+(enabling times reset), \texttt{e5} (scenario runs) and the evaluation folders
+\texttt{eval\_*}. Each simulated log is a CSV file per seed; every evaluation
+writes its values as CSV next to a summary.
+
+\section{Sources of the Tables and Figures}
+
+Table~\ref{tab:app_sources} lists the script that produces each table and figure
+of the thesis from these runs. No value in a generated table is edited by hand.
+
+\begin{table}[htbp]
 \centering
-\includegraphics[width=0.92\textheight,height=0.88\textwidth,keepaspectratio]{figures/discovery/dfg_frequency_inductive_training.png}
-\caption{Complete frequency directly-follows graph of the order-preserving CTB
-training log. Node labels report activity occurrences and arc labels report
-directly-follows counts. All 59 observed arcs are retained. The figure is a
-descriptive audit view and is not the executable simulation model.}
-\label{fig:appendix_full_dfg}
-\end{sidewaysfigure}
-
-\section{Executable Model State}
-
-The baseline, T22-closure and increased-demand models are retained as separate
-serialized ProSiT parameter objects. The baseline contains the common Petri
-net, markings, fitted distributions, resources, capacities and calendars.
-The T22 scenario removes the block from the eligible RMG resource mappings and
-its availability calendar. The demand scenario changes only the empirical
-working-time inter-arrival sample. These state differences are described in
-Section~\ref{sec:exp_policy}. No source-code listing is required to
-interpret the interventions.
-
-The public ProSiT save-and-load workflow serializes discovered parameters so
-that simulation can be repeated without rerunning discovery
-\cite{ProSiTRepository}. The project follows that workflow and additionally
-retains the exact Python objects used for the CTB experiments. A machine-readable
-round-trip audit covers the baseline, T22-closure and increased-demand bundles
-of the Train-80 \textit{native-only} demand-mechanism configuration. Fitted rules, capacities,
-calendars, workload settings and empirical case-attribute distributions survive
-reconstruction. Each pickle additionally contains 40 timing or rule nodes with
-stored \texttt{sampled} arrays. This includes 71,530 calibrated inter-arrival
-values in the arrival node. None of these arrays is present immediately after
-\texttt{from\_json()}, and the CTB-specific calibration metadata attached to the
-Python objects is not reconstructed either.
-
-The JSON files consequently remain valid portable descriptions of the
-discovered parameters. Exact numerical reproduction instead uses the trusted
-pickles because they preserve the complete post-calibration in-memory state
-that produced the reported runs. This distinction is specific to the audited
-CTB bundles and software version and is not a general criticism of ProSiT's
-JSON interface. Pickles must only be loaded from this trusted project state and
-with the recorded environment.
-
-The serialized objects and provenance records are retained in the research
-project and can be supplied separately if executable reproduction is requested.
-They are not required to follow the methodological argument or the result
-tables in the thesis.
+\scriptsize
+\begin{tabularx}{\textwidth}{L{4.6cm}Y}
+\toprule
+\textbf{Table or figure} & \textbf{Script (inputs)} \\
+\midrule
+\ref{tab:obs_descriptives} & \texttt{analysis/describe\_event\_log.py} (training and test log) \\
+\ref{tab:kpi_long_visits} & \texttt{analysis/kpi\_long\_visits.py} (training and test log) \\
+\ref{tab:rq1_e1_levels}, \ref{tab:app_e1_conformance} & \texttt{analysis/reproducible\_e1\_20261110/make\_e1\_levels\_table.py}, \texttt{process\_discovery/make\_rq1\_tables.py} (ProM 6.15 values) \\
+\ref{fig:res_e1_tradeoff_train}, \ref{fig:res_e1_variant_coverage} & \texttt{process\_discovery/plot\_e1\_split13apr.py}, \texttt{plot\_e1\_variant\_coverage.py} \\
+\ref{tab:rq1_e2_audit} & \texttt{process\_discovery/make\_e2\_audit\_table.py} (language audit) \\
+\ref{tab:rq1_e3_main} & \texttt{simulation\_e3/validate\_e3.py}, \texttt{runs/hm07orig\_20261115/e3\_plan\_check.py}, guard counts from the run logs \\
+\ref{tab:sim_components}, \ref{tab:sim_hyperparameters}, \ref{tab:sim_capacities}, Figures~\ref{fig:sim_tree_arrivals} to~\ref{fig:sim_tree_exec} & \texttt{simulation\_e3/export\_simulation\_model.py} (final model) \\
+\ref{tab:sim_worked_example} & \texttt{simulation\_e3/worked\_example.py} (final configuration, seed 42) \\
+\ref{tab:sim_kpis}, Figures~\ref{fig:sim_ttt_distribution} to~\ref{fig:sim_ttt_decomposition} & \texttt{simulation\_e3/plot\_simulation\_validation.py} \\
+\ref{tab:rq2_chain} to \ref{tab:rq2_acceptance} & \texttt{simulation\_e3/make\_rq2\_tables.py --run runs/hm07orig\_20261115/e4 --final d3x --final-train f0} \\
+\ref{tab:rq2_nets} & \texttt{runs/hm07orig\_20261115/make\_net\_table.py} \\
+\ref{tab:rq3_effect}, \ref{tab:rq3_distribution}, \ref{tab:rq3_robustness} & \texttt{simulation\_e3/make\_rq3\_tables.py --evaluation runs/hm07orig\_20261115/eval\_e5} \\
+\ref{tab:rq3_corridor} & \texttt{simulation\_e3/evaluate\_e5\_kpi.py}, \texttt{runs/hm07orig\_20261115/make\_corridor\_table.py} \\
+\ref{tab:app_inventory} & \texttt{runs/hm07orig\_20261115/make\_inventory\_appendix.py} (also \texttt{model\_leaves.csv}) \\
+Net figures of Appendix~\ref{app:prosit_inventory}, \ref{fig:sim_controlflow} & \texttt{simulation\_e3/plot\_control\_flow.py} \\
+Tables of Appendix~\ref{app:replica} & \texttt{process\_discovery/make\_rq1\_tables.py}, \texttt{make\_replica\_table.py} \\
+\bottomrule
+\end{tabularx}
+\caption{Scripts behind the tables and figures.}
+\label{tab:app_sources}
+\end{table}

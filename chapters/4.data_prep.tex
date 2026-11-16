@@ -1,386 +1,233 @@
-\chapter{Data Preparation}
+\chapter{Data and Event Log}
 \label{chp:case_study_and_data}
-\begin{hints}
-\item Roadmap: environment, data sources, event-log construction, context attributes, key facts of the event log, domain rules. Keep the chapter short; details go to Appendix~\ref{app:observed_behaviour}.
-\item This chapter only describes the data and the observed system. It does not fit models.
-\end{hints}
+% Sources (trucksimulation): eventlog_building/00-04 (schedule, container matching, case aggregation, event log),
+%   preparation/001 (container scores); data/processed/CTB/split13apr_20261106/manifest.json (split and counts);
+%   analysis/describe_event_log.py (Table obs_descriptives); simulation_e3/run_e3_prom.py (MANIFEST_ATTRIBUTES).
 
-This chapter describes the operational context and the pipeline that turns raw operational
-records into a simulation-ready event log. The resulting event log is the input for Chapters~\ref{chp:experiments} and~\ref{chp:results}.
-
-Section~\ref{sec:cs_environment} introduces HHLA Container Terminal
-Burchardkai (CTB), the truck-handling operations and the data sources.
-Section~\ref{sec:event_log_engineering} describes how the pipeline reconstructs lifecycle timestamps and derives the case-level context required by ProSiT
-\cite{Vinci2026prosit}. Section~\ref{sec:observed_behaviour} gives the key
-facts of the resulting event log, and Section~\ref{sec:domain_rules} the
-domain rules that every truck visit must satisfy. The use of the
-train/validation/test partitions is described in
-Section~\ref{sec:exp_partitions}.
-
-
-
-
+This chapter describes the data of the case and the event log built from them:
+which records are used, what a case and an event are, which case attributes the
+simulation may use and why, what the log shows about truck turnaround, and which
+domain rules every truck visit must satisfy. The log is the input of all
+experiments (Chapter~\ref{chp:experiments}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Case Study Environment}
+\section{Case and Data Sources}
 \label{sec:cs_environment}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item Keep it short and concrete (the committee criticised too much port context in the defense).
-\end{hints}
 
-    \subsection{HHLA Container Terminal Burchardkai}
-\begin{hints}
-\item Terminal key facts, the truck process, the handling areas (RMG blocks, LL, HO2) and the gate.
-\item Replace ``operational experts confirmed by the exact source (author knowledge or documented terminal review with date).
-\end{hints}
+HHLA Container Terminal Burchardkai (CTB) in the Port of Hamburg handles about
+2.6 million TEU per year on 315 hectares \cite{hhla2025}. External trucks deliver
+or receive containers. A truck passes the entry gate (\emph{Gate In}), drives to
+one or more handling areas and leaves through the exit gate (\emph{Gate Out}).
+There are three kinds of handling areas: 22 storage blocks served by automated
+rail-mounted gantry cranes (RMG, blocks T06--T27), the empty-container depot (LL,
+from the German \emph{Leerlager}) and the manually operated area HO2. An RMG block
+has three handover lanes for trucks, and its cranes also serve the waterside and
+the rail. The physical constraints that follow from this are introduced in
+Section~\ref{sec:bg_terminal}.
 
-    This case study concerns the HHLA Container Terminal Burchardkai (CTB) in the Port of Hamburg. CTB handles approximately 2.6 million TEU
-    (Twenty-foot Equivalent Units) annually across 315 hectares
-    \cite{hhla2025}.
-
-    \textbf{Truck process.} External trucks visit CTB to deliver or receive
-    containers. At \textit{Gate In}, the truck is registered at the entry
-    gate. It then drives to the assigned yard position, where an RMG or other
-    handling equipment loads or unloads the container. After all planned
-    operations are completed, the truck leaves through \textit{Gate Out}.
-
-    The CTB environment in this project has several resource constraints.
-    Located between the waterside and the landside, 22 RMG storage
-    blocks (T06--T27) serve both sides. Operational experts from the terminal
-    confirmed two constraints used in this study: the activities of one truck
-    cannot be executed in parallel, and at most three automated rail-mounted
-    gantry cranes can work concurrently at one block. The CTB
-    has two specialised areas: an empty-container depot (called
-    ``MT'' or ``LL'', from the German \textit{Leerlager}) and the
-    manually operated HO2 yard area. The terminal gate consists of 16
-    lanes, split between incoming and outgoing trucks. The number of
-    operated gate lanes varies by day, shift and terminal resource plan.
-
-    \subsection{Data Sources}
-    \label{sec:cs_data_sources}
-\begin{hints}
-\item Keep the table. Add the observation period and what each system records about a truck visit.
-\end{hints}
-
-    The data come from several systems used in daily terminal operations.
-    These systems were developed over time and record different parts of the
-    process. A Terminal Operating System coordinates them.
-    Table~\ref{tab:ctb_data_sources} summarises the four sources used in this
-    thesis.
+\label{sec:cs_data_sources}
+Four operational systems record parts of a truck visit
+(Table~\ref{tab:ctb_data_sources}). They use different identifiers and are linked
+through the truck schedule. The extract covers March and April 2026, about
+104,000 truck visits and 113,466 container moves.
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{L{4.4cm}Y}
+\small
+\begin{tabularx}{\textwidth}{L{3.6cm}YL{3.4cm}}
 \toprule
-\textbf{Data source} & \textbf{Data provided} \\
+\textbf{Source} & \textbf{Content} & \textbf{Use in this thesis} \\
 \midrule
-ITS schedule & Truck-visit schedules and timestamps for gate entry,
-handling readiness, order completion and gate exit. \\
-Report system & Stage-level execution data, gate-entry records,
-exchange-area assignments, container transactions and carrier identifiers. \\
-Yard management system & Four-hour snapshots of storage-block capacity,
-occupancy and utilisation. \\
-Container master data & Container size, type, loading status, hazardous and
-reefer indicators, dwell time and inbound/outbound carriers. \\
+ITS truck schedule & Planned visit with its stops; timestamps of Gate In, readiness in the handover lane, fulfilment of the order and Gate Out & cases, events, timestamps, planned stops \\
+Report system & Container transactions, exchange areas and gate records & link of containers to stops \\
+Container master data & Size, type, full or empty, hazardous and reefer indicators & manifest attributes \\
+Yard management system & Four-hourly snapshots of block occupancy & description of the terminal only \\
 \bottomrule
 \end{tabularx}
-\caption{Operational data sources used for event-log engineering.}
+\caption{Operational data sources.}
 \label{tab:ctb_data_sources}
 \end{table}
 
-    These systems generate independent data pools with different
-    identifier schemes, requiring a data-integration procedure
-    described in Section~\ref{sec:event_log_engineering}. Historical
-    data from March and April 2026 (approximately eight weeks) were extracted.
-    The raw extract covers approximately 104,000 truck visits, 113,466
-    container move events and 336 yard-state snapshots
-    ($8$ weeks $\times 7$ days $\times 6$ snapshots per day).
-    The move-event count refers to the raw report-system extract. It is not the
-    denominator used later for the cleaned and cross-system-matched schedule
-    records.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Event-Log Construction}
+\section{Event Log}
 \label{sec:event_log_engineering}
-\begin{hints}
-\item The pipeline from four source systems to one truck-visit event log, as one figure (figures/schemas/event\_log\_engineering\_pipeline.png) and a short walk-through.
-\item Every step that changes the population must be counted (attrition table: raw visits, after cleaning, after matching, final).
-\end{hints}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Draft text (moved from the chapter introduction):
-The Truck schedule serves as the baseline for the data assembly.
-
-In a first step, the raw schedule is cleaned from false or incomplete entries. That includes missing timestamps and total visit times of over 12 hours, as those indicate system errors. 
-
-We are matching container details to each recorded transatction to give each visit with its operations complexity.
-Using ProSiT as the simulation framework in this thesis, we are then aggregating the individual container details to a case level complexity. Container attributes, like dangerous goods, fill status etc. are transformed into a complexity code system attributing each visit with a complexity score and container counts and trafic direction. 
-
-Then the schedules attributes and timestamps are transformed into an event log style.  
-Then the system variables are added by the initial timestamp of the process, aka the moment, the truck enters the terminal. 
-The demand of the gate at moment of entry, as well as the demand at the planned transaction points are calculated. 
-
-To include the terminals utilization into the process behaviour, the utilization of each of the yard sections and blocks is calculated and added to each visit. 
-
-\todo{Decided: no target features; multiblock visits are restored (expanded population). Describe this in Cleaning and Population.}
-
-\subsection{Visit Reconstruction}
+\paragraph{Case.}
 \label{sec:visit_reconstruction}
-\begin{hints}
-\item Case notion: one completed truck visit from Gate In to Gate Out; the key that links the systems (schedule UID).
-\item How container transactions are matched to visits, and what happens to unmatched records.
-\end{hints}
+A case is one completed truck visit from Gate In to Gate Out, identified by its
+schedule record. Container transactions are attached to the visit through the
+schedule, and container properties through the container number.
 
-\subsection{Activities and Event Order}
+\paragraph{Activities and resources.}
 \label{sec:activities_order}
-\begin{hints}
-\item The eleven generic labels (table): Gate In, Gate Out, receive/delivery/mixed at RMG, LL and HO2. Why block names are not part of the label.
-\item Event order from case:event:order (schedule sequence), not from timestamps, and why.
-\end{hints}
-
-\subsection{Timestamp Semantics}
-\label{sec:timestamp_semantics}
-\begin{hints}
-\item A stop interval runs from readiness in the handover lane to fulfilment. It can contain waiting for the crane, so it is not pure service time.
-\item Gate events are instantaneous; therefore turnaround time decomposes exactly into approach, stops, transfer and exit.
-\item Minute resolution of all source timestamps; known imprecision at LL and HO2.
-\end{hints}
-
-\paragraph{Order of stops and imprecise LL timestamps}
-The stops of a visit never overlap in the data: in no training or test visit
-does a stop start before the previous stop has ended. This supports domain
-rule~4 (Section~\ref{sec:domain_rules}). The gate events are less clean. In 6 of
-the 59,139 training visits and 5 of the 32,014 test visits, an
-\texttt{LL\_delivery} stop ends about two minutes after the truck has passed
-Gate Out. Such a stop cannot be physical; the timestamps of the empty-container
-depot are known to be imprecise. The event log used for discovery orders the
-events of a visit by the recorded sequence (\texttt{case:event:order}), in which
-Gate Out is always last, so these timestamps do not affect it.
-
-They do matter for discovery methods that read start and end timestamps. The
-lifecycle variant of the Inductive Miner \cite{RWLeemans2016Lifecycle} treats
-overlapping intervals as concurrency. Without a noise filter, the six
-overlapping training visits, 0.01\,\% of the training log, were enough for it to place Gate Out in
-parallel with the stops: the resulting net accepts a stop after Gate Out, which
-breaks rule~2. For this experiment, the end of a stop is therefore capped at the
-Gate Out time of its visit. With this correction the lifecycle variant returns a
-net with exactly the same language and the same concurrency as the Inductive
-Miner without lifecycle information (Section~\ref{sec:exp_discovery}).
-Lifecycle-based discovery thus depends on reliable start and end timestamps: a
-few imprecise timestamps at one area are enough to produce a physically
-impossible model.
-% Source: trucksimulation/process_discovery/export_lifecycle_xes.py (--cap-at-gate-out),
-% check_concurrency.py, compare_languages.py; nets in data/processed/CTB/ProM Petri Nets 65-35 Split
-% (Petri net IM Lifecycle 0.0 / 0.0 capped). 6 Nov 2026.
-
-\subsection{Resource Identities}
 \label{sec:resource_identities}
-\begin{hints}
-\item Resource = RMG block (T06--T27), LL, HO2, gates. One generic label can occur at different blocks.
-\item Physical capacities and their source: three handover lanes and up to three cranes per block shared with waterside and rail; four lanes at LL. Name the source (author knowledge, terminal confirmation with date).
-\end{hints}
+The log has eleven activities: Gate In, Gate Out and the nine combinations of
+three handling areas (RMG, LL, HO2) with three kinds of stop (\emph{delivery}, the
+truck brings a container; \emph{receive}, it collects one; \emph{mixed}, it does
+both at the same area). The block of an RMG stop is not part of the activity
+label but its resource (T06--T27); LL and HO2 are one resource each. A generic
+label keeps the control flow independent of the block, and the block allocation,
+which the scenario of this thesis changes, stays a separate decision.
 
-\subsection{Cleaning and Population}
+\paragraph{Event order and timestamps.}
+\label{sec:timestamp_semantics}
+Every stop has a start and a complete timestamp: it runs from the moment the truck
+reports ready in the handover lane to the fulfilment of the order. A stop
+therefore contains the waiting for the crane and is time at the block, not pure
+service time. Gate events are instantaneous, so the turnaround time (TTT) splits
+exactly into the approach to the first stop, the stops, the transfer between stops
+and the exit after the last stop. All timestamps have minute resolution. The order
+of the events within a visit is taken from the schedule (attribute
+\texttt{case:event:order}), not from the timestamps: the stops of a visit never
+overlap, but at the empty-container depot a stop can end a few minutes after Gate
+Out (6 training and 5 test visits). Methods that read the time intervals would
+treat this as concurrency; Section~\ref{sec:exp_discovery_input} shows the effect
+on discovery.
+
+\paragraph{Population.}
 \label{sec:cleaning_population}
-\begin{hints}
-\item Cleaning rules (missing timestamps, visits over 12 hours, unknown activity labels: 184 visits) with counts.
-\item The population correction: visits with several RMG blocks were first excluded for a target feature, then restored, because the exclusion removed a regular pattern (Chapter 7, E1). Final counts per partition.
-\end{hints}
-\FloatBarrier
+Visits with missing timestamps, visits longer than twelve hours, which indicate
+recording errors, and 184 visits with an activity outside the eleven labels are
+removed. Visits that handle containers at several RMG blocks are kept: they are a
+regular part of the process (1.7\,\% of the training visits) and the visits that
+a block allocation affects most. The final log has 91,153 visits.
+\todo{Add the counts of the cleaning steps (raw schedule records, missing timestamps, over twelve hours) from preparation/009\_Validation\_quality\_report\_s4\_fahrplan.py.}
 
-\subsection{Context Enrichment}
+\paragraph{Split.}
+The log is split once in time, at the weekly closure on Monday 13 April 2026.
+The training log (2 March to 11 April, 59,139 visits) is used to discover and fit
+every model and to make every selection; the test log (13 to 30 April, 32,014
+visits) is used to evaluate them. No visit spans the boundary, so the test period
+starts with an empty terminal. Section~\ref{sec:exp_partitions} describes how the
+experiments use the two logs.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Case Attributes: the Planned Manifest}
 \label{sec:context_enrichment}
-\begin{hints}
-\item For every attribute: definition, source, and whether it is known at Gate In (planned manifest) or reconstructed. This answers the leakage question.
-\item Note that historical demand and utilisation values are case-constant in the simulation and do not react to simulated load.
-\end{hints}
-
-To enable data-aware simulation, the event log is enriched with
-contextual attributes describing the operational state at the time of
-process execution. These attributes are organised into five
-categories.
-
-\paragraph{Information Available at Truck Entry}
 \label{sec:entry_known_attributes}
-
-The scheduling record contains the complete planned visit manifest before
-the truck enters the terminal. The number of planned stops,
-the numbers of delivery and receive transactions, the planned target area
-and the resulting final visit-complexity score are known at Gate In. The
-pipeline reproduces this entry-time information by aggregating all rows of
-the same \texttt{FAHRPLAN\_UID}. It does not infer these attributes from
-later realised durations or completion outcomes.
-\texttt{visit\_complexity} is a deterministic summary of the planned
-stop/container manifest (visit size, container-handling complexity and
-mixed-flow complexity), not an ex-post performance measure. Using these
-variables as case attributes does not leak the simulated future
-provided that the same planned manifest is supplied for a prospective run.
-
-The implementation detail that the target block is reconstructed from the
-planned stop's area-specific activity label can otherwise look like
-look-ahead: after genericising \texttt{T06--T27} activities, the reconstructed
-block is copied into \texttt{primary\_target\_area}. Semantically, however,
-the source is the planned \texttt{ANLAUFPUNKT\_HALTESTELLE} attached to the
-visit order and available at entry, not the later activity-completion
-timestamp. This distinction defines the deployment contract for all
-entry-known case attributes.
-
-\paragraph{Container Features}
-
-Container-related context is aggregated to case level so that visit
-properties can serve as case-level attributes in ProSiT. The resulting
-\texttt{n\_containers} attribute counts the unique containers handled during
-the visit. The binary attributes \texttt{has\_hazardous} and
-\texttt{has\_reefer} are aggregated using a logical OR across the complete
-manifest. The \texttt{full\_ratio} records the share of loaded containers,
-while \texttt{container\_complexity\_mean} and
-\texttt{container\_complexity\_sum} describe the average and cumulative
-handling complexity of the visit.
-
-\paragraph{Yard Features}
-
-Yard state features capture the storage capacity and utilisation status
-of different terminal areas at truck arrival (Gate In event). These
-features are matched by an exact equality join on the minute-resolved Gate In
-timestamp. The joined snapshot provides the overall
-\texttt{gate\_utilization}, the aggregated \texttt{rmg\_utilization}, and
-the area-level \texttt{vc\_utilization} and \texttt{mt\_utilization}. For
-single-block visits, \texttt{target\_utilization} gives the utilisation of
-the assigned RMG block.
-
-\paragraph{Demand Features}
-
-Demand features quantify operational load pressure at different
-terminal areas over a rolling 60-minute window. The general
-\texttt{gate\_demand} counts trucks processed across the terminal during the
-preceding hour. The \texttt{rmg\_demand}, \texttt{vc\_demand} and
-\texttt{mt\_demand} attributes separate this load by operational area.
-For single-block visits, \texttt{target\_demand} records the demand for the
-assigned RMG block.
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Event Log Overview}
-\label{sec:observed_behaviour}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Source: trucksimulation/peak_analysis/peak_analysis_observed_v2.py,
-% output peak_analysis/observed_20261007_v2. Training and validation only.
 
-This section gives the key facts of the event log that later chapters use.
-The full description of the observed behaviour, with the arrival pattern,
-congestion over the day, delay peaks, disruption episodes and the differences
-between the partitions, is in Appendix~\ref{app:observed_behaviour}.
-Thresholds are fitted on the training partition and applied unchanged to the
-validation partition. The test partition is not used.
-
-\subsection{Visit Structure and Turnaround Time}
-\label{sec:obs_structure}
-
-Table~\ref{tab:obs_descriptives} summarises both partitions. Nine out of
-ten visits have a single yard stop. Visits with three or more stops are
-rare. Receive and delivery visits are similarly frequent, and about one
-visit in seven is mixed. About a quarter of the visits do not use an RMG
-block. Visits with two different RMG blocks make up 1.7\,\% of the
-training visits.
+A data-aware simulation learns its decisions and durations from case attributes.
+This thesis gives the simulation the attributes of the planned visit manifest
+and nothing else (Table~\ref{tab:manifest_attributes}). They are aggregated per
+visit from the schedule and the container master data.
 
 \begin{table}[htbp]
 \centering
-\begin{tabularx}{\textwidth}{YL{2.6cm}L{2.6cm}}
+\small
+\begin{tabularx}{\textwidth}{L{3.3cm}Y}
 \toprule
-\textbf{Measure} & \textbf{Training} & \textbf{Validation} \\
+\textbf{Attribute} & \textbf{Definition} \\
 \midrule
-Visits & 58,262 & 14,625 \\
-Visits with 1 / 2 / $\geq$3 stops & 91.3 / 8.6 / 0.2\,\% & 89.8 / 10.1 / 0.1\,\% \\
-Delivery / receive / mixed visits & 38.6 / 48.2 / 13.2\,\% & 42.2 / 43.4 / 14.5\,\% \\
-No RMG / one block / several blocks & 22.5 / 75.7 / 1.7\,\% & 27.1 / 70.8 / 2.1\,\% \\
-\midrule
-TTT mean / median / P90 [min] & 36.5 / 28.5 / 64 & 42.2 / 34 / 78 \\
-Median TTT delivery / receive / mixed & 23 / 30 / 41 & 28 / 35 / 48 \\
-Median TTT one block / several blocks & 29 / 46.5 & 33 / 50 \\
-Mean approach / stops / transfer / exit & 10.9 / 12.0 / 1.1 / 12.5 & 13.2 / 13.7 / 1.5 / 13.6 \\
+\texttt{process\_flow\_type} & delivery, receive or mixed visit \\
+\texttt{n\_stops} & planned number of yard stops \\
+\texttt{n\_deliveries}, \texttt{n\_receives} & planned numbers of delivered and received containers \\
+\texttt{n\_containers} & number of different containers of the visit \\
+\texttt{has\_hazardous}, \texttt{has\_reefer} & at least one hazardous or refrigerated container \\
+\texttt{full\_ratio} & share of full containers \\
+\texttt{visit\_complexity} & additive score of the planned work: stops and containers, one point for each full and each received container, two for each reefer or hazardous container, and extra points for mixed visits and mixed stops \\
 \bottomrule
 \end{tabularx}
-\caption{Visit structure and turnaround time (TTT) by partition. Approach
-is the time from Gate In to the start of the first stop, exit the time
-from the end of the last stop to Gate Out, and transfer the time between
-stops. Because gate events are instantaneous, the four components add up
-to the TTT.}
-\label{tab:obs_descriptives}
+\caption{Case attributes of the simulation: the planned visit manifest, known at Gate In.}
+\label{tab:manifest_attributes}
 \end{table}
 
-The turnaround time depends on the type of visit. Receive visits take
-longer than delivery visits, and mixed visits take longest. A visit with
-two RMG blocks takes about 17 minutes longer than a single-block visit.
-The decomposition shows that the stop intervals account for only about
-one third of the mean TTT. Approach and exit together account for about
-two thirds. Since a stop interval begins when the truck reports ready in
-the handover lane, it can already contain waiting for the crane. Driving
-and any queueing before the truck reports ready fall into the approach.
-
-\subsection{Load and Delay}
-\label{sec:obs_summary}
-
-Trucks arrive from Monday to Friday, with few visits on Saturdays and none on
-Sundays. On weekdays, between 126 and 152 trucks per hour arrive from 7:00 to
-16:00. Hours with at least 165 arrivals, the 90th percentile of the training
-hours, are called \emph{arrival peaks}.
-
-The turnaround time grows with the number of trucks in the terminal, and the
-growth is non-linear (Figure~\ref{fig:obs_wip}). Up to about 100 trucks, the
-median TTT rises slowly from 23 to 34 minutes. Between 140 and 160 trucks it
-reaches 43 minutes, and above 160 trucks the P90 exceeds two hours.
-
-Hours in which the median TTT is at least 37 minutes, the 90th percentile of
-the training hours, are called \emph{delay peaks}. They make up 10.2\,\% of the
-training hours and 26.5\,\% of the validation hours. Delay peaks and arrival
-peaks rarely coincide. The additional time in delay peaks lies mainly in the
-approach to the first stop and in the exit, not in the stop intervals. A few
-disruption days, such as 23 March 2026, show very long exit times at normal
-arrival rates. They are reported separately but never removed.
-
-The validation period is more congested than the training period, with a
-daily median TTT of 32 against 29 minutes (Section~\ref{sec:obs_drift}). The
-set of activity sequences, however, hardly changes: only six validation visits
-follow a sequence that does not occur in training. A model fitted on the
-training period is therefore expected to underestimate the validation TTT,
-independently of its control flow.
-
-\subsection{Implications for the Simulation}
-\label{sec:obs_implications}
-
-The observed behaviour defines what an adequate simulation must
-reproduce for the purpose of this thesis.
+Three reasons decide this choice.
 
 \begin{enumerate}
-\item The weekday and hourly arrival profile, including arrival peaks
-above 165 trucks per hour.
-\item The stop structure and the turnaround time by visit type.
-\item The increase of the turnaround time with the number of trucks in
-the terminal, and of the stop interval with the occupancy of the unit.
-\item The growth of approach and exit time under load, since these
-components carry most of the delay in delay-peak hours.
-\item Delay peaks at a frequency comparable to the observed one,
-excluding disruption episodes, which are reported separately.
+\item \textbf{Known when the decision is taken.} The manifest is fixed before the
+truck enters the terminal, and the yard position of a container is assigned when
+the truck arrives (Section~\ref{sec:prob_statement}). An allocation rule, and a
+simulation that evaluates it, can only use what is known at that moment. The
+attributes are taken from the planned schedule, not from the recorded execution.
+The block of a planned RMG stop is read from the planned stop of the order, which
+is also known at entry.
+\item \textbf{They describe the work of the visit.} The number, kind and
+properties of the containers determine which areas a truck visits and how long
+its handling takes. These are the dependencies the routing and duration models of
+the simulator are meant to learn.
+\item \textbf{The state of the terminal is computed, not attached.} Values that
+describe the terminal at Gate In, such as the recent gate demand or the
+occupancy of a block, are case attributes only in the recorded log. In a
+simulation, ProSiT draws the attributes of a generated case as the attribute tuple
+of a random training visit, independent of the simulated time
+(Section~\ref{sec:prosit_components}). A recorded demand or occupancy would then
+describe another day than the simulated one, and it would not change when a
+scenario changes the load. The load that a truck meets is instead computed by
+the simulator from its own state: the trucks at a block and their workload
+(Section~\ref{sec:prosit_execution}). This is the quantity a block allocation
+changes.
 \end{enumerate}
 
-These requirements are the basis of the comparison measures in
-Chapter~\ref{chp:experiments}.
+The yard snapshots of Table~\ref{tab:ctb_data_sources} are therefore used only to
+describe the terminal. Two attributes of the manifest also bound the
+control flow: the planned number of stops is enforced as a domain rule
+(rule~6 in Section~\ref{sec:domain_rules}), and the flow type separates the
+first stop of a visit (Section~\ref{sec:sim_components}).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Observed Truck Turnaround}
+\label{sec:observed_behaviour}
+\label{sec:obs_structure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Table~\ref{tab:obs_descriptives} summarises the two logs. Nine out of ten visits
+have one yard stop, and visits with three or more stops are rare. About a quarter
+of the visits use no RMG block. The TTT depends on the type of visit: receive
+visits take longer than delivery visits, mixed visits longest, and a visit with
+two RMG blocks about 17 minutes longer than a visit with one. The stops account
+for about one third of the mean TTT; the approach and the exit together for about
+two thirds. Because a stop starts only when the truck is ready in the handover
+lane, driving and queueing before that point fall into the approach.
+
+\input{tables/obs_descriptives}
+
+\label{sec:obs_summary}
+The TTT grows with the number of trucks in the terminal, and the growth is not
+linear. In the training log, the median TTT is 24 minutes with fewer than 50
+trucks in the terminal at Gate In, 28 and 34 minutes with 50 to 99 and 100 to
+149 trucks, and 56 minutes with 150 or more. Trucks arrive on weekdays and, in
+smaller numbers, on Saturdays; on weekdays between 7 and 16~h, 126 to 152 trucks
+arrive per hour in training. Hours with a median TTT of at least 37 minutes, the 90th percentile of
+the training hours, are called \emph{delay peaks}. The test period is more
+congested than the training period: 95 instead of 77 trucks in the terminal on
+average, and 25.7 instead of 10.4\,\% delay-peak hours. The sequences of stops,
+in contrast, hardly change: 16 test sequences do not occur in training, and they
+account for 0.05\,\% of the test visits. A model fitted on the training log is
+therefore expected to underestimate the TTT of the test period, independently of
+its control flow. Further figures on arrivals, load and delay peaks are in
+Appendix~\ref{app:observed_behaviour}.
+
+\paragraph{What a simulation has to reproduce.}
+\label{sec:obs_implications}
+For the purpose of this thesis, a simulation has to reproduce:
+\begin{enumerate}
+\item the stop structure and the TTT by type of visit;
+\item the arrival profile over the week and the day;
+\item the growth of the TTT with the number of trucks in the terminal, and of the
+approach and the stops with the load of a block, because a block allocation acts
+on this load;
+\item the share of visits above the turnaround corridor and the delay peaks
+(Section~\ref{sec:exp_kpis}).
+\end{enumerate}
+These requirements define the measures of Chapter~\ref{chp:experiments}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Domain Rules}
 \label{sec:domain_rules}
-\begin{hints}
-\item Add per rule the share of training and validation visits that satisfy it (audit level 1 in E2).
-\item Open points: repeated mixed events at the same block; eligible blocks for deliveries.
-\end{hints}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The physical constraints of Section~\ref{sec:bg_terminal} are written down as
-seven rules (Table~\ref{tab:domain_rules}). They are based on the domain
-knowledge of the author.
-% TODO: state the author's role at CTB and the period precisely.
-They have not yet been confirmed independently by the terminal. Confirmation
-is requested in part B of the domain review (Section~\ref{sec:exp_review}).
-Until then the rules are working assumptions. Rule 7 is tentative, because
-the truck type and its capacity are not recorded.
+The physical constraints of a truck visit are written down as seven rules
+(Table~\ref{tab:domain_rules}). They come from the author's knowledge of the
+terminal operations
+\todo{State the author's role at CTB and the period.}
+and are checked against the recorded log: every training and test visit satisfies
+rules 1 to 5 (Section~\ref{sec:res_rules}); rule~6 holds by construction, because
+the planned and the recorded stops come from the same schedule. Their review by the terminal is
+reported in Section~\ref{sec:disc_stakeholders}. Rule 7 cannot be checked,
+because the truck type and its capacity are not recorded; it is not used.
 
 \begin{table}[htbp]
 \centering
@@ -394,24 +241,28 @@ the truck type and its capacity are not recorded.
 3 & A visit has at least one yard stop between Gate In and Gate Out. & sequence & activity labels \\
 4 & The stops of a visit never overlap in time. & time & start and complete timestamps \\
 5 & A mixed stop handles all moves of the visit at its unit. The visit has no separate delivery or receive at the same unit. & sequence (LL, HO2); data (RMG) & activity labels; block of each RMG stop \\
-6 & The number of stops equals the number of planned stops in the manifest. A truck delivers and receives at most four containers each, so a visit has at most eight stops; the data show at most four. & data; the bound is a sequence rule & planned stops (case attribute) \\
-7 & The load of the truck stays within its capacity after every stop (tentative). & data & container counts and truck type (not recorded) \\
+6 & The number of stops equals the number of planned stops in the manifest (at most four in the data). & data & planned stops (case attribute) \\
+7 & The load of the truck stays within its capacity after every stop. & data & truck type (not recorded) \\
 \bottomrule
 \end{tabularx}
-\caption{Domain rules for truck visits. Source: domain knowledge of the
-author; confirmation by the terminal pending. The type decides where a rule
-can be enforced (Section~\ref{sec:exp_rules}).}
+\caption{Domain rules for truck visits. The type decides where a rule can be
+enforced (Section~\ref{sec:exp_rules}).}
 \label{tab:domain_rules}
 \end{table}
 
-For LL and HO2, the area is the handling unit, so rule 5 can be read from the
-activity labels. For RMG, the unit is the block, which the generic activity
-label does not show. The RMG part of rule 5 therefore needs the block of each
-stop, which is the resource of the event.
+For LL and HO2, the area is the handling unit, so rule~5 can be read from the
+activity labels. For RMG, the unit is the block, so the RMG part of rule~5 needs
+the resource of each stop.
 
 \section{Chapter Summary}
 \label{sec:cs_summary}
-\begin{hints}
-\item One paragraph: the event log, the population, the observed delay pattern and bottleneck, and the rules. Hand over to the methodology (Chapter~\ref{chp:experiments}).
-\end{hints}
 
+The event log contains 91,153 completed truck visits with eleven activities, the
+block of every RMG stop as resource, and start and complete timestamps for every
+stop. The simulation uses only the planned visit manifest as case attributes,
+because it is known when a truck arrives and because the load of the terminal has
+to come from the simulated state, not from a recorded value. The log shows a TTT
+that grows non-linearly with the load and a test period that is more congested
+than the training period. Seven domain rules state what a truck visit can
+physically do; Chapter~\ref{chp:experiments} uses them to select and check the
+control-flow model.

@@ -1,86 +1,129 @@
 \chapter{Discussion}
 \label{chp:discussion}
 
-\begin{hints}
-\item Bring the results together and judge them. No new results here.
-\item Separate clearly: what the evidence supports, what depends on assumptions, and what remains open.
-\end{hints}
+This chapter brings the results together and judges them against the purpose of
+the study: whether a simulation learned from the event log of CTB can support the
+assessment of a different block allocation for truck deliveries. It first states
+what the final model can and cannot support, then what the case shows about
+discovery metrics and about data-aware simulation in a physical process, which
+threats remain, how domain knowledge entered the study, and what the terminal can
+take from it.
 
 \section{Adequacy for the Intended Use}
 \label{sec:disc_adequacy}
-\begin{hints}
-\item Which decisions can the final model support (and which not)? Validity is judged for turnaround time and delay peaks only.
-\item Where does a policy evaluation depend on uncertain assumptions (eligible blocks, occupancy effect, timing extension)?
-\end{hints}
+
+The intended use is the comparison of a block allocation rule with the current
+allocation, measured by the visits above the turnaround corridor. Three
+properties decide whether a simulation can support this comparison: it must
+generate only visits that trucks can perform, it must produce the waiting at a
+busy block by the mechanism that the allocation changes, and it must respond to
+load as strongly as the terminal. The final model meets the first two and the
+third only in part.
+
+\paragraph{What the model supports.} Every simulated visit is physically
+possible and follows its plan: no visit without a stop, no overlapping stops, the
+planned number of stops, never more than three trucks at a block
+(Sections~\ref{sec:res_baseline} and~\ref{sec:res_mechanisms}). The waiting before
+a stop arises in the simulation when all three lanes of a block are taken, and the
+approach to the first stop grows with the load of the block as observed. The
+turnaround time rises with the arrivals and, convexly, with the arrival
+intensity. These are the properties a block allocation acts on. The model can
+therefore show whether moving deliveries away from full blocks shortens the
+visits in principle, which visits gain, and whether the waiting is reduced or only
+moved. E5 answers these questions within the examined model variants: the long
+visits become shorter through less waiting at full blocks, the receiving blocks do
+not become slower, and a local rule is enough.
+
+\paragraph{What the model does not support.} It does not give the size of the
+effect at the terminal. The simulated stops slow down less than the recorded ones
+at the busiest blocks and hours, the simulated terminal holds fewer trucks, and it
+has almost no delay-peak hours. The size of the simulated effect depends on
+exactly these properties: across the robustness runs, the effect on the mean
+turnaround time lies between 0.9 and 4.9 minutes. The model also leaves out what
+a move costs at the terminal: the driving to another block, a later rehandling of
+the container and the constraints of the yard plan. These can make the real effect
+smaller; a stronger slowdown under load, as recorded, can make it larger. The
+model cannot decide which dominates. A statement such as ``S1 shortens the mean
+turnaround time at CTB by two minutes'' is therefore not supported. The supported
+statement is conditional: if the waiting at a full block arises as in the model,
+moving deliveries to a neighbouring block with a free lane shortens the long
+visits and does not slow down the other blocks.
+
+\paragraph{Conditions of the result.} The final configuration replays the observed
+arrivals, manifests and blocks of the test period. Its validity is conditional on
+these inputs: without them, the error is larger (cycle-time distance 11.2 against
+8.0 minutes). For a prospective use, an arrival model with the daily peaks of the
+terminal and the block of each container from the yard plan would have to replace
+the replay. The result also rests on the four changes to ProSiT's queue and
+service (Table~\ref{tab:sim_learned_added}); each is needed for the load response
+(Section~\ref{sec:res_e4_loo}). The rule itself decides when a delivery becomes
+possible, which for single-stop visits is at Gate In, the moment the terminal
+assigns the yard position; whether the number of trucks at each block is known to
+the yard planning at that moment was not checked.
 
 \section{Discovery Metrics and Simulation Behaviour}
 \label{sec:disc_metrics}
-\begin{hints}
-\item Do good discovery metrics predict a usable simulation? Only partly: precision from 0.825 to 0.998 gave nearly the same simulated sequences; the same language as a different net decided whether the stop guard can act (HM 0.7) and whether impossible visits arise (IM 0.0); the self-count of the block choice and the outdated enabling times were invisible to every discovery metric, and the latter rewarded the net with more loops under a simulation-first rule.
-\item What this means for model selection in simulation studies: validate per layer in the simulator, not only on the log.
-\end{hints}
 
-Good discovery metrics predicted a usable simulation only in part. What a net
-permits is not what a simulator generates. Precision counts the behaviour that a
-net permits but the log does not show; ProSiT generates little of it, because its
-routing is learned from the observed visits. Nets from 0.825 to 0.998 in
-precision generated the same distribution of sequences
-(Appendix~\ref{app:rewritten}). Precision mattered only when the net kept no
-history of the visit at all, as the unrepaired ILP 1.00 rewritten with a single
-state for all stops. Coverage of the frequent behaviour mattered throughout: the
-structural errors followed the behaviour each net rejects (E3). What no measure
-on the language showed was how the net is built. A net with parallel branches and
-silent skips, such as IM 0.0, produced visits without a stop and overlapping
-stops, and in every discovered net the decisions sat on silent transitions, where
-a simple data rule could not act.
+Good discovery metrics predicted a usable simulation only in part. Three
+observations from E1 to E4 show where they fall short.
 
-The control-flow replica explains why (Appendix~\ref{app:replica}). ProSiT's
-routing weights depend on the case attributes and on how often each activity has
-occurred, but not on the marking of the net; the same holds for the stochastic
-labelled data Petri nets on which ProSiT builds
-\cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}. In a
-net with parallel branches and silent skips, each skip is then learned without
-knowing what the other branches did. In a net without parallel branches, such as
-HM 0.7, each silent transition stands for one step of the visit, and the learned
-weights are enough. A data rule, such as the planned number of stops, then has to
-be checked where the decision is taken: on the silent transitions, by looking
-ahead on the net.
+First, what a net permits is not what the simulator generates. ProSiT learns its
+routing from the observed visits, so behaviour that a net permits but the log
+never shows is generated rarely: the most precise nets, HM 0.7 and HM 0.8,
+generate almost no unseen sequences, and so does IMf 0.3. Precision separated the
+nets mainly where they are very permissive, as ILP 1.00 with its single state for
+all stops.
+
+Second, coverage of the frequent behaviour mattered throughout. A sequence that a
+net rejects is never generated. IMf 0.3 rejects the most frequent multi-block
+sequence and generates almost no visits to two RMG blocks; these are long visits
+and the ones a block allocation affects most.
+
+Third, no measure on the language shows how a net is built, and the structure
+decided what the simulator does. IM 0.0 has parallel branches that silent
+transitions can skip. Its language is a superset of the observed one, its
+precision is moderate, but in the simulation 12 to 21\,\% of its multi-stop visits
+have overlapping stops (E3 and the final configuration), because ProSiT learns each routing weight from the case
+attributes and the history of activities, not from the marking of the net
+(Appendix~\ref{app:replica}); the same holds for the stochastic labelled data Petri
+nets on which ProSiT builds
+\cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}. Under
+the final configuration, these impossible visits even bring IM 0.0 closest to the
+observed turnaround time (Section~\ref{sec:res_e4_nets}). A selection by the fit of
+the simulated turnaround time alone would have chosen a net that no truck can
+follow. In HM 0.7, without parallel branches, every decision sits on a silent
+transition that stands for one dependency between two activities. ProSiT learns
+these decisions well, but a data rule that looks only at the visible activities
+comes too late; the rule has to look ahead on the net.
 
 Two of the strongest effects in the simulation were invisible to every discovery
 metric: the self-count in the queue feature, which made the block choice herd
-trucks onto one block, and the outdated enabling times in loops, which inflated
-the exit of multi-stop visits. In an earlier comparison, the second even made a
-net with more loops look better than HM 0.7 until the defect was removed
-(Appendix~\ref{app:rewritten}). Metrics on the log, and a single similarity score
-of the simulated log, would have hidden both.
+trucks onto one block, and the count of stops in progress, which was too low for
+one in seven RMG stops. Metrics on the log, and a single similarity score of the
+simulated log, would have hidden both.
 
 For model selection in simulation studies, this suggests an order: first the
 coverage of the frequent behaviour, then the domain rules and precision, then a
 check of how the net expresses its decisions, and finally a validation layer by
-layer in the simulator itself. The review of Sulis et al.\ asks for validation procedures that draw on
-simulation methodology rather than on conformance measures alone
-\cite{Sulis2026SimulationReview}; the critique of precision measures
-\cite{Tax2018Imprecisions} and of log-similarity evaluation
-\cite{Oezdemir2025RethinkingBPS} points the same way. The evidence here comes
-from one process with a simple control flow and from the nets of one discovery
-grid; it shows that the metrics can fail to anticipate the simulation, not how
-often they do.
+layer in the simulator itself. The review of Sulis et al.\ asks for validation
+procedures that draw on simulation methodology rather than on conformance
+measures alone \cite{Sulis2026SimulationReview}; the critique of precision
+measures \cite{Tax2018Imprecisions} and of log-similarity evaluation
+\cite{Oezdemir2025RethinkingBPS} points the same way. The evidence comes from one
+process with a simple control flow and from the nets of one discovery grid; it
+shows that the metrics can fail to anticipate the simulation, not how often they
+do.
 
 \section{Data-Aware Simulation in a Physical Logistics Process}
 \label{sec:disc_transfer}
-\begin{hints}
-\item What ProSiT represents well (routing, case attributes) and what it does not represent out of the box (load-dependent timing, block-bound resources, multi-server capacity).
-\item The version issue: model selection in 1.0.3 vs. 1.0.4; the queue-length feature; the capacity check. Formulate as findings about transferability, not as criticism of the tool.
-\item Historical context features vs. dynamic state: case-constant demand and utilisation values do not react to simulated load.
-\end{hints}
 
 \paragraph{What transfers.} Much of ProSiT transferred without change. The
 routing trees split on the manifest and reproduce the first stop of a visit by
 flow type within one percentage point; the waiting and execution trees use
 plausible features such as the queue, the workload, the hour and reefer
 containers. Version 1.0.4 matters here: its model selection by the continuous
-ranked probability score chooses trees where version 1.0.3 almost always chose a
-single distribution (Section~\ref{sec:prosit_trees}). The white-box form was a
+ranked probability score chooses trees where a single distribution would hide the
+dependencies (Section~\ref{sec:prosit_trees}). The white-box form was a
 precondition for the mechanism audit: every finding of E4 started from a tree
 that could be read, for example block-choice trees that send trucks to the block
 with the longer queue.
@@ -88,77 +131,72 @@ with the longer queue.
 \paragraph{What does not transfer out of the box.} The findings of E4 are of four
 kinds, and they carry different weight.
 \begin{itemize}
-\item \textbf{Implementation.} Three findings are inconsistencies between how
+\item \textbf{Implementation.} Two findings are inconsistencies between how
 ProSiT builds its training data and how its simulation loop works: the queue
-feature counts the stop itself in training but not in the simulation, the
-enabling time survives loops in training but not in the simulation, and the count
-of stops in progress is too low for 13--14\,\% of the RMG stops. They can be
-corrected in the code and say little about the method itself.
+feature counts the stop itself in training but not in the simulation, and the
+count of stops in progress is too low for 14 to 15\,\% of the RMG stops. A third,
+the enabling time that survives loops in training, had no measurable effect on
+the final model. These findings can be corrected in the code and say little about
+the method itself.
 \item \textbf{Modelling semantics.} Three findings concern what the learned
 quantities mean: waiting is measured from the moment the block was completely
 free, capacity is checked when a stop is enabled rather than when it runs, and the
 service time has no load feature. A block with three handover lanes violates the
 single-server view behind the first two. Where a resource is one person and a case
 waits only because the person is busy, these choices are correct, so they are
-findings about transferability, not errors for the business processes for which
-ProSiT was designed. They match the known risks of business process simulation,
-the neglected process context and the working speed that depends on the workload
-\cite{Aalst2015}, and the gap that Sulis et al.\ find for queues and resources
-\cite{Sulis2026SimulationReview}; a queueing perspective on the log, as in queue
-mining \cite{Senderovich2015QueueMining}, asks these questions from the start.
+findings about the fit between the tool and this kind of process, not errors for
+the business processes for which ProSiT was designed. They match the known risks
+of business process simulation, the neglected process context and the working
+speed that depends on the workload \cite{Aalst2015}, and the gap that Sulis et
+al.\ find for queues and resources \cite{Sulis2026SimulationReview}; a queueing
+perspective on the log, as in queue mining \cite{Senderovich2015QueueMining}, asks
+these questions from the start.
 \item \textbf{Data.} The log does not record the use of the cranes, their
 competition with the waterside and the rail, or the waiting for a lane, which is
-part of the recorded stop (see below).
+part of the recorded stop.
 \item \textbf{Validity under intervention.} The learned relations between the
 load of a block and the waiting and service are associations. Whether they hold
 when the allocation of deliveries changes cannot be checked with these data
 (Section~\ref{sec:disc_threats}).
 \end{itemize}
 
-\paragraph{What had to be added.} The final model keeps everything that the log
-can express learned and adds what it cannot: the three lanes, the capacity check
+\paragraph{What had to be added.} The final model keeps learned everything that
+the log can express and adds what it cannot: the three lanes, the capacity check
 at the start of a stop, a waiting target measured from a free lane, the load as a
 feature of the service time, and the domain rules of the control flow
 (Table~\ref{tab:sim_learned_added}). This is the split that data-driven
 simulation in manufacturing uses, where the structure is discovered and buffers
 and capacities are added \cite{LugaresiMatta2021,Grobis2025ProductionLogistics},
-and it confirms what RIMS showed for congested processes: load features have to
+and it agrees with what RIMS showed for congested processes: load features have to
 be computed from the simulated state in the same way as in training
 \cite{runtimeIntegration2024}. With these additions the model reproduces the
-response to load of normal hours (Spearman 0.54 against 0.55), but not the worst
-hours: with 150 or more trucks in the terminal, the simulated median is 39 to 44
-minutes against 58.
+response to load of normal hours (Spearman 0.51 against 0.55), but not the worst
+hours: with 150 or more trucks in the terminal, the simulated median is 38 to 40
+minutes against 58 to 59.
 
 \paragraph{What a case-centric log cannot show.} The remaining gap points to what
-the event log does not record. The cranes of a block also serve the waterside
-and the rail; containers are restacked; trucks drive between areas. In the log
-these appear only as longer stops and approaches. Containers are aggregated per
-truck, so a visit with several containers is one case with one manifest. An
+the event log does not record. The cranes of a block also serve the waterside and
+the rail; containers are restacked; trucks drive between areas. In the log these
+appear only as longer stops and approaches. Containers are aggregated per truck,
+so a visit with several containers is one case with one manifest. An
 object-centric event log with trucks, containers, blocks and cranes as objects
 \cite{VanDerAalst2023OCPM} and object-centric simulation models
-\cite{Knopp2023ObjectCentricSimulation} would be the next step, as would
-operational data on equipment, which Grobis and Ihlenfeldt find necessary for
-queues in production logistics \cite{Grobis2025ProductionLogistics}.
+\cite{Knopp2023ObjectCentricSimulation} would be a next step, as would operational
+data on equipment, which Grobis and Ihlenfeldt find necessary for queues in
+production logistics \cite{Grobis2025ProductionLogistics}.
 
 \paragraph{Beyond the terminal.} The findings suggest questions for other
-processes in which several cases share a resource: whether training and
-simulation compute workload consistently, whether the waiting-time target
-matches the resource semantics, and whether the learned durations represent
-the load conditions relevant to the proposed intervention. These are
-transferable questions to investigate, rather than evidence that every such
-process needs the same corrections. The empirical evidence here concerns one
-terminal, a relatively simple control flow and the examined ProSiT version.
-The data contain no implementation of the proposed allocation policy, so its
-real-world effect cannot be checked against an observed intervention.
+processes in which several cases share a capacity-limited resource: whether
+training and simulation compute the workload in the same way, whether the
+waiting-time target matches the resource, and whether the learned durations
+cover the load conditions that the proposed intervention creates. These are
+hypotheses for other processes, not evidence that every such process needs the
+same corrections. The evidence here concerns one terminal, a simple control flow
+and one version of ProSiT, and the data contain no implementation of the proposed
+allocation, so its real effect cannot be checked against an observed intervention.
 
 \section{Threats to Validity}
 \label{sec:disc_threats}
-\begin{hints}
-\item Construct validity: timestamp semantics (readiness to fulfilment includes waiting), possible double counting of waiting, the KPI definition by Gate-In hour.
-\item Internal validity: selection on training data only; changes to the protocol after earlier results (Table~\ref{tab:threats_protocol}); retrospective hold-out.
-\item External validity: one terminal, eight weeks, the selected population (completed visits, known activities); transfer to other periods (validation was more congested).
-\item Conclusion validity: replications, intervals, associational vs. causal relations (occupancy and waiting).
-\end{hints}
 
 The threats are grouped as construct, internal, external and conclusion validity
 \cite{Wohlin2012Experimentation}. The design already answers some of them
@@ -167,28 +205,30 @@ The threats are grouped as construct, internal, external and conclusion validity
 \subsection{Construct Validity}
 \paragraph{What a stop measures.} A stop runs from the readiness of the truck in
 the handover lane to the fulfilment of the order
-(Chapter~\ref{chp:case_study_and_data}). It can contain waiting for the crane,
+(Section~\ref{sec:timestamp_semantics}). It can contain waiting for the crane,
 and the log records four trucks at a block at once for 5.6\,\% of the training
 stops, although a block has three lanes: the fourth truck is already counted at
 the block while it waits for a lane. The stop duration is therefore time at the
 block, not service time. The final model treats it as service and creates the
-waiting for a lane in the simulation; it never learns a waiting time and creates
-the same queue again (Section~\ref{sec:exp_e4_mechanisms}). Part of the waiting
-in the recorded stops is still in the learned service time, which may be one
-reason why the simulated stops grow too little at the busiest blocks.
+waiting for a lane in the simulation; it does not learn a waiting time and create
+the same queue again (Section~\ref{sec:exp_e4_mechanisms}). Part of the waiting in
+the recorded stops is still in the learned service time, which may be one reason
+why the simulated stops grow too little at the busiest blocks.
 
 \paragraph{Time resolution.} All source timestamps are floored to the minute.
 Short stops can have a duration of zero, and the order of events in the same
-minute comes from the schedule, not from the clock. A counting error caused by
-such stops was found and corrected in the evaluation (Table~\ref{tab:threats_protocol}).
+minute comes from the schedule, not from the clock. Zero-length stops are not
+counted as trucks at a block in the evaluation.
 
 \paragraph{The KPI.} The turnaround time runs from Gate In to Gate Out; the
 approach to the first stop mixes driving and waiting, which the data cannot
-separate. Hourly values are attributed to the Gate-In hour of the trucks, and a
-delay peak is defined with thresholds from the training period. Another
-attribution, for example by the hour in which the delay occurs, would give other
-peak hours. The validity of the model is judged for the turnaround time and its
-parts only; the use of cranes or lanes was not examined.
+separate. The corridor of 25 to 35 minutes is the operational aim reported by the
+terminal (Section~\ref{sec:prob_statement}); visits below the corridor are not
+counted as an improvement or a loss. Hourly values are attributed to the Gate-In
+hour of the trucks, and a delay peak is defined with thresholds from the training
+period; another attribution would give other peak hours. The validity of the
+model is judged for the turnaround time and its parts only; the use of cranes or
+lanes was not examined.
 
 \paragraph{The manifest.} The case attributes come from the planned visit
 manifest, which is known at Gate In (Section~\ref{sec:entry_known_attributes}),
@@ -199,78 +239,40 @@ guard would make the simulated number of stops look better than a prospective
 run could.
 
 \subsection{Internal Validity}
-\paragraph{Changes to the protocol.} The criteria of the experiments were set
-before the final runs, but not all of them before any result had been seen. The
-work went through several rounds, and some rules were changed after earlier
-results had shown a problem. Table~\ref{tab:threats_protocol} lists every such
-change, what was known when it was made and how it affects the answers. Three
-changes matter most. First, the selection rule of E1 changed from ``accepts every
-training sequence'' to ``accepts every sequence above a noise threshold of
-0.1\,\%'', and with it the selected net from IM 0.0 to HM 0.7. When this was
-decided, E3, E4 and E5 had been run with IM 0.0. HM 0.7 is selected for every
-threshold between 0.07 and 0.52\,\%, and in that earlier stage the answers to RQ2
-and RQ3 were the same with both nets (Appendix~\ref{app:rewritten}). Second, the
-nets were first repaired and rewritten without silent transitions, because a
-simple guard could not act at silent decisions. The final design uses the net as
-discovered, with a guard that looks ahead; the net and its language are the same,
-and E3 to E5 were rerun. Third, the four changes to the queue and the
-service in E4 were found in an audit that also looked at the test period. The
-choice among them used the training period only, and each change rests on a
-mechanism that the training data show, such as the self-count in 99.98\,\% of
-the training stops, not on a fitted parameter. The test error of the final model
-is still likely to be somewhat optimistic.
-
-\begin{table}[htbp]
-\centering
-\scriptsize
-\begin{tabularx}{\textwidth}{L{2.6cm}YYY}
-\toprule
-\textbf{Change} & \textbf{Reason} & \textbf{Known when it was made} & \textbf{Effect on the answers} \\
-\midrule
-One temporal split at 13 April (before: training, validation and test partitions) & one hold-out that starts with an empty terminal & earlier exploration had used partitions that cover the same weeks & the test period is not unseen by the author; no parameter is fitted on it \\
-Precision with ProM ETConformance (before: PM4Py) & the PM4Py helper misses silent routes & E1 values & only the value of IM 0.0 changed \\
-E1 gate A2 with a noise threshold of 0.1\,\%; selected net HM 0.7 (before: IM 0.0) & selection by the number of fitting visits was criticised; rare sequences treated as noise & E3--E5 with IM 0.0 & same selection for thresholds of 0.07--0.52\,\%; RQ2 and RQ3 unchanged with IM 0.0 \\
-E3 gate without block capacity & every net exceeds three trucks in the native loop; capacity belongs to the loop & first E3 runs & capacity tested in E4; no net admitted or excluded by the change \\
-E3 measures against the training log (before: test log) & the distance to the test log mixes model error and change between periods & first E3 comparison & HM 0.7 selected with either log \\
-Net used as discovered, stop guard that looks ahead (before: nets repaired and rewritten without silent transitions, guard on visible transitions only) & the simple guard could not act at silent decisions; a look-ahead guard can, and keeps the discovered net & E1--E5 with the rewritten nets & same net (HM 0.7) and same language; E3 to E5 rerun; earlier stage reported in Appendix~\ref{app:rewritten} \\
-E4: at most three trucks at a block (before: four, as recorded) & three handover lanes; the fourth truck in the log waits at the block & before the training runs of the choice were read & four lanes and no limit reported as sensitivity only \\
-Evaluation: zero-length stops no longer counted as a fourth truck & minute timestamps & first evaluation of E4 with HM 0.7 & c1x and c2x became admissible; the chosen configuration is unchanged \\
-Control runs (flower net, reset enabling times, control-flow replica) & to test explanations of results & the results they explain & reported as controls; no selection changed \\
-\bottomrule
-\end{tabularx}
-\caption{Changes to the protocol of the experiments, in the order in which they
-were made.}
-\label{tab:threats_protocol}
-\end{table}
-
-\paragraph{Retrospective hold-out.} The test period was split off after the data
-had been explored, and it was more congested than the training period
-(26\,\% against 10\,\% delay-peak hours). Its error mixes the error of the model
-with the change of the terminal between the periods; the in-sample run on the
-training period separates the two (Section~\ref{sec:res_e4_remaining}).
+\paragraph{Retrospective hold-out.} Every selection uses the training log, and the
+criteria of the selections are fixed before the runs they decide. The data of the
+test period were nevertheless available to the author during the exploration of
+the data, so the test log is a retrospective hold-out, not an untouched
+confirmatory sample. The four changes to the queue and the service rest on
+mechanisms that the training data show, such as the self-count in 99.98\,\% of the
+training stops, not on parameters fitted to the test period; the test error may
+still be somewhat optimistic. The test period was also more congested than the
+training period (25.7 against 10.4\,\% delay-peak hours). Its error mixes the error
+of the model with the change of the terminal between the periods; the in-sample
+run on the training period separates the two (Section~\ref{sec:res_e4_remaining}).
 
 \paragraph{Oracle inputs.} The final configuration replays the observed arrivals,
 manifests and blocks. Its validity is conditional on these inputs; without them
-the error is larger (cycle-time distance 11.3 against 7.9 minutes).
+the error is larger (cycle-time distance 11.2 against 8.0 minutes).
 
-\paragraph{Own code.} The changes to ProSiT are text replacements in its loop;
+\paragraph{Own code.} The changes to ProSiT are switches in its simulation loop;
 with all changes switched off, the loop reproduces ProSiT's log exactly
 (Section~\ref{sec:sim_adaptations}). Conformance values come from ProM, the
 soundness check from WOFLAN. The measures of the generated logs (distances,
 profile gaps) and the control-flow replica are own code; the replica reproduces
-ProSiT on the original IM 0.0 (15.7 against 15.1\,\% visits without a stop).
+ProSiT's routing on IM 0.0 (Appendix~\ref{app:replica}).
 
 \subsection{External Validity}
 The data cover one terminal and eight and a half weeks in spring 2026, and the
 population is the set of completed visits with known activities. Seasonal
-patterns, other terminals and other equipment are not covered. The findings about
-mechanisms, how capacity and load enter the training data and the simulation
-loop, are meant to transfer to other capacity-limited processes; the numbers are
-not (Section~\ref{sec:disc_transfer}). The findings refer to ProSiT~1.0.4 and may
-change with later versions. The discovery grid has 19 nets of four families;
-other algorithms, such as the Split Miner \cite{RWSplitMiner2019}, were not
-tested. The domain rules and the limit of three lanes come from the author's
-knowledge of the terminal; their review is described in
+patterns, other terminals and other equipment are not covered. The findings refer
+to ProSiT~1.0.4 and may change with later versions. The discovery grid has 18
+nets of four families; other algorithms, such as the Split Miner
+\cite{RWSplitMiner2019}, were not tested. The mechanisms found here, how capacity
+and load enter the training data and the simulation loop, are candidates to check
+in other capacity-limited processes (Section~\ref{sec:disc_transfer}); the numbers
+are specific to the case. The domain rules and the limit of three lanes come from
+the author's knowledge of the terminal; their review is described in
 Section~\ref{sec:disc_stakeholders}.
 
 \subsection{Conclusion Validity}
@@ -280,37 +282,64 @@ seeds, and E5 reports 95\,\% intervals. These intervals describe the randomness 
 the simulator for one fitted model, not the uncertainty of the fitted parameters
 or of the model structure. The acceptance thresholds come from differences
 between real periods; with few weeks and only two periods, these thresholds are
-themselves uncertain, and the criteria that the model misses, it misses
-narrowly. The trees learn associations: stops take longer when a block is busy,
-and waiting grows with the queue. The what-if analysis of E5 assumes that these
-associations hold when the allocation changes, which the data cannot confirm
-\cite{Vinci2026prosit}.
+themselves uncertain. The trees learn associations: stops take longer when a block
+is busy, and waiting grows with the queue. The what-if analysis of E5 assumes that
+these associations hold when the allocation changes, which the data cannot
+confirm \cite{Vinci2026prosit}.
 
 \section{Domain Knowledge and Stakeholder Review}
 \label{sec:disc_stakeholders}
 
-Domain knowledge supplied by the author informs the model's interpretation,
-rules and scenario. It provides a basis for modelling, while leaving the
-possibility of assumptions being incomplete or incorrect. The quantitative
-evaluation cannot independently confirm assumptions that have already been
-imposed on the simulator. No completed independent stakeholder review is
-claimed in this version of the study.
+Domain knowledge entered the study in four places: the meaning of the recorded
+stop times, the domain rules of the truck visit, the three lanes of a block, and
+the corridor and the decision point of the allocation. Except for the corridor,
+which the terminal states, these come from the author's knowledge of the
+terminal operations. They give the model a physical basis, but an assumption that
+the modeller puts into the model cannot be confirmed by the same model: the
+records can only show that they do not contradict it, as they do for rules 1 to 5.
 
-Two qualifications are especially relevant to the operational interpretation.
-First, the 30-minute reference for mean total TTT is a simplified study
-objective. The reported operational corridor of approximately 25--35 minutes
-allows resources to be balanced with waterside work; lower TTT alone therefore
-does not establish better overall terminal performance. Second, the proposed
-allocation must be compatible with assigning a yard position at truck arrival,
-including the information and storage restrictions available at that time.
+\todo{Report the stakeholder review here: who reviewed (role), when, on which
+version of the model and which material (domain rules, three lanes, corridor,
+eligible blocks, decision point, simulated KPIs and S1 results); what was
+confirmed, what was corrected, and what changed in the model or the
+interpretation as a result. If no review took place, state this plainly and keep
+the conclusions conditional.}
 
-Independent review of these points, the recorded event semantics and the
-physical resource assumptions would strengthen the case study. In its absence,
-the scenario results support investigation of a candidate policy within the
-model, with operational feasibility and effectiveness still to be established.
+Two points matter most for the operational reading of the results. First, the
+corridor has a lower bound because the cranes are shared with the waterside and
+the rail: a shorter turnaround time is not better in itself, and the effect of S1
+on the waterside is outside the model. Second, the rule must fit the moment at
+which the terminal assigns the yard position and the information available then,
+including the blocks that may take a given container.
 
 \section{Implications for Practice}
 \label{sec:disc_practice}
-\begin{hints}
-\item What the terminal can take from the results (bottleneck at the handover, conditional effect of S1) and what it would need before acting on them.
-\end{hints}
+
+For the terminal, the study gives three results that do not depend on the size
+of the simulated effect.
+
+\paragraph{Where the time is lost.} The visits above the corridor are longer in
+every part of the visit, not at one point: in the test period they spend about 20
+minutes before the first stop, 21 minutes at their stops and 18 minutes before
+Gate Out, against 7, 8 and 8 minutes for the other visits
+(Table~\ref{tab:kpi_long_visits}). The waiting before the first stop grows sharply
+when three trucks are already at a block. This locates two levers: the load of the
+blocks at the moment a truck arrives, and the waiting before Gate Out.
+
+\paragraph{What a block allocation can do.} Within the model, sending a delivery
+to a neighbouring block when all three lanes of its block are taken shortens the
+long visits, reduces waiting rather than moving it, and works with a local rule
+that moves about one delivery in five by one or two block numbers. Whether this
+is worth testing in operation depends on what the model leaves out: whether the
+yard plan allows a delivery to go to a neighbouring block, what the extra driving
+and a later rehandling cost, and whether the yard planning knows the trucks at
+each block when it assigns the position.
+
+\paragraph{What would be needed before acting.} A decision to change the
+allocation would need, first, the review of these assumptions by the terminal
+(Section~\ref{sec:disc_stakeholders}); second, data on the occupancy of the lanes
+and cranes, so that waiting and service can be separated and the slowdown in the
+busiest hours can be learned; and third, a small field trial or a historical
+period in which deliveries were redirected, against which the simulated effect
+could be checked. Until then, the simulation is a tool to explore and explain
+where waiting arises and how a rule would act on it, not a forecast of its effect.

@@ -2,8 +2,8 @@
 \label{chp:process_discovery_methodology}
 % Sources (trucksimulation): simulation_e3/export_simulation_model.py (trees, routing, tables),
 %   plot_simulation_architecture.py, worked_example.py, plot_simulation_validation.py (Chapter 7 figures);
-%   final model: runs/split13apr_20261106/main/HM_0.7/prosit_params.pkl + runs/hm07_20261110/components/components
-%   (waiting_M3, exec_L); switches: ctb_engine.py. Earlier draft notes of the author are kept as comments below.
+%   final model: runs/hm07orig_20261115/e3/HM_0.7/prosit_params.pkl + runs/hm07orig_20261115/components/components
+%   (waiting_M3, exec_L); switches: ctb_engine.py. Draft notes of the author are kept as comments below.
 
 This chapter describes the simulation model: how it is built from the event log,
 what it has learned, and how it produces one simulated truck visit. The
@@ -207,19 +207,21 @@ fitted distribution (line), each on its own scale.}
 
 \paragraph{Routing.} Every transition with alternatives has its own tree; it
 predicts the probability that the transition fires when it is enabled. The
-weights of the enabled transitions are then normalised. Of the 29 transitions,
-27 have a tree and 2 a constant weight. The trees split on the manifest. Figure~\ref{fig:sim_tree_routing} shows the tree
-for an RMG receive as the first stop: for a receive visit with one planned stop
-and mostly full containers, its probability is 0.88; for a delivery visit it is
-practically zero. Figure~\ref{fig:sim_routing_first} compares the first stop that
+weights of the enabled transitions are then normalised. In HM 0.7 the
+alternatives are the 34 silent transitions; 33 of them have a tree and one a
+constant weight, while the 11 visible transitions never compete. The trees split
+on the manifest. Figure~\ref{fig:sim_tree_routing} shows the tree of the silent
+transition from Gate In to an RMG receive: for a receive visit with one planned
+stop and mostly full containers, its probability is 0.88; for a delivery visit it
+is practically zero. Figure~\ref{fig:sim_routing_first} compares the first stop that
 the learned routing chooses with the training log, by flow type: the shares
 agree within one percentage point.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/simulation_model/sim_tree_routing_first_rmg_receive.png}
-\caption{Routing tree of the transition \texttt{RMG\_receive} at the first
-decision after Gate In: probability that it fires when enabled, by manifest
+\caption{Routing tree of the silent transition from Gate In to
+\texttt{RMG\_receive}: probability that it fires when enabled, by manifest
 attributes.}
 \label{fig:sim_tree_routing}
 \end{figure}
@@ -263,7 +265,7 @@ stop. In the final model, it has one more feature: the number of other trucks at
 the block when the stop starts (Section~\ref{sec:exp_e4_mechanisms}). For RMG
 receives this feature makes the first two splits (Figure~\ref{fig:sim_tree_exec}).
 Without reefer containers, a receive takes 7.5 minutes on average when the truck
-is alone at the block, 11.7 minutes with one other truck, 16.0 with two and 20.7
+is alone at the block, 11.7 minutes with one other truck, 16.0 with two and 20.8
 with three; block T18 is slower. The tree for RMG deliveries also splits first on
 the other trucks at the block, then on the number of deliveries.
 
@@ -306,11 +308,11 @@ tree that produced them.
 \label{sec:sim_adaptations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The simulation loop of ProSiT is not re-implemented. Its source is read at run
-time, a few marked lines are changed by exact text replacement, and each change
-can be switched off. With all changes switched off, the loop produces exactly the
-same log as ProSiT. Table~\ref{tab:sim_adaptations} lists what each change does
-and why it is needed; the evidence is in E3 and E4.
+The simulation loop of ProSiT is not re-implemented. Each adaptation is a switch
+in ProSiT's own loop, and with all switches off the loop produces exactly the
+same log as ProSiT (Appendix~\ref{app:model_inspection}).
+Table~\ref{tab:sim_adaptations} lists what each change does and why it is needed;
+the evidence is in E3 and E4.
 
 \begin{table}[htbp]
 \centering
@@ -328,7 +330,7 @@ Block choice & learned trees (queue feature counts the stop itself) & observed b
 Capacity & discovered 4--5; checked when a stop is enabled & 3 lanes; checked over the whole stop at its start & at most three trucks at a block (E4) \\
 Waiting time & measured from a completely free block & measured from a free lane & otherwise the learned waiting time falls with the load (E4) \\
 Execution time & no load feature & other trucks at the block as a feature & stops take longer when the block is busy (E4) \\
-Counting & stops at the first finished activity in the schedule & every activity counted & 13--14\,\% of the counts were too low (E4) \\
+Counting & stops at the first finished activity in the schedule & every activity counted & 14--15\,\% of the counts are too low (E4) \\
 \bottomrule
 \end{tabularx}
 \caption{Differences between the ProSiT simulation loop and the final model.}

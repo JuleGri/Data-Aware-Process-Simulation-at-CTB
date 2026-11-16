@@ -1,0 +1,22 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabularx}{\textwidth}{L{3.6cm}YYYYYYY}
+\toprule
+& \multicolumn{3}{c}{\textbf{Eligible blocks}} & \multicolumn{4}{c}{\textbf{Robustness of S1 $\pm 2$}} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-8}
+\textbf{Measure} & \textbf{S1 $\pm 1$} & \textbf{S1 $\pm 2$} & \textbf{S1 any} & \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} \\
+\midrule
+Visits above 35 min, baseline (\%) & 33.5 & 33.5 & 33.5 & 35.2 & 43.5 & 47.3 & 28.1 \\
+\quad change (percentage points) & $-$3.4 [$-$3.9, $-$2.9] & $-$3.7 [$-$4.2, $-$3.3] & $-$4.2 [$-$4.6, $-$3.7] & $-$3.1 [$-$3.5, $-$2.7] & $-$6.8 [$-$7.4, $-$6.3] & $-$5.6 [$-$6.9, $-$4.4] & $-$1.7 [$-$2.0, $-$1.4] \\
+Visits in the corridor, change (percentage points) & 0.3 [$-$0.1, 0.7] & 0.3 [$-$0.0, 0.6] & 0.1 [$-$0.1, 0.3] & 0.5 [0.2, 0.8] & 1.9 [1.6, 2.2] & 1.5 [1.0, 1.9] & $-$0.0 [$-$0.3, 0.3] \\
+Minutes above 35 per visit, baseline & 6.73 & 6.73 & 6.73 & 7.22 & 11.51 & 15.98 & 4.64 \\
+\quad change (minutes) & $-$1.26 [$-$1.64, $-$0.88] & $-$1.34 [$-$1.65, $-$1.03] & $-$1.46 [$-$1.87, $-$1.05] & $-$1.45 [$-$1.69, $-$1.22] & $-$3.93 [$-$4.39, $-$3.46] & $-$2.43 [$-$4.54, $-$0.31] & $-$0.53 [$-$0.64, $-$0.43] \\
+Mean TTT, baseline (min) & 33.1 & 33.1 & 33.1 & 34.1 & 39.4 & 44.6 & 29.9 \\
+\quad change (minutes) & $-$1.87 [$-$2.32, $-$1.43] & $-$2.03 [$-$2.38, $-$1.68] & $-$2.25 [$-$2.72, $-$1.79] & $-$1.99 [$-$2.27, $-$1.71] & $-$4.93 [$-$5.47, $-$4.39] & $-$3.25 [$-$5.50, $-$1.00] & $-$0.87 [$-$1.00, $-$0.75] \\
+\bottomrule
+\end{tabularx}
+\caption{Effect of S1 on the turnaround corridor of 25 to 35 minutes: baseline value of the simulation and paired change (S1 minus baseline), mean over ten seeds with 95\,\% $t$-interval. Robustness runs as in Table~\ref{tab:rq3_robustness}, each against its own baseline. Values of the model, not estimates for the terminal.}
+\label{tab:rq3_corridor}
+\end{table}

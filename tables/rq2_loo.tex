@@ -9,30 +9,30 @@
 Observed (test log) & 33 & 75 & 0.0 & 12.7 & 14.4 & 6.3 & 4 & 0.55 & 0.0 & 0.0 & 0.0 \\
 \midrule
 \multicolumn{12}{l}{\textit{Final configuration}} \\
-d3x = c3x + load-dependent service & 28 & 56 & 7.9 & 10.9 & 10.7 & 6.1 & 3 & 0.54 & 1.1 & 1.3 & 5.9 \\
+d3x = c3x + load-dependent service & 28 & 58 & 8.0 & 10.8 & 10.8 & 6.0 & 3 & 0.51 & 1.1 & 1.7 & 6.8 \\
 \midrule
 \multicolumn{12}{l}{\textit{One change reversed}} \\
-ProSiT count & 27 & 54 & 8.4 & 11.2 & 9.9 & 6.0 & 3 & 0.40 & 1.9 & 2.0 & 7.2 \\
-capacity at enabling & 27 & 52 & 9.6 & 9.6 & 10.5 & 5.9 & 10 & 0.46 & 3.8 & 2.7 & 5.9 \\
-single-server waiting & 24 & 47 & 13.4 & 5.1 & 11.6 & 6.0 & 3 & 0.14 & 4.9 & 1.1 & 5.8 \\
-service without load & 29 & 57 & 7.5 & 10.3 & 11.8 & 6.0 & 3 & 0.44 & 1.6 & 3.0 & 7.3 \\
+ProSiT count & 27 & 56 & 9.0 & 10.7 & 10.0 & 6.0 & 3 & 0.39 & 1.6 & 2.2 & 7.6 \\
+capacity at enabling & 27 & 55 & 9.6 & 9.6 & 10.6 & 5.9 & 8 & 0.37 & 3.5 & 2.8 & 5.5 \\
+single-server waiting & 24 & 50 & 13.3 & 5.1 & 11.7 & 6.0 & 3 & 0.13 & 4.8 & 1.3 & 6.9 \\
+service without load & 29 & 59 & 7.3 & 10.6 & 11.8 & 6.0 & 3 & 0.41 & 1.6 & 3.0 & 6.5 \\
 \midrule
 \multicolumn{12}{l}{\textit{Block allocation instead of the observed blocks}} \\
-blocks: training shares & 28 & 53 & 9.0 & 10.1 & 10.6 & 6.1 & 3 & 0.48 & 1.6 & 1.3 & 7.3 \\
-blocks: learned, no self-count & 28 & 53 & 9.1 & 9.9 & 10.6 & 5.9 & 3 & 0.49 & 1.5 & 1.3 & 6.7 \\
+blocks: training shares & 27 & 57 & 8.8 & 10.3 & 10.7 & 6.0 & 3 & 0.41 & 1.6 & 1.7 & 6.6 \\
+blocks: learned, no self-count & 27 & 56 & 9.1 & 10.0 & 10.8 & 6.0 & 3 & 0.46 & 1.4 & 1.7 & 5.8 \\
 \midrule
 \multicolumn{12}{l}{\textit{Arrival intensity (extreme condition)}} \\
-arrival intensity 0.8 & 26 & 50 & 10.8 & 8.6 & 10.6 & 6.0 & 3 & 0.40 & 2.0 & 1.3 & 3.2 \\
-arrival intensity 1.2 & 33 & 73 & 1.3 & 15.1 & 12.0 & 6.0 & 3 & 0.79 & 1.9 & 1.3 & 5.1 \\
+arrival intensity 0.8 & 26 & 53 & 10.7 & 8.6 & 10.7 & 6.1 & 3 & 0.37 & 2.1 & 1.6 & 3.5 \\
+arrival intensity 1.2 & 34 & 83 & 3.8 & 15.5 & 12.0 & 6.1 & 3 & 0.70 & 2.0 & 1.7 & 3.5 \\
 \midrule
 \multicolumn{12}{l}{\textit{Fully generative (no replay; training block shares)}} \\
-hour-of-week arrivals & 26 & 49 & 11.3 & 8.6 & 10.2 & 6.1 & 3 & 0.47 & 2.1 & 1.3 & 3.8 \\
-ProSiT arrivals & 25 & 45 & 13.1 & 7.4 & 9.6 & 6.0 & 3 & 0.08 & 2.5 & 1.3 & 2.5 \\
+hour-of-week arrivals & 26 & 52 & 11.2 & 8.5 & 10.3 & 6.1 & 3 & 0.45 & 1.7 & 1.5 & 4.0 \\
+ProSiT arrivals & 24 & 49 & 13.0 & 7.4 & 9.7 & 6.0 & 3 & 0.08 & 2.4 & 1.5 & 3.3 \\
 \midrule
 \multicolumn{12}{l}{\textit{First day of the test period}} \\
 Observed (13 April) & 49 & 96 & 0.0 & 18.4 & 14.4 & 7.5 & 4 & 0.34 & 0.0 & 0.0 & 0.0 \\
-final configuration$^{*}$ & 30 & 65 & 19.0 & 13.9 & 10.8 & 6.5 & 3 & 0.59 & 2.1 & 1.1 & 11.8 \\
-blocks: learned (ProSiT)$^{*}$ & 3{,}097 & 7{,}682 & 3{,}368 & 3{,}055 & 15.1 & 100 & 3 & -0.46 & 2{,}880 & 1.0 & 1{,}144 \\
+final configuration$^{*}$ & 30 & 68 & 18.5 & 14.4 & 11.0 & 6.3 & 3 & 0.62 & 2.1 & 1.3 & 12.2 \\
+blocks: learned (ProSiT)$^{*}$ & 3{,}305 & 7{,}945 & 3{,}534 & 3{,}203 & 15.4 & 100 & 3 & -0.46 & 2{,}730 & 0.6 & 1{,}132 \\
 \bottomrule
 \end{tabular}
 \caption{Final configuration with each change reversed alone, with other block allocations, other arrival intensities and without replay (E4e), against the test log, means over five seeds. $^{*}$Only the 2,393 visits of the first day, because the queue of the learned block choice grows without bound. Med., P90: median and P90 of the TTT; CTD: cycle-time distance; Appr., Stops: mean approach and stop time per visit (all in minutes). Top bl.: share of the RMG stops at the busiest block in \%. Max: largest number of trucks at one block at once in any seed. Spear.: Spearman correlation of hourly arrivals and hourly median TTT. G-appr., G-stop, G-WIP: profile gaps for the approach by trucks at the block, the RMG stop duration by other trucks at the block and the TTT by trucks in the terminal (minutes).}
