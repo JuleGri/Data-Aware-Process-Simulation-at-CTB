@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  16 NOV 2026 12:47
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  16 NOV 2026 20:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2732,8 +2732,8 @@ Package translations Info: No language package found. I am going to use `englis
 h' as default language. on input line 99.
 
 (dissertation.aux (chapters/1.introduction.aux) (chapters/2.background.aux)
-(chapters/4.data_prep.aux) (chapters/5.discovery_prosit.aux)
-(chapters/6.experiments.aux) (chapters/7.results.aux)
+(chapters/4.data_prep.aux) (chapters/6.experiments.aux)
+(chapters/5.discovery_prosit.aux) (chapters/7.results.aux)
 (chapters/8.discussion.aux) (chapters/9.conclusion.aux)
 (appendices/observed_behaviour.aux) (appendices/discovery_results.aux)
 (appendices/control_flow_replica.aux) (appendices/prosit_model_inventory.aux)
@@ -2967,32 +2967,35 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [9
 
-])
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [10])
 \tf@lof=\write7
 \openout7 = `dissertation.lof'.
 
 
-[10] [11] [12
+[11] [12
 
 ] (dissertation.lot
-Underfull \vbox (badness 1622) has occurred while \output is active []
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/it' will be
+(Font)              scaled to size 12.0pt on input line 15.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [13
 
 ]
-LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/it' will be
-(Font)              scaled to size 12.0pt on input line 27.
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [14]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [15]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1117) has occurred while \output is active []
 
  [16]
-Overfull \hbox (44.61751pt too wide) in paragraph at lines 54--54
+Overfull \hbox (44.61751pt too wide) in paragraph at lines 49--49
  \TU/EBGaramond12-Regular.otf(2)/m/n/12 PM4Py 2.7.22.3: \TU/SourceCodePro-Regul
 ar.ttf(0)/m/it/12 precision_token_based_replay \TU/EBGaramond12-Regular.otf(2)/
 m/n/12 and \TU/SourceCodePro-Regular.ttf(0)/m/it/12 precision_alignments\TU/EBG
@@ -3003,6 +3006,12 @@ aramond12-Regular.otf(2)/m/n/12 .
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [17]
+Overfull \hbox (1.01448pt too wide) in paragraph at lines 57--57
+ \TU/EBGaramond12-Regular.otf(2)/m/n/12 ponents of the final configuration (Sec
+tion 4.6.3); the inventory of every model 
+ []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [18])
@@ -3022,9 +3031,9 @@ Chapter 1.
 Package newfloat Info: Setting Plan B file extension to `lof'... on input line 
 1.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/sc' will be
-(Font)              scaled to size 17.28pt on input line 12.
+(Font)              scaled to size 17.28pt on input line 14.
 
-Underfull \vbox (badness 1158) has occurred while \output is active []
+Underfull \vbox (badness 1264) has occurred while \output is active []
 
  [1
 
@@ -3032,19 +3041,7 @@ Underfull \vbox (badness 1158) has occurred while \output is active []
 
 ]
 [2]
-Overfull \hbox (1.36371pt too wide) in paragraph at lines 97--102
-\TU/EBGaramond12-Regular.otf(2)/m/n/12 pares observed and simulated performance
-, investigates discrepancies through controlled
- []
-
-
-Overfull \hbox (1.49307pt too wide) in paragraph at lines 104--111
-[]\TU/EBGaramond12-Regular.otf(2)/m/n/12 The empirical case study builds on exi
-sting discovery and simulation methods. Documented
- []
-
-
-Overfull \hbox (0.64372pt too wide) in paragraph at lines 116--119
+Overfull \hbox (0.64372pt too wide) in paragraph at lines 110--113
 []\TU/EBGaramond12-Regular.otf(2)/b/n/12 RQ1: \TU/EBGaramond12-Regular.otf(2)/m
 /n/12 Which discovery and rule treatment yields a sound, executable control-flo
 w model
@@ -3220,134 +3217,104 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [27]
 (tables/obs_descriptives.tex) [28]) [29] [30]
-\openout2 = `chapters/5.discovery_prosit.aux'.
-
- (chapters/5.discovery_prosit.tex
-Chapter 4.
-File: figures/simulation_model/sim_architecture.png Graphic file (type bmp)
-<figures/simulation_model/sim_architecture.png>
-
-Underfull \vbox (badness 1067) has occurred while \output is active []
-
- [31
-
-
-
-
-]
-Overfull \hbox (1.45677pt too wide) in paragraph at lines 69--69
-[]|\TU/EBGaramond12-Regular.otf(2)/b/n/10.95 Checked 
- []
-
-[32]
-File: figures/simulation_model/sim_control_flow.png Graphic file (type bmp)
-<figures/simulation_model/sim_control_flow.png>
-
-Overfull \hbox (1.5166pt too wide) in paragraph at lines 145--145
-[]|\TU/EBGaramond12-Regular.otf(2)/b/n/10.95 Transition|  
- []
-
-
-Underfull \vbox (badness 2486) has occurred while \output is active []
-
- [33]
-[34] (tables/sim_components.tex) (tables/sim_hyperparameters.tex)
-File: figures/simulation_model/sim_tree_arrivals.png Graphic file (type bmp)
-<figures/simulation_model/sim_tree_arrivals.png>
- [35] [36]
-File: figures/simulation_model/sim_tree_routing_first_rmg_receive.png Graphic f
-ile (type bmp)
-<figures/simulation_model/sim_tree_routing_first_rmg_receive.png>
-File: figures/simulation_model/sim_routing_first_stop.png Graphic file (type bm
-p)
-<figures/simulation_model/sim_routing_first_stop.png>
-
-[37]
-File: figures/simulation_model/sim_tree_waiting_block.png Graphic file (type bm
-p)
-<figures/simulation_model/sim_tree_waiting_block.png>
- [38]
-File: figures/simulation_model/sim_tree_exec_rmg_receive.png Graphic file (type
- bmp)
-<figures/simulation_model/sim_tree_exec_rmg_receive.png>
- (tables/sim_capacities.tex)
-Underfull \vbox (badness 2865) has occurred while \output is active []
-
- [39]
-(tables/sim_worked_example.tex))
-Underfull \vbox (badness 1184) has occurred while \output is active []
-
- [40]
-[41]
 \openout2 = `chapters/6.experiments.aux'.
 
  (chapters/6.experiments.tex
-Chapter 5.
+Chapter 4.
 (figures/schemas/experiment_flow.tex
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/b/n' will be
 (Font)              scaled to size 10.0pt on input line 10.
-) [42
+) [31
 
 
 
 
-] [43]
-Overfull \hbox (21.61574pt too wide) in paragraph at lines 56--62
-[]\TU/EBGaramond12-Regular.otf(2)/m/n/12 Quantify how much of the remaining dev
-iation between simulated and observed turnaround
- []
+] [32]
+File: figures/kpi/drift_daily.pdf Graphic file (type pdf)
+<use figures/kpi/drift_daily.pdf>
+ [33]
+File: figures/kpi/kpi_corridor.pdf Graphic file (type pdf)
+<use figures/kpi/kpi_corridor.pdf>
 
-[44] [45] (tables/kpi_long_visits.tex
+Underfull \vbox (badness 1565) has occurred while \output is active []
 
-Package fontspec Info: 
-(fontspec)             EBGaramond12-Regular scale = 1.0.
-
-LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/n' will be
-(Font)              scaled to size 10.95pt on input line 4.
-LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/b/n' will be
-(Font)              scaled to size 10.95pt on input line 6.
-LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
-(Font)              scaled to size 10.95pt on input line 8.
-) [46] [47] [48]
-Overfull \hbox (32.70436pt too wide) in paragraph at lines 231--244
+ [34]
+[35]
+Overfull \hbox (32.70436pt too wide) in paragraph at lines 196--209
 []\TU/EBGaramond12-Regular.otf(2)/m/n/12 The sequence of events within a case i
 s taken from the explicit order attribute \TU/SourceCodePro-Regular.ttf(0)/m/it
 /12 case:event:order\TU/EBGaramond12-Regular.otf(2)/m/n/12 ;
  []
 
-[49]
+[36]
 Underfull \vbox (badness 6510) has occurred while \output is active []
 
- [50]
+ [37]
+[38]
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
 
-Overfull \hbox (11.54651pt too wide) in paragraph at lines 343--357
+Overfull \hbox (11.54651pt too wide) in paragraph at lines 308--322
  [][] 
  []
 
-[51]
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 10.40002pt on input line 370.
+(Font)              scaled to size 10.40002pt on input line 335.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 9.10002pt on input line 374.
- [52] [53] [54]
-
-LaTeX Warning: Float too large for page by 8.43233pt on input line 538.
-
-[55] [56] [57]
+(Font)              scaled to size 9.10002pt on input line 339.
+[39] [40] [41] [42]
 LaTeX Font Info:    Font shape `TU/Lato-Reg.ttf(0)/m/it' will be
-(Font)              scaled to size 8.09479pt on input line 632.
- [58] [59] [60] [61] [62]
-Overfull \hbox (0.89569pt too wide) in paragraph at lines 877--886
+(Font)              scaled to size 8.09479pt on input line 537.
+ [43]
+Underfull \vbox (badness 2626) has occurred while \output is active []
+
+ [44]
+[45] [46] [47]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [48]
+Overfull \hbox (0.89569pt too wide) in paragraph at lines 784--793
 [] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Status after E4[] \TU/EBGaramond12
 -Regular.otf(2)/m/n/12 The final configuration of E4 passes the physical and th
 e extreme-condition
  []
 
-[63] [64]) [65] [66] [67]
+[49] [50]) [51] [52] [53]
+\openout2 = `chapters/5.discovery_prosit.aux'.
+
+ (chapters/5.discovery_prosit.tex
+Chapter 5.
+[54
+
+
+
+
+]
+File: figures/simulation_model/sim_control_flow.pdf Graphic file (type pdf)
+<use figures/simulation_model/sim_control_flow.pdf>
+File: figures/simulation_model/sim_tree_routing_first_rmg_receive.pdf Graphic f
+ile (type pdf)
+<use figures/simulation_model/sim_tree_routing_first_rmg_receive.pdf>
+ [55] [56]
+File: figures/simulation_model/sim_tree_waiting_block.pdf Graphic file (type pd
+f)
+<use figures/simulation_model/sim_tree_waiting_block.pdf>
+File: figures/simulation_model/sim_tree_exec_rmg_receive.pdf Graphic file (type
+ pdf)
+<use figures/simulation_model/sim_tree_exec_rmg_receive.pdf>
+ [57] (tables/sim_capacities.tex)
+Overfull \hbox (4.25041pt too wide) in paragraph at lines 151--156
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 Table [][]5.3[][] lists the settings of 
+the discovery. The most important choice is the version. ProSiT 1.0.4
+ []
+
+(tables/sim_hyperparameters.tex) [58]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [59]
+[60] (tables/sim_worked_example.tex)) [61]
 \openout2 = `chapters/7.results.aux'.
 
  (chapters/7.results.tex
@@ -3367,16 +3334,19 @@ LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/n' will be
 File: figures/discovery_prom/e1_split13apr_fitness_precision_train.pdf Graphic 
 file (type pdf)
 <use figures/discovery_prom/e1_split13apr_fitness_precision_train.pdf>
- [68
+ [62
 
 
 
 
-] [69]
+] [63]
 File: figures/discovery_prom/e1_split13apr_variant_coverage.pdf Graphic file (t
 ype pdf)
 <use figures/discovery_prom/e1_split13apr_variant_coverage.pdf>
- [70]
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [64]
 Overfull \hbox (0.33945pt too wide) in paragraph at lines 110--121
 \TU/EBGaramond12-Regular.otf(2)/m/n/12 an RMG stop (\TU/SourceCodePro-Regular.t
 tf(0)/m/it/12 LL_delivery > RMG_delivery\TU/EBGaramond12-Regular.otf(2)/m/n/12 
@@ -3392,28 +3362,28 @@ G_receive
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 2452) has occurred while \output is active []
 
- [71]
+ [65]
 (tables/rq1_e2_audit.tex
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
-) [72]
-Underfull \vbox (badness 5288) has occurred while \output is active []
-
- [73]
-[74]
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/n' will be
+(Font)              scaled to size 10.95pt on input line 5.
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/b/n' will be
+(Font)              scaled to size 10.95pt on input line 7.
+) [66] [67] [68]
 Underfull \vbox (badness 1874) has occurred while \output is active []
 
- [75]
-[76] [77] [78]
+ [69]
+[70] [71] [72]
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
- [79] (tables/rq2_chain.tex
+ [73] (tables/rq2_chain.tex
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
@@ -3424,31 +3394,33 @@ LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/b/n' will be
 (Font)              scaled to size 8.0pt on input line 7.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
 (Font)              scaled to size 8.0pt on input line 10.
-) [80]
+) [74]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [81]
+ [75]
 (tables/rq2_selection.tex
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
-) [82] (tables/rq2_loo.tex
+) [76] (tables/rq2_loo.tex
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
-) [83] [84]
+) [77] [78]
 (tables/rq2_nets.tex
 Overfull \hbox (5.13979pt too wide) in paragraph at lines 17--17
 []|\TU/EBGaramond12-Regular.otf(2)/b/n/10 Overlap 
  []
 
-) [85] (tables/sim_kpis.tex
+) [79] (tables/sim_kpis.tex
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
+LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
+(Font)              scaled to size 10.95pt on input line 8.
 )
 File: figures/simulation_model/sim_ttt_distribution.png Graphic file (type bmp)
 
@@ -3473,46 +3445,36 @@ LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
-) [86] [87] [88] (tables/rq2_acceptance.tex
+) [80] [81] [82] (tables/rq2_acceptance.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [89])
+ [83])
 Underfull \vbox (badness 7133) has occurred while \output is active []
 
- [90]
-[91] (tables/rq3_corridor.tex)
-Underfull \vbox (badness 3291) has occurred while \output is active []
-
- [92]
-(tables/rq3_effect.tex) [93] (tables/rq3_distribution.tex) [94]
-(tables/rq3_robustness.tex) [95] [96]) [97]
+ [84]
+[85] (tables/rq3_corridor.tex [86]) (tables/rq3_effect.tex) [87]
+(tables/rq3_distribution.tex) [88] (tables/rq3_robustness.tex) [89] [90])
+[91]
 \openout2 = `chapters/8.discussion.aux'.
 
  (chapters/8.discussion.tex
 Chapter 7.
-[98
+[92
 
 
 
 
-] [99] [100]
-Overfull \hbox (11.43027pt too wide) in paragraph at lines 133--133
+] [93] [94]
+Overfull \hbox (11.43027pt too wide) in paragraph at lines 146--146
 |[]\TU/EBGaramond12-Regular.otf(2)/m/sc/17.28 Data-Aware Simulation in a Physic
 al Logistics Pro-
  []
 
+[95] [96] [97] [98]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Underfull \vbox (badness 1009) has occurred while \output is active []
-
- [101]
-[102] [103]
-Overfull \hbox (10.9016pt too wide) in paragraph at lines 279--285
-[] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Own code.[] \TU/EBGaramond12-Regul
-ar.otf(2)/m/n/12 The changes to ProSiT are switches in its simulation loop; wit
-h all changes switched
- []
-
-[104] [105]) [106]
+ [99]
+[100]) [101]
 \openout2 = `chapters/9.conclusion.aux'.
 
  (chapters/9.conclusion.tex
@@ -3520,7 +3482,7 @@ Chapter 8.
 
 Underfull \vbox (badness 1264) has occurred while \output is active []
 
- [107
+ [102
 
 
 
@@ -3532,39 +3494,27 @@ T simulation reproduce truck turnaround
  []
 
 
-Overfull \hbox (3.40773pt too wide) in paragraph at lines 47--56
-[] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 RQ3: To what extent can the simula
-tion be used to analyse a load-aware block
- []
-
-
-Overfull \hbox (43.73978pt too wide) in paragraph at lines 47--56
-\TU/EBGaramond12-Regular.otf(2)/m/sc/12 allocation for deliveries, and what doe
-s it indicate about the effect on turnaround
- []
-
-
 Underfull \vbox (badness 1005) has occurred while \output is active []
 
- [108]
-Overfull \hbox (3.85175pt too wide) in paragraph at lines 113--125
+ [103]
+Overfull \hbox (3.85175pt too wide) in paragraph at lines 114--126
 \TU/EBGaramond12-Regular.otf(2)/m/n/12 process activity, a richer simulation fo
 rmalism could include location directly in the model
  []
 
-[109]
-Overfull \hbox (6.37306pt too wide) in paragraph at lines 126--137
+[104]
+Overfull \hbox (6.37306pt too wide) in paragraph at lines 127--138
 \TU/EBGaramond12-Regular.otf(2)/m/n/12 ing resource labels as fully interchange
 able. Equipment availability and assignment should
  []
 
 
-Overfull \hbox (6.29707pt too wide) in paragraph at lines 126--137
+Overfull \hbox (6.29707pt too wide) in paragraph at lines 127--138
 \TU/EBGaramond12-Regular.otf(2)/m/n/12 distribution. An object-centric represen
 tation could preserve the relations between trucks,
  []
 
-) [110]
+) [105]
 \openout2 = `appendices/observed_behaviour.aux'.
 
  (appendices/observed_behaviour.tex
@@ -3574,7 +3524,7 @@ File: figures/observed/hourly_arrivals_ttt.png Graphic file (type bmp)
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [111
+ [106
 
 
 
@@ -3585,7 +3535,7 @@ File: figures/observed/ttt_components_by_hour.png Graphic file (type bmp)
 File: figures/observed/ttt_vs_wip.png Graphic file (type bmp)
 <figures/observed/ttt_vs_wip.png>
 
-[112] [113]
+[107] [108]
 File: figures/observed/stop_vs_unit_wip.png Graphic file (type bmp)
 <figures/observed/stop_vs_unit_wip.png>
 
@@ -3593,10 +3543,16 @@ Overfull \hbox (5.77689pt too wide) in paragraph at lines 142--142
 []|\TU/EBGaramond12-Regular.otf(2)/b/n/12 Approach|  
  []
 
-[114] [115]) [116]
+[109] [110] (tables/kpi_long_visits.tex
+
+Package fontspec Info: 
+(fontspec)             EBGaramond12-Regular scale = 1.0.
+
+)) [111] [112]
 \openout2 = `appendices/discovery_results.aux'.
 
- (appendices/discovery_results.tex
+
+(appendices/discovery_results.tex
 Appendix B.
 (tables/rq1_e1_conformance.tex
 
@@ -3608,13 +3564,13 @@ Package fontspec Info:
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
-)) [117
+)) [113
 
 
 
 
 ]
-[118] [119]
+[114] [115]
 \openout2 = `appendices/control_flow_replica.aux'.
 
  (appendices/control_flow_replica.tex
@@ -3624,7 +3580,7 @@ Appendix C.
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
-) [120
+) [116
 
 
 
@@ -3635,8 +3591,8 @@ Package fontspec Info:
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
 )
-(tables/app_rewritten_2x2_hm.tex) [121] (tables/app_rewritten_2x2_im.tex)
-[122] (tables/app_control_flow_replica.tex
+(tables/app_rewritten_2x2_hm.tex) [117] (tables/app_rewritten_2x2_im.tex)
+[118] (tables/app_control_flow_replica.tex
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
@@ -3646,31 +3602,42 @@ Overfull \hbox (23.1399pt too wide) in paragraph at lines 5--31
  [][] 
  []
 
-) [123]) [124]
+) [119]) [120]
 \openout2 = `appendices/prosit_model_inventory.aux'.
 
  (appendices/prosit_model_inventory.tex
 Appendix D.
 
+Overfull \hbox (25.54633pt too wide) in paragraph at lines 18--31
+\TU/EBGaramond12-Regular.otf(2)/m/n/12 marking, and the training log of 59,139 
+visits (2 March to 11 April 2026, SHA-256 \TU/SourceCodePro-Regular.ttf(0)/m/it
+/12 58932826…6cb94b\TU/EBGaramond12-Regular.otf(2)/m/n/12 ).
+ []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [125
+ [121
 
 
 
 
 ]
-(tables/app_inventory.tex
+(tables/sim_components.tex)
+File: figures/simulation_model/sim_tree_arrivals.pdf Graphic file (type pdf)
+<use figures/simulation_model/sim_tree_arrivals.pdf>
+File: figures/simulation_model/sim_routing_first_stop.pdf Graphic file (type pd
+f)
+<use figures/simulation_model/sim_routing_first_stop.pdf>
+ (tables/app_inventory.tex [122]
+ignored error: Infinite glue shrinkage found in box being split [123]
+ignored error: Infinite glue shrinkage found in box being split [124]
+ignored error: Infinite glue shrinkage found in box being split [125]
 ignored error: Infinite glue shrinkage found in box being split [126]
 ignored error: Infinite glue shrinkage found in box being split [127]
 ignored error: Infinite glue shrinkage found in box being split [128]
 ignored error: Infinite glue shrinkage found in box being split [129]
-ignored error: Infinite glue shrinkage found in box being split [130]
-ignored error: Infinite glue shrinkage found in box being split [131]
-ignored error: Infinite glue shrinkage found in box being split [132])
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [133]
+ignored error: Infinite glue shrinkage found in box being split [130])
 File: figures/discovery_prom/net_IM_0.0.png Graphic file (type bmp)
 <figures/discovery_prom/net_IM_0.0.png>
 File: figures/discovery_prom/net_ILP_1.00.png Graphic file (type bmp)
@@ -3680,7 +3647,7 @@ File: figures/discovery_prom/net_IMf_0.3.png Graphic file (type bmp)
 File: figures/discovery_prom/net_HM_0.8.png Graphic file (type bmp)
 <figures/discovery_prom/net_HM_0.8.png>
 )
-[134] [135] [136]
+[131] [132] [133]
 \openout2 = `appendices/model_inspection_and_reproduction.aux'.
 
  (appendices/model_inspection_and_reproduction.tex
@@ -3688,25 +3655,25 @@ Appendix E.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [137
+ [134
 
 
 
 
 ])
-[138] (dissertation.bbl
+[135] (dissertation.bbl
 ** WARNING: IEEEtran.bst: No hyphenation pattern has been
 ** loaded for the language `English'. Using the pattern for
 ** the default language instead.
 ** WARNING: IEEEtran.bst: No hyphenation pattern has been
 ** loaded for the language `English'. Using the pattern for
 ** the default language instead.
-[139
+[136
 
 
 
 
-] [140] [141] [142] [143] [144] [145] [146] [147]
+] [137] [138] [139] [140] [141] [142] [143] [144]
 Underfull \hbox (badness 10000) in paragraph at lines 530--535
 []\TU/EBGaramond12-Regular.otf(2)/m/n/12 D. Chapela-Campa, I. Benchekroun, O. B
 aron, M. Dumas, D. Krass, and
@@ -3718,9 +3685,9 @@ Underfull \hbox (badness 2426) in paragraph at lines 530--535
 on model? measuring the quality of
  []
 
-[148]) [149] (dissertation.aux (chapters/1.introduction.aux)
+[145]) [146] (dissertation.aux (chapters/1.introduction.aux)
 (chapters/2.background.aux) (chapters/4.data_prep.aux)
-(chapters/5.discovery_prosit.aux) (chapters/6.experiments.aux)
+(chapters/6.experiments.aux) (chapters/5.discovery_prosit.aux)
 (chapters/7.results.aux) (chapters/8.discussion.aux) (chapters/9.conclusion.aux
 ) (appendices/observed_behaviour.aux) (appendices/discovery_results.aux)
 (appendices/control_flow_replica.aux) (appendices/prosit_model_inventory.aux)
@@ -3734,15 +3701,15 @@ L3 programming layer <2025-12-24>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: F933E32863D69C8BF78BC53B1BD953CA;15653.
+(rerunfilecheck)             Checksum: 56DFDC931D7D85E0CDC95630024C2196;14947.
  ) 
 Here is how much of TeX's memory you used:
- 71903 strings out of 402986
- 1799494 string characters out of 5448710
- 2641828 words of memory out of 5000000
- 99545 multiletter control sequences out of 15000+600000
+ 71915 strings out of 402986
+ 1799794 string characters out of 5448710
+ 2651038 words of memory out of 5000000
+ 99555 multiletter control sequences out of 15000+600000
  636717 words of font info for 166 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  103i,12n,131p,1259b,3001s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on dissertation.xdv (171 pages, 3675100 bytes).
+Output written on dissertation.xdv (168 pages, 3604636 bytes).

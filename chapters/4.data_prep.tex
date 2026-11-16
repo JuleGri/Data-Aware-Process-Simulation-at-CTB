@@ -41,7 +41,7 @@ through the truck schedule. The extract covers March and April 2026, about
 \midrule
 ITS truck schedule & Planned visit with its stops; timestamps of Gate In, readiness in the handover lane, fulfilment of the order and Gate Out & cases, events, timestamps, planned stops \\
 Report system & Container transactions, exchange areas and gate records & link of containers to stops \\
-Container master data & Size, type, full or empty, hazardous and reefer indicators & manifest attributes \\
+Container master data & Size, type, full or empty, hazardous and reefer indicators & case attributes \\
 Yard management system & Four-hourly snapshots of block occupancy & description of the terminal only \\
 \bottomrule
 \end{tabularx}
@@ -124,22 +124,22 @@ a block allocation affects most. The final log has 91,153 visits.
 \todo{Add the counts of the cleaning steps (raw schedule records, missing timestamps, over twelve hours) from preparation/009\_Validation\_quality\_report\_s4\_fahrplan.py.}
 
 \paragraph{Split.}
-The log is split once in time, at the weekly closure on Monday 13 April 2026.
-The training log (2 March to 11 April, 59,139 visits) is used to discover and fit
-every model and to make every selection; the test log (13 to 30 April, 32,014
-visits) is used to evaluate them. No visit spans the boundary, so the test period
-starts with an empty terminal. Section~\ref{sec:exp_partitions} describes how the
-experiments use the two logs.
+The log is split once in time into a training log with 65\,\% of the visits
+(59,139 visits, 2 March to 11 April) and a test log with 35\,\% (32,014 visits, 13 to
+30 April). The boundary falls on a weekend; heavy trucks may not drive on Sundays
+in Germany, so no visit spans the boundary and the test period starts with an
+empty terminal. Section~\ref{sec:exp_partitions} describes how the experiments
+use the two logs.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Case Attributes: the Planned Manifest}
+\section{Case Attributes of the Planned Visit}
 \label{sec:context_enrichment}
 \label{sec:entry_known_attributes}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 A data-aware simulation learns its decisions and durations from case attributes.
-This thesis gives the simulation the attributes of the planned visit manifest
-and nothing else (Table~\ref{tab:manifest_attributes}). They are aggregated per
+This thesis gives the simulation the attributes of the planned visit and
+nothing else (Table~\ref{tab:manifest_attributes}). They are aggregated per
 visit from the schedule and the container master data.
 
 \begin{table}[htbp]
@@ -158,14 +158,14 @@ visit from the schedule and the container master data.
 \texttt{visit\_complexity} & additive score of the planned work: stops and containers, one point for each full and each received container, two for each reefer or hazardous container, and extra points for mixed visits and mixed stops \\
 \bottomrule
 \end{tabularx}
-\caption{Case attributes of the simulation: the planned visit manifest, known at Gate In.}
+\caption{Case attributes of the simulation: the planned visit, known at Gate In.}
 \label{tab:manifest_attributes}
 \end{table}
 
 Three reasons decide this choice.
 
 \begin{enumerate}
-\item \textbf{Known when the decision is taken.} The manifest is fixed before the
+\item \textbf{Known when the decision is taken.} The planned visit is fixed before the
 truck enters the terminal, and the yard position of a container is assigned when
 the truck arrives (Section~\ref{sec:prob_statement}). An allocation rule, and a
 simulation that evaluates it, can only use what is known at that moment. The
@@ -190,10 +190,10 @@ changes.
 \end{enumerate}
 
 The yard snapshots of Table~\ref{tab:ctb_data_sources} are therefore used only to
-describe the terminal. Two attributes of the manifest also bound the
-control flow: the planned number of stops is enforced as a domain rule
-(rule~6 in Section~\ref{sec:domain_rules}), and the flow type separates the
-first stop of a visit (Section~\ref{sec:sim_components}).
+describe the terminal. Two of the attributes also bound the
+control flow: the stop guard of the simulation makes every truck perform its
+planned number of stops (Section~\ref{sec:sim_adaptations}), and the flow type
+separates the first stop of a visit (Section~\ref{sec:sim_components}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Observed Truck Turnaround}
@@ -248,12 +248,10 @@ These requirements define the measures of Chapter~\ref{chp:experiments}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The physical constraints of a truck visit are written down as seven rules
-(Table~\ref{tab:domain_rules}). They come from the author's knowledge of the
-terminal operations
-\todo{State the author's role at CTB and the period.}
-and are checked against the recorded log: every training and test visit satisfies
-rules 1 to 5 (Section~\ref{sec:res_rules}); rule~6 holds by construction, because
-the planned and the recorded stops come from the same schedule. Their review by the terminal is
+(Table~\ref{tab:domain_rules}). They were worked out with the project team of
+the terminal, from terminal development and the data warehouse team, as part of
+the use case of this study, and are checked against the recorded log: every training and test visit satisfies
+rules 1 to 6 (Section~\ref{sec:res_rules}). Their review by the terminal is
 reported in Section~\ref{sec:disc_stakeholders}. Rule 7 cannot be checked,
 because the truck type and its capacity are not recorded; it is not used.
 
@@ -269,7 +267,7 @@ because the truck type and its capacity are not recorded; it is not used.
 3 & A visit has at least one yard stop between Gate In and Gate Out. & sequence & activity labels \\
 4 & The stops of a visit never overlap in time. & time & start and complete timestamps \\
 5 & A mixed stop handles all moves of the visit at its unit. The visit has no separate delivery or receive at the same unit. & sequence (LL, HO2); data (RMG) & activity labels; block of each RMG stop \\
-6 & The number of stops equals the number of planned stops in the manifest (at most four in the data). & data & planned stops (case attribute) \\
+6 & A visit has at most eight stops: a truck delivers and receives at most four containers each (at most four stops in the data). & sequence (bound) & activity labels \\
 7 & The load of the truck stays within its capacity after every stop. & data & truck type (not recorded) \\
 \bottomrule
 \end{tabularx}
@@ -287,7 +285,7 @@ the resource of each stop.
 
 The event log contains 91,153 completed truck visits with eleven activities, the
 block of every RMG stop as resource, and start and complete timestamps for every
-stop. The simulation uses only the planned visit manifest as case attributes,
+stop. The simulation uses only the attributes of the planned visit as case attributes,
 because it is known when a truck arrives and because the load of the terminal has
 to come from the simulated state, not from a recorded value. The log shows a TTT
 that grows non-linearly with the load and a test period that is more congested

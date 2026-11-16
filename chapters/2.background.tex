@@ -724,7 +724,10 @@ spread where the data are spread. A lower score is better. Version 1.0.3 used
 the Wasserstein distance between training and test values inside each leaf.
 That criterion measures only how stable a leaf is, so it almost always chose a
 single distribution. This thesis uses version 1.0.4
-(Section~\ref{sec:mc_hyperparameters}).
+(Section~\ref{sec:sim_settings}). In practice, version 1.0.4 keeps a tree wherever splitting the cases predicts
+the values better than one distribution for all of them, while version 1.0.3
+used one distribution almost everywhere, so that waiting and execution times
+could not depend on the load or the attributes of a case.
 
 \paragraph{Example}
 Figure~\ref{fig:bg_prosit_arrival_tree} shows the arrival tree that ProSiT
@@ -779,7 +782,7 @@ of each case is stored as well.
 The discovery has a few hyperparameters: the largest tree depth and the leaf sizes tried in cross-validation,
 whether workload features and multitasking are used, and whether case attributes are drawn as observed
 tuples or one by one. Their defaults, the values used in this thesis and the reasons are listed in
-Table~\ref{tab:exp_e3_config} (Section~\ref{sec:exp_baseline}).
+Table~\ref{tab:sim_hyperparameters} (Section~\ref{sec:sim_settings}).
 
 \subsection{Evidence and Limitations}
 \label{sec:prosit_limits}

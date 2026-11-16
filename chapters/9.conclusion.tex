@@ -7,7 +7,7 @@ This thesis built a simulation of truck handling at HHLA Container Terminal
 Burchardkai from two months of operational event data and examined whether it
 can support the assessment of a load-aware allocation of truck deliveries to
 yard blocks. It selected the control-flow model from a grid of discovered nets,
-fitted ProSiT on the planned visit manifest, validated the simulation layer by
+fitted ProSiT with the attributes of the planned visit, validated the simulation layer by
 layer against the recorded turnaround times and their response to load, and
 applied one allocation rule within the limits that this validation established.
 
@@ -21,7 +21,7 @@ Miner net HM 0.7, used as discovered, with a stop guard in the simulator that
 looks ahead on the net. Of 19 discovered nets, it is the only sound net
 that accepts every sequence above a coverage threshold of 0.1\,\% and whose
 language respects the rules of the truck visit, and the most precise of the three
-nets that pass the coverage gate (0.998). It gives up 44 rare sequences, 0.96\,\% of the truck-minutes. Conformance
+nets that pass the coverage check (0.998). It gives up 44 rare sequences, 0.96\,\% of the truck-minutes. Conformance
 metrics anticipate the simulation only in part: coverage of the frequent
 behaviour and the structure of the net, parallel branches and where its decisions
 sit, decided more than precision. A net with parallel branches produced visits
@@ -42,7 +42,7 @@ within the change between the two periods. It does not reproduce the slowdown in
 the busiest hours and misses two thresholds of the load-response criterion; part
 of the test error is the slower service of the test period.
 
-\paragraph{RQ3: To what extent can the simulation be used to analyse a
+\paragraph{RQ3: To what extent can the simulation be used to evaluate a
 load-aware block allocation for deliveries, and what does it indicate about the
 effect on turnaround time?} It can show the direction and the mechanism of such
 a change within the examined model variants, but not its size. Moving a delivery
@@ -58,7 +58,7 @@ across the robustness runs, and the model leaves out the costs of a move.
 \label{sec:concl_contributions}
 
 \paragraph{(C1) A justified simulation model for the CTB case.} The control-flow
-model was chosen by explicit gates on the training log, soundness, acceptance of
+model was chosen by explicit checks on the training log, soundness, acceptance of
 every frequent sequence and the domain rules, and the price of the choice was
 measured: the rare sequences it gives up, the generalisation it lacks, and their
 small effect on the turnaround time. The learned trees, their parameters and the
@@ -84,7 +84,8 @@ Second, it underestimates the slowdown in the busiest hours, so the size of a
 scenario effect is not established. Third, the event log records time at the
 block, not the use of lanes and cranes, so waiting and service cannot be fully
 separated. Fourth, the domain rules, the three lanes and the decision point of
-the allocation rest on the author's knowledge of the terminal, and the costs of a
+the allocation rest on the use case worked out with the project team of the
+terminal rather than on an independent review, and the costs of a
 move, driving, rehandling and the yard plan, are not modelled.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

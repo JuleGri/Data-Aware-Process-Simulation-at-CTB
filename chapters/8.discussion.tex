@@ -61,13 +61,26 @@ waterside work, so it can evaluate the upper bound of the corridor but not the
 lower one. A rule for the terminal would have to combine the allocation with a
 limit on how much crane capacity the trucks may take.
 
+\paragraph{Model error or drift?} Part of the shortfall is the drift between the
+periods (Section~\ref{sec:exp_partitions}). On the training period the same
+configuration meets the thresholds for the approach and the stop duration, and it
+misses the Spearman threshold by only 0.0002; its cycle-time distance (3.9 minutes)
+lies within the change between the periods. On the test period, two thresholds are
+missed and the error of the mean turnaround time is twice as large (8.0 against
+3.9 minutes), because the stops of the test period took longer at every load
+(Section~\ref{sec:res_e4_remaining}). With less drift, the model would therefore
+come much closer to the acceptance criteria. One weakness, however, appears in both
+periods: with 150 or more trucks in the terminal, the simulated median turnaround
+time is 38 to 40 minutes against 58 to 59. The missing slowdown in the busiest hours
+is a limitation of the model, not of the test period.
+
 \paragraph{Conditions of the result.} The final configuration replays the observed
-arrivals, manifests and blocks of the test period. Its validity is conditional on
+arrivals, case attributes and blocks of the test period. Its validity is conditional on
 these inputs: without them, the error is larger (cycle-time distance 11.2 against
 8.0 minutes). For a prospective use, an arrival model with the daily peaks of the
 terminal and the block of each container from the yard plan would have to replace
 the replay. The result also rests on the four changes to ProSiT's queue and
-service (Table~\ref{tab:sim_learned_added}); each is needed for the load response
+service (Table~\ref{tab:sim_adaptations}); each is needed for the load response
 (Section~\ref{sec:res_e4_loo}). Three implementation details also bound the
 result. The block allocation is replayed only where a simulated stop has an
 observed counterpart, about three quarters of the RMG stops. The load feature of
@@ -134,7 +147,7 @@ do.
 \label{sec:disc_transfer}
 
 \paragraph{What transfers.} Much of ProSiT transferred without change. The
-routing trees split on the manifest and reproduce the first stop of a visit by
+routing trees split on the case attributes and reproduce the first stop of a visit by
 flow type within one percentage point; the waiting and execution trees use
 plausible features such as the queue, the workload, the hour and reefer
 containers. Version 1.0.4 matters here: its model selection by the continuous
@@ -148,7 +161,7 @@ with the longer queue.
 kinds, and they carry different weight.
 \begin{itemize}
 \item \textbf{Implementation.} Two findings are inconsistencies between how
-ProSiT builds its training data and how its simulation loop works: the queue
+ProSiT builds its training data and how its simulator works: the queue
 feature counts the stop itself in training but not in the simulation, and the
 count of stops in progress is too low for 14 to 15\,\% of the RMG stops. A third,
 the enabling time that survives loops in training, had no measurable effect on
@@ -181,7 +194,7 @@ when the allocation of deliveries changes cannot be checked with these data
 the log can express and adds what it cannot: the three lanes, the capacity check
 at the start of a stop, a waiting target measured from a free lane, the load as a
 feature of the service time, and the domain rules of the control flow
-(Table~\ref{tab:sim_learned_added}). This is the split that data-driven
+(Table~\ref{tab:sim_adaptations}). This is the split that data-driven
 simulation in manufacturing uses, where the structure is discovered and buffers
 and capacities are added \cite{LugaresiMatta2021,Grobis2025ProductionLogistics},
 and it agrees with what RIMS showed for congested processes: load features have to
@@ -195,7 +208,7 @@ minutes against 58 to 59.
 the event log does not record. The cranes of a block also serve the waterside and
 the rail; containers are restacked; trucks drive between areas. In the log these
 appear only as longer stops and approaches. Containers are aggregated per truck,
-so a visit with several containers is one case with one manifest. An
+so a visit with several containers is one case with one set of attributes. An
 object-centric event log with trucks, containers, blocks and cranes as objects
 \cite{VanDerAalst2023OCPM} and object-centric simulation models
 \cite{Knopp2023ObjectCentricSimulation} would be a next step, as would operational
@@ -251,20 +264,21 @@ period; another attribution would give other peak hours. The validity of the
 model is judged for the turnaround time and its parts only; the use of cranes or
 lanes was not examined.
 
-\paragraph{The manifest.} The case attributes come from the planned visit
-manifest, which is known at Gate In (Section~\ref{sec:entry_known_attributes}),
+\paragraph{The case attributes.} The case attributes come from the planned visit,
+which is known at Gate In (Section~\ref{sec:entry_known_attributes}),
 and the stop guard uses the planned number of stops. The data do not show whether
 a schedule was changed after Gate In. If stops were added during a visit, the
 planned number of stops would carry information from the visit itself, and the
 guard would make the simulated number of stops look better than a prospective
-run could.
+run could. The choice of the attributes also bounds what the model can learn:
+container-level properties or the state of the yard, computed in the simulation,
+might change the learned routing and times.
 
 \subsection{Internal Validity}
 \paragraph{Retrospective hold-out.} Every selection uses the training log, and the
-criteria of the selections are fixed before the runs they decide. The data of the
-test period were nevertheless available to the author during the exploration of
-the data, so the test log is a retrospective hold-out, not an untouched
-confirmatory sample. The four changes to the queue and the service rest on
+criteria of the selections are fixed before the runs they decide. The split itself
+was fixed after the data had been explored, so the test log is a retrospective
+hold-out. The four changes to the queue and the service rest on
 mechanisms that the training data show, such as the self-count in 99.98\,\% of the
 training stops, not on parameters fitted to the test period; the test error may
 still be somewhat optimistic. The test period was also more congested than the
@@ -273,10 +287,10 @@ of the model with the change of the terminal between the periods; the in-sample
 run on the training period separates the two (Section~\ref{sec:res_e4_remaining}).
 
 \paragraph{Oracle inputs.} The final configuration replays the observed arrivals,
-manifests and blocks. Its validity is conditional on these inputs; without them
+case attributes and blocks. Its validity is conditional on these inputs; without them
 the error is larger (cycle-time distance 11.2 against 8.0 minutes).
 
-\paragraph{Own code.} The changes to ProSiT are switches in its simulation loop;
+\paragraph{Own code.} The changes to ProSiT are switches in its simulator;
 with all changes switched off, the loop reproduces ProSiT's log exactly
 (Section~\ref{sec:sim_adaptations}). Conformance values come from ProM, the
 soundness check from WOFLAN. The measures of the generated logs (distances,
@@ -290,10 +304,10 @@ patterns, other terminals and other equipment are not covered. The findings refe
 to ProSiT~1.0.4 and may change with later versions. The discovery grid has 19
 nets of four families; other algorithms, such as the Split Miner
 \cite{RWSplitMiner2019}, were not tested. The mechanisms found here, how capacity
-and load enter the training data and the simulation loop, are candidates to check
+and load enter the training data and the simulator, are candidates to check
 in other capacity-limited processes (Section~\ref{sec:disc_transfer}); the numbers
-are specific to the case. The domain rules and the limit of three lanes come from
-the author's knowledge of the terminal; their review is described in
+are specific to the case. The domain rules and the limit of three lanes were
+worked out with the project team of the terminal; their review is described in
 Section~\ref{sec:disc_stakeholders}.
 
 \subsection{Conclusion Validity}
@@ -313,9 +327,10 @@ confirm \cite{Vinci2026prosit}.
 
 Domain knowledge entered the study in four places: the meaning of the recorded
 stop times, the domain rules of the truck visit, the three lanes of a block, and
-the corridor and the decision point of the allocation. Except for the corridor,
-which the terminal states, these come from the author's knowledge of the
-terminal operations. They give the model a physical basis, but an assumption that
+the corridor and the decision point of the allocation. They were worked out with
+the project team of the terminal, from terminal development and the data warehouse
+team, as part of the use case of this study. They give the model a physical basis,
+but an assumption that
 the modeller puts into the model cannot be confirmed by the same model: the
 records can only show that they do not contradict it, as they do for rules 1 to 5.
 

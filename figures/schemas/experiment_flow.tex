@@ -7,16 +7,16 @@
   passon/.style={rectangle, draw, fill=black!6, align=left, font=\footnotesize, text width=9.2cm, inner sep=4pt},
   rq/.style={font=\footnotesize\bfseries, align=center},
   arr/.style={-{Stealth[length=2mm]}}]
-\node[exper] (e1) at (0,0) {\textbf{E1 Discovery and gates} (training log)\\
+\node[exper] (e1) at (0,0) {\textbf{E1 Discovery and checks} (training log)\\
   19 nets of four families: IMf (5), Heuristics (5), ILP (6), Alpha (3)\\
-  A1 sound; A2 accepts every sequence above the coverage threshold of 0.1\,\%};
-\node[passon, below=2.5mm of e1] (o1) {IM 0.0, HM 0.7, ILP 1.00 pass A1 and A2};
+  soundness check; coverage check: accepts every sequence above 0.1\,\% of the visits};
+\node[passon, below=2.5mm of e1] (o1) {IM 0.0, HM 0.7, ILP 1.00 pass both checks};
 \node[exper, below=4mm of o1] (e2) {\textbf{E2 Rule audit} on the language of each net\\
-  A3 rules 3--5: a stop in every visit, no two stops at once, no forbidden combination\\
-  rule 6 (planned stops) cannot be written into a net: stop guard in the simulator};
+  rule check, rules 3--5: a stop in every visit, no two stops at once, no forbidden combination\\
+  the planned number of stops cannot be written into a net: stop guard in the simulator};
 \node[passon, below=2.5mm of e2] (o2) {HM 0.7, used as discovered, with a look-ahead stop guard};
 \node[exper, below=4mm of o2] (e3) {\textbf{E3 Simulation of the selected net} in ProSiT\\
-  guard on, off and simple; contrasts IM 0.0, ILP 1.00 (fail A3), IMf 0.3, HM 0.8 (fail A2)};
+  guard on, off and simple; contrasts IM 0.0, ILP 1.00 (fail the rule check), IMf 0.3, HM 0.8 (fail the coverage check)};
 \node[passon, below=2.5mm of e3] (o3) {control flow that works in the simulator; baseline for E4};
 \node[exper, below=4mm of o3] (e4) {\textbf{E4 Mechanism audit} along the path of the truck\\
   demand $\rightarrow$ block allocation $\rightarrow$ queue at the block $\rightarrow$ service\\

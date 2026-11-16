@@ -1,221 +1,186 @@
 \chapter{Methodology and Experimental Setup}
 \label{chp:experiments}
 
-This chapter describes how the claims of this thesis are tested. It
-states which experiment answers which research question, which inputs
-are held fixed, which factor is varied, and how the outcome is measured.
-The concepts behind the methods (Petri nets, rules, conformance measures
-and ProSiT) are introduced in Chapter~\ref{chp:background}. The results
-follow in Chapter~\ref{chp:results} in the same order.
+This chapter describes how the research questions are answered: which
+experiments are run, on which data, with which measures and with which criteria.
+The concepts behind the methods are introduced in Chapter~\ref{chp:background};
+the simulation model on which E3 to E5 operate is described in
+Chapter~\ref{chp:process_discovery_methodology}, and the results follow in
+Chapter~\ref{chp:results} in the same order.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Overview of the Experiments}
 \label{sec:exp_overview}
+\label{sec:exp_goals}
+\label{sec:exp_selection_logic}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Table~\ref{tab:exp_overview} maps the experiments to the research
-questions, and Figure~\ref{fig:exp_flow} shows how each experiment hands its
-result on. E1 and E2 concern the untimed control-flow model. E3 runs the
-selected net and the contrasts in the simulator under identical conditions. E4 and
-E5 build on the configuration selected in E3.
+Five experiments build on each other (Figure~\ref{fig:exp_flow}). Each has one goal
+and one result that the next experiment uses.
 
 \input{figures/schemas/experiment_flow}
 
-\begin{table}[htbp]
-\centering
-\begin{tabularx}{\textwidth}{L{1.0cm}L{3.6cm}YL{1.4cm}}
-\toprule
-\textbf{ID} & \textbf{Experiment} & \textbf{Varied factor and fixed conditions} & \textbf{RQ} \\
-\midrule
-E1 & Control-flow discovery & Discovery algorithm and parameter. Fixed training log, activity labels, event order and evaluation logs. & RQ1 \\
-E2 & Rule audit & Language of every admissible net checked against the domain rules; stop guard for the planned number of stops. Fixed rules; nets not changed. & RQ1 \\
-E3 & Simulation of the selected net & Stop guard (on, off, simple); nets that failed a gate as contrasts. Fixed ProSiT version, hyperparameters, training log, seeds and horizon. & RQ1, RQ2 \\
-E4 & Mechanism audit and simulation validity & One component at a time, in the order a truck meets them: demand, block allocation, queue at the block, service under load. Oracle and repaired variants; fixed fitted model, seeds and period. & RQ2 \\
-E5 & What-if demonstration & Block allocation rule for deliveries (S1), three eligible sets, four robustness runs. Fixed final configuration of E4, replayed trucks, ten paired seeds. & RQ3 \\
-\bottomrule
-\end{tabularx}
-\caption{Experiments, varied factors and the research questions they address.}
-\label{tab:exp_overview}
-\end{table}
-
-\subsection{Goals of the Experiments}
-\label{sec:exp_goals}
-
-Each experiment has one goal and one deliverable.
-
 \begin{enumerate}[label=\textbf{E\arabic*}]
-\item Evaluate the discovered nets on two levels and keep those that are sound
-and accept every sequence above the coverage threshold. Deliverable: the
-admissible nets.
-\item Check the admissible nets against the domain rules and select the most
-precise net whose language respects them; define the stop guard for the planned
-number of stops. Deliverable: the selected net, used as discovered.
-\item Simulate the selected net with and without the stop guard, and the nets
-that failed a gate as contrasts. Deliverable: the control-flow model used in E4
-and E5, and the evidence that it works in the simulator.
-\item Quantify how much of the remaining deviation between simulated
-and observed turnaround time is caused by the demand, the block
-allocation, the queue at the block and the service time, and whether the
-simulated turnaround time responds to load at the blocks as observed.
-Deliverable: the final simulation configuration, the attribution of the
-error to components and the decision whether E5 is admissible.
-\item Show what the simulation of E4 can and cannot say about a load-aware
-block allocation for deliveries: the direction of the effect on turnaround
-time, the mechanism, who gains and who loses, and whether this holds under the
-weaknesses found in E4. Deliverable: a conditional what-if statement and an assessment of the
-evidence still required before an operational recommendation is justified.
+\item \textbf{Control-flow discovery.} Discover candidate nets with four families
+of discovery algorithms and several settings, and evaluate them with conformance
+metrics: fitness, precision, generalisation and coverage. Keep the nets that are
+sound and accept every frequent sequence. Result: the admissible nets.
+\item \textbf{Rule audit.} Check the admissible nets against the domain rules of
+the truck visit and select the net whose behaviour respects them. Result: the
+control-flow model, used exactly as discovered.
+\item \textbf{Simulation of the selected net.} Run the selected net in ProSiT and
+check that the simulated visits follow the observed behaviour. Result: a confirmed
+control-flow model that ProSiT can use and that produces visits close to the
+observed ones.
+\item \textbf{Mechanism audit.} Check how well the simulation reproduces the
+turnaround time and its response to load, and which components of the simulator
+cause the remaining error. Result: the configuration used in E5 and an assessment
+of its validity.
+\item \textbf{Improvement measure.} Evaluate a redesign of the allocation of
+deliveries to the yard blocks that targets the visits above the corridor. Result:
+the effect of the measure on the KPI, the mechanism behind it, its costs, and how
+far the simulation can support it.
 \end{enumerate}
 
-E1 to E3 answer RQ1. E3 and E4 answer RQ2. E5 answers RQ3. Every selection
-uses the training log only; the test log reports the results, including the
-generalisation of the nets.
+E1 to E3 answer RQ1, E3 and E4 answer RQ2, and E5 answers RQ3. The experiments do
+not aim to rank discovery algorithms in general, or to show that the simulation is
+valid for measures other than the turnaround time.
 
-The experiments do not aim to rank discovery algorithms in general, to
-optimise the allocation rule, or to show that the simulator is valid for
-purposes other than the turnaround and peak measures defined in
-Section~\ref{sec:exp_kpis}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Setting}
+\label{sec:exp_setting}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Model Selection}
-\label{sec:exp_selection_logic}
-
-The control-flow model is selected in four steps, with criteria fixed before
-the runs they decide (Figure~\ref{fig:exp_flow}).
-\begin{enumerate}
-\item \textbf{E1, gates.} A1: the net is sound. A2: it accepts every sequence
-above the coverage threshold.
-\item \textbf{E2, rule audit.} A3: the language of the net respects the sequence
-rules of the truck visit (no visit without a stop, no two stops of one truck at
-the same time, no forbidden combination at an LL or HO2 area). The planned
-number of stops cannot be written into a discovered net; a stop guard enforces
-it in the simulator.
-\item \textbf{Selection.} Among the nets that pass A1 to A3, the most precise
-one is selected. The net is used exactly as it was discovered.
-\item \textbf{E3, simulation.} The selected net is simulated with and without
-the stop guard. The nets that fail A2 or A3 are simulated as contrasts, to show
-what the gates prevent.
-\end{enumerate}
-Discovery metrics alone are not enough, because a simulator executes the
-model: behaviour that the language permits but the log never shows can become
-frequent in the generated log (Section~\ref{sec:bg_coverage}). The last step
-therefore takes place in the simulator.
-
-\section{Data Partitions and Their Use}
+\subsection{Training and Test Log}
 \label{sec:exp_partitions}
 
-All experiments use the two logs of the split at Monday 13 April 2026
-(Section~\ref{sec:cleaning_population}). The training log (59,139 visits) is used
-to discover the nets, to fit every ProSiT component, to fix the peak thresholds
-and to make every selection: the gates of E1 and E2, and the choice of the final
-configuration in E4. The test log (32,014 visits) reports the selected models;
-no parameter is fitted on it. In E4 and E5 the arrivals and manifests of the test
-log are replayed, so that simulated and observed visits can be compared one by
-one.
+The event log is split once in time: 65\,\% of the visits form the training log
+(59,139 visits, 2 March to 11 April 2026), 35\,\% the test log (32,014 visits, 13
+to 30 April). The boundary falls on a weekend. Heavy trucks may not drive on
+Sundays in Germany, so the terminal holds no trucks at the boundary, and neither
+period needs a warm-up phase.
 
-The test log is a retrospective hold-out. The data of the whole period were
-available to the author during the exploration of the data, so the test log is
-not an untouched confirmatory sample (Section~\ref{sec:disc_threats}). It is also
-more congested than the training log (Section~\ref{sec:obs_summary}): an error on
-the test period mixes the error of the model with the change of the terminal
-between the periods. Model variants are therefore compared with each other on
-the same period, and the final configuration of E4 is also run on the training
-period.
+Everything that a model learns, and every decision of the experiments, comes from
+the training log: the discovery of the nets, the fitting of ProSiT, the thresholds
+of the measures and every selection. The test log is used only to evaluate. E1
+counts how many of its sequences that do not occur in training a net accepts; E3
+to E5 simulate its period, and E4 and E5 compare the simulated with the observed
+visits of the same trucks.
 
-\section{Outcome Measures and Peak Definitions}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/kpi/drift_daily.pdf}
+\caption{Trucks per day and daily median turnaround time over the whole period
+(days with at least 300 visits). Blue: training log; orange: test log. The
+dashed line marks the split, the grey band the Easter holidays (3 to 6 April), the
+green band the corridor of 25 to 35 minutes.}
+\label{fig:drift_daily}
+\end{figure}
+
+Between the two periods, a temporal drift is apparent (Figure~\ref{fig:drift_daily}).
+In the test period more trucks are in the terminal at the same time (95 instead of
+77 on average at Gate In), the median turnaround time is 33 instead of 29 minutes,
+and a quarter instead of a tenth of the hours are delay peaks
+(Section~\ref{sec:observed_behaviour}). The terminal could not name a specific
+operational cause. One plausible reason is the Easter holidays at the end of the
+training period: cargo that was delayed then may have been moved into the
+following weeks and concentrated there. A model learned on the training period
+cannot know such a shift. An error on the test period therefore mixes the error of
+the model with the drift. For this reason, model variants are compared with each
+other on the same period, and the configuration selected in E4 is also run on the
+training period.
+
+\subsection{KPI and Measures}
 \label{sec:exp_kpis}
 
-The KPI is the truck turnaround time (TTT), from Gate In to Gate Out. The
-terminal aims at a TTT between 25 and 35 minutes for every truck
-(Section~\ref{sec:prob_statement}). The corridor therefore applies to each visit,
-not to an average: a visit above 35 minutes is too long for the customer, a visit
-below 25 minutes is faster than the terminal wants, because the cranes also serve
-the waterside and the rail. The scenario of this thesis addresses the visits
-above the corridor; the visits below it are reported. The thesis uses four groups
-of measures:
+The KPI is the truck turnaround time (TTT), from Gate In to Gate Out, that is, the
+total duration of a case. The terminal aims at a TTT between 25 and 35 minutes for
+every truck (Section~\ref{sec:prob_statement}). A visit above 35 minutes is too long
+for the customer; a visit below 25 minutes is faster than the terminal wants,
+because the cranes also serve the waterside and the rail.
+Figure~\ref{fig:kpi_corridor} shows where the visits lie: in the test period,
+47\,\% of the visits take longer than 35 minutes, and on average a visit spends
+12.5 minutes above the corridor (training log: 36\,\% and 9.5 minutes). These
+visits are the target of the improvement measure in E5.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/kpi/kpi_corridor.pdf}
+\caption{Turnaround time per visit in the training and the test log, with the
+corridor of 25 to 35 minutes. Minutes above 35 per visit: the mean of
+$\max(\mathrm{TTT}-35, 0)$ over all visits.}
+\label{fig:kpi_corridor}
+\end{figure}
+
+The visits above the corridor lose time in every part of the visit, not at one
+point: before the first stop, at the stops and before Gate Out
+(Table~\ref{tab:kpi_long_visits} in Appendix~\ref{app:observed_behaviour}). The
+waiting before the first stop grows with the load of the block
+(Section~\ref{sec:observed_behaviour}), and the stops take longer at busy blocks; a
+different allocation of deliveries to the blocks acts on both. The thesis uses
+four groups of measures:
 \begin{itemize}
-\item \textbf{Corridor:} the share of visits below, in and above the corridor,
-and the minutes above the corridor per visit, the mean of
-$\max(\mathrm{TTT}-35, 0)$ over all visits. The last measure counts both how many
-visits are too long and by how much.
+\item \textbf{Corridor:} the share of visits below, in and above the corridor, and
+the minutes above the corridor per visit, which count both how many visits are too
+long and by how much.
 \item \textbf{Level and tail:} the mean, the median and the 90th percentile (P90)
-of the TTT. The mean is moved by single visits of several hours, which remain in
-the log after visits over twelve hours were removed; the median is the robust
-central value.
+of the TTT. The mean is moved by single visits of several hours; the median is the
+robust central value.
 \item \textbf{Parts of the visit:} the approach to the first stop, the stops, the
 transfer between stops and the exit after the last stop. They add up to the TTT
 (Section~\ref{sec:timestamp_semantics}) and show where the time is spent.
-\item \textbf{Delay peaks:} Gate-In hours with at least 20 visits and a median
-TTT of at least 37 minutes, the 90th percentile of the training hours. The
-threshold is fixed on the training log and used unchanged in every experiment.
-Hourly values are attributed to the Gate-In hour of the trucks.
+\item \textbf{Delay peaks:} hours in which at least 20 trucks arrive and their
+median TTT is at least 37 minutes, the 90th percentile of the hours of the training
+log. The 37 minutes are computed once and then kept for every run, so that a
+measure that shortens the visits also reduces the number of delay peaks instead of
+moving the threshold.
 \end{itemize}
-The corridor is not a calibration target and does not replace the validation
-criteria of E4. Effects on the waterside are outside the model.
+The corridor is not a calibration target of the simulation, and effects on the
+waterside are outside the model.
 
-\input{tables/kpi_long_visits}
-
-Both periods lie above the corridor (Table~\ref{tab:kpi_long_visits}). The mean
-TTT is 36.6 minutes in training and 41.2 minutes in the test period; 36\,\% and
-47\,\% of the visits take longer than 35 minutes, and on average a visit spends
-9.5 and 12.5 minutes above the corridor. The long visits are longer in every part
-of the visit, not at one point: in the test period they need 19.7 instead of 6.7
-minutes to the first stop, 21.3 instead of 8.4 minutes at their stops, and 17.6
-instead of 7.8 minutes from the last stop to Gate Out. Visits with several stops
-(19\,\% against 4\,\%) and mixed visits (24\,\% against 7\,\%) are much more
-frequent among them. This points to three places where time is lost: the waiting
-before the first stop, which grows with the load of the block
-(Section~\ref{sec:observed_behaviour}); the longer stops at busy blocks; and the
-waiting before Gate Out. A block allocation acts on the first two. The waiting
-before Gate Out is a second lever, which the model reproduces only statistically
-and cannot evaluate.
-
-\section{Simulation Runs, Replications and Uncertainty}
+\subsection{Simulation Runs and Replications}
 \label{sec:exp_runs}
 
 Every run simulates the 32,014 visits of the test period from its first Gate In,
-starting with an empty terminal, as the observed test period does; runs on the
-training period simulate its 59,139 visits in the same way. Every visit is
-completed, so no visit is cut at the end of the horizon. E3 and E4 use five
+starting with an empty terminal, as the real test period does after the weekend;
+runs on the training period simulate its 59,139 visits in the same way. Every visit
+is completed, so no visit is cut at the end of the period. E3 and E4 use five
 seeds (42--46) per configuration, E5 ten seeds (42--51). A scenario of E5 and its
-baseline use the same seeds and the same replayed visits; the difference is
-computed seed by seed.
+baseline use the same seeds and the same trucks, and the difference is computed
+seed by seed.
 
-Results are reported as the mean over the seeds. For E3 and E4 a difference
-between configurations counts only if it lies outside the range of the seeds; E5
-reports 95\,\% $t$-intervals of the paired differences. These intervals describe
-the randomness of the simulator for one fitted model. They do not describe the
-uncertainty of the fitted parameters or of the model structure. The order of the
-events of a generated visit is taken from their start timestamps.
+Results are reported as the mean over the seeds. In E3 and E4 a difference between
+configurations counts only if it lies outside the range of the seeds; E5 reports
+95\,\% $t$-intervals of the paired differences. These intervals describe the
+random variation of the simulator for one fitted model, not the uncertainty of the
+fitted parameters or of the model structure.
 
-\section{Domain Knowledge and Validation Status}
+\subsection{Domain Knowledge}
 \label{sec:exp_review}
 
-The model and its interpretation draw on three sources: the operational records,
-the cited literature and the author's knowledge of the terminal operations. They
-support different claims. The records support empirical checks of sequences,
-times and loads. The author's knowledge gives the meaning of the activities, the
-domain rules, the three lanes of a block and the decision point of the
-allocation. An assumption that the modeller puts into the model cannot be
-confirmed by the same model: a check against the records only shows that the
-records do not contradict it.
-
-The assumptions that need an independent review by the terminal are the meaning
-of the recorded stop times, the relation between recorded stops and the use of
-the cranes and lanes, the domain rules, the corridor, the blocks that may receive
-a delivery and the information available when the yard position is assigned. The
-review and its outcome are reported in Section~\ref{sec:disc_stakeholders}: who
-reviewed which assumption, on which version of the model, what was confirmed or
-corrected, and what changed as a result.
+The model draws on three sources: the operational records, the literature, and the
+use case that was worked out with the project team of the terminal, from terminal
+development and the data warehouse team. They support different claims. The
+records support empirical checks of sequences, times and loads. The use case
+gives the meaning of the activities and timestamps, the domain rules, the three
+lanes of a block, the corridor and the moment at which a yard position is
+assigned. An assumption that is put into the model cannot be confirmed by the same
+model: a check against the records only shows that the records do not contradict
+it. The review of the model and of the results by the terminal is reported in
+Section~\ref{sec:disc_stakeholders}.
 
 \section{Control-Flow Discovery (E1)}
 \label{sec:exp_discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-E1 asks which discovery configuration produces a sound control-flow
-model that reproduces the recorded truck visits without permitting
-much additional behaviour. It is designed as a controlled comparison
+E1 discovers candidate control-flow models with several algorithms and settings
+and evaluates them with conformance metrics, the usual quality measures of process
+discovery: fitness, precision and generalisation, and coverage of the observed
+sequences. It asks which net reproduces the recorded truck visits without
+permitting much additional behaviour. It is designed as a controlled comparison
 following the recommendations of Rehse et al.~\cite{RWRehse2024Experimentation}:
-every candidate is fitted on the same cases and evaluated on the same
-cohorts with the same implementation of each metric.
+every candidate is fitted on the same cases and evaluated on the same cohorts with
+the same implementation of each metric.
 
 \subsection{Discovery Input}
 \label{sec:exp_discovery_input}
@@ -398,13 +363,13 @@ WOFLAN \cite{Verbeek2001Woflan}. The precision values depend on how a tool repla
 silent transitions. Appendix~\ref{app:discovery_results} compares them with the
 two precision functions of PM4Py \cite{Berti2023PM4Py}: the values agree where the
 silent transitions of a net do not branch (0.998 for HM 0.7 with all three), and
-the ranking of the nets that pass gate A2 is the same with every implementation.
+the ranking of the nets that pass the coverage check is the same with every implementation.
 
-\paragraph{Gates}
+\paragraph{Checks}
 A net of the discovery grid (Table~\ref{tab:exp_grid}) is \emph{admissible} if it
-passes two gates: \textbf{A1}, it is sound; \textbf{A2}, it accepts every sequence
-above the coverage threshold. The prefix tree is a reference only. The admissible
-nets go to E2.
+passes two checks: the \emph{soundness check}, it is sound, and the \emph{coverage
+check}, it accepts every sequence above the coverage threshold. The prefix tree is
+a reference only. The admissible nets go to E2.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Rule Audit (E2)}
@@ -415,9 +380,8 @@ Discovery algorithms do not know what a truck can physically do: a net can reach
 high fitness and precision and still allow a visit without a stop, or two stops
 of one truck at the same time. E2 therefore checks every admissible net of E1
 against the domain rules (Table~\ref{tab:domain_rules}) before it is simulated.
-The nets are not changed. A net whose language breaks a rule of the truck visit
-is not admissible; the one rule that no discovered net can express, the planned
-number of stops, is enforced in the simulator.
+The nets are not changed by a process repair: a net whose language breaks a rule
+of the truck visit is not admissible.
 
 \subsection{Audit}
 Each rule is checked on three levels, because conformance on one level does not
@@ -433,35 +397,28 @@ is violated if a reachable marking holds the tokens that two stops need at the
 same time, so that both can be executed together. Two stops that are both enabled
 as alternatives, of which only one can fire, do not violate it.
 
-\paragraph{Gate A3} A net is admissible only if its language respects rules 3, 4
-and 5: every visit has a stop, the stops of a truck follow one another, and a
-mixed stop is not combined with a separate delivery or receive at the same LL or
-HO2 area. Rules 1 and 2 hold in every net. If several nets pass A1 to A3, the
-most precise one is selected; generalisation is reported.
+\paragraph{Rule check} A net passes the rule check only if its language respects
+rules 3, 4 and 5: every visit has a stop, the stops of a truck follow one another,
+and a mixed stop is not combined with a separate delivery or receive at the same
+LL or HO2 area. Rules 1 and 2 hold in every net, and rule 6, at most eight stops,
+is a bound that every net with a loop exceeds and that the simulator enforces. If
+several nets pass the soundness, coverage and rule checks, the most precise one is
+selected; generalisation is reported.
 
 \subsection{Stop Guard}
 \label{sec:exp_guard}
-Rule 6 says that a truck performs exactly the stops of its manifest. The planned
-number of stops $n$ is a case attribute known at Gate In
-(Section~\ref{sec:entry_known_attributes}). No discovered net can express it,
-and ProSiT has no guards (Section~\ref{sec:prosit_limits}). The stop guard adds
-it to the simulation loop as a condition on the data of the case, as a guard
-does in a data Petri net (Section~\ref{sec:bg_rules}). Before each routing draw,
-every enabled transition keeps its learned weight only if, after it fires, the
-visit can still end with exactly $n$ stops; otherwise its weight is set to zero.
-Whether this is possible is read from the reachability graph of the net, combined
-with the number of stops done so far, which is computed once per net before the
-simulation \cite{FelliDeLeoniMontali2021}. The guard looks ahead because in a
-discovered net many decisions are taken by silent transitions: a check of the
-visible stops and of Gate Out alone would come too late, once the silent step has
-already committed the visit. If no enabled transition can complete the plan, the
-learned weights are kept and the draw counts as an \emph{override}. E3 reports how
-often the guard changes a draw and how often it has to give up.
-
-The planned number of stops is also learned by the routing trees of ProSiT,
-which split on the manifest. The guard therefore does not replace the learned
-routing; it removes the visits that the learned probabilities would still allow
-with too many or too few stops.
+Beyond the domain rules, every visit has a planned number of stops $n$, a case
+attribute that is known at Gate In (Section~\ref{sec:entry_known_attributes}). A
+simulated truck should perform exactly these stops. No discovered net can express
+this condition, and ProSiT has no guards (Section~\ref{sec:prosit_limits}). The
+stop guard of the simulation model adds it as a condition on the data of the case,
+as a guard does in a data Petri net (Section~\ref{sec:bg_rules}); its mechanism is
+described in Section~\ref{sec:sim_adaptations}. It is computed from the
+reachability graph of the net \cite{FelliDeLeoniMontali2021} and looks ahead,
+because in a discovered net the decisions are taken by silent transitions. The
+routing trees of ProSiT also split on the planned number of stops; the guard does
+not replace them, it removes the visits that the learned probabilities would still
+allow with too many or too few stops.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation of the Selected Net (E3)}
@@ -474,73 +431,21 @@ simulator, and it is the baseline for the mechanisms analysed in E4.
 
 \subsection{Conditions}
 \label{sec:exp_e3_conditions}
-Table~\ref{tab:exp_e3_contrast} lists the conditions. The main condition is the
-selected net with the stop guard. Two contrasts change only the guard: without
-it, ProSiT runs as it is; with a simple guard that only masks visible stops and
-Gate Out, the decisions taken at silent transitions escape it. Three further
-contrasts use nets that failed a gate, each as discovered and with the stop
-guard: IM 0.0 and ILP 1.00 fail the rule audit, IMf 0.3 and HM 0.8 fail gate A2.
-They show what the gates prevent.
-
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabularx}{\textwidth}{L{3.2cm}L{3.4cm}Y}
-\toprule
-\textbf{Condition} & \textbf{Net} & \textbf{What it shows} \\
-\midrule
-Main & selected net, stop guard & whether the control flow works in ProSiT \\
-No guard & selected net & ProSiT as it is; how far the learned routing alone follows the plan \\
-Simple guard & selected net, guard on visible transitions only & why the guard has to look ahead \\
-Rule audit failed & IM 0.0, ILP 1.00, stop guard & what happens with a language that breaks rules 3 to 5 \\
-Coverage failed & IMf 0.3, HM 0.8, stop guard & what happens with a net that rejects frequent sequences \\
-\bottomrule
-\end{tabularx}
-\caption{Conditions of E3. All conditions use the same ProSiT settings and seeds.}
-\label{tab:exp_e3_contrast}
-\end{table}
-
-\subsection{ProSiT Configuration}
 \label{sec:mc_hyperparameters}
 \label{sec:mc_ctb_adaptations}
-ProSiT learns its parameters separately for each net, with the settings in
-Table~\ref{tab:exp_e3_config}. Identical settings therefore do not imply
-identical fitted routing, timing or resource models; the contrasts compare the
-complete fitted simulators. The test period only sets the number of simulated
-visits and the start time; no parameter is fitted on it.
-
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabularx}{\textwidth}{L{3.6cm}L{3.4cm}Y}
-\toprule
-\textbf{Element} & \textbf{Setting (default)} & \textbf{Reason} \\
-\midrule
-Software & ProSiT 1.0.4, PM4Py 2.7.22.3, Python 3.11 & Version 1.0.4 selects trees by CRPS; 1.0.3 almost always chose single distributions (Section~\ref{sec:prosit_trees}). \\
-Training data & training log, 59,139 visits & The test log is not used for fitting. \\
-\texttt{max\_depth\_tree} & 3 (5) & Trees stay readable; cross-validation can still choose depth 1 or 2. \\
-\texttt{min\_samples\_leaf\_cv} & 50, 100, 200 (same) & Default. \\
-\texttt{attribute\_mode} & empirical (distribution) & Keeps consistent manifests, e.g.\ flow type, numbers of stops, deliveries and receives. Independent draws would create impossible visits. \\
-Case attributes & flow type, containers, planned stops, deliveries, receives, hazardous and reefer flags, full ratio, visit complexity & All known at Gate In (Section~\ref{sec:entry_known_attributes}). \\
-\texttt{use\_workload\_features} & on (off) & Delay grows with load (Section~\ref{sec:observed_behaviour}), so resource choice and waiting time should see the workload. \\
-\texttt{enable\_multitasking}, threshold & on (off), 0.05 & A block serves several trucks at once. Without multitasking every resource has capacity one. \\
-RMG capacity & at most 3 per block & Three handover lanes per block; the discovered capacities were 4 or 5. \\
-Arrivals & native arrival tree on hour and weekday & The learned profile is part of the baseline; alternatives follow in E4a. \\
-Resource calendars & open for the full week & Trucks already inside are served to completion. \\
-Simulation loop & native ProSiT loop: learned block choice, capacity checked at enabling & Changes to the loop are tested in E4. \\
-Stop guard & on (contrasts: off, simple guard) & Enforces rule 6 and thereby rule 3 (Section~\ref{sec:exp_guard}). \\
-\texttt{random\_state} & 42 (72) & Fixed for reproducibility. \\
-Replications & seeds 42--46, 32,014 visits each, from the first test Gate In & Same number of visits as the test log. \\
-\bottomrule
-\end{tabularx}
-\caption{Fixed simulation conditions in E3.}
-\label{tab:exp_e3_config}
-\end{table}
+The main condition is the selected net with the stop guard, fitted with the
+settings of Table~\ref{tab:sim_hyperparameters} and run in ProSiT's own simulator,
+with its learned block choice and its capacity check. Two variants show why the
+guard is needed: without any guard, and with a simple guard that only acts on the
+visible stops and on Gate Out. The nets that failed a check of E1 or E2 (IM 0.0,
+ILP 1.00, IMf 0.3, HM 0.8) are run in the same way, with the stop guard; they test
+whether the conformance metrics anticipate what a net does in the simulator
+(RQ1). ProSiT learns its parameters separately for each net, so the variants compare
+complete fitted simulators.
 
 \subsection{Measures}
 \label{sec:exp_e3_measures}
-The generated visits are compared with the training log; the test log is
-reported. Each measure is the mean over the five replications with its minimum
+The generated visits are compared with the training log. Each measure is the mean over the five replications with its minimum
 and maximum, and a difference counts only if it exceeds this range. The
 replications show the random variation of the simulator, not the uncertainty of
 the fitted parameters.
@@ -579,7 +484,7 @@ timestamps; for equal timestamps the completion time decides.
 E4 answers RQ2: to what extent does the ProSiT simulation reproduce the
 turnaround time of trucks and its response to load at the capacity-limited
 yard blocks, and which model components cause the remaining error? The base is
-the main configuration of E3: HM 0.7 as discovered, stop guard, manifest attributes,
+the main configuration of E3: HM 0.7 as discovered, stop guard, case attributes of the planned visit,
 ProSiT 1.0.4 with trees and workload features.
 
 A simulation model is valid only for an intended use
@@ -597,7 +502,7 @@ The evaluation follows the three levels of Sargent
 \cite{Sargent2013Validation} (Section~\ref{sec:simulation_validation_background}).
 \begin{enumerate}
 \item \textbf{Verification.} Does the simulator do what it should? The modified
-simulation loop must reproduce ProSiT exactly when all changes are switched off.
+simulator must reproduce ProSiT exactly when all changes are switched off.
 A retrained component must be identical to the fitted one when its training data
 are not changed. Replayed arrivals must be exact, and the generated logs must
 respect the capacity and the domain rules. The number of activities in progress
@@ -606,7 +511,7 @@ check, is recomputed from the generated log and compared with the value the
 simulator used.
 \item \textbf{Conceptual validity.} Are the assumptions of each component
 plausible for the terminal? Every learned model is inspected (split features,
-leaves), and every mechanism of the simulation loop is compared with the
+leaves), and every mechanism of the simulator is compared with the
 physical process (Table~\ref{tab:exp_e4_mechanisms}).
 \item \textbf{Operational validity.} Is the output accurate enough for the
 intended use? Generated logs are compared with the observed test log on four
@@ -651,7 +556,7 @@ later test log \cite{Oezdemir2025RethinkingBPS}. First, the comparison mixes the
 error of the model with the change of the process between the periods. Second,
 distances based on the Wasserstein distance can hide temporal patterns. E4
 addresses both. Most configurations replay the observed Gate-In times and
-manifests of the test period (\emph{conditional replay}), so that the simulated
+case attributes of the test period (\emph{conditional replay}), so that the simulated
 trucks are the observed ones and the demand is not part of the error. The final
 configuration is also run on the training period, which separates the error of
 the model from the change between periods. And the medians, quantiles and load
@@ -661,19 +566,19 @@ profiles of P1 and P4 are reported next to the Wasserstein-based distances.
 \label{sec:exp_e4_attribution}
 
 A truck meets the components of the simulator in a fixed order: the demand
-(arrival time and manifest), the block allocation, the queue at the block
+(arrival time and case attributes), the block allocation, the queue at the block
 (capacity and waiting time) and the service (execution time); the exit follows.
 The error of a component is measured by replacing it and observing how much of
 the error disappears. Two kinds of replacement are used.
 \begin{itemize}
 \item \textbf{Oracle.} The component is replaced by the observed values of the
-test period: replayed arrivals and manifests, or the observed block of each RMG
+test period: replayed arrivals and case attributes, or the observed block of each RMG
 stop. This is trace-driven simulation \cite{Law2015Simulation}. It shows the
 error that remains if the component were exact; for the blocks this holds only
 for the simulated stops that have an observed counterpart (about three quarters
 of the RMG stops).
 \item \textbf{Repair.} The component stays learned, but a documented defect of
-its training data or of the simulation loop is corrected.
+its training data or of the simulator is corrected.
 \end{itemize}
 The components are examined in the order in which the truck meets them. Each
 step keeps the components before it at their oracle values, so that only one
@@ -703,7 +608,7 @@ ProSiT implements them and why a variant is tested.
 \toprule
 \textbf{Component} & \textbf{ProSiT 1.0.4} & \textbf{Terminal} & \textbf{Variants tested} \\
 \midrule
-Demand & Arrival gap drawn from a tree on hour and weekday of the previous arrival; manifest drawn as a random training tuple, independent of the time & Strong daily profile; up to 255 arrivals per hour & Hour-of-week tree from training; replay of the observed arrivals and manifests (oracle) \\
+Demand & Arrival gap drawn from a tree on hour and weekday of the previous arrival; case attributes drawn as a random training tuple, independent of the time & Strong daily profile; up to 255 arrivals per hour & Hour-of-week tree from training; replay of the observed arrivals and manifests (oracle) \\
 Block allocation & Learned choice among free blocks, with the queue length of each block as feature. In training, a stop that starts after it was enabled is counted in the queue of its own block, so the label enters the feature & The block follows the container location and the yard plan; the share of each block changes from week to week (correlation 0.27 to 0.62 between weeks) & Learned choice retrained without this count; training shares of the blocks; observed block (oracle) \\
 Capacity & Checked at the enabling time & A block serves at most three trucks at once (three lanes). The log shows a fourth truck at 8.1\,\% of the RMG stops, but only for a short overlap (see the design decisions) & Checked over the whole stop interval at its actual start, with three lanes; four lanes only as a sensitivity run \\
 Waiting & Waiting time measured from the moment the block was last completely free (single server) & Several trucks are served side by side; the approach grows from 6 to 16--24 minutes with three or more trucks at the block & Waiting measured from the moment a lane became free, with capacity at start (queue arises in the simulation); or the whole time from enabling to start, without capacity limit (queue learned from data) \\
@@ -757,7 +662,7 @@ and it is at most the number of lanes minus one.
 \item \textbf{Exact counting.} ProSiT counts the activities in progress at a
 resource by walking backwards through its schedule and stops at the first
 activity that has already ended. This is exact only if the schedule is sorted
-by end time. The simulation loop stores activities in the order in which they
+by end time. The simulator stores activities in the order in which they
 are processed, so some counts are too low; in training, ProSiT counts exactly.
 The verification of E4 measures how often this happens
 (Section~\ref{sec:res_e4_verification}). The baseline and all configurations
@@ -859,19 +764,21 @@ demonstration (Section~\ref{sec:exp_policy}). Criterion 4 states how far the
 absolute values can be trusted.
 
 % ======================================================================
-\section{What-If Demonstration (E5)}
+\section{Improvement Measure: Load-Aware Block Allocation (E5)}
 \label{sec:exp_policy}
 % ======================================================================
 % Code: trucksimulation/simulation_e3/run_rq2.py (s1 and exec_load settings), ctb_engine.py (switch s1),
 %   evaluate_e5.py, evaluate_e5_kpi.py (corridor measures); runs: simulation_e3/runs/hm07orig_20261115/e5,
 %   eval_e5, eval_e5_kpi35.
 
-E5 answers RQ3: to what extent can the simulation be used to analyse a
-load-aware block allocation for deliveries under the physical limits of the
-yard blocks, and what does it indicate about the effect on truck turnaround
-time? E5 examines a candidate improvement to the process. Its validation
-results determine whether the evidence can support an operational
-recommendation or only an exploratory statement about the simulated system.
+E5 evaluates an improvement measure: a redesign of the allocation of deliveries
+to the yard blocks that aims at the visits above the corridor. It answers RQ3: to
+what extent can the simulation be used to evaluate such a measure under the
+physical limits of the blocks, and what does it indicate about its effect on the
+turnaround time? Three variants of the measure differ in how far a delivery may be
+moved, so that E5 also shows how much flexibility the measure needs. Whether the
+result can support an operational recommendation, or only a statement about the
+simulated system, depends on the validation of E4.
 
 \paragraph{Status after E4}
 The final configuration of E4 passes the physical and the extreme-condition
@@ -903,7 +810,7 @@ $\pm 1$, $\pm 2$, or any block (upper bound).
 
 \paragraph{Fixed conditions}
 The baseline is the final configuration of E4 on the test period: replayed
-arrivals and manifests, observed blocks, capacity at start with three lanes,
+arrivals and case attributes, observed blocks, capacity at start with three lanes,
 lane-free waiting, load-dependent service and exact counting. In the baseline,
 S1 only records the deliveries it would move (dry run); as a verification, the
 baseline log must equal the E4 log for the same seed. Baseline and variants use
@@ -979,7 +886,7 @@ discussed in Section~\ref{sec:disc_threats}.
 \textbf{Threat} & \textbf{Design response} & \textbf{What remains} \\
 \midrule
 Physically impossible visits & Rule audit of the nets (E2); stop guard; admissibility of every generated log (E3--E5) & Rule~7 cannot be checked \\
-Leakage through case attributes & Only the planned manifest, known at Gate In (Section~\ref{sec:entry_known_attributes}) & Changes of the schedule after Gate In are not recorded \\
+Leakage through case attributes & Only the attributes of the planned visit, known at Gate In (Section~\ref{sec:entry_known_attributes}) & Changes of the schedule after Gate In are not recorded \\
 Selection on the test log & Every selection on the training log; criteria fixed before the runs they decide & The test period was available during the exploration of the data \\
 Change between periods & Variants compared on the same period; final configuration also on the training period & The test error mixes both \\
 Waiting counted twice & The queue either arises in the simulation or is learned, never both (E4) & Part of the waiting is inside the recorded stop \\
@@ -993,7 +900,7 @@ Author as domain source & Assumptions listed for review (Section~\ref{sec:exp_re
 
 \section{Chapter Summary}
 
-E1 and E2 select the control-flow model with gates fixed on the training log:
+E1 and E2 select the control-flow model with checks fixed on the training log:
 soundness, acceptance of every frequent sequence and the domain rules; the most
 precise admissible net is used as discovered, with a stop guard for the planned
 number of stops. E3 shows whether this net works in the simulator. E4 measures

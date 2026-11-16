@@ -2,15 +2,15 @@
 \label{chp:results}
 
 This chapter reports the results in the order of the experiments in
-Chapter~\ref{chp:experiments}: discovery and the gates (E1), the rule audit and
+Chapter~\ref{chp:experiments}: discovery and the checks (E1), the rule audit and
 the selection (E2), the simulation of the selected net (E3), the mechanism audit
-(E4) and the what-if demonstration (E5). Each
+(E4) and the improvement measure (E5). Each
 experiment ends with a short conclusion; the answers to the research questions
 follow the experiments they rest on. Selections use the training log only; test
 values are reported.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discovery and Gates (E1)}
+\section{Discovery and Checks (E1)}
 \label{sec:res_discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sources (trucksimulation repository, split at Monday 13 April 2026):
@@ -82,7 +82,7 @@ implementation replays silent transitions (Table~\ref{tab:app_precision_tools}).
 Where the silent transitions of a net do not branch, all implementations agree;
 for HM 0.7 they all give 0.998. Where silent paths branch, other implementations
 report higher values, for example 0.903 instead of 0.842 for IM 0.0. The ranking
-of the three nets that pass gate A2 is the same with every implementation; the
+of the three nets that pass the coverage check is the same with every implementation; the
 tables report the ProM values.
 
 \subsection{Level 2: Fitness for Simulation}
@@ -119,10 +119,10 @@ rejected visits are 5.5 to 8.0\,\% of the truck-minutes and 10 to 15\,\% of the
 visits above the P90. The nets with stronger filters reject between a third and
 three fifths of the truck-minutes.
 
-\subsection{Gates}
+\subsection{Checks}
 \label{sec:res_e1_gates}
 
-Gate A1 removes the three Alpha nets. Gate A2 is passed by three nets: IM 0.0,
+The soundness check removes the three Alpha nets. The coverage check is passed by three nets: IM 0.0,
 HM 0.7 and ILP 1.00. The prefix tree passes too, but is a reference. ILP 0.95, HM
 0.8 and HM 0.9 fail it by one to three frequent sequences. The set of admissible
 nets does not depend on the exact threshold within a wide range: at 0.5\,\% it is
@@ -164,14 +164,14 @@ conformance partly follows from that construction.
 HM 0.7 respects rules 3, 4 and 5 as discovered
 (Table~\ref{tab:rq1_e2_audit}). It has no parallel branches: none of its 22
 reachable markings enables two stops at the same time. Its loops permit any number
-of stops, so the bound of rule 6 is not part of the net. IM 0.0 and ILP 1.00 break
+of stops, so the bound of rule 6 is not part of the net; the stop guard enforces it. IM 0.0 and ILP 1.00 break
 rules 3 to 5. Both permit a visit without a stop (\texttt{Gate In > Gate Out}) and a
 mixed stop together with a separate delivery or receive at the same area (for
 example \texttt{Gate In > LL\_mixed > LL\_delivery > Gate Out}), and both have
 reachable markings that enable two stops of one truck at once. None of these
 sequences occurs in the training log.
 
-HM 0.7 is therefore the only net that passes gate A3. It is selected because it
+HM 0.7 is therefore the only net that passes the rule check. It is selected because it
 is the only admissible net, not because a ranking among several admissible nets
 was made; its precision, the highest of the three with every implementation
 (0.998, against 0.842 and 0.773; Table~\ref{tab:app_precision_tools}),
@@ -180,7 +180,7 @@ corroborates the choice. It is used exactly as discovered.
 \subsection{Stop Guard}
 The reachability graph of HM 0.7 has 22 markings. From the initial marking, a
 visit can end with every number of stops from one to eight, so every plan of the
-manifest can be completed. The guard computes this once per net and checks it
+visit can be completed. The guard computes this once per net and checks it
 before each routing draw (Section~\ref{sec:exp_guard}).
 
 \subsection{Conclusion of E2}
@@ -199,9 +199,9 @@ guard enforces it.
 %   e3_noguard/, e3_simpleguard/; validate_e3.py (validation_train), e3_plan_check.py (extras/e3_plan_check.csv);
 %   guard statistics from the run logs (e3_hm.log, extras/e3_contrast.log, extras/e3_noguard.log, e3_simpleguard.log).
 
-The selected net was simulated with the settings of Table~\ref{tab:exp_e3_config}
+The selected net was simulated with the settings of Table~\ref{tab:sim_hyperparameters}
 and five seeds of 32,014 visits each, in the conditions of
-Table~\ref{tab:exp_e3_contrast}. The measures compare the generated visits with
+Section~\ref{sec:exp_e3_conditions}. The measures compare the generated visits with
 the training log (Table~\ref{tab:rq1_e3_main}).
 
 \begin{table}[htbp]
@@ -262,13 +262,12 @@ visits. The guard has to overrule their learned routing about 74,000 and 67,000
 times per run, ten to eleven times as often as for HM 0.7, and for IM 0.0 it has to
 choose among steps without a learned weight 4,700 times per run. Their sequence
 distributions are five to ten times as far from the training log as that of HM 0.7
-(TVD 0.079 and 0.151), with 0.3 to 0.4\,\% unseen sequences. IMf 0.3, which fails
-gate A2 because it rejects the most frequent multi-block sequence, generates
+(TVD 0.079 and 0.151), with 0.3 to 0.4\,\% unseen sequences. IMf 0.3, which fails the coverage check because it rejects the most frequent multi-block sequence, generates
 almost no visits to two RMG blocks (0.05\,\% of the RMG visits, against 2.3\,\% in
 training), and its parallel construct still lets 1.6\,\% of the multi-stop visits
 overlap. HM 0.8, which rejects two frequent sequences with an LL stop before an RMG
-stop, stays close to HM 0.7 (TVD 0.024). The gates of E1 and E2 thus predict where
-the contrasts fail: the rule audit the impossible visits, the coverage gate the
+stop, stays close to HM 0.7 (TVD 0.024). The checks of E1 and E2 thus predict where
+the contrasts fail: the rule audit the impossible visits, the coverage check the
 missing multi-block visits.
 
 \subsection{Turnaround Time}
@@ -285,7 +284,7 @@ The discovered HM 0.7 works in ProSiT: with the look-ahead guard, every generate
 visit satisfies the checked rules and has its planned number of stops, without
 rewriting the net. The guard enforces the number of stops, not the planned
 itinerary itself. The
-nets that failed a gate fail in the simulation as the gates predict. The
+nets that failed a check fail in the simulation as the checks predict. The
 remaining error lies in the timing and the resources, which E4 examines.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -302,7 +301,7 @@ of this model in simulation.
 
 The selected control-flow model is the Heuristics Miner net HM 0.7, used exactly as
 ProM discovered it, with a data-aware stop guard in the simulator that makes every
-truck perform the stops of its manifest.
+truck perform its planned number of stops.
 
 \paragraph{Discovery.} Of the 19 nets of the grid, three are sound and accept every
 sequence above the coverage threshold of 0.1\,\%: IM 0.0, HM 0.7 and ILP 1.00
@@ -348,7 +347,7 @@ log does not show. In E3, the two most precise nets generate the sequence
 distributions closest to the training log (HM 0.7 and HM 0.8, TVD 0.015 and
 0.024), and the least precise ones the farthest. But precision is not what
 separates them. Restricted to the rules and encoded as state machines, the
-languages of the three nets that pass A1 and A2, with precision from 0.825 to
+languages of the three nets that pass the soundness and coverage checks, with precision from 0.825 to
 0.998, generate the same distribution of sequences (TVD 0.015 for all three;
 Appendix~\ref{app:replica}): ProSiT learns its
 routing from the observed visits and rarely generates the extra behaviour.
@@ -399,11 +398,11 @@ contrasts are run with it, and it is checked against the acceptance criteria.
 \subsection{Verification}
 \label{sec:res_e4_verification}
 
-Four checks pass. With all changes switched off, the modified simulation loop
+Four checks pass. With all changes switched off, the modified simulator
 generates exactly the same log as ProSiT. Every component that is retrained on
 unchanged training data is identical to the fitted one. The replayed arrivals
 are exact: every simulated visit starts at the Gate-In time of its observed visit
-and carries its manifest, and the case-arrival distance to the test log is zero.
+and carries its case attributes, and the case-arrival distance to the test log is zero.
 No configuration generates a visit without a stop, overlapping stops of one truck
 or more than four stops.
 
@@ -411,7 +410,7 @@ One check fails. The number of stops in progress at a block, recomputed from the
 generated log, is larger than the number the simulator used for 14 to 15\,\% of
 the RMG stops (five seeds), by one or two. ProSiT counts the activities in
 progress at a resource by walking backwards through its schedule and stops at the
-first activity that has already ended. The simulation loop stores the activities
+first activity that has already ended. The simulator stores the activities
 in the order in which it processes them, not by their end time, so the walk can
 stop too early. In training, the same quantities are computed exactly. The
 simulated trucks therefore see less load than the models were trained on, in the
@@ -447,7 +446,7 @@ and the models learn that trucks go to the block with the longer queue. In the
 simulation, the new stop is not yet in any queue, so the rule becomes a positive
 feedback: the more trucks a block has, the more new trucks choose it. Retrained
 without this self-count, only 6 of the 26 models split on the queue length. The
-others split on the manifest, for example on reefer containers, the share of
+others split on case attributes, for example on reefer containers, the share of
 full containers and the visit complexity.
 
 \paragraph{Waiting time.} The waiting-time models split mainly on the queue
@@ -509,7 +508,7 @@ most three.
 
 \paragraph{Demand (E4a).} The E3 baseline overestimates the turnaround time
 strongly: median 57 and P90 137 minutes, against 33 and 75 observed. A realistic
-arrival profile (a1) and even the exact observed arrivals and manifests (a2)
+arrival profile (a1) and even the exact observed arrivals and case attributes (a2)
 hardly change this (median 54, P90 133 minutes). The demand is therefore not the
 cause. The time is lost before the first stop: the approach takes 42 minutes on
 average instead of 13, because 54\,\% of the RMG stops go to a single block.
@@ -643,7 +642,7 @@ missing, and the gaps are computed only over the bins that both logs reach.
 \input{tables/rq2_nets}
 
 The nets of the E3 contrasts were run with the final configuration
-(Table~\ref{tab:rq2_nets}). HM 0.8 and IMf 0.3, which fail gate A2, give nearly
+(Table~\ref{tab:rq2_nets}). HM 0.8 and IMf 0.3, which fail the coverage check, give nearly
 the same turnaround time as HM 0.7 (mean 32.8 and 34.6 against 33.1 minutes).
 Among nets without parallel branches, the net therefore explains at most 1.5 of
 the 8.0 minutes of cycle-time distance; the rest lies in the timing and resource
@@ -659,7 +658,7 @@ its control flow three times as distant (0.100) and its load response flat: with
 observed and 40 for HM 0.7. ILP 1.00 fails completely: a truck waits 41 minutes
 on average before Gate Out (12.4 observed), and almost every hour is a delay
 peak. A better level is therefore no argument for a net that breaks the
-domain rules; gate A3 excludes exactly these visits.
+domain rules; the rule check excludes exactly these visits.
 
 \subsection{The Final Model at a Glance}
 \label{sec:res_e4_glance}
@@ -857,7 +856,7 @@ turnaround time and its parts; other measures, such as the use of the cranes,
 were not examined.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Load-Aware Block Allocation (E5)}
+\section{Improvement Measure: Load-Aware Block Allocation (E5)}
 \label{sec:res_policy}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sources: trucksimulation/simulation_e3/runs/hm07orig_20261115/e5 (run_rq2.py, switch s1), eval_e5 (evaluate_e5.py),
@@ -980,7 +979,7 @@ estimate for the terminal.
 \label{sec:res_rq3}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-RQ3 asks to what extent the simulation can be used to analyse a load-aware block
+RQ3 asks to what extent the simulation can be used to evaluate a load-aware block
 allocation for deliveries under the physical limits of the yard blocks, and what
 it indicates about the effect on the turnaround time.
 
