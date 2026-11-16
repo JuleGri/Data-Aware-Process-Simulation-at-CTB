@@ -1,0 +1,87 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\@writefile{toc}{\contentsline {chapter}{\numberline {C}Control-Flow Representation}{121}{appendix.C}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{app:replica}{{C}{121}{Control-Flow Representation}{appendix.C}{}}
+\newlabel{app:rewritten}{{C}{121}{Control-Flow Representation}{appendix.C}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.1}The Same Language as a State Machine}{121}{section.C.1}\protected@file@percent }
+\newlabel{app:rewritten_repair}{{C.1}{121}{The Same Language as a State Machine}{section.C.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Precision and simulation.}{121}{table.caption.74}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {C.1}{\ignorespaces E2 on the three admissible nets. Rules violated: rules whose violation the language of the net permits, before $\rightarrow $ after the repair (6 (bound): more than four stops, enforced by the stop guard). Sequences with 4 stops: distinct sequences the language permits (5 occur in training). Precision: ETConformance in ProM 6.15 on the discovered net and on the repaired net without silent transitions. Gen.: new test sequences accepted, before $\rightarrow $ after the repair. A4: fitting visits (training and test), accepted training sequences and accepted new test sequences unchanged by the repair. A3: not dominated in precision of the rewritten net and generalisation.}}{122}{table.caption.74}\protected@file@percent }
+\newlabel{tab:app_rewritten_funnel}{{C.1}{122}{E2 on the three admissible nets. Rules violated: rules whose violation the language of the net permits, before $\rightarrow $ after the repair (6 (bound): more than four stops, enforced by the stop guard). Sequences with 4 stops: distinct sequences the language permits (5 occur in training). Precision: ETConformance in ProM 6.15 on the discovered net and on the repaired net without silent transitions. Gen.: new test sequences accepted, before $\rightarrow $ after the repair. A4: fitting visits (training and test), accepted training sequences and accepted new test sequences unchanged by the repair. A3: not dominated in precision of the rewritten net and generalisation}{table.caption.74}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {C.2}{\ignorespaces Earlier comparison of the three admissible nets, each repaired, rewritten without silent transitions, with the stop guard on the visible transitions; mean over five seeds with [minimum, maximum]. Prec.: ETConformance on the rewritten net (training). Gate: no visit without stop, no overlapping stops of one truck, at most four stops, in every seed. TVD: total-variation distance to the training log (sequences; number of stops per visit). Overr.: guard overrides per run. Unseen: generated visits whose sequence does not occur in the training log. Right: against the test log. Observed test log: TTT median 33, P90 75 minutes.}}{122}{table.caption.75}\protected@file@percent }
+\newlabel{tab:app_rewritten_matrix}{{C.2}{122}{Earlier comparison of the three admissible nets, each repaired, rewritten without silent transitions, with the stop guard on the visible transitions; mean over five seeds with [minimum, maximum]. Prec.: ETConformance on the rewritten net (training). Gate: no visit without stop, no overlapping stops of one truck, at most four stops, in every seed. TVD: total-variation distance to the training log (sequences; number of stops per visit). Overr.: guard overrides per run. Unseen: generated visits whose sequence does not occur in the training log. Right: against the test log. Observed test log: TTT median 33, P90 75 minutes}{table.caption.75}{}}
+\@writefile{toc}{\contentsline {paragraph}{The simple guard and silent decisions.}{122}{table.caption.75}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Parallel branches.}{122}{table.caption.76}\protected@file@percent }
+\citation{burke2020stochasticPD,mannhardt2023stochasticProcessesModelling}
+\@writefile{lot}{\contentsline {table}{\numberline {C.3}{\ignorespaces $2\times 2$ contrast for HM 0.7 in E3 (Table~\ref {tab:exp_e3_contrast}): original net (22 places, 45 transitions, 34 silent) or the same language rewritten without silent transitions, stop guard on the visible transitions off or on; mean over five seeds, against the training log. Overlap: share of the multi-stop visits with overlapping stops. Unseen: generated visits whose sequence does not occur in the training log. Guard: draws whose weights the guard changed, and draws it could not decide (overrides), per run.}}{123}{table.caption.76}\protected@file@percent }
+\newlabel{tab:app_rewritten_2x2_hm}{{C.3}{123}{$2\times 2$ contrast for HM 0.7 in E3 (Table~\ref {tab:exp_e3_contrast}): original net (22 places, 45 transitions, 34 silent) or the same language rewritten without silent transitions, stop guard on the visible transitions off or on; mean over five seeds, against the training log. Overlap: share of the multi-stop visits with overlapping stops. Unseen: generated visits whose sequence does not occur in the training log. Guard: draws whose weights the guard changed, and draws it could not decide (overrides), per run}{table.caption.76}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.2}Control-Flow Replica}{123}{section.C.2}\protected@file@percent }
+\newlabel{app:replica_token_game}{{C.2}{123}{Control-Flow Replica}{section.C.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{The weights do not see the marking.}{123}{table.caption.78}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {C.4}{\ignorespaces Effect of the rule treatment on the simulated visits (E3), test period, means over five seeds. Original net: IM 0.0 as discovered (parallel branches that silent transitions can skip). Repaired net: language restricted to rules 3 and 5, rewritten without silent transitions. Guard: stop guard on the visible transitions. Control: the unrepaired language rewritten without silent transitions. Overlapping stops: share of the visits with more than one stop. Unseen sequences: generated visits whose sequence never occurs in the training log. TVD: total-variation distance to the distribution of the observed test log (0 = identical).}}{124}{table.caption.77}\protected@file@percent }
+\newlabel{tab:app_rewritten_2x2_im}{{C.4}{124}{Effect of the rule treatment on the simulated visits (E3), test period, means over five seeds. Original net: IM 0.0 as discovered (parallel branches that silent transitions can skip). Repaired net: language restricted to rules 3 and 5, rewritten without silent transitions. Guard: stop guard on the visible transitions. Control: the unrepaired language rewritten without silent transitions. Overlapping stops: share of the visits with more than one stop. Unseen sequences: generated visits whose sequence never occurs in the training log. TVD: total-variation distance to the distribution of the observed test log (0 = identical)}{table.caption.77}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {C.5}{\ignorespaces Control-flow replica of ProSiT's routing (token game, no time, no resources): every training visit is simulated with its own manifest, three seeds, measures against the training log; the sequence TVD of a row varies by at most 0.006 between the seeds. Routing weights: P(transition fires $\mid $ enabled), estimated by counting on the aligned training log; ``data + history'' uses the planned stops, the flow type and the counts of the activities done so far, as ProSiT's trees do; ``marking'' adds the state of the net. Guard: local = the stop guard of this thesis; look-ahead = also masks silent steps after which the plan cannot be completed; rejection = simulate without guard and keep only visits with the planned number of stops. Rewritten: the same language without silent transitions.}}{125}{table.caption.78}\protected@file@percent }
+\newlabel{tab:app_control_flow_replica}{{C.5}{125}{Control-flow replica of ProSiT's routing (token game, no time, no resources): every training visit is simulated with its own manifest, three seeds, measures against the training log; the sequence TVD of a row varies by at most 0.006 between the seeds. Routing weights: P(transition fires $\mid $ enabled), estimated by counting on the aligned training log; ``data + history'' uses the planned stops, the flow type and the counts of the activities done so far, as ProSiT's trees do; ``marking'' adds the state of the net. Guard: local = the stop guard of this thesis; look-ahead = also masks silent steps after which the plan cannot be completed; rejection = simulate without guard and keep only visits with the planned number of stops. Rewritten: the same language without silent transitions}{table.caption.78}{}}
+\@writefile{toc}{\contentsline {paragraph}{Silent transitions alone are not the cause.}{125}{table.caption.78}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{A guard has to act where the decision is taken.}{125}{table.caption.78}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The flower needs the history in the weights.}{126}{table.caption.78}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Limits.}{126}{table.caption.78}\protected@file@percent }
+\@setckpt{appendices/control_flow_replica}{
+\setcounter{page}{127}
+\setcounter{equation}{0}
+\setcounter{enumi}{3}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{0}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{chapter}{3}
+\setcounter{section}{2}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{0}
+\setcounter{table}{5}
+\setcounter{section@level}{0}
+\setcounter{Item}{43}
+\setcounter{Hfootnote}{1}
+\setcounter{Hy@AnnotLevel}{0}
+\setcounter{bookmark@seq@number}{78}
+\setcounter{DefaultLines}{2}
+\setcounter{DefaultDepth}{0}
+\setcounter{L@lines}{0}
+\setcounter{L@depth}{0}
+\setcounter{parentequation}{0}
+\setcounter{eu@}{0}
+\setcounter{eu@i}{0}
+\setcounter{mkern}{4}
+\setcounter{caption@flags}{2}
+\setcounter{continuedfloat}{0}
+\setcounter{subfigure}{0}
+\setcounter{subtable}{0}
+\setcounter{float@type}{8}
+\setcounter{algorithm}{0}
+\setcounter{ALG@line}{0}
+\setcounter{ALG@rem}{0}
+\setcounter{ALG@nested}{0}
+\setcounter{ALG@Lnr}{2}
+\setcounter{ALG@blocknr}{10}
+\setcounter{ALG@storecount}{0}
+\setcounter{ALG@tmpcounter}{0}
+\setcounter{lofdepth}{1}
+\setcounter{lotdepth}{1}
+\setcounter{@pps}{0}
+\setcounter{@ppsavesec}{0}
+\setcounter{@ppsaveapp}{0}
+\setcounter{NAT@ctr}{0}
+\setcounter{LT@tables}{0}
+\setcounter{LT@chunks}{0}
+\setcounter{note}{0}
+\setcounter{example}{0}
+\setcounter{nlinenum}{0}
+\setcounter{r@tfl@t}{0}
+}

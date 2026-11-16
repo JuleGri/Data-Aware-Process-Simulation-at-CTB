@@ -1,45 +1,36 @@
 %!TEX root = ../dissertation.tex
 
-Container terminals use simulation to evaluate operational changes without
-disrupting live operations, but conventional models are commonly constructed
-and calibrated manually. Data-aware process simulation instead derives
-executable models from event logs. Its validity in physical logistics is still under-evaluated.
+Container terminals use simulation to assess operational changes before they
+are made. Data-aware process simulation promises to learn such models from event
+logs, but its fitness for physical logistics processes with shared,
+capacity-limited resources is largely untested. This thesis examines whether a
+simulation learned with ProSiT from the operational data of HHLA Container
+Terminal Burchardkai can support the assessment of a load-aware allocation of
+truck deliveries to yard blocks. The terminal aims at a truck turnaround time
+within a corridor of 25 to 35 minutes; in the test period, 47\,\% of the visits
+take longer.
 
-This thesis examines ProSiT as a data-aware Process Simulation framework for truck operations at HHLA Container Terminal
-Burchardkai. Two months of operational data were transformed into an event log
-of 89,460 truck visits and divided chronologically into discovery, validation and untouched test datasets. 
-Preserving the ITS schedule-derived stop order prevents a timestamp-induced
-parallelism artefact, but the raw Inductive-Miner model still violates known
-truck semantics through parallel behavior and a gate-only bypass. A transparent
-domain repair therefore enforces sequential yard handling while retaining
-alternative orders and repetitions. The resulting Petri net fits all 17,892
-held-out visits with fitness 1.0 and test precision 0.7641 and serves as the
-common executable control-flow model.
+From an event log of 91,153 truck visits, eighteen nets of four discovery
+families were compared with gates fixed on the training log: soundness,
+acceptance of every sequence above a noise threshold of 0.1\,\%, and the domain
+rules of the truck visit. The Heuristics Miner net HM 0.7, used as discovered, is
+the most precise admissible net (precision 0.998) and the only one whose language
+respects the rules; a look-ahead stop guard makes every simulated truck perform
+its planned stops. As fitted, the simulation overestimates the turnaround time
+strongly (median 57 against 33 minutes), because its learned block choice
+concentrates the trucks. A component-wise audit locates the causes in the block
+choice, the queue and the service. With replayed trucks and blocks, three lanes
+per block, a waiting time measured from a free lane and load-dependent service,
+the model reproduces the median within 5 minutes and the rise of the waiting with
+the load of a block, but not the slowdown in the busiest hours. A net with
+parallel branches fits the level better only through physically impossible
+visits.
 
-A $2\times2$ validation experiment separates manually constructed static
-demand and utilisation proxies from ProSiT's native workload and queue state.
-No added-state configuration provides a resolved multi-perspective improvement.
-The parsimonious \textit{visit-only} configuration is therefore rediscovered
-on the complete 80\,\% development period and evaluated once on the final
-test period. It reproduces inter-arrival spacing closely and parts of yard
-service timing, but underestimates mean turnaround by 5.930 minutes
-(33.812 vs.\ 39.742) and P90 by 13.100 minutes (57.900 vs.\ 71.000).
-The discrepancy is stable across Monte-Carlo seeds.
-Physical validity is audited separately. Truck activities must remain
-sequential and no more than three RMGs may operate concurrently in one block;
-the latter upper bound is imposed transparently because overlap-derived capacities
-exceed the physical maximum. Historical fidelity alone selects the
-workload-blind \textit{visit-only} benchmark, which lacks an endogenous pathway
-for demand propagation. A mechanism-focused audit therefore evaluates the
-minimal \textit{native-only} configuration with a dynamic workload state.
-Closing block T22 and increasing working-time demand by 20\,\% produce no
-resolved mean-turnaround effect, while a matched six-level stress test produces
-a non-linear delay response, only at substantially higher realised arrival
-rates. This reflects an internal response pathway in the fitted simulator,
-not a validated physical CTB congestion response.
-The thesis contributes a layered validity audit, separating event order,
-control-flow language, historical fidelity, physical semantics, and
-intervention response. The case shows that good historical fit is an important first step, but is not enough to show that the model is reliable for what-if analysis. For direct
-decision support, the model would need a more explicit representation of
-location, movement, equipment, and queues, as well as further validation with
-future operational data.
+Within these limits, moving deliveries from full blocks to a neighbouring block
+shortens the moved visits by about 9.5 minutes and reduces the visits above the
+corridor by 3.7 percentage points in the model, without slowing down the
+receiving blocks. The simulation supports the direction and the mechanism of
+this change, not its size at the terminal. The case shows that conformance
+metrics and historical fit are not enough to judge a simulation for a what-if
+question; the mechanism the intervention acts on has to be validated in the
+simulator itself.

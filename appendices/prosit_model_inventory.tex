@@ -2,37 +2,103 @@
 \chapter{ProSiT Model Inventory}
 \label{app:prosit_inventory}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item The assessment explicitly asks for the concrete decision trees and all parameters needed to set up the ProSiT simulation. This appendix delivers them for the final model.
-\end{hints}
+% Sources (trucksimulation): simulation_e3/runs/hm07orig_20261115/make_inventory_appendix.py
+%   (tables/app_inventory.tex, model_leaves.csv, model_inventory.csv); export_simulation_model.py (Chapter 5 tables);
+%   plot_control_flow.py (net figures); data/processed/CTB/split13apr_20261106/manifest.json (hashes).
 
-\section{Discovery Settings and Versions}
+This appendix lists everything needed to set up the final simulation model with
+ProSiT: the settings and inputs, every learned model, the capacities and
+calendars, the domain rules and the discovered nets. Chapter~\ref{chp:process_discovery_methodology}
+shows and interprets the most important trees; Section~\ref{sec:res_inspection}
+discusses whether their features and targets are plausible for the terminal.
+
+\section{Settings, Versions and Inputs}
 \label{app:prosit_settings}
-\begin{hints}
-\item All hyperparameters, package versions, input hashes and run folders of the final model.
-\end{hints}
 
-\section{Learned Decision Trees}
+The model is discovered with ProSiT~1.0.4 (\texttt{prosit-pm}) on PM4Py
+2.7.22.3 and Python 3.11, with the settings of
+Tables~\ref{tab:sim_hyperparameters} and~\ref{tab:exp_e3_config}: trees of depth
+at most three, at least 50, 100 or 200 cases per leaf chosen by five-fold
+cross-validation with the continuous ranked probability score, the planned
+manifest as case attributes, workload features and multitasking on, and random
+state 42. The inputs are the net HM 0.7 as exported from ProM with its initial and
+final marking, and the training log of 59,139 visits (2 March to 11 April 2026,
+SHA-256 \texttt{58932826\ldots 6cb94b}). The test log has 32,014 visits (13 to 30
+April 2026, SHA-256 \texttt{dee4cb78\ldots 4cda30}). The four adaptations of
+Table~\ref{tab:sim_adaptations} are switches in the simulation loop; the final
+configuration sets all of them. Every configuration of E3 and E4 is run with seeds
+42 to 46, E5 with seeds 42 to 51.
+
+\section{Learned Models}
 \label{app:prosit_trees}
-\begin{hints}
-\item For each component (arrivals, routing per transition, resource choice per resource, waiting time per resource, execution time per activity): tree or single distribution, split features, thresholds, leaf distributions and sample sizes.
-\item Generate the tables automatically from prosit\_params.pkl so that they are exact.
-\end{hints}
+
+Table~\ref{tab:app_inventory} lists every learned model of the final model: the
+arrival tree, the routing model of every transition of HM 0.7, the waiting-time
+model of every resource (lane-free target) and the execution-time model of every
+activity (with the trucks at the block as a feature). The learned block choice is
+listed as well, although the final configuration replays the observed blocks. A
+routing transition is named by its identifier in the PNML file and, for a silent
+transition, by the step it stands for. The file \texttt{model\_leaves.csv} of the
+reproduction package gives every one of the 481 leaves with its path of splits,
+its fitted distribution and parameters, its mean or firing probability and its
+sample size.
+
+\input{tables/app_inventory}
 
 \section{Calendars and Capacities}
 \label{app:prosit_calendars}
-\begin{hints}
-\item Arrival calendar, resource calendars, capacity per resource (discovered and after the cap of three).
-\end{hints}
 
-\section{Rule Register and Unobserved Sequences}
+The capacities and calendars are given in Table~\ref{tab:sim_capacities}. The
+capacities of LL and HO2 are discovered by ProSiT from the number of trucks served
+at the same time; the RMG blocks have three lanes, a physical limit that replaces
+the discovered values of four or five. The discovered resource calendars cover
+122 to 128 of the 168 hours of a week; they are set to the full week so that a
+truck already inside is served to completion.
+
+\section{Domain Rules}
 \label{app:rules}
-\begin{hints}
-\item The full rule register with status and sources, and the 19 two-stop sequences that the repaired model allows but the data never shows, with the terminal's assessment.
-\end{hints}
+
+The domain rules are listed in Table~\ref{tab:domain_rules}, and the result of
+their audit on the recorded log and on the language of the admissible nets in
+Table~\ref{tab:rq1_e2_audit}, with the shortest violating sequence of each net.
+Rules 1 to 5 hold in the language of HM 0.7; rule 6 is enforced by the stop guard;
+rule 7 is not used, because the truck type is not recorded.
 
 \section{Discovered Models}
 \label{app:model_gallery}
-\begin{hints}
-\item Figures of all candidate nets of E1 on the expanded population (IMf 0.1/0.2, Heuristics, ILP, Split Miner) with their sizes.
-\end{hints}
+
+Figure~\ref{fig:sim_controlflow} shows the selected net. Figures~\ref{fig:app_net_im}
+to~\ref{fig:app_net_hm08} show the nets of the E3 contrasts, drawn in the same
+way. All nets of the discovery grid are part of the reproduction package as PNML
+files with their markings.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{figures/discovery_prom/net_IM_0.0.png}
+\caption{IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).
+Its parallel branches let several stops be enabled at once; silent transitions
+skip the branches.}
+\label{fig:app_net_im}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{figures/discovery_prom/net_ILP_1.00.png}
+\caption{ILP 1.00 as discovered (15 places, 11 visible and 2 silent transitions).}
+\label{fig:app_net_ilp}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{figures/discovery_prom/net_IMf_0.3.png}
+\caption{IMf 0.3 as discovered (11 places, 11 visible and 7 silent transitions).}
+\label{fig:app_net_imf}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{figures/discovery_prom/net_HM_0.8.png}
+\caption{HM 0.8 as discovered (22 places, 11 visible and 31 silent transitions).
+It lacks the dependencies from an LL stop to an RMG stop that HM 0.7 has.}
+\label{fig:app_net_hm08}
+\end{figure}

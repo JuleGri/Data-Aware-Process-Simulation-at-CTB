@@ -7,13 +7,13 @@
 \midrule
 Arrival & Gate In Fri 17 Apr 14:46 (replayed from the test log) & -- \\
 Manifest & process flow type = receive, n containers = 1, n stops = 1, n receives = 1, has reefer = 0 & replayed with the visit \\
-Routing, first decision & RMG receive 0.93; HO2 receive 0.04; LL receive 0.02 & one tree per enabled transition, normalised; stop guard: Gate Out masked (0 of 1 stops done) \\
+Routing, first decision & RMG receive 0.94; HO2 receive 0.04; LL receive 0.02 & one tree per enabled transition, normalised; stop guard: Gate Out masked (0 of 1 stops done) \\
 Drawn step & RMG receive & -- \\
 Block & T24 (observed block of the visit) & final configuration: observed blocks \\
-Load at enabling & 1 trucks in progress, 2 waiting & recomputed from the simulated log \\
-Waiting time & 10 min (enabled 14:46, start 14:56); leaf mean 12.8 min, lognorm & tree of block T24: queue length $\leq$ 2.5, queue length $>$ 1.5, hour $>$ 12.5 \\
-Execution time & 17 min (end 15:13); leaf mean 16.0 min, lognorm & tree of RMG receive: other trucks at block $>$ 1.5, other trucks at block $\leq$ 2.5, block T18 no \\
-Exit & Gate Out 15:17; turnaround time 31 min & stop guard: all planned stops done \\
+Load at enabling & 2 trucks in progress, 2 waiting & recomputed from the simulated log \\
+Waiting time & 22 min (enabled 14:46, start 15:08); leaf mean 12.8 min, lognorm & tree of block T24: queue length $\leq$ 2.5, queue length $>$ 1.5, hour $>$ 12.5 \\
+Execution time & 18 min (end 15:26); leaf mean 16.0 min, lognorm & tree of RMG receive: other trucks at block $>$ 1.5, other trucks at block $\leq$ 2.5, block T18 no \\
+Exit & Gate Out 15:28; turnaround time 42 min & stop guard: all planned stops done \\
 \bottomrule
 \end{tabularx}
 \caption{One simulated truck of the final model (configuration of E4, seed 42), step by step. The leaf of each tree follows from the features at that moment; the waiting and execution times are drawn from the distribution of that leaf; the waiting time includes any delay until a lane is free (capacity checked over the whole stop at its start).}
