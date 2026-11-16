@@ -96,7 +96,7 @@ discovered HM 0.7 it has to fall back 1.7 times per 1,000 visits.
 IM 0.0, a look-ahead guard or rejection sampling gives every truck its planned
 number of stops, but the stops are combined wrongly (sequence TVD 0.167 and 0.068,
 against 0.006 for the state machine of the restricted language). For a net with parallel
-branches, no guard repairs the combination of stops; for a net without them, such
+branches, the tested stop-count guards do not repair the combination of stops; for a net without them, such
 as HM 0.7, the look-ahead guard is enough.
 
 \paragraph{The flower needs the history in the weights.} With weights from

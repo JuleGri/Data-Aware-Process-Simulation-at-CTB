@@ -1,0 +1,40 @@
+% Flow of the experiments E1-E5 (design of Chapter 5). Drawn in TikZ, 16 Nov 2026.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  exper/.style={rectangle, rounded corners=2pt, draw, align=left, font=\footnotesize,
+               text width=9.2cm, inner sep=4pt},
+  passon/.style={rectangle, draw, fill=black!6, align=left, font=\footnotesize, text width=9.2cm, inner sep=4pt},
+  rq/.style={font=\footnotesize\bfseries, align=center},
+  arr/.style={-{Stealth[length=2mm]}}]
+\node[exper] (e1) at (0,0) {\textbf{E1 Discovery and gates} (training log)\\
+  19 nets of four families: IMf (5), Heuristics (5), ILP (6), Alpha (3)\\
+  A1 sound; A2 accepts every sequence above the coverage threshold of 0.1\,\%};
+\node[passon, below=2.5mm of e1] (o1) {IM 0.0, HM 0.7, ILP 1.00 pass A1 and A2};
+\node[exper, below=4mm of o1] (e2) {\textbf{E2 Rule audit} on the language of each net\\
+  A3 rules 3--5: a stop in every visit, no two stops at once, no forbidden combination\\
+  rule 6 (planned stops) cannot be written into a net: stop guard in the simulator};
+\node[passon, below=2.5mm of e2] (o2) {HM 0.7, used as discovered, with a look-ahead stop guard};
+\node[exper, below=4mm of o2] (e3) {\textbf{E3 Simulation of the selected net} in ProSiT\\
+  guard on, off and simple; contrasts IM 0.0, ILP 1.00 (fail A3), IMf 0.3, HM 0.8 (fail A2)};
+\node[passon, below=2.5mm of e3] (o3) {control flow that works in the simulator; baseline for E4};
+\node[exper, below=4mm of o3] (e4) {\textbf{E4 Mechanism audit} along the path of the truck\\
+  demand $\rightarrow$ block allocation $\rightarrow$ queue at the block $\rightarrow$ service\\
+  choice of the final configuration on the training log; acceptance criteria};
+\node[passon, below=2.5mm of e4] (o4) {final configuration; E5 admissible only as a what-if demonstration};
+\node[exper, below=4mm of o4] (e5) {\textbf{E5 What-if:} scenario S1, deliveries moved away from full blocks\\
+  eligible blocks $\pm 1$, $\pm 2$, any; ten paired seeds; four robustness runs};
+\node[passon, below=2.5mm of e5] (o5) {direction and mechanism of the effect within the model, not its size at the terminal};
+\foreach \a/\b in {e1/o1, o1/e2, e2/o2, o2/e3, e3/o3, o3/e4, e4/o4, o4/e5, e5/o5}
+  \draw[arr] (\a) -- (\b);
+\draw[decorate, decoration={brace, amplitude=5pt}] ([xshift=3mm]e1.north east) -- ([xshift=3mm]o3.south east)
+  node[rq, midway, right=6pt] {RQ1};
+\draw[decorate, decoration={brace, amplitude=5pt}] ([xshift=12mm]e3.north east) -- ([xshift=12mm]o4.south east)
+  node[rq, midway, right=6pt] {RQ2};
+\draw[decorate, decoration={brace, amplitude=5pt}] ([xshift=3mm]e5.north east) -- ([xshift=3mm]o5.south east)
+  node[rq, midway, right=6pt] {RQ3};
+\end{tikzpicture}
+\caption{Flow of the experiments. Every decision uses the training log; the test log
+reports the results. White: experiment; grey: what it passes on.}
+\label{fig:exp_flow}
+\end{figure}

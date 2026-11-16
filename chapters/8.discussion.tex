@@ -20,10 +20,12 @@ busy block by the mechanism that the allocation changes, and it must respond to
 load as strongly as the terminal. The final model meets the first two and the
 third only in part.
 
-\paragraph{What the model supports.} Every simulated visit is physically
-possible and follows its plan: no visit without a stop, no overlapping stops, the
-planned number of stops, never more than three trucks at a block
-(Sections~\ref{sec:res_baseline} and~\ref{sec:res_mechanisms}). The waiting before
+\paragraph{What the model supports.} Every simulated visit satisfies the
+checked rules: no visit without a stop, no overlapping stops, the planned number
+of stops, never more than three trucks at a block
+(Sections~\ref{sec:res_baseline} and~\ref{sec:res_mechanisms}). The stop guard
+enforces the number of stops, not the planned itinerary itself, and truck
+capacity, driving and the yard plan are not checked. The waiting before
 a stop arises in the simulation when all three lanes of a block are taken, and the
 approach to the first stop grows with the load of the block as observed. The
 turnaround time rises with the arrivals and, convexly, with the arrival
@@ -31,8 +33,8 @@ intensity. These are the properties a block allocation acts on. The model can
 therefore show whether moving deliveries away from full blocks shortens the
 visits in principle, which visits gain, and whether the waiting is reduced or only
 moved. E5 answers these questions within the examined model variants: the long
-visits become shorter through less waiting at full blocks, the receiving blocks do
-not become slower, and a local rule is enough.
+visits become shorter through less waiting at full blocks, the receiving blocks
+change little (intervals that include zero), and a local rule is enough.
 
 \paragraph{What the model does not support.} It does not give the size of the
 effect at the terminal. The simulated stops slow down less than the recorded ones
@@ -47,7 +49,17 @@ model cannot decide which dominates. A statement such as ``S1 shortens the mean
 turnaround time at CTB by two minutes'' is therefore not supported. The supported
 statement is conditional: if the waiting at a full block arises as in the model,
 moving deliveries to a neighbouring block with a free lane shortens the long
-visits and does not slow down the other blocks.
+visits, with at most a small change at the receiving blocks.
+
+\paragraph{Both sides of the corridor.} The corridor applies to every truck, and
+both of its bounds matter. S1 reduces the visits above 35 minutes by 3.7
+percentage points, but the visits inside the corridor grow by only 0.3 points:
+the other visits that become shorter fall below 25 minutes. For the customer this
+is an improvement; for the terminal it means faster truck handling than wanted,
+because the cranes also serve the waterside and the rail. The model contains no
+waterside work, so it can evaluate the upper bound of the corridor but not the
+lower one. A rule for the terminal would have to combine the allocation with a
+limit on how much crane capacity the trucks may take.
 
 \paragraph{Conditions of the result.} The final configuration replays the observed
 arrivals, manifests and blocks of the test period. Its validity is conditional on
@@ -56,10 +68,14 @@ these inputs: without them, the error is larger (cycle-time distance 11.2 agains
 terminal and the block of each container from the yard plan would have to replace
 the replay. The result also rests on the four changes to ProSiT's queue and
 service (Table~\ref{tab:sim_learned_added}); each is needed for the load response
-(Section~\ref{sec:res_e4_loo}). The rule itself decides when a delivery becomes
-possible, which for single-stop visits is at Gate In, the moment the terminal
-assigns the yard position; whether the number of trucks at each block is known to
-the yard planning at that moment was not checked.
+(Section~\ref{sec:res_e4_loo}). Three implementation details also bound the
+result. The block allocation is replayed only where a simulated stop has an
+observed counterpart, about three quarters of the RMG stops. The load feature of
+the service time is counted when a stop is scheduled, and it sees somewhat less
+load than the final log shows. And S1 decides when a delivery stop becomes
+possible: at Gate In for a first stop, the moment the terminal assigns the yard
+position, but later for 6.5\,\% of the moves; whether the committed load of each
+block is known to the yard planning at the moment of assignment was not checked.
 
 \section{Discovery Metrics and Simulation Behaviour}
 \label{sec:disc_metrics}
@@ -142,10 +158,11 @@ the method itself.
 quantities mean: waiting is measured from the moment the block was completely
 free, capacity is checked when a stop is enabled rather than when it runs, and the
 service time has no load feature. A block with three handover lanes violates the
-single-server view behind the first two. Where a resource is one person and a case
-waits only because the person is busy, these choices are correct, so they are
-findings about the fit between the tool and this kind of process, not errors for
-the business processes for which ProSiT was designed. They match the known risks
+single-server view behind the first two. For a resource that serves one case at a
+time, the single-server target fits better, but a start that is delayed for other
+reasons can conflict with a capacity check at enabling there as well. These are
+therefore findings about how well the assumptions fit a resource with several
+lanes, not general errors of the tool. They match the known risks
 of business process simulation, the neglected process context and the working
 speed that depends on the workload \cite{Aalst2015}, and the gap that Sulis et
 al.\ find for queues and resources \cite{Sulis2026SimulationReview}; a queueing
@@ -207,9 +224,11 @@ The threats are grouped as construct, internal, external and conclusion validity
 the handover lane to the fulfilment of the order
 (Section~\ref{sec:timestamp_semantics}). It can contain waiting for the crane,
 and the log records four trucks at a block at once for 5.6\,\% of the training
-stops, although a block has three lanes: the fourth truck is already counted at
-the block while it waits for a lane. The stop duration is therefore time at the
-block, not service time. The final model treats it as service and creates the
+stops, although a block has three lanes. One reading is that the fourth truck is
+already counted while it waits for a lane; delayed completion records or other
+recording effects would produce the same pattern, and the data cannot tell them
+apart. The stop duration is therefore time at the block, not service time, and
+the three lanes of the model are an approximation of the physical limit. The final model treats it as service and creates the
 waiting for a lane in the simulation; it does not learn a waiting time and create
 the same queue again (Section~\ref{sec:exp_e4_mechanisms}). Part of the waiting in
 the recorded stops is still in the learned service time, which may be one reason
@@ -222,9 +241,11 @@ counted as trucks at a block in the evaluation.
 
 \paragraph{The KPI.} The turnaround time runs from Gate In to Gate Out; the
 approach to the first stop mixes driving and waiting, which the data cannot
-separate. The corridor of 25 to 35 minutes is the operational aim reported by the
-terminal (Section~\ref{sec:prob_statement}); visits below the corridor are not
-counted as an improvement or a loss. Hourly values are attributed to the Gate-In
+separate. The corridor of 25 to 35 minutes applies to every truck; the TTT is shown
+per truck on the management dashboard of the terminal
+(Section~\ref{sec:prob_statement}). The model can evaluate the upper bound, but
+not the lower one, because the waterside work that faster truck handling
+displaces is not modelled. Hourly values are attributed to the Gate-In
 hour of the trucks, and a delay peak is defined with thresholds from the training
 period; another attribution would give other peak hours. The validity of the
 model is judged for the turnaround time and its parts only; the use of cranes or
@@ -266,7 +287,7 @@ ProSiT's routing on IM 0.0 (Appendix~\ref{app:replica}).
 The data cover one terminal and eight and a half weeks in spring 2026, and the
 population is the set of completed visits with known activities. Seasonal
 patterns, other terminals and other equipment are not covered. The findings refer
-to ProSiT~1.0.4 and may change with later versions. The discovery grid has 18
+to ProSiT~1.0.4 and may change with later versions. The discovery grid has 19
 nets of four families; other algorithms, such as the Split Miner
 \cite{RWSplitMiner2019}, were not tested. The mechanisms found here, how capacity
 and load enter the training data and the simulation loop, are candidates to check

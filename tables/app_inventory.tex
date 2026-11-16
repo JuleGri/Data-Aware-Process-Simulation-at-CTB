@@ -1,5 +1,5 @@
-\begin{longtable}{L{4.2cm}L{1.6cm}rrL{4.0cm}L{1.9cm}}
-\caption{Every learned model of the final simulation model. Leaves: number of leaves; range: smallest and largest leaf mean (minutes) or firing probability (routing). Every leaf with its distribution, parameters and sample size is listed in \texttt{model\_leaves.csv} of the reproduction package.}\label{tab:app_inventory}\\
+\begin{longtable}{L{3.5cm}L{1.5cm}rrL{3.4cm}L{1.6cm}}
+\caption{Every learned model of the final simulation model. Leaves: number of leaves; range: smallest and largest mean of the values a leaf gives the simulator (minutes), or firing probability (routing). Every leaf with its distribution, parameters and sample size is listed in \texttt{model\_leaves.csv} of the reproduction package.}\label{tab:app_inventory}\\
 \toprule
 \textbf{Model} & \textbf{Form} & \textbf{Depth} & \textbf{Leaves} & \textbf{Split features} & \textbf{Range} \\
 \midrule
@@ -11,7 +11,7 @@
 \bottomrule
 \endfoot
 \multicolumn{6}{l}{\textit{Arrivals}} \\
-arrivals & tree & 3 & 7 & hour, weekday & 0.533 -- 34.6 \\
+arrivals & tree & 3 & 7 & hour, weekday & 0.65 -- 7.66 \\
 \multicolumn{6}{l}{\textit{Routing}} \\
 n52: Gate In & constant & 0 & 1 &  & 1 \\
 n43: Gate In $\rightarrow$ LL\_delivery & tree & 3 & 8 & deliveries, flow type, full ratio, planned stops, visit complexity & 0 -- 0.864 \\
@@ -86,42 +86,42 @@ T25 & tree & 2 & 3 & queue length, reefer & 0 -- 0.204 \\
 T26 & tree & 1 & 2 & queue length & 0 -- 0.094 \\
 T27 & tree & 3 & 5 & activity, full ratio, queue length, reefer & 0 -- 0.24 \\
 \multicolumn{6}{l}{\textit{Waiting time (lane-free target)}} \\
-HO2 & tree & 3 & 8 & hour, queue length, workload & 8.38 -- 84.1 \\
-LL & tree & 3 & 5 & queue length, workload & 6.1 -- 41.2 \\
+HO2 & tree & 3 & 8 & hour, queue length, workload & 8.35 -- 86.2 \\
+LL & tree & 3 & 5 & queue length, workload & 5.98 -- 40.8 \\
 Res.GateIn & single distribution & 0 & 1 &  & 0 \\
-Res.GateOut & tree & 3 & 8 & flow type, hour, queue length & 9.49 -- 118 \\
-T06 & tree & 3 & 7 & queue length & 6.55 -- 39.2 \\
-T07 & tree & 3 & 6 & queue length, workload & 6.31 -- 42.5 \\
-T08 & tree & 3 & 6 & queue length, workload & 6.34 -- 73.9 \\
-T09 & tree & 3 & 7 & queue length, workload & 6.46 -- 34.9 \\
-T10 & tree & 3 & 4 & queue length & 6.43 -- 76.6 \\
-T11 & tree & 3 & 7 & queue length, workload & 6.77 -- 63.5 \\
-T12 & tree & 3 & 6 & queue length, visit complexity, workload & 6.33 -- 22.7 \\
-T13 & tree & 3 & 6 & activity, queue length & 7.09 -- 101 \\
-T14 & tree & 3 & 5 & queue length, workload & 6.59 -- 44.4 \\
-T15 & tree & 3 & 6 & queue length, weekday, workload & 6.65 -- 35.6 \\
-T16 & tree & 3 & 7 & flow type, queue length & 6.56 -- 55.6 \\
-T17 & tree & 3 & 8 & queue length, visit complexity, workload & 7.25 -- 41.2 \\
-T18 & tree & 3 & 7 & queue length, workload & 4.96 -- 51.8 \\
-T19 & tree & 3 & 7 & hour, queue length, visit complexity & 7.12 -- 35.1 \\
-T20 & tree & 3 & 6 & queue length, workload & 6.64 -- 35.2 \\
-T21 & tree & 3 & 6 & hour, queue length, weekday, workload & 5.9 -- 18.1 \\
-T22 & tree & 3 & 6 & activity done, hour, queue length & 6.85 -- 19.1 \\
-T23 & tree & 3 & 6 & deliveries, queue length, workload & 6.83 -- 19 \\
-T24 & tree & 3 & 7 & hour, queue length, workload & 5.31 -- 22.5 \\
-T25 & tree & 3 & 5 & queue length, weekday, workload & 8.44 -- 35.8 \\
-T26 & tree & 3 & 5 & queue length, workload & 8 -- 57.8 \\
-T27 & tree & 3 & 6 & queue length, weekday, workload & 8.39 -- 45.1 \\
+Res.GateOut & tree & 3 & 8 & flow type, hour, queue length & 8.06 -- 118 \\
+T06 & tree & 3 & 7 & queue length & 6.2 -- 38.9 \\
+T07 & tree & 3 & 6 & queue length, workload & 6.13 -- 41.7 \\
+T08 & tree & 3 & 6 & queue length, workload & 6.22 -- 74.5 \\
+T09 & tree & 3 & 7 & queue length, workload & 6.34 -- 36.1 \\
+T10 & tree & 3 & 4 & queue length & 6.27 -- 76.8 \\
+T11 & tree & 3 & 7 & queue length, workload & 6.53 -- 64.4 \\
+T12 & tree & 3 & 6 & queue length, visit complexity, workload & 6.58 -- 22.6 \\
+T13 & tree & 3 & 6 & activity, queue length & 7.18 -- 103 \\
+T14 & tree & 3 & 5 & queue length, workload & 6.93 -- 43.5 \\
+T15 & tree & 3 & 6 & queue length, weekday, workload & 6.57 -- 34.3 \\
+T16 & tree & 3 & 7 & flow type, queue length & 6.88 -- 54.6 \\
+T17 & tree & 3 & 8 & queue length, visit complexity, workload & 7.14 -- 41.1 \\
+T18 & tree & 3 & 7 & queue length, workload & 5.23 -- 52.3 \\
+T19 & tree & 3 & 7 & hour, queue length, visit complexity & 6.82 -- 33.7 \\
+T20 & tree & 3 & 6 & queue length, workload & 6.64 -- 34.8 \\
+T21 & tree & 3 & 6 & hour, queue length, weekday, workload & 5.76 -- 18 \\
+T22 & tree & 3 & 6 & activity done, hour, queue length & 6.82 -- 18.9 \\
+T23 & tree & 3 & 6 & deliveries, queue length, workload & 7 -- 19.6 \\
+T24 & tree & 3 & 7 & hour, queue length, workload & 5.07 -- 23 \\
+T25 & tree & 3 & 5 & queue length, weekday, workload & 7.99 -- 35.7 \\
+T26 & tree & 3 & 5 & queue length, workload & 7.93 -- 58.4 \\
+T27 & tree & 3 & 6 & queue length, weekday, workload & 8.11 -- 44.8 \\
 \multicolumn{6}{l}{\textit{Execution time (with load)}} \\
 Gate In & single distribution & 0 & 1 &  & 0 \\
-Gate Out & tree & 3 & 4 & block, trucks at block at start & 0 -- 17.2 \\
-HO2\_delivery & tree & 3 & 6 & hour, trucks at block at start & 6.68 -- 25.9 \\
-HO2\_mixed & tree & 3 & 6 & full ratio, hour, trucks at block at start, weekday & 19.1 -- 30.2 \\
-HO2\_receive & tree & 3 & 7 & hour, trucks at block at start, weekday & 12 -- 30.6 \\
+Gate Out & tree & 3 & 4 & block, trucks at block at start & 0 -- 16.9 \\
+HO2\_delivery & tree & 3 & 6 & hour, trucks at block at start & 6.18 -- 24.1 \\
+HO2\_mixed & tree & 3 & 6 & full ratio, hour, trucks at block at start, weekday & 18.6 -- 28.9 \\
+HO2\_receive & tree & 3 & 7 & hour, trucks at block at start, weekday & 11.6 -- 29.7 \\
 LL\_delivery & tree & 3 & 8 & hour, trucks at block at start & 7.17 -- 31.7 \\
-LL\_mixed & single distribution & 0 & 1 &  & 10.7 \\
-LL\_receive & tree & 3 & 4 & hour, trucks at block at start & 7.28 -- 22.5 \\
-RMG\_delivery & tree & 3 & 8 & deliveries, planned stops, trucks at block at start & 5 -- 24.9 \\
-RMG\_mixed & tree & 3 & 7 & block, trucks at block at start, visit complexity, weekday & 13.1 -- 38.7 \\
-RMG\_receive & tree & 3 & 8 & block, reefer, trucks at block at start & 7.53 -- 26.4 \\
+LL\_mixed & single distribution & 0 & 1 &  & 10.5 \\
+LL\_receive & tree & 3 & 4 & hour, trucks at block at start & 7.1 -- 22.3 \\
+RMG\_delivery & tree & 3 & 8 & deliveries, planned stops, trucks at block at start & 4.93 -- 24.7 \\
+RMG\_mixed & tree & 3 & 7 & block, trucks at block at start, visit complexity, weekday & 13.2 -- 38.4 \\
+RMG\_receive & tree & 3 & 8 & block, reefer, trucks at block at start & 7.43 -- 25.7 \\
 \end{longtable}

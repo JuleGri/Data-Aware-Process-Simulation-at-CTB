@@ -6,30 +6,32 @@ logs, but its fitness for physical logistics processes with shared,
 capacity-limited resources is largely untested. This thesis examines whether a
 simulation learned with ProSiT from the operational data of HHLA Container
 Terminal Burchardkai can support the assessment of a load-aware allocation of
-truck deliveries to yard blocks. The terminal aims at a truck turnaround time
-within a corridor of 25 to 35 minutes; in the test period, 47\,\% of the visits
-take longer.
+truck deliveries to yard blocks. The terminal aims at a turnaround time between 25
+and 35 minutes for every truck; in the test period, 47\,\% of the visits take
+longer.
 
-From an event log of 91,153 truck visits, eighteen nets of four discovery
+From an event log of 91,153 truck visits, nineteen nets of four discovery
 families were compared with gates fixed on the training log: soundness,
-acceptance of every sequence above a noise threshold of 0.1\,\%, and the domain
-rules of the truck visit. The Heuristics Miner net HM 0.7, used as discovered, is
-the most precise admissible net (precision 0.998) and the only one whose language
-respects the rules; a look-ahead stop guard makes every simulated truck perform
-its planned stops. As fitted, the simulation overestimates the turnaround time
+acceptance of every sequence above a coverage threshold of 0.1\,\%, and the
+domain rules of the truck visit. The Heuristics Miner net HM 0.7, used as
+discovered, is the only net that passes all gates, and the most precise of those
+that pass the coverage gate (precision 0.998); a look-ahead stop guard makes every
+simulated truck perform its planned number of stops. As fitted, the simulation overestimates the turnaround time
 strongly (median 57 against 33 minutes), because its learned block choice
 concentrates the trucks. A component-wise audit locates the causes in the block
 choice, the queue and the service. With replayed trucks and blocks, three lanes
 per block, a waiting time measured from a free lane and load-dependent service,
 the model reproduces the median within 5 minutes and the rise of the waiting with
-the load of a block, but not the slowdown in the busiest hours. A net with
+the load of a block, but not the slowdown in the busiest hours: its validity is
+partial. A net with
 parallel branches fits the level better only through physically impossible
 visits.
 
 Within these limits, moving deliveries from full blocks to a neighbouring block
 shortens the moved visits by about 9.5 minutes and reduces the visits above the
-corridor by 3.7 percentage points in the model, without slowing down the
-receiving blocks. The simulation supports the direction and the mechanism of
+corridor by 3.7 percentage points in the model, with only a small change at the
+receiving blocks; more visits fall below the lower bound, which the model cannot
+evaluate. The simulation supports the direction and the mechanism of
 this change, not its size at the terminal. The case shows that conformance
 metrics and historical fit are not enough to judge a simulation for a what-if
 question; the mechanism the intervention acts on has to be validated in the

@@ -74,9 +74,37 @@ which the scenario of this thesis changes, stays a separate decision.
 \paragraph{Event order and timestamps.}
 \label{sec:timestamp_semantics}
 Every stop has a start and a complete timestamp: it runs from the moment the truck
-reports ready in the handover lane to the fulfilment of the order. A stop
-therefore contains the waiting for the crane and is time at the block, not pure
-service time. Gate events are instantaneous, so the turnaround time (TTT) splits
+reports ready in the handover lane to the fulfilment of the order
+(Figure~\ref{fig:timestamps}). A stop therefore contains the waiting for the crane
+and is time at the block, not pure service time. Driving, and any queueing before
+the truck reports ready, fall into the approach. What happens between these
+points, when a lane becomes free or when the crane starts, is not recorded.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm,
+  rec/.style={circle, fill=black, inner sep=1.6pt},
+  nrec/.style={circle, draw=black, fill=white, inner sep=1.6pt},
+  lab/.style={font=\scriptsize, align=center}]
+\draw[-{Stealth[length=2mm]}] (0,0) -- (13.2,0);
+\node[rec]  (gi) at (0.3,0) {};   \node[lab, above] at ([yshift=3pt]gi.north)  {Gate In};
+\node[nrec] (ab) at (2.6,0) {};   \node[lab, above] at ([yshift=3pt]ab.north)  {arrival at\\the block};
+\node[rec]  (rd) at (4.9,0) {};   \node[lab, above] at ([yshift=3pt]rd.north)  {ready in the\\handover lane};
+\node[nrec] (cs) at (7.2,0) {};   \node[lab, above] at ([yshift=3pt]cs.north)  {crane\\handles};
+\node[rec]  (fu) at (9.5,0) {};   \node[lab, above] at ([yshift=3pt]fu.north)  {order\\fulfilled};
+\node[rec]  (go) at (12.6,0) {};  \node[lab, above] at ([yshift=3pt]go.north)  {Gate Out};
+\draw[decorate, decoration={brace, mirror, amplitude=4pt}] (0.3,-0.25) -- (4.9,-0.25)
+  node[lab, midway, below, yshift=-5pt] {approach: driving and queueing};
+\draw[decorate, decoration={brace, mirror, amplitude=4pt}] (4.9,-0.25) -- (9.5,-0.25)
+  node[lab, midway, below, yshift=-5pt] {recorded stop: waiting for the crane and handling};
+\draw[decorate, decoration={brace, mirror, amplitude=4pt}] (9.5,-0.25) -- (12.6,-0.25)
+  node[lab, midway, below, yshift=-5pt] {exit};
+\end{tikzpicture}
+\caption{Timestamps of a single-stop visit. Filled: recorded; open: not recorded.
+The model places a free lane at the start of the recorded stop; the data cannot
+show whether a truck sometimes reports ready before a lane is free.}
+\label{fig:timestamps}
+\end{figure} Gate events are instantaneous, so the turnaround time (TTT) splits
 exactly into the approach to the first stop, the stops, the transfer between stops
 and the exit after the last stop. All timestamps have minute resolution. The order
 of the events within a visit is taken from the schedule (attribute

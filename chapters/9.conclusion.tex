@@ -18,10 +18,10 @@ applied one allocation rule within the limits that this validation established.
 control-flow model that preserves the observed truck-visit behaviour, and do
 conformance metrics anticipate its behaviour in simulation?} The Heuristics
 Miner net HM 0.7, used as discovered, with a stop guard in the simulator that
-looks ahead on the net. Of 18 discovered nets, it is the most precise sound net
-that accepts every sequence above a noise threshold of 0.1\,\% (precision 0.998),
-and the only admissible net whose language respects the rules of the truck
-visit. It gives up 44 rare sequences, 0.96\,\% of the truck-minutes. Conformance
+looks ahead on the net. Of 19 discovered nets, it is the only sound net
+that accepts every sequence above a coverage threshold of 0.1\,\% and whose
+language respects the rules of the truck visit, and the most precise of the three
+nets that pass the coverage gate (0.998). It gives up 44 rare sequences, 0.96\,\% of the truck-minutes. Conformance
 metrics anticipate the simulation only in part: coverage of the frequent
 behaviour and the structure of the net, parallel branches and where its decisions
 sit, decided more than precision. A net with parallel branches produced visits
@@ -49,9 +49,10 @@ a change within the examined model variants, but not its size. Moving a delivery
 to a block within two block numbers when all lanes of its block are taken
 shortens the moved visits by about 9.5 minutes, reduces the share of visits above
 the corridor of 25 to 35 minutes by 3.7 percentage points and the minutes above
-the corridor by about a fifth, and does not slow down the receiving blocks. The
-effect on the mean turnaround time ranges from 0.9 to 4.9 minutes across the
-robustness runs, and the model leaves out the costs of a move.
+the corridor by about a fifth, with only a small change at the receiving blocks.
+More visits fall below 25 minutes, a side of the corridor the model cannot
+evaluate. The effect on the mean turnaround time ranges from 0.9 to 4.9 minutes
+across the robustness runs, and the model leaves out the costs of a move.
 
 \section{Contributions}
 \label{sec:concl_contributions}

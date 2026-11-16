@@ -2,7 +2,7 @@
 \centering
 \scriptsize
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{lrrrrr}
+\begin{tabularx}{\textwidth}{L{3.6cm}YYYYY}
 \toprule
 \textbf{Measure} & \textbf{Main run} & \textbf{(a) service without load} & \textbf{(b) stronger slowdown} & \textbf{(c) intensity 1.2} & \textbf{(d) fully generative} \\
 \midrule
@@ -14,7 +14,7 @@ RMG stops at a full block (percentage points) & $-$6.2 [$-$6.5, $-$5.9] & $-$5.0
 RMG deliveries moved (\%) & 22.6 & 24.2 & 29.2 & 30.2 & 15.5 \\
 Mean TTT of the affected visits in the baseline (min) & 34.5 & 34.6 & 41.4 & 49.5 & 35.0 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{Robustness of S1 $\pm 2$ (Z5): each run against its own baseline, mean over ten paired seeds with 95\,\% $t$-interval. (a) execution time without load; (b) the service model sees one more truck whenever another truck is at the block; (c) arrivals compressed to intensity 1.2; (d) hour-of-week arrivals and training block shares; in (d) the affected visits are compared as groups, not per visit.}
 \label{tab:rq3_robustness}
 \end{table}

@@ -19,7 +19,7 @@ The model described here is the final configuration of E4
 
 The model has two parts. The \emph{control flow} says which sequences of stops
 a truck may perform. It is a Petri net discovered from the training log and
-repaired with domain rules (E1, E2). The \emph{simulation parameters} say how
+checked against domain rules (E1, E2). The \emph{simulation parameters} say how
 often each path is taken, which block a stop goes to, and how long trucks wait
 and are served. ProSiT learns them from the same training log
 \cite{Vinci2026prosit}. A small number of changes adapt the simulation loop to
@@ -93,7 +93,7 @@ from every reachable state the visit can still end, and no token is left behind.
 The net used in the simulation is the Heuristics Miner net HM 0.7, exactly as ProM
 discovered it (Figure~\ref{fig:sim_controlflow}). Its selection is described in
 E1 and E2 (Sections~\ref{sec:exp_discovery} and \ref{sec:exp_rules}). It accepts
-every sequence above the noise threshold and 38 of the 82 training sequences
+every sequence above the coverage threshold and 38 of the 82 training sequences
 (99.4\,\% of the training visits), and its language satisfies the domain rules 3
 to 5 without any change. The net has 22 places and 45 transitions: one visible
 transition per activity and 34 silent ones.
@@ -188,9 +188,10 @@ lists the components; the settings are in Table~\ref{tab:sim_hyperparameters}.
 
 \paragraph{Arrivals and manifests.} In generative runs, the time to the next
 arrival is drawn from a tree on the weekday and hour of the last arrival
-(Figure~\ref{fig:sim_tree_arrivals}). On weekdays between 5 and 21 hours, the
-next truck follows after 0.5 minutes on average; at night and at weekends, the
-mean gap is 2 to 35 minutes. The manifest of a generated visit is one training
+(Figure~\ref{fig:sim_tree_arrivals}; Section~\ref{sec:prosit_trees} explains how
+to read it). On weekdays between 5 and 21 hours, the next truck follows after 0.65
+minutes on average, about 90 trucks per hour; at night and at weekends, the mean
+gap is 2 to 8 minutes. The manifest of a generated visit is one training
 manifest drawn as a whole, so that its attributes stay consistent. In the final
 configuration, both are replayed from the period that is simulated: every
 simulated truck arrives at the Gate-In time of one observed truck and carries
@@ -240,8 +241,9 @@ that a stop goes there, with the queue length and the workload of the block as
 features. These trees learned that trucks prefer the block with the longer
 queue, because the training data count a stop in the queue of its own block (E4,
 Section~\ref{sec:res_mechanisms}). The final configuration therefore uses the
-observed block of each stop; generative runs draw the block from the training
-shares.
+observed block of a stop wherever the simulated visit has an observed
+counterpart for it, and the training shares otherwise (about a quarter of the RMG
+stops); generative runs draw every block from the training shares.
 
 \paragraph{Waiting time.} One tree per resource predicts the time from the moment
 a stop can start until it starts. In the final model, this time is measured from
@@ -262,7 +264,8 @@ the start of the stop. All leaves on one scale.}
 
 \paragraph{Execution time.} One tree per activity predicts the duration of a
 stop. In the final model, it has one more feature: the number of other trucks at
-the block when the stop starts (Section~\ref{sec:exp_e4_mechanisms}). For RMG
+the block when the stop starts; in the simulation it is counted when the stop is
+scheduled (Sections~\ref{sec:exp_e4_mechanisms} and~\ref{sec:res_e4_verification}). For RMG
 receives this feature makes the first two splits (Figure~\ref{fig:sim_tree_exec}).
 Without reefer containers, a receive takes 7.5 minutes on average when the truck
 is alone at the block, 11.7 minutes with one other truck, 16.0 with two and 20.8
@@ -288,8 +291,9 @@ number of trucks served at the same time; the RMG blocks have three lanes.
 \label{sec:sim_execution}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The simulation processes the visits in the order of their arrival. For each
-visit, the loop repeats four steps until Gate Out: determine the enabled
+The simulation always continues with the visit whose next step becomes
+possible earliest (Section~\ref{sec:prosit_execution}). For each visit, the loop
+repeats four steps until Gate Out: determine the enabled
 transitions of the current state; compute their routing weights and apply the
 stop guard; draw one transition; for a yard stop, choose the block, determine
 the start (waiting time, then the earliest time at which fewer than three trucks
@@ -326,7 +330,7 @@ Number of stops & no guard & stop guard that looks ahead on the net: as many sto
 Resource calendars & discovered (122--128 of 168 hours) & full week for trucks already inside & a stop is not interrupted at the end of a shift \\
 Timestamps & continuous & floored to the minute & as in the source systems \\
 Arrivals and manifests & arrival tree, random training manifest & replayed (final); arrival tree (generative) & separates the model error from the demand (E4) \\
-Block choice & learned trees (queue feature counts the stop itself) & observed block (final); training shares (generative) & the learned rule sends trucks to the longest queue (E4) \\
+Block choice & learned trees (queue feature counts the stop itself) & observed block where available, else training shares (final, about 25\,\% of RMG stops); training shares (generative) & the learned rule sends trucks to the longest queue (E4) \\
 Capacity & discovered 4--5; checked when a stop is enabled & 3 lanes; checked over the whole stop at its start & at most three trucks at a block (E4) \\
 Waiting time & measured from a completely free block & measured from a free lane & otherwise the learned waiting time falls with the load (E4) \\
 Execution time & no load feature & other trucks at the block as a feature & stops take longer when the block is busy (E4) \\

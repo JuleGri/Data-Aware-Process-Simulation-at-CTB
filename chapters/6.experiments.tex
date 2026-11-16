@@ -14,20 +14,12 @@ follow in Chapter~\ref{chp:results} in the same order.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Table~\ref{tab:exp_overview} maps the experiments to the research
-questions, and Figure~\ref{fig:exp_flow} shows how E1 to E3 hand their
-results on. E1 and E2 concern the untimed control-flow model. E3 runs the
-resulting candidates in the simulator under identical conditions. E4 and
+questions, and Figure~\ref{fig:exp_flow} shows how each experiment hands its
+result on. E1 and E2 concern the untimed control-flow model. E3 runs the
+selected net and the contrasts in the simulator under identical conditions. E4 and
 E5 build on the configuration selected in E3.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{figures/schemas/experiment_flow_e1_e3.pdf}
-\caption{Flow of the experiments E1 to E3. Each stage reduces the set of
-candidate models and passes it on. E4 and E5 continue with the
-configuration selected in E3.}
-\label{fig:exp_flow}
-\end{figure}
-\todo{Extend Figure~\ref{fig:exp_flow} by E4 (mechanism audit, acceptance) and E5 (what-if).}
+\input{figures/schemas/experiment_flow}
 
 \begin{table}[htbp]
 \centering
@@ -53,7 +45,7 @@ Each experiment has one goal and one deliverable.
 
 \begin{enumerate}[label=\textbf{E\arabic*}]
 \item Evaluate the discovered nets on two levels and keep those that are sound
-and accept every sequence above the noise threshold. Deliverable: the
+and accept every sequence above the coverage threshold. Deliverable: the
 admissible nets.
 \item Check the admissible nets against the domain rules and select the most
 precise net whose language respects them; define the stop guard for the planned
@@ -90,7 +82,7 @@ The control-flow model is selected in four steps, with criteria fixed before
 the runs they decide (Figure~\ref{fig:exp_flow}).
 \begin{enumerate}
 \item \textbf{E1, gates.} A1: the net is sound. A2: it accepts every sequence
-above the noise threshold.
+above the coverage threshold.
 \item \textbf{E2, rule audit.} A3: the language of the net respects the sequence
 rules of the truck visit (no visit without a stop, no two stops of one truck at
 the same time, no forbidden combination at an LL or HO2 area). The planned
@@ -106,7 +98,6 @@ Discovery metrics alone are not enough, because a simulator executes the
 model: behaviour that the language permits but the log never shows can become
 frequent in the generated log (Section~\ref{sec:bg_coverage}). The last step
 therefore takes place in the simulator.
-\todo{Redraw Figure~\ref{fig:exp_flow} as this funnel (gates, rule audit, selection, simulation).}
 
 \section{Data Partitions and Their Use}
 \label{sec:exp_partitions}
@@ -133,12 +124,13 @@ period.
 \label{sec:exp_kpis}
 
 The KPI is the truck turnaround time (TTT), from Gate In to Gate Out. The
-terminal aims at a TTT within a corridor of about 25 to 35 minutes
-(Section~\ref{sec:prob_statement}). The corridor has a lower bound because the
-cranes of a block also serve the waterside and the rail: a shorter TTT is not
-better in itself. The visits above the corridor are the problem that the
-scenario of this thesis addresses. The thesis therefore uses four groups of
-measures:
+terminal aims at a TTT between 25 and 35 minutes for every truck
+(Section~\ref{sec:prob_statement}). The corridor therefore applies to each visit,
+not to an average: a visit above 35 minutes is too long for the customer, a visit
+below 25 minutes is faster than the terminal wants, because the cranes also serve
+the waterside and the rail. The scenario of this thesis addresses the visits
+above the corridor; the visits below it are reported. The thesis uses four groups
+of measures:
 \begin{itemize}
 \item \textbf{Corridor:} the share of visits below, in and above the corridor,
 and the minutes above the corridor per visit, the mean of
@@ -298,7 +290,7 @@ families in general.
 \textbf{Family} & \textbf{ProM plugin (package)} & \textbf{Settings} & \textbf{Nets} \\
 \midrule
 Inductive Miner & Mine Petri net with Inductive Miner (InductiveMinerDeprecated 6.10.72), variant IMf & noise threshold 0.0, 0.1, 0.2, 0.3, 0.4 & 5 \\
-Heuristics & Interactive Data-aware Heuristic Miner (DataAwareCNetMiner 6.9.193); dependency heuristic: Flexible Heuristics Miner; bindings heuristic: nearest activity (FHM) & frequency 0.0 with dependency 0.7, 0.8 and 0.9; frequency 0.1 with dependency 0.9; bindings 0.1; ``accepted connected'' on (default); long-term dependencies and ``all tasks connected'' off; no data attributes; Petri net output & 4 \\
+Heuristics & Interactive Data-aware Heuristic Miner (DataAwareCNetMiner 6.9.193); dependency heuristic: Flexible Heuristics Miner; bindings heuristic: nearest activity (FHM) & frequency 0.0 with dependency 0.7, 0.8, 0.9 and 1.0; frequency 0.1 with dependency 0.9; bindings 0.1; ``accepted connected'' on (default); long-term dependencies and ``all tasks connected'' off; no data attributes; Petri net output & 5 \\
 ILP Miner & ILP-Based Process Discovery (HybridILPMiner 6.10.154), advanced configuration; LP solver LPSolve 5.5 & sequence encoding filter threshold 0.0, 0.25, 0.55, 0.75, 0.95, 1.0; p/t net; objective: Parikh values weighted by absolute frequencies; constraints: theory of regions, empty after completion, no trivial regions; sink place added; two variables per event; one place per causal relation, causal graph from the Midi miner with default settings & 6 \\
 Alpha & Alpha Miner (AlphaMiner 6.9.78) & variants Alpha, Alpha+, Alpha++ & 3 \\
 \bottomrule
@@ -317,7 +309,7 @@ In addition to the miners, a prefix-tree reference model is built
 \cite{DeLaBriandais1959Trie}. Every observed prefix of a training
 sequence becomes one place, and every observed extension one transition.
 The language of this net equals exactly the set of training sequences.
-It is not a simulation candidate. It shows how well the validation
+It is not a simulation candidate. It shows how well the test
 visits can be explained by doing nothing more than memorising the
 training sequences, and thus calibrates the precision values of the
 discovered models.
@@ -333,13 +325,15 @@ evaluation has two levels: the quality of the net as a model of the log
 (Section~\ref{sec:bg_conformance}), and its fitness for the purpose of
 simulation (Section~\ref{sec:bg_coverage}).
 
-\paragraph{Noise threshold}
-A sequence counts as noise if it accounts for less than 0.1\,\% of the training
-visits. The 17 sequences above this threshold cover 99\,\% of the 59,139 visits;
-the threshold removes all 21 sequences that occur only once. The simulation has
+\paragraph{Coverage threshold}
+A sequence is required if it accounts for at least 0.1\,\% of the training
+visits. This is an admissibility rule for a simulation model, not a claim that
+rarer sequences are errors: they are not required, but every one of them that a
+net rejects is reported. The 17 required sequences cover 99\,\% of the 59,139
+visits; the threshold leaves out all 21 sequences that occur only once. The simulation has
 to reproduce the long turnaround times, not only the average. The rare sequences
 are long visits: their mean turnaround time is 62 minutes, against 37 minutes for
-all visits. A higher threshold would treat more of these long visits as noise
+all visits. A higher threshold would leave out more of these long visits
 (Table~\ref{tab:exp_noise_threshold}). The threshold does not filter the logs:
 Level 1 uses all visits. It only decides which sequences the selected net must
 accept (Level 2 and selection).
@@ -348,16 +342,17 @@ accept (Level 2 and selection).
 \centering
 \begin{tabular}{lrrrrr}
 \toprule
-\textbf{Noise: sequences} & \textbf{Sequences} & \textbf{Visits} & \textbf{Mean TTT} & \multicolumn{2}{c}{\textbf{Share removed of all \ldots}} \\
-\textbf{below} & \textbf{removed} & \textbf{removed} & \textbf{removed} & \textbf{visits $>$ P90} & \textbf{multi-block visits} \\
+\textbf{Threshold: sequences} & \textbf{Sequences} & \textbf{Visits} & \textbf{Mean TTT} & \multicolumn{2}{c}{\textbf{Share left out of all \ldots}} \\
+\textbf{below} & \textbf{left out} & \textbf{left out} & \textbf{left out} & \textbf{visits $>$ P90} & \textbf{multi-block visits} \\
 \midrule
 0.1\,\% & 65 & 0.9\,\% & 62 min & 3.4\,\% & 5.0\,\% \\
 0.5\,\% & 69 & 1.8\,\% & 62 min & 6.4\,\% & 21.1\,\% \\
 1\,\% & 73 & 4.3\,\% & 58 min & 12.5\,\% & 21.1\,\% \\
 \bottomrule
 \end{tabular}
-\caption{What a noise threshold removes from the training log (59,139 visits,
-82 sequences). A sequence below the threshold is noise. Mean TTT of all visits:
+\caption{What a coverage threshold leaves out of the required behaviour
+(training log, 59,139 visits, 82 sequences). A sequence below the threshold is
+not required. Mean TTT of all visits:
 37 minutes. P90: 64 minutes. Multi-block visits: visits to two or more RMG
 blocks.}
 \label{tab:exp_noise_threshold}
@@ -388,7 +383,7 @@ representation of the net.
 \paragraph{Level 2: fitness for simulation}
 A sequence that a net rejects is never generated by the simulator.
 \begin{itemize}
-\item \textbf{Rejected sequences.} Above and below the noise threshold, with the
+\item \textbf{Rejected sequences.} Above and below the coverage threshold, with the
 share of fitting visits overall and per visit group (no RMG stop, one RMG block,
 two or more RMG blocks).
 \item \textbf{Rejected visits in KPI terms.} Their share of the truck-minutes
@@ -408,7 +403,7 @@ the ranking of the nets that pass gate A2 is the same with every implementation.
 \paragraph{Gates}
 A net of the discovery grid (Table~\ref{tab:exp_grid}) is \emph{admissible} if it
 passes two gates: \textbf{A1}, it is sound; \textbf{A2}, it accepts every sequence
-above the noise threshold. The prefix tree is a reference only. The admissible
+above the coverage threshold. The prefix tree is a reference only. The admissible
 nets go to E2.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -434,12 +429,14 @@ net (Section~\ref{sec:bg_rules}). If the net can complete a run that a monitor
 rejects, the shortest such sequence is reported. The check is exact for bounded
 nets, including nets with loops \cite{RWMaggi2011Monitoring,RWCarmona2022Conformance}.
 Rule 4, no two stops of one truck at the same time, is a property of the net: it
-is violated if a reachable marking enables two stops at once.
+is violated if a reachable marking holds the tokens that two stops need at the
+same time, so that both can be executed together. Two stops that are both enabled
+as alternatives, of which only one can fire, do not violate it.
 
 \paragraph{Gate A3} A net is admissible only if its language respects rules 3, 4
 and 5: every visit has a stop, the stops of a truck follow one another, and a
 mixed stop is not combined with a separate delivery or receive at the same LL or
-HO2 area. Rules 1 and 2 hold in every net. Among the nets that pass A1 to A3, the
+HO2 area. Rules 1 and 2 hold in every net. If several nets pass A1 to A3, the
 most precise one is selected; generalisation is reported.
 
 \subsection{Stop Guard}
@@ -672,7 +669,9 @@ the error disappears. Two kinds of replacement are used.
 \item \textbf{Oracle.} The component is replaced by the observed values of the
 test period: replayed arrivals and manifests, or the observed block of each RMG
 stop. This is trace-driven simulation \cite{Law2015Simulation}. It shows the
-error that remains if the component were perfect.
+error that remains if the component were exact; for the blocks this holds only
+for the simulated stops that have an observed counterpart (about three quarters
+of the RMG stops).
 \item \textbf{Repair.} The component stays learned, but a documented defect of
 its training data or of the simulation loop is corrected.
 \end{itemize}
@@ -724,7 +723,8 @@ from the replaced component and not from a new fit.
 \item \textbf{Observed blocks for the queue and service steps.} The share of each
 block changes from week to week, so no model learned on the training period can
 reproduce the block loads of the test period. To judge the queue and the service
-at a block, the observed block of each stop is used. The error of the block
+at a block, the observed block of each stop is used where the simulated stop
+has an observed counterpart, and the training shares otherwise. The error of the block
 allocation itself is measured separately (E4b).
 \item \textbf{Where the queue comes from.} A queue can arise in the simulation,
 when a stop has to wait for a free lane, or it can be part of the learned waiting
@@ -738,10 +738,11 @@ trucks at once. This is a physical limit. The log nevertheless shows RMG stops
 that start while three other stops at the same block are still in progress
 (5.6\,\% of the RMG stops in training, 8.1\,\% in the test period). For these
 stops, the first of the other three ends after a median of 3 minutes (in 68 to
-73\,\% of the cases within 5 minutes). The fourth truck is therefore already
-registered at the block while it waits for a lane: the recorded stop interval
-is the time at the block, not the time in the lane. The simulation uses three
-lanes. Four lanes, as the log suggests, are run only as a sensitivity check and
+73\,\% of the cases within 5 minutes). A plausible reading is that the fourth
+truck is already registered at the block while it waits for a lane, so that the
+recorded interval includes waiting; delayed completion records would look the
+same, and the data cannot tell the two apart. The simulation uses three lanes as
+an approximation of the physical limit. Four lanes, as the log suggests, are run only as a sensitivity check and
 are not admissible. For the same reason, the load profiles of P4 are compared
 only for the states that three lanes allow (up to two other trucks at the start
 of a stop, up to three trucks at the block at Gate In).
@@ -749,9 +750,10 @@ of a stop, up to three trucks at the block at Gate In).
 the block is spent waiting for the crane, which serves several trucks. The stop
 interval therefore grows with the number of trucks at the block. ProSiT does not
 offer load features for execution times. The extension adds one feature, the
-number of other stops in progress at the block when the stop starts, both in
-training and in the simulation. With capacity at start, the simulated count is at
-most the number of lanes minus one.
+number of other stops in progress at the block when the stop starts. In training
+it is counted at the recorded start; in the simulation it is counted when the
+stop is scheduled, before the capacity check can move the stop to a later start,
+and it is at most the number of lanes minus one.
 \item \textbf{Exact counting.} ProSiT counts the activities in progress at a
 resource by walking backwards through its schedule and stops at the first
 activity that has already ended. This is exact only if the schedule is sorted
@@ -776,9 +778,9 @@ period. A configuration whose queue grows without bound is simulated only for
 the first day of the test period (2,393 visits) and compared with the observed
 visits of that day.
 
-\begin{table}[htbp]
+\begin{table}[p]
 \centering
-\footnotesize
+\scriptsize
 \begin{tabularx}{\textwidth}{lL{1.5cm}L{1.6cm}L{1.6cm}L{1.6cm}L{1.3cm}Y}
 \toprule
 \textbf{Run} & \textbf{Demand} & \textbf{Blocks} & \textbf{Capacity} & \textbf{Waiting} & \textbf{Service} & \textbf{Question} \\
@@ -790,7 +792,7 @@ a2 & replay & learned & 3, enabling & ProSiT & ProSiT & Error without demand err
 \multicolumn{7}{l}{\textit{E4b Block allocation}} \\
 b1 & replay & learned, no self-count & 3, enabling & ProSiT & ProSiT & Is the self-count the cause of the concentration? \\
 b2 & replay & training shares & 3, enabling & ProSiT & ProSiT & Load-independent allocation \\
-b3 & replay & observed & 3, enabling & ProSiT & ProSiT & Error without allocation error \\
+b3 & replay & observed & 3, enabling & ProSiT & ProSiT & Blocks from the log where available \\
 \multicolumn{7}{l}{\textit{E4c Queue at the block}} \\
 c1 & replay & observed & 3, start & ProSiT & ProSiT & Capacity over the whole stop \\
 c2 & replay & observed & 3, start & no self-count & ProSiT & Consistent queue feature \\
@@ -888,10 +890,13 @@ three trucks are already at the block, while other blocks often have free lanes
 (Section~\ref{sec:observed_behaviour}). The storage block of an export delivery
 is assigned by yard planning, whereas a receive must go to the block where its
 container is. S1 therefore moves only RMG deliveries. When a delivery becomes
-possible, the simulator counts the stops at its block that are in progress or
-already scheduled. If this number is three or more, all lanes are taken, and the
-delivery is moved to the eligible block with the fewest such stops below three;
-ties go to the nearest block. If no block is eligible, the delivery stays.
+possible, the simulator counts the committed load of its block: the stops in
+progress there or already scheduled. If this number is three or more, the block
+counts as full, and the delivery is moved to the eligible block with the lowest
+committed load below three; ties go to the nearest block. The rule thus decides
+when the delivery stop becomes possible: at Gate In for a delivery that is the
+first stop of a visit, the moment the terminal assigns the yard position, and
+later for a delivery after another stop. If no block is eligible, the delivery stays.
 Receives and mixed stops keep their observed block. The rule draws no random
 numbers. Three variants differ in the eligible blocks: the observed block
 $\pm 1$, $\pm 2$, or any block (upper bound).

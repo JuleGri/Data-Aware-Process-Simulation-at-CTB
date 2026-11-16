@@ -450,6 +450,8 @@ INPUT C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex\latex\tools\longtable.sty
 INPUT C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex\latex\tools\longtable.sty
 INPUT C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex\latex\amscls\amsthm.sty
 INPUT C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex\latex\amscls\amsthm.sty
+INPUT C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarypositioning.code.tex
+INPUT C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex\generic\pgf\frontendlayer\tikz\libraries\tikzlibrarypositioning.code.tex
 INPUT C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex\latex\makecell\makecell.sty
 INPUT C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex\latex\makecell\makecell.sty
 INPUT C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex\latex\wrapfig\wrapfig.sty
@@ -680,9 +682,11 @@ INPUT .\chapters\6.experiments.tex
 INPUT .\chapters\6.experiments.tex
 INPUT .\chapters\6.experiments.tex
 INPUT chapters\6.experiments.tex
-INPUT .\figures\schemas\experiment_flow_e1_e3.pdf
-INPUT .\figures\schemas\experiment_flow_e1_e3.pdf
-INPUT .\figures\schemas\experiment_flow_e1_e3.pdf
+INPUT .\figures\schemas\experiment_flow.tex
+INPUT .\figures\schemas\experiment_flow.tex
+INPUT .\figures\schemas\experiment_flow.tex
+INPUT .\figures\schemas\experiment_flow.tex
+INPUT figures\schemas\experiment_flow.tex
 INPUT .\tables\kpi_long_visits.tex
 INPUT .\tables\kpi_long_visits.tex
 INPUT .\tables\kpi_long_visits.tex

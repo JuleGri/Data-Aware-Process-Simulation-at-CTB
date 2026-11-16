@@ -1,10 +1,6 @@
 \chapter{Background and Related Work}
 \label{chp:background}
 
-\begin{hints}
-\item Target length about 15 pages. Only concepts that later chapters use. Related work is placed in the section where its topic is introduced; Section~\ref{sec:rw_positioning} collects the gap.
-\item Each section ends with one or two sentences on what it means for this thesis.
-\end{hints}
 
 This chapter introduces the concepts that the thesis uses and the research
 related to each of them. It follows the path of the thesis: the terminal
@@ -20,9 +16,6 @@ the research gap.
 \section{Container Terminal Truck Operations}
 \label{sec:bg_terminal}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item About two pages. One small figure of a truck visit (Gate In, stops at RMG block / LL / HO2, Gate Out) would help. CTB numbers (blocks, lanes, volumes) stay in Chapter~\ref{chp:case_study_and_data}.
-\end{hints}
 
 A container terminal connects ships, trains and trucks. Containers are stored
 in a yard between the waterside and the landside. In many terminals, including
@@ -363,7 +356,7 @@ assumption: only the behaviour it describes is allowed. A \emph{declarative}
 formalism, such as Declare, follows an open-world assumption: everything is
 allowed that does not break one of its constraints \cite{schuster2022}. This
 thesis uses both. The discovered net is imperative, the domain rules are
-declarative, and the repair keeps only the behaviour that both allow. Schuster
+declarative, and a net is admitted only if its language respects the rules. Schuster
 et al.\ also classify approaches by the formalism of the output model. Here
 the output must be a sound workflow net, because ProSiT executes Petri nets
 and learns its routing per transition (Section~\ref{sec:prosit_background}).
@@ -526,9 +519,6 @@ the selected models are also simulated (E3).
 \section{Business Process Simulation}
 \label{sec:bps_models}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item One to one and a half pages. Concepts only; the measures and replications used are defined in Chapter~\ref{chp:experiments}.
-\end{hints}
 
 Business process simulation (BPS) runs an executable model of a process to
 study its behaviour without disturbing the real system \cite{Aalst2015}. A
@@ -638,9 +628,6 @@ uncertainty of the fitted parameters or of the model structure.
 \section{ProSiT}
 \label{sec:prosit_background}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item Core section, three to four pages. Describes ProSiT 1.0.4 as implemented (\texttt{prosit-pm}); every statement must match the code. The values chosen for CTB are in Section~\ref{sec:exp_baseline}, the full trees in Appendix~\ref{app:prosit_inventory}.
-\end{hints}
 
 ProSiT (\textit{PROcess SImulation Tool}) discovers a data-aware simulation
 model from a Petri net and an event log \cite{Vinci2026prosit,ProSiTRepository}.
@@ -743,9 +730,9 @@ single distribution. This thesis uses version 1.0.4
 Figure~\ref{fig:bg_prosit_arrival_tree} shows the arrival tree that ProSiT
 learned from the training data of this thesis. Read from the top: if the
 previous truck arrived on a weekday between 5 and 21~h, the gap to the next
-truck is drawn from a normal distribution with a mean of 0.65 minutes, about
-90 trucks per hour. At night, the mean gap is about two minutes. On Saturday
-after 10~h, it is 13 minutes. The tree has depth three, so it cannot separate
+truck is drawn from a normal distribution, and the drawn gaps average 0.65
+minutes, about 90 trucks per hour. At night, the mean gap is about two minutes. On
+Saturday after 10~h, it is 7.7 minutes. The tree has depth three, so it cannot separate
 the morning ramp-up, the daytime plateau and the evening; the leaf from 5 to
 21~h pools them. Whether this is good enough is tested in E4a
 (Section~\ref{sec:exp_e4_runs}).
@@ -844,9 +831,6 @@ constraints of the blocks and are examined in E4
 \section{Research Gap and Positioning}
 \label{sec:rw_positioning}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{hints}
-\item About one page. End with the research questions of Chapter~\ref{chp:introduction}.
-\end{hints}
 
 Table~\ref{tab:rw_comparison} summarises what the reviewed research
 contributes and which question remains open for a terminal like CTB.
