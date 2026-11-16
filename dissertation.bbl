@@ -21,15 +21,6 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{YUN1999DESSimulation}
-\BIBentryALTinterwordspacing
-W.~Y. Yun and Y.~S. Choi, ``A simulation model for container-terminal operation
-  analysis using an object-oriented approach,'' \emph{International Journal of
-  Production Economics}, vol.~59, no.~1, pp. 221--230, 1999. [Online].
-  Available:
-  \url{https://www.sciencedirect.com/science/article/pii/S0925527398002138}
-\BIBentrySTDinterwordspacing
-
 \bibitem{CTSteenken2004}
 D.~Steenken, S.~Voss, and R.~Stahlbock, ``Container terminal operation and
   operations research - a classification and literature review,'' \emph{OR
@@ -40,20 +31,9 @@ B.~Weerasinghe, N.~Perera, and X.~Bai, ``Optimizing container terminal
   operations: a systematic review of operations research applications,''
   \emph{Maritime Economics and Logistics}, vol.~26, pp. 1--35, 02 2023.
 
-\bibitem{Bett2024}
-D.~Bett, I.~Ali, M.~Gheith, and A.~Eltawil, ``Simulation-based optimization of
-  truck appointment systems in container terminals: A dual transactions
-  approach with improved congestion factor representation,'' \emph{Logistics},
-  vol.~8, p.~80, 08 2024.
-
 \bibitem{PMRozinat2009}
 A.~Rozinat, R.~Mans, M.~Song, and W.~Aalst, ``Discovering simulation models,''
   \emph{Information Systems}, vol.~34, pp. 305--327, 05 2009.
-
-\bibitem{DaSLeno2019}
-V.~Leno, M.~Dumas, F.~Maggi, M.~La~Rosa, and A.~Polyvyanyy, ``Automated
-  discovery of declarative process models with correlated data conditions,''
-  \emph{Information Systems}, vol.~89, p. 101482, 12 2019.
 
 \bibitem{mannhardt2023stochasticProcessesModelling}
 \BIBentryALTinterwordspacing
@@ -77,19 +57,6 @@ M.~\{de Leoni\}, F.~Vinci, S.~Leemans, and F.~Mannhardt,
   International Conference on Business Process Management, BPM 2023, BPM 2023 ;
   Conference date: 11-09-2023 Through 15-09-2023.
 
-\bibitem{lopez2024}
-\BIBentryALTinterwordspacing
-O.~López-Pintado, S.~Murashko, and M.~Dumas, ``Discovery and simulation of
-  data-aware business processes,'' 2024. [Online]. Available:
-  \url{https://arxiv.org/abs/2408.13666}
-\BIBentrySTDinterwordspacing
-
-\bibitem{runtimeIntegration2024}
-F.~Meneghello, C.~Di~Francescomarino, C.~Ghidini, and M.~Ronzani, ``Runtime
-  integration of machine learning and simulation for business processes: Time
-  and decision mining predictions,'' \emph{Information Systems}, vol. 128, p.
-  102472, 10 2025.
-
 \bibitem{Vinci2026prosit}
 F.~Vinci, G.~Park, W.~M.~P. van~der Aalst, and M.~de~Leoni, ``Reliable and
   configurable process simulations via probabilistic white-box models,'' in
@@ -98,25 +65,11 @@ F.~Vinci, G.~Park, W.~M.~P. van~der Aalst, and M.~de~Leoni, ``Reliable and
   Notes in Computer Science, vol. 16321.\hskip 1em plus 0.5em minus 0.4em\relax
   Springer Singapore, 2026, pp. 337--352.
 
-\bibitem{Sulis2026SimulationReview}
-E.~Sulis, L.~Genga, and N.~Martin, ``Simulation and process mining: Review and
-  outlook,'' \emph{International Journal of Data Science and Analytics},
-  vol.~22, p. 198, 2026.
-
-\bibitem{Camargo2020}
-M.~Camargo, M.~Dumas, and O.~González-Rojas, ``Automated discovery of business
-  process simulation models from event logs,'' \emph{Decision Support Systems},
-  vol. 134, p. 113284, 03 2020.
-
-\bibitem{Hospital2026Vinci}
-\BIBentryALTinterwordspacing
-F.~Vinci, D.~Aloini, E.~Benevento, A.~Stefanini, F.~Zen, and M.~{de Leoni},
-  ``Improving organizational processes in healthcare through simulation-driven
-  resource allocation: Methodology and real-world case study,''
-  \emph{Artificial Intelligence in Medicine}, vol. 176, p. 103391, 2026.
-  [Online]. Available:
-  \url{https://www.sciencedirect.com/science/article/pii/S0933365726000436}
-\BIBentrySTDinterwordspacing
+\bibitem{Bett2024}
+D.~Bett, I.~Ali, M.~Gheith, and A.~Eltawil, ``Simulation-based optimization of
+  truck appointment systems in container terminals: A dual transactions
+  approach with improved congestion factor representation,'' \emph{Logistics},
+  vol.~8, p.~80, 08 2024.
 
 \bibitem{CTprocessMiningTAS2020}
 M.~Gracia, J.~Mar-Ortiz, C.~Caballini, and S.~Sacone, ``A combined data mining
@@ -124,6 +77,15 @@ M.~Gracia, J.~Mar-Ortiz, C.~Caballini, and S.~Sacone, ``A combined data mining
   with the use of a tas: Application to an italian and a mexican port,''
   \emph{Transportation Research Part E Logistics and Transportation Review},
   vol. 142, 08 2020.
+
+\bibitem{YUN1999DESSimulation}
+\BIBentryALTinterwordspacing
+W.~Y. Yun and Y.~S. Choi, ``A simulation model for container-terminal operation
+  analysis using an object-oriented approach,'' \emph{International Journal of
+  Production Economics}, vol.~59, no.~1, pp. 221--230, 1999. [Online].
+  Available:
+  \url{https://www.sciencedirect.com/science/article/pii/S0925527398002138}
+\BIBentrySTDinterwordspacing
 
 \bibitem{Bruzzone2012}
 A.~Bruzzone, F.~Longo, L.~Nicoletti, E.~Bottani, and R.~Montanari,
@@ -182,8 +144,28 @@ Y.~Wang, F.~Caron, J.~Vanthienen, L.~Huang, and Y.~Guo, ``Acquiring logistics
   port,'' \emph{Expert Systems with Applications}, vol.~41, no.~1, pp.
   195--209, 2014.
 
+\bibitem{Sulis2026SimulationReview}
+E.~Sulis, L.~Genga, and N.~Martin, ``Simulation and process mining: Review and
+  outlook,'' \emph{International Journal of Data Science and Analytics},
+  vol.~22, p. 198, 2026.
+
+\bibitem{Hospital2026Vinci}
+\BIBentryALTinterwordspacing
+F.~Vinci, D.~Aloini, E.~Benevento, A.~Stefanini, F.~Zen, and M.~{de Leoni},
+  ``Improving organizational processes in healthcare through simulation-driven
+  resource allocation: Methodology and real-world case study,''
+  \emph{Artificial Intelligence in Medicine}, vol. 176, p. 103391, 2026.
+  [Online]. Available:
+  \url{https://www.sciencedirect.com/science/article/pii/S0933365726000436}
+\BIBentrySTDinterwordspacing
+
 \bibitem{Aalst2016}
 W.~Van~der Aalst, \emph{Process Mining: Data Science in Action}, 01 2016.
+
+\bibitem{Camargo2020}
+M.~Camargo, M.~Dumas, and O.~González-Rojas, ``Automated discovery of business
+  process simulation models from event logs,'' \emph{Decision Support Systems},
+  vol. 134, p. 113284, 03 2020.
 
 \bibitem{vanDongen2005ProM}
 B.~F. van Dongen, A.~K.~A. de~Medeiros, H.~M.~W. Verbeek, A.~J. M.~M. Weijters,
@@ -495,6 +477,19 @@ M.~Camargo, M.~Dumas, and O.~González-Rojas, ``Discovering generative models
   from event logs: data-driven simulation vs deep learning,'' \emph{PeerJ
   Computer Science}, vol.~7, p. e577, 07 2021.
 
+\bibitem{lopez2024}
+\BIBentryALTinterwordspacing
+O.~López-Pintado, S.~Murashko, and M.~Dumas, ``Discovery and simulation of
+  data-aware business processes,'' 2024. [Online]. Available:
+  \url{https://arxiv.org/abs/2408.13666}
+\BIBentrySTDinterwordspacing
+
+\bibitem{runtimeIntegration2024}
+F.~Meneghello, C.~Di~Francescomarino, C.~Ghidini, and M.~Ronzani, ``Runtime
+  integration of machine learning and simulation for business processes: Time
+  and decision mining predictions,'' \emph{Information Systems}, vol. 128, p.
+  102472, 10 2025.
+
 \bibitem{Senderovich2015QueueMining}
 A.~Senderovich, M.~Weidlich, A.~Gal, and A.~Mandelbaum, ``Queue mining for
   delay prediction in multi-class service processes,'' \emph{Information
@@ -559,10 +554,6 @@ K.~{\"O}zdemir, L.~Kirchdorfer, K.~Amiri~Elyasi, H.~van~der Aa, and
 T.~Gneiting and A.~E. Raftery, ``Strictly proper scoring rules, prediction, and
   estimation,'' \emph{Journal of the American Statistical Association}, vol.
   102, no. 477, pp. 359--378, 2007.
-
-\bibitem{Flyvbjerg2006CaseStudy}
-B.~Flyvbjerg, ``Five misunderstandings about case-study research,''
-  \emph{Qualitative Inquiry}, vol.~12, no.~2, pp. 219--245, 2006.
 
 \bibitem{hhla2025}
 \BIBentryALTinterwordspacing

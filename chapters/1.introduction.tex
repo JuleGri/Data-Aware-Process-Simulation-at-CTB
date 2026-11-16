@@ -1,213 +1,146 @@
 \chapter{Introduction}
 \label{chp:introduction}
 
-Container terminals connect maritime and hinterland transport networks. Higher
-container volumes and larger vessels require terminal operators to make many
-tactical and operational decisions under uncertainty. These decisions concern
-truck dispatching, yard-block allocation, resource use, congestion, equipment
-failures, and temporary infrastructure outages. Experiments in an operating
-terminal are often costly, disruptive, or not feasible. Simulation offers a way
-to assess decisions without interrupting terminal operations.
+Truck handling at a container terminal involves a trade-off between service to
+road transport and the use of resources shared with other terminal operations.
+At HHLA Container Terminal Burchardkai (CTB), this thesis examines whether a
+simulation learned from operational event data can support the assessment of a
+different allocation of truck deliveries to yard blocks. The intended benefit
+is a reduction of truck delays. Establishing whether the model is reliable
+enough for this purpose is part of the investigation.
 
 \section{Motivation}
 
-\begin{hints}
-\item Why terminals need decision support for truck handling, and why live experiments are not an option (one paragraph).
-\item Why simulation, and why building it from event logs (process mining) instead of by hand.
-\item What data-aware, white-box simulation adds (ProSiT): inspectable rules instead of black boxes.
-\item The gap: evidence comes mainly from business processes; physical logistics has capacity, congestion and space. Keep to about 1.5 pages in total.
-\end{hints}
+Simulation allows terminal operators to investigate changes before implementing
+them in live operations. Conventional terminal simulation models are often
+constructed and calibrated manually, drawing on operational data and domain
+knowledge \cite{CTSteenken2004,OptimizingCTs2023}. Process mining offers a way to
+derive parts of such models from event logs, including the control flow,
+activity durations, arrival patterns and resource assignments
+\cite{PMRozinat2009}. Data-aware approaches additionally learn how decisions
+and durations depend on case attributes and the state of the process
+\cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}.
 
+This thesis uses ProSiT, which combines a Petri net with learned decision models
+for the stochastic behaviour of the simulation. Its probabilistic white-box
+models make learned relationships available for inspection and modification
+\cite{Vinci2026prosit}. This is useful in a case study: a model can be checked
+against the recorded process and the assumptions underlying a proposed
+operational change can be made explicit.
 
-Simulation is used for decision support in container-terminal planning and
-operations research. Its operational purpose is prospective: a terminal can
-compare how alternative process executions and operating conditions affect
-specific handling patterns before changing live operations. For example, when
-high yard utilisation is forecast, a terminal may compare lower truck-slot
-release rates, alternative resource allocations, or policies that favour
-receive or delivery operations, and evaluate their effects on activity-specific
-service, pre-service delay, and total truck turnaround. Simulation can likewise
-assess infrastructure investments, scheduling approaches, truck appointment
-systems, and terminal redesigns before implementation. Traditional approaches mostly use manually
-developed Discrete Event Simulation (DES) models, agent-based models, or
-digital twins. Building and maintaining these models requires domain knowledge,
-manual work, and calibration \cite{YUN1999DESSimulation,CTSteenken2004,OptimizingCTs2023,Bett2024}.
-
-Process Mining research has studied how simulation models can be built
-from event logs. Earlier work showed that control-flow behaviour, activity
-durations, arrival patterns, resource allocations, and routing probabilities
-can be discovered from process data and used in executable simulation models
-\cite{PMRozinat2009}. \textit{Data-aware process simulation} extends this idea.
-It uses context attributes, case information, process states, resource
-characteristics, and decision logic
-\cite{DaSLeno2019,mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob,lopez2024}.
-
-Machine-learning and deep-learning methods can learn complicated behavior,
-but their results are often difficult to inspect, modify, and validate. Hybrid
-and white-box approaches combine interpretable models with data-driven
-behaviour discovery \cite{runtimeIntegration2024,Vinci2026prosit}. ProSiT uses
-probabilistic white-box predictors to build simulation models that can be
-inspected and configured for what-if analysis \cite{Vinci2026prosit}.
-
-Evidence on automatically discovered simulation models in logistics systems is
-still limited. A recent review of 105 studies that combine simulation and
-process mining found one in logistics and one in transportation; most concern
-healthcare, manufacturing and administration \cite{Sulis2026SimulationReview}.
-The same review finds that process mining supports arrivals, durations and the
-control flow well, but gives little support for queues and resources. Container
-terminal truck operations are shaped by exactly these: trucks share blocks with
-a few handover lanes, congestion builds up in busy hours, and the space and the
-equipment limit what can happen at the same time. It is not yet clear how well a
-discovered data-aware simulation model can reproduce these conditions, which of
-its assumptions break, and what must be added before it can support decisions.
-This thesis studies these questions with event logs from real container terminal
-truck operations.
-
-
+For CTB, the relevant question is whether these learned relationships represent
+truck handling well enough to assess a change in block allocation. Trucks
+share yard facilities, and their turnaround times depend on handling times,
+delays and concurrent operations. A simulation may reproduce common activity
+sequences while representing these dependencies inadequately. The model must
+therefore be evaluated for the particular decision it is intended to support.
 
 \section{Problem Statement}
 
-\begin{hints}
-\item The concrete operational problem at CTB: delay peaks in truck turnaround time. Use the observed numbers from Chapter~\ref{chp:case_study_and_data} (10\,\% of training hours, 26\,\% of validation hours are delay peaks).
-\item The KPI: truck turnaround time (median, P90) and share of delay-peak hours. Say where the KPI comes from (HHLA practice, terminal contact).
-\item Why a simulator is needed to evaluate a procedural change against this KPI.
-\item The scientific problem: a discovered simulator can reproduce the visit sequences without reproducing the KPI and its response to load. Nobody has checked this layer by layer for a physical logistics process.
-\item Remove ``TBC''.
-\end{hints}
-Container terminal operators make decisions about capacity, truck handling,
-yard use, policies, and infrastructure changes. Experiments in a real terminal
-are often not feasible or involve operational risk, so these decisions are
-often studied with simulation \cite{CTSteenken2004,OptimizingCTs2023}. At HHLA
-Container Terminal Burchardkai (CTB), the truck turnaround time is the main key
-performance indicator of truck handling. It has a long tail and rises in busy
-hours: in the test period of this thesis, the median is 33 and the 90th
-percentile 75 minutes, and in 26\,\% of the busy Gate-In hours the median
-turnaround time reaches the delay-peak threshold of 37 minutes (10\,\% in the
-training period). A measure against such delay peaks, for example a different
-allocation of deliveries to the yard blocks, cannot be tried out in the running
-terminal.
+The primary performance measure in this study is truck turnaround time (TTT),
+defined as the time between Gate In and Gate Out. In the test period used in
+the current evaluation, the observed median is 33 minutes and the 90th
+percentile is 75 minutes. These values show that typical visits and long visits
+require separate attention; the data and performance measures are described in
+Chapters~\ref{chp:case_study_and_data} and~\ref{chp:experiments}.
 
-Data-aware process simulation discovers simulation models from historical
-event logs. This may reduce modelling work and keep the model closer to the
-recorded process \cite{Camargo2020,lopez2024,Vinci2023Inf.Activ.Prob}. Before
-such a model can support decisions, it must reproduce observed operations,
-remain configurable, produce stable results, and represent the mechanisms
-through which a proposed intervention can affect the relevant KPI. A model
-intended to recommend a truck-slot rate under forecast congestion must, for
-example, propagate changed arrivals through resource contention and must keep
-receive and delivery effects distinguishable. Earlier studies have shown
-that data-aware simulation can be applied to business processes
-\cite{Vinci2023Inf.Activ.Prob,Hospital2026Vinci}. Its use in logistics systems
-with congestion, competing resources, and context-dependent behaviour is less
-clear. The scientific problem is that a discovered simulator can reproduce the
-sequences of the visits and still miss the KPI and its response to load. Queues,
-capacity and load enter the learned models through assumptions that were made
-for business processes, where a resource is a person and waiting means that the
-person is busy. Whether these assumptions hold when the resource is a block with
-three handover lanes has not been checked layer by layer. This thesis evaluates
-the fidelity, use and limitations of such a model for container-terminal truck
-operations.
+The operational objective agreed with the terminal is a mean TTT of 30 minutes
+\todo{document the agreement: who, when, in which form}. It concerns the visits
+that take longer than 30 minutes: why they take longer, and whether a different
+allocation of deliveries to the yard blocks can reduce them. Because the recorded
+data contain implausible durations, the terminal reads the median as the robust
+central value; the mean, the share of visits above 30 minutes and the P90 describe
+the long visits that the target is about. In both observed periods the target is
+missed: about half of the visits take longer than 30 minutes
+(Section~\ref{sec:exp_kpis}). The study does not optimise the balance between
+truck handling and waterside performance.
+
+The candidate intervention is a load-aware allocation of deliveries to yard
+blocks. The operational account supplied for this study places the assignment
+of the container's yard position at truck arrival, so that the driver knows
+where to go. An applicable allocation rule must therefore use information
+available at that point and respect the eligible storage locations. The
+simulation experiment examines a specified allocation rule; its decision time,
+information requirements and omitted restrictions must be checked before its
+results can be interpreted as evidence for implementation.
+
+This leads to two connected problems. First, the simulation must reproduce the
+relevant truck behaviour, TTT and response to load. Second, an apparent
+improvement in a simulated scenario must be interpreted in light of the
+model's validation results and the operational feasibility of the intervention.
+Finding a favourable difference between simulated runs alone does not resolve
+the second problem.
 
 \section{Research Objective and Contributions}
 
-\begin{hints}
-\item Objective in one sentence: investigate whether, and under which conditions, a data-aware process simulation learned from event logs can represent a physically constrained logistics process, using truck handling at CTB as the case. The aim is a scientific statement about the technique, not a recommendation for the terminal.
-\item Contributions as a short list, each pointing to a chapter:
-  (C1) controlled control-flow selection with rule audit and exact repair, and evidence that coverage and the encoding, not precision, anticipate the simulated behaviour (Ch.~6/7);
-  (C2) a mechanism-level validation of a ProSiT model for a capacity-limited logistics process: which assumptions of the technique break under physical limits, why, and what is needed to repair them (Ch.~6/7);
-  (C3) a demonstration of what-if use under physical constraints: what the validated simulation can and cannot show about one allocation rule, with its conditions of validity (Ch.~7);
-  (C4) a reproducible pipeline with frozen inputs and documented runs.
-\item Say explicitly that this is an empirical case study, not a new algorithm. The limits of the technique and the approaches to overcome them are part of the result (Chapter~\ref{chp:discussion}).
-\end{hints}
+The objective is to develop and evaluate an event-log-derived simulation of
+truck handling at CTB and determine what it can support about the effect of a
+load-aware block allocation on truck turnaround time. CTB is the case under
+study, and the allocation question provides the intended use against which the
+model is assessed. Limitations of the simulation are results of this assessment
+and determine the scope of the conclusions for the terminal.
 
-The objective of this thesis is to investigate whether, and under which
-conditions, a data-aware process simulation learned from an event log can
-represent a logistics process with physical capacity limits. Truck handling at
-CTB serves as a critical case: the data are favourable and the physical limits
-are known, so the case shows clearly what transfers from business processes,
-what breaks and what must be added (Section~\ref{sec:rw_positioning}). The aim is
-a statement about the technique and about how it can be checked, not a
-recommendation for the terminal. The thesis is an empirical case study; it
-proposes no new discovery algorithm and no new simulator. Its contributions are:
+The thesis makes two connected contributions:
 \begin{enumerate}
-\item[(C1)] \textbf{Model selection for simulation.} A selection procedure with
-gates, a rule audit and a check in the simulator, and the evidence that what a
-net permits is not what a simulator generates: precision does not anticipate the
-simulated behaviour over a wide range, coverage of the frequent behaviour does,
-nets with parallel branches and silent skips produce impossible visits, and a
-data-aware rule has to look ahead because the decisions of a discovered net sit
-on silent transitions (E1--E3, Chapter~\ref{chp:results}).
-\item[(C2)] \textbf{A mechanism-level validation of a discovered simulator.} Six
-assumptions of ProSiT~1.0.4 that do not hold under physical capacity limits, each
-tested with a control run, and four changes to the queue and the service that
-restore the response to load. They concern every process in which cases share a
-resource of limited capacity (E4).
-\item[(C3)] \textbf{A validation design for discovered simulation models.} The
-model is checked layer by layer, with thresholds taken from differences between
-real periods, criteria for the response to load and an extreme-condition test,
-and a separation of model error from change between the periods
-(Chapter~\ref{chp:experiments}).
-\item[(C4)] \textbf{A what-if demonstration under physical limits.} One allocation
-rule for deliveries, evaluated with paired runs and robustness runs, with the
-conditions under which its result holds (E5).
-\item[(C5)] \textbf{A reproducible pipeline} with frozen inputs, scripts for every
-table and figure, and documented runs.
+\item[(C1)] \textbf{A justified simulation model for the CTB case.} The study
+compares alternative discovered process models, evaluates their coverage and
+conformance, and checks the rules relevant to truck visits. It documents the
+selected model, the learned simulation parameters and the assumptions used to
+represent the terminal. Concrete decision trees and parameter settings make
+the model available for inspection
+(Chapters~\ref{chp:process_discovery_methodology}--\ref{chp:results}).
+\item[(C2)] \textbf{An empirical assessment of validity and decision-support
+potential.} The study compares observed and simulated performance, investigates
+discrepancies through controlled component comparisons, and evaluates a block
+allocation scenario within the resulting validity limits. It distinguishes
+findings about the simulated system from conclusions justified for CTB
+(Chapters~\ref{chp:results} and~\ref{chp:discussion}).
 \end{enumerate}
 
+The empirical case study builds on existing discovery and simulation methods.
+Documented inputs, configurations and evaluation procedures support the two
+contributions. The account of the workflow distinguishes standard ProSiT
+configuration from custom diagnostic or simulation extensions; results that
+depend on an extension must be identified as such. Findings from this terminal
+can motivate further investigation in other settings, but do not establish
+general limitations of all data-aware simulators.
 
+\section{Research Questions}
 
-\section{Research Questions} To achieve the research objective, the thesis addresses the following research questions:
-
+The objective is addressed through three research questions:
 \begin{enumerate}
-\item \textbf{RQ1:} \todo{final wording} Which discovery and rule treatment yields a sound, executable control-flow model that preserves the observed truck-visit behaviour, and do conformance metrics anticipate its behaviour in simulation?
-\item \textbf{RQ2:} \todo{final wording} To what extent does the ProSiT simulation reproduce truck turnaround time and its response to load at the capacity-limited yard blocks, and which model components cause the remaining error?
-\item \textbf{RQ3:} \todo{final wording} To what extent can the simulation be used to analyse a load-aware block allocation for deliveries under the physical limits of the yard blocks, and what does it indicate about the effect on truck turnaround time?
+\item \textbf{RQ1:} Which discovery and rule treatment yields a sound,
+executable control-flow model that preserves the observed truck-visit
+behaviour, and do conformance metrics anticipate its behaviour in simulation?
+\item \textbf{RQ2:} To what extent does the ProSiT simulation reproduce truck
+turnaround time and its response to load at the capacity-limited yard blocks,
+and which model components explain the observed discrepancies?
+\item \textbf{RQ3:} To what extent can the simulation be used to analyse a
+load-aware block allocation for deliveries under the physical limits of the
+yard blocks, and what does it indicate about the effect on truck turnaround
+time?
 \end{enumerate}
 
-\begin{hints}
-\item Each RQ is answered by named experiments: RQ1 by E1--E3, RQ2 by E3--E4, RQ3 by E5 (Chapter~\ref{chp:experiments}).
-\item Wording to be agreed with the supervisor. Keep it exactly identical in Chapters 1, 6 and 9.
-\end{hints}
+Experiments E1--E3 address model selection and simulated visit behaviour (RQ1).
+E3 and E4 assess performance and investigate discrepancies (RQ2). E5 examines
+the allocation scenario (RQ3). Its interpretation depends on the evidence from
+the preceding validation: where that evidence is insufficient, the conclusion
+identifies the remaining requirements for decision support.
 
 \section{Thesis Outline}
 \label{sec:thesis_outline}
 
-\begin{hints}
-\item One or two sentences per chapter, in the final order: 2 Background and Related Work, 3 Data Preparation, 4 Methodology and Experimental Setup, 5 Results, 6 Discussion, 7 Conclusion. Mention the appendices (observed behaviour, ProSiT parameters and trees, reproduction).
-\item There are three RQs, not four; update the descriptions of Results and Conclusion accordingly.
-\end{hints}
+Chapter~\ref{chp:background} introduces the relevant process-mining and
+simulation concepts and positions the study in the literature.
+Chapter~\ref{chp:case_study_and_data} describes CTB, the operational records and
+their transformation into an event log. Chapter~\ref{chp:process_discovery_methodology}
+documents the simulation model and its parameters, while
+Chapter~\ref{chp:experiments} explains the selection, validation and scenario
+experiments.
 
-Chapter~\ref{chp:background} introduces the concepts that the thesis uses:
-truck operations in a container terminal and their key performance indicator,
-event logs, process discovery with Petri nets, domain rules and model repair,
-conformance checking, business process simulation and the simulation
-framework ProSiT. Related work is discussed together with each concept. The
-chapter ends with the research gap.
-
-Chapter~\ref{chp:case_study_and_data} introduces HHLA Container Terminal
-Burchardkai and its data. It explains how records from several terminal
-systems are turned into one truck-visit event log, gives the key facts of
-this log and states the domain rules that every truck visit must satisfy.
-
-Chapter~\ref{chp:process_discovery_methodology} describes the final simulation
-model: how it is built from the event log, what it has learned, which parts are
-added to respect the physical limits, and how it produces one simulated visit.
-
-Chapter~\ref{chp:experiments} describes the five experiments: control-flow
-discovery (E1), rule-based improvement (E2), simulation of the shortlist (E3),
-mechanism audit (E4) and what-if demonstration (E5), together with the outcome
-measures and the domain review.
-
-Chapter~\ref{chp:results} presents the results of the experiments in the
-same order and answers the three research questions.
-
-Chapter~\ref{chp:discussion} judges the results: what the case shows about
-data-aware simulation of a physical logistics process, what depends on
-assumptions, and the threats to validity.
-
-Chapter~\ref{chp:conclusion} summarises the answers and the contributions and
-outlines directions for future work, particularly richer spatial and
-resource-state representations, object-centric event logs, and validation in
-other capacity-limited processes. The appendices give the observed behaviour,
-the conformance of all discovered nets, the control-flow replica, the learned
-ProSiT models and the steps to reproduce the results.
+Chapter~\ref{chp:results} reports the evidence and answers the research
+questions. Chapter~\ref{chp:discussion} assesses the implications for CTB, the
+role of domain knowledge and the limits of the conclusions.
+Chapter~\ref{chp:conclusion} summarises the findings and the work needed to
+strengthen their operational use. The appendices provide additional results,
+model inventories and reproduction details.

@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lrr}
+\toprule
+\textbf{Measure} & \textbf{Training} & \textbf{Test} \\
+\midrule
+\multicolumn{3}{l}{\textit{Turnaround time of all visits}} \\
+Visits & 59,139 & 32,014 \\
+Median / mean / P90 (min) & 29 / 36.6 / 64 & 33 / 41.2 / 75 \\
+Visits above 30 min (\%) & 45.5 & 55.5 \\
+Minutes above 30 per visit & 11.6 & 15.1 \\
+\midrule
+\multicolumn{3}{l}{\textit{Visits within 30 min: mean minutes and shares}} \\
+Turnaround time & 20.7 & 21.1 \\
+Approach to the first stop & 6.4 & 6.2 \\
+Stops & 7.2 & 7.5 \\
+Transfer between stops & 0.1 & 0.1 \\
+Exit after the last stop & 7.0 & 7.3 \\
+Visits with several stops (\%) & 2.4 & 2.7 \\
+Mixed visits (\%) & 5.6 & 5.7 \\
+\midrule
+\multicolumn{3}{l}{\textit{Visits above 30 min: mean minutes and shares}} \\
+Turnaround time & 55.5 & 57.3 \\
+Approach to the first stop & 16.4 & 18.0 \\
+Stops & 17.9 & 19.9 \\
+Transfer between stops & 2.3 & 2.9 \\
+Exit after the last stop & 18.9 & 16.5 \\
+Visits with several stops (\%) & 16.3 & 17.3 \\
+Mixed visits (\%) & 22.3 & 22.3 \\
+\bottomrule
+\end{tabular}
+\caption{Visits above the turnaround-time target of 30 minutes, observed logs. Minutes above 30 per visit: mean of $\max(\mathrm{TTT}-30, 0)$ over all visits. The four parts of the turnaround time add up to it. Visits longer than twelve hours were removed as recording errors in the data preparation (Chapter~\ref{chp:case_study_and_data}).}
+\label{tab:kpi_long_visits}
+\end{table}

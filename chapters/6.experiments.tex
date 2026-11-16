@@ -76,8 +76,8 @@ error to components and the decision whether E5 is admissible.
 \item Show what the simulation of E4 can and cannot say about a load-aware
 block allocation for deliveries: the direction of the effect on turnaround
 time, the mechanism, who gains and who loses, and whether this holds under the
-weaknesses found in E4. Deliverable: a conditional what-if statement with its
-conditions of validity, not a recommendation for the terminal.
+weaknesses found in E4. Deliverable: a conditional what-if statement and an assessment of the
+evidence still required before an operational recommendation is justified.
 \end{enumerate}
 
 E1 to E3 answer RQ1. E3 and E4 answer RQ2. E5 answers RQ3. Every selection
@@ -147,9 +147,47 @@ stated once here.
 
 \section{Outcome Measures and Peak Definitions}
 \label{sec:exp_kpis}
+
+The KPI is the truck turnaround time (TTT), from Gate In to Gate Out. The target
+agreed with the terminal is a mean TTT of 30 minutes \todo{document the agreement:
+who, when, in which form}. It is about the visits that take longer: the terminal
+wants to know why they take longer and whether a different allocation of the
+deliveries to the blocks can reduce them. Because the recorded data contain
+implausible durations, the terminal reads the median as the robust central
+value. Visits over twelve hours were removed in the data preparation
+(Chapter~\ref{chp:case_study_and_data}), but single visits of up to ten hours
+remain, which move the mean. The thesis therefore uses four measures:
+\begin{itemize}
+\item \textbf{Target:} mean TTT of at most 30 minutes.
+\item \textbf{Long visits:} the share of visits above 30 minutes, and the minutes
+above 30 per visit, the mean of $\max(\mathrm{TTT}-30, 0)$ over all visits. Both
+measure what has to be reduced to reach the target.
+\item \textbf{Robust and tail measures:} median and P90 of the TTT.
+\item \textbf{Delay peaks:} Gate-In hours with a high median TTT (defined below),
+as a secondary measure.
+\end{itemize}
+The target is not a calibration target and does not replace the validation
+criteria of E4. Effects on waterside service are outside the model.
+
+\input{tables/kpi_long_visits}
+
+The target is missed in both periods (Table~\ref{tab:kpi_long_visits}): the mean
+TTT is 36.6 minutes in training and 41.2 minutes in the test period, and about
+half of the visits take longer than 30 minutes (45.5 and 55.5\,\%). The long visits
+are longer in every part of the visit, not at one point: in the test period they
+need 18.0 instead of 6.2 minutes to the first stop, 19.9 instead of 7.5 minutes at
+their stops, and 16.5 instead of 7.3 minutes from the last stop to Gate Out.
+Visits with several stops (17\,\% against 3\,\%) and mixed visits (22\,\% against
+6\,\%) are much more frequent among them. This points to three bottlenecks: the
+waiting before the first stop, which grows with the load of the block
+(Section~\ref{sec:observed_behaviour}); the longer stops at busy blocks; and the
+waiting before Gate Out. The block allocation of E5 acts on the first two. The
+waiting before Gate Out is a second lever, which the model reproduces only
+statistically and cannot evaluate.
+
 \begin{hints}
 \item Primary KPI: turnaround time (TTT) per visit, Gate Out minus Gate
-In. Reported as median and P90, overall and by flow type. Why P90: delay
+In. Report the mean, median and P90, overall and by flow type. Why P90: delay
 peaks are a tail phenomenon.
 \item TTT decomposition (approach, stops, transfer between stops, exit)
 as diagnostic measures, with the formula. Note that gate events are
@@ -193,26 +231,32 @@ timestamps. Firing sequences are exported for new runs.
 inputs, recorded versions (details in the appendix).
 \end{hints}
 
-\section{Domain Review}
+\section{Domain Knowledge and Validation Status}
 \label{sec:exp_review}
-\begin{hints}
-\item Purpose: an independent check of data meaning, rules and
-simulation plausibility, which the author's own domain knowledge cannot
-provide.
-\item Instrument: structured questionnaire with five parts. A: data
-semantics. B: rules, including the unobserved two-stop sequences. C:
-expected values, collected \emph{before} seeing results. D: assessment
-of the simulation output. E: realistic control levers.
-\item Use of answers: B confirms or changes the rule register (E2).
-C provides acceptance tolerances for E3/E4 that were not chosen by the
-author after seeing the results. D is face validation of E3. E
-selects the lever for E5.
-\item Documentation: reviewer role, date, model version shown, answers,
-disagreements and resulting changes. Summary confirmed by the reviewer.
-\item Limitation: one reviewer is expert opinion, not proof of validity.
-\end{hints}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The construction and interpretation of the CTB model use the author's account
+of terminal operations, the available operational records and the cited
+literature. These sources serve different purposes. Recorded timestamps and
+activity sequences support empirical checks; author-supplied domain knowledge
+informs the meaning of activities, resource restrictions and possible control
+levers. Agreement with an assumption supplied by the modeller does not provide
+independent validation of that assumption.
+
+The current study does not claim a completed independent stakeholder review.
+In particular, the 30-minute reference for mean total TTT is a study assumption,
+and the scenario is not presented as a policy approved by CTB. The operational
+account places yard-position assignment at truck arrival; matching the
+scenario's decision time and information set to this point is a prerequisite
+for an operational interpretation.
+
+The assumptions requiring independent scrutiny are the event-time semantics,
+the relation between recorded stops and physical resource occupancy, the
+truck-visit rules, feasible block assignments and the interpretation of the
+performance objective. A subsequent review should identify the reviewer's
+role, the model version examined, the points confirmed or disputed and the
+resulting changes. Until such evidence is available, author-supplied domain
+knowledge and quantitative checks are reported with their respective limits.
+
 \section{Control-Flow Discovery (E1)}
 \label{sec:exp_discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -912,8 +956,9 @@ absolute values can be trusted.
 E5 answers RQ3: to what extent can the simulation be used to analyse a
 load-aware block allocation for deliveries under the physical limits of the
 yard blocks, and what does it indicate about the effect on truck turnaround
-time? The purpose is not a recommendation for the terminal. E5 shows what the
-simulation validated in E4 can and cannot say about one change of the process.
+time? E5 examines a candidate improvement to the process. Its validation
+results determine whether the evidence can support an operational
+recommendation or only an exploratory statement about the simulated system.
 
 \paragraph{Status after E4}
 The final configuration of E4 passed the physical and the extreme-condition
@@ -923,7 +968,8 @@ therefore not admissible for a quantitative estimate of a policy effect. E5 is
 run as a \emph{what-if demonstration}: it states the direction of an effect and
 the mechanism behind it, and only if both are robust to the weaknesses found in
 E4. Effect sizes are reported as values of the model under the conditions of
-E4, not as estimates for the terminal.
+E4, not as estimates for the terminal. Robustness within the tested models
+does not independently establish the direction of an effect at CTB.
 
 \paragraph{Scenario S1}
 The observed waiting before the first RMG stop grows from 6 to 16 minutes when
@@ -952,9 +998,13 @@ averaged.
 \paragraph{Measures}
 \begin{itemize}
 \item \textbf{Z1 Effect.} Paired difference (S1 minus baseline) of the mean,
-median and P90 of the TTT of all visits, of the visits with a moved delivery,
-and of the visits that arrive with 100 or more trucks in the terminal; mean
-over the ten seeds with a 95\,\% $t$-interval.
+median and P90 of the TTT of all visits, of the share of visits above 30 minutes
+and of the minutes above 30 per visit (Section~\ref{sec:exp_kpis}), of the visits
+with a moved delivery, and of the visits that arrive with 100 or more trucks in
+the terminal; mean over the ten seeds with a 95\,\% $t$-interval. Because the model
+underestimates the level of the TTT, the effect is read as the share of the gap to
+the target that S1 closes, applied to the observed value, not as a simulated level
+compared with 30 minutes.
 \item \textbf{Z2 Mechanism.} Approach to the first RMG stop, share of RMG stops
 that start with two other trucks at the block (a full block), and waiting for a
 free lane per RMG stop.

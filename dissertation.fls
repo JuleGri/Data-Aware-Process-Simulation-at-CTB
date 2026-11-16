@@ -674,6 +674,11 @@ INPUT chapters\6.experiments.tex
 INPUT .\figures\schemas\experiment_flow_e1_e3.pdf
 INPUT .\figures\schemas\experiment_flow_e1_e3.pdf
 INPUT .\figures\schemas\experiment_flow_e1_e3.pdf
+INPUT .\tables\kpi_long_visits.tex
+INPUT .\tables\kpi_long_visits.tex
+INPUT .\tables\kpi_long_visits.tex
+INPUT .\tables\kpi_long_visits.tex
+INPUT tables\kpi_long_visits.tex
 INPUT .\chapters\7.results.tex
 OUTPUT chapters\7.results.aux
 INPUT .\chapters\7.results.tex

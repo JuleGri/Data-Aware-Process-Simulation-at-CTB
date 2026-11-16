@@ -85,24 +85,35 @@ precondition for the mechanism audit: every finding of E4 started from a tree
 that could be read, for example block-choice trees that send trucks to the block
 with the longer queue.
 
-\paragraph{What does not transfer out of the box.} The six findings of E4 fall
-into three groups. First, features are built differently in training and in the
-simulation: the queue feature counts the stop itself in training but not in the
-simulation, the enabling time survives loops in training but not in the
-simulation, and the count of stops in progress is too low for 13--14\,\% of the
-RMG stops. Second, a resource is treated as one server: waiting is measured from
-the moment the block was completely free, and capacity is checked when a stop is
-enabled, not when it runs. A block with three handover lanes violates both
-assumptions. Third, the service time does not depend on the load. These are
-findings about transferability, not about errors in the business processes for
-which ProSiT was designed: where a resource is one person and a case waits only
-because the person is busy, the single-server view is correct and the load
-enters through the queue. They match the known risks of business process
-simulation, the neglected process context and the working speed that depends on
-the workload \cite{Aalst2015}, and the gap that Sulis et al.\ find for queues and
-resources \cite{Sulis2026SimulationReview}. A queueing perspective on the log, as
-in queue mining \cite{Senderovich2015QueueMining}, would have asked the right
-questions from the start.
+\paragraph{What does not transfer out of the box.} The findings of E4 are of four
+kinds, and they carry different weight.
+\begin{itemize}
+\item \textbf{Implementation.} Three findings are inconsistencies between how
+ProSiT builds its training data and how its simulation loop works: the queue
+feature counts the stop itself in training but not in the simulation, the
+enabling time survives loops in training but not in the simulation, and the count
+of stops in progress is too low for 13--14\,\% of the RMG stops. They can be
+corrected in the code and say little about the method itself.
+\item \textbf{Modelling semantics.} Three findings concern what the learned
+quantities mean: waiting is measured from the moment the block was completely
+free, capacity is checked when a stop is enabled rather than when it runs, and the
+service time has no load feature. A block with three handover lanes violates the
+single-server view behind the first two. Where a resource is one person and a case
+waits only because the person is busy, these choices are correct, so they are
+findings about transferability, not errors for the business processes for which
+ProSiT was designed. They match the known risks of business process simulation,
+the neglected process context and the working speed that depends on the workload
+\cite{Aalst2015}, and the gap that Sulis et al.\ find for queues and resources
+\cite{Sulis2026SimulationReview}; a queueing perspective on the log, as in queue
+mining \cite{Senderovich2015QueueMining}, asks these questions from the start.
+\item \textbf{Data.} The log does not record the use of the cranes, their
+competition with the waterside and the rail, or the waiting for a lane, which is
+part of the recorded stop (see below).
+\item \textbf{Validity under intervention.} The learned relations between the
+load of a block and the waiting and service are associations. Whether they hold
+when the allocation of deliveries changes cannot be checked with these data
+(Section~\ref{sec:disc_threats}).
+\end{itemize}
 
 \paragraph{What had to be added.} The final model keeps everything that the log
 can express learned and adds what it cannot: the three lanes, the capacity check
@@ -129,19 +140,16 @@ object-centric event log with trucks, containers, blocks and cranes as objects
 operational data on equipment, which Grobis and Ihlenfeldt find necessary for
 queues in production logistics \cite{Grobis2025ProductionLogistics}.
 
-\paragraph{Beyond the terminal.} The three groups of findings matter wherever
-cases share a resource of limited capacity that serves several cases at once:
-beds and treatment rooms in a hospital, machines with buffers in a factory, docks
-in a warehouse. Vinci et al.\ assume for an emergency department that delays arise
-only from limited resources \cite{Hospital2026Vinci}. The terminal shows that,
-under such an assumption, how capacity enters the training data and the
-simulation loop matters as much as the assumption itself. As a critical case
-\cite{Flyvbjerg2006CaseStudy}, CTB had favourable conditions: a large, complete
-log, a clear case notion, a manifest known at Gate In and known physical limits.
-Processes without these conditions are unlikely to need fewer additions. The
-case has limits of its own: one terminal, a simple control flow, and no
-intervention in the data, so the counterfactual validity of a what-if result
-cannot be tested against reality.
+\paragraph{Beyond the terminal.} The findings suggest questions for other
+processes in which several cases share a resource: whether training and
+simulation compute workload consistently, whether the waiting-time target
+matches the resource semantics, and whether the learned durations represent
+the load conditions relevant to the proposed intervention. These are
+transferable questions to investigate, rather than evidence that every such
+process needs the same corrections. The empirical evidence here concerns one
+terminal, a relatively simple control flow and the examined ProSiT version.
+The data contain no implementation of the proposed allocation policy, so its
+real-world effect cannot be checked against an observed intervention.
 
 \section{Threats to Validity}
 \label{sec:disc_threats}
@@ -280,10 +288,26 @@ associations hold when the allocation changes, which the data cannot confirm
 
 \section{Domain Knowledge and Stakeholder Review}
 \label{sec:disc_stakeholders}
-\begin{hints}
-\item Separate the author's domain knowledge from the documented external review (who, when, what was confirmed, what was not).
-\item What the review changed in the rules, the KPI target and the scenario design.
-\end{hints}
+
+Domain knowledge supplied by the author informs the model's interpretation,
+rules and scenario. It provides a basis for modelling, while leaving the
+possibility of assumptions being incomplete or incorrect. The quantitative
+evaluation cannot independently confirm assumptions that have already been
+imposed on the simulator. No completed independent stakeholder review is
+claimed in this version of the study.
+
+Two qualifications are especially relevant to the operational interpretation.
+First, the 30-minute reference for mean total TTT is a simplified study
+objective. The reported operational corridor of approximately 25--35 minutes
+allows resources to be balanced with waterside work; lower TTT alone therefore
+does not establish better overall terminal performance. Second, the proposed
+allocation must be compatible with assigning a yard position at truck arrival,
+including the information and storage restrictions available at that time.
+
+Independent review of these points, the recorded event semantics and the
+physical resource assumptions would strengthen the case study. In its absence,
+the scenario results support investigation of a candidate policy within the
+model, with operational feasibility and effectiveness still to be established.
 
 \section{Implications for Practice}
 \label{sec:disc_practice}

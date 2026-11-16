@@ -885,20 +885,21 @@ is needed before a what-if analysis, is rarely tested, and the judgement of
 domain experts is rarely documented.
 
 Queue mining, data-driven simulation in manufacturing and the validation
-literature point to a hybrid design: process mining learns what the log records, the physical limits enter as explicit mechanisms, and the model is
-validated with the methods of simulation research. This thesis tests whether
-such a design works for a data-aware simulator and what it costs. Truck
-operations at HHLA Container Terminal Burchardkai serve as a \emph{critical case}
-in the sense of Flyvbjerg \cite{Flyvbjerg2006CaseStudy}. The conditions are
-favourable: the log is large and complete, the case notion is clear, the
-manifest of a visit is known at Gate In, and the physical limits are known and
-can be checked in every generated log. If a data-aware simulator needs
-additional mechanisms under these conditions, other capacity-limited processes
-will need them as well; the mechanisms that work here are candidates for those
-processes. The control flow, in contrast, is simple, so the case says less about
-discovery algorithms than about what a simulator does with their models. The
-result is therefore a statement about the technique, not a recommendation for
-the terminal.
+literature motivate a combination of learned behaviour, explicit domain
+assumptions and simulation validation. The CTB case examines whether this
+combination provides a model suitable for assessing a proposed change in block
+allocation. The comparison of discovered nets establishes a justified model
+for the case; the performance evaluation determines how well it represents the
+quantities relevant to the decision; and the scenario analysis is interpreted
+within those limits.
+
+The case provides access to operational records and a concrete decision
+context. It also has limitations: the log does not directly expose every
+resource state, domain assumptions require scrutiny, and the data contain no
+implementation of the proposed intervention. The study therefore contributes
+evidence about this application of ProSiT. Mechanisms identified here are
+candidates for investigation in other settings, rather than demonstrated
+requirements for all capacity-limited processes.
 
 This thesis addresses these gaps in a case study of truck operations at HHLA
 Container Terminal Burchardkai. It does not propose a new discovery algorithm or

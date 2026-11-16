@@ -781,9 +781,12 @@ generative run (11.3 minutes).
 By the rule of Section~\ref{sec:exp_e4_runs}, E5 is admissible only if criteria 1
 to 3 hold under replay. Criterion 2 does not hold. The model reproduces the
 mechanism that E5 acts on, the waiting for a lane at a busy block, but it
-underestimates how much the stops slow down at the busiest blocks and hours. An
-effect of moving trucks away from these blocks would therefore be underestimated
-rather than overestimated.
+underestimates how much the stops slow down at the busiest blocks and hours. Whether
+this makes the effect of moving trucks away from these blocks too small or too
+large cannot be decided from the model: driving distances, restacking and the
+restrictions of the yard plan are not represented and can act in either
+direction. E5 can therefore show a direction within the examined model variants,
+not the size of the effect at the terminal.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Answer to RQ2}
@@ -799,7 +802,7 @@ Justified by E4 (Tables~\ref{tab:rq2_chain} to \ref{tab:rq2_acceptance}).
 
 RQ2 asks to what extent the ProSiT simulation reproduces the turnaround time of
 the trucks and its response to load at the capacity-limited yard blocks, and
-which model components cause the remaining error.
+which model components explain the observed discrepancies.
 
 \paragraph{To what extent.} As fitted in E3, the simulation does not reproduce
 the turnaround time: the median is 58 instead of 33 minutes and the P90 136 instead
@@ -869,12 +872,12 @@ direction and the mechanism hold in all four robustness runs; the size does not.
 \ref{tab:rq3_robustness} (robustness).
 \end{hints}
 
-\todo{KPI target agreed with the terminal: turnaround time of 30 minutes (state: median or mean). Observed in the
-test period: median 33, mean 41 minutes; decomposition of the mean: approach 12.7, stops 14.4, transfer 1.7, exit
-12.4 minutes; the approach rises with the block load (bottleneck addressed by S1), the exit is a second
-bottleneck the model cannot evaluate. Report the effect of S1 as the share of the gap to 30 minutes it closes
-(paired difference applied to the observed value). Earlier model: median $-1$, mean $-2.2$, P90 $-4.8$ minutes.
-All numbers of E5 below come from the earlier model; rerun in progress (runs/hm07orig\_20261115).}
+\todo{Replace the provisional E5 results with runs of the final model version.
+Use 30 minutes of mean total TTT only as the study's analytical reference,
+not as an agreed terminal target. Compare the scenario with its own simulated
+baseline. Do not apply a simulated difference to observed TTT as a real-world
+prediction unless the necessary validity is established. Check whether the
+implemented allocation decision uses only information available at Gate In.}
 
 E5 is a what-if demonstration (Section~\ref{sec:exp_policy}), because the final
 configuration of E4 missed the load-response criterion narrowly. The values below
