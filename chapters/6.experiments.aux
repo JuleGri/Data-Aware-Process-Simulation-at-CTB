@@ -19,18 +19,20 @@
 \newlabel{fig:drift_daily}{{4.2}{38}{Trucks per day and daily median turnaround time over the whole period (days with at least 300 visits). Blue: training log; orange: test log. The dashed line marks the split, the grey band the Easter holidays (3 to 6 April), the green band the corridor of 25 to 35 minutes}{figure.caption.22}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}KPI and Measures}{38}{subsection.4.2.2}\protected@file@percent }
 \newlabel{sec:exp_kpis}{{4.2.2}{38}{KPI and Measures}{subsection.4.2.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Turnaround time per visit in the training and the test log, with the corridor of 25 to 35 minutes. Minutes above 35 per visit: the mean of $\max (\mathrm  {TTT}-35, 0)$ over all visits.}}{39}{figure.caption.23}\protected@file@percent }
-\newlabel{fig:kpi_corridor}{{4.3}{39}{Turnaround time per visit in the training and the test log, with the corridor of 25 to 35 minutes. Minutes above 35 per visit: the mean of $\max (\mathrm {TTT}-35, 0)$ over all visits}{figure.caption.23}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Simulation Runs and Replications}{39}{subsection.4.2.3}\protected@file@percent }
-\newlabel{sec:exp_runs}{{4.2.3}{39}{Simulation Runs and Replications}{subsection.4.2.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Mean turnaround time of the trucks of an hour in the training and the test log, with the corridor of 25 to 35 minutes. Hours with at least 20 trucks, attributed by Gate Out. Minutes above 35 per hour are the mean of $\max (\overline  {\mathrm  {TTT}}-35, 0)$ over these hours.}}{39}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:kpi_corridor}{{4.3}{39}{Mean turnaround time of the trucks of an hour in the training and the test log, with the corridor of 25 to 35 minutes. Hours with at least 20 trucks, attributed by Gate Out. Minutes above 35 per hour are the mean of $\max (\overline {\mathrm {TTT}}-35, 0)$ over these hours}{figure.caption.23}{}}
 \citation{RWRehse2024Experimentation}
-\citation{RWLeemans2016Lifecycle}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Simulation Runs and Replications}{40}{subsection.4.2.3}\protected@file@percent }
+\newlabel{sec:exp_runs}{{4.2.3}{40}{Simulation Runs and Replications}{subsection.4.2.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Domain Knowledge}{40}{subsection.4.2.4}\protected@file@percent }
 \newlabel{sec:exp_review}{{4.2.4}{40}{Domain Knowledge}{subsection.4.2.4}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.3}Control-Flow Discovery (E1)}{40}{section.4.3}\protected@file@percent }
 \newlabel{sec:exp_discovery}{{4.3}{40}{Control-Flow Discovery (E1)}{section.4.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Discovery Input}{40}{subsection.4.3.1}\protected@file@percent }
-\newlabel{sec:exp_discovery_input}{{4.3.1}{40}{Discovery Input}{subsection.4.3.1}{}}
+\citation{RWLeemans2016Lifecycle}
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Contributions of the terminal by phase. Participants were the data warehouse and business intelligence team and terminal development of HHLA.}}{41}{table.caption.24}\protected@file@percent }
+\newlabel{tab:stakeholder_phases}{{4.1}{41}{Contributions of the terminal by phase. Participants were the data warehouse and business intelligence team and terminal development of HHLA}{table.caption.24}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Discovery Input}{41}{subsection.4.3.1}\protected@file@percent }
+\newlabel{sec:exp_discovery_input}{{4.3.1}{41}{Discovery Input}{subsection.4.3.1}{}}
 \citation{DiscoveryBenchmark}
 \citation{Leemans2014InductiveMiner}
 \citation{Mannhardt2017DHM,Mannhardt2017iDHM}
@@ -39,89 +41,90 @@
 \citation{RWVanZelst2018ILP}
 \citation{vanDongen2005ProM}
 \citation{DeLaBriandais1959Trie}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Candidate Algorithms and Parameter Grid}{41}{subsection.4.3.2}\protected@file@percent }
-\newlabel{sec:exp_candidates}{{4.3.2}{41}{Candidate Algorithms and Parameter Grid}{subsection.4.3.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{Prefix reference.}{41}{table.caption.24}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Discovery configurations of E1, all run in ProM Lite 1.4 on the training log (59,139 visits). The iDHM frequency threshold is relative to the number of visits: at 0.1, only directly-follows relations that occur in at least a tenth of the visits are used. Because no data attributes were selected, iDHM discovers no conditional dependencies, and the conditional heuristic (C4.5 with F1 score, condition threshold 0.5) has no effect.}}{42}{table.caption.24}\protected@file@percent }
-\newlabel{tab:exp_grid}{{4.1}{42}{Discovery configurations of E1, all run in ProM Lite 1.4 on the training log (59,139 visits). The iDHM frequency threshold is relative to the number of visits: at 0.1, only directly-follows relations that occur in at least a tenth of the visits are used. Because no data attributes were selected, iDHM discovers no conditional dependencies, and the conditional heuristic (C4.5 with F1 score, condition threshold 0.5) has no effect}{table.caption.24}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Evaluation Protocol}{42}{subsection.4.3.3}\protected@file@percent }
-\newlabel{sec:exp_discovery_eval}{{4.3.3}{42}{Evaluation Protocol}{subsection.4.3.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Coverage threshold}{42}{subsection.4.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Candidate Algorithms and Parameter Grid}{42}{subsection.4.3.2}\protected@file@percent }
+\newlabel{sec:exp_candidates}{{4.3.2}{42}{Candidate Algorithms and Parameter Grid}{subsection.4.3.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Prefix reference.}{42}{table.caption.25}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Discovery configurations of E1, all run in ProM Lite 1.4 on the training log (59,139 visits). The iDHM frequency threshold is relative to the number of visits: at 0.1, only directly-follows relations that occur in at least a tenth of the visits are used. Because no data attributes were selected, iDHM discovers no conditional dependencies, and the conditional heuristic (C4.5 with F1 score, condition threshold 0.5) has no effect.}}{43}{table.caption.25}\protected@file@percent }
+\newlabel{tab:exp_grid}{{4.2}{43}{Discovery configurations of E1, all run in ProM Lite 1.4 on the training log (59,139 visits). The iDHM frequency threshold is relative to the number of visits: at 0.1, only directly-follows relations that occur in at least a tenth of the visits are used. Because no data attributes were selected, iDHM discovers no conditional dependencies, and the conditional heuristic (C4.5 with F1 score, condition threshold 0.5) has no effect}{table.caption.25}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Evaluation Protocol}{43}{subsection.4.3.3}\protected@file@percent }
+\newlabel{sec:exp_discovery_eval}{{4.3.3}{43}{Evaluation Protocol}{subsection.4.3.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Coverage threshold}{43}{subsection.4.3.3}\protected@file@percent }
 \citation{Verbeek2001Woflan}
 \citation{Adriansyah2011CostFitness}
 \citation{MunozGama2010FreshLook}
 \citation{Buijs2014Quality}
-\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces What a coverage threshold leaves out of the required behaviour (training log, 59,139 visits, 82 sequences). A sequence below the threshold is not required. Mean TTT of all visits: 37 minutes. P90: 64 minutes. Multi-block visits: visits to two or more RMG blocks.}}{43}{table.caption.25}\protected@file@percent }
-\newlabel{tab:exp_noise_threshold}{{4.2}{43}{What a coverage threshold leaves out of the required behaviour (training log, 59,139 visits, 82 sequences). A sequence below the threshold is not required. Mean TTT of all visits: 37 minutes. P90: 64 minutes. Multi-block visits: visits to two or more RMG blocks}{table.caption.25}{}}
-\@writefile{toc}{\contentsline {paragraph}{Level 1: quality of the net}{43}{table.caption.25}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Level 2: fitness for simulation}{43}{table.caption.25}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces What a coverage threshold leaves out of the required behaviour (training log, 59,139 visits, 82 sequences). A sequence below the threshold is not required. Mean TTT of all visits: 37 minutes. P90: 64 minutes. Multi-block visits: visits to two or more RMG blocks.}}{44}{table.caption.26}\protected@file@percent }
+\newlabel{tab:exp_noise_threshold}{{4.3}{44}{What a coverage threshold leaves out of the required behaviour (training log, 59,139 visits, 82 sequences). A sequence below the threshold is not required. Mean TTT of all visits: 37 minutes. P90: 64 minutes. Multi-block visits: visits to two or more RMG blocks}{table.caption.26}{}}
+\@writefile{toc}{\contentsline {paragraph}{Level 1: quality of the net}{44}{table.caption.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Level 2: fitness for simulation}{44}{table.caption.26}\protected@file@percent }
 \citation{vanDongen2005ProM}
 \citation{Verbeek2001Woflan}
 \citation{Berti2023PM4Py}
 \citation{RWMaggi2011Monitoring,RWCarmona2022Conformance}
-\@writefile{toc}{\contentsline {paragraph}{Tools}{44}{table.caption.25}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Checks}{44}{table.caption.25}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}Rule Audit (E2)}{44}{section.4.4}\protected@file@percent }
-\newlabel{sec:exp_rules}{{4.4}{44}{Rule Audit (E2)}{section.4.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}Audit}{44}{subsection.4.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Tools}{45}{table.caption.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Checks}{45}{table.caption.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Rule Audit (E2)}{45}{section.4.4}\protected@file@percent }
+\newlabel{sec:exp_rules}{{4.4}{45}{Rule Audit (E2)}{section.4.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}Audit}{45}{subsection.4.4.1}\protected@file@percent }
 \citation{FelliDeLeoniMontali2021}
-\@writefile{toc}{\contentsline {paragraph}{Rule check}{45}{subsection.4.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}Stop Guard}{45}{subsection.4.4.2}\protected@file@percent }
-\newlabel{sec:exp_guard}{{4.4.2}{45}{Stop Guard}{subsection.4.4.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.5}Simulation of the Selected Net (E3)}{45}{section.4.5}\protected@file@percent }
-\newlabel{sec:exp_baseline}{{4.5}{45}{Simulation of the Selected Net (E3)}{section.4.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.1}Conditions}{45}{subsection.4.5.1}\protected@file@percent }
-\newlabel{sec:exp_e3_conditions}{{4.5.1}{45}{Conditions}{subsection.4.5.1}{}}
-\newlabel{sec:mc_hyperparameters}{{4.5.1}{45}{Conditions}{subsection.4.5.1}{}}
-\newlabel{sec:mc_ctb_adaptations}{{4.5.1}{45}{Conditions}{subsection.4.5.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Rule check}{46}{subsection.4.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}Stop Guard}{46}{subsection.4.4.2}\protected@file@percent }
+\newlabel{sec:exp_guard}{{4.4.2}{46}{Stop Guard}{subsection.4.4.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}Simulation of the Selected Net (E3)}{46}{section.4.5}\protected@file@percent }
+\newlabel{sec:exp_baseline}{{4.5}{46}{Simulation of the Selected Net (E3)}{section.4.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.1}Conditions}{46}{subsection.4.5.1}\protected@file@percent }
+\newlabel{sec:exp_e3_conditions}{{4.5.1}{46}{Conditions}{subsection.4.5.1}{}}
+\newlabel{sec:mc_hyperparameters}{{4.5.1}{46}{Conditions}{subsection.4.5.1}{}}
+\newlabel{sec:mc_ctb_adaptations}{{4.5.1}{46}{Conditions}{subsection.4.5.1}{}}
 \citation{Sargent2013Validation}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.2}Measures}{46}{subsection.4.5.2}\protected@file@percent }
-\newlabel{sec:exp_e3_measures}{{4.5.2}{46}{Measures}{subsection.4.5.2}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Measures of E3. The capacity of the blocks depends on the simulator, not on the net, and is examined in E4.}}{46}{table.caption.26}\protected@file@percent }
-\newlabel{tab:exp_e3_matrix}{{4.3}{46}{Measures of E3. The capacity of the blocks depends on the simulator, not on the net, and is examined in E4}{table.caption.26}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.6}Mechanism Audit and Simulation Validity (E4)}{46}{section.4.6}\protected@file@percent }
-\newlabel{sec:exp_mechanisms}{{4.6}{46}{Mechanism Audit and Simulation Validity (E4)}{section.4.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.2}Measures}{47}{subsection.4.5.2}\protected@file@percent }
+\newlabel{sec:exp_e3_measures}{{4.5.2}{47}{Measures}{subsection.4.5.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Measures of E3. The capacity of the blocks depends on the simulator, not on the net, and is examined in E4.}}{47}{table.caption.27}\protected@file@percent }
+\newlabel{tab:exp_e3_matrix}{{4.4}{47}{Measures of E3. The capacity of the blocks depends on the simulator, not on the net, and is examined in E4}{table.caption.27}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.6}Mechanism Audit and Simulation Validity (E4)}{47}{section.4.6}\protected@file@percent }
+\newlabel{sec:exp_mechanisms}{{4.6}{47}{Mechanism Audit and Simulation Validity (E4)}{section.4.6}{}}
 \citation{Sargent2013Validation}
 \citation{Chapela2025SimQuality}
 \citation{Vinci2026prosit,Chapela2025SimQuality}
 \citation{Oezdemir2025RethinkingBPS}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.1}Evaluation Design}{47}{subsection.4.6.1}\protected@file@percent }
-\newlabel{sec:exp_e4_design}{{4.6.1}{47}{Evaluation Design}{subsection.4.6.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{Reference values}{47}{table.caption.27}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Two weaknesses of the usual comparison}{47}{table.caption.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.1}Evaluation Design}{48}{subsection.4.6.1}\protected@file@percent }
+\newlabel{sec:exp_e4_design}{{4.6.1}{48}{Evaluation Design}{subsection.4.6.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Reference values}{48}{table.caption.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Two weaknesses of the usual comparison}{48}{table.caption.28}\protected@file@percent }
 \citation{Law2015Simulation}
-\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Measures of operational validity in E4. For each load profile in P4, the \emph  {profile gap} is the mean absolute difference of the simulated medians to the observed ones over the bins.}}{48}{table.caption.27}\protected@file@percent }
-\newlabel{tab:exp_e4_measures}{{4.4}{48}{Measures of operational validity in E4. For each load profile in P4, the \emph {profile gap} is the mean absolute difference of the simulated medians to the observed ones over the bins}{table.caption.27}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.2}Error Attribution by Component Substitution}{48}{subsection.4.6.2}\protected@file@percent }
-\newlabel{sec:exp_e4_attribution}{{4.6.2}{48}{Error Attribution by Component Substitution}{subsection.4.6.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces Measures of operational validity in E4. For each load profile in P4, the \emph  {profile gap} is the mean absolute difference of the simulated medians to the observed ones over the bins.}}{49}{table.caption.28}\protected@file@percent }
+\newlabel{tab:exp_e4_measures}{{4.5}{49}{Measures of operational validity in E4. For each load profile in P4, the \emph {profile gap} is the mean absolute difference of the simulated medians to the observed ones over the bins}{table.caption.28}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.2}Error Attribution by Component Substitution}{49}{subsection.4.6.2}\protected@file@percent }
+\newlabel{sec:exp_e4_attribution}{{4.6.2}{49}{Error Attribution by Component Substitution}{subsection.4.6.2}{}}
 \citation{RWChapela2024Delays}
-\@writefile{toc}{\contentsline {paragraph}{Retraining protocol}{49}{subsection.4.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.3}Mechanisms and Design Decisions}{49}{subsection.4.6.3}\protected@file@percent }
-\newlabel{sec:exp_e4_mechanisms}{{4.6.3}{49}{Mechanisms and Design Decisions}{subsection.4.6.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Design decisions}{49}{table.caption.28}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces Mechanisms examined in E4. Observed values from the test log; the training log gives the same profiles within one to two minutes.}}{50}{table.caption.28}\protected@file@percent }
-\newlabel{tab:exp_e4_mechanisms}{{4.5}{50}{Mechanisms examined in E4. Observed values from the test log; the training log gives the same profiles within one to two minutes}{table.caption.28}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.4}Experiments}{52}{subsection.4.6.4}\protected@file@percent }
-\newlabel{sec:exp_e4_runs}{{4.6.4}{52}{Experiments}{subsection.4.6.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{Choice of the final configuration}{52}{table.caption.29}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Acceptance criteria for the intended use}{52}{table.caption.29}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.7}Improvement Measure: Load-Aware Block Allocation (E5)}{53}{section.4.7}\protected@file@percent }
-\newlabel{sec:exp_policy}{{4.7}{53}{Improvement Measure: Load-Aware Block Allocation (E5)}{section.4.7}{}}
-\@writefile{toc}{\contentsline {paragraph}{Status after E4}{53}{section.4.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Scenario S1}{53}{section.4.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Fixed conditions}{53}{section.4.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Measures}{54}{section.4.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Robustness (Z5)}{54}{section.4.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Rules for the claims}{54}{section.4.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.8}Threats Addressed by the Design}{55}{section.4.8}\protected@file@percent }
-\newlabel{sec:exp_threats}{{4.8}{55}{Threats Addressed by the Design}{section.4.8}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.9}Chapter Summary}{55}{section.4.9}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.6}{\ignorespaces Configurations of E4. ProSiT: component as fitted in E3. No self-count: retrained without counting the stop in its own queue. Lane free: waiting measured from the moment a lane became free. Whole delay: waiting measured from enabling to start. Every configuration from b3 on, and the baseline a0, is also run with an exact count of the activities in progress (suffix x, see the design decisions).}}{56}{table.caption.29}\protected@file@percent }
-\newlabel{tab:exp_e4_configs}{{4.6}{56}{Configurations of E4. ProSiT: component as fitted in E3. No self-count: retrained without counting the stop in its own queue. Lane free: waiting measured from the moment a lane became free. Whole delay: waiting measured from enabling to start. Every configuration from b3 on, and the baseline a0, is also run with an exact count of the activities in progress (suffix x, see the design decisions)}{table.caption.29}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4.7}{\ignorespaces Threats to the conclusions and the design responses.}}{57}{table.caption.30}\protected@file@percent }
-\newlabel{tab:exp_threats}{{4.7}{57}{Threats to the conclusions and the design responses}{table.caption.30}{}}
+\@writefile{toc}{\contentsline {paragraph}{Retraining protocol}{50}{subsection.4.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.3}Mechanisms and Design Decisions}{50}{subsection.4.6.3}\protected@file@percent }
+\newlabel{sec:exp_e4_mechanisms}{{4.6.3}{50}{Mechanisms and Design Decisions}{subsection.4.6.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Design decisions}{50}{table.caption.29}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.6}{\ignorespaces Mechanisms examined in E4. Observed values from the test log; the training log gives the same profiles within one to two minutes.}}{51}{table.caption.29}\protected@file@percent }
+\newlabel{tab:exp_e4_mechanisms}{{4.6}{51}{Mechanisms examined in E4. Observed values from the test log; the training log gives the same profiles within one to two minutes}{table.caption.29}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.4}Experiments}{53}{subsection.4.6.4}\protected@file@percent }
+\newlabel{sec:exp_e4_runs}{{4.6.4}{53}{Experiments}{subsection.4.6.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Choice of the final configuration}{53}{table.caption.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Acceptance criteria for the intended use}{53}{table.caption.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.7}Improvement Measure: Load-Aware Block Allocation (E5)}{54}{section.4.7}\protected@file@percent }
+\newlabel{sec:exp_policy}{{4.7}{54}{Improvement Measure: Load-Aware Block Allocation (E5)}{section.4.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{Status after E4}{54}{section.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Scenario S1}{54}{section.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Fixed conditions}{55}{section.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Measures}{55}{section.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Robustness (Z5)}{56}{section.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Decision at Gate In}{56}{section.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Rules for the claims}{56}{section.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.8}Threats Addressed by the Design}{56}{section.4.8}\protected@file@percent }
+\newlabel{sec:exp_threats}{{4.8}{56}{Threats Addressed by the Design}{section.4.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.9}Chapter Summary}{57}{section.4.9}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.7}{\ignorespaces Configurations of E4. ProSiT: component as fitted in E3. No self-count: retrained without counting the stop in its own queue. Lane free: waiting measured from the moment a lane became free. Whole delay: waiting measured from enabling to start. Every configuration from b3 on, and the baseline a0, is also run with an exact count of the activities in progress (suffix x, see the design decisions).}}{58}{table.caption.30}\protected@file@percent }
+\newlabel{tab:exp_e4_configs}{{4.7}{58}{Configurations of E4. ProSiT: component as fitted in E3. No self-count: retrained without counting the stop in its own queue. Lane free: waiting measured from the moment a lane became free. Whole delay: waiting measured from enabling to start. Every configuration from b3 on, and the baseline a0, is also run with an exact count of the activities in progress (suffix x, see the design decisions)}{table.caption.30}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.8}{\ignorespaces Threats to the conclusions and the design responses.}}{59}{table.caption.31}\protected@file@percent }
+\newlabel{tab:exp_threats}{{4.8}{59}{Threats to the conclusions and the design responses}{table.caption.31}{}}
 \@setckpt{chapters/6.experiments}{
-\setcounter{page}{58}
+\setcounter{page}{60}
 \setcounter{equation}{0}
 \setcounter{enumi}{3}
 \setcounter{enumii}{0}
@@ -137,7 +140,7 @@
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
 \setcounter{figure}{3}
-\setcounter{table}{7}
+\setcounter{table}{8}
 \setcounter{section@level}{0}
 \setcounter{Item}{39}
 \setcounter{Hfootnote}{1}

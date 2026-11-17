@@ -4,8 +4,10 @@
 Process mining can learn executable simulation models from event logs. Data-aware
 simulation goes a step further and learns how decisions and durations depend on
 the data of a case and on the state of the process. Such models have been built
-and evaluated mainly for business processes, in which a case waits because a
-person is busy \cite{Sulis2026SimulationReview,Vinci2026prosit}. This thesis examines how far the approach carries over to a
+and evaluated mainly for processes in which a resource handles one case at a
+time \cite{Vinci2026prosit}. Logistics and transportation are rare among their
+applications, and the modelling of queues and shared resources is the task that
+process mining supports least \cite{Sulis2026SimulationReview}. This thesis examines how far the approach carries over to a
 physical logistics process, using truck handling at HHLA Container Terminal
 Burchardkai (CTB) as a case study: whether a simulation learned with ProSiT from
 the operational event data of the terminal can support the assessment of a
@@ -47,26 +49,31 @@ observed median is 33 minutes, the mean 41 minutes and the 90th percentile
 75 minutes. The data and performance measures are described in
 Chapters~\ref{chp:case_study_and_data} and~\ref{chp:experiments}.
 
-The terminal aims at a TTT between 25 and 35 minutes for every truck. The TTT of
-each truck is the figure shown on the management dashboard of the terminal,
-without a breakdown by the number of containers
-\todo{Name the source: dashboard and statement of the operations management, with date.}.
-Both bounds matter. A truck that stays longer than 35 minutes has waited too long
-from the customer's point of view. A turnaround below 25 minutes is not wanted
-either, because the cranes of a block also serve the waterside and the rail, and
-fast truck handling can take capacity from them. In the test period, 47\,\% of the
-visits take longer than 35 minutes, and on average a visit spends 12.5 minutes
-above the corridor (Section~\ref{sec:exp_kpis}). This thesis asks why these visits
-take longer and whether a different allocation of deliveries to the yard blocks
-can shorten them. The visits below the corridor are reported, but the waterside
-work is not modelled, so the study does not optimise the balance between truck
-handling and waterside operations.
+The terminal judges the TTT per hour. The mean TTT of the trucks that leave
+through Gate Out in an hour, that is, of all visits completed in that hour, should
+lie between 25 and 35 minutes (M.~Petersen, project manager for the cross-terminal KPI dashboard, data warehouse and business intelligence, HHLA, personal communication, 12 November 2026).
+Both bounds matter. In an hour whose trucks take longer than 35 minutes on
+average, the trucks wait too long from the customers' point of view. An hour
+below 25 minutes means that truck handling is faster than needed. If such an hour
+can be foreseen, the terminal can move manual equipment from the handling area
+HO2 to the waterside, so that HO2 serves trucks more slowly while the waterside
+gains capacity. In the test period, the mean TTT exceeds 35 minutes in 56\,\% of
+the hours with at least 20 trucks (Section~\ref{sec:exp_kpis}). This thesis asks
+why the trucks take longer in these hours and whether a different allocation of
+deliveries to the yard blocks can shorten them. The data do not record how
+equipment is assigned to the handling areas, so the shift of equipment to the
+waterside cannot be modelled. The improvement measure is therefore judged against
+the upper bound of the corridor only, by the share of hours whose mean TTT exceeds
+35 minutes and by the minutes by which it exceeds them. The lower bound is
+reported, but it remains a constraint that the model cannot evaluate.
 
 The improvement measure studied is a load-aware allocation of deliveries to the
 yard blocks: a delivery whose block is full goes to a nearby block with a free
 lane. The yard position of a container is assigned when the truck arrives, so that
 the driver knows where to go. An applicable rule must therefore use information
-available at that point and respect the blocks that may take the container.
+available at that point and respect the blocks that may take the container. Today
+the assignment does not consider how many trucks are already heading to a block,
+so the measure adds this information to the decision.
 
 This leads to two connected problems. First, the simulation must reproduce the
 relevant truck behaviour, the TTT and its response to load, within the physical

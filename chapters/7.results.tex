@@ -627,25 +627,32 @@ and its parts; other measures, such as the use of the cranes, were not examined.
 E5 is a what-if demonstration (Section~\ref{sec:exp_policy}), because the final
 configuration of E4 misses two thresholds of the load-response criterion. The
 values below are values of the model under the conditions of E4, each measured
-against the simulated baseline of the same seed; they are not estimates for the
-terminal. As a verification, the baseline of E5 generates the same log as the
+against the simulated baseline of the same seed. They are not estimates for the
+terminal. The rule is judged against the upper bound of the corridor
+(Section~\ref{sec:prob_statement}). As a verification, the baseline of E5 generates the same log as the
 final configuration of E4 for every common seed.
 
-\subsection{Effect on the Turnaround Corridor}
+\subsection{Effect on the Hourly Corridor}
 \label{sec:res_s1_kpi}
 
-\input{tables/rq3_corridor}
+\input{tables/rq3_corridor_hourly}
 
-S1 reduces the visits above the corridor (Table~\ref{tab:rq3_corridor}). With the
-$\pm 2$ variant, the share of visits longer than 35 minutes falls from 33.5\,\% in
-the baseline by 3.7 percentage points, and the minutes above the corridor per visit
-fall from 6.7 by 1.3 minutes, about a fifth. The narrower and the wider set of
-eligible blocks give similar values ($-3.4$ and $-4.2$ percentage points). The share
-of visits in the corridor hardly changes ($+0.3$ percentage points), because the
-whole distribution shifts: visits just above the corridor move into it, while
-visits at its lower end fall below 25 minutes, which the terminal does not want
-either (Section~\ref{sec:disc_adequacy}). The baseline itself lies lower than the
-terminal (33.5 against 46.6\,\% of the visits above 35 minutes), as E4 showed.
+S1 reduces the hours above the corridor (Table~\ref{tab:rq3_corridor_hourly}). In
+the simulated baseline, the mean turnaround time exceeds 35 minutes in 23.6\,\% of
+the hours. With the $\pm 2$ variant, this share falls by 11.6 percentage points, so
+it is about halved, and the minutes above 35 per hour fall from 0.90 by 0.46. The
+hours move from above the corridor into it, not below it. The share of hours below
+25 minutes does not change, and its interval includes zero in every variant. The
+narrower and the wider set of eligible blocks give similar values ($-11.0$ and
+$-12.3$ percentage points), so a completely different block choice adds little to
+a local one. The baseline lies far below the terminal. In the test period, the
+mean turnaround time exceeds 35 minutes in 56\,\% of the hours, in the simulation
+in 24\,\%, as E4 showed.
+
+Per visit, the share of visits longer than 35 minutes falls by 3.7 percentage
+points, from 33.5\,\% in the baseline (Table~\ref{tab:rq3_corridor} in
+Appendix~\ref{app:sim_results}). Some visits at the lower end become shorter than
+25 minutes, but the hourly means do not fall below the corridor.
 
 \input{tables/rq3_effect}
 
@@ -684,8 +691,16 @@ trucks, and no rule is violated. For 6.5\,\% of the moves ($\pm 2$), the decisio
 falls at least one minute after Gate In, a median of 13 minutes later, because the
 delivery follows another stop. At the terminal, the yard position is assigned when
 the truck arrives, so these decisions use information that the yard planning would
-not have at that moment. Not modelled are the driving distance to another block, a
-later rehandling of the container and the constraints of the yard plan.
+not have at that moment. When the moves are restricted to deliveries that are the
+first stop of their visit, so that every decision falls at Gate In, S1 moves 2,059
+instead of 2,176 deliveries per run (21 instead of 23\,\% of the RMG deliveries).
+The share of hours above 35 minutes falls by 11.7 percentage points, as in the
+main variant (11.6), the share of visits above 35 minutes by 3.7 as before, the mean by 2.0
+minutes, and the moved visits gain 9.4 minutes. The receiving blocks again
+change by an amount whose interval includes zero. The effect therefore does not
+depend on information from after Gate In. Not modelled are the driving distance to
+another block, a later rehandling of the container and the constraints of the yard
+plan.
 
 \subsection{Sensitivity}
 \label{sec:res_s1_sensitivity}
@@ -693,9 +708,12 @@ later rehandling of the container and the constraints of the yard plan.
 \input{tables/rq3_robustness}
 
 The $\pm 2$ variant was repeated under the four changes of Z5, each against its own
-baseline (Table~\ref{tab:rq3_robustness}). The sign is the same in all four, for
-the moved visits, for the mean and for the visits above the corridor. The size is
-not. The moved visits gain 7.6 instead of 9.5 minutes without load in the service
+baseline (Tables~\ref{tab:rq3_robustness} and~\ref{tab:rq3_corridor_hourly}). The
+sign is the same in all four, for the moved visits, for the mean and for the hours
+and the visits above the corridor. The size is not. Where the baseline comes
+closest to the congestion of the terminal, with a stronger slowdown (b) or with
+20\,\% more trucks (c), more than half of the hours exceed 35 minutes (52 and
+56\,\%), and S1 reduces this share by 19.8 and 14.7 percentage points. The moved visits gain 7.6 instead of 9.5 minutes without load in the service
 time (a) and 14.3 minutes with a stronger slowdown (b). With the arrivals
 compressed to an intensity of 1.2 (c), where the simulated level is close to the
 observed one, they gain 16.3 minutes, and the mean of all visits falls by 3.3
@@ -708,10 +726,14 @@ E4 found the model to reproduce least well.
 
 \label{sec:res_s1_conclusion}
 By the rules for the claims (Section~\ref{sec:exp_policy}), a direction and a
-mechanism can be stated: the interval for the moved visits excludes zero in all
-three variants, the sign holds in all four robustness runs, and the approach and
-the share of stops at full blocks fall. A local rule ($\pm 1$) gives most of the
-effect. The size is a value of the model, not an estimate for the terminal.
+mechanism can be stated for the simulated system. The interval for the moved
+visits excludes zero in all three variants, the sign holds in all four robustness
+runs, and the approach and the share of stops at full blocks fall. A local rule
+($\pm 1$) gives most of the effect. The robustness runs vary the model, not the
+conditions that decide the benefit at the terminal, namely how often an
+alternative block is really eligible, what a move costs and whether the load of
+the blocks is known when the yard position is assigned. The result is therefore a
+hypothesis for CTB, not an estimate of its effect.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Answer to RQ3}
@@ -731,15 +753,22 @@ load-response criterion, and the effect on the mean turnaround time varies betwe
 0.9 and 4.9 minutes across the robustness runs.
 
 \paragraph{What it indicates.} In the model, moving an RMG delivery to a block
-within two block numbers when all lanes of its block are taken shortens the moved
-visits by about 9.5 minutes (95\,\% interval 9.0 to 9.9 minutes), the mean
-turnaround time of all visits by about 2 minutes, the share of visits above the
-corridor by 3.7 percentage points and the minutes above the corridor per visit by
-about a fifth. The trucks reach their first stop sooner and meet fewer full blocks,
-and the blocks that receive the deliveries change little. A local rule gives most
-of the effect. The price is that about one fifth of the RMG deliveries go to
-another block than planned, which the yard plan would have to allow, and the
-committed load of each block would have to be known when the yard position is
-assigned. More visits fall below 25 minutes, a side of the corridor the model
-cannot evaluate. Whether the effect holds at the terminal depends on what the
-model does not contain: the driving distance, the rehandling and the yard plan.
+within two block numbers when all lanes of its block are taken about halves the
+share of hours whose mean turnaround time exceeds 35 minutes (by 11.6 percentage
+points). These hours move into the corridor, not below it. Per visit, the share
+above 35 minutes falls by 3.7 percentage points. The rule works through less
+waiting. The trucks
+reach their first stop sooner and meet fewer full blocks, the moved visits are
+about 9.5 minutes shorter, and the blocks that receive the deliveries change
+little. A local rule gives most of the effect. About one fifth of the RMG
+deliveries go to another block than planned, which the yard plan would have to
+allow. The rule also needs the committed load of each block when the yard position
+is assigned, information that today's assignment does not use. The terminal judged the result plausible and expects no
+rehandling and no long additional driving for moves within one or two blocks
+(Section~\ref{sec:disc_stakeholders}). The lower bound of the corridor, below which
+the terminal could move equipment from HO2 to the waterside, cannot be evaluated,
+because the data do not record the assignment of equipment. The model misses the
+congestion that the rule is meant to relieve, and the costs of a move are judged,
+not measured. These
+values therefore describe the simulated system. For CTB they form a hypothesis
+that a pilot would have to test, not a validated improvement.

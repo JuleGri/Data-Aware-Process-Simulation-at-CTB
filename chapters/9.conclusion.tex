@@ -44,15 +44,15 @@ of the test error is the slower service of the test period.
 
 \paragraph{RQ3: To what extent can the simulation be used to evaluate a
 load-aware block allocation for deliveries, and what does it indicate about the
-effect on turnaround time?} It can show the direction and the mechanism of such
-a change within the examined model variants, but not its size. Moving a delivery
-to a block within two block numbers when all lanes of its block are taken
-shortens the moved visits by about 9.5 minutes, reduces the share of visits above
-the corridor of 25 to 35 minutes by 3.7 percentage points and the minutes above
-the corridor by about a fifth, with only a small change at the receiving blocks.
-More visits fall below 25 minutes, a side of the corridor the model cannot
-evaluate. The effect on the mean turnaround time ranges from 0.9 to 4.9 minutes
-across the robustness runs, and the model leaves out the costs of a move.
+effect on turnaround time?} It can show how such a change acts in the simulated
+system, but not its effect at the terminal. In the model, moving a delivery to a
+block within two block numbers when all lanes of its block are taken about halves
+the share of hours whose mean turnaround time exceeds 35 minutes, mainly through
+less waiting at full blocks, with only a small change at the receiving blocks.
+No hour falls below the corridor. The terminal judged the result plausible. The
+size varies across the robustness runs, the model misses the congestion that the
+rule is meant to relieve, and the costs of a move are judged, not measured. For CTB, the
+result is a hypothesis for a pilot, not a validated improvement.
 
 \section{Contributions}
 \label{sec:concl_contributions}
@@ -72,8 +72,8 @@ causes of the error in the block choice, the queue and the service, and judged
 the final configuration against criteria fixed in advance. It showed that a model with a
 plausible level can still lack the mechanism a scenario needs, and that a net
 with impossible visits can fit the level better. The scenario analysis then
-stated only what this validation supports: a direction and a mechanism, not a
-forecast.
+stated only what this validation supports, a hypothesis about direction and
+mechanism, not a forecast.
 
 \section{Limitations}
 \label{sec:concl_limitations}
@@ -83,10 +83,10 @@ configuration replays the observed arrivals and blocks; without them its error i
 Second, it underestimates the slowdown in the busiest hours, so the size of a
 scenario effect is not established. Third, the event log records time at the
 block, not the use of lanes and cranes, so waiting and service cannot be fully
-separated. Fourth, the domain rules, the three lanes and the decision point of
-the allocation rest on the use case worked out with the project team of the
-terminal rather than on an independent review, and the costs of a
-move, driving, rehandling and the yard plan, are not modelled.
+separated. Fourth, the domain rules, the three lanes, the corridor and the
+decision point were co-designed and confirmed by the terminal, but the review came
+from the company-side co-supervisor and is not independent, and the costs of a move
+were judged by the terminal, not modelled.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Future Work}

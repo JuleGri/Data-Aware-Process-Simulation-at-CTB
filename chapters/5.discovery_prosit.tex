@@ -162,8 +162,8 @@ waiting and execution times can depend on the load and the attributes of a visit
 \label{sec:sim_adaptations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-ProSiT was developed and evaluated on business processes, in which a case
-typically waits because a person is busy \cite{Vinci2026prosit}. A truck visit has physical limits that such a model does not know
+ProSiT was developed and evaluated on event logs of business processes, in which
+a resource typically handles one case at a time \cite{Vinci2026prosit}. A truck visit has physical limits that such a model does not know
 (Section~\ref{sec:bg_terminal}): a truck performs the stops of its visit one after
 another, and a block serves at most three trucks at once. Five extensions add these
 limits to the simulator (Table~\ref{tab:sim_adaptations}). Each is a switch in

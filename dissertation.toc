@@ -6,7 +6,7 @@
 \contentsline {section}{\numberline {1.1}Motivation}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Problem Statement}{2}{section.1.2}%
 \contentsline {section}{\numberline {1.3}Research Objective and Contributions}{3}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Research Questions}{3}{section.1.4}%
+\contentsline {section}{\numberline {1.4}Research Questions}{4}{section.1.4}%
 \contentsline {section}{\numberline {1.5}Thesis Outline}{4}{section.1.5}%
 \contentsline {chapter}{\numberline {2}Background and Related Work}{5}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Container Terminal Truck Operations}{5}{section.2.1}%
@@ -65,180 +65,183 @@
 \contentsline {section}{\numberline {4.2}Setting}{37}{section.4.2}%
 \contentsline {subsection}{\numberline {4.2.1}Training and Test Log}{37}{subsection.4.2.1}%
 \contentsline {subsection}{\numberline {4.2.2}KPI and Measures}{38}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Simulation Runs and Replications}{39}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.3}Simulation Runs and Replications}{40}{subsection.4.2.3}%
 \contentsline {subsection}{\numberline {4.2.4}Domain Knowledge}{40}{subsection.4.2.4}%
 \contentsline {section}{\numberline {4.3}Control-Flow Discovery (E1)}{40}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Discovery Input}{40}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Candidate Algorithms and Parameter Grid}{41}{subsection.4.3.2}%
-\contentsline {paragraph}{Prefix reference.}{41}{table.caption.24}%
-\contentsline {subsection}{\numberline {4.3.3}Evaluation Protocol}{42}{subsection.4.3.3}%
-\contentsline {paragraph}{Coverage threshold}{42}{subsection.4.3.3}%
-\contentsline {paragraph}{Level 1: quality of the net}{43}{table.caption.25}%
-\contentsline {paragraph}{Level 2: fitness for simulation}{43}{table.caption.25}%
-\contentsline {paragraph}{Tools}{44}{table.caption.25}%
-\contentsline {paragraph}{Checks}{44}{table.caption.25}%
-\contentsline {section}{\numberline {4.4}Rule Audit (E2)}{44}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Audit}{44}{subsection.4.4.1}%
-\contentsline {paragraph}{Rule check}{45}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Stop Guard}{45}{subsection.4.4.2}%
-\contentsline {section}{\numberline {4.5}Simulation of the Selected Net (E3)}{45}{section.4.5}%
-\contentsline {subsection}{\numberline {4.5.1}Conditions}{45}{subsection.4.5.1}%
-\contentsline {subsection}{\numberline {4.5.2}Measures}{46}{subsection.4.5.2}%
-\contentsline {section}{\numberline {4.6}Mechanism Audit and Simulation Validity (E4)}{46}{section.4.6}%
-\contentsline {subsection}{\numberline {4.6.1}Evaluation Design}{47}{subsection.4.6.1}%
-\contentsline {paragraph}{Reference values}{47}{table.caption.27}%
-\contentsline {paragraph}{Two weaknesses of the usual comparison}{47}{table.caption.27}%
-\contentsline {subsection}{\numberline {4.6.2}Error Attribution by Component Substitution}{48}{subsection.4.6.2}%
-\contentsline {paragraph}{Retraining protocol}{49}{subsection.4.6.2}%
-\contentsline {subsection}{\numberline {4.6.3}Mechanisms and Design Decisions}{49}{subsection.4.6.3}%
-\contentsline {paragraph}{Design decisions}{49}{table.caption.28}%
-\contentsline {subsection}{\numberline {4.6.4}Experiments}{52}{subsection.4.6.4}%
-\contentsline {paragraph}{Choice of the final configuration}{52}{table.caption.29}%
-\contentsline {paragraph}{Acceptance criteria for the intended use}{52}{table.caption.29}%
-\contentsline {section}{\numberline {4.7}Improvement Measure: Load-Aware Block Allocation (E5)}{53}{section.4.7}%
-\contentsline {paragraph}{Status after E4}{53}{section.4.7}%
-\contentsline {paragraph}{Scenario S1}{53}{section.4.7}%
-\contentsline {paragraph}{Fixed conditions}{53}{section.4.7}%
-\contentsline {paragraph}{Measures}{54}{section.4.7}%
-\contentsline {paragraph}{Robustness (Z5)}{54}{section.4.7}%
-\contentsline {paragraph}{Rules for the claims}{54}{section.4.7}%
-\contentsline {section}{\numberline {4.8}Threats Addressed by the Design}{55}{section.4.8}%
-\contentsline {section}{\numberline {4.9}Chapter Summary}{55}{section.4.9}%
-\contentsline {chapter}{\numberline {5}The Simulation Model}{58}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Inputs}{58}{section.5.1}%
-\contentsline {paragraph}{The control flow.}{58}{section.5.1}%
-\contentsline {paragraph}{The event log.}{59}{figure.caption.31}%
-\contentsline {section}{\numberline {5.2}What ProSiT Learns}{59}{section.5.2}%
-\contentsline {paragraph}{Routing.}{59}{table.caption.32}%
-\contentsline {paragraph}{Waiting time.}{59}{figure.caption.33}%
-\contentsline {paragraph}{Execution time.}{61}{figure.caption.34}%
-\contentsline {paragraph}{Capacities.}{61}{figure.caption.35}%
-\contentsline {section}{\numberline {5.3}Settings}{62}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Extensions for the Physical Limits}{62}{section.5.4}%
-\contentsline {paragraph}{The stop guard.}{63}{section.5.4}%
-\contentsline {paragraph}{Without the planned number of stops.}{64}{section.5.4}%
-\contentsline {paragraph}{The other extensions.}{64}{section.5.4}%
-\contentsline {paragraph}{Resource choice.}{65}{table.caption.38}%
-\contentsline {section}{\numberline {5.5}Replay and Generative Mode}{65}{section.5.5}%
-\contentsline {section}{\numberline {5.6}Chapter Summary}{65}{section.5.6}%
-\contentsline {chapter}{\numberline {6}Results}{67}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Discovery and Checks (E1)}{67}{section.6.1}%
-\contentsline {paragraph}{Level 1: quality of the nets.}{67}{table.caption.40}%
-\contentsline {paragraph}{Level 2: fitness for simulation.}{68}{figure.caption.41}%
-\contentsline {paragraph}{Checks.}{69}{figure.caption.42}%
-\contentsline {section}{\numberline {6.2}Rule Audit (E2)}{70}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Simulation of the Selected Net (E3)}{71}{section.6.3}%
-\contentsline {paragraph}{The selected net.}{71}{table.caption.44}%
-\contentsline {paragraph}{Guard off and simple guard.}{71}{table.caption.45}%
-\contentsline {paragraph}{Nets that failed a check.}{73}{table.caption.45}%
-\contentsline {paragraph}{Turnaround time.}{73}{table.caption.45}%
-\contentsline {section}{\numberline {6.4}Answer to RQ1}{73}{section.6.4}%
-\contentsline {paragraph}{Discovery and rule treatment.}{73}{section.6.4}%
-\contentsline {paragraph}{Do conformance metrics anticipate the simulation?}{74}{section.6.4}%
-\contentsline {section}{\numberline {6.5}Mechanism Audit and Simulation Validity (E4)}{74}{section.6.5}%
-\contentsline {subsection}{\numberline {6.5.1}Verification}{74}{subsection.6.5.1}%
-\contentsline {subsection}{\numberline {6.5.2}Conceptual Validity: What the Components Learned}{75}{subsection.6.5.2}%
-\contentsline {paragraph}{Block choice.}{75}{subsection.6.5.2}%
-\contentsline {paragraph}{Waiting time.}{75}{subsection.6.5.2}%
-\contentsline {paragraph}{Execution time and capacity.}{76}{table.caption.46}%
-\contentsline {paragraph}{Enabling times in loops.}{76}{table.caption.46}%
-\contentsline {subsection}{\numberline {6.5.3}Operational Validity Along the Path of the Truck}{76}{subsection.6.5.3}%
-\contentsline {paragraph}{Demand (E4a).}{76}{table.caption.47}%
-\contentsline {paragraph}{Block allocation (E4b).}{76}{table.caption.47}%
-\contentsline {paragraph}{Queue at the block (E4c).}{77}{table.caption.47}%
-\contentsline {paragraph}{Service under load (E4d).}{78}{table.caption.47}%
-\contentsline {subsection}{\numberline {6.5.4}Choice and Necessity of the Changes}{78}{subsection.6.5.4}%
-\contentsline {subsection}{\numberline {6.5.5}Does the Net Matter Under the Final Configuration?}{79}{subsection.6.5.5}%
-\contentsline {subsection}{\numberline {6.5.6}Where the Remaining Error Lies}{79}{subsection.6.5.6}%
-\contentsline {paragraph}{In-sample and out-of-sample.}{79}{table.caption.50}%
-\contentsline {paragraph}{The model error.}{81}{table.caption.50}%
-\contentsline {subsection}{\numberline {6.5.7}Acceptance for the Intended Use}{81}{subsection.6.5.7}%
-\contentsline {section}{\numberline {6.6}Answer to RQ2}{82}{section.6.6}%
-\contentsline {paragraph}{To what extent.}{82}{section.6.6}%
-\contentsline {paragraph}{Which components.}{82}{section.6.6}%
-\contentsline {section}{\numberline {6.7}Improvement Measure: Load-Aware Block Allocation (E5)}{83}{section.6.7}%
-\contentsline {subsection}{\numberline {6.7.1}Effect on the Turnaround Corridor}{84}{subsection.6.7.1}%
-\contentsline {subsection}{\numberline {6.7.2}Mechanism and Distribution of Effects}{85}{subsection.6.7.2}%
-\contentsline {subsection}{\numberline {6.7.3}Sensitivity}{86}{subsection.6.7.3}%
-\contentsline {section}{\numberline {6.8}Answer to RQ3}{87}{section.6.8}%
-\contentsline {paragraph}{To what extent.}{87}{section.6.8}%
-\contentsline {paragraph}{What it indicates.}{87}{section.6.8}%
-\contentsline {chapter}{\numberline {7}Discussion}{88}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Adequacy for the Intended Use}{88}{section.7.1}%
-\contentsline {paragraph}{What the model supports.}{88}{section.7.1}%
-\contentsline {paragraph}{What the model does not support.}{89}{section.7.1}%
-\contentsline {paragraph}{Both sides of the corridor.}{89}{section.7.1}%
-\contentsline {paragraph}{Model error or drift?}{89}{section.7.1}%
-\contentsline {paragraph}{Conditions of the result.}{90}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Discovery Metrics and Simulation Behaviour}{90}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Data-Aware Simulation in a Physical Logistics Process}{91}{section.7.3}%
-\contentsline {paragraph}{What transfers.}{91}{section.7.3}%
-\contentsline {paragraph}{What does not transfer out of the box.}{92}{section.7.3}%
-\contentsline {paragraph}{What had to be added.}{92}{section.7.3}%
-\contentsline {paragraph}{What a case-centric log cannot show.}{93}{section.7.3}%
-\contentsline {paragraph}{Beyond the terminal.}{93}{section.7.3}%
-\contentsline {section}{\numberline {7.4}Threats to Validity}{93}{section.7.4}%
-\contentsline {subsection}{\numberline {7.4.1}Construct Validity}{93}{subsection.7.4.1}%
-\contentsline {paragraph}{What a stop measures.}{93}{subsection.7.4.1}%
-\contentsline {paragraph}{Cleaning and thresholds.}{94}{subsection.7.4.1}%
-\contentsline {paragraph}{Time resolution.}{94}{subsection.7.4.1}%
-\contentsline {paragraph}{The KPI.}{94}{subsection.7.4.1}%
-\contentsline {paragraph}{The case attributes.}{94}{subsection.7.4.1}%
-\contentsline {subsection}{\numberline {7.4.2}Internal Validity}{95}{subsection.7.4.2}%
-\contentsline {paragraph}{Retrospective hold-out.}{95}{subsection.7.4.2}%
-\contentsline {paragraph}{Oracle inputs.}{95}{subsection.7.4.2}%
-\contentsline {paragraph}{Own code.}{95}{subsection.7.4.2}%
-\contentsline {subsection}{\numberline {7.4.3}External Validity}{95}{subsection.7.4.3}%
-\contentsline {subsection}{\numberline {7.4.4}Conclusion Validity}{95}{subsection.7.4.4}%
-\contentsline {section}{\numberline {7.5}Domain Knowledge and Stakeholder Review}{96}{section.7.5}%
-\contentsline {section}{\numberline {7.6}Implications for Practice}{96}{section.7.6}%
-\contentsline {paragraph}{Where the time is lost.}{96}{section.7.6}%
-\contentsline {paragraph}{What a block allocation can do.}{97}{section.7.6}%
-\contentsline {paragraph}{What would be needed before acting.}{97}{section.7.6}%
-\contentsline {chapter}{\numberline {8}Conclusion}{98}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Answers to the Research Questions}{98}{section.8.1}%
-\contentsline {paragraph}{RQ1: Which discovery and rule treatment yields a sound, executable control-flow model that preserves the observed truck-visit behaviour, and do conformance metrics anticipate its behaviour in simulation?}{98}{section.8.1}%
-\contentsline {paragraph}{RQ2: To what extent does the ProSiT simulation reproduce truck turnaround time and its response to load, and which components explain the discrepancies?}{99}{section.8.1}%
-\contentsline {paragraph}{RQ3: To what extent can the simulation be used to evaluate a load-aware block allocation for deliveries, and what does it indicate about the effect on turnaround time?}{99}{section.8.1}%
-\contentsline {section}{\numberline {8.2}Contributions}{99}{section.8.2}%
-\contentsline {paragraph}{(C1) A justified simulation model for the CTB case.}{99}{section.8.2}%
-\contentsline {paragraph}{(C2) An empirical assessment of validity and decision-support potential.}{100}{section.8.2}%
-\contentsline {section}{\numberline {8.3}Limitations}{100}{section.8.3}%
-\contentsline {section}{\numberline {8.4}Future Work}{100}{section.8.4}%
-\contentsline {chapter}{\numberline {A}Observed Truck-Visit Behaviour}{102}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Arrival Pattern}{102}{section.A.1}%
-\contentsline {section}{\numberline {A.2}Congestion over the Day}{103}{section.A.2}%
-\contentsline {section}{\numberline {A.3}Delay Peaks}{105}{section.A.3}%
-\contentsline {section}{\numberline {A.4}Disruption Episodes}{106}{section.A.4}%
-\contentsline {section}{\numberline {A.5}Differences between Training and Test Period}{106}{section.A.5}%
-\contentsline {section}{\numberline {A.6}Bottlenecks at the Handover}{107}{section.A.6}%
-\contentsline {section}{\numberline {A.7}Visits Above the Corridor}{107}{section.A.7}%
-\contentsline {chapter}{\numberline {B}Conformance of All Discovered Nets}{109}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Control-Flow Representation}{112}{appendix.C}%
-\contentsline {section}{\numberline {C.1}The Same Language as a State Machine}{112}{section.C.1}%
-\contentsline {paragraph}{Precision and simulation.}{112}{table.caption.63}%
-\contentsline {paragraph}{The simple guard and silent decisions.}{113}{table.caption.64}%
-\contentsline {paragraph}{Parallel branches.}{113}{table.caption.65}%
-\contentsline {section}{\numberline {C.2}Control-Flow Replica}{114}{section.C.2}%
-\contentsline {paragraph}{The weights do not see the marking.}{115}{table.caption.67}%
-\contentsline {paragraph}{Silent transitions alone are not the cause.}{115}{table.caption.67}%
-\contentsline {paragraph}{A guard has to act where the decision is taken.}{116}{table.caption.67}%
-\contentsline {paragraph}{The flower needs the history in the weights.}{116}{table.caption.67}%
-\contentsline {paragraph}{Limits.}{116}{table.caption.67}%
-\contentsline {chapter}{\numberline {D}Additional Simulation Results}{117}{appendix.D}%
-\contentsline {section}{\numberline {D.1}Choice and Necessity of the Changes}{117}{section.D.1}%
-\contentsline {section}{\numberline {D.2}Other Nets Under the Final Configuration}{118}{section.D.2}%
-\contentsline {section}{\numberline {D.3}The Final Configuration Against the Observed Logs}{119}{section.D.3}%
-\contentsline {section}{\numberline {D.4}Who Gains Under S1}{122}{section.D.4}%
-\contentsline {chapter}{\numberline {E}ProSiT Model Inventory}{123}{appendix.E}%
-\contentsline {section}{\numberline {E.1}Components of a ProSiT Model}{123}{section.E.1}%
-\contentsline {section}{\numberline {E.2}Settings, Versions and Inputs}{123}{section.E.2}%
-\contentsline {section}{\numberline {E.3}Learned Models}{124}{section.E.3}%
-\contentsline {section}{\numberline {E.4}Calendars and Capacities}{133}{section.E.4}%
-\contentsline {section}{\numberline {E.5}Domain Rules}{133}{section.E.5}%
-\contentsline {section}{\numberline {E.6}Discovered Models}{133}{section.E.6}%
-\contentsline {chapter}{\numberline {F}Reproduction}{137}{appendix.F}%
-\contentsline {section}{\numberline {F.1}Environments and Inputs}{137}{section.F.1}%
-\contentsline {section}{\numberline {F.2}Fitted Models and Simulation Runs}{138}{section.F.2}%
-\contentsline {section}{\numberline {F.3}Sources of the Tables and Figures}{138}{section.F.3}%
-\contentsline {chapter}{References}{139}{section*.85}%
+\contentsline {subsection}{\numberline {4.3.1}Discovery Input}{41}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Candidate Algorithms and Parameter Grid}{42}{subsection.4.3.2}%
+\contentsline {paragraph}{Prefix reference.}{42}{table.caption.25}%
+\contentsline {subsection}{\numberline {4.3.3}Evaluation Protocol}{43}{subsection.4.3.3}%
+\contentsline {paragraph}{Coverage threshold}{43}{subsection.4.3.3}%
+\contentsline {paragraph}{Level 1: quality of the net}{44}{table.caption.26}%
+\contentsline {paragraph}{Level 2: fitness for simulation}{44}{table.caption.26}%
+\contentsline {paragraph}{Tools}{45}{table.caption.26}%
+\contentsline {paragraph}{Checks}{45}{table.caption.26}%
+\contentsline {section}{\numberline {4.4}Rule Audit (E2)}{45}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Audit}{45}{subsection.4.4.1}%
+\contentsline {paragraph}{Rule check}{46}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Stop Guard}{46}{subsection.4.4.2}%
+\contentsline {section}{\numberline {4.5}Simulation of the Selected Net (E3)}{46}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Conditions}{46}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Measures}{47}{subsection.4.5.2}%
+\contentsline {section}{\numberline {4.6}Mechanism Audit and Simulation Validity (E4)}{47}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Evaluation Design}{48}{subsection.4.6.1}%
+\contentsline {paragraph}{Reference values}{48}{table.caption.28}%
+\contentsline {paragraph}{Two weaknesses of the usual comparison}{48}{table.caption.28}%
+\contentsline {subsection}{\numberline {4.6.2}Error Attribution by Component Substitution}{49}{subsection.4.6.2}%
+\contentsline {paragraph}{Retraining protocol}{50}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Mechanisms and Design Decisions}{50}{subsection.4.6.3}%
+\contentsline {paragraph}{Design decisions}{50}{table.caption.29}%
+\contentsline {subsection}{\numberline {4.6.4}Experiments}{53}{subsection.4.6.4}%
+\contentsline {paragraph}{Choice of the final configuration}{53}{table.caption.30}%
+\contentsline {paragraph}{Acceptance criteria for the intended use}{53}{table.caption.30}%
+\contentsline {section}{\numberline {4.7}Improvement Measure: Load-Aware Block Allocation (E5)}{54}{section.4.7}%
+\contentsline {paragraph}{Status after E4}{54}{section.4.7}%
+\contentsline {paragraph}{Scenario S1}{54}{section.4.7}%
+\contentsline {paragraph}{Fixed conditions}{55}{section.4.7}%
+\contentsline {paragraph}{Measures}{55}{section.4.7}%
+\contentsline {paragraph}{Robustness (Z5)}{56}{section.4.7}%
+\contentsline {paragraph}{Decision at Gate In}{56}{section.4.7}%
+\contentsline {paragraph}{Rules for the claims}{56}{section.4.7}%
+\contentsline {section}{\numberline {4.8}Threats Addressed by the Design}{56}{section.4.8}%
+\contentsline {section}{\numberline {4.9}Chapter Summary}{57}{section.4.9}%
+\contentsline {chapter}{\numberline {5}The Simulation Model}{60}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Inputs}{60}{section.5.1}%
+\contentsline {paragraph}{The control flow.}{60}{section.5.1}%
+\contentsline {paragraph}{The event log.}{61}{figure.caption.32}%
+\contentsline {section}{\numberline {5.2}What ProSiT Learns}{61}{section.5.2}%
+\contentsline {paragraph}{Routing.}{61}{table.caption.33}%
+\contentsline {paragraph}{Waiting time.}{61}{figure.caption.34}%
+\contentsline {paragraph}{Execution time.}{63}{figure.caption.35}%
+\contentsline {paragraph}{Capacities.}{63}{figure.caption.36}%
+\contentsline {section}{\numberline {5.3}Settings}{64}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Extensions for the Physical Limits}{64}{section.5.4}%
+\contentsline {paragraph}{The stop guard.}{65}{section.5.4}%
+\contentsline {paragraph}{Without the planned number of stops.}{66}{section.5.4}%
+\contentsline {paragraph}{The other extensions.}{66}{section.5.4}%
+\contentsline {paragraph}{Resource choice.}{67}{table.caption.39}%
+\contentsline {section}{\numberline {5.5}Replay and Generative Mode}{67}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Chapter Summary}{67}{section.5.6}%
+\contentsline {chapter}{\numberline {6}Results}{69}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Discovery and Checks (E1)}{69}{section.6.1}%
+\contentsline {paragraph}{Level 1: quality of the nets.}{69}{table.caption.41}%
+\contentsline {paragraph}{Level 2: fitness for simulation.}{70}{figure.caption.42}%
+\contentsline {paragraph}{Checks.}{71}{figure.caption.43}%
+\contentsline {section}{\numberline {6.2}Rule Audit (E2)}{72}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Simulation of the Selected Net (E3)}{73}{section.6.3}%
+\contentsline {paragraph}{The selected net.}{73}{table.caption.45}%
+\contentsline {paragraph}{Guard off and simple guard.}{73}{table.caption.46}%
+\contentsline {paragraph}{Nets that failed a check.}{75}{table.caption.46}%
+\contentsline {paragraph}{Turnaround time.}{75}{table.caption.46}%
+\contentsline {section}{\numberline {6.4}Answer to RQ1}{75}{section.6.4}%
+\contentsline {paragraph}{Discovery and rule treatment.}{75}{section.6.4}%
+\contentsline {paragraph}{Do conformance metrics anticipate the simulation?}{76}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Mechanism Audit and Simulation Validity (E4)}{76}{section.6.5}%
+\contentsline {subsection}{\numberline {6.5.1}Verification}{76}{subsection.6.5.1}%
+\contentsline {subsection}{\numberline {6.5.2}Conceptual Validity: What the Components Learned}{77}{subsection.6.5.2}%
+\contentsline {paragraph}{Block choice.}{77}{subsection.6.5.2}%
+\contentsline {paragraph}{Waiting time.}{77}{subsection.6.5.2}%
+\contentsline {paragraph}{Execution time and capacity.}{78}{table.caption.47}%
+\contentsline {paragraph}{Enabling times in loops.}{78}{table.caption.47}%
+\contentsline {subsection}{\numberline {6.5.3}Operational Validity Along the Path of the Truck}{78}{subsection.6.5.3}%
+\contentsline {paragraph}{Demand (E4a).}{78}{table.caption.48}%
+\contentsline {paragraph}{Block allocation (E4b).}{78}{table.caption.48}%
+\contentsline {paragraph}{Queue at the block (E4c).}{79}{table.caption.48}%
+\contentsline {paragraph}{Service under load (E4d).}{80}{table.caption.48}%
+\contentsline {subsection}{\numberline {6.5.4}Choice and Necessity of the Changes}{80}{subsection.6.5.4}%
+\contentsline {subsection}{\numberline {6.5.5}Does the Net Matter Under the Final Configuration?}{81}{subsection.6.5.5}%
+\contentsline {subsection}{\numberline {6.5.6}Where the Remaining Error Lies}{81}{subsection.6.5.6}%
+\contentsline {paragraph}{In-sample and out-of-sample.}{81}{table.caption.51}%
+\contentsline {paragraph}{The model error.}{83}{table.caption.51}%
+\contentsline {subsection}{\numberline {6.5.7}Acceptance for the Intended Use}{83}{subsection.6.5.7}%
+\contentsline {section}{\numberline {6.6}Answer to RQ2}{84}{section.6.6}%
+\contentsline {paragraph}{To what extent.}{84}{section.6.6}%
+\contentsline {paragraph}{Which components.}{84}{section.6.6}%
+\contentsline {section}{\numberline {6.7}Improvement Measure: Load-Aware Block Allocation (E5)}{85}{section.6.7}%
+\contentsline {subsection}{\numberline {6.7.1}Effect on the Hourly Corridor}{86}{subsection.6.7.1}%
+\contentsline {subsection}{\numberline {6.7.2}Mechanism and Distribution of Effects}{88}{subsection.6.7.2}%
+\contentsline {subsection}{\numberline {6.7.3}Sensitivity}{88}{subsection.6.7.3}%
+\contentsline {section}{\numberline {6.8}Answer to RQ3}{89}{section.6.8}%
+\contentsline {paragraph}{To what extent.}{89}{section.6.8}%
+\contentsline {paragraph}{What it indicates.}{90}{section.6.8}%
+\contentsline {chapter}{\numberline {7}Discussion}{91}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Adequacy for the Intended Use}{91}{section.7.1}%
+\contentsline {paragraph}{What the model supports.}{91}{section.7.1}%
+\contentsline {paragraph}{What the model does not support.}{92}{section.7.1}%
+\contentsline {paragraph}{Both sides of the corridor.}{92}{section.7.1}%
+\contentsline {paragraph}{Model error or drift?}{93}{section.7.1}%
+\contentsline {paragraph}{Conditions of the result.}{93}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Discovery Metrics and Simulation Behaviour}{94}{section.7.2}%
+\contentsline {paragraph}{What the discovered control flow contributes.}{94}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Data-Aware Simulation in a Physical Logistics Process}{95}{section.7.3}%
+\contentsline {paragraph}{What transfers.}{95}{section.7.3}%
+\contentsline {paragraph}{What does not transfer out of the box.}{95}{section.7.3}%
+\contentsline {paragraph}{What had to be added.}{96}{section.7.3}%
+\contentsline {paragraph}{What a case-centric log cannot show.}{97}{section.7.3}%
+\contentsline {paragraph}{Beyond the terminal.}{97}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Threats to Validity}{97}{section.7.4}%
+\contentsline {subsection}{\numberline {7.4.1}Construct Validity}{97}{subsection.7.4.1}%
+\contentsline {paragraph}{What a stop measures.}{97}{subsection.7.4.1}%
+\contentsline {paragraph}{Cleaning and thresholds.}{98}{subsection.7.4.1}%
+\contentsline {paragraph}{Time resolution.}{98}{subsection.7.4.1}%
+\contentsline {paragraph}{The KPI.}{98}{subsection.7.4.1}%
+\contentsline {paragraph}{The case attributes.}{98}{subsection.7.4.1}%
+\contentsline {subsection}{\numberline {7.4.2}Internal Validity}{98}{subsection.7.4.2}%
+\contentsline {paragraph}{Retrospective hold-out.}{98}{subsection.7.4.2}%
+\contentsline {paragraph}{Oracle inputs.}{99}{subsection.7.4.2}%
+\contentsline {paragraph}{Own code.}{99}{subsection.7.4.2}%
+\contentsline {subsection}{\numberline {7.4.3}External Validity}{99}{subsection.7.4.3}%
+\contentsline {subsection}{\numberline {7.4.4}Conclusion Validity}{99}{subsection.7.4.4}%
+\contentsline {section}{\numberline {7.5}Domain Knowledge and Stakeholder Review}{100}{section.7.5}%
+\contentsline {section}{\numberline {7.6}Implications for Practice}{101}{section.7.6}%
+\contentsline {paragraph}{Where the time is lost.}{101}{section.7.6}%
+\contentsline {paragraph}{What a block allocation can do.}{101}{section.7.6}%
+\contentsline {paragraph}{What would be needed before acting.}{101}{section.7.6}%
+\contentsline {chapter}{\numberline {8}Conclusion}{102}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Answers to the Research Questions}{102}{section.8.1}%
+\contentsline {paragraph}{RQ1: Which discovery and rule treatment yields a sound, executable control-flow model that preserves the observed truck-visit behaviour, and do conformance metrics anticipate its behaviour in simulation?}{102}{section.8.1}%
+\contentsline {paragraph}{RQ2: To what extent does the ProSiT simulation reproduce truck turnaround time and its response to load, and which components explain the discrepancies?}{103}{section.8.1}%
+\contentsline {paragraph}{RQ3: To what extent can the simulation be used to evaluate a load-aware block allocation for deliveries, and what does it indicate about the effect on turnaround time?}{103}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Contributions}{103}{section.8.2}%
+\contentsline {paragraph}{(C1) A justified simulation model for the CTB case.}{103}{section.8.2}%
+\contentsline {paragraph}{(C2) An empirical assessment of validity and decision-support potential.}{104}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Limitations}{104}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Future Work}{104}{section.8.4}%
+\contentsline {chapter}{\numberline {A}Observed Truck-Visit Behaviour}{106}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Arrival Pattern}{106}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Congestion over the Day}{107}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Delay Peaks}{109}{section.A.3}%
+\contentsline {section}{\numberline {A.4}Disruption Episodes}{110}{section.A.4}%
+\contentsline {section}{\numberline {A.5}Differences between Training and Test Period}{110}{section.A.5}%
+\contentsline {section}{\numberline {A.6}Bottlenecks at the Handover}{111}{section.A.6}%
+\contentsline {section}{\numberline {A.7}Visits Longer Than 35 Minutes}{111}{section.A.7}%
+\contentsline {chapter}{\numberline {B}Conformance of All Discovered Nets}{114}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Control-Flow Representation}{117}{appendix.C}%
+\contentsline {section}{\numberline {C.1}The Same Language as a State Machine}{117}{section.C.1}%
+\contentsline {paragraph}{Precision and simulation.}{117}{table.caption.65}%
+\contentsline {paragraph}{The simple guard and silent decisions.}{118}{table.caption.66}%
+\contentsline {paragraph}{Parallel branches.}{118}{table.caption.67}%
+\contentsline {section}{\numberline {C.2}Control-Flow Replica}{119}{section.C.2}%
+\contentsline {paragraph}{The weights do not see the marking.}{120}{table.caption.69}%
+\contentsline {paragraph}{Silent transitions alone are not the cause.}{120}{table.caption.69}%
+\contentsline {paragraph}{A guard has to act where the decision is taken.}{121}{table.caption.69}%
+\contentsline {paragraph}{The flower needs the history in the weights.}{121}{table.caption.69}%
+\contentsline {paragraph}{Limits.}{121}{table.caption.69}%
+\contentsline {chapter}{\numberline {D}Additional Simulation Results}{122}{appendix.D}%
+\contentsline {section}{\numberline {D.1}Choice and Necessity of the Changes}{122}{section.D.1}%
+\contentsline {section}{\numberline {D.2}Other Nets Under the Final Configuration}{123}{section.D.2}%
+\contentsline {section}{\numberline {D.3}The Final Configuration Against the Observed Logs}{124}{section.D.3}%
+\contentsline {section}{\numberline {D.4}Corridor per Visit Under S1}{127}{section.D.4}%
+\contentsline {section}{\numberline {D.5}Who Gains Under S1}{127}{section.D.5}%
+\contentsline {chapter}{\numberline {E}ProSiT Model Inventory}{129}{appendix.E}%
+\contentsline {section}{\numberline {E.1}Components of a ProSiT Model}{129}{section.E.1}%
+\contentsline {section}{\numberline {E.2}Settings, Versions and Inputs}{129}{section.E.2}%
+\contentsline {section}{\numberline {E.3}Learned Models}{130}{section.E.3}%
+\contentsline {section}{\numberline {E.4}Calendars and Capacities}{139}{section.E.4}%
+\contentsline {section}{\numberline {E.5}Domain Rules}{139}{section.E.5}%
+\contentsline {section}{\numberline {E.6}Discovered Models}{139}{section.E.6}%
+\contentsline {chapter}{\numberline {F}Reproduction}{143}{appendix.F}%
+\contentsline {section}{\numberline {F.1}Environments and Inputs}{143}{section.F.1}%
+\contentsline {section}{\numberline {F.2}Fitted Models and Simulation Runs}{144}{section.F.2}%
+\contentsline {section}{\numberline {F.3}Sources of the Tables and Figures}{144}{section.F.3}%
+\contentsline {chapter}{References}{146}{section*.88}%

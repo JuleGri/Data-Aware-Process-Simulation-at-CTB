@@ -13,11 +13,11 @@ take from it.
 \label{sec:disc_adequacy}
 
 The intended use is the comparison of a block allocation rule with the current
-allocation, measured by the visits above the turnaround corridor. Three
-properties decide whether a simulation can support this comparison: it must
-generate only visits that trucks can perform, it must produce the waiting at a
-busy block by the mechanism that the allocation changes, and it must respond to
-load as strongly as the terminal. The final configuration meets the first two and the
+allocation, measured by the hours whose mean turnaround time lies above the
+corridor. Three properties decide whether a simulation can support this
+comparison. It must generate only visits that trucks can perform, it must produce
+the waiting at a busy block by the mechanism that the allocation changes, and it
+must respond to load as strongly as the terminal. The final configuration meets the first two and the
 third only in part.
 
 \paragraph{What the model supports.} Every simulated visit satisfies the
@@ -30,11 +30,12 @@ a stop arises in the simulation when all three lanes of a block are taken, and t
 approach to the first stop grows with the load of the block as observed. The
 turnaround time rises with the arrivals and, convexly, with the arrival
 intensity. These are the properties a block allocation acts on. The model can
-therefore show whether moving deliveries away from full blocks shortens the
-visits in principle, which visits gain, and whether the waiting is reduced or only
-moved. E5 answers these questions within the examined model variants: the long
-visits become shorter through less waiting at full blocks, the receiving blocks
-change little (intervals that include zero), and a local rule is enough.
+therefore show how moving deliveries away from full blocks acts in principle,
+which visits gain, and whether the waiting is reduced or only moved. Within the
+examined model variants, the long visits become shorter through less waiting at
+full blocks, the receiving blocks change little (intervals that include zero),
+and a local rule is enough. These are statements about the simulated system. For
+CTB they are hypotheses.
 
 \paragraph{What the model does not support.} It does not give the size of the
 effect at the terminal. The simulated stops slow down less than the recorded ones
@@ -47,19 +48,26 @@ the container and the constraints of the yard plan. These can make the real effe
 smaller; a stronger slowdown under load, as recorded, can make it larger. The
 model cannot decide which dominates. A statement such as ``S1 shortens the mean
 turnaround time at CTB by two minutes'' is therefore not supported. The supported
-statement is conditional: if the waiting at a full block arises as in the model,
-moving deliveries to a neighbouring block with a free lane shortens the long
-visits, with at most a small change at the receiving blocks.
+statement is conditional. If the waiting at a full block arises as in the model,
+if eligible blocks exist and if a move costs little, then moving deliveries to a
+neighbouring block with a free lane shortens the long visits, with at most a small
+change at the receiving blocks. The model does not reproduce the severe
+congestion that motivates the rule, so even the direction of the effect at CTB is
+not established. It is a hypothesis that a pilot would have to test.
 
-\paragraph{Both sides of the corridor.} The corridor applies to every truck, and
-both of its bounds matter. S1 reduces the visits above 35 minutes by 3.7
-percentage points, but the visits inside the corridor grow by only 0.3 points:
-the other visits that become shorter fall below 25 minutes. For the customer this
-is an improvement; for the terminal it means faster truck handling than wanted,
-because the cranes also serve the waterside and the rail. The model contains no
-waterside work, so it can evaluate the upper bound of the corridor but not the
-lower one. A rule for the terminal would have to combine the allocation with a
-limit on how much crane capacity the trucks may take.
+\paragraph{Both sides of the corridor.} The corridor applies to the mean
+turnaround time of an hour, and both of its bounds matter. In the model, S1 about
+halves the share of hours above 35 minutes, and these hours move into the
+corridor, not below it. Per visit, some visits become shorter than 25 minutes, but
+the hourly means stay above the lower bound. Below the corridor, the terminal could
+move manual equipment from HO2 to the waterside, so that HO2 serves trucks more
+slowly while the waterside gains capacity. The data do not record how equipment is
+assigned to the handling areas, so the model cannot evaluate this lower side. This
+thesis therefore judges the rule against the upper bound only
+(Section~\ref{sec:prob_statement}). A
+shorter turnaround time also does not show that crane capacity was taken from the
+waterside, because it can come from less waiting with the same handling effort.
+The model cannot settle this trade-off.
 
 \paragraph{Model error or drift?} Part of the shortfall is the drift between the
 periods (Section~\ref{sec:exp_partitions}). On the training period the same
@@ -68,11 +76,15 @@ misses the Spearman threshold by only 0.0002; its cycle-time distance (3.9 minut
 lies within the change between the periods. On the test period, two thresholds are
 missed and the error of the mean turnaround time is twice as large (8.0 against
 3.9 minutes), because the stops of the test period took longer at every load
-(Section~\ref{sec:res_e4_remaining}). With less drift, the model would therefore
-come much closer to the acceptance criteria. One weakness, however, appears in both
-periods: with 150 or more trucks in the terminal, the simulated median turnaround
+(Section~\ref{sec:res_e4_remaining}). In the test period, more blocks were empty,
+2.4 against 1.1 of 22 on average, so the remaining blocks carried more of the load
+(Section~\ref{sec:obs_drift}). The in-sample run therefore suggests that
+part of the shortfall comes from the drift, although it cannot separate the two
+cleanly (Section~\ref{sec:disc_threats}). One weakness, however, appears in both
+periods. With 150 or more trucks in the terminal, the simulated median turnaround
 time is 38 to 40 minutes against 58 to 59. The missing slowdown in the busiest hours
-is a limitation of the model, not of the test period.
+is a limitation of the model, not of the test period, and it lies exactly in the
+congestion that the allocation rule is meant to relieve.
 
 \paragraph{Conditions of the result.} The final configuration replays the observed
 arrivals, case attributes and blocks of the test period. Its validity is conditional on
@@ -85,10 +97,15 @@ service (Table~\ref{tab:sim_adaptations}); each is needed for the load response
 result. The block allocation is replayed only where a simulated stop has an
 observed counterpart, about three quarters of the RMG stops. The load feature of
 the service time is counted when a stop is scheduled, and it sees somewhat less
-load than the final log shows. And S1 decides when a delivery stop becomes
-possible: at Gate In for a first stop, the moment the terminal assigns the yard
-position, but later for 6.5\,\% of the moves; whether the committed load of each
-block is known to the yard planning at the moment of assignment was not checked.
+load than the final log shows. Its likely consequence is that the simulated stops
+slow down too little under load, which agrees with the shortfall in the busiest
+hours. And S1 decides when a delivery stop becomes possible, which is later than
+Gate In for 6.5\,\% of the moves. Restricted to decisions at Gate In, the effect
+is the same (Section~\ref{sec:res_s1_mechanism}). Today's assignment does not use
+the committed load of the blocks (Section~\ref{sec:disc_stakeholders}). S1 would
+therefore add new information to the decision. In principle it is available at
+Gate In, because the blocks of the trucks already in the terminal were assigned
+when they passed the gate.
 
 \section{Discovery Metrics and Simulation Behaviour}
 \label{sec:disc_metrics}
@@ -125,11 +142,28 @@ transition that stands for one dependency between two activities. ProSiT learns
 these decisions well, but a data rule that looks only at the visible activities
 comes too late; the rule has to look ahead on the net.
 
-Two of the strongest effects in the simulation were invisible to every discovery
-metric: the self-count in the queue feature, which made the block choice herd
-trucks onto one block, and the count of stops in progress, which was too low for
-one in seven RMG stops. Metrics on the log, and a single similarity score of the
-simulated log, would have hidden both.
+Conformance metrics evaluate the control flow, not the resource and queue
+mechanisms, so they are not expected to reveal problems there. The two strongest
+effects in the simulation therefore had to be found by validating the simulator
+component by component. One is the self-count in the queue feature, which made
+the block choice herd trucks onto one block. The other is the count of stops in
+progress, which was too low for one in seven RMG stops. A single similarity score
+of the simulated log would have hidden both.
+
+\paragraph{What the discovered control flow contributes.} Most visits have one
+stop, and the planned stops are known at Gate In, so the control flow might seem
+of little importance for the decision. It matters in three ways. It decides which
+sequences the simulator can generate at all, for example the visits to two blocks
+that the filtered nets lose. Its structure decides whether impossible visits arise
+and where a data rule has to act. It also provides the decision points at which
+ProSiT learns its routing. Once the resource mechanisms are corrected, however,
+nets without parallel branches give nearly the same turnaround time, and the net
+explains at most 1.5 of the 8.0 minutes of cycle-time distance
+(Section~\ref{sec:res_e4_nets}). The discovered control flow is therefore a
+necessary basis of the simulation, but not the source of its remaining error. For
+this decision, the value of process discovery lies in a justified and admissible
+control flow, while the evidence on the intervention depends on the resource
+model.
 
 For model selection in simulation studies, this suggests an order: first the
 coverage of the frequent behaviour, then the domain rules and precision, then a
@@ -260,17 +294,17 @@ Short stops can have a duration of zero, and the order of events in the same
 minute comes from the schedule, not from the clock. Zero-length stops are not
 counted as trucks at a block in the evaluation.
 
-\paragraph{The KPI.} The turnaround time runs from Gate In to Gate Out; the
+\paragraph{The KPI.} The turnaround time runs from Gate In to Gate Out. The
 approach to the first stop mixes driving and waiting, which the data cannot
-separate. The corridor of 25 to 35 minutes applies to every truck; the TTT is shown
-per truck on the management dashboard of the terminal
-(Section~\ref{sec:prob_statement}). The model can evaluate the upper bound, but
-not the lower one, because the waterside work that faster truck handling
-displaces is not modelled. Hourly values are attributed to the Gate-In
-hour of the trucks, and a delay peak is defined with thresholds from the training
-period; another attribution would give other peak hours. The validity of the
-model is judged for the turnaround time and its parts only; the use of cranes or
-lanes was not examined.
+separate. The corridor of 25 to 35 minutes applies to the mean turnaround time of
+the trucks of an hour (Section~\ref{sec:prob_statement}). An hour is formed by the
+Gate-Out hour of the trucks, that is, by the visits completed in it, and only
+hours with at least 20 trucks count. Another
+attribution or another minimum would give other hours. The model can evaluate the
+upper bound, but not the lower one, because the shift of equipment from HO2 to the
+waterside is not modelled. A delay peak is defined with a threshold from the
+training period. The validity of the model is judged for the turnaround time and
+its parts only. The use of cranes or lanes was not examined.
 
 \paragraph{The case attributes.} The case attributes come from the planned visit,
 which is known at Gate In (Section~\ref{sec:entry_known_attributes}),
@@ -286,13 +320,18 @@ might change the learned routing and times.
 \paragraph{Retrospective hold-out.} Every selection uses the training log, and the
 criteria of the selections are fixed before the runs they decide. The split itself
 was fixed after the data had been explored, so the test log is a retrospective
-hold-out. The four changes to the queue and the service rest on
+hold-out. The acceptance thresholds of E4 draw partly on the weekly variation of
+the test period (Section~\ref{sec:exp_partitions}), so the evaluation is not fully
+independent of it. The four changes to the queue and the service rest on
 mechanisms that the training data show, such as the self-count in 99.98\,\% of the
-training stops, not on parameters fitted to the test period; the test error may
+training stops, not on parameters fitted to the test period. The test error may
 still be somewhat optimistic. The test period was also more congested than the
 training period (25.7 against 10.4\,\% delay-peak hours). Its error mixes the error
-of the model with the change of the terminal between the periods; the in-sample
-run on the training period separates the two (Section~\ref{sec:res_e4_remaining}).
+of the model with the change of the terminal between the periods. The in-sample
+run on the training period helps to distinguish the two, but it does not separate
+them cleanly, because the two runs also differ in fitting, in the composition of
+the visits and in conditions that the data do not record
+(Section~\ref{sec:res_e4_remaining}).
 
 \paragraph{Oracle inputs.} The final configuration replays the observed arrivals,
 case attributes and blocks. Its validity is conditional on these inputs; without them
@@ -333,28 +372,49 @@ confirm \cite{Vinci2026prosit}.
 \section{Domain Knowledge and Stakeholder Review}
 \label{sec:disc_stakeholders}
 
-Domain knowledge entered the study in four places: the meaning of the recorded
-stop times, the domain rules of the truck visit, the three lanes of a block, and
-the corridor and the decision point of the allocation. They were worked out with
-the project team of the terminal, from terminal development and the data warehouse
-team, as part of the use case of this study. They give the model a physical basis,
-but an assumption that
-the modeller puts into the model cannot be confirmed by the same model: the
-records can only show that they do not contradict it, as they do for rules 1 to 5.
+The terminal took part in the study in two ways. First, its data warehouse and
+business intelligence team and terminal development co-designed the use case in
+every phase, from the data and the cleaning to the domain rules and the
+improvement measure (Table~\ref{tab:stakeholder_phases}). Second, the completed
+model and its results were reviewed by e-mail on 12 November 2026 by the project
+manager responsible for the cross-terminal KPI dashboard in the data warehouse and
+business intelligence team. He is also the company-side co-supervisor of this
+thesis, so the review is not independent of the study. The review covered the
+domain rules and the three lanes, the variants of the event log, the corridor,
+the decision point and the eligible blocks of the allocation, the result of the
+improvement measure and the peak hours of the simulation.
 
-\todo{Report the stakeholder review here: who reviewed (role), when, on which
-version of the model and which material (domain rules, three lanes, corridor,
-eligible blocks, decision point, simulated KPIs and S1 results); what was
-confirmed, what was corrected, and what changed in the model or the
-interpretation as a result. If no review took place, state this plainly and keep
-the conclusions conditional.}
+The review confirmed the domain rules and the three lanes per block. It confirmed
+that all sequences of the event log are real operational variants, so rare
+sequences are not noise. It confirmed that the yard position of a delivery is
+assigned at Gate In. There, the terminal chooses a block near the berth of the
+target vessel if the berth is known, and block T13 in the middle of the yard
+otherwise. The assignment does not consider how many trucks are already heading
+to a block. This is the decision that the improvement measure changes, and the
+committed load of the blocks is the information it adds.
 
-Two points matter most for the operational reading of the results. First, the
-corridor has a lower bound because the cranes are shared with the waterside and
-the rail: a shorter turnaround time is not better in itself, and the effect of S1
-on the waterside is outside the model. Second, the rule must fit the moment at
-which the terminal assigns the yard position and the information available then,
-including the blocks that may take a given container.
+The review corrected the corridor. It applies to the mean turnaround time of an
+hour, computed over the trucks that leave in that hour, not to every truck. Below
+the corridor, the terminal can move manual
+equipment from HO2 to the waterside. The thesis uses this definition throughout.
+Because the assignment of equipment is not recorded, the improvement measure is
+judged against the upper bound only.
+
+The review judged the result of the improvement measure plausible. Moves within
+one or two blocks need no rehandling and no long additional driving to the
+waterside, and the later retrieval may even become faster, because not every
+container comes from the same default block. Whether a completely different block
+choice gives a clearly larger effect was named as an open question. In the model
+it adds little (Section~\ref{sec:res_s1_kpi}). These statements are an expert
+judgement, not a measured cost.
+
+The review did not find the missing peak hours of the simulation plausible. This
+agrees with the main limitation of the model found in E4, and it is the reason why
+the result of the improvement measure remains a hypothesis for CTB.
+
+An assumption that the modeller and the terminal put into the model cannot be
+confirmed by the same model. The records can only show that they do not
+contradict it, as they do for rules 1 to 5.
 
 \section{Implications for Practice}
 \label{sec:disc_practice}
@@ -362,8 +422,8 @@ including the blocks that may take a given container.
 For the terminal, the study gives three results that do not depend on the size
 of the simulated effect.
 
-\paragraph{Where the time is lost.} The visits above the corridor are longer in
-every part of the visit, not at one point: in the test period they spend about 20
+\paragraph{Where the time is lost.} Visits longer than 35 minutes are longer in
+every part of the visit, not at one point. In the test period they spend about 20
 minutes before the first stop, 21 minutes at their stops and 18 minutes before
 Gate Out, against 7, 8 and 8 minutes for the other visits
 (Table~\ref{tab:kpi_long_visits}). The waiting before the first stop grows sharply
@@ -371,19 +431,21 @@ when three trucks are already at a block. This locates two levers: the load of t
 blocks at the moment a truck arrives, and the waiting before Gate Out.
 
 \paragraph{What a block allocation can do.} Within the model, sending a delivery
-to a neighbouring block when all three lanes of its block are taken shortens the
-long visits, reduces waiting rather than moving it, and works with a local rule
-that moves about one delivery in five by one or two block numbers. Whether this
-is worth testing in operation depends on what the model leaves out: whether the
-yard plan allows a delivery to go to a neighbouring block, what the extra driving
-and a later rehandling cost, and whether the yard planning knows the trucks at
-each block when it assigns the position.
+to a nearby block when all three lanes of its block are taken about halves the
+hours above the corridor, reduces waiting rather than moving it, and works with a
+local rule that moves about one delivery in five by one or two block numbers. The
+decision fits the moment at which the terminal assigns the yard position, and the
+terminal expects no rehandling and no long additional driving for such moves.
+Whether the rule is worth a pilot depends on what the model cannot show, namely
+how strongly the busiest hours would respond. The information the rule needs, the
+trucks already heading to each block, is not used in today's assignment, so a
+pilot would also show whether the yard planning can use it at the gate.
 
 \paragraph{What would be needed before acting.} A decision to change the
-allocation would need, first, the review of these assumptions by the terminal
-(Section~\ref{sec:disc_stakeholders}); second, data on the occupancy of the lanes
-and cranes, so that waiting and service can be separated and the slowdown in the
-busiest hours can be learned; and third, a small field trial or a historical
-period in which deliveries were redirected, against which the simulated effect
-could be checked. Until then, the simulation is a tool to explore and explain
+allocation would need three things. The first is data on the occupancy of the
+lanes and cranes, so that waiting and service can be separated and the slowdown
+in the busiest hours can be learned. The second is a check in the yard plan of
+how often a block within one or two block numbers can really take a given
+container. The third is a small field trial or a historical period in which
+deliveries were redirected, against which the simulated effect could be checked. Until then, the simulation is a tool to explore and explain
 where waiting arises and how a rule would act on it, not a forecast of its effect.

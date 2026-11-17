@@ -190,14 +190,36 @@ model error without the change, and the distance between two real periods shows
 how close any model fitted on one period can be to another
 (Section~\ref{sec:exp_e4_design}).
 
+The yard snapshots show a further difference (Figure~\ref{fig:obs_block_occupancy}).
+Every four hours they record the occupied and the theoretical capacity of every block
+in TEU. In the training period, T16, T19 and T25 were empty for one to three weeks
+each, on average 1.1 blocks at a time. In the test period, T26 was empty from
+6 April, T18 from 13 April and T15 from 19 April, until T18 and T26 were refilled
+from 28 April. On average 2.4 of the 22 blocks were empty, and for 87\,\% of the
+time at least two, against 37\,\% in the training period. The event log shows the
+same pattern. Before a block falls empty, its deliveries stop while its receives
+continue. The terminal could not confirm the reason. The replayed blocks of the
+simulation contain these closures, but the learned waiting and service times come
+from a period with fewer closed blocks.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/observed/block_occupancy.png}
+\caption{Occupancy of the RMG blocks from the yard snapshots of the terminal, every
+four hours. Top: utilisation of every block (occupied TEU divided by the theoretical
+capacity). Bottom: occupied TEU of T15, T18, T26 and the default block T13. Dashed
+line: split between training and test period.}
+\label{fig:obs_block_occupancy}
+\end{figure}
+
 \section{Bottlenecks at the Handover}
 \label{sec:obs_bottlenecks}
 
-\section{Visits Above the Corridor}
+\section{Visits Longer Than 35 Minutes}
 \label{sec:obs_long_visits}
 
-Table~\ref{tab:kpi_long_visits} compares the visits above the corridor of 25 to 35
-minutes with the other visits. The long visits are longer in every part of the
+Table~\ref{tab:kpi_long_visits} compares the visits longer than 35 minutes with the
+other visits. The long visits are longer in every part of the
 visit: before the first stop, at the stops and before Gate Out. Visits with
 several stops and mixed visits are much more frequent among them.
 

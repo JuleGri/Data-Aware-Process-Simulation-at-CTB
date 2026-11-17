@@ -37,7 +37,7 @@ turnaround time and its response to load, and which components of the simulator
 cause the remaining error. Result: the configuration used in E5 and an assessment
 of its validity.
 \item \textbf{Improvement measure.} Evaluate a redesign of the allocation of
-deliveries to the yard blocks that targets the visits above the corridor. Result:
+deliveries to the yard blocks that targets the hours above the corridor. Result:
 the effect of the measure on the KPI, the mechanism behind it, its costs, and how
 far the simulation can support it.
 \end{enumerate}
@@ -60,12 +60,17 @@ to 30 April). The boundary falls on a weekend. Heavy trucks may not drive on
 Sundays in Germany \cite{StVO30}, so the terminal holds no trucks at the boundary, and neither
 period needs a warm-up phase.
 
-Everything that a model learns, and every decision of the experiments, comes from
-the training log: the discovery of the nets, the fitting of ProSiT, the thresholds
-of the measures and every selection. The test log is used only to evaluate. E1
-counts how many of its sequences that do not occur in training a net accepts; E3
-to E5 simulate its period, and E4 and E5 compare the simulated with the observed
-visits of the same trucks.
+Everything that a model learns comes from the training log, namely the discovery
+of the nets, the fitting of ProSiT, the delay-peak threshold and every selection
+between nets or configurations. The test log is used to evaluate. E1 counts how
+many of its sequences that do not occur in training a net accepts. E3 to E5
+simulate its period, and E4 and E5 compare the simulated with the observed visits
+of the same trucks. One exception concerns the acceptance criteria of E4
+(Section~\ref{sec:exp_e4_runs}). Their thresholds come from the natural variation
+between real periods, and this variation is measured partly between the weeks of
+the test period. The thresholds use only observed data, never simulated results,
+and they were fixed before the final configuration was run. The evaluation of E4
+is nevertheless not fully independent of the test period.
 
 \begin{figure}[htbp]
 \centering
@@ -81,10 +86,15 @@ Between the two periods, a temporal drift is apparent (Figure~\ref{fig:drift_dai
 In the test period more trucks are in the terminal at the same time (95 instead of
 77 on average at Gate In), the median turnaround time is 33 instead of 29 minutes,
 and a quarter instead of a tenth of the hours are delay peaks
-(Section~\ref{sec:observed_behaviour}). The terminal could not name a specific
-operational cause. One plausible reason is the Easter holidays at the end of the
-training period: cargo that was delayed then may have been moved into the
-following weeks and concentrated there. A model learned on the training period
+(Section~\ref{sec:observed_behaviour}). The yard snapshots of the terminal show
+one concrete difference. Blocks T26, T18 and T15 were emptied in April and stayed
+empty for up to three weeks, so that on average 2.4 of the 22 blocks were empty in
+the test period, against 1.1 in the training period
+(Figure~\ref{fig:obs_block_occupancy}). The terminal could not confirm the
+reason, for example maintenance. With fewer blocks, the same trucks meet fully
+loaded blocks more often. A second plausible reason is the Easter holidays at the
+end of the training period. Cargo that was delayed then may have been moved into
+the following weeks and concentrated there. A model learned on the training period
 cannot know such a shift. An error on the test period therefore mixes the error of
 the model with the drift. For this reason, model variants are compared with each
 other on the same period, and the configuration selected in E4 is also run on the
@@ -94,35 +104,38 @@ training period.
 \label{sec:exp_kpis}
 
 The KPI is the truck turnaround time (TTT), from Gate In to Gate Out, that is, the
-total duration of a case. The terminal aims at a TTT between 25 and 35 minutes for
-every truck (Section~\ref{sec:prob_statement}). A visit above 35 minutes is too long
-for the customer; a visit below 25 minutes is faster than the terminal wants,
-because the cranes also serve the waterside and the rail.
-Figure~\ref{fig:kpi_corridor} shows where the visits lie: in the test period,
-47\,\% of the visits take longer than 35 minutes, and on average a visit spends
-12.5 minutes above the corridor (training log: 36\,\% and 9.5 minutes). These
-visits are the target of the improvement measure in E5.
+total duration of a case. The terminal judges it per hour. The mean TTT of the
+trucks that leave through Gate Out in an hour, that is, of all visits completed in
+that hour, should lie between 25 and 35 minutes
+(Section~\ref{sec:prob_statement}). Only hours with at least 20 trucks are counted,
+the same minimum as for the delay peaks below. Figure~\ref{fig:kpi_corridor} shows
+the hourly mean TTT. In the test period it exceeds 35 minutes in 56\,\% of the
+hours, and on average an hour lies 5.5 minutes above the corridor (training log
+38\,\% and 3.8 minutes). These hours are the target of the improvement measure in
+E5.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/kpi/kpi_corridor.pdf}
-\caption{Turnaround time per visit in the training and the test log, with the
-corridor of 25 to 35 minutes. Minutes above 35 per visit: the mean of
-$\max(\mathrm{TTT}-35, 0)$ over all visits.}
+\includegraphics[width=\textwidth]{figures/kpi/kpi_corridor_hourly.pdf}
+\caption{Mean turnaround time of the trucks of an hour in the training and the
+test log, with the corridor of 25 to 35 minutes. Hours with at least 20 trucks,
+attributed by Gate Out. Minutes above 35 per hour are the mean of
+$\max(\overline{\mathrm{TTT}}-35, 0)$ over these hours.}
 \label{fig:kpi_corridor}
 \end{figure}
 
-The visits above the corridor lose time in every part of the visit, not at one
-point: before the first stop, at the stops and before Gate Out
+Visits longer than 35 minutes lose time in every part of the visit, not at one
+point. They spend longer before the first stop, at the stops and before Gate Out
 (Table~\ref{tab:kpi_long_visits} in Appendix~\ref{app:observed_behaviour}). The
 waiting before the first stop grows with the load of the block
 (Section~\ref{sec:observed_behaviour}), and the stops take longer at busy blocks; a
 different allocation of deliveries to the blocks acts on both. The thesis uses
-four groups of measures:
+four groups of measures.
 \begin{itemize}
-\item \textbf{Corridor:} the share of visits below, in and above the corridor, and
-the minutes above the corridor per visit, which count both how many visits are too
-long and by how much.
+\item \textbf{Corridor.} The share of hours whose mean TTT lies below, in or above
+the corridor, and the minutes by which the hourly mean exceeds 35, averaged over
+the hours. They count both how many hours are too long and by how much. The same
+measures per visit show which visits gain.
 \item \textbf{Level and tail:} the mean, the median and the 90th percentile (P90)
 of the TTT. The mean is moved by single visits of several hours; the median is the
 robust central value.
@@ -158,16 +171,36 @@ fitted parameters or of the model structure.
 \subsection{Domain Knowledge}
 \label{sec:exp_review}
 
-The model draws on three sources: the operational records, the literature, and the
-use case that was worked out with the project team of the terminal, from terminal
-development and the data warehouse team. They support different claims. The
-records support empirical checks of sequences, times and loads. The use case
-gives the meaning of the activities and timestamps, the domain rules, the three
-lanes of a block, the corridor and the moment at which a yard position is
-assigned. An assumption that is put into the model cannot be confirmed by the same
-model: a check against the records only shows that the records do not contradict
-it. The review of the model and of the results by the terminal is reported in
-Section~\ref{sec:disc_stakeholders}.
+The model draws on three sources, the operational records, the literature and the
+terminal. They support different claims. The records support empirical checks of
+sequences, times and loads. The terminal took part in every phase of the study
+(Table~\ref{tab:stakeholder_phases}). Its data warehouse and business intelligence
+team and terminal development co-designed the use case. They identified the data,
+classified the edge cases of the cleaning, defined the visit complexity, provided
+the domain rules and defined the improvement measure. The completed model and its
+results were reviewed afterwards (Section~\ref{sec:disc_stakeholders}). An
+assumption that is put into the model cannot be confirmed by the same model. A
+check against the records only shows that the records do not contradict it.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{L{2.4cm}YL{2.7cm}}
+\toprule
+\textbf{Phase} & \textbf{Input from the terminal} & \textbf{Where it enters} \\
+\midrule
+Event log & Identified which tables of the terminal operating system record the physical milestones of a visit, such as Gate In, the start and end of a stop and Gate Out. Provided the operational data on container moves, truck moves and yard occupation. & Chapter~\ref{chp:case_study_and_data} \\
+Cleaning & Classified the edge cases, for example visits longer than twelve hours and missing timestamps as recording errors. Defined the visit complexity, which expresses how much planning and equipment a visit needs, for example for hazardous goods. & Sections~\ref{sec:cleaning_population} and~\ref{sec:entry_known_attributes} \\
+Rules & Provided the catalogue of rules that every model and every simulated visit has to follow, including the three lanes per block. & Table~\ref{tab:domain_rules}, E2, E4 \\
+Variants & Confirmed that the sequences of the event log are real operational variants. & Section~\ref{sec:exp_discovery_eval} \\
+KPI & Defined the corridor of 25 to 35 minutes for the hourly mean turnaround time. & Section~\ref{sec:exp_kpis} \\
+Scenario & Given the limits of the resource data, defined the improvement measure. A delivery can be assigned to another RMG block at the moment the truck arrives. & Section~\ref{sec:exp_policy} \\
+Review & Reviewed the rules, the variants, the corridor, the decision point, the result of the improvement measure and the peak hours of the simulation. & Section~\ref{sec:disc_stakeholders} \\
+\bottomrule
+\end{tabularx}
+\caption{Contributions of the terminal by phase. Participants were the data warehouse and business intelligence team and terminal development of HHLA.}
+\label{tab:stakeholder_phases}
+\end{table}
 
 \section{Control-Flow Discovery (E1)}
 \label{sec:exp_discovery}
@@ -763,7 +796,11 @@ periods); reported for the conditional and the fully generative configuration.
 E5 is admissible for a quantitative estimate if criteria 1 to 3 hold for the
 final configuration under replay; otherwise it is run only as a what-if
 demonstration (Section~\ref{sec:exp_policy}). Criterion 4 states how far the
-absolute values can be trusted.
+absolute values can be trusted. The thresholds make the decision reproducible.
+They do not prove that a model which meets them is accurate enough for the
+allocation decision, and a rising turnaround time under more arrivals
+(criterion 3) is a sanity check rather than evidence of correct behaviour under
+an intervention.
 
 % ======================================================================
 \section{Improvement Measure: Load-Aware Block Allocation (E5)}
@@ -773,11 +810,11 @@ absolute values can be trusted.
 %   evaluate_e5.py, evaluate_e5_kpi.py (corridor measures); runs: simulation_e3/runs/hm07orig_20261115/e5,
 %   eval_e5, eval_e5_kpi35.
 
-E5 evaluates an improvement measure: a redesign of the allocation of deliveries
-to the yard blocks that aims at the visits above the corridor. It answers RQ3: to
-what extent can the simulation be used to evaluate such a measure under the
-physical limits of the blocks, and what does it indicate about its effect on the
-turnaround time? Three variants of the measure differ in how far a delivery may be
+E5 evaluates an improvement measure, a redesign of the allocation of deliveries
+to the yard blocks that aims at the hours above the corridor. It answers RQ3, to
+what extent the simulation can be used to evaluate such a measure under the
+physical limits of the blocks, and what it indicates about its effect on the
+turnaround time. Three variants of the measure differ in how far a delivery may be
 moved, so that E5 also shows how much flexibility the measure needs. Whether the
 result can support an operational recommendation, or only a statement about the
 simulated system, depends on the validation of E4.
@@ -798,9 +835,15 @@ The observed waiting before the first RMG stop grows from 6 to 16 minutes when
 three trucks are already at the block, while other blocks often have free lanes
 (Section~\ref{sec:observed_behaviour}). The storage block of an export delivery
 is assigned by yard planning, whereas a receive must go to the block where its
-container is. S1 therefore moves only RMG deliveries. When a delivery becomes
-possible, the simulator counts the committed load of its block: the stops in
-progress there or already scheduled. If this number is three or more, the block
+container is. At Gate In, the terminal decides whether a delivery goes to LL, HO2
+or a block. If the target vessel and its berth are known, it chooses a block near
+the berth. Otherwise the container goes to the middle of the yard, block T13 by
+default (M.~Petersen, project manager for the cross-terminal KPI dashboard, data warehouse and business intelligence, HHLA, personal communication, 12 November 2026). The assignment does not consider how many trucks are already heading to the block.
+S1 changes this choice and therefore moves only RMG
+deliveries. Within one or two block numbers of the original block, the later
+retrieval towards the berth stays short. When a delivery becomes possible, the
+simulator counts the committed load of its block, that is, the stops in progress
+there or already scheduled. If this number is three or more, the block
 counts as full, and the delivery is moved to the eligible block with the lowest
 committed load below three; ties go to the nearest block. The rule thus decides
 when the delivery stop becomes possible: at Gate In for a delivery that is the
@@ -822,15 +865,19 @@ averaged.
 
 \paragraph{Measures}
 \begin{itemize}
-\item \textbf{Z1 Effect.} Paired difference (S1 minus baseline) of the corridor
-measures (share of visits above 35 minutes and in the corridor, minutes above 35
-per visit; Section~\ref{sec:exp_kpis}), of the mean, median and P90 of the TTT of
+\item \textbf{Z1 Effect.} Paired difference (S1 minus baseline) of the hourly
+corridor measures, the shares of hours whose mean TTT lies above 35 minutes, in
+the corridor and below 25 minutes, and the minutes above 35 per hour
+(Section~\ref{sec:exp_kpis}). The rule is judged by the two measures of the upper
+bound, the share of hours above 35 minutes and the minutes above 35 per hour. The
+same measures per visit are reported as well. Further differences are those of
+the mean, median and P90 of the TTT of
 all visits, of the TTT of the visits with a moved delivery, and of the visits that
-arrive with 100 or more trucks in the terminal; mean over the ten seeds with a
-95\,\% $t$-interval. Every difference is measured against the simulated baseline
-of the same seed. No simulated difference is added to an observed value: the
-model does not reproduce the observed level (E4), so a simulated difference is
-not a prediction for the terminal.
+arrive with 100 or more trucks in the terminal. All are means over the ten seeds
+with a 95\,\% $t$-interval. Every difference is measured against the simulated
+baseline of the same seed. No simulated difference is added to an observed value,
+because the model does not reproduce the observed level (E4), so a simulated
+difference is not a prediction for the terminal.
 \item \textbf{Z2 Mechanism.} Approach to the first RMG stop, share of RMG stops
 that start with two other trucks at the block (a full block), and waiting for a
 free lane per RMG stop.
@@ -854,6 +901,13 @@ service model sees one more truck whenever at least one other truck is at the
 block; (c) arrivals compressed to an intensity of 1.2, where the simulated level
 matched the observed one; (d) fully generative arrivals and blocks (hour-of-week
 arrivals and training block shares).
+
+\paragraph{Decision at Gate In}
+A further check is not part of the rules fixed before the runs. It restricts the
+moves of the $\pm 2$ variant to deliveries that are the first stop of their visit,
+so that every decision falls at Gate In, when the terminal assigns the yard
+position. Later deliveries keep their block. The check shows how much of the effect
+depends on decisions that use information from after Gate In.
 
 \paragraph{Rules for the claims}
 Fixed before the runs of E5:

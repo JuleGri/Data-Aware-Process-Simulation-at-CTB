@@ -21,11 +21,6 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{Sulis2026SimulationReview}
-E.~Sulis, L.~Genga, and N.~Martin, ``Simulation and process mining: Review and
-  outlook,'' \emph{International Journal of Data Science and Analytics},
-  vol.~22, p. 198, 2026.
-
 \bibitem{Vinci2026prosit}
 F.~Vinci, G.~Park, W.~M.~P. van~der Aalst, and M.~de~Leoni, ``Reliable and
   configurable process simulations via probabilistic white-box models,'' in
@@ -33,6 +28,11 @@ F.~Vinci, G.~Park, W.~M.~P. van~der Aalst, and M.~de~Leoni, ``Reliable and
   Shenzhen, China, December 1--4, 2025, Proceedings, Part II}, ser. Lecture
   Notes in Computer Science, vol. 16321.\hskip 1em plus 0.5em minus 0.4em\relax
   Springer Singapore, 2026, pp. 337--352.
+
+\bibitem{Sulis2026SimulationReview}
+E.~Sulis, L.~Genga, and N.~Martin, ``Simulation and process mining: Review and
+  outlook,'' \emph{International Journal of Data Science and Analytics},
+  vol.~22, p. 198, 2026.
 
 \bibitem{CTSteenken2004}
 D.~Steenken, S.~Voss, and R.~Stahlbock, ``Container terminal operation and
