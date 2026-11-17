@@ -12,6 +12,37 @@ calendars, the domain rules and the discovered nets. Chapter~\ref{chp:process_di
 shows and interprets the most important trees; Section~\ref{sec:res_inspection}
 discusses whether their features and targets are plausible for the terminal.
 
+\section{Components of a ProSiT Model}
+\label{app:prosit_components}
+
+Table~\ref{tab:prosit_components} lists the components that ProSiT learns in
+general, with the features each tree can use (Section~\ref{sec:prosit_components}).
+Table~\ref{tab:sim_overview} in Chapter~\ref{chp:process_discovery_methodology}
+shows what each component decides in the simulation model of this thesis.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{L{2.4cm}L{3.0cm}L{3.3cm}Y}
+\toprule
+\textbf{Component} & \textbf{Learned model} & \textbf{Predicts} & \textbf{Features} \\
+\midrule
+Arrivals & one regression tree & gap until the next case starts & hour and weekday of the previous arrival \\
+Arrival calendar & table & open or closed per weekday and hour & none \\
+Case attributes & observed sets or one distribution per attribute & attributes of a new case & none \\
+Routing & one classification tree per transition & whether the transition fires when it is enabled & case attributes, number of times each activity has occurred so far \\
+Resource choice & one classification tree per resource & whether the resource is chosen & activity, case attributes, resources used so far, optionally workload and queue length \\
+Capacity & number per resource & how many activities can run at once & none \\
+Waiting time & one regression tree per resource & time from ``enabled and resource free'' to start & activity, hour, weekday, case attributes, activity counts, optionally workload and queue length \\
+Execution time & one regression tree per activity & time from start to complete & resource, hour, weekday, case attributes, activity counts \\
+Resource calendars & table per resource & open or closed per weekday and hour & none \\
+\bottomrule
+\end{tabularx}
+\caption{Components of a ProSiT simulation model (version 1.0.4). Times are
+counted in open minutes of the relevant calendar.}
+\label{tab:prosit_components}
+\end{table}
+
 \section{Settings, Versions and Inputs}
 \label{app:prosit_settings}
 

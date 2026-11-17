@@ -3,12 +3,12 @@
 
 
 This chapter introduces the concepts that the thesis uses and the research
-related to each of them. It follows the path of the thesis: the terminal
-process and its key performance indicator (Section~\ref{sec:bg_terminal}),
-event logs (Section~\ref{sec:operational_data_event_logs}), process discovery
-with Petri nets (Section~\ref{sec:bg_discovery}), conformance checking
-(Section~\ref{sec:bg_conformance}), business process simulation
-(Section~\ref{sec:bps_models}) and the simulation framework ProSiT
+related to each of them. It follows the path of the thesis. It starts with the
+terminal process and its key performance indicator (Section~\ref{sec:bg_terminal})
+and with event logs (Section~\ref{sec:operational_data_event_logs}). It then
+explains process discovery with Petri nets (Section~\ref{sec:bg_discovery}),
+conformance checking (Section~\ref{sec:bg_conformance}), business process
+simulation (Section~\ref{sec:bps_models}) and the simulation framework ProSiT
 (Section~\ref{sec:prosit_background}). Section~\ref{sec:rw_positioning} states
 the research gap.
 
@@ -35,9 +35,9 @@ Out}). Most visits have one stop. Visits with two or more stops are less
 frequent but take longer.
 
 \paragraph{Physical constraints}
-A truck visit is a physical process. Several constraints follow from this and
+A truck visit is a physical process. Several constraints follow from this. They
 hold for every visit, whether or not they are visible in the recorded data.
-\begin{itemize}
+\begin{itemize}[itemsep=2pt,topsep=4pt]
 \item A truck is one vehicle. Its stops happen one after another and never at
 the same time.
 \item A visit exists to move containers. A visit without any stop between the
@@ -63,16 +63,15 @@ The mean alone hides the long waits that cause complaints. This thesis
 therefore also reports the 90th percentile (P90) of TTT and the number of hours
 in which TTT is unusually high (Section~\ref{sec:exp_kpis}).
 
-\paragraph{Related work: simulation in container terminals}
+\paragraph{Simulation in container terminals}
 Terminal managers decide about truck appointments, equipment, staff and yard
 operations while the terminal is running. Because the processes are
 connected, a local change can affect waiting times and service elsewhere.
 Simulation allows such changes to be tested without disturbing live
-operations. Discrete-event simulation (DES) is the most common approach,
-because the terminal can be described by events such as arrivals, gate
-passages and container moves
-\cite{YUN1999DESSimulation,Bruzzone2012,Muravev2019,Carboni2025}. Studies use
-simulation to compare equipment numbers and operating policies
+operations. In the literature, discrete-event simulation is the most common
+approach, because a terminal can be described by events such as arrivals, gate
+passages and container moves \cite{YUN1999DESSimulation,Carboni2025}. Studies
+use simulation to compare equipment numbers and operating policies
 \cite{Kastner2021}, to generate scenarios \cite{Hartmann2005cenariosforCTSimulation},
 and to evaluate truck appointment systems and double cycles
 \cite{CTprocessMiningTAS2020,Bett2024}. These models are built by hand. This
@@ -80,7 +79,7 @@ needs domain knowledge, much manual work, and recalibration when operations
 change. A hand-built model may also describe how the process is meant to work
 rather than how it actually runs \cite{PMRozinat2009}.
 
-\paragraph{Related work: process mining in logistics}
+\paragraph{Process mining in logistics}
 Process mining has been applied to logistics, mostly to discover and analyse
 processes rather than to build executable simulation models
 \cite{RWAlnahas2023Logistics}. Reconstructing a logistics process from several
@@ -88,27 +87,26 @@ information systems requires care, because timestamps and identifiers from
 different systems may describe different operational stages
 \cite{RWBecker2017Context}. Grobis and Ihlenfeldt use event data to prepare a
 simulation model for production logistics and split the time between two
-activities into transport and waiting
-\cite{Grobis2025ProductionLogistics,Grobis2026SimulationDevelopment}. In
+activities into transport and waiting \cite{Grobis2025ProductionLogistics}. In
 ports, process mining has been used to describe operations, for example the
 performance and the deviations of a bulk port, but not to build simulation
 models \cite{Wang2014BulkPort}. Across 105 studies that combine simulation and
-process mining, Sulis et al.\ found one in logistics and one in transportation;
-most concern healthcare and manufacturing \cite{Sulis2026SimulationReview}. In a
-hospital, Vinci et al.\ discover a simulation model from an event log, check it
-against observed behaviour and only then use it to compare resource
-configurations \cite{Hospital2026Vinci}. This thesis follows the same order.
-They argue that queueing models suit capacity problems of a single activity,
-whereas processes with several activities and several resource pools need
-simulation. Their method assumes that delays arise only from limited resources,
-and the simulation was judged in discussions with the staff rather than by a
-structured procedure; the authors name both as limitations.
+process mining, Sulis et al.\ found one in logistics and one in transportation.
+Most of the studies concern healthcare and manufacturing
+\cite{Sulis2026SimulationReview}. In a hospital, Vinci et al.\ discover a
+simulation model from an event log, check it against observed behaviour and only
+then use it to compare resource configurations \cite{Hospital2026Vinci}. This
+thesis follows the same order. The authors argue that queueing models suit
+capacity problems of a single activity, whereas processes with several
+activities and several resource pools need simulation. Their method assumes that
+delays arise only from limited resources, and the simulation was judged in
+discussions with the staff rather than by a structured procedure. The authors
+name both as limitations.
 
-\paragraph{Implication for this thesis}
-An adequate simulation of the truck process must reproduce TTT, its tail and
-its growth under load. It must also respect the physical constraints listed
-above, because a policy that changes the load on the blocks is only credible
-if the simulated trucks behave like real trucks.
+An adequate simulation of the truck process must therefore reproduce TTT, its
+tail and its growth under load. It must also respect the physical constraints
+listed above, because a policy that changes the load on the blocks is only
+credible if the simulated trucks behave like real trucks.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Event Logs}
@@ -152,12 +150,12 @@ Simulation needs more than the order of events. When an event has a
 execution time. A third point in time, \emph{enablement}, is the moment at
 which the process model allows the activity to begin. It is not recorded. It is
 reconstructed by replaying the log on the process model
-\cite{PMRozinat2009,Camargo2020,Vinci2026prosit}. The time between enablement
-and start is called waiting time. In a physical process, this interval can
-contain queueing, driving and other delays. The meaning of each timestamp must
-therefore be checked. In the terminal data, a stop starts when the truck
-reports ready in the handover lane. The stop interval can already contain
-waiting for the crane (Section~\ref{sec:timestamp_semantics}).
+\cite{PMRozinat2009,Vinci2026prosit}. The time between enablement and start is
+called waiting time. In a physical process, this interval can contain queueing,
+driving and other delays. The meaning of each timestamp must therefore be
+checked. In the terminal data, a stop starts when the truck reports ready in the
+handover lane. The stop interval can therefore already contain waiting for the
+crane (Section~\ref{sec:timestamp_semantics}).
 
 \paragraph{Attributes}
 Further attributes describe the case and its context, for example the number of
@@ -176,32 +174,42 @@ PM4Py \cite{Berti2023PM4Py}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Process discovery builds a process model from an event log
-\cite{Aalst2016,Aalst2022Foundations}. The model shows how the process
-was executed, not how it was planned. ProSiT, the simulator used in this
-thesis, needs the model as a Petri net. This section introduces Petri nets,
-the discovery algorithms compared in E1, and the use of rules to restrict a
-discovered model.
+\cite{Aalst2016,Aalst2022Foundations}. The model describes the
+\emph{control flow} of the process, that is, which activities occur and in
+which order they can follow each other. In this thesis, the terms process
+model and control-flow model mean the same thing, a Petri net discovered from
+the event log. The model shows how the process was executed, not how it was
+planned. ProSiT, the simulator used in this thesis, needs the control flow as a
+Petri net. This section introduces Petri nets, the discovery algorithms that
+the thesis compares, and how domain rules can be brought into a discovered
+control flow.
 
 \subsection{Petri Nets, Workflow Nets and Silent Transitions}
 \label{sec:bg_petri}
 
 A Petri net is a graph of \emph{places} (circles) and \emph{transitions}
-(boxes), connected by arcs \cite{Murata1989,Aalst2016}. Formally, a
-labelled Petri net is a tuple $N=(P,T,F,\lambda)$. $P$ is a finite set of
-places, $T$ a finite set of transitions, and
+(boxes), connected by arcs \cite{Aalst2016}. For a reader who comes from the
+event log, the two kinds of nodes have a simple meaning. Transitions correspond
+to the recorded activities, for example \texttt{Gate In} or
+\texttt{RMG\_receive}. Places lie between the transitions, like junctions
+between the activities. They determine in which order the activities can occur
+and where the process can take one of several ways.
+
+Formally, a labelled Petri net is a tuple $N=(P,T,F,\lambda)$. $P$ is a finite
+set of places, $T$ a finite set of transitions, and
 $F\subseteq(P\times T)\cup(T\times P)$ the set of arcs. The labelling function
 $\lambda: T\rightarrow A\cup\{\tau\}$ gives each transition either an activity
 of the event log or the label $\tau$. The places with an arc to a transition
 $t$ are its input places ${\bullet}t$. The places with an arc from $t$ are its
 output places $t{\bullet}$.
 
-The state of a net is a \emph{marking}: a number of tokens in each place. A
-transition is \emph{enabled} when each of its input places holds a token.
-Firing it removes one token from each input place and adds one token to each
-output place. A choice is a place with several outgoing arcs: only one of the
-enabled transitions can take the token. Parallelism is a transition with
-several output places: it creates one token per branch, and the branches can
-then fire independently.
+The state of a net is called a \emph{marking}. It says how many tokens lie in
+each place. A transition is \emph{enabled} when each of its input places holds
+a token. Firing it removes one token from each input place and adds one token
+to each output place. A place with several outgoing arcs is a choice, because
+only one of the enabled transitions can take the token. A transition with
+several output places starts parallel branches. It creates one token per
+branch, and the branches can then fire independently of each other.
 
 A \emph{workflow net} has one source place $i$ and one sink place $o$, and
 every node lies on a path from $i$ to $o$. A run starts with one token in $i$
@@ -216,11 +224,11 @@ the net and must bring every case to the end.
 
 Transitions labelled $\tau$ are \emph{silent}. They fire like other
 transitions but leave no event in the log. They express routing that has no
-recorded counterpart: skipping an activity, repeating a loop, or splitting and
-joining parallel branches. The \emph{language} of a workflow net is the set of
-visible activity sequences of all complete runs. The net in
+recorded counterpart, for example skipping an activity, repeating a loop, or
+splitting and joining parallel branches. The net in
 Figure~\ref{fig:bg_petri_silent} accepts both \texttt{Gate In, RMG\_receive,
-Gate Out} and \texttt{Gate In, Gate Out}.
+Gate Out} and \texttt{Gate In, Gate Out}, because the silent transition skips
+the stop.
 
 \begin{figure}[htbp]
 \centering
@@ -256,264 +264,334 @@ skips the yard stop, so the net also accepts a visit without any stop.}
 \label{fig:bg_petri_silent}
 \end{figure}
 
-Silent transitions are a means of representation. Two nets with very different
-numbers of silent transitions can have the same language. Discovery algorithms
-add them systematically. The Inductive Miner, for example, turns an optional
-activity into a silent skip and a parallel block into a silent split and join
-\cite{Leemans2014InductiveMiner}. They have three consequences in this thesis.
-First, combinations of silent skips can admit behaviour that never occurs,
-such as the visit without a stop in Figure~\ref{fig:bg_petri_silent}. Because
-silent paths leave no trace, this is easy to overlook. Second, alignments
+Two notions have to be kept apart, the language of a net and its
+representation. The \emph{language} of a workflow net is the set of visible
+activity sequences of all its complete runs, that is, the behaviour it allows.
+The \emph{representation} is the net itself, its places, transitions and arcs.
+Two nets can look very different and still have the same language, for example
+because their silent transitions are placed differently. Discovery algorithms
+add silent transitions systematically. The Inductive Miner, for example, turns
+an optional activity into a silent skip and a parallel part into a silent split
+and join \cite{Leemans2014InductiveMiner}.
+
+Silent transitions have three consequences in this thesis. First,
+combinations of silent skips can allow behaviour that never occurs, such as the
+visit without a stop in Figure~\ref{fig:bg_petri_silent}. Because silent paths
+leave no trace, this is easy to overlook. Second, alignments
 (Section~\ref{sec:astar_alignment_definition}) must decide for every silent
-transition whether to fire it, which enlarges the search. Third, a simulator
-has to decide them as well, although they leave no trace in the training data
-(Section~\ref{sec:prosit_limits}).
+transition whether it fires, which enlarges the search. Third, a simulator also
+has to choose at every silent transition whether it fires. The event log never
+shows when a silent transition fired, so the simulator can learn these choices
+only from a replay of the log on the net (Section~\ref{sec:prosit_limits}).
 
 
 \subsection{Discovery Algorithms}
 \label{sec:bg_algorithms}
 
 Discovery algorithms differ in how they turn observed sequences into a model.
-Experiment E1 compares four families.
-\begin{itemize}
-\item \textbf{Alpha family.} The Alpha Miner derives ordering relations
-(directly follows, causality, parallelism, choice) from the log and builds
-places from them \cite{vanderAalst2004AlphaMiner}. Alpha+ and Alpha++ add short
-loops and non-local dependencies \cite{deMedeiros2004AlphaPlus,Wen2007AlphaPlusPlus}.
-The algorithms do not handle noise and do not guarantee a sound net.
+Ideally, the discovered net contains every recorded activity once, and a run
+through the net can reproduce every combination of activities that was
+observed, without allowing much more. All algorithms receive the same
+sequences, but they make different assumptions about what the sequences mean.
+Some derive ordering relations between pairs of activities, some count how
+often one activity follows another, some split the log step by step into
+smaller parts, and some search for constraints that every observed sequence
+satisfies. They also differ in what they guarantee, for example whether the
+resulting net is always sound. The same log therefore leads to different nets,
+and the nets receive different quality values
+(Section~\ref{sec:bg_conformance}).
+
+Most algorithms also have a frequency or noise threshold. Behaviour that occurs
+less often than the threshold is treated as noise and left out of the model.
+The higher the threshold, the more rare sequences the model does not represent.
+Whether rare behaviour is noise or regular behaviour cannot be decided from its
+frequency alone. It is a question of the data quality and of the domain. In a
+terminal, a rare sequence can be a recording error, but it can also be a
+regular, infrequent visit, for example a truck that serves two blocks.
+
+The process discovery in this thesis compares four families of algorithms.
+\begin{itemize}[itemsep=3pt,topsep=4pt]
+\item \textbf{Inductive Miner.} The Inductive Miner splits the log step by step
+into smaller parts. At each step it looks for one of four patterns, called
+cuts. The activities can follow each other in a sequence, they can be
+alternatives in a choice, they can repeat in a loop, or they can be independent
+of each other in a parallel part. In a parallel part, the miner assumes that
+the activities may occur in any order and even at the same time. The result is
+a process tree, which is converted into a sound workflow net. The variant with
+filtering (IMf) first removes behaviour below a noise threshold
+\cite{Leemans2014InductiveMiner}.
 \item \textbf{Heuristics Miner.} The Heuristics Miner counts how often one
-activity follows another and keeps a dependency when its dependency measure
-exceeds a threshold \cite{heuristicsMiner2006,Weijters2011FHM}. The interactive
+activity directly follows another. It keeps a dependency between two activities
+when this order is frequent and mostly one-directional, measured against a
+dependency threshold \cite{heuristicsMiner2006,Weijters2011FHM}. The interactive
 data-aware variant (iDHM) can also keep infrequent dependencies that depend on
-data, and converts the resulting causal net into a Petri net
+data, and converts the result into a Petri net
 \cite{Mannhardt2017DHM,Mannhardt2017iDHM}. In this Petri net every activity
 appears once, and every dependency between two activities becomes a silent
 transition between them. The result is not guaranteed to be sound.
-\item \textbf{Inductive Miner.} The Inductive Miner splits the log
-recursively by sequence, choice, parallel and loop cuts. The result is a
-process tree, which is converted into a sound workflow net. The variant IMf
-first removes infrequent behaviour below a noise threshold
-\cite{Leemans2014InductiveMiner}.
-\item \textbf{ILP Miner.} Region-based miners add a place for every linear
-inequality that all prefixes of the observed traces satisfy. The ILP Miner
-finds these places with integer linear programming. A filter on the prefixes
-controls how much infrequent behaviour is kept \cite{RWVanZelst2018ILP}.
+\item \textbf{ILP Miner.} Region-based miners look for places that the observed
+behaviour never violates. Such a place can be read as a rule on the order of
+the activities, for example that a stop can only happen after Gate In. The ILP
+Miner searches for these places with integer linear programming, a standard
+optimisation method. Because it keeps only the rules that all observed
+sequences respect, it tends to allow many orders that were never observed, so
+its nets are often permissive. A filter controls how much infrequent behaviour
+is taken into account \cite{RWVanZelst2018ILP}.
+\item \textbf{Alpha family.} The Alpha Miner, the oldest of the four, derives
+ordering relations between pairs of activities from the log. It records which
+activity directly follows which, and whether two activities are causally
+related, parallel or alternatives. From these relations it builds the places
+\cite{vanderAalst2004AlphaMiner}. Alpha+ and Alpha++ add short loops and
+long-distance dependencies \cite{deMedeiros2004AlphaPlus,Wen2007AlphaPlusPlus}.
+The algorithms do not handle noise and do not guarantee a sound net.
 \end{itemize}
 
-\paragraph{Related work}
-Benchmarks show that no algorithm is best on every log and every quality
-dimension \cite{DiscoveryBenchmark}. Rehse et al.\ argue that
-discovery experiments need explicit assumptions and a controlled design: the
-same input, the same cohorts and the same implementation of each measure
-\cite{RWRehse2024Experimentation}. E1 follows this design. A further point
-concerns time. Two activities that occur in either order are not necessarily
-parallel; they may simply be ordered freely. Lifecycle-aware discovery uses
+In the literature, benchmarks show that no algorithm is best on every log and
+every quality dimension \cite{DiscoveryBenchmark}. Rehse et al.\ argue that
+discovery experiments need explicit assumptions and a controlled design. Only
+then are their results comparable and a justified basis for choosing the net
+that the later stages work with. This means that every algorithm receives the
+same input log and that every quality measure is computed with the same
+implementation \cite{RWRehse2024Experimentation}. The process discovery in this
+thesis therefore follows an experiment protocol that is defined beforehand and
+used to select the most fitting control flow for the later simulation. Time is
+a further point. Two activities that occur in either order are not necessarily
+parallel. They may simply be ordered freely. Lifecycle-aware discovery uses
 start and complete timestamps to make this distinction
-\cite{RWLeemans2016Lifecycle}. For trucks it matters: two stops may occur in
-either order, but never at the same time.
+\cite{RWLeemans2016Lifecycle}. For trucks this matters, because two stops may
+occur in either order but never at the same time.
 
 \subsection{Domain Rules and Model Repair}
 \label{sec:bg_rules}
 
-A discovered model generalises beyond the observed traces. Part of this
-generalisation can contradict knowledge that is known independently of the
-data, for example the physical constraints of Section~\ref{sec:bg_terminal}.
+A discovered model generalises beyond the observed traces, so it also accepts
+sequences that the event log does not contain. This is important, because only
+then can the model represent behaviour that may occur in the future or in an
+alternative scenario. Otherwise it would reproduce only what happened in the
+training period, which may be short, incomplete or partly wrong. Part of this
+generalisation can, however, contradict knowledge that is known independently of
+the data, for example the physical constraints of Section~\ref{sec:bg_terminal}.
 Such knowledge can be written down as rules.
 
 \paragraph{Rules as automata}
 Many rules on activity sequences can be written as Declare constraints, for
-example ``Gate In occurs exactly once'' or ``mixed and delivery do not both
-occur at the same area'' \cite{RWDiCiccio2022Declarative}. Every Declare
-constraint can be translated into a finite automaton that accepts exactly the
-sequences satisfying it \cite{RWDeGiacomo2013LTLf,RWMaggi2011Monitoring}. A
-sound workflow net has a finite reachability graph, so its language is also
-accepted by a finite automaton. Finite automata can be combined: the product of
-two automata accepts exactly the sequences that both accept. Running the net
-and the rule automata in one product therefore answers two questions exactly.
-Does the net accept a sequence that breaks a rule? And which sequences of the
-net satisfy all rules? The product follows the same idea as the synchronous
-product used for alignments \cite{RWCarmona2022Conformance}. A net combined
-with declarative constraints in this way corresponds to a hybrid process model
-\cite{RWSlaats2016Hybrid}.
+example ``Gate In occurs exactly once'' or ``a mixed stop and a delivery do not
+both occur at the same area'' \cite{RWDiCiccio2022Declarative}. Each such
+constraint can be translated into a finite automaton
+\cite{RWMaggi2011Monitoring}. A finite automaton is a simple machine with a
+finite number of states. It reads a sequence of activities one by one, moves
+from state to state, and at the end accepts or rejects the sequence. The
+automaton of a constraint accepts exactly the sequences that satisfy the
+constraint. A sound workflow net can be read as an automaton as well. Its
+reachable markings form a finite graph, called the reachability graph, and the
+paths through this graph from the initial to the final marking spell out
+exactly the language of the net. Two automata can be combined into a product
+that accepts exactly the sequences that both of them accept. Running the net and
+the rule automata together therefore answers two questions exactly. The first
+is whether the net accepts a sequence that breaks a rule. The second is which
+sequences of the net satisfy all rules.
 
-Not every rule is a rule on sequences. ``Stops never overlap'' is a rule on
-timestamps. ``The number of stops equals the number of planned stops'' depends
-on a case attribute. Such rules cannot be written in the untimed language of a
-net. In data-aware Petri nets they become \emph{guards}: conditions on data
-that a transition must satisfy before it may fire
-\cite{Mannhardt2016Precision}. With guards, soundness also depends on the data:
-every case must still be able to complete under the guards
+\paragraph{Rules on data and time}
+Not every rule is a rule on the order of activities. ``Stops never overlap'' is a
+rule on timestamps. ``The number of stops equals the number of planned stops''
+depends on a case attribute. A classic Petri net describes only orders, so it
+cannot express such rules. For these cases, data Petri nets exist
+\cite{Mannhardt2016Precision}. They extend a classic Petri net by variables, for
+example the number of planned stops of a truck, and by \emph{guards}. A guard is
+a rule attached to a transition. It is a condition on the variables that must
+hold before the transition may fire. With guards, soundness also depends on the
+data, because every case must still be able to complete under the guards
 \cite{FelliDeLeoniMontali2021}.
 
-\paragraph{Related work: domain knowledge in discovery and repair}
-Schuster et al.\ classify how domain knowledge enters process discovery
-\cite{schuster2022}. Knowledge can be used before discovery, during
+\paragraph{Domain knowledge in discovery and repair}
+In the literature, Schuster et al.\ classify how domain knowledge enters process
+discovery \cite{schuster2022}. Knowledge can be used before discovery, during
 discovery, or \emph{a posteriori} on a discovered model. It can be explicit
 or come from user feedback, and it can be applied automatically or
 interactively. Explicit knowledge is written in one of two kinds of formalism.
 An \emph{imperative} formalism, such as a Petri net, follows a closed-world
-assumption: only the behaviour it describes is allowed. A \emph{declarative}
-formalism, such as Declare, follows an open-world assumption: everything is
+assumption, so only the behaviour it describes is allowed. A \emph{declarative}
+formalism, such as Declare, follows an open-world assumption, so everything is
 allowed that does not break one of its constraints \cite{schuster2022}. This
 thesis uses both. The discovered net is imperative, the domain rules are
-declarative, and a net is admitted only if its language respects the rules. Schuster
-et al.\ also classify approaches by the formalism of the output model. Here
-the output must be a sound workflow net, because ProSiT executes Petri nets
-and learns its routing per transition (Section~\ref{sec:prosit_background}).
+declarative, and a net is admitted only if its language respects the rules.
+Above all, the rules enforce physical feasibility, for example that a truck
+never performs two stops at once. Schuster et al.\ also classify approaches by
+the formalism of the output model. Here the output must be a sound workflow net,
+because ProSiT executes Petri nets and learns its routing per transition
+(Section~\ref{sec:prosit_background}). Several methods have been proposed to
+bring rules into discovery or to use them for the repair of a discovered model
+\cite{RWGreco2015Precedence,RWNorouzifar2026Rules,RWDixit2015Domain,Revoredo2023DomainRepair}.
 
-Greco et al.\ enforce precedence constraints
-during discovery \cite{RWGreco2015Precedence}. Norouzifar et al.\ integrate
-rules into the cuts of the Inductive Miner \cite{RWNorouzifar2026Rules}. Dixit
-et al.\ work a posteriori: they edit a discovered model at random and keep the
-candidates that satisfy user-specified Declare constraints best
-\cite{RWDixit2015Domain}. Revoredo discusses how domain knowledge can guide
-the repair of a process model \cite{Revoredo2023DomainRepair}.
-
-Process enhancement changes a discovered model in two ways: \emph{repair}
+Process enhancement changes a discovered model in two ways. \emph{Repair}
 changes the model so that it reflects reality better, and \emph{extension} adds
 a perspective such as data, time or resources \cite{Aalst2016,RWdeLeoni2022Enhancement}.
 Classical model repair changes a model so that it can replay every trace of a
 log while staying close to the original \cite{RWFahland2015Repair}.
 This adds behaviour. The opposite direction removes behaviour that the log
-does not support, for example by adding non-local places to a Petri net
-\cite{RWKalenkova2020NonLocal} or by refining process trees
+does not support. One way is to add places that connect distant parts of the
+net, so that combinations of activities that never occur together are forbidden
+\cite{RWKalenkova2020NonLocal}. Another way is to refine process trees
 \cite{RWRennert2024Precision}. Vinci and de Leoni repair a model for
-simulation: they simulate it, find behaviour that is missing in the generated
+simulation. They simulate it, find behaviour that is missing in the generated
 log and add it \cite{SimulationGuidedRepair2025}. Restricting behaviour that
 the simulator generates too often is named as future work.
 
-\paragraph{Implication for this thesis}
-E2 uses explicit, declarative domain knowledge a posteriori: the sequence rules
-are checked on the language of each discovered net, which is not changed, and the
-data rule on the planned stops becomes a guard in the simulator
-(Section~\ref{sec:exp_rules}).
+In this thesis, explicit and declarative domain knowledge is used after
+discovery. The rules on activity sequences are checked on the language of each
+discovered net, which is not changed. The rule on the planned stops becomes a
+guard in the simulator (Section~\ref{sec:exp_rules}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conformance Checking}
 \label{sec:bg_conformance}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Conformance checking compares a log with a model
+Conformance checking measures how well a model represents an event log
 \cite{aalst2012ConformanceChecking,RWCarmona2022Conformance}. Four quality
-dimensions are common \cite{Buijs2014Quality}. \emph{Fitness} measures how much
-of the observed behaviour the model can replay. \emph{Precision} penalises
-behaviour that the model allows but the log does not show.
-\emph{Generalisation} rewards a model that is likely to accept new, unseen
+dimensions are commonly used in the literature \cite{Buijs2014Quality}.
+\emph{Fitness} measures how much of the observed behaviour the model can replay.
+\emph{Precision} penalises behaviour that the model allows but the log does not
+show. \emph{Generalisation} rewards a model that is likely to accept new, unseen
 traces of the same process. \emph{Simplicity} prefers small models. The
-dimensions pull in different directions. A model that accepts every sequence
-has perfect fitness and poor precision; a model that lists every observed trace
-has perfect precision and poor generalisation.
+dimensions pull in different directions. This creates a trade-off that has to be
+balanced when the best model is searched. A model that accepts every sequence
+has perfect fitness but poor precision. A model that lists every observed trace
+has perfect precision but poor generalisation.
 
 \paragraph{Alignments}
 \label{sec:astar_alignment_definition}
-An alignment relates the trace of a case to a complete run of the model. It is
-a sequence of moves of three types. A \emph{synchronous move} consumes an
-event and fires a transition with the same label. A \emph{log move} consumes an
-event that the model cannot follow. A \emph{model move} fires a transition
-without a matching event. Model moves on silent transitions are free. The
-other deviations have a positive cost. An optimal alignment $\gamma^{\star}$ of
-a trace $\sigma$ with a net $N$ is
+An alignment fits an observed trace to the model. It pairs each event of the
+trace with a step of a complete run of the model and marks where the two do not
+match. Alignments are the basis for computing fitness. An alignment is a
+sequence of moves of three types. A \emph{synchronous move} consumes an event
+from the trace and fires the transition with the same label. A \emph{log move}
+consumes an event that the model cannot follow at this point. A \emph{model
+move} fires a transition without a matching event. This happens when the model
+requires an activity that the trace does not contain, and also whenever a
+silent transition fires, because silent transitions never have an event. Model
+moves on silent transitions are therefore free. The other deviations have a
+positive cost. An optimal alignment $\gamma^{\star}$ of a trace $\sigma$ with a
+net $N$ is
 \begin{equation}
 \gamma^{\star}=\arg\min_{\gamma\in\Gamma(\sigma,N)} c(\gamma),
 \end{equation}
 where $\Gamma(\sigma,N)$ is the set of all alignments and $c$ the total cost
 \cite{aalst2012ConformanceChecking,Adriansyah2011CostFitness}. Optimal
-alignments are usually computed with the A* search algorithm on the product of
-the trace and the net. With an admissible heuristic, the first complete
-alignment found is optimal \cite{Adriansyah2011CostFitness}.
+alignments are usually computed with the A* search algorithm. A* works like a
+route planner. It always extends the most promising partial alignment and
+estimates the cost that is still to come. If this estimate never overestimates
+the remaining cost, the first complete alignment that A* finds is the cheapest
+one \cite{Adriansyah2011CostFitness}.
 
 \paragraph{Fitness}
 Trace fitness is one minus the cost of the optimal alignment divided by the
-cost of the worst case, in which every event is a log move and the model runs
-its shortest path alone. Log fitness averages over all traces. A trace
-\emph{fits} if its optimal alignment has no deviation.
+cost of the worst case. In the worst case, every event of the trace is a log
+move and the model runs its shortest path alone. An example makes this concrete.
+The trace \texttt{Gate In, LL\_delivery, RMG\_receive, Gate Out} has four events.
+Suppose that the model accepts only \texttt{Gate In, RMG\_receive, Gate Out}. The
+optimal alignment has one log move for \texttt{LL\_delivery}, so its cost is 1.
+The worst case has four log moves and three model moves, a cost of 7. The trace
+fitness is $1-1/7\approx 0.86$. A trace \emph{fits} if its optimal alignment has
+no deviation.
 
 \paragraph{Precision}
-Escaping-edges precision replays the log on the model
-\cite{MunozGama2010FreshLook}. For every prefix of a trace, it compares the
+When calculating precision, the goal is to penalise behaviour that the model
+allows but the event log never shows. This includes behaviour that the model
+allows through silent transitions, for example a silent skip that permits a
+visit without any stop. Several ways to compute precision exist. The most common
+is escaping-edges precision \cite{MunozGama2010FreshLook}. It works with the
+prefixes of the traces. A \emph{prefix} is the beginning of a trace. For
+example, \texttt{Gate In, LL\_delivery} is a prefix of the trace \texttt{Gate In,
+LL\_delivery, RMG\_receive, Gate Out}. For every prefix, the measure compares the
 activities that the model allows next with the activities that the log shows
-after the same prefix. An activity that the model allows but the log never shows
-after that prefix is an \emph{escaping edge}. Precision is one minus the share of
-escaping edges, weighted by how often each prefix occurs. The alignment-based
-variant first aligns every trace with the model, so that non-fitting traces can
-be included \cite{Adriansyah2012AlignPrecision,Adriansyah2015Precision}.
+next after the same prefix. An activity that the model allows but the log never
+shows after that prefix is an \emph{escaping edge}. Precision is one minus the
+share of escaping edges, weighted by how often each prefix occurs. A variant
+first aligns every trace with the model, so that traces which the model cannot
+replay can be included as well \cite{Adriansyah2015Precision}.
 
-The measure can be read on two levels. On the level of transitions, the
-automaton is built from fired transitions, silent ones included
-\cite{Adriansyah2012AlignPrecision}. Two nets with the same language can then
-receive different values \cite{Tax2018Imprecisions,Syring2019Propositions}. On
-the level of activities, the model side after a prefix is the set of activities
-that the language allows next, over every marking the prefix can reach.
-Precision then depends only on the language and the log. This is what the
-proposition BehPro+ asks of a quality measure: the representation of the model
-must not matter \cite{vanderAalst2018Propositions}.
+Precision and fitness pull against each other. A model that allows more
+behaviour replays more traces, so its fitness rises. At the same time it allows
+more behaviour that the log never shows, so its precision falls. A model that
+allows less is more precise but rejects more traces. Discovery algorithms with a
+noise threshold move along this trade-off.
 
-A tool has to know the state of the model after each prefix. The token-based
-implementation keeps one marking per prefix. In a deterministic net without
-silent transitions, this marking is unique, and the value equals the
-activity-level value. With silent transitions, a prefix can reach several
-markings. The tool then chooses one by a heuristic \cite{MunozGama2010FreshLook},
-and the value can deviate from the activity-level value. For the same reason,
-multi-perspective precision assumes that the executed silent transitions are
-known, for example from alignments \cite{Mannhardt2016Precision}.
-Section~\ref{sec:exp_discovery_eval} states how this is handled.
+Silent transitions make precision harder to compute. To find the activities
+that the model allows after a prefix, a tool must know in which state the model
+is after that prefix. Without silent transitions this state is unique. With
+silent transitions, the model can be in several states after the same prefix,
+and all of them have to be considered. Some implementations follow only one of
+these states, chosen by a heuristic \cite{MunozGama2010FreshLook}. Two nets with
+the same language can then receive different precision values
+\cite{Tax2018Imprecisions}. This contradicts a basic requirement on quality
+measures, which van der Aalst formulates as the proposition BehPro+. A measure
+should depend only on the behaviour of the model, its language, and not on how
+the model is drawn \cite{vanderAalst2018Propositions}. This thesis reports the
+values of ProM and checks them against implementations that follow every state
+after a prefix (Section~\ref{sec:exp_discovery_eval}).
 
 \paragraph{Generalisation}
-Token-based generalisation counts how often each transition is used in the
-replay. A transition that fires many times contributes little uncertainty; a
-transition that fires rarely contributes much \cite{Buijs2014Quality}. The
-measure looks at transitions, not at sequences. A model that allows many
-unobserved sequences through frequently used transitions can still score
-high.
+Generalisation rewards a model that is likely to accept new behaviour of the
+same process. This is important when the training log does not cover every
+possible sequence, for example because the observed period is short or because
+some cases were recorded wrongly. Generalisation pulls against precision. A model
+that generalises well also allows sequences that the log does not show, and
+precision counts exactly these as escaping. Token-based generalisation counts how
+often each transition is used in the replay. A transition that fires many times
+contributes little uncertainty, and a transition that fires rarely contributes
+much \cite{Buijs2014Quality}. The measure looks at transitions, not at
+sequences. A model that allows many unobserved sequences through frequently used
+transitions can therefore still score high.
 
 \paragraph{Coverage}
 \label{sec:bg_coverage}
-Fitness gives partial credit. A trace with one deviation among six events
-still reaches a trace fitness of about 0.8, and log fitness averages such
-values over all traces. Coverage measures ask a stricter question about whole
-cases: does the model accept the complete sequence, yes or no? This thesis uses
-three of them.
-\begin{itemize}
-\item \textbf{Share of fitting cases.} The share of traces whose optimal
-alignment has no deviation. It is the simplest fitness measure
-\cite{Aalst2016} and counts every case, so frequent sequences weigh more.
+Fitness gives partial credit. A trace with one deviation among six events still
+reaches a trace fitness of about 0.8. Coverage measures ask a stricter question
+about whole cases. They count whether the model accepts the complete sequence of
+a case or not. When simulation is the goal, coverage is essential. A sequence
+that the model does not accept can never be generated by a simulator built on
+this model, and the behaviour missing from a simulated log is exactly what
+simulation-guided repair has to add afterwards \cite{SimulationGuidedRepair2025}.
+This thesis uses three coverage measures.
+\begin{itemize}[itemsep=1pt,topsep=3pt]
+\item \textbf{Share of fitting cases.} The share of the traces of the event log
+that the model replays without any deviation. It is the simplest fitness measure
+\cite{Aalst2016}. It counts every case, so frequent sequences weigh more.
 \item \textbf{Share of accepted sequences.} The share of the distinct sequences
-(variants) of the log that the model accepts, each counted once. This is recall
-on the level of the language: the log is read as a set of sequences, not as a
-collection of cases. Entropy-based recall extends the same idea to models with
-infinitely many sequences \cite{Polyvyanyy2020Monotone}.
+(variants) of the event log that the model accepts, each counted once. It
+measures how much of the observed behaviour the model covers, regardless of how
+often each sequence occurs.
 \item \textbf{Coverage per group.} The share of fitting cases within a group of
-cases, for example the visits that use two RMG blocks. A dominant variant can
-hide that a smaller but regular group is not accepted
-\cite{RWNorouzifar2026Rules}.
+cases. Groups are formed from the attributes or resources of the cases, for
+example the visits that use two RMG blocks. A dominant variant can hide that a
+smaller but regular group is not accepted \cite{RWNorouzifar2026Rules}.
 \end{itemize}
-On a hold-out log, a fourth view checks generalisation directly: how many of the
-sequences that occur in the hold-out log but not in the training log does the
-model accept?
+A fourth, outside view uses a hold-out log, that is, data that the discovery has
+not seen. It counts how many of the sequences that occur only in the hold-out log
+the model accepts. This measures generalisation directly.
 
-When cases follow a long-tailed distribution, the measures can differ a lot. A
+When a few sequences make up most of the cases, the measures can differ a lot. A
 model that accepts only the few frequent sequences fits almost all cases but
 accepts only a small share of the sequences. For a simulator the unweighted view
 matters as well, because a sequence that the model does not accept can never be
 generated.
 
 High coverage is not the same as overfitting. A model \emph{overfits} if it
-allows only the observed sequences and fails on new ones; it \emph{underfits} if
+allows only the observed sequences and fails on new ones. It \emph{underfits} if
 it allows much more than the log shows \cite{Aalst2016}. Precision measures the
 second error. The first can only be seen on a hold-out log, which is why the
-fourth view above matters. Noise filtering, as in the Inductive Miner with
-filtering, removes rare behaviour because it treats it as noise
-\cite{Leemans2014InductiveMiner}. Whether rare behaviour is noise or regular
-behaviour cannot be decided from its frequency alone. It is a question of the
-data quality and of the domain.
+outside view matters. How a noise threshold decides between noise and rare
+regular behaviour is discussed in Section~\ref{sec:bg_algorithms}.
 
-\paragraph{Implication for this thesis}
 Fitness, precision and coverage compare the language of a model with the
 observed traces. Coverage shows which observed behaviour a simulator built on the
 model could never generate. None of the measures says how often a simulator will
-generate each permitted sequence. A path that is permitted but never observed
-may be rare in the language and still frequent in the simulation. This is why
-the selected models are also simulated (E3).
+generate each permitted sequence. A path that the model permits but that never
+occurs in the log is rare in the language, but a simulator can still generate it
+often. The selected nets are therefore also given to the simulator for a first
+run, before the actual simulation experiments analyse the model in detail
+(Section~\ref{sec:exp_baseline}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Business Process Simulation}
@@ -522,107 +600,125 @@ the selected models are also simulated (E3).
 
 Business process simulation (BPS) runs an executable model of a process to
 study its behaviour without disturbing the real system \cite{Aalst2015}. A
-BPS model has five parts \cite{Aalst2015,PMRozinat2009}:
-\begin{itemize}
-\item an \emph{arrival process} that decides when new cases start;
-\item a \emph{control-flow model} that decides which activities can follow,
-together with \emph{routing} probabilities or rules at each choice;
-\item \emph{resources} with their capacity and working calendars;
-\item \emph{time models} for the execution and waiting times of activities;
-\item \emph{case attributes} that describe each case.
+BPS model consists of five components, which it uses to generate a simulated
+event log \cite{Aalst2015,PMRozinat2009}.
+\begin{itemize}[itemsep=2pt,topsep=4pt]
+\item An \emph{arrival process} decides when new cases start.
+\item A \emph{control-flow model} decides which activities can follow each other.
+This is the Petri net of Section~\ref{sec:bg_discovery}, together with
+\emph{routing} probabilities or rules at each choice.
+\item \emph{Resources} have a capacity and working calendars.
+\item \emph{Time models} give the execution and waiting times of activities.
+\item \emph{Case attributes} describe each case.
 \end{itemize}
-Most BPS tools use discrete-event simulation: time jumps from one event to the
-next. Because arrivals, routing and durations are drawn at random, one run is
-one possible history. Several runs with different random seeds
-(\emph{replications}) show how much the results vary \cite{Law2015Simulation}.
-Simulation is mainly used for \emph{what-if analysis}: the same model is run
-with and without a change, for example more resources or another allocation
-rule, and the KPIs are compared \cite{Aalst2015}.
+Most BPS tools use discrete-event simulation. The simulation clock does not run
+continuously. It jumps from one event to the next, for example from the arrival
+of a truck to the start of its first stop. Arrivals, routing decisions and
+durations are drawn at random from the learned distributions. One simulation run
+is therefore one possible course of events, and a second run gives a slightly
+different one. The random draws are controlled by a \emph{seed}, a start number
+for the random number generator. The same seed reproduces exactly the same run,
+and different seeds give different runs. Several runs with different seeds,
+called \emph{replications}, show how much the results vary
+\cite{Law2015Simulation}. Simulation is mainly used for \emph{what-if analysis}.
+The same model is run with and without a change, for example more resources or
+another allocation rule, and the KPIs of the two runs are compared
+\cite{Aalst2015}.
 
-\paragraph{Related work: discovering simulation models}
-Rozinat et al.\ showed early that all five parts can be estimated from an event
-log \cite{PMRozinat2009}. Camargo et al.\ automate this and search for the
-configuration whose generated log is most similar to the real log
-\cite{Camargo2020,simod2024}. L\'opez-Pintado and Dumas show that modelling
-resources individually, with their own calendars and performance, brings the
-simulated cycle times closer to the real ones
-\cite{BPSdifferentiatedResources2022,Prosimos2023}. Stochastic process models
-add probabilities to the paths of a model \cite{stochastikPetriNets2013Solti,burke2020stochasticPD}.
-Deep-learning generators can learn more complex dependencies, but they are hard
-to inspect and to change for a scenario \cite{Camargo2021}.
+\paragraph{Discovering simulation models}
+Rozinat et al.\ showed early that all five components can be extracted from an
+event log \cite{PMRozinat2009}. Each component can be configured, for example by
+the choice of a distribution for the execution time of an activity. Together,
+these choices form the \emph{configuration} of the simulation model, and running
+the configured model produces a simulated event log. Discovering a simulation
+model therefore means finding the configuration whose simulated log is as close
+as possible to the real one. Camargo et al.\ automate this search
+\cite{Camargo2020}. L\'opez-Pintado and Dumas show that modelling resources
+individually, with their own calendars and performance, brings the simulated
+case durations closer to the real ones \cite{BPSdifferentiatedResources2022}.
+Stochastic process models add probabilities to the paths of a model
+\cite{stochastikPetriNets2013Solti}. Deep-learning generators can learn more
+complex dependencies between the activities, attributes and times of a case,
+but they are hard to inspect and to change for a scenario \cite{Camargo2021}.
 
-\paragraph{Related work: data-aware simulation}
-A classical BPS model uses the same routing probability for every case. A
-\emph{data-aware} model lets routing, times or resource choice depend on data,
-for example case attributes or the current workload. Mannhardt et al.\ define
-stochastic Petri nets whose transition weights depend on data
-\cite{mannhardt2023stochasticProcessesModelling}. De Leoni et al.\ add the
+\paragraph{Data-aware simulation}
+In a classical BPS model, each choice in the control flow has fixed branching
+probabilities, for example 70\,\% of the cases take one path and 30\,\% the
+other, the same for every case. A \emph{data-aware} model lets routing, times or
+resource choice depend on data, for example on case attributes or on the
+current workload. Mannhardt et al.\ define stochastic Petri nets whose transition
+weights depend on data \cite{mannhardt2023stochasticProcessesModelling}. Such a
+net is called a stochastic labelled data Petri net. De Leoni et al.\ add the
 history of the case to this \emph{process state} and show that the best state
 depends on the process \cite{Vinci2023Inf.Activ.Prob}. L\'opez-Pintado et al.\
-also model how attributes change during a case \cite{lopez2024}. RIMS calls
-predictive models at run time, so that they can use the current state of the
-simulation \cite{runtimeIntegration2024}. ProSiT, introduced in
-Section~\ref{sec:prosit_background}, applies data awareness to all parts of the
-model.
+also model how attributes change during a case \cite{lopez2024}. ProSiT, the
+simulation framework used in this thesis (Section~\ref{sec:prosit_background}),
+applies data awareness to all components of the model. It learns probabilistic
+decision trees for the arrivals, the routing, the resources and the times, and
+it uses the routing trees as data-dependent weights on the transitions of the
+Petri net.
 
-\paragraph{Related work: queues and physical resources}
-Discovered simulation models are weakest where queues and shared resources
-shape a process. Among the specific risks of BPS, van der Aalst lists models that
+\paragraph{Queues and physical resources}
+Queues and shared resources influence the execution of a process through the
+interaction of different cases. Discovered simulation models are weakest
+exactly there. Among the specific risks of BPS, van der Aalst lists models that
 ignore the process context, such as the number of cases that compete for the
 same resources, and working speeds that depend on the workload \cite{Aalst2015}.
 In the review of Sulis et al., process mining supports arrivals, durations and
-the control flow well, but the modelling tasks around queues and resources
-receive limited or no support, partly because the data do not record them
+the control flow well. The modelling tasks around queues and resources receive
+limited or no support, partly because the data do not record them
 \cite{Sulis2026SimulationReview}. Queue mining takes a queueing perspective on
 event logs and predicts the delay of a case from the congestion it meets
 \cite{Senderovich2015QueueMining}. In manufacturing, simulation models are
-generated from event logs of the material flow: the structure is discovered
-from the data, while physical elements such as buffers and capacities are added
-and calibrated explicitly
-\cite{LugaresiMatta2021,LugaresiMatta2023,Reinhardt2019ASMG,Cimino2025ASMGReview}.
-Grobis and Ihlenfeldt note that logs at the business level are usually too
-coarse for queues, which need data from the operational level
+generated from event logs of the material flow. The structure is discovered from
+the data, while physical elements such as buffers and capacities are added and
+calibrated explicitly \cite{LugaresiMatta2021,Cimino2025ASMGReview}. Grobis and
+Ihlenfeldt note that logs at the business level are usually too coarse for
+queues, which need data from the operational level
 \cite{Grobis2025ProductionLogistics}. RIMS computes queue features during the
 simulation and simulates waiting times better where resources are congested
-\cite{runtimeIntegration2024}. Object-centric simulation models represent
-several interacting objects instead of one case notion
-\cite{Knopp2023ObjectCentricSimulation}; Sulis et al.\ found only one such
-study.
+\cite{runtimeIntegration2024}.
 
 \paragraph{Validation}
 \label{sec:simulation_validation_background}
-A simulation model is valid only for an intended use \cite{Sargent2013Validation}.
-Sargent separates \emph{conceptual validity} (are the assumptions reasonable
-for the purpose?), \emph{verification} (is the model implemented correctly?),
-\emph{data validity} and \emph{operational validity} (is the output accurate
-enough for the purpose?). For discovered BPS models, operational validity is
-usually checked by comparing logs generated by the model with a real log that
-was not used for discovery. Chapela-Campa et al.\ recommend separate measures
-for the control flow, the timing and the congestion of the generated logs,
-because one aggregate score hides which part of the model is wrong
+A simulation model consists of the discovered control flow combined with the
+learned components, such as the routing weights and the time distributions. It
+is valid only for an intended use \cite{Sargent2013Validation}. Sargent
+separates \emph{conceptual validity} (are the assumptions made by the model
+reasonable for the purpose?), \emph{verification} (is the model implemented
+correctly?), \emph{data validity} and \emph{operational validity} (is the output
+accurate enough for the purpose?). For discovered BPS models, operational
+validity is usually checked by comparing logs generated by the model with a real
+log that was not used for discovery. Chapela-Campa et al.\ recommend separate
+measures for the control flow, the timing and the congestion of the generated
+logs, because one aggregate score hides which component of the model is wrong
 \cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. Özdemir et al.\ add two
-cautions \cite{Oezdemir2025RethinkingBPS}: a later test log mixes the error of
+cautions \cite{Oezdemir2025RethinkingBPS}. A later test log mixes the error of
 the model with changes of the process between the periods, and distances based
-on the Wasserstein distance can hide temporal patterns. Law recommends
-\emph{trace-driven} comparisons, in which the model is fed with the observed
-inputs of the comparison period, for example the observed arrivals, so that
-model and system face the same demand \cite{Law2015Simulation}. A comparison with a
-historical log shows that the model reproduces the current process. It does not
-show that the model predicts the effect of a change correctly. Evidence for a
-what-if use needs more: plausible mechanisms, a model that responds to load as
-the real system does, and the judgement of people who know the process. Such
-\emph{face validation} by domain experts is a recognised technique
-\cite{Sargent2013Validation}. A review of 105 studies on simulation and process
-mining found that 36 report no validation at all \cite{Sulis2026SimulationReview}.
+on the Wasserstein distance can hide temporal patterns.
+
+Law recommends \emph{trace-driven} comparisons, in which the model receives the
+observed inputs of the comparison period, for example the observed arrivals, so
+that model and system face the same demand \cite{Law2015Simulation}. A comparison
+with a historical log shows that the model reproduces the current process. It
+does not show that the model predicts the effect of a change correctly. When the
+model is used for what-if scenarios, its reliability has to be shown more
+thoroughly. Its mechanisms have to be plausible, it has to respond to load as the
+real system does, and people who know the process have to find it credible.
+Validation by domain experts is a recognised technique
+\cite{Sargent2013Validation}. It can take several forms, for example a review of
+the model logic or of the simulated results. Domain rules that experts define
+before the modelling serve a similar purpose, because they bring expert
+knowledge into the model in advance.
 
 \paragraph{Replications}
 \label{sec:stochastic_replication_ci}
-A model is run $N$ times with different seeds. For a measure with replication
-values $x_1,\dots,x_N$, the mean $\bar{x}$ is reported with the interval
-$\bar{x}\pm t_{0.975,N-1}\,s/\sqrt{N}$, where $s$ is the standard deviation
-across replications \cite{Law2015Simulation}. This interval describes the
-random variation of the simulator for one fitted model. It does not cover the
-uncertainty of the fitted parameters or of the model structure.
+Because one run is only one possible course of events, a model is run several
+times with different seeds. The mean over the runs is reported together with a
+95\,\% confidence interval, which shows how much the result varies between runs
+\cite{Law2015Simulation}. This interval describes the randomness of the
+simulator for one fitted model. It does not cover the uncertainty of the fitted
+parameters or of the model structure.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{ProSiT}
@@ -631,81 +727,107 @@ uncertainty of the fitted parameters or of the model structure.
 
 ProSiT (\textit{PROcess SImulation Tool}) discovers a data-aware simulation
 model from a Petri net and an event log \cite{Vinci2026prosit,ProSiTRepository}.
-Every part of the model is learned as a \emph{probabilistic decision tree}: a
-decision tree whose leaves hold a probability or a distribution instead of a
-single value. The model is called white-box, because every learned rule can be
-read and changed. This section describes what ProSiT learns, how a tree is
-built and used, how a simulated case runs, and where the framework stops.
+Every component of the model is learned as a \emph{probabilistic decision tree},
+a decision tree whose leaves hold a probability or a distribution instead of a
+single value. The model is considered a white-box model, because every learned
+rule can be inspected and edited, for example to create controlled what-if
+scenarios. This section describes what ProSiT learns, how a tree is built and
+used, how a simulated case runs, and where the framework stops.
 
 \subsection{Inputs and Learned Components}
 \label{sec:prosit_components}
 
 ProSiT needs a sound workflow net and an event log with start and complete
-timestamps, a resource per event and case attributes. It first aligns every
-trace with the net. The alignment tells, for every event, which transition
-fired, which transitions were enabled at that moment and since when. From this
-replay, ProSiT builds one training table per component.
-Table~\ref{tab:prosit_components} lists the components.
+timestamps per activity, a resource per event and static case attributes. Static
+means that the attributes describe the case as a whole and do not change while
+the case is executed, like the age of a patient or the number of planned stops
+of a truck.
 
-\begin{table}[htbp]
+ProSiT first aligns every trace of the log with the net. In simple terms, it
+replays each recorded case on the net, step by step. For every event, this
+replay tells which transition fired, which other transitions could have fired at
+that moment, and since when the transition had been possible. This is how
+ProSiT learns about decisions that the log itself does not show, for example
+the choices at silent transitions. From this replay, ProSiT builds one training
+table per component and learns one tree from each table
+(Figure~\ref{fig:bg_prosit_pipeline}). The components roughly follow the BPS
+components of Section~\ref{sec:bps_models}, but every one of them is a
+probabilistic decision tree that can depend on the case and on the state of the
+process. ProSiT offers hyperparameters that steer this discovery, for example
+the largest depth of a tree (Section~\ref{sec:prosit_hyperparameters}).
+Table~\ref{tab:prosit_components} in Appendix~\ref{app:prosit_inventory} lists
+every component with its features.
+
+\begin{figure}[htbp]
 \centering
-\small
-\begin{tabularx}{\textwidth}{L{2.4cm}L{3.0cm}L{3.3cm}Y}
-\toprule
-\textbf{Component} & \textbf{Learned model} & \textbf{Predicts} & \textbf{Features} \\
-\midrule
-Arrivals & one regression tree & gap until the next case starts & hour and weekday of the previous arrival \\
-Arrival calendar & table & open or closed per weekday and hour & -- \\
-Case attributes & observed tuples or one distribution per attribute & attributes of a new case & -- \\
-Routing & one classification tree per transition & whether the transition fires when it is enabled & case attributes, number of times each activity has occurred so far \\
-Resource choice & one classification tree per resource & whether the resource is chosen & activity, case attributes, resources used so far (optional: workload, queue length) \\
-Capacity & number per resource & how many activities can run at once & -- \\
-Waiting time & one regression tree per resource & time from ``enabled and resource free'' to start & activity, hour, weekday, case attributes, activity counts (optional: workload, queue length) \\
-Execution time & one regression tree per activity & time from start to complete & resource, hour, weekday, case attributes, activity counts \\
-Resource calendars & table per resource & open or closed per weekday and hour & -- \\
-\bottomrule
-\end{tabularx}
-\caption{Components of a ProSiT simulation model (version 1.0.4). Times are
-counted in open minutes of the relevant calendar.}
-\label{tab:prosit_components}
-\end{table}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  box/.style={rectangle, rounded corners=2pt, draw, align=center, font=\footnotesize,
+              text width=3.0cm, minimum height=1.2cm, inner sep=3pt},
+  data/.style={box, fill=black!6},
+  arr/.style={-{Stealth[length=2mm]}}]
+\node[data] (log) at (0,0.9) {\textbf{Event log}\\start, complete, resource, case attributes};
+\node[data] (net) at (0,-0.9) {\textbf{Petri net}\\sound workflow net};
+\node[box] (align) at (3.9,0) {\textbf{Alignment}\\every recorded case replayed on the net};
+\node[box] (tab) at (7.8,0) {\textbf{Training tables}\\one per component};
+\node[box, text width=3.8cm] (trees) at (12.1,0) {\textbf{Probabilistic decision trees}\\arrivals, routing, resource choice, waiting and execution times, plus capacities and calendars};
+\node[box, text width=3.4cm] (sim) at (7.8,-3.1) {\textbf{Simulator}\\executes the net and draws from the trees};
+\node[data] (out) at (12.1,-3.1) {\textbf{Simulated event log}};
+\draw[arr] (log.east) -- (align);
+\draw[arr] (net.east) -- (align);
+\draw[arr] (align) -- (tab);
+\draw[arr] (tab) -- (trees);
+\draw[arr] (trees.south) -- ++(0,-0.45) -| (sim.north);
+\draw[arr] (net.south) |- (sim.west);
+\draw[arr] (sim) -- (out);
+\end{tikzpicture}}
+\caption{How ProSiT discovers and runs a simulation model. The alignment replays
+every recorded case on the net, so that each decision, also at silent
+transitions, becomes a training example. One probabilistic decision tree is
+learned per component, and the simulator executes the net with these trees.}
+\label{fig:bg_prosit_pipeline}
+\end{figure}
 
-A few components need a short explanation; the description follows the paper and
-the implementation of version 1.0.4 \cite{Vinci2026prosit,ProSiTRepository}.
-\begin{itemize}
+A few components need a short explanation. The description follows the paper
+and the implementation of version 1.0.4 \cite{Vinci2026prosit,ProSiTRepository}.
+\begin{itemize}[itemsep=3pt,topsep=4pt]
 \item \textbf{Arrivals.} The gaps between consecutive case starts are
 computed in open minutes of the arrival calendar. The calendar marks a weekday
 and hour as open if enough arrivals fall into it. It decides only \emph{whether}
-cases can arrive; the tree decides \emph{how often}.
+cases can arrive, and the tree decides \emph{how often}.
 \item \textbf{Routing.} For every transition, ProSiT collects all moments in
 the replay at which it was enabled. The class is 1 if it fired and 0 if another
 transition fired. The tree then predicts the probability that the transition
 fires, given the case attributes and how often each activity has occurred so
 far. These features describe the case, not the marking of the net. Silent
-transitions get a routing tree like visible ones; when they fired is known only
-from the alignment.
-\item \textbf{Capacity.} By default every resource handles one activity at a
-time. With \emph{multitasking} enabled, a resource whose activities overlap in
-at least a given share of cases gets a capacity of the largest observed overlap
-plus one.
-\item \textbf{Waiting time.} The waiting time of an event is the time between
-its start and the later of two points: the moment the transition was enabled,
-and the moment the resource became free. Waiting caused by a busy resource is
-therefore not part of the target. The simulator produces it through the
+transitions get a routing tree like visible ones, and when they fired is known
+only from the alignment. In the simulation, these probabilities act as the
+data-dependent weights of the transitions.
+\item \textbf{Capacity.} By default, every resource handles one activity at a
+time. ProSiT offers a hyperparameter that allows a resource to handle several
+activities at once (multitasking). If it is switched on, a resource whose
+activities overlap in at least a given share of cases receives a capacity equal
+to the largest observed overlap plus one.
+\item \textbf{Waiting time.} The waiting time is the time that a case waits
+before an activity starts, although the control flow already allows it. ProSiT
+measures it from the later of two moments. The first is the moment the previous
+activity ended and the transition became enabled. The second is the moment the
+resource became free. Waiting caused by a busy resource is therefore not part of
+what the tree learns. The simulator produces this waiting itself, through the
 capacity check.
 \end{itemize}
 
 \subsection{Probabilistic Decision Trees}
 \label{sec:prosit_trees}
 
-A decision tree \cite{Vinci2026prosit} splits the training data step by step on one feature at a
-time, for example ``hour $\le$ 21''. Each split is chosen so that the groups
-become as different as possible in the target (CART). The groups at the end
-are the \emph{leaves}. In ProSiT, a routing leaf stores a probability. A time
-leaf stores a distribution: ProSiT fits a fixed value, a normal, exponential,
-lognormal, gamma and uniform distribution to the values in the leaf and keeps
-the one closest to the data in Wasserstein distance. Values drawn from it are
-limited to the smallest and largest observed value.
+A decision tree \cite{Vinci2026prosit} splits the training data step by step on
+one feature at a time, for example ``hour $\le$ 21''. Each split is chosen so
+that the groups become as different as possible in the target (CART). The groups
+at the end are the \emph{leaves}. In ProSiT, a routing leaf stores a probability.
+A time leaf stores a distribution. ProSiT fits a fixed value and a normal,
+exponential, lognormal, gamma and uniform distribution to the values in the leaf
+and keeps the one closest to the data in Wasserstein distance. Values drawn from
+it are limited to the smallest and largest observed value.
 
 \paragraph{Model selection}
 A tree is not always better than one distribution for all cases. ProSiT
@@ -720,40 +842,40 @@ distribution $F$,
 \mathrm{CRPS}(F,y)=\mathbb{E}\,|X-y|-\tfrac{1}{2}\,\mathbb{E}\,|X-X'|,
 \end{equation}
 where $X$ and $X'$ are independent draws from $F$ \cite{Gneiting2007CRPS}. The
-first term rewards distributions close to the observation, the second rewards
-spread where the data are spread. A lower score is better. Version 1.0.3 used
-the Wasserstein distance between training and test values inside each leaf.
+first term rewards distributions close to the observation, and the second term
+rewards spread where the data are spread. A lower score is better. Version 1.0.3
+used the Wasserstein distance between training and test values inside each leaf.
 That criterion measures only how stable a leaf is, so it almost always chose a
-single distribution. This thesis uses version 1.0.4
-(Section~\ref{sec:sim_settings}). In practice, version 1.0.4 keeps a tree wherever splitting the cases predicts
-the values better than one distribution for all of them, while version 1.0.3
-used one distribution almost everywhere, so that waiting and execution times
-could not depend on the load or the attributes of a case.
+single distribution. In practice, version 1.0.4 keeps a tree wherever splitting
+the cases predicts the values better than one distribution for all of them.
+Version 1.0.3 used one distribution almost everywhere, so that waiting and
+execution times could not depend on the load or the attributes of a case. This
+thesis uses version 1.0.4 (Section~\ref{sec:sim_settings}).
 
 \paragraph{Example}
 Figure~\ref{fig:bg_prosit_arrival_tree} shows the arrival tree that ProSiT
-learned from the training data of this thesis. Read from the top: if the
+learned from the training data of this thesis. It is read from the top. If the
 previous truck arrived on a weekday between 5 and 21~h, the gap to the next
 truck is drawn from a normal distribution, and the drawn gaps average 0.65
-minutes, about 90 trucks per hour. At night, the mean gap is about two minutes. On
-Saturday after 10~h, it is 7.7 minutes. The tree has depth three, so it cannot separate
-the morning ramp-up, the daytime plateau and the evening; the leaf from 5 to
-21~h pools them. Whether this is good enough is tested in E4a
-(Section~\ref{sec:exp_e4_runs}).
+minutes, about 90 trucks per hour. At night, the mean gap is about two minutes.
+On Saturday after 10~h, it is 7.7 minutes. The tree has depth three, so it cannot
+separate the morning ramp-up, the daytime plateau and the evening. The leaf from
+5 to 21~h pools them. Whether this is good enough is tested in the validation of
+the simulation model (Section~\ref{sec:exp_e4_runs}).
 
 \input{figures/schemas/prosit_arrival_tree}
 
 \subsection{Execution of a Simulated Case}
 \label{sec:prosit_execution}
 
-The simulator processes all cases in one loop, always continuing with the case
+The simulator processes all cases together and always continues with the case
 whose next step is enabled earliest. A case runs as follows.
-\begin{enumerate}
+\begin{enumerate}[itemsep=2pt,topsep=4pt]
 \item \textbf{Arrival.} The start time is the start of the previous case plus a
 gap drawn from the arrival tree, counted in open minutes of the arrival
 calendar.
 \item \textbf{Attributes.} The case receives its attributes, in empirical mode
-as one complete tuple of a randomly drawn training case.
+as one complete set of attributes of a randomly drawn training case.
 \item \textbf{Enabled transitions.} The token sits in the source place. A
 transition is enabled if all its input places hold a token. Its enabling time
 is the latest time stamp of these tokens.
@@ -768,7 +890,7 @@ trees. If none is free, the resource that becomes free first is taken and the
 start moves to that moment.
 \item \textbf{Times.} A waiting time is drawn from the tree of the resource
 (zero for the first activity of a case). The start is the enabling time plus
-the waiting time; the complete time is the start plus an execution time drawn
+the waiting time. The complete time is the start plus an execution time drawn
 from the tree of the activity. Both are counted in open minutes of the
 resource calendar.
 \item \textbf{Token update.} The tokens move to the output places and carry the
@@ -780,10 +902,12 @@ of each case is stored as well.
 
 \subsection{Hyperparameters}
 \label{sec:prosit_hyperparameters}
-The discovery has a few hyperparameters: the largest tree depth and the leaf sizes tried in cross-validation,
-whether workload features and multitasking are used, and whether case attributes are drawn as observed
-tuples or one by one. Their defaults, the values used in this thesis and the reasons are listed in
-Table~\ref{tab:sim_hyperparameters} (Section~\ref{sec:sim_settings}).
+ProSiT offers a few hyperparameters that steer the discovery. They set the
+largest tree depth and the leaf sizes tried in cross-validation, whether
+workload features and multitasking are used, and whether case attributes are
+drawn as complete observed sets or one by one. Their defaults, the values used in
+this thesis and the reasons are listed in Table~\ref{tab:sim_hyperparameters}
+(Section~\ref{sec:sim_settings}).
 
 \subsection{Evidence and Limitations}
 \label{sec:prosit_limits}
@@ -791,14 +915,14 @@ Table~\ref{tab:sim_hyperparameters} (Section~\ref{sec:sim_settings}).
 The ProSiT paper evaluates the framework on five case studies with a temporal
 80/20 split and five simulated logs per model. ProSiT reaches an accuracy
 comparable to a black-box baseline while its rules stay readable
-\cite{Vinci2026prosit}. The authors also stress a boundary: the trees capture
+\cite{Vinci2026prosit}. The authors also stress a boundary. The trees capture
 associations in the training data, not causes. A readable rule shows which
 association the simulator uses. Whether it holds after an intervention needs
 other evidence.
 
 For this thesis, seven properties of the implementation of version 1.0.4 matter
 \cite{ProSiTRepository}.
-\begin{enumerate}
+\begin{enumerate}[itemsep=2pt,topsep=4pt]
 \item \textbf{No hard rules.} A transition can fire whenever its input places
 hold tokens and its weight is above zero. ProSiT has no guards. A rule that
 the net does not encode, such as ``at least one stop'' or ``as many stops as
@@ -820,17 +944,18 @@ started. An activity that waited is therefore counted in the queue of the
 resource that performed it, but not in the queues of the other candidates. In
 the simulation the activity is not yet in any queue when the resource is
 chosen.
-\item \textbf{Waiting is measured against one server.} The waiting time is the
-time from the moment the resource was last completely free, that is, from the
-latest end of all its activities in progress at the enabling time. For a
+\item \textbf{Waiting is measured against one server.} The waiting time is
+measured from the moment the resource was last completely free, that is, from
+the latest end of all its activities in progress at the enabling time. For a
 resource that serves several cases side by side, a lane may already be free much
 earlier.
 \end{enumerate}
 The first three properties make the control-flow model more important for a
-simulator than for a descriptive model; E2 and E3 address them
-(Sections~\ref{sec:exp_rules} and \ref{sec:exp_baseline}). Properties four to seven concern the physical
-constraints of the blocks and are examined in E4
-(Section~\ref{sec:exp_mechanisms}).
+simulator than for a descriptive model. The rule check of the discovered nets
+and the first simulation of the selected net address them
+(Sections~\ref{sec:exp_rules} and~\ref{sec:exp_baseline}). Properties four to
+seven concern the physical constraints of the blocks. They are examined in the
+validation of the simulation model (Section~\ref{sec:exp_mechanisms}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Research Gap and Positioning}
@@ -849,10 +974,10 @@ contributes and which question remains open for a terminal like CTB.
 \midrule
 Terminal simulation \cite{Kastner2021,Bett2024} & Hand-built models that compare operating policies on KPIs such as TTT. & Can a model discovered from data support the same kind of comparison? \\
 Discovery benchmarks \cite{DiscoveryBenchmark,RWRehse2024Experimentation} & Compare fitness, precision and size of discovered models. & Which model is adequate when it is \emph{executed}, not only described? \\
-Domain knowledge and repair \cite{schuster2022,RWDixit2015Domain,SimulationGuidedRepair2025} & Use rules in discovery or repair; repair for simulation adds missing behaviour. & Can physical rules remove impossible behaviour exactly, and which rules belong in the net and which in the simulator? \\
-Data-aware simulation \cite{mannhardt2023stochasticProcessesModelling,lopez2024,Vinci2026prosit} & Routing and times depend on data and process state; evaluated on business processes. & Does it reproduce a physical process with shared capacity and congestion? \\
-Queues and physical resources \cite{Senderovich2015QueueMining,Aalst2015,Sulis2026SimulationReview} & Queueing view of delays; known risks of ignoring workload and shared resources; little process-mining support for queues. & Which assumptions of a discovered simulator break when capacity is physical, and what must be added? \\
-Data-driven simulation in manufacturing \cite{LugaresiMatta2021,Grobis2025ProductionLogistics} & Structure discovered from logs; buffers and capacities added explicitly. & Does this split between learned and added parts work for a data-aware simulator of truck visits? \\
+Domain knowledge and repair \cite{schuster2022,RWDixit2015Domain,SimulationGuidedRepair2025} & Use rules in discovery or repair. Repair for simulation adds missing behaviour. & Can physical rules remove impossible behaviour exactly, and which rules belong in the net and which in the simulator? \\
+Data-aware simulation \cite{mannhardt2023stochasticProcessesModelling,lopez2024,Vinci2026prosit} & Routing and times depend on data and process state. Evaluated on business processes. & Does it reproduce a physical process with shared capacity and congestion? \\
+Queues and physical resources \cite{Senderovich2015QueueMining,Aalst2015,Sulis2026SimulationReview} & Queueing view of delays. Known risks of ignoring workload and shared resources. Little process-mining support for queues. & Which assumptions of a discovered simulator break when capacity is physical, and what must be added? \\
+Data-driven simulation in manufacturing \cite{LugaresiMatta2021,Grobis2025ProductionLogistics} & Structure discovered from logs, buffers and capacities added explicitly. & Does this split between learned and added components work for a data-aware simulator of truck visits? \\
 Simulation validation \cite{ChapelaCampa2023Trust,Chapela2025SimQuality,Sargent2013Validation} & Multi-perspective comparison of generated and real logs. & Does the model respond to load like the terminal, and do domain experts find it plausible? \\
 \bottomrule
 \end{tabularx}
@@ -861,30 +986,30 @@ Simulation validation \cite{ChapelaCampa2023Trust,Chapela2025SimQuality,Sargent2
 \end{table}
 
 Three gaps follow. First, discovered models are usually selected by fitness
-and precision \cite{Buijs2014Quality,DiscoveryBenchmark}. These measures do not show what a simulator does with behaviour
-that the model permits but the log never shows, and physical rules are not part
-of the discovered model. Second, data-aware simulation discovery has been
-evaluated mainly on administrative and healthcare processes. Its behaviour in a
-physical logistics system with shared capacity and congestion is largely
-untested. The assumptions that decide it, how queues, capacity and load enter the
-learned models, are exactly those that process mining supports least. Third,
-validation of discovered simulation models focuses on similarity to a
-historical log. Whether the model responds to load like the real system, which
-is needed before a what-if analysis, is rarely tested, and the judgement of
-domain experts is rarely documented.
+and precision \cite{Buijs2014Quality,DiscoveryBenchmark}. These measures do not
+show what a simulator does with behaviour that the model permits but the log
+never shows, and physical rules are not part of the discovered model. Second,
+data-aware simulation discovery has been evaluated mainly on administrative and
+healthcare processes. Its behaviour in a physical logistics system with shared
+capacity and congestion is largely untested. The assumptions that decide it,
+namely how queues, capacity and load enter the learned models, are exactly those
+that process mining supports least. Third, validation of discovered simulation
+models focuses on similarity to a historical log. Whether the model responds to
+load like the real system, which is needed before a what-if analysis, is rarely
+tested, and the judgement of domain experts is rarely documented.
 
 Queue mining \cite{Senderovich2015QueueMining}, data-driven simulation in
 manufacturing \cite{LugaresiMatta2021} and the validation literature
-\cite{Sargent2013Validation} motivate a combination of learned behaviour, explicit domain
-assumptions and simulation validation. The CTB case examines whether this
-combination provides a model suitable for assessing a proposed change in block
-allocation. The comparison of discovered nets establishes a justified model
-for the case; the performance evaluation determines how well it represents the
-quantities relevant to the decision; and the scenario analysis is interpreted
-within those limits.
+\cite{Sargent2013Validation} motivate a combination of learned behaviour,
+explicit domain assumptions and simulation validation. The CTB case examines
+whether this combination provides a model suitable for assessing a proposed
+change in block allocation. The comparison of discovered nets establishes a
+justified model for the case. The performance evaluation determines how well it
+represents the quantities relevant to the decision. The scenario analysis is
+then interpreted within those limits.
 
 The case provides access to operational records and a concrete decision
-context. It also has limitations: the log does not directly expose every
+context. It also has limitations. The log does not directly expose every
 resource state, domain assumptions require scrutiny, and the data contain no
 implementation of the proposed intervention. The study therefore contributes
 evidence about this application of ProSiT. Mechanisms identified here are
@@ -893,8 +1018,8 @@ requirements for all capacity-limited processes.
 
 This thesis addresses these gaps in a case study of truck operations at HHLA
 Container Terminal Burchardkai. It does not propose a new discovery algorithm or
-a new simulator. It compares discovery algorithms for their use in simulation
-(E1), checks the nets against physical rules (E2), measures how the
-control-flow model shapes the simulated visits (E3), audits the simulation
-mechanisms and their response to load (E4), and examines one operational policy
-within the limits that these checks establish (E5).
+a new simulator. It compares discovery algorithms for their use in simulation,
+checks the discovered nets against physical rules, and measures how the
+control-flow model shapes the simulated visits. It then validates the simulation
+mechanisms and their response to load, and examines one operational policy
+within the limits that these checks establish.

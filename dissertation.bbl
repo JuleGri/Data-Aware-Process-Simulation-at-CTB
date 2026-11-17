@@ -92,17 +92,6 @@ W.~Y. Yun and Y.~S. Choi, ``A simulation model for container-terminal operation
   \url{https://www.sciencedirect.com/science/article/pii/S0925527398002138}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Bruzzone2012}
-A.~Bruzzone, F.~Longo, L.~Nicoletti, E.~Bottani, and R.~Montanari,
-  ``Simulation, analysis and optimization of container terminals processes,''
-  \emph{International Journal of Modeling, Simulation, and Scientific
-  Computing}, vol.~03, p. 1240006, 11 2012.
-
-\bibitem{Muravev2019}
-D.~Muravev, A.~Rakhmangulov, H.~Hu, and H.~Zhou, ``The introduction to system
-  dynamics approach to operational efficiency and sustainability of dry
-  port’s main parameters,'' \emph{Sustainability}, vol.~11, p. 2413, 04 2019.
-
 \bibitem{Carboni2025}
 \BIBentryALTinterwordspacing
 A.~Carboni, F.~Deflorio, C.~Caballini, and S.~Cangelosi, ``Advances in terminal
@@ -138,11 +127,6 @@ M.~Grobis and S.~Ihlenfeldt, ``Process mining for supporting data processing
   and process design in production and logistics,'' \emph{Procedia CIRP}, vol.
   136, pp. 468--473, 2025.
 
-\bibitem{Grobis2026SimulationDevelopment}
-------, ``Application of process mining to support simulation model
-  development: A use case in production planning,'' \emph{Procedia CIRP}, vol.
-  142, pp. 992--997, 2026.
-
 \bibitem{Wang2014BulkPort}
 Y.~Wang, F.~Caron, J.~Vanthienen, L.~Huang, and Y.~Guo, ``Acquiring logistics
   process intelligence: Methodology and an application for a {C}hinese bulk
@@ -162,11 +146,6 @@ F.~Vinci, D.~Aloini, E.~Benevento, A.~Stefanini, F.~Zen, and M.~{de Leoni},
 \bibitem{Aalst2016}
 W.~Van~der Aalst, \emph{Process Mining: Data Science in Action}, 01 2016.
 
-\bibitem{Camargo2020}
-M.~Camargo, M.~Dumas, and O.~González-Rojas, ``Automated discovery of business
-  process simulation models from event logs,'' \emph{Decision Support Systems},
-  vol. 134, p. 113284, 03 2020.
-
 \bibitem{vanDongen2005ProM}
 B.~F. van Dongen, A.~K.~A. de~Medeiros, H.~M.~W. Verbeek, A.~J. M.~M. Weijters,
   and W.~M.~P. van~der Aalst, ``The {ProM} framework: A new era in process
@@ -184,34 +163,12 @@ W.~M.~P. van~der Aalst, ``Foundations of process discovery,'' in \emph{Process
   W.~M.~P. van~der Aalst and J.~Carmona, Eds.\hskip 1em plus 0.5em minus
   0.4em\relax Cham: Springer, 2022, vol. 448, pp. 37--75.
 
-\bibitem{Murata1989}
-T.~Murata, ``Petri nets: Properties, analysis and applications,''
-  \emph{Proceedings of the IEEE}, vol.~77, no.~4, pp. 541--580, 1989.
-
 \bibitem{Leemans2014InductiveMiner}
 S.~J.~J. Leemans, D.~Fahland, and W.~M.~P. van~der Aalst, ``Discovering
   block-structured process models from event logs containing infrequent
   behaviour,'' in \emph{Business Process Management Workshops}, ser. Lecture
   Notes in Business Information Processing, vol. 171.\hskip 1em plus 0.5em
   minus 0.4em\relax Springer, 2014, pp. 66--78.
-
-\bibitem{vanderAalst2004AlphaMiner}
-W.~M.~P. van~der Aalst, T.~Weijters, and L.~Maruster, ``Workflow mining:
-  Discovering process models from event logs,'' \emph{IEEE Transactions on
-  Knowledge and Data Engineering}, vol.~16, no.~9, pp. 1128--1142, 2004.
-
-\bibitem{deMedeiros2004AlphaPlus}
-A.~K.~A. de~Medeiros, B.~F. van Dongen, W.~M.~P. van~der Aalst, and A.~J. M.~M.
-  Weijters, ``Process mining for ubiquitous mobile systems: An overview and a
-  concrete algorithm,'' in \emph{Ubiquitous Mobile Information and
-  Collaboration Systems (UMICS 2004)}, ser. Lecture Notes in Computer Science,
-  vol. 3272.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2004, pp.
-  151--165.
-
-\bibitem{Wen2007AlphaPlusPlus}
-L.~Wen, W.~M.~P. van~der Aalst, J.~Wang, and J.~Sun, ``Mining process models
-  with non-free-choice constructs,'' \emph{Data Mining and Knowledge
-  Discovery}, vol.~15, no.~2, pp. 145--180, 2007.
 
 \bibitem{heuristicsMiner2006}
 A.~Weijters, W.~Aalst, and A.~Medeiros, \emph{Process Mining with the
@@ -241,6 +198,24 @@ S.~J. van Zelst, B.~F. van Dongen, W.~M.~P. van~der Aalst, and H.~M.~W.
   Verbeek, ``Discovering workflow nets using integer linear programming,''
   \emph{Computing}, vol. 100, pp. 529--556, 2018.
 
+\bibitem{vanderAalst2004AlphaMiner}
+W.~M.~P. van~der Aalst, T.~Weijters, and L.~Maruster, ``Workflow mining:
+  Discovering process models from event logs,'' \emph{IEEE Transactions on
+  Knowledge and Data Engineering}, vol.~16, no.~9, pp. 1128--1142, 2004.
+
+\bibitem{deMedeiros2004AlphaPlus}
+A.~K.~A. de~Medeiros, B.~F. van Dongen, W.~M.~P. van~der Aalst, and A.~J. M.~M.
+  Weijters, ``Process mining for ubiquitous mobile systems: An overview and a
+  concrete algorithm,'' in \emph{Ubiquitous Mobile Information and
+  Collaboration Systems (UMICS 2004)}, ser. Lecture Notes in Computer Science,
+  vol. 3272.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2004, pp.
+  151--165.
+
+\bibitem{Wen2007AlphaPlusPlus}
+L.~Wen, W.~M.~P. van~der Aalst, J.~Wang, and J.~Sun, ``Mining process models
+  with non-free-choice constructs,'' \emph{Data Mining and Knowledge
+  Discovery}, vol.~15, no.~2, pp. 145--180, 2007.
+
 \bibitem{DiscoveryBenchmark}
 A.~Augusto, R.~Conforti, M.~Dumas, M.~La~Rosa, F.~M. Maggi, A.~Marrella,
   M.~Mecella, and A.~Soo, ``Automated discovery of process models from event
@@ -268,32 +243,12 @@ C.~Di~Ciccio and M.~Montali, ``Declarative process specifications: Reasoning,
   J.~Carmona, Eds.\hskip 1em plus 0.5em minus 0.4em\relax Cham: Springer, 2022,
   vol. 448, pp. 108--152.
 
-\bibitem{RWDeGiacomo2013LTLf}
-G.~De~Giacomo and M.~Y. Vardi, ``Linear temporal logic and linear dynamic logic
-  on finite traces,'' in \emph{Proceedings of the 23rd International Joint
-  Conference on Artificial Intelligence (IJCAI 2013)}, F.~Rossi, Ed.\hskip 1em
-  plus 0.5em minus 0.4em\relax IJCAI/AAAI, 2013, pp. 854--860.
-
 \bibitem{RWMaggi2011Monitoring}
 F.~M. Maggi, M.~Montali, M.~Westergaard, and W.~M.~P. van~der Aalst,
   ``Monitoring business constraints with linear temporal logic: An approach
   based on colored automata,'' in \emph{Business Process Management (BPM
   2011)}, ser. Lecture Notes in Computer Science, vol. 6896.\hskip 1em plus
   0.5em minus 0.4em\relax Springer, 2011, pp. 132--147.
-
-\bibitem{RWCarmona2022Conformance}
-J.~Carmona, B.~van Dongen, and M.~Weidlich, ``Conformance checking:
-  Foundations, milestones and challenges,'' in \emph{Process Mining Handbook},
-  ser. Lecture Notes in Business Information Processing, W.~M.~P. van~der Aalst
-  and J.~Carmona, Eds.\hskip 1em plus 0.5em minus 0.4em\relax Cham: Springer,
-  2022, vol. 448, pp. 155--190.
-
-\bibitem{RWSlaats2016Hybrid}
-T.~Slaats, D.~M.~M. Schunselaar, F.~M. Maggi, and H.~A. Reijers, ``The
-  semantics of hybrid process models,'' in \emph{On the Move to Meaningful
-  Internet Systems: OTM 2016 Conferences}, ser. Lecture Notes in Computer
-  Science, vol. 10033.\hskip 1em plus 0.5em minus 0.4em\relax Cham: Springer,
-  2016, pp. 531--551.
 
 \bibitem{Mannhardt2016Precision}
 F.~Mannhardt, M.~de~Leoni, H.~A. Reijers, and W.~M.~P. van~der Aalst,
@@ -372,6 +327,13 @@ W.~Aalst, A.~Adriansyah, and B.~Dongen, ``Replaying history on process models
   for conformance checking and performance analysis,'' \emph{WIREs Data Mining
   and Knowledge Discovery}, vol.~2, pp. 182--192, 03 2012.
 
+\bibitem{RWCarmona2022Conformance}
+J.~Carmona, B.~van Dongen, and M.~Weidlich, ``Conformance checking:
+  Foundations, milestones and challenges,'' in \emph{Process Mining Handbook},
+  ser. Lecture Notes in Business Information Processing, W.~M.~P. van~der Aalst
+  and J.~Carmona, Eds.\hskip 1em plus 0.5em minus 0.4em\relax Cham: Springer,
+  2022, vol. 448, pp. 155--190.
+
 \bibitem{Buijs2014Quality}
 J.~C. A.~M. Buijs, B.~F. van Dongen, and W.~M.~P. van~der Aalst, ``Quality
   dimensions in process discovery: The importance of fitness, precision,
@@ -390,28 +352,15 @@ J.~Mu{\~n}oz-Gama and J.~Carmona, ``A fresh look at precision in process
   Notes in Computer Science, vol. 6336.\hskip 1em plus 0.5em minus 0.4em\relax
   Springer, 2010, pp. 211--226.
 
-\bibitem{Adriansyah2012AlignPrecision}
-A.~Adriansyah, J.~Munoz-Gama, J.~Carmona, B.~F. van Dongen, and W.~M.~P.
-  van~der Aalst, ``Alignment based precision checking,'' in \emph{Business
-  Process Management Workshops (BPM 2012)}, ser. Lecture Notes in Business
-  Information Processing, vol. 132.\hskip 1em plus 0.5em minus 0.4em\relax
-  Springer, 2012.
-
 \bibitem{Adriansyah2015Precision}
-------, ``Measuring precision of modeled behavior,'' \emph{Information Systems
-  and e-Business Management}, vol.~13, no.~1, pp. 37--67, 2015.
+A.~Adriansyah, J.~Munoz-Gama, J.~Carmona, B.~F. van Dongen, and W.~M.~P.
+  van~der Aalst, ``Measuring precision of modeled behavior,'' \emph{Information
+  Systems and e-Business Management}, vol.~13, no.~1, pp. 37--67, 2015.
 
 \bibitem{Tax2018Imprecisions}
 N.~Tax, X.~Lu, N.~Sidorova, D.~Fahland, and W.~M.~P. van~der Aalst, ``The
   imprecisions of precision measures in process mining,'' \emph{Information
   Processing Letters}, vol. 135, pp. 1--8, 2018.
-
-\bibitem{Syring2019Propositions}
-A.~F. Syring, N.~Tax, and W.~M.~P. van~der Aalst, ``Evaluating conformance
-  measures in process mining using conformance propositions,'' in
-  \emph{Transactions on Petri Nets and Other Models of Concurrency XIV}, ser.
-  Lecture Notes in Computer Science.\hskip 1em plus 0.5em minus 0.4em\relax
-  Springer, 2019, vol. 11790, pp. 192--221.
 
 \bibitem{vanderAalst2018Propositions}
 \BIBentryALTinterwordspacing
@@ -422,27 +371,20 @@ W.~M.~P. van~der Aalst, ``Relating process models and event logs -- 21
   [Online]. Available: \url{https://ceur-ws.org/Vol-2115/ATAED2018-56-74.pdf}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Polyvyanyy2020Monotone}
-A.~Polyvyanyy, A.~Solti, M.~Weidlich, C.~Di~Ciccio, and J.~Mendling, ``Monotone
-  precision and recall measures for comparing executions and specifications of
-  dynamic systems,'' \emph{ACM Transactions on Software Engineering and
-  Methodology}, vol.~29, no.~3, 2020.
-
 \bibitem{Aalst2015}
-W.~M.~P. van~der Aalst, ``Business process simulation survival guide,'' in
-  \emph{Handbook on Business Process Management 1: Introduction, Methods, and
-  Information Systems}, 2nd~ed., J.~vom Brocke and M.~Rosemann, Eds.\hskip 1em
-  plus 0.5em minus 0.4em\relax Berlin, Heidelberg: Springer, 2015, pp.
-  337--370.
+------, ``Business process simulation survival guide,'' in \emph{Handbook on
+  Business Process Management 1: Introduction, Methods, and Information
+  Systems}, 2nd~ed., J.~vom Brocke and M.~Rosemann, Eds.\hskip 1em plus 0.5em
+  minus 0.4em\relax Berlin, Heidelberg: Springer, 2015, pp. 337--370.
 
 \bibitem{Law2015Simulation}
 A.~M. Law, \emph{Simulation Modeling and Analysis}, 5th~ed.\hskip 1em plus
   0.5em minus 0.4em\relax New York: McGraw-Hill Education, 2015.
 
-\bibitem{simod2024}
-D.~Chapela-Campa, O.~López-Pintado, I.~Suvorau, and M.~Dumas, ``{SIMOD}:
-  Automated discovery of business process simulation models,''
-  \emph{SoftwareX}, vol.~30, p. 102157, 2025.
+\bibitem{Camargo2020}
+M.~Camargo, M.~Dumas, and O.~González-Rojas, ``Automated discovery of business
+  process simulation models from event logs,'' \emph{Decision Support Systems},
+  vol. 134, p. 113284, 03 2020.
 
 \bibitem{BPSdifferentiatedResources2022}
 O.~López-Pintado and M.~Dumas, ``Business process simulation with
@@ -452,13 +394,6 @@ O.~López-Pintado and M.~Dumas, ``Business process simulation with
   Science, vol. 13420.\hskip 1em plus 0.5em minus 0.4em\relax Cham: Springer,
   2022, pp. 361--378.
 
-\bibitem{Prosimos2023}
-O.~L{\'o}pez-Pintado, I.~Halenok, and M.~Dumas, ``Prosimos: Discovering and
-  simulating business processes with differentiated resources,'' in
-  \emph{Enterprise Design, Operations, and Computing. EDOC 2022 Workshops},
-  ser. Lecture Notes in Business Information Processing, vol. 466.\hskip 1em
-  plus 0.5em minus 0.4em\relax Springer, 2023, pp. 346--352.
-
 \bibitem{stochastikPetriNets2013Solti}
 A.~Rogge-Solti, W.~M.~P. van~der Aalst, and M.~Weske, ``Discovering stochastic
   petri nets with arbitrary delay distributions from event logs,'' in
@@ -466,11 +401,6 @@ A.~Rogge-Solti, W.~M.~P. van~der Aalst, and M.~Weske, ``Discovering stochastic
   Workshops, Beijing, China, August 26, 2013, Revised Papers}, ser. Lecture
   Notes in Business Information Processing, vol. 171.\hskip 1em plus 0.5em
   minus 0.4em\relax Springer, 2014, pp. 15--27.
-
-\bibitem{burke2020stochasticPD}
-A.~Burke, S.~Leemans, and M.~Wynn, ``Stochastic process discovery by weight
-  estimation,'' in \emph{Business Process Management Workshops}, ser. Lecture
-  Notes in Business Information Processing, vol. 406, 2021, pp. 260--272.
 
 \bibitem{Camargo2021}
 M.~Camargo, M.~Dumas, and O.~González-Rojas, ``Discovering generative models
@@ -484,12 +414,6 @@ O.~López-Pintado, S.~Murashko, and M.~Dumas, ``Discovery and simulation of
   \url{https://arxiv.org/abs/2408.13666}
 \BIBentrySTDinterwordspacing
 
-\bibitem{runtimeIntegration2024}
-F.~Meneghello, C.~Di~Francescomarino, C.~Ghidini, and M.~Ronzani, ``Runtime
-  integration of machine learning and simulation for business processes: Time
-  and decision mining predictions,'' \emph{Information Systems}, vol. 128, p.
-  102472, 10 2025.
-
 \bibitem{Senderovich2015QueueMining}
 A.~Senderovich, M.~Weidlich, A.~Gal, and A.~Mandelbaum, ``Queue mining for
   delay prediction in multi-class service processes,'' \emph{Information
@@ -500,27 +424,17 @@ G.~Lugaresi and A.~Matta, ``Automated manufacturing system discovery and
   digital twin generation,'' \emph{Journal of Manufacturing Systems}, vol.~59,
   pp. 51--66, 2021.
 
-\bibitem{LugaresiMatta2023}
-------, ``Automated digital twin generation of manufacturing systems with
-  complex material flows: Graph model completion,'' \emph{Computers in
-  Industry}, vol. 151, p. 103977, 2023.
-
-\bibitem{Reinhardt2019ASMG}
-H.~Reinhardt, M.~Weber, and M.~Putz, ``A survey on automatic model generation
-  for material flow simulation in discrete manufacturing,'' \emph{Procedia
-  CIRP}, vol.~81, pp. 121--126, 2019.
-
 \bibitem{Cimino2025ASMGReview}
 A.~Cimino, M.~Elbasheer, F.~Longo, G.~Mirabelli, V.~Solina, and P.~Veltri,
   ``Automatic simulation models generation in industrial systems: A systematic
   literature review and outlook towards simulation technology in the industry
   5.0,'' \emph{Journal of Manufacturing Systems}, vol.~80, pp. 859--882, 2025.
 
-\bibitem{Knopp2023ObjectCentricSimulation}
-B.~Knopp, M.~Pourbafrani, and W.~M.~P. van~der Aalst, ``Discovering
-  object-centric process simulation models,'' in \emph{2023 5th International
-  Conference on Process Mining (ICPM)}.\hskip 1em plus 0.5em minus 0.4em\relax
-  IEEE, 2023, pp. 81--88.
+\bibitem{runtimeIntegration2024}
+F.~Meneghello, C.~Di~Francescomarino, C.~Ghidini, and M.~Ronzani, ``Runtime
+  integration of machine learning and simulation for business processes: Time
+  and decision mining predictions,'' \emph{Information Systems}, vol. 128, p.
+  102472, 10 2025.
 
 \bibitem{Sargent2013Validation}
 R.~G. Sargent, ``Verification and validation of simulation models,''
@@ -587,6 +501,12 @@ D.~Chapela-Campa and M.~Dumas, ``Enhancing business process simulation models
 W.~M.~P. van~der Aalst, ``Object-centric process mining: Unraveling the fabric
   of real processes,'' \emph{Mathematics}, vol.~11, no.~12, p. 2691, 2023.
 
+\bibitem{Knopp2023ObjectCentricSimulation}
+B.~Knopp, M.~Pourbafrani, and W.~M.~P. van~der Aalst, ``Discovering
+  object-centric process simulation models,'' in \emph{2023 5th International
+  Conference on Process Mining (ICPM)}.\hskip 1em plus 0.5em minus 0.4em\relax
+  IEEE, 2023, pp. 81--88.
+
 \bibitem{Wohlin2012Experimentation}
 C.~Wohlin, P.~Runeson, M.~H{\"o}st, M.~C. Ohlsson, B.~Regnell, and
   A.~Wessl{\'e}n, \emph{Experimentation in Software Engineering}.\hskip 1em
@@ -597,5 +517,10 @@ A.~Augusto, R.~Conforti, M.~Dumas, M.~La~Rosa, and A.~Polyvyanyy, ``Split
   miner: Automated discovery of accurate and simple business process models
   from event logs,'' \emph{Knowledge and Information Systems}, vol.~59, pp.
   251--284, 2019.
+
+\bibitem{burke2020stochasticPD}
+A.~Burke, S.~Leemans, and M.~Wynn, ``Stochastic process discovery by weight
+  estimation,'' in \emph{Business Process Management Workshops}, ser. Lecture
+  Notes in Business Information Processing, vol. 406, 2021, pp. 260--272.
 
 \end{thebibliography}
