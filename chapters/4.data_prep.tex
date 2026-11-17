@@ -29,8 +29,8 @@ Section~\ref{sec:bg_terminal}.
 \label{sec:cs_data_sources}
 Four operational systems record parts of a truck visit
 (Table~\ref{tab:ctb_data_sources}). They use different identifiers and are linked
-through the truck schedule. The extract covers March and April 2026, about
-104,000 truck visits and 113,466 container moves.
+through the truck schedule. The extract covers March and April 2026: 104,807
+schedule records of 94,705 truck visits and 113,466 container moves.
 
 \begin{table}[htbp]
 \centering
@@ -108,26 +108,68 @@ show whether a truck sometimes reports ready before a lane is free.}
 exactly into the approach to the first stop, the stops, the transfer between stops
 and the exit after the last stop. All timestamps have minute resolution. The order
 of the events within a visit is taken from the schedule (attribute
-\texttt{case:event:order}), not from the timestamps: the stops of a visit never
-overlap, but at the empty-container depot a stop can end a few minutes after Gate
+\texttt{case:event:order}), not from the timestamps: after cleaning, the stops of
+a visit never overlap (Table~\ref{tab:cleaning}), but at the empty-container depot a stop can end a few minutes after Gate
 Out (6 training and 5 test visits). Methods that read the time intervals would
 treat this as concurrency; Section~\ref{sec:exp_discovery_input} shows the effect
 on discovery.
 
 \paragraph{Population.}
 \label{sec:cleaning_population}
-Visits with missing timestamps, visits longer than twelve hours, which indicate
-recording errors, and 184 visits with an activity outside the eleven labels are
-removed. Visits that handle containers at several RMG blocks are kept: they are a
-regular part of the process (1.7\,\% of the training visits) and the visits that
-a block allocation affects most. The final log has 91,153 visits.
-\todo{Add the counts of the cleaning steps (raw schedule records, missing timestamps, over twelve hours) from preparation/009\_Validation\_quality\_report\_s4\_fahrplan.py.}
+Table~\ref{tab:cleaning} lists how the 94,705 visits of the extract become the
+91,153 visits of the event log. The cleaning removes visits whose records cannot
+describe a real visit: missing timestamps, overlapping stop records, negative
+durations and visits that stay longer than twelve hours or wait more than ten
+hours before Gate Out. Visits whose stops cannot be linked to a container
+transaction are removed when the containers are matched, and visits with an
+activity outside the eleven labels when the event log is built. Visits that
+handle containers at several RMG blocks are kept: they are a regular part of the
+process (1.7\,\% of the training visits) and the visits that a block allocation
+affects most.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{YL{2.2cm}L{2.2cm}}
+\toprule
+\textbf{Step} & \textbf{Removed} & \textbf{Visits left} \\
+\midrule
+Truck schedule, March and April 2026 & & 94,705 \\
+Missing timestamp & 1,267 & \\
+Overlapping stop records & 43 & \\
+Gate-out delay over 10~h or turnaround over 12~h & 23 & \\
+Negative duration & 3 & \\
+\quad after cleaning & 1,336 & 93,369 \\
+No matching container transaction & 2,032 & 91,337 \\
+Activity outside the eleven labels & 184 & 91,153 \\
+\bottomrule
+\end{tabularx}
+\caption{From the truck schedule to the event log. A visit is counted under its
+first reason; visits with a missing timestamp and a turnaround over twelve hours
+are counted as missing timestamp.}
+\label{tab:cleaning}
+\end{table}
+
+\paragraph{Cleaning as a modelling decision.} For data from a physical process, the
+cleaning is more than a technical step. Every removed record is classified as a
+recording error rather than as behaviour that the terminal can show. Some of these
+decisions follow directly from the physics: a truck cannot perform two stops at
+the same time, so overlapping stop records cannot describe a real visit. Others
+draw a line within plausible behaviour: a visit of more than twelve hours may be a
+recording error, but it may also be a truck that really stayed, for example during
+a disruption. The cleaning thus decides which behaviour enters the study as
+physical behaviour of the terminal. Together with the coverage threshold of E1
+(Section~\ref{sec:exp_discovery_eval}), which decides which of the remaining rare
+sequences a net must accept, it bounds what the discovered net can represent and
+what the simulation learned from it can generate: behaviour that is removed here
+can never be reproduced later, and behaviour that is kept, such as the visits to
+several blocks, has to be represented by the net.
 
 \paragraph{Split.}
 The log is split once in time into a training log with 65\,\% of the visits
 (59,139 visits, 2 March to 11 April) and a test log with 35\,\% (32,014 visits, 13 to
 30 April). The boundary falls on a weekend; heavy trucks may not drive on Sundays
-in Germany, so no visit spans the boundary and the test period starts with an
+in Germany \cite{StVO30}, so no visit spans the boundary and the test period starts with an
 empty terminal. Section~\ref{sec:exp_partitions} describes how the experiments
 use the two logs.
 

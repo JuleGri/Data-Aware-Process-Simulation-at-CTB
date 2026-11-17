@@ -4,7 +4,7 @@
 This chapter brings the results together and judges them against the purpose of
 the study: whether a simulation learned from the event log of CTB can support the
 assessment of a different block allocation for truck deliveries. It first states
-what the final model can and cannot support, then what the case shows about
+what the simulation model can and cannot support, then what the case shows about
 discovery metrics and about data-aware simulation in a physical process, which
 threats remain, how domain knowledge entered the study, and what the terminal can
 take from it.
@@ -17,7 +17,7 @@ allocation, measured by the visits above the turnaround corridor. Three
 properties decide whether a simulation can support this comparison: it must
 generate only visits that trucks can perform, it must produce the waiting at a
 busy block by the mechanism that the allocation changes, and it must respond to
-load as strongly as the terminal. The final model meets the first two and the
+load as strongly as the terminal. The final configuration meets the first two and the
 third only in part.
 
 \paragraph{What the model supports.} Every simulated visit satisfies the
@@ -97,7 +97,7 @@ Good discovery metrics predicted a usable simulation only in part. Three
 observations from E1 to E4 show where they fall short.
 
 First, what a net permits is not what the simulator generates. ProSiT learns its
-routing from the observed visits, so behaviour that a net permits but the log
+routing from the observed visits \cite{Vinci2026prosit}, so behaviour that a net permits but the log
 never shows is generated rarely: the most precise nets, HM 0.7 and HM 0.8,
 generate almost no unseen sequences, and so does IMf 0.3. Precision separated the
 nets mainly where they are very permissive, as ILP 1.00 with its single state for
@@ -165,7 +165,7 @@ ProSiT builds its training data and how its simulator works: the queue
 feature counts the stop itself in training but not in the simulation, and the
 count of stops in progress is too low for 14 to 15\,\% of the RMG stops. A third,
 the enabling time that survives loops in training, had no measurable effect on
-the final model. These findings can be corrected in the code and say little about
+the final configuration. These findings can be corrected in the code and say little about
 the method itself.
 \item \textbf{Modelling semantics.} Three findings concern what the learned
 quantities mean: waiting is measured from the moment the block was completely
@@ -190,7 +190,7 @@ when the allocation of deliveries changes cannot be checked with these data
 (Section~\ref{sec:disc_threats}).
 \end{itemize}
 
-\paragraph{What had to be added.} The final model keeps learned everything that
+\paragraph{What had to be added.} The simulation model keeps learned everything that
 the log can express and adds what it cannot: the three lanes, the capacity check
 at the start of a stop, a waiting target measured from a free lane, the load as a
 feature of the service time, and the domain rules of the control flow
@@ -241,11 +241,19 @@ stops, although a block has three lanes. One reading is that the fourth truck is
 already counted while it waits for a lane; delayed completion records or other
 recording effects would produce the same pattern, and the data cannot tell them
 apart. The stop duration is therefore time at the block, not service time, and
-the three lanes of the model are an approximation of the physical limit. The final model treats it as service and creates the
+the three lanes of the model are an approximation of the physical limit. The simulation treats it as service and creates the
 waiting for a lane in the simulation; it does not learn a waiting time and create
 the same queue again (Section~\ref{sec:exp_e4_mechanisms}). Part of the waiting in
 the recorded stops is still in the learned service time, which may be one reason
 why the simulated stops grow too little at the busiest blocks.
+
+\paragraph{Cleaning and thresholds.} The cleaning removed 1,336 visits (1.4\,\%) as
+recording errors, and the coverage threshold of E1 leaves about 1\,\% of the training
+visits out of the behaviour that a net must accept. Both decisions define which
+behaviour counts as physical behaviour of the terminal. They are reproducible, but
+not neutral: keeping very long visits that reflect real disruptions, or a higher
+threshold, would change the long tail of the turnaround time that the discovery
+sees and that the simulation learns (Section~\ref{sec:cleaning_population}).
 
 \paragraph{Time resolution.} All source timestamps are floored to the minute.
 Short stops can have a duration of zero, and the order of events in the same
@@ -291,7 +299,7 @@ case attributes and blocks. Its validity is conditional on these inputs; without
 the error is larger (cycle-time distance 11.2 against 8.0 minutes).
 
 \paragraph{Own code.} The changes to ProSiT are switches in its simulator;
-with all changes switched off, the loop reproduces ProSiT's log exactly
+with all changes switched off, the simulator reproduces ProSiT's log exactly
 (Section~\ref{sec:sim_adaptations}). Conformance values come from ProM, the
 soundness check from WOFLAN. The measures of the generated logs (distances,
 profile gaps) and the control-flow replica are own code; the replica reproduces

@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Visits with \ldots\ (\%)} & \textbf{Training log} & \textbf{HM 0.7, stop guard} & \textbf{HM 0.7, no guard} \\
+\midrule
+1 stop & 91.28 & 91.32 & 91.78 \\
+2 stops & 8.57 & 8.62 & 8.05 \\
+3 stops & 0.145 & 0.058 & 0.141 \\
+4 stops & 0.010 & 0.002 & 0.023 \\
+5 or more stops & 0.000 & 0.000 & 0.011 \\
+\midrule
+Total-variation distance to the training log & -- & 0.0016 & 0.0053 \\
+\bottomrule
+\end{tabular}
+\caption{Number of stops per visit: training log against the simulation of HM 0.7 (E3, means over five seeds of 32,014 visits). With the stop guard every truck performs its planned number of stops; without it, the learned routing alone reproduces the distribution almost as closely.}
+\label{tab:rq1_e3_stopcount}
+\end{table}

@@ -308,13 +308,16 @@
 	  \@advisor\par
 	  \@university\par
 	  \vspace{1.1em}
-	  {\small\itshape Co-supervisors}\par
+	  \@ifundefined{@coadvisorTwo}%
+	    {{\small\itshape Co-supervisor}\par}%
+	    {{\small\itshape Co-supervisors}\par}%
 	  \vspace{.25em}
 	  \@coadvisorOne\par
 	  \@coadvisorOneUniversity\par
-	  \vspace{.35em}
-	  \@coadvisorTwo\par
-	  \@coadvisorTwoUniversity\par
+	  \@ifundefined{@coadvisorTwo}{}{%
+	    \vspace{.35em}%
+	    \@coadvisorTwo\par
+	    \@coadvisorTwoUniversity\par}%
 	\end{minipage}
 	\hfill
 	\begin{minipage}[t]{.40\textwidth}

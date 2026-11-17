@@ -670,7 +670,8 @@ counted in open minutes of the relevant calendar.}
 \label{tab:prosit_components}
 \end{table}
 
-A few components need a short explanation.
+A few components need a short explanation; the description follows the paper and
+the implementation of version 1.0.4 \cite{Vinci2026prosit,ProSiTRepository}.
 \begin{itemize}
 \item \textbf{Arrivals.} The gaps between consecutive case starts are
 computed in open minutes of the arrival calendar. The calendar marks a weekday
@@ -697,7 +698,7 @@ capacity check.
 \subsection{Probabilistic Decision Trees}
 \label{sec:prosit_trees}
 
-A decision tree splits the training data step by step on one feature at a
+A decision tree \cite{Vinci2026prosit} splits the training data step by step on one feature at a
 time, for example ``hour $\le$ 21''. Each split is chosen so that the groups
 become as different as possible in the target (CART). The groups at the end
 are the \emph{leaves}. In ProSiT, a routing leaf stores a probability. A time
@@ -795,7 +796,8 @@ associations in the training data, not causes. A readable rule shows which
 association the simulator uses. Whether it holds after an intervention needs
 other evidence.
 
-For this thesis, seven properties of the implementation matter.
+For this thesis, seven properties of the implementation of version 1.0.4 matter
+\cite{ProSiTRepository}.
 \begin{enumerate}
 \item \textbf{No hard rules.} A transition can fire whenever its input places
 hold tokens and its weight is above zero. ProSiT has no guards. A rule that
@@ -859,7 +861,7 @@ Simulation validation \cite{ChapelaCampa2023Trust,Chapela2025SimQuality,Sargent2
 \end{table}
 
 Three gaps follow. First, discovered models are usually selected by fitness
-and precision. These measures do not show what a simulator does with behaviour
+and precision \cite{Buijs2014Quality,DiscoveryBenchmark}. These measures do not show what a simulator does with behaviour
 that the model permits but the log never shows, and physical rules are not part
 of the discovered model. Second, data-aware simulation discovery has been
 evaluated mainly on administrative and healthcare processes. Its behaviour in a
@@ -871,8 +873,9 @@ historical log. Whether the model responds to load like the real system, which
 is needed before a what-if analysis, is rarely tested, and the judgement of
 domain experts is rarely documented.
 
-Queue mining, data-driven simulation in manufacturing and the validation
-literature motivate a combination of learned behaviour, explicit domain
+Queue mining \cite{Senderovich2015QueueMining}, data-driven simulation in
+manufacturing \cite{LugaresiMatta2021} and the validation literature
+\cite{Sargent2013Validation} motivate a combination of learned behaviour, explicit domain
 assumptions and simulation validation. The CTB case examines whether this
 combination provides a model suitable for assessing a proposed change in block
 allocation. The comparison of discovered nets establishes a justified model

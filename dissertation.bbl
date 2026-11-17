@@ -21,6 +21,19 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{Sulis2026SimulationReview}
+E.~Sulis, L.~Genga, and N.~Martin, ``Simulation and process mining: Review and
+  outlook,'' \emph{International Journal of Data Science and Analytics},
+  vol.~22, p. 198, 2026.
+
+\bibitem{Vinci2026prosit}
+F.~Vinci, G.~Park, W.~M.~P. van~der Aalst, and M.~de~Leoni, ``Reliable and
+  configurable process simulations via probabilistic white-box models,'' in
+  \emph{Service-Oriented Computing: 23rd International Conference, ICSOC 2025,
+  Shenzhen, China, December 1--4, 2025, Proceedings, Part II}, ser. Lecture
+  Notes in Computer Science, vol. 16321.\hskip 1em plus 0.5em minus 0.4em\relax
+  Springer Singapore, 2026, pp. 337--352.
+
 \bibitem{CTSteenken2004}
 D.~Steenken, S.~Voss, and R.~Stahlbock, ``Container terminal operation and
   operations research - a classification and literature review,'' \emph{OR
@@ -56,14 +69,6 @@ M.~\{de Leoni\}, F.~Vinci, S.~Leemans, and F.~Mannhardt,
   plus 0.5em minus 0.4em\relax Germany: Springer, Sep. 2023, pp. 129--145, 21st
   International Conference on Business Process Management, BPM 2023, BPM 2023 ;
   Conference date: 11-09-2023 Through 15-09-2023.
-
-\bibitem{Vinci2026prosit}
-F.~Vinci, G.~Park, W.~M.~P. van~der Aalst, and M.~de~Leoni, ``Reliable and
-  configurable process simulations via probabilistic white-box models,'' in
-  \emph{Service-Oriented Computing: 23rd International Conference, ICSOC 2025,
-  Shenzhen, China, December 1--4, 2025, Proceedings, Part II}, ser. Lecture
-  Notes in Computer Science, vol. 16321.\hskip 1em plus 0.5em minus 0.4em\relax
-  Springer Singapore, 2026, pp. 337--352.
 
 \bibitem{Bett2024}
 D.~Bett, I.~Ali, M.~Gheith, and A.~Eltawil, ``Simulation-based optimization of
@@ -143,11 +148,6 @@ Y.~Wang, F.~Caron, J.~Vanthienen, L.~Huang, and Y.~Guo, ``Acquiring logistics
   process intelligence: Methodology and an application for a {C}hinese bulk
   port,'' \emph{Expert Systems with Applications}, vol.~41, no.~1, pp.
   195--209, 2014.
-
-\bibitem{Sulis2026SimulationReview}
-E.~Sulis, L.~Genga, and N.~Martin, ``Simulation and process mining: Review and
-  outlook,'' \emph{International Journal of Data Science and Analytics},
-  vol.~22, p. 198, 2026.
 
 \bibitem{Hospital2026Vinci}
 \BIBentryALTinterwordspacing
@@ -561,6 +561,12 @@ T.~Gneiting and A.~E. Raftery, ``Strictly proper scoring rules, prediction, and
   und Logistik AG, Hamburg, Tech. Rep., 2026. [Online]. Available:
   \url{https://bericht.hhla.de/geschaeftsbericht-2025/_assets/downloads/HHLA_2025_Geschaeftsbericht.pdf}
 \BIBentrySTDinterwordspacing
+
+\bibitem{StVO30}
+{Bundesministerium der Justiz}, ``{Stra{\ss}enverkehrs-Ordnung (StVO), {\S}~30
+  Abs.~3: Sonn- und Feiertagsfahrverbot},''
+  \url{https://www.gesetze-im-internet.de/stvo_2013/__30.html}, 2013, accessed
+  16 November 2026.
 
 \bibitem{DeLaBriandais1959Trie}
 R.~de~la Briandais, ``File searching using variable length keys,'' in

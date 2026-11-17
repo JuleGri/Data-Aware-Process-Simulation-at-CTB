@@ -57,7 +57,7 @@ valid for measures other than the turnaround time.
 The event log is split once in time: 65\,\% of the visits form the training log
 (59,139 visits, 2 March to 11 April 2026), 35\,\% the test log (32,014 visits, 13
 to 30 April). The boundary falls on a weekend. Heavy trucks may not drive on
-Sundays in Germany, so the terminal holds no trucks at the boundary, and neither
+Sundays in Germany \cite{StVO30}, so the terminal holds no trucks at the boundary, and neither
 period needs a warm-up phase.
 
 Everything that a model learns, and every decision of the experiments, comes from
@@ -295,7 +295,9 @@ A sequence is required if it accounts for at least 0.1\,\% of the training
 visits. This is an admissibility rule for a simulation model, not a claim that
 rarer sequences are errors: they are not required, but every one of them that a
 net rejects is reported. The 17 required sequences cover 99\,\% of the 59,139
-visits; the threshold leaves out all 21 sequences that occur only once. The simulation has
+visits; the threshold leaves out all 21 sequences that occur only once. Like the
+cleaning (Section~\ref{sec:cleaning_population}), it shapes what the simulation can
+reproduce: a sequence that the selected net rejects is never generated. The simulation has
 to reproduce the long turnaround times, not only the average. The rare sequences
 are long visits: their mean turnaround time is 62 minutes, against 37 minutes for
 all visits. A higher threshold would leave out more of these long visits
@@ -464,8 +466,8 @@ Guard & draws whose weights the guard changed, and overrides, per run \\
 Reported only & turnaround time: mean, median and P90, decomposed into approach, stops, transfer and exit; delay peaks (Section~\ref{sec:exp_kpis}); judged in E4 \\
 \bottomrule
 \end{tabularx}
-\caption{Measures of E3. The capacity of the blocks depends on the simulation
-loop, not on the net, and is examined in E4.}
+\caption{Measures of E3. The capacity of the blocks depends on the simulator,
+not on the net, and is examined in E4.}
 \label{tab:exp_e3_matrix}
 \end{table}
 
@@ -525,7 +527,7 @@ perspectives (Table~\ref{tab:exp_e4_measures}).
 \toprule
 \textbf{Perspective} & \textbf{Measures} & \textbf{Why} \\
 \midrule
-P1 Turnaround time & TTT median, P90 and mean; cycle-time distance (CTD, Wasserstein-1 in minutes); median TTT by flow type & The KPI of the thesis \cite{Chapela2025SimQuality}. \\
+P1 Turnaround time & TTT median, P90 and mean; cycle-time distance (CTD: Wasserstein-1, or earth mover's, distance between the TTT distributions, in minutes); median TTT by flow type & The KPI of the thesis \cite{Chapela2025SimQuality}. \\
 P2 Where the time is spent & Mean approach (Gate In to first stop), stop time, transfer between stops and exit; the four means add up to the mean TTT & Locates the error in the visit. \\
 P3 Physical constraints & Trucks in the terminal; share of RMG stops at the busiest block and correlation of block shares with the observed ones; share of RMG stops that start with three or more other trucks at the block; largest number of trucks at one block at once; visits without stop, overlapping stops, visits with more stops than planned & The constraints that the title refers to. \\
 P4 Response to load & Spearman correlation of hourly arrivals and hourly median TTT; median TTT by trucks in the terminal; median approach to an RMG first stop by the trucks at that block at Gate In; median RMG stop duration by the other trucks at the block at its start; share of delay-peak hours & The property that E5 needs. \\

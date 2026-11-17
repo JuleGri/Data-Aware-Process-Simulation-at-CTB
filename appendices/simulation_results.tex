@@ -1,0 +1,62 @@
+\chapter{Additional Simulation Results}
+\label{app:sim_results}
+
+This appendix gives the tables and figures of E4 and E5 whose key values
+Chapter~\ref{chp:results} states in the text. All runs use HM 0.7 as discovered
+with the stop guard; the sources are listed in Appendix~\ref{app:model_inspection}.
+
+\section{Choice and Necessity of the Changes}
+
+Table~\ref{tab:rq2_selection} shows the choice of the final configuration on the
+training period (Section~\ref{sec:res_e4_selection}). Table~\ref{tab:rq2_loo}
+reverses each change of the final configuration alone and adds the runs with other
+block allocations, other arrival intensities and without replay.
+
+\input{tables/rq2_selection}
+\input{tables/rq2_loo}
+
+\FloatBarrier
+\section{Other Nets Under the Final Configuration}
+
+Table~\ref{tab:rq2_nets} gives the nets of the E3 contrasts under the final
+configuration (Section~\ref{sec:res_e4_nets}).
+
+\input{tables/rq2_nets}
+
+\FloatBarrier
+\section{The Final Configuration Against the Observed Logs}
+
+Table~\ref{tab:sim_kpis} summarises the key values of the final configuration.
+Figure~\ref{fig:sim_ttt_distribution} shows the distribution of the turnaround
+time, Figure~\ref{fig:sim_ttt_decomposition} where the time of a visit is spent,
+and Table~\ref{tab:rq2_profiles} the load profiles of
+Figure~\ref{fig:sim_load_profiles} in numbers.
+
+\input{tables/sim_kpis}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_ttt_distribution.png}
+\caption{Turnaround time, observed and simulated (final configuration; replayed
+visits and observed blocks; five seeds pooled).}
+\label{fig:sim_ttt_distribution}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/simulation_model/sim_ttt_decomposition.png}
+\caption{Where the time of a visit is spent, observed and simulated (means).}
+\label{fig:sim_ttt_decomposition}
+\end{figure}
+
+\input{tables/rq2_profiles}
+
+\FloatBarrier
+\section{Who Gains Under S1}
+
+Table~\ref{tab:rq3_distribution} splits the paired change of the turnaround time
+under S1 by the visits at the giving and the receiving blocks and by flow type
+(Section~\ref{sec:res_s1_mechanism}).
+
+\input{tables/rq3_distribution}
+\FloatBarrier
