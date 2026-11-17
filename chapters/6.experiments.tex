@@ -274,33 +274,12 @@ All nets were discovered in ProM Lite 1.4 \cite{vanDongen2005ProM} on
 the complete training log, with the
 activity label (\texttt{concept:name}) as classifier, and exported as
 PNML files with initial and final marking. iDHM was run without data
-attributes, so its nets contain control flow only. Table~\ref{tab:exp_grid}
+attributes, so its nets contain control flow only. Table~\ref{tab:exp_grid} in
+Appendix~\ref{app:discovery_results}
 lists the configurations. They are a bounded exploration, not an
 exhaustive tuning. The grid sizes differ between families. Conclusions
 therefore concern the tested configurations and not the algorithm
 families in general.
-
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabularx}{\textwidth}{L{2.0cm}L{4.3cm}YL{0.8cm}}
-\toprule
-\textbf{Family} & \textbf{ProM plugin (package)} & \textbf{Settings} & \textbf{Nets} \\
-\midrule
-Inductive Miner & Mine Petri net with Inductive Miner (InductiveMinerDeprecated 6.10.72), variant IMf & noise threshold 0.0, 0.1, 0.2, 0.3, 0.4 & 5 \\
-Heuristics & Interactive Data-aware Heuristic Miner (DataAwareCNetMiner 6.9.193); dependency heuristic: Flexible Heuristics Miner; bindings heuristic: nearest activity (FHM) & frequency 0.0 with dependency 0.7, 0.8, 0.9 and 1.0; frequency 0.1 with dependency 0.9; bindings 0.1; ``accepted connected'' on (default); long-term dependencies and ``all tasks connected'' off; no data attributes; Petri net output & 5 \\
-ILP Miner & ILP-Based Process Discovery (HybridILPMiner 6.10.154), advanced configuration; LP solver LPSolve 5.5 & sequence encoding filter threshold 0.0, 0.25, 0.55, 0.75, 0.95, 1.0; p/t net; objective: Parikh values weighted by absolute frequencies; constraints: theory of regions, empty after completion, no trivial regions; sink place added; two variables per event; one place per causal relation, causal graph from the Midi miner with default settings & 6 \\
-Alpha & Alpha Miner (AlphaMiner 6.9.78) & variants Alpha, Alpha+, Alpha++ & 3 \\
-\bottomrule
-\end{tabularx}
-\caption{Discovery configurations of E1, all run in ProM Lite 1.4 on the
-training log (59,139 visits). The iDHM frequency threshold is relative to the
-number of visits: at 0.1, only directly-follows relations that occur in at least
-a tenth of the visits are used. Because no data attributes were selected, iDHM discovers no
-conditional dependencies, and the conditional heuristic (C4.5 with F1
-score, condition threshold 0.5) has no effect.}
-\label{tab:exp_grid}
-\end{table}
 
 \paragraph{Prefix reference.}
 In addition to the miners, a prefix-tree reference model is built
@@ -333,30 +312,9 @@ cleaning (Section~\ref{sec:cleaning_population}), it shapes what the simulation 
 reproduce: a sequence that the selected net rejects is never generated. The simulation has
 to reproduce the long turnaround times, not only the average. The rare sequences
 are long visits: their mean turnaround time is 62 minutes, against 37 minutes for
-all visits. A higher threshold would leave out more of these long visits
-(Table~\ref{tab:exp_noise_threshold}). The threshold does not filter the logs:
+all visits. A higher threshold would leave out more of these long visits. The threshold does not filter the logs:
 Level 1 uses all visits. It only decides which sequences the selected net must
 accept (Level 2 and selection).
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{lrrrrr}
-\toprule
-\textbf{Threshold: sequences} & \textbf{Sequences} & \textbf{Visits} & \textbf{Mean TTT} & \multicolumn{2}{c}{\textbf{Share left out of all \ldots}} \\
-\textbf{below} & \textbf{left out} & \textbf{left out} & \textbf{left out} & \textbf{visits $>$ P90} & \textbf{multi-block visits} \\
-\midrule
-0.1\,\% & 65 & 0.9\,\% & 62 min & 3.4\,\% & 5.0\,\% \\
-0.5\,\% & 69 & 1.8\,\% & 62 min & 6.4\,\% & 21.1\,\% \\
-1\,\% & 73 & 4.3\,\% & 58 min & 12.5\,\% & 21.1\,\% \\
-\bottomrule
-\end{tabular}
-\caption{What a coverage threshold leaves out of the required behaviour
-(training log, 59,139 visits, 82 sequences). A sequence below the threshold is
-not required. Mean TTT of all visits:
-37 minutes. P90: 64 minutes. Multi-block visits: visits to two or more RMG
-blocks.}
-\label{tab:exp_noise_threshold}
-\end{table}
 
 \paragraph{Level 1: quality of the net}
 \begin{itemize}
@@ -483,26 +441,17 @@ complete fitted simulators.
 The generated visits are compared with the training log. Each measure is the mean over the five replications with its minimum
 and maximum, and a difference counts only if it exceeds this range. The
 replications show the random variation of the simulator, not the uncertainty of
-the fitted parameters.
-
-\begin{table}[htbp]
-\centering
-\begin{tabularx}{\textwidth}{L{3.3cm}Y}
-\toprule
-\textbf{Criterion} & \textbf{Measure} \\
-\midrule
-Physical admissibility & no visit without stop, no overlapping stops of one truck, in every seed \\
-Planned stops & share of visits with exactly the planned number of stops, and visits with more stops than planned \\
-Control-flow fidelity & total-variation distance (TVD) between the distributions of sequences: half the sum of the absolute differences of their shares; the same for the number of stops per visit \\
-Unobserved behaviour & share of generated visits whose sequence does not occur in training \\
-Guard & draws whose weights the guard changed, and overrides, per run \\
-Reported only & turnaround time: mean, median and P90, decomposed into approach, stops, transfer and exit; delay peaks (Section~\ref{sec:exp_kpis}); judged in E4 \\
-\bottomrule
-\end{tabularx}
-\caption{Measures of E3. The capacity of the blocks depends on the simulator,
-not on the net, and is examined in E4.}
-\label{tab:exp_e3_matrix}
-\end{table}
+the fitted parameters. The measures cover five criteria. Physical admissibility
+requires no visit without a stop and no overlapping stops of one truck, in every
+seed. For the planned stops, the share of visits with exactly the planned number
+of stops is counted, together with the visits that have more. The fidelity of the
+control flow is the total-variation distance (TVD) between the distributions of
+sequences, that is, half the sum of the absolute differences of their shares, and
+the same for the number of stops per visit. Unobserved behaviour is the share of
+generated visits whose sequence does not occur in training. The work of the guard
+is the number of draws whose weights it changed. The turnaround time is reported,
+but it is judged only in E4, because the capacity of the blocks depends on the
+simulator, not on the net.
 
 The order of events within a simulated visit is taken from the start
 timestamps; for equal timestamps the completion time decides.
@@ -547,31 +496,11 @@ simulator used.
 \item \textbf{Conceptual validity.} Are the assumptions of each component
 plausible for the terminal? Every learned model is inspected (split features,
 leaves), and every mechanism of the simulator is compared with the
-physical process (Table~\ref{tab:exp_e4_mechanisms}).
+physical process (Table~\ref{tab:sim_adaptations}).
 \item \textbf{Operational validity.} Is the output accurate enough for the
 intended use? Generated logs are compared with the observed test log on four
 perspectives (Table~\ref{tab:exp_e4_measures}).
 \end{enumerate}
-
-\begin{table}[htbp]
-\centering
-\footnotesize
-\begin{tabularx}{\textwidth}{L{2.6cm}YL{3.4cm}}
-\toprule
-\textbf{Perspective} & \textbf{Measures} & \textbf{Why} \\
-\midrule
-P1 Turnaround time & TTT median, P90 and mean; cycle-time distance (CTD: Wasserstein-1, or earth mover's, distance between the TTT distributions, in minutes); median TTT by flow type & The KPI of the thesis \cite{Chapela2025SimQuality}. \\
-P2 Where the time is spent & Mean approach (Gate In to first stop), stop time, transfer between stops and exit; the four means add up to the mean TTT & Locates the error in the visit. \\
-P3 Physical constraints & Trucks in the terminal; share of RMG stops at the busiest block and correlation of block shares with the observed ones; share of RMG stops that start with three or more other trucks at the block; largest number of trucks at one block at once; visits without stop, overlapping stops, visits with more stops than planned & The constraints that the title refers to. \\
-P4 Response to load & Spearman correlation of hourly arrivals and hourly median TTT; median TTT by trucks in the terminal; median approach to an RMG first stop by the trucks at that block at Gate In; median RMG stop duration by the other trucks at the block at its start; share of delay-peak hours & The property that E5 needs. \\
-Standard BPS measures & 3-gram distance of the activity sequences (NGD-3) and case-arrival distance (CAR) & Comparability with the ProSiT evaluation \cite{Vinci2026prosit,Chapela2025SimQuality}. \\
-\bottomrule
-\end{tabularx}
-\caption{Measures of operational validity in E4. For each load profile in P4,
-the \emph{profile gap} is the mean absolute difference of the simulated medians
-to the observed ones over the bins.}
-\label{tab:exp_e4_measures}
-\end{table}
 
 \paragraph{Reference values}
 A distance between a generated and an observed log has no meaning on its own.
@@ -633,27 +562,10 @@ must equal the fitted component exactly.
 \subsection{Mechanisms and Design Decisions}
 \label{sec:exp_e4_mechanisms}
 
-Table~\ref{tab:exp_e4_mechanisms} lists the mechanisms that are examined, how
-ProSiT implements them and why a variant is tested.
-
-\begin{table}[htbp]
-\centering
-\footnotesize
-\begin{tabularx}{\textwidth}{L{1.9cm}YYY}
-\toprule
-\textbf{Component} & \textbf{ProSiT 1.0.4} & \textbf{Terminal} & \textbf{Variants tested} \\
-\midrule
-Demand & Arrival gap drawn from a tree on hour and weekday of the previous arrival; case attributes drawn as a random training tuple, independent of the time & Strong daily profile; up to 255 arrivals per hour & Hour-of-week tree from training; replay of the observed arrivals and manifests (oracle) \\
-Block allocation & Learned choice among free blocks, with the queue length of each block as feature. In training, a stop that starts after it was enabled is counted in the queue of its own block, so the label enters the feature & The block follows the container location and the yard plan; the share of each block changes from week to week (correlation 0.27 to 0.62 between weeks) & Learned choice retrained without this count; training shares of the blocks; observed block (oracle) \\
-Capacity & Checked at the enabling time & A block serves at most three trucks at once (three lanes). The log shows a fourth truck at 8.1\,\% of the RMG stops, but only for a short overlap (see the design decisions) & Checked over the whole stop interval at its actual start, with three lanes; four lanes only as a sensitivity run \\
-Waiting & Waiting time measured from the moment the block was last completely free (single server) & Several trucks are served side by side; the approach grows from 6 to 16--24 minutes with three or more trucks at the block & Waiting measured from the moment a lane became free, with capacity at start (queue arises in the simulation); or the whole time from enabling to start, without capacity limit (queue learned from data) \\
-Service & Execution time without load features & The RMG stop takes 6, 9, 14 and 20 minutes (median) with 0, 1, 2 and 3 other trucks at the block & Execution time with the number of other trucks at the block as an additional feature \\
-\bottomrule
-\end{tabularx}
-\caption{Mechanisms examined in E4. Observed values from the test log; the
-training log gives the same profiles within one to two minutes.}
-\label{tab:exp_e4_mechanisms}
-\end{table}
+The mechanisms that are examined follow the path of a truck, namely the demand,
+the block allocation, the capacity, the waiting and the service.
+Table~\ref{tab:sim_adaptations} compares how ProSiT 1.0.4 implements them with the
+extensions of the simulation model.
 
 \paragraph{Design decisions}
 \begin{itemize}
@@ -711,55 +623,13 @@ on average in both periods).
 \subsection{Experiments}
 \label{sec:exp_e4_runs}
 
-Table~\ref{tab:exp_e4_configs} lists the configurations. All use five seeds
+Table~\ref{tab:exp_e4_configs} in Appendix~\ref{app:sim_results} lists the
+configurations. All use five seeds
 (42--46) and simulate the 32,014 visits of the test period from its first Gate
 In, except the runs of E4f, which simulate the 59,139 visits of the training
 period. A configuration whose queue grows without bound is simulated only for
 the first day of the test period (2,393 visits) and compared with the observed
 visits of that day.
-
-\begin{table}[p]
-\centering
-\scriptsize
-\begin{tabularx}{\textwidth}{lL{1.5cm}L{1.6cm}L{1.6cm}L{1.6cm}L{1.3cm}Y}
-\toprule
-\textbf{Run} & \textbf{Demand} & \textbf{Blocks} & \textbf{Capacity} & \textbf{Waiting} & \textbf{Service} & \textbf{Question} \\
-\midrule
-\multicolumn{7}{l}{\textit{E4a Demand}} \\
-a0 & ProSiT tree & learned & 3, enabling & ProSiT & ProSiT & E3 baseline \\
-a1 & hour of week & learned & 3, enabling & ProSiT & ProSiT & Does a realistic arrival profile help? \\
-a2 & replay & learned & 3, enabling & ProSiT & ProSiT & Error without demand error \\
-\multicolumn{7}{l}{\textit{E4b Block allocation}} \\
-b1 & replay & learned, no self-count & 3, enabling & ProSiT & ProSiT & Is the self-count the cause of the concentration? \\
-b2 & replay & training shares & 3, enabling & ProSiT & ProSiT & Load-independent allocation \\
-b3 & replay & observed & 3, enabling & ProSiT & ProSiT & Blocks from the log where available \\
-\multicolumn{7}{l}{\textit{E4c Queue at the block}} \\
-c1 & replay & observed & 3, start & ProSiT & ProSiT & Capacity over the whole stop \\
-c2 & replay & observed & 3, start & no self-count & ProSiT & Consistent queue feature \\
-c3 & replay & observed & 3, start & lane free & ProSiT & Queue arises in the simulation \\
-c4 & replay & observed & 4, start & lane free & ProSiT & Four lanes, as in the log (sensitivity) \\
-c5 & replay & observed & none & whole delay & ProSiT & Queue learned from data (sensitivity) \\
-\multicolumn{7}{l}{\textit{E4d Service under load}} \\
-d3--d5 & \multicolumn{4}{l}{as c3--c5} & with load & Does load-dependent service reproduce the stop durations? \\
-\multicolumn{7}{l}{\textit{E4e Final configuration (chosen by the rule below)}} \\
-e-- & \multicolumn{5}{l}{each change of the final configuration reversed alone} & Is every change needed? \\
-eblk & \multicolumn{5}{l}{final configuration with training shares or a learned block choice} & What is lost without the observed blocks? \\
-e$\times$ & \multicolumn{5}{l}{final configuration with arrivals compressed or stretched (intensity 0.8, 1.2)} & Does TTT rise with load? \\
-eG & \multicolumn{5}{l}{final mechanisms with hour-of-week or ProSiT arrivals and training block shares} & Fully generative accuracy \\
-enet & \multicolumn{5}{l}{final configuration with each net of the E3 contrasts} & Does the net matter once queue and service are corrected? \\
-\multicolumn{7}{l}{\textit{E4f Training period (in-sample)}} \\
-T & \multicolumn{5}{l}{the admissible c1x--c3x and d3x on the training period (replay of the training visits)} & Selection of the final configuration \\
-f0 & \multicolumn{5}{l}{final configuration on the training period} & Model error or change between periods? \\
-\bottomrule
-\end{tabularx}
-\caption{Configurations of E4. ProSiT: component as fitted in E3. No
-self-count: retrained without counting the stop in its own queue. Lane free:
-waiting measured from the moment a lane became free. Whole delay: waiting
-measured from enabling to start. Every configuration from b3 on, and the
-baseline a0, is also run with an exact count of the activities in progress
-(suffix x, see the design decisions).}
-\label{tab:exp_e4_configs}
-\end{table}
 
 \paragraph{Choice of the final configuration}
 The rule is fixed before the training runs of the choice are read. As in E1
@@ -930,29 +800,16 @@ waiting, not a reduction.
 \label{sec:exp_threats}
 % ======================================================================
 
-Table~\ref{tab:exp_threats} lists the main threats to the conclusions, how the
-design responds to them and what remains. The remaining limitations are
-discussed in Section~\ref{sec:disc_threats}.
-
-\begin{table}[htbp]
-\centering
-\footnotesize
-\begin{tabularx}{\textwidth}{L{3.0cm}YY}
-\toprule
-\textbf{Threat} & \textbf{Design response} & \textbf{What remains} \\
-\midrule
-Physically impossible visits & Rule audit of the nets (E2); stop guard; admissibility of every generated log (E3--E5) & Rule~7 cannot be checked \\
-Leakage through case attributes & Only the attributes of the planned visit, known at Gate In (Section~\ref{sec:entry_known_attributes}) & Changes of the schedule after Gate In are not recorded \\
-Selection on the test log & Every selection on the training log; criteria fixed before the runs they decide & The test period was available during the exploration of the data \\
-Change between periods & Variants compared on the same period; final configuration also on the training period & The test error mixes both \\
-Waiting counted twice & The queue either arises in the simulation or is learned, never both (E4) & Part of the waiting is inside the recorded stop \\
-Random variation & Five or ten seeds; ranges and paired intervals & Parameter uncertainty is not covered \\
-Author as domain source & Assumptions listed for review (Section~\ref{sec:exp_review}) & See Section~\ref{sec:disc_stakeholders} \\
-\bottomrule
-\end{tabularx}
-\caption{Threats to the conclusions and the design responses.}
-\label{tab:exp_threats}
-\end{table}
+The design responds to the main threats to the conclusions. Physically impossible
+visits are excluded by the rule audit of the nets, the stop guard and the check of
+every generated log. Leakage is avoided, because only the attributes of the planned
+visit are used, which are known at Gate In. Every selection uses the training log,
+and its criteria are fixed before the runs they decide. The change between the
+periods is handled by comparing variants on the same period and by running the
+final configuration on the training period as well. The queue at a block either
+arises in the simulation or is learned, never both. Five or ten seeds show the
+random variation. What remains of these threats is discussed in
+Section~\ref{sec:disc_threats}.
 
 \section{Chapter Summary}
 

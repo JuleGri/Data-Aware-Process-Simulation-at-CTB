@@ -140,22 +140,22 @@ the analysis concerns the RMG blocks, and as long as the simulated stops at LL a
 HO2 take as long as the recorded ones, their exact capacity does not affect the
 blocks. For the RMG blocks, ProSiT discovers four or five trucks at once; the model
 uses three, the number of handover lanes (Section~\ref{sec:sim_adaptations}).
-Table~\ref{tab:sim_capacities} lists all capacities and calendars.
+Table~\ref{tab:sim_capacities} in Appendix~\ref{app:prosit_inventory} lists all
+capacities and calendars.
 
-\input{tables/sim_capacities}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Settings}
 \label{sec:sim_settings}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Table~\ref{tab:sim_hyperparameters} lists the settings of the discovery. The most
+Table~\ref{tab:sim_hyperparameters} in Appendix~\ref{app:prosit_inventory} lists the
+settings of the discovery. The most
 important choice is the version. ProSiT~1.0.4 decides for every component by
 cross-validation whether a tree predicts better than one distribution for all
 cases (Section~\ref{sec:prosit_trees}); trees are kept where they help, so that
 waiting and execution times can depend on the load and the attributes of a visit.
 
-\input{tables/sim_hyperparameters}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Extensions for the Physical Limits}

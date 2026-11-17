@@ -26,10 +26,8 @@ was then encoded without silent transitions, with one place for each state of
 the visit and one transition for each activity that can happen in that state. The
 language stayed the same; an activity therefore appears on several transitions.
 The repair kept every observed sequence and raised the precision of IM 0.0 from
-0.842 to 0.888 and that of ILP 1.00 from 0.773 to 0.825
-(Table~\ref{tab:app_rewritten_funnel}).
+0.842 to 0.888 and that of ILP 1.00 from 0.773 to 0.825.
 
-\input{tables/app_rewritten_funnel}
 
 \paragraph{Precision and simulation.} Simulated with the same settings as in E3,
 the three state machines generated the same distribution of sequences (sequence
@@ -49,21 +47,17 @@ simple guard, which masks only the visible stops and Gate Out, changed no draw: 
 decisions are taken by silent transitions, and when a stop or Gate Out becomes
 enabled it is often the only step left (449 overrides per run). On the state
 machine it changes 3,206 draws per run, but still has to give up 117 times, in
-states from which the plan can no longer be completed
-(Table~\ref{tab:app_rewritten_2x2_hm}). The sequences are the same in all four
+states from which the plan can no longer be completed. The sequences are the same in all four
 conditions. The look-ahead guard reaches the same on the discovered net without
 rewriting it, and never has to give up (E3).
 
-\input{tables/app_rewritten_2x2_hm}
 
 \paragraph{Parallel branches.} For IM 0.0, whose discovered net expresses the
 free order of the stops by parallel branches that silent transitions can skip,
-the representation decides much more (Table~\ref{tab:app_rewritten_2x2_im}; test
-log). With the simple guard, the discovered net generates 15.1\,\% visits without
+the representation decides much more (test log). With the simple guard, the discovered net generates 15.1\,\% visits without
 a stop and overlapping stops in 22.7\,\% of the multi-stop visits; the same
 language as a state machine generates none.
 
-\input{tables/app_rewritten_2x2_im}
 
 \section{Control-Flow Replica}
 \label{app:replica_token_game}

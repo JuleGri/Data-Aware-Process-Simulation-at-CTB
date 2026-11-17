@@ -962,30 +962,7 @@ validation of the simulation model (Section~\ref{sec:exp_mechanisms}).
 \label{sec:rw_positioning}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Table~\ref{tab:rw_comparison} summarises what the reviewed research
-contributes and which question remains open for a terminal like CTB.
-
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabularx}{\textwidth}{@{}L{3.6cm}YY@{}}
-\toprule
-\textbf{Research direction} & \textbf{Main contribution} & \textbf{Open question for CTB} \\
-\midrule
-Terminal simulation \cite{Kastner2021,Bett2024} & Hand-built models that compare operating policies on KPIs such as TTT. & Can a model discovered from data support the same kind of comparison? \\
-Discovery benchmarks \cite{DiscoveryBenchmark,RWRehse2024Experimentation} & Compare fitness, precision and size of discovered models. & Which model is adequate when it is \emph{executed}, not only described? \\
-Domain knowledge and repair \cite{schuster2022,RWDixit2015Domain,SimulationGuidedRepair2025} & Use rules in discovery or repair. Repair for simulation adds missing behaviour. & Can physical rules remove impossible behaviour exactly, and which rules belong in the net and which in the simulator? \\
-Data-aware simulation \cite{mannhardt2023stochasticProcessesModelling,lopez2024,Vinci2026prosit} & Routing and times depend on data and process state. Evaluated mainly where a resource handles one case at a time. & Does it reproduce a process with multi-lane physical resources, shared capacity and congestion? \\
-Queues and physical resources \cite{Senderovich2015QueueMining,Aalst2015,Sulis2026SimulationReview} & Queueing view of delays. Known risks of ignoring workload and shared resources. Little process-mining support for queues. & Which assumptions of a discovered simulator break when capacity is physical, and what must be added? \\
-Data-driven simulation in manufacturing \cite{LugaresiMatta2021,Grobis2025ProductionLogistics} & Structure discovered from logs, buffers and capacities added explicitly. & Does this split between learned and added components work for a data-aware simulator of truck visits? \\
-Simulation validation \cite{ChapelaCampa2023Trust,Chapela2025SimQuality,Sargent2013Validation} & Multi-perspective comparison of generated and real logs. & Does the model respond to load like the terminal, and do domain experts find it plausible? \\
-\bottomrule
-\end{tabularx}
-\caption{Research directions and the questions they leave open for the CTB case study.}
-\label{tab:rw_comparison}
-\end{table}
-
-Three gaps follow. First, discovered models are usually selected by fitness
+The reviewed research leaves three gaps for a terminal like CTB. First, discovered models are usually selected by fitness
 and precision \cite{Buijs2014Quality,DiscoveryBenchmark}. These measures do not
 show what a simulator does with behaviour that the model permits but the log
 never shows, and physical rules are not part of the discovered model. Second,

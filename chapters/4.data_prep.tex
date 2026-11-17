@@ -28,26 +28,9 @@ Section~\ref{sec:bg_terminal}.
 
 \label{sec:cs_data_sources}
 Four operational systems record parts of a truck visit
-(Table~\ref{tab:ctb_data_sources}). They use different identifiers and are linked
+(Table~\ref{tab:ctb_data_sources} in Appendix~\ref{app:observed_behaviour}). They use different identifiers and are linked
 through the truck schedule. The extract covers March and April 2026: 104,807
 schedule records of 94,705 truck visits and 113,466 container moves.
-
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabularx}{\textwidth}{L{3.6cm}YL{3.4cm}}
-\toprule
-\textbf{Source} & \textbf{Content} & \textbf{Use in this thesis} \\
-\midrule
-ITS truck schedule & Planned visit with its stops; timestamps of Gate In, readiness in the handover lane, fulfilment of the order and Gate Out & cases, events, timestamps, planned stops \\
-Report system & Container transactions, exchange areas and gate records & link of containers to stops \\
-Container master data & Size, type, full or empty, hazardous and reefer indicators & case attributes \\
-Yard management system & Four-hourly snapshots of block occupancy & description of the terminal only \\
-\bottomrule
-\end{tabularx}
-\caption{Operational data sources.}
-\label{tab:ctb_data_sources}
-\end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Event Log}
@@ -252,7 +235,6 @@ for about one third of the mean TTT; the approach and the exit together for abou
 two thirds. Because a stop starts only when the truck is ready in the handover
 lane, driving and queueing before that point fall into the approach.
 
-\input{tables/obs_descriptives}
 
 \label{sec:obs_summary}
 The TTT grows with the number of trucks in the terminal, and the growth is not

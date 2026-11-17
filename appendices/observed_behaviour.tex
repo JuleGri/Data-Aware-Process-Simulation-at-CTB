@@ -11,6 +11,30 @@ statements are descriptive associations. They do not establish causes. The
 figures and values describe the training period; thresholds are fixed on it and
 used unchanged for the test period.
 
+\section{Data Sources}
+\label{sec:obs_sources}
+
+Table~\ref{tab:ctb_data_sources} lists the operational data sources of the event log
+(Section~\ref{sec:cs_environment}).
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{L{3.6cm}YL{3.4cm}}
+\toprule
+\textbf{Source} & \textbf{Content} & \textbf{Use in this thesis} \\
+\midrule
+ITS truck schedule & Planned visit with its stops; timestamps of Gate In, readiness in the handover lane, fulfilment of the order and Gate Out & cases, events, timestamps, planned stops \\
+Report system & Container transactions, exchange areas and gate records & link of containers to stops \\
+Container master data & Size, type, full or empty, hazardous and reefer indicators & case attributes \\
+Yard management system & Four-hourly snapshots of block occupancy & description of the terminal only \\
+\bottomrule
+\end{tabularx}
+\caption{Operational data sources.}
+\label{tab:ctb_data_sources}
+\end{table}
+
+\FloatBarrier
 \section{Arrival Pattern}
 \label{sec:obs_arrivals}
 
@@ -110,8 +134,8 @@ Training contains 65 delay-peak hours (10.4\,\%) and the test period 82
 (25.7\,\%). Only 9 delay-peak hours of the training period and 27 of the test
 period are also arrival-peak hours.
 
-Table~\ref{tab:obs_peak_components} decomposes the turnaround time in
-and outside delay peaks. In training, the mean TTT in delay-peak hours
+In and outside delay peaks, the parts of the turnaround time differ as follows. In
+training, the mean TTT in delay-peak hours
 is 24.1 minutes longer. Approach and exit account for 20.9 minutes of
 this difference, or 87\,\%. The stop intervals grow by only 2.6 minutes.
 Arrival peaks, in contrast, are associated with an increase of only 2.4
@@ -125,25 +149,6 @@ the exit for 3.0 minutes (18\,\%). Under normal operation, the additional
 delay therefore arises mainly before the truck reports ready at its
 first stop.
 % Source: peak_analysis_observed_v2.py on the final split (T1) and analysis/describe_event_log.py.
-
-\begin{table}[htbp]
-\centering
-\begin{tabularx}{\textwidth}{YL{1.5cm}L{1.5cm}L{1.5cm}L{1.5cm}L{1.5cm}}
-\toprule
-\textbf{Training, mean [min]} & \textbf{Approach} & \textbf{Stops} & \textbf{Transfer} & \textbf{Exit} & \textbf{TTT} \\
-\midrule
-Delay-peak hours (7,531 visits) & 19.2 & 14.3 & 1.6 & 22.5 & 57.5 \\
-Other hours (51,608 visits) & 9.8 & 11.7 & 1.0 & 11.0 & 33.5 \\
-Difference & +9.4 & +2.6 & +0.5 & +11.5 & +24.1 \\
-\midrule
-Arrival-peak hours (12,765 visits) & 12.0 & 12.4 & 1.2 & 12.8 & 38.4 \\
-Other hours (46,374 visits) & 10.7 & 12.0 & 1.1 & 12.3 & 36.0 \\
-\bottomrule
-\end{tabularx}
-\caption{Turnaround-time components in and outside peak hours. Visits
-are assigned to the hour of their Gate In.}
-\label{tab:obs_peak_components}
-\end{table}
 
 Not all visits are affected equally. In arrival peaks, the median TTT of
 receive visits rises from 29 to 34 minutes, that of delivery visits only
@@ -181,6 +186,8 @@ mix of visits shifts as well: the test period has more deliveries, more visits
 without RMG and more visits with two or more stops. The shift affects the
 frequencies of activity sequences rather than their set: 16 test sequences do not
 occur in training, and they account for 0.05\,\% of the test visits.
+
+\input{tables/obs_descriptives}
 
 A model fitted on the training period is therefore expected to underestimate the
 TTT of the test period, independently of its control flow. Errors measured on the

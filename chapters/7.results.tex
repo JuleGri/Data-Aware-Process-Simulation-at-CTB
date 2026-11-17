@@ -112,7 +112,6 @@ visits, which are long and directly affected by the block allocation of E5.
 % Sources: process_discovery/outputs/runs/e2_split13apr_20261106/audit/model_rule_checks.csv (language audit);
 %   rule 4 and table: process_discovery/make_e2_audit_table.py -> tables/rq1_e2_audit.tex
 
-\input{tables/rq1_e2_audit}
 
 Every training and test visit satisfies rules 1, 2, 3 and 5, no visit has more
 than four stops, and in no visit with several stops do two stops overlap. This
@@ -188,7 +187,6 @@ training. Visits to two RMG blocks are generated, but less often than recorded
 (1.2 against 2.3\,\% of the visits with an RMG stop). The number of stops per visit
 follows the training log (Table~\ref{tab:rq1_e3_stopcount}).
 
-\input{tables/rq1_e3_stopcount}
 
 \paragraph{Guard off and simple guard.} Without the guard, the learned routing
 already follows the plan in 98.7\,\% of the visits, because its trees split on the
@@ -333,26 +331,17 @@ plausible. ProSiT measures the waiting time from the moment the block was last
 completely free. A block serves up to three trucks at once, so a truck often
 starts while others are still served, and the target is then zero or negative.
 The busier the block, the shorter the learned waiting time, although the real
-delay grows (Table~\ref{tab:rq2_waiting_target}).
+delay grows (Figure~\ref{fig:rq2_waiting_target}).
 
-\begin{table}[htbp]
+\begin{figure}[htbp]
 \centering
-\footnotesize
-\begin{tabular}{lrrrr}
-\toprule
-\textbf{Other stops in progress at enabling} & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3+} \\
-\midrule
-RMG stops in training & 23,011 & 12,110 & 7,254 & 4,517 \\
-ProSiT waiting target, median (min) & 6 & 3 & 1 & 0 \\
-Share of targets $\leq 0$ & 0\,\% & 31\,\% & 50\,\% & 54\,\% \\
-Observed delay from enabling to start, median (min) & 6 & 7 & 9 & 16 \\
-\bottomrule
-\end{tabular}
-\caption{ProSiT's waiting-time target at the RMG blocks by the load of the block
-when the stop is enabled, training log. The target is measured from the moment the block
-was last completely free (single server).}
-\label{tab:rq2_waiting_target}
-\end{table}
+\includegraphics[width=0.9\textwidth]{figures/simulation_model/sim_waiting_target.pdf}
+\caption{ProSiT's waiting-time target at the RMG blocks against the observed delay,
+by the number of other stops in progress at the block when the stop is enabled
+(training log). The target is measured from the moment the block was last
+completely free, as if a block had one server.}
+\label{fig:rq2_waiting_target}
+\end{figure}
 
 \paragraph{Execution time and capacity.} The 11 execution-time models split
 mainly on the hour and the weekday; ProSiT offers no load feature for execution
@@ -397,7 +386,7 @@ demand and blocks, the error changes its sign. The turnaround time is now too
 short (median 23, P90 47 minutes), and the approach falls from 6 minutes at an
 empty block to 0 minutes with three trucks, while the observed approach rises from
 6 to 16 minutes. This is the single-server target of
-Table~\ref{tab:rq2_waiting_target}.
+Figure~\ref{fig:rq2_waiting_target}.
 
 \paragraph{Queue at the block (E4c).} Checking the capacity over the whole stop
 at its start (c1x) keeps at most three trucks at a block, but does not create
@@ -508,7 +497,6 @@ occur in the simulation.}
 \label{fig:sim_load_profiles}
 \end{figure}
 
-\input{tables/rq2_attribution}
 
 \paragraph{In-sample and out-of-sample.} On the training period, the final
 configuration is close to the log: median 27 against 29 minutes, P90 57 against 64
@@ -517,8 +505,7 @@ between the two periods but not within the variation between two real weeks. The
 approach and stop-duration profiles are reproduced within the variation between
 weeks (gaps 0.8 and 1.0 minutes). On the test period, the cycle-time distance is
 8.0 minutes. The mean error grows from $-3.9$ to $-8.0$ minutes, mainly in the
-approach ($-0.3$ to $-1.9$) and in the stop durations ($-1.4$ to $-3.4$;
-Table~\ref{tab:rq2_attribution}). These are the parts in which the terminal changed
+approach ($-0.3$ to $-1.9$) and in the stop durations ($-1.4$ to $-3.4$). These are the parts in which the terminal changed
 between the periods: from training to test, the approach grew by 1.8 minutes, and
 the stops took 2.0 minutes longer per visit with nearly the same routing. They took
 longer at every load: an RMG stop with no other truck at the block took 8.2 instead
@@ -650,11 +637,9 @@ mean turnaround time exceeds 35 minutes in 56\,\% of the hours, in the simulatio
 in 24\,\%, as E4 showed.
 
 Per visit, the share of visits longer than 35 minutes falls by 3.7 percentage
-points, from 33.5\,\% in the baseline (Table~\ref{tab:rq3_corridor} in
-Appendix~\ref{app:sim_results}). Some visits at the lower end become shorter than
+points, from 33.5\,\% in the baseline. Some visits at the lower end become shorter than
 25 minutes, but the hourly means do not fall below the corridor.
 
-\input{tables/rq3_effect}
 
 The effect is concentrated on the visits whose delivery is moved
 (Table~\ref{tab:rq3_effect}). They are 8.4 minutes shorter when the delivery may go
@@ -680,7 +665,7 @@ block falls from 23.0\,\% by 5.0 to 7.4 percentage points
 (Table~\ref{tab:rq3_effect}). Besides the moved visits, the other visits at the
 blocks that gave a delivery away gain 1.5 to 1.8 minutes, and all other visits 1.8
 to 2.0 minutes, because with shorter visits fewer trucks are in the terminal at a
-time (Table~\ref{tab:rq3_distribution}). The visits at the blocks that received a
+time. The visits at the blocks that received a
 delivery change by $-0.1$ to $+0.3$ minutes, and every interval includes zero: a
 small deterioration cannot be excluded, but none is shown. In the model, S1
 therefore reduces waiting rather than moving it to other blocks.
@@ -705,7 +690,6 @@ plan.
 \subsection{Sensitivity}
 \label{sec:res_s1_sensitivity}
 
-\input{tables/rq3_robustness}
 
 The $\pm 2$ variant was repeated under the four changes of Z5, each against its own
 baseline (Tables~\ref{tab:rq3_robustness} and~\ref{tab:rq3_corridor_hourly}). The

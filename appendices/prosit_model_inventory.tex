@@ -60,10 +60,13 @@ Table~\ref{tab:sim_adaptations} are switches in the simulator; the final
 configuration sets all of them. Every configuration of E3 and E4 is run with seeds
 42 to 46, E5 with seeds 42 to 51.
 
+\input{tables/sim_hyperparameters}
+
+\FloatBarrier
 \section{Learned Models}
 \label{app:prosit_trees}
 
-Table~\ref{tab:app_inventory} lists every learned model of the final model: the
+Table~\ref{tab:app_inventory} lists every learned model of the simulation model: the
 arrival tree, the routing model of every transition of HM 0.7, the waiting-time
 model of every resource (lane-free target) and the execution-time model of every
 activity (with the trucks at the block as a feature). The learned block choice is
@@ -74,15 +77,12 @@ reproduction package gives every one of the 481 leaves with its path of splits,
 its fitted distribution and parameters, its mean or firing probability and its
 sample size.
 
-Table~\ref{tab:sim_components} summarises the components: how many models each has,
-how many of them are trees, and on which features they split most often.
 Figure~\ref{fig:sim_tree_arrivals} shows the arrival tree with the fitted
 distribution and the training values of every leaf (the same tree as
 Figure~\ref{fig:bg_prosit_arrival_tree}), and Figure~\ref{fig:sim_routing_first}
 checks the routing: the first stop that the learned trees choose agrees with the
 training log within one percentage point for every flow type.
 
-\input{tables/sim_components}
 
 \begin{figure}[htbp]
 \centering
@@ -114,6 +114,9 @@ the discovered values of four or five. The discovered resource calendars cover
 122 to 128 of the 168 hours of a week; they are set to the full week so that a
 truck already inside is served to completion.
 
+\input{tables/sim_capacities}
+
+\FloatBarrier
 \section{Domain Rules}
 \label{app:rules}
 
