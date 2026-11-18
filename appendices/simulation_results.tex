@@ -3,13 +3,13 @@
 
 This appendix gives the tables and figures of E4 and E5 whose key values
 Chapter~\ref{chp:results} states in the text. All runs use HM 0.7 as discovered
-with the stop guard; the sources are listed in Appendix~\ref{app:model_inspection}.
+with the stop guard. The sources are listed in Appendix~\ref{app:model_inspection}.
 
 \section{Measures and Configurations of E4}
 
 Table~\ref{tab:exp_e4_measures} lists the measures of operational validity and
 Table~\ref{tab:exp_e4_configs} the configurations of E4
-(Section~\ref{sec:exp_e4_design}).
+(Sections~\ref{sec:exp_e4_configs} and~\ref{sec:exp_e4_operational}).
 
 \begin{table}[htbp]
 \centering
@@ -20,8 +20,8 @@ Table~\ref{tab:exp_e4_configs} the configurations of E4
 \midrule
 P1 Turnaround time & TTT median, P90 and mean, cycle-time distance (CTD, the Wasserstein-1 or earth mover's distance between the TTT distributions, in minutes), median TTT by flow type & The KPI of the thesis \cite{Chapela2025SimQuality}. \\
 P2 Where the time is spent & Mean approach (Gate In to first stop), stop time, transfer between stops and exit, whose four means add up to the mean TTT & Locates the error in the visit. \\
-P3 Physical constraints & Trucks in the terminal; share of RMG stops at the busiest block and correlation of block shares with the observed ones; share of RMG stops that start with three or more other trucks at the block; largest number of trucks at one block at once; visits without stop, overlapping stops, visits with more stops than planned & The constraints that the title refers to. \\
-P4 Response to load & Spearman correlation of hourly arrivals and hourly median TTT; median TTT by trucks in the terminal; median approach to an RMG first stop by the trucks at that block at Gate In; median RMG stop duration by the other trucks at the block at its start; share of delay-peak hours & The property that E5 needs. \\
+P3 Physical constraints & Trucks in the terminal. Share of RMG stops at the busiest block and correlation of block shares with the observed ones. Share of RMG stops that start with three or more other trucks at the block. Largest number of trucks at one block at once. Visits without stop, overlapping stops, visits with more stops than planned & The constraints that the title refers to. \\
+P4 Response to load & Spearman correlation of hourly arrivals and hourly median TTT. Median TTT by trucks in the terminal. Median approach to an RMG first stop by the trucks at that block at Gate In. Median RMG stop duration by the other trucks at the block at its start. Share of delay-peak hours & The property that E5 needs. \\
 Standard BPS measures & 3-gram distance of the activity sequences (NGD-3) and case-arrival distance (CAR) & Comparability with the ProSiT evaluation \cite{Vinci2026prosit,Chapela2025SimQuality}. \\
 \bottomrule
 \end{tabularx}
@@ -35,14 +35,14 @@ Standard BPS measures & 3-gram distance of the activity sequences (NGD-3) and ca
 \scriptsize
 \begin{tabularx}{\textwidth}{lL{1.5cm}L{1.6cm}L{1.6cm}L{1.6cm}L{1.3cm}Y}
 \toprule
-\textbf{Run} & \textbf{Demand} & \textbf{Blocks} & \textbf{Capacity} & \textbf{Waiting} & \textbf{Service} & \textbf{Question} \\
+\textbf{Run} & \textbf{Demand} & \textbf{Blocks} & \textbf{Capacity} & \textbf{Waiting} & \textbf{Service} & \textbf{Purpose} \\
 \midrule
 \multicolumn{7}{l}{\textit{E4a Demand}} \\
 a0 & ProSiT tree & learned & 3, enabling & ProSiT & ProSiT & E3 baseline \\
-a1 & hour of week & learned & 3, enabling & ProSiT & ProSiT & Does a realistic arrival profile help? \\
+a1 & hour of week & learned & 3, enabling & ProSiT & ProSiT & Effect of a realistic arrival profile \\
 a2 & replay & learned & 3, enabling & ProSiT & ProSiT & Error without demand error \\
 \multicolumn{7}{l}{\textit{E4b Block allocation}} \\
-b1 & replay & learned, no self-count & 3, enabling & ProSiT & ProSiT & Is the self-count the cause of the concentration? \\
+b1 & replay & learned, no self-count & 3, enabling & ProSiT & ProSiT & Self-count as the cause of the concentration \\
 b2 & replay & training shares & 3, enabling & ProSiT & ProSiT & Load-independent allocation \\
 b3 & replay & observed & 3, enabling & ProSiT & ProSiT & Blocks from the log where available \\
 \multicolumn{7}{l}{\textit{E4c Queue at the block}} \\
@@ -52,33 +52,22 @@ c3 & replay & observed & 3, start & lane free & ProSiT & Queue arises in the sim
 c4 & replay & observed & 4, start & lane free & ProSiT & Four lanes, as in the log (sensitivity) \\
 c5 & replay & observed & none & whole delay & ProSiT & Queue learned from data (sensitivity) \\
 \multicolumn{7}{l}{\textit{E4d Service under load}} \\
-d3--d5 & \multicolumn{4}{l}{as c3--c5} & with load & Does load-dependent service reproduce the stop durations? \\
-\multicolumn{7}{l}{\textit{E4e Final configuration (chosen by the rule below)}} \\
-e-- & \multicolumn{5}{l}{each change of the final configuration reversed alone} & Is every change needed? \\
-eblk & \multicolumn{5}{l}{final configuration with training shares or a learned block choice} & What is lost without the observed blocks? \\
-e$\times$ & \multicolumn{5}{l}{final configuration with arrivals compressed or stretched (intensity 0.8, 1.2)} & Does TTT rise with load? \\
+d3--d5 & \multicolumn{4}{l}{as c3--c5} & with load & Stop durations with load-dependent service \\
+\multicolumn{7}{l}{\textit{E4e Final configuration (chosen by the rule of Section~\ref{sec:exp_e4_runs})}} \\
+e-- & \multicolumn{5}{l}{each change of the final configuration reversed alone} & Necessity of every change \\
+eblk & \multicolumn{5}{l}{final configuration with training shares or a learned block choice} & Loss without the observed blocks \\
+e$\times$ & \multicolumn{5}{l}{final configuration with arrivals compressed or stretched (intensity 0.8, 1.2)} & TTT under fewer and more arrivals \\
 eG & \multicolumn{5}{l}{final mechanisms with hour-of-week or ProSiT arrivals and training block shares} & Fully generative accuracy \\
-enet & \multicolumn{5}{l}{final configuration with each net of the E3 contrasts} & Does the net matter once queue and service are corrected? \\
+enet & \multicolumn{5}{l}{final configuration with each net of the E3 contrasts} & Influence of the net after the corrections \\
 \multicolumn{7}{l}{\textit{E4f Training period (in-sample)}} \\
 T & \multicolumn{5}{l}{the admissible c1x--c3x and d3x on the training period (replay of the training visits)} & Selection of the final configuration \\
-f0 & \multicolumn{5}{l}{final configuration on the training period} & Model error or change between periods? \\
+f0 & \multicolumn{5}{l}{final configuration on the training period} & Model error without the change between periods \\
 \bottomrule
 \end{tabularx}
 \par\smallskip{\footnotesize\raggedright ProSiT means the parameter as fitted in E3. No self-count means retrained without counting the stop in its own queue. Lane free means waiting measured from the moment a lane became free. Whole delay means waiting measured from enabling to start. Every configuration from b3 on, and the baseline a0, is also run with an exact count of the activities in progress (suffix x).\par}
 \caption{Configurations of E4.}
 \label{tab:exp_e4_configs}
 \end{table}
-
-\FloatBarrier
-\section{Choice and Necessity of the Changes}
-
-Table~\ref{tab:rq2_selection} shows the choice of the final configuration on the
-training period (Section~\ref{sec:res_e4_selection}). Table~\ref{tab:rq2_loo}
-reverses each change of the final configuration alone and adds the runs with other
-block allocations, other arrival intensities and without replay.
-
-\input{tables/rq2_selection}
-\input{tables/rq2_loo}
 
 \FloatBarrier
 \section{The Final Configuration Against the Observed Logs}
@@ -103,12 +92,13 @@ time and Figure~\ref{fig:sim_ttt_decomposition} where the time of a visit is spe
 
 
 \FloatBarrier
-\section{Further Results of S1}
+\section{Further Results of the Allocation Rule}
 \label{app:s1_results}
 
-Table~\ref{tab:rq3_grid_visits} gives the effect of S1 per visit for the six
-scenarios of the grid, and Table~\ref{tab:rq3_robustness} the $\pm 2$ variant under
-the robustness runs and the design checks (Section~\ref{sec:res_policy}).
+Table~\ref{tab:rq3_grid_visits} gives the effect of the allocation rule per visit
+for the six scenarios of the grid, and Table~\ref{tab:rq3_robustness} the $\pm 2$
+variant under the robustness runs and without the restrictions of the rule
+(Section~\ref{sec:res_policy}).
 
 \input{tables/rq3_grid_visits}
 \input{tables/rq3_robustness}

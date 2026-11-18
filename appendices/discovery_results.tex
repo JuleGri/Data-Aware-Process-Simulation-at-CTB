@@ -21,7 +21,7 @@ ILP Miner & ILP-Based Process Discovery (HybridILPMiner 6.10.154), advanced conf
 Alpha & Alpha Miner (AlphaMiner 6.9.78) & variants Alpha, Alpha+, Alpha++ & 3 \\
 \bottomrule
 \end{tabularx}
-\par\smallskip{\footnotesize\raggedright All configurations are run on the training log (59,139 visits). The iDHM frequency threshold is relative to the number of visits. At 0.1, only directly-follows relations that occur in at least a tenth of the visits are used. Because no data attributes were selected, iDHM discovers no conditional dependencies, and the conditional heuristic (C4.5 with F1 score, condition threshold 0.5) has no effect.\par}
+\par\smallskip{\footnotesize\raggedright All configurations are run on the training log (59,139 visits). The iDHM frequency threshold is relative to the number of visits. At 0.1, only directly-follows relations that occur in at least 10\,\% of the visits are used. Because no data attributes were selected, iDHM discovers no conditional dependencies, and the conditional heuristic (C4.5 with F1 score, condition threshold 0.5) has no effect.\par}
 \caption{Discovery configurations of E1 in ProM Lite 1.4.}
 \label{tab:exp_grid}
 \end{table}
@@ -37,6 +37,6 @@ only (Section~\ref{sec:res_discovery}).
 
 \FloatBarrier
 Table~\ref{tab:rq1_e2_audit} gives the rule audit of the three nets that pass the
-soundness and the coverage check (Section~\ref{sec:res_rules}).
+soundness and the coverage criterion (Section~\ref{sec:res_rules}).
 
 \input{tables/rq1_e2_audit}

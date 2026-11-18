@@ -9,16 +9,24 @@ relative to the project repository \texttt{trucksimulation}.
 
 \section{Environments and Inputs}
 
-Discovery uses ProM Lite~1.4; conformance values use ProM~6.15 (PNetReplayer
+Discovery uses ProM Lite~1.4. Conformance values use ProM~6.15 (PNetReplayer
 6.11.191, ETConformance 6.9.52), run headless on the PNML files exported from
-ProM. Soundness is checked with WOFLAN as implemented in PM4Py 2.7.22.3. The
+ProM. Soundness is tested with WOFLAN in ProM, and in the scripts with the WOFLAN
+implementation of PM4Py 2.7.22.3. The
 simulation runs in a Python 3.11 environment with ProSiT~1.0.4 and PM4Py 2.7.22.3
 (\nolinkurl{envs/prosit104}). The training and test logs are in
 \nolinkurl{data/processed/CTB/split13apr_20261106}, with a manifest that records the
 split rule, the counts and the SHA-256 hash of each file. Before discovery, the
-logs are checked for missing labels, duplicate order positions, cases in both logs
-and chronological order, and they are written to XES with a check that each file
-reproduces its log sequence by sequence and is read correctly by OpenXES.
+logs are checked for missing labels, cases in both logs and chronological order,
+and they are written to XES with a check that each file reproduces its log
+sequence by sequence and is read correctly by OpenXES. The events of a visit are
+ordered by their start timestamps, with ties resolved by the complete timestamp
+(Section~\ref{sec:timestamp_semantics}). The CSV and XES files also carry the
+position of each event in this order, because ProM reads the events in the order
+of the file and PM4Py would otherwise sort them by the complete timestamp alone.
+The truck schedule numbers the stops of a visit as well. This numbering agrees
+with the time order in every visit of both logs and is not used
+(\nolinkurl{analysis/verify_timestamp_order.py}).
 \todo{State the availability of the operational data and of the derived event logs.}
 
 \section{Fitted Models and Simulation Runs}
@@ -26,15 +34,45 @@ reproduces its log sequence by sequence and is read correctly by OpenXES.
 The fitted ProSiT models are stored as Python pickles, the model of each net in
 \nolinkurl{simulation_e3/runs/hm07orig_20261115/e3/<net>/prosit_params.pkl}, and the
 retrained predictive parameters of E4 in \nolinkurl{components/components}. The pickles keep the
-complete fitted state, including the training samples stored in the leaves;
-exact numerical reproduction uses them together with the recorded environment
+complete fitted state, including the training samples stored in the leaves.
+Exact numerical reproduction uses them together with the recorded environment
 and the seeds. All simulation runs of E3 to E5 and the controls are in the same
 run folder, namely \texttt{e3} (main condition and contrasts), \nolinkurl{e3_noguard} and
 \nolinkurl{e3_simpleguard} (guard ablation), \texttt{e4} (all configurations of E4),
 \texttt{netx} (final configuration with the contrast nets), \nolinkurl{stale_final}
 (enabling times reset), \texttt{e5} (scenario runs) and the evaluation folders
-\nolinkurl{eval_*}. Each simulated log is a CSV file per seed; every evaluation
+\nolinkurl{eval_*}. Each simulated log is a CSV file per seed, and every evaluation
 writes its values as CSV next to a summary.
+
+\section{Implementation of the Extensions}
+\label{app:implementation}
+
+The extensions of Table~\ref{tab:sim_adaptations} consist of two parts. Neither
+changes the installed ProSiT package, whose files match the hashes recorded at its
+installation.
+
+\paragraph{Retrained predictive parameters} The script
+\nolinkurl{simulation_e3/rq2_components.py} builds ProSiT's own training table with
+ProSiT's function \texttt{build\_df\_features}, changes single columns and calls
+ProSiT's own discovery functions with the same hyperparameters and random state.
+The function \texttt{fix\_queue} removes the stop itself from the queue length. The
+function \texttt{multi\_lane\_free} recomputes the moment from which the waiting is
+measured as the moment at which a lane of the block became free, with three lanes per
+block. For the execution time, the column \texttt{start\_workload}, the number of
+other stops in progress at the block at the start, is added. As a test, every
+parameter is also retrained on the unchanged table and compared with the fitted
+model (\nolinkurl{components/identity_check.json}).
+
+\paragraph{Simulator} The module \nolinkurl{simulation_e3/ctb_engine.py} reads the
+source code of ProSiT's simulation loop (\texttt{SimulatorEngine.apply}) at runtime,
+inserts a few marked lines by exact text replacement and compiles the changed loop
+in ProSiT's own module. Every replacement is checked, so that another version of
+ProSiT stops with an error instead of running a different loop. Each insertion is a
+switch, namely the capacity at the start of a stop, the exact count of the stops in
+progress, the load feature of the execution time, the stop guard, the replay of
+arrivals and blocks, and the allocation rule of E5. With all switches off, the loop
+generates exactly the same log as ProSiT, tested on the base model of HM 0.7 with two
+seeds of 600 visits (\nolinkurl{runs/hm07orig_20261115/regression_check_hm07.py}).
 
 \section{Sources of the Tables and Figures}
 
@@ -63,6 +101,7 @@ Figures~\ref{fig:sim_ttt_distribution} to~\ref{fig:sim_ttt_decomposition} & \nol
 \ref{tab:app_inventory} & \nolinkurl{runs/hm07orig_20261115/make_inventory_appendix.py} (also \nolinkurl{model_leaves.csv}) \\
 Net figures of Appendix~\ref{app:prosit_inventory}, \ref{fig:sim_controlflow} & \nolinkurl{simulation_e3/plot_control_flow.py} \\
 Tables of Appendix~\ref{app:replica} & \nolinkurl{process_discovery/make_rq1_tables.py}, \nolinkurl{make_replica_table.py} \\
+Verification of E4 (Section~\ref{sec:res_e4_verification}) & \nolinkurl{runs/hm07orig_20261115/regression_check_hm07.py}, \nolinkurl{components/identity_check.json}, \nolinkurl{simulation_e3/verify_rq2_counts.py} \\
 \bottomrule
 \end{tabularx}
 \caption{Scripts behind the tables and figures.}

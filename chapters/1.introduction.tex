@@ -29,8 +29,9 @@ probabilistic decision trees, which can be read and changed \cite{Vinci2026prosi
 A container terminal is a demanding test for such models, because its process has
 physical limits. A truck is one vehicle. Its stops happen one after another, never
 at the same time, and every visit exists to move containers. A storage block has
-three handover lanes, so it can serve at most three trucks at once, and its cranes
-are shared with the waterside and the rail. These limits are not written in the
+three handover lanes, so it can hold at most three trucks at once, its crane
+handles them one after another, and its cranes are shared with the waterside and
+the rail. These limits are not written in the
 event log, and a model learned only from the recorded sequences and durations does
 not know them. A discovered control-flow model may allow a truck to perform two
 stops at once. A learned simulator may send more trucks to a block than it can

@@ -21,6 +21,13 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{Anthropic2026Claude}
+\BIBentryALTinterwordspacing
+{Anthropic}, ``Claude opus 5.5,'' Large language model, used through Claude
+  Code, 2026, used in 2026. [Online]. Available:
+  \url{https://www.anthropic.com/claude}
+\BIBentrySTDinterwordspacing
+
 \bibitem{Vinci2026prosit}
 F.~Vinci, G.~Park, W.~M.~P. van~der Aalst, and M.~de~Leoni, ``Reliable and
   configurable process simulations via probabilistic white-box models,'' in
@@ -142,6 +149,12 @@ F.~Vinci, D.~Aloini, E.~Benevento, A.~Stefanini, F.~Zen, and M.~{de Leoni},
   [Online]. Available:
   \url{https://www.sciencedirect.com/science/article/pii/S0933365726000436}
 \BIBentrySTDinterwordspacing
+
+\bibitem{DeWeerdt2022EventData}
+J.~De~Weerdt and M.~T. Wynn, ``Foundations of process event data,'' in
+  \emph{Process Mining Handbook}, ser. Lecture Notes in Business Information
+  Processing, W.~M.~P. van~der Aalst and J.~Carmona, Eds.\hskip 1em plus 0.5em
+  minus 0.4em\relax Springer, 2022, vol. 448, pp. 193--211.
 
 \bibitem{Aalst2016}
 W.~Van~der Aalst, \emph{Process Mining: Data Science in Action}, 01 2016.
@@ -458,10 +471,17 @@ K.~{\"O}zdemir, L.~Kirchdorfer, K.~Amiri~Elyasi, H.~van~der Aa, and
 
 \bibitem{ProSiTRepository}
 \BIBentryALTinterwordspacing
-{ProSiT Project}, ``Prosit: Process simulation tool---save and load
-  parameters,'' GitHub repository documentation, 2026, accessed 30 August 2026.
-  [Online]. Available:
-  \url{https://github.com/franvinci/prosit#save-and-load-parameters}
+F.~Vinci, ``{ProSiT}: {PROcess SImulation Tool}, source code,'' GitHub
+  repository, 2026, versions 1.0.4 (3 July 2026) and 1.0.5 (17 November 2026),
+  accessed 18 November 2026. [Online]. Available:
+  \url{https://github.com/franvinci/prosit}
+\BIBentrySTDinterwordspacing
+
+\bibitem{ProSiTDocs}
+\BIBentryALTinterwordspacing
+------, ``prosit-pm, {Prosit} ({PROcess SImulation Tool}), package
+  documentation,'' Python Package Index, 2026, version 1.0.5, accessed 18
+  November 2026. [Online]. Available: \url{https://pypi.org/project/prosit-pm/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{Gneiting2007CRPS}
@@ -480,6 +500,12 @@ L.~Murazzano, P.~Landa, M.~Ghafourian~Nasiri, F.~Bergeron, and A.~C{\^o}t{\'e},
   und Logistik AG, Hamburg, Tech. Rep., 2026. [Online]. Available:
   \url{https://bericht.hhla.de/geschaeftsbericht-2025/_assets/downloads/HHLA_2025_Geschaeftsbericht.pdf}
 \BIBentrySTDinterwordspacing
+
+\bibitem{vanderAalst2022Order}
+W.~M.~P. van~der Aalst and L.~Santos, ``May i take your order? on the interplay
+  between time and order in process mining,'' in \emph{Business Process
+  Management Workshops, BPM 2021}, ser. Lecture Notes in Business Information
+  Processing, vol. 436.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2022.
 
 \bibitem{StVO30}
 {Bundesministerium der Justiz}, ``{Stra{\ss}enverkehrs-Ordnung (StVO), {\S}~30

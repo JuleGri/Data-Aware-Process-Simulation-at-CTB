@@ -1,4 +1,4 @@
-\chapter{Data and Event Log}
+\chapter{Event Log Construction}
 \label{chp:case_study_and_data}
 % Sources (trucksimulation): eventlog_building/00-04 (schedule, container matching, case aggregation, event log),
 %   preparation/001 (container scores); data/processed/CTB/split13apr_20261106/manifest.json (split and counts);
@@ -68,27 +68,27 @@ flow independent of the block. The simulator can then learn the choice of the
 block as a separate resource decision, and a block allocation policy, which the
 scenario of this thesis changes, stays a separate decision as well.
 
-Every event of the log has seven fields, namely the case, the activity, the
-resource, the start and the complete timestamp, the position of the event in the
-visit and the case attributes of Section~\ref{sec:context_enrichment}.
-Table~\ref{tab:eventlog_excerpt} shows one recorded visit. The truck delivers a
-container to block T12 and then receives one from block T07, so the visit is a
-mixed visit with two planned stops. Its turnaround time is 35 minutes.
+Every event of the log has six fields, namely the case, the activity, the
+resource, the start and the complete timestamp, and the case attributes of
+Section~\ref{sec:context_enrichment}. Table~\ref{tab:eventlog_excerpt} shows one
+recorded visit, with its events in the order of their start timestamps. The truck
+delivers a container to block T12 and then receives one from block T07, so the
+visit is a mixed visit with two planned stops. Its turnaround time is 35 minutes.
 
 \begin{table}[htbp]
 \centering
 \small
-\begin{tabular}{lllllr}
+\begin{tabular}{lllll}
 \toprule
-\textbf{Case} & \textbf{Activity} & \textbf{Resource} & \textbf{Start} & \textbf{Complete} & \textbf{Order} \\
+\textbf{Case} & \textbf{Activity} & \textbf{Resource} & \textbf{Start} & \textbf{Complete} \\
 \midrule
-TP\_\ldots 982603 & Gate In      & Res.GateIn  & 2026-03-02 08:47 & 08:47 & 0 \\
-TP\_\ldots 982603 & RMG\_delivery & T12        & 2026-03-02 08:50 & 08:59 & 1 \\
-TP\_\ldots 982603 & RMG\_receive  & T07        & 2026-03-02 09:03 & 09:10 & 2 \\
-TP\_\ldots 982603 & Gate Out     & Res.GateOut & 2026-03-02 09:22 & 09:22 & 3 \\
+TP\_\ldots 982603 & Gate In      & Res.GateIn  & 2026-03-02 08:47 & 2026-03-02 08:47 \\
+TP\_\ldots 982603 & RMG\_delivery & T12        & 2026-03-02 08:50 & 2026-03-02 08:59 \\
+TP\_\ldots 982603 & RMG\_receive  & T07        & 2026-03-02 09:03 & 2026-03-02 09:10 \\
+TP\_\ldots 982603 & Gate Out     & Res.GateOut & 2026-03-02 09:22 & 2026-03-02 09:22 \\
 \midrule
-\multicolumn{6}{l}{\footnotesize Case attributes, the same on every event, are flow type mixed, 2 planned stops, 1 delivery, 1 receive,} \\
-\multicolumn{6}{l}{\footnotesize 2 containers, no hazardous or reefer container, full ratio 1.0, visit complexity 10.} \\
+\multicolumn{5}{l}{\footnotesize Case attributes, the same on every event, are flow type mixed, 2 planned stops, 1 delivery,} \\
+\multicolumn{5}{l}{\footnotesize 1 receive, 2 containers, no hazardous or reefer container, full ratio 1.0, visit complexity 10.} \\
 \bottomrule
 \end{tabular}
 \caption{One visit of the training log.}
@@ -137,11 +137,22 @@ The model places a free lane at the start of the recorded stop. The data cannot
 show whether a truck sometimes reports ready before a lane is free. Gate events
 are instantaneous, so the turnaround time (TTT) splits exactly into the approach
 to the first stop, the stops, the transfers between stops and the time to the
-exit after the last stop. All timestamps are provided in minute resolution. The
-order of the events within a visit is taken from the schedule (attribute
-\texttt{case:event:order}), not from the timestamps. At the empty-container depot,
-a stop can end a few minutes after Gate Out (6 training and 5 test visits).
-Methods that read the time intervals would treat this as concurrency.
+exit after the last stop. All timestamps are provided in minute resolution.
+
+The events of a visit are ordered in time, by their start timestamps, which is the
+usual basis of an event log \cite{DeWeerdt2022EventData}. The process behaviour is
+therefore learned from the recorded events alone. Two details of the timestamps
+need a rule. First, with minute resolution, Gate In and the first stop sometimes
+start in the same minute (8 training and 2 test visits). Coarse timestamps need an
+explicit rule for events of the same time \cite{vanderAalst2022Order}. Here such a
+tie is resolved by the complete timestamp, which puts the instantaneous Gate In
+first. Second, at the empty-container depot, a stop can be
+completed a few minutes after Gate Out (6 training and 5 test visits), although it
+started before. The completion is booked after the truck has left. Ordering by the
+start timestamp keeps these stops before Gate Out. Ordering by the complete
+timestamp alone, the default of many tools, would place Gate Out before a stop and
+break rule~2 of Section~\ref{sec:domain_rules}. Methods that read the time
+intervals would treat these visits as concurrency.
 Section~\ref{sec:exp_discovery_input} shows the effect on discovery.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -153,8 +164,7 @@ Real operational data from a mix of automated and manually maintained systems
 contain errors, which have to be filtered out before the data can describe the
 process. The cleaning removes visits with errors in their records that result
 from human input errors or system failures. The cleaning rules were set up
-together with the terminal during the inspection of the raw data
-(Table~\ref{tab:stakeholder_phases} in Section~\ref{sec:exp_review}).
+together with the terminal during the inspection of the raw data.
 
 \paragraph{Cleaning as a modelling decision} For data from a physical process, the
 cleaning is more than a technical step. Every removed record is classified as a
@@ -280,9 +290,10 @@ the simulator from its own state, namely the trucks at a block and their workloa
 changes.
 \end{enumerate}
 
-The yard snapshots of Table~\ref{tab:ctb_data_sources} are therefore not used as
-case attributes. They serve to describe the occupancy of the blocks and to mark
-the blocks that were out of use (Section~\ref{sec:obs_drift}). Two of the
+The yard utilisation data of Table~\ref{tab:ctb_data_sources}, which record every four
+hours how full each block is, are therefore not used as case attributes. They
+serve to describe the occupancy of the blocks and to mark the blocks that were
+closed for maintenance (Section~\ref{sec:obs_drift}). Two of the
 attributes are also used to keep the simulated visits physically possible. The
 planned number of stops limits how many stops a simulated truck performs
 (Section~\ref{sec:sim_adaptations}), and the flow type decides in the routing
@@ -295,12 +306,12 @@ trees which kind of stop a visit starts with (Section~\ref{sec:sim_components}).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Table~\ref{tab:obs_descriptives} in Appendix~\ref{app:observed_behaviour}
-summarises the two logs. Nine out of ten visits have one yard stop, and visits
-with three or more stops are rare. About a quarter of the visits use no RMG block.
+summarises the two logs. In the training log, 91.3\,\% of the visits have one yard
+stop and 0.2\,\% have three or more. 22.5\,\% of the visits use no RMG block.
 The TTT depends on the type of visit. Receive visits take longer than delivery
 visits, mixed visits longest, and a visit with two RMG blocks about 17 minutes
-longer than a visit with one. The stops account for about one third of the mean
-TTT, while the approach and the exit together account for about two thirds. By
+longer than a visit with one. In the training log, the stops account for 33\,\%
+of the mean TTT, while the approach and the exit together account for 64\,\%. By
 design, a stop starts only when the truck is ready in the handover lane, so the
 driving and queueing before that point fall into the approach.
 
@@ -393,6 +404,7 @@ For LL and HO2, the area is the handling unit, so rule~5 can be read from the
 activity labels. For RMG, the unit is the block, so the RMG part of rule~5 needs
 the resource of each stop.
 
+\FloatBarrier
 \section{Chapter Summary}
 \label{sec:cs_summary}
 

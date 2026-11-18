@@ -8,8 +8,8 @@
 
 This appendix lists everything needed to set up the final simulation model with
 ProSiT, namely the settings and inputs, every learned model, the capacities and
-calendars, the domain rules and the discovered nets. Chapter~\ref{chp:process_discovery_methodology}
-shows and interprets the most important trees; Section~\ref{sec:res_inspection}
+calendars and the discovered nets. Chapter~\ref{chp:process_discovery_methodology}
+shows and interprets the most important trees, and Section~\ref{sec:res_inspection}
 discusses whether their features and targets are plausible for the terminal.
 
 \section{Parameters of a ProSiT Model}
@@ -52,17 +52,15 @@ The model is discovered with ProSiT~1.0.4 (\texttt{prosit-pm}) on PM4Py
 2.7.22.3 and Python 3.11, with the settings of
 Table~\ref{tab:sim_hyperparameters}, namely trees of depth
 at most three, at least 50, 100 or 200 cases per leaf chosen by five-fold
-cross-validation with the continuous ranked probability score, the planned
+cross-validation with the continuous ranked probability score, the
 attributes of the planned visit as case attributes, workload features and multitasking on, and random
 state 42. The inputs are the net HM 0.7 as exported from ProM with its initial and
 final marking, and the training log of 59,139 visits (2 March to 11 April 2026,
 SHA-256 \texttt{58932826\ldots 6cb94b}). The test log has 32,014 visits (13 to 30
 April 2026, SHA-256 \texttt{dee4cb78\ldots 4cda30}). The four adaptations of
-Table~\ref{tab:sim_adaptations} are switches in the simulator; the final
+Table~\ref{tab:sim_adaptations} are switches in the simulator, and the final
 configuration sets all of them. Every configuration of E3 and E4 is run with seeds
 42 to 46, E5 with seeds 42 to 51.
-
-\input{tables/sim_hyperparameters}
 
 \FloatBarrier
 \section{Learned Models}
@@ -110,24 +108,14 @@ every flow type.
 
 The capacities and calendars are given in Table~\ref{tab:sim_capacities}. The
 capacities of LL and HO2 are discovered by ProSiT from the number of trucks served
-at the same time; the RMG blocks have three lanes, a physical limit that replaces
+at the same time. The RMG blocks have three lanes, a physical limit that replaces
 the discovered values of four or five. The discovered resource calendars cover
-122 to 128 of the 168 hours of a week; they are set to the full week so that a
+122 to 128 of the 168 hours of a week. They are set to the full week so that a
 truck already inside is served to completion.
 
 \input{tables/sim_capacities}
 
 \FloatBarrier
-\section{Domain Rules}
-\label{app:rules}
-
-The domain rules are listed in Table~\ref{tab:domain_rules}, and the result of
-their audit on the recorded log and on the language of the admissible nets in
-Table~\ref{tab:rq1_e2_audit}, with the shortest violating sequence of each net.
-Rules 1 to 5 hold in the language of HM 0.7; rule 6, at most eight stops, and the
-planned number of stops of each visit are enforced by the stop guard;
-rule 7 is not used, because the truck type is not recorded.
-
 \section{Discovered Models}
 \label{app:model_gallery}
 

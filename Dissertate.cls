@@ -251,6 +251,8 @@
 	\cleardoublepage
 	\abstractpage
 	\cleardoublepage
+	\aiusepage
+	\cleardoublepage
 	\tableofcontents
 	\cleardoublepage
 
@@ -382,6 +384,13 @@
 	\addcontentsline{toc}{chapter}{Listing of acronyms}
 	\chapter*{Listing of acronyms}
 	\input{frontmatter/abbr.tex}
+}
+
+\newcommand{\aiusepage}{
+	\phantomsection
+	\addcontentsline{toc}{chapter}{Use of Generative AI}
+	\chapter*{Use of Generative AI}
+	\input{frontmatter/ai_use}
 }
 
 \newcommand{\abstractpage}{

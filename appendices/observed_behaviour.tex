@@ -8,7 +8,7 @@
 This appendix describes the recorded behaviour that the simulation must
 reproduce, in more detail than Section~\ref{sec:observed_behaviour}. All
 statements are descriptive associations. They do not establish causes. The
-figures and values describe the training period; thresholds are fixed on it and
+figures and values describe the training period. Thresholds are fixed on it and
 used unchanged for the test period.
 
 \section{Data Sources}
@@ -24,10 +24,10 @@ Table~\ref{tab:ctb_data_sources} lists the operational data sources of the event
 \toprule
 \textbf{Source} & \textbf{Content} & \textbf{Use in this thesis} \\
 \midrule
-ITS truck schedule & Planned visit with its stops; timestamps of Gate In, readiness in the handover lane, fulfilment of the order and Gate Out & cases, events, timestamps, planned stops \\
+ITS truck schedule & Planned visit with its stops, with the timestamps of Gate In, readiness in the handover lane, fulfilment of the order and Gate Out & cases, events, timestamps, planned stops \\
 Report system & Container transactions, exchange areas and gate records & link of containers to stops \\
 Container master data & Size, type, full or empty, hazardous and reefer indicators & case attributes \\
-Yard management system & Four-hourly snapshots of block occupancy & description of the terminal only \\
+Yard management system & Utilisation of every block, recorded every four hours & description of the terminal only \\
 \bottomrule
 \end{tabularx}
 \caption{Operational data sources.}
@@ -165,11 +165,9 @@ entirely in the exit, with approach and stop intervals at normal values.
 Similar but shorter episodes occur on 12 March and on 13 April
 (test period). Possible explanations include a disruption at the exit
 gate or in exit processing, or an artefact of the Gate Out recording.
-% TODO: add the explanation from the domain review (questionnaire D9).
 Such episodes are not driven by demand. A simulation learned from normal
-operations cannot be expected to reproduce them. They are therefore
-identified by a rule fixed in advance and reported separately, but they
-are never removed from the evaluation.
+operations cannot be expected to reproduce them. They remain in the logs and in
+every evaluation.
 
 \section{Differences between Training and Test Period}
 \label{sec:obs_drift}
@@ -177,7 +175,7 @@ are never removed from the evaluation.
 The test period is more congested than the training period
 (Table~\ref{tab:obs_descriptives}). The median TTT is 33 against 29 minutes, the
 mean 41.2 against 36.6 minutes, and the share of delay-peak hours 25.7 against
-10.4\,\%; on average 95 instead of 77 trucks are in the terminal at Gate In. The
+10.4\,\%. On average 95 instead of 77 trucks are in the terminal at Gate In. The
 mix of visits shifts as well. The test period has more deliveries, more visits
 without RMG and more visits with two or more stops. The shift affects the
 frequencies of activity sequences rather than their set. Only 16 test sequences do not
@@ -191,9 +189,9 @@ test period mix model error and the change between the periods. Two references
 help to distinguish them. A replay of the training period with the fitted model
 shows the model error without the change, and the distance between two real periods shows
 how close any model fitted on one period can be to another
-(Section~\ref{sec:exp_e4_design}).
+(Section~\ref{sec:exp_e4_operational}).
 
-The yard snapshots show a further difference (Figure~\ref{fig:obs_block_occupancy}).
+The yard utilisation data show a further difference (Figure~\ref{fig:obs_block_occupancy}).
 Every four hours they record the occupied and the theoretical capacity of every block
 in TEU. The upper panel of the figure shows the utilisation of every block, the
 occupied TEU divided by the theoretical capacity, and the lower panel the occupied
@@ -203,19 +201,16 @@ each, on average 1.1 blocks at a time. In the test period, T26 was empty from
 from 28 April. On average 2.4 of the 22 blocks were empty, and for 87\,\% of the
 time at least two, against 37\,\% in the training period. The event log shows the
 same pattern. Before a block falls empty, its deliveries stop while its receives
-continue. The terminal could not confirm the reason. The replayed blocks of the
+continue. According to the terminal, these closures were planned for maintenance. The replayed blocks of the
 simulation contain these closures, but the learned waiting and service times come
 from a period with fewer closed blocks.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/observed/block_occupancy.png}
-\caption{Occupancy of the RMG blocks in the four-hourly yard snapshots.}
+\caption{Occupancy of the RMG blocks, recorded every four hours.}
 \label{fig:obs_block_occupancy}
 \end{figure}
-
-\section{Bottlenecks at the Handover}
-\label{sec:obs_bottlenecks}
 
 \section{Visits Longer Than 35 Minutes}
 \label{sec:obs_long_visits}

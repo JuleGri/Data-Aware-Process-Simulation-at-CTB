@@ -11,7 +11,7 @@
 
 This appendix reports two controls on how the control flow is represented. The
 first encodes the languages of the admissible nets as state machines and
-simulates them; the second rebuilds ProSiT's routing as a token game. Together
+simulates them. The second rebuilds ProSiT's routing as a token game. Together
 they explain why the stop guard looks ahead on the discovered net
 (Section~\ref{sec:exp_guard}) and why a net with parallel branches produces visits
 that no truck can perform.
@@ -24,7 +24,7 @@ The reachability graph of each net was combined with automata for the rules, and
 states with the same continuations were merged. Each of the three admissible nets
 was then encoded without silent transitions, with one place for each state of
 the visit and one transition for each activity that can happen in that state. The
-language stayed the same; an activity therefore appears on several transitions.
+language stayed the same, so an activity appears on several transitions.
 The repair kept every observed sequence and raised the precision of IM 0.0 from
 0.842 to 0.888 and that of ILP 1.00 from 0.773 to 0.825.
 
@@ -55,7 +55,7 @@ rewriting it, and never has to give up (E3).
 \paragraph{Parallel branches.} For IM 0.0, whose discovered net expresses the
 free order of the stops by parallel branches that silent transitions can skip,
 the representation decides much more (test log). With the simple guard, the discovered net generates 15.1\,\% visits without
-a stop and overlapping stops in 22.7\,\% of the multi-stop visits; the same
+a stop and overlapping stops in 22.7\,\% of the multi-stop visits. The same
 language as a state machine generates none.
 
 
@@ -90,7 +90,7 @@ discovered HM 0.7 it has to fall back 1.7 times per 1,000 visits.
 IM 0.0, a look-ahead guard or rejection sampling gives every truck its planned
 number of stops, but the stops are combined wrongly (sequence TVD 0.167 and 0.068,
 against 0.006 for the state machine of the restricted language). For a net with parallel
-branches, the tested stop-count guards do not repair the combination of stops; for a net without them, such
+branches, the tested stop-count guards do not repair the combination of stops. For a net without them, such
 as HM 0.7, the look-ahead guard is enough.
 
 \paragraph{The flower needs the history in the weights.} With weights from

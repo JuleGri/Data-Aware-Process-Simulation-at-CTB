@@ -150,8 +150,9 @@ capacities and calendars.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The discovery uses the hyperparameters of Section~\ref{sec:prosit_hyperparameters}
-with the values of Table~\ref{tab:sim_hyperparameters} in
-Appendix~\ref{app:prosit_inventory}. Each value has a reason.
+with the values of Table~\ref{tab:sim_hyperparameters}. Each value has a reason.
+
+\input{tables/sim_hyperparameters}
 \begin{itemize}[itemsep=2pt,topsep=4pt]
 \item \textbf{Version 1.0.4.} It decides for every predictive parameter by cross-validation
 whether a tree predicts better than one distribution for all cases
@@ -187,7 +188,7 @@ discovered capacities of the blocks are replaced by the three handover lanes
 ProSiT was developed and evaluated on event logs of business processes, in which
 a resource typically handles one case at a time \cite{Vinci2026prosit}. A truck visit has physical limits that such a model does not know
 (Section~\ref{sec:bg_terminal}). A truck performs the stops of its visit one after
-another, and a block serves at most three trucks at once. Five extensions add these
+another, and a block holds at most three trucks at once in its handover lanes. Five extensions add these
 limits to the simulator (Table~\ref{tab:sim_adaptations}). Each is a switch in
 ProSiT's simulator. With all switches off, it produces exactly the same log as
 ProSiT (Appendix~\ref{app:model_inspection}). E3 and E4 test whether each extension
@@ -237,12 +238,26 @@ distance 0.0053 to the training log, Section~\ref{sec:res_baseline}). A bound wo
 remove only visits beyond it, and the observed maximum of four stops would be the
 stricter bound to choose.
 
-\paragraph{The other extensions.} The remaining four concern the blocks. The
-capacity of three lanes is checked over the whole stop when it starts, not only
-when it becomes possible. The waiting time is learned from the moment a lane of the
-block became free, not from the moment the whole block was free. The execution time
-receives the number of other trucks at the block as a feature. And the number of
-trucks at a block is counted exactly. Why each of them is needed follows from the
+\paragraph{The other extensions.} The remaining four concern the blocks. Two of them
+change the simulator and two change the training data of a predictive parameter.
+\begin{itemize}[itemsep=2pt,topsep=4pt]
+\item \textbf{Capacity at the start.} The capacity of three lanes is checked over
+the whole stop when it starts, not only when it becomes possible. A stop that
+finds all three lanes busy is moved to the first moment at which a lane is free for
+its whole duration.
+\item \textbf{Exact counting.} The number of trucks at a block is counted exactly.
+\item \textbf{Waiting from a free lane.} In the training data of the waiting time,
+two quantities are computed anew. The waiting is measured from the moment a lane of
+the block became free, not from the moment the whole block was free, and the queue
+length no longer counts the stop itself.
+\item \textbf{Load in the execution time.} The training data of the execution time
+receive one more feature, the number of other trucks at the block when the stop
+starts.
+\end{itemize}
+The changed training data are computed from the training log only, and the trees
+are learned with ProSiT's own discovery functions, hyperparameters and random
+state. The installed ProSiT package is not changed. Appendix~\ref{app:implementation}
+describes the implementation. Why each extension is needed follows from the
 mechanism audit (Section~\ref{sec:res_mechanisms}).
 
 \begin{table}[htbp]
@@ -253,8 +268,8 @@ mechanism audit (Section~\ref{sec:res_mechanisms}).
 \textbf{Part} & \textbf{ProSiT 1.0.4} & \textbf{Simulation model} & \textbf{Why} \\
 \midrule
 Number of stops & no guard & stop guard that looks ahead on the net, as many stops as planned & ProSiT has no guards, and the decisions sit on silent transitions (E3) \\
-Capacity & discovered 4--5; checked when a stop becomes possible & 3 lanes; checked over the whole stop when it starts & a block serves at most three trucks (E4) \\
-Waiting time & measured from a completely free block & measured from a free lane & otherwise the learned waiting falls when the block gets busier (E4) \\
+Capacity & discovered 4--5; checked when a stop becomes possible & 3 lanes; checked over the whole stop when it starts & a block holds at most three trucks (E4) \\
+Waiting time & measured from a completely free block, queue counts the stop itself & measured from a free lane, queue without the stop itself & otherwise the learned waiting falls when the block gets busier (E4) \\
 Execution time & no load feature & other trucks at the block as a feature (counted when the stop is scheduled) & stops take longer when the block is busy (E4) \\
 Counting & stops at the first finished stop in its list & every stop counted & 14--15\,\% of the counts are too low (E4) \\
 Resource choice & learned trees & observed block where available, else training shares (replay); training shares (generative) & the learned trees prefer the busiest block (E4) \\
@@ -272,7 +287,7 @@ training data count the queue (Section~\ref{sec:res_inspection}). In the simulat
 this sends most trucks to one block. When the model replays the observed trucks,
 it therefore takes the observed block of a stop wherever the simulated visit has an
 observed counterpart for it, and the shares of the blocks in the training log
-otherwise (about a quarter of the RMG stops). When it generates its own trucks, it
+otherwise (24.7\,\% of the RMG stops). When it generates its own trucks, it
 draws every block from these shares.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

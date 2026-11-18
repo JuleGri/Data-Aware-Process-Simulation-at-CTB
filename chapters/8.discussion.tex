@@ -50,7 +50,7 @@ seeds do not determine the effect on the mean. The model also leaves out what
 a move costs at the terminal, namely the driving to another block, a later rehandling of
 the container and the constraints of the yard plan. These can make the real effect
 smaller. A stronger slowdown under load, as recorded, can make it larger. The
-model cannot decide which dominates. A statement such as ``S1 shortens the mean
+model cannot decide which dominates. A statement such as ``the rule shortens the mean
 turnaround time at CTB by two minutes'' is therefore not supported. The supported
 statement is conditional. If the waiting at a full block arises as in the model,
 if eligible blocks exist and if a move costs little, then moving deliveries to a
@@ -61,7 +61,7 @@ congestion that motivates the rule, so even the direction of the effect at CTB i
 not established. It is a hypothesis that a pilot would have to test.
 
 \paragraph{Both sides of the corridor.} The corridor applies to the mean
-turnaround time of an hour, and both of its bounds matter. In the model, S1 lowers
+turnaround time of an hour, and both of its bounds matter. In the model, the rule lowers
 the share of hours above 35 minutes by 8 to 13 percentage points, and the share of
 hours in the corridor grows by about as much. The share of hours below 25 minutes
 shows no clear change. Below the corridor, the terminal could
@@ -79,7 +79,7 @@ periods (Section~\ref{sec:exp_partitions}). On the training period the same
 configuration meets the thresholds for the approach and the stop duration, and it
 misses the Spearman threshold by only 0.0002. Its cycle-time distance (3.9 minutes)
 lies within the change between the periods. On the test period, two thresholds are
-missed and the error of the mean turnaround time is twice as large (8.0 against
+missed and the error of the mean turnaround time is larger (8.0 against
 3.9 minutes), because the stops of the test period took longer at every load
 (Section~\ref{sec:res_e4_remaining}). In the test period, more blocks were empty,
 2.4 against 1.1 of 22 on average, so the remaining blocks carried more of the load
@@ -102,16 +102,16 @@ the replay. The result also rests on the four changes to ProSiT's queue and
 service (Table~\ref{tab:sim_adaptations}). Each is needed for the load response
 (Section~\ref{sec:res_e4_loo}). Three implementation details also bound the
 result. The block allocation is replayed only where a simulated stop has an
-observed counterpart, about three quarters of the RMG stops. The load feature of
+observed counterpart, which is the case for 75\,\% of the RMG stops. The load feature of
 the service time is counted when a stop is scheduled, and it sees somewhat less
 load than the final log shows. Its likely consequence is that the simulated stops
 slow down too little under load, which agrees with the shortfall in the busiest
-hours. And S1 uses only blocks that the yard snapshots show in use. Which blocks
-were really out of use, and why, the terminal could not confirm. Without this
-restriction and without the decision at Gate In, the effect is somewhat larger,
-but a quarter of the moves would go to blocks that were empty
+hours. And the rule uses only blocks that the yard utilisation data show in use,
+which excludes the blocks closed for maintenance. Without this restriction and
+without the decision at Gate In, the effect is slightly larger, but 25\,\% of the
+moves would go to blocks that were empty
 (Section~\ref{sec:res_s1_sensitivity}). Today's assignment does not use
-the committed load of the blocks (Section~\ref{sec:disc_stakeholders}). S1 would
+the committed load of the blocks (Section~\ref{sec:disc_stakeholders}). The rule would
 therefore add new information to the decision. In principle it is available at
 Gate In, because the blocks of the trucks already in the terminal were assigned
 when they passed the gate.
@@ -209,14 +209,18 @@ feature counts the stop itself in training but not in the simulation, and the
 count of stops in progress is too low for 14 to 15\,\% of the RMG stops. A third,
 the enabling time that survives loops in training, had no measurable effect on
 the final configuration. These findings can be corrected in the code and say little about
-the method itself.
-\item \textbf{Modelling semantics.} Three findings concern what the learned
+the method itself. Version 1.0.5 of ProSiT removes the self-count from the training
+data \cite{ProSiTRepository}.
+\item \textbf{Modelling semantics.} Four findings concern what the learned
 quantities mean. Waiting is measured from the moment the block was completely
-free, capacity is checked when a stop is enabled rather than when it runs, and the
+free. Capacity is checked when a stop is enabled rather than when it runs. A stop
+that finds the block full waits until the stop booked last has ended and then for
+its learned waiting time, so a lane can stay unused while trucks wait. And the
 service time has no load feature. A block with three handover lanes violates the
-single-server view behind the first two. For a resource that serves one case at a
-time, the single-server target fits better, but a start that is delayed for other
-reasons can conflict with a capacity check at enabling there as well. These are
+single-server view behind the waiting target and the rule for a full block. For a
+resource that serves one case at a time, both fit, because such a resource works
+through its bookings one after another. A start that is delayed for other reasons
+can conflict with a capacity check at enabling there as well. These are
 therefore findings about how well the assumptions fit a resource with several
 lanes, not general errors of the tool. They match the known risks
 of business process simulation, the neglected process context and the working
@@ -290,6 +294,16 @@ the same queue again (Section~\ref{sec:exp_e4_mechanisms}). Part of the waiting 
 the recorded stops is still in the learned service time, which may be one reason
 why the simulated stops grow too little at the busiest blocks.
 
+\paragraph{Waiting and queue in the simulation model.} In the simulation model, the
+learned waiting and the queue for a lane are not added up. A stop starts at the
+later of two moments, its enabling plus the learned waiting, and the first moment at
+which a lane is free for the whole stop (Section~\ref{sec:exp_e4_mechanisms}). No
+lane stays unused while a truck waits for it, and no waiting is counted twice. A
+truck that had to queue, however, loses the learned remainder after the lane became
+free, for example the time to move into the lane. This may contribute to the
+shortfall of the approach at a full block, 13.8 against 16 minutes with three
+trucks at the block at Gate In.
+
 \paragraph{Cleaning and thresholds.} The cleaning removed 1,336 visits (1.4\,\%) as
 recording errors, and the coverage threshold of E1 leaves about 1\,\% of the training
 visits out of the behaviour that a net must accept. Both decisions define which
@@ -299,8 +313,9 @@ threshold, would change the long tail of the turnaround time that the discovery
 sees and that the simulation learns (Section~\ref{sec:cleaning_population}).
 
 \paragraph{Time resolution.} All source timestamps are floored to the minute.
-Short stops can have a duration of zero, and the order of events in the same
-minute comes from the schedule, not from the clock. Zero-length stops are not
+Short stops can have a duration of zero. Events that start in the same minute
+are ordered by their complete timestamp, which concerns only Gate In and the first
+stop of 10 visits (Section~\ref{sec:timestamp_semantics}). Zero-length stops are not
 counted as trucks at a block in the evaluation.
 
 \paragraph{The KPI.} The turnaround time runs from Gate In to Gate Out. The
@@ -349,7 +364,7 @@ the error is larger (cycle-time distance 11.2 against 8.0 minutes).
 \paragraph{Own code.} The changes to ProSiT are switches in its simulator.
 with all changes switched off, the simulator reproduces ProSiT's log exactly
 (Section~\ref{sec:sim_adaptations}). Conformance values come from ProM, the
-soundness check from WOFLAN. The measures of the generated logs (distances,
+soundness test from WOFLAN in ProM. The measures of the generated logs (distances,
 profile gaps) and the control-flow replica are own code. The replica reproduces
 ProSiT's routing on IM 0.0 (Appendix~\ref{app:replica}).
 
@@ -384,7 +399,7 @@ confirm \cite{Vinci2026prosit}.
 The terminal took part in the study in two ways. First, its data warehouse and
 business intelligence team and terminal development co-designed the use case in
 every phase, from the data and the cleaning to the domain rules and the
-improvement measure (Table~\ref{tab:stakeholder_phases}). Second, the completed
+improvement measure. Second, the completed
 model and its results were reviewed by e-mail on 12 November 2026 by the project
 manager responsible for the cross-terminal KPI dashboard in the data warehouse and
 business intelligence team. He is also the company-side co-supervisor of this

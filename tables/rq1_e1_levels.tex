@@ -4,7 +4,7 @@
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{lrrr|rrrrrc}
 \toprule
- & \multicolumn{3}{c|}{\textbf{Level 1}} & \multicolumn{5}{c}{\textbf{Level 2, rejected training \ldots}} & \\
+ & \multicolumn{3}{c|}{\textbf{Quality of the net}} & \multicolumn{5}{c}{\textbf{Fitness for simulation, rejected training \ldots}} & \\
  & \textbf{Fitting} & & & \multicolumn{2}{c}{\textbf{sequences}} & \multicolumn{3}{c}{\textbf{visits, share of [\%]}} & \\
 \textbf{Net} & \textbf{visits [\%]} & \textbf{Prec.} & \textbf{Gen.} & $\geq$0.1\,\% & $<$0.1\,\% & \textbf{truck-min.} & \textbf{$>$ P90} & \textbf{multi-bl.} & \textbf{A2} \\
 \midrule
@@ -28,7 +28,7 @@ ILP 1.00 & 100.00 & 0.773 & 16 & 0 & 0 & 0.00 & 0.00 & 0.00 & yes \\
 Prefix tree & 100.00 & 1.000 & 0 & 0 & 0 & 0.00 & 0.00 & 0.00 & yes \\
 \bottomrule
 \end{tabular}
-\par\smallskip{\footnotesize\raggedright The training log has 59,139 visits and 82 sequences. Level 1 gives the share of fitting visits and the escaping-edges precision (ProM 6.15, Section~\ref{sec:exp_discovery_eval}). Gen.\ counts the new test sequences accepted, of 16. Level 2 gives the training sequences that the net rejects, above the coverage threshold (of 17) and below it (of 65), and the share of the truck-minutes (sum of the turnaround times), of the visits above the training P90 of 64 minutes and of the multi-block visits that the rejected visits make up. The coverage check requires that a net accepts every sequence above the coverage threshold. \textsuperscript{a}\,ETConformance rejects 30 fitting visits of IM 0.0 (Section~\ref{sec:res_e1_level1}). The prefix tree is a reference, not a candidate.\par}
+\par\smallskip{\footnotesize\raggedright The training log has 59,139 visits and 82 sequences. Quality of the net gives the share of fitting visits and the escaping-edges precision (ProM 6.15, Section~\ref{sec:exp_discovery_eval}). Gen.\ counts the new test sequences accepted, of 16. Fitness for simulation gives the training sequences that the net rejects, above the coverage threshold (of 17) and below it (of 65), and the share of the truck-minutes (sum of the turnaround times), of the visits above the training P90 of 64 minutes and of the multi-block visits that the rejected visits make up. The coverage criterion requires that a net accepts every sequence above the coverage threshold. \textsuperscript{a}\,ETConformance rejects 30 fitting visits of IM 0.0 (Section~\ref{sec:res_e1_level1}). The prefix tree is a reference, not a candidate.\par}
 \caption{Two levels of E1 for the sound nets on the training log.}
 \label{tab:rq1_e1_levels}
 \end{table}
