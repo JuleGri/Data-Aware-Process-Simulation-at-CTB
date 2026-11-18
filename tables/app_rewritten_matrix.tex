@@ -12,6 +12,7 @@ IM 0.0 & 0.888 & yes & 0.015 [0.014, 0.016] & 0.002 [0.001, 0.002] & 0 & 0.04 & 
 ILP 1.00 & 0.825 & yes & 0.015 [0.013, 0.017] & 0.002 [0.001, 0.002] & 4 & 0.05 & 0.098 [0.096, 0.099] & 59 / 141 \\
 \bottomrule
 \end{tabular}
-\caption{Comparison of the three admissible nets, each repaired, rewritten without silent transitions, with the stop guard on the visible transitions; mean over five seeds with [minimum, maximum]. Prec.: ETConformance on the rewritten net (training). Gate: no visit without stop, no overlapping stops of one truck, at most four stops, in every seed. TVD: total-variation distance to the training log (sequences; number of stops per visit). Overr.: guard overrides per run. Unseen: generated visits whose sequence does not occur in the training log. Right: against the test log. Observed test log: TTT median 33, P90 75 minutes.}
+\par\smallskip{\footnotesize\raggedright Each net is repaired, rewritten without silent transitions and run with the stop guard on the visible transitions. Means over five seeds with [minimum, maximum]. Prec.\ is ETConformance on the rewritten net (training). Gate means no visit without a stop, no overlapping stops of one truck and at most four stops, in every seed. TVD is the total-variation distance to the training log, for the sequences and for the number of stops per visit. Overr.\ counts the guard overrides per run. Unseen are generated visits whose sequence does not occur in the training log. The right part compares with the test log, whose TTT median is 33 and P90 75 minutes.\par}
+\caption{Comparison of the three admissible nets as rewritten state machines.}
 \label{tab:app_rewritten_matrix}
 \end{table}

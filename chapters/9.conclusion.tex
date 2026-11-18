@@ -14,7 +14,7 @@ applied one allocation rule within the limits that this validation established.
 \section{Answers to the Research Questions}
 \label{sec:concl_rq}
 
-\paragraph{RQ1: Which discovery and rule treatment yields a sound, executable
+\paragraph{RQ1. Which discovery and rule treatment yields a sound, executable
 control-flow model that preserves the observed truck-visit behaviour, and do
 conformance metrics anticipate its behaviour in simulation?} The Heuristics
 Miner net HM 0.7, used as discovered, with a stop guard in the simulator that
@@ -22,15 +22,15 @@ looks ahead on the net. Of 19 discovered nets, it is the only sound net
 that accepts every sequence above a coverage threshold of 0.1\,\% and whose
 language respects the rules of the truck visit, and the most precise of the three
 nets that pass the coverage check (0.998). It gives up 44 rare sequences, 0.96\,\% of the truck-minutes. Conformance
-metrics anticipate the simulation only in part: coverage of the frequent
+metrics anticipate the simulation only in part. Coverage of the frequent
 behaviour and the structure of the net, parallel branches and where its decisions
 sit, decided more than precision. A net with parallel branches produced visits
 that no truck can perform, and under the final configuration these visits even
 brought it closest to the observed turnaround time.
 
-\paragraph{RQ2: To what extent does the ProSiT simulation reproduce truck
+\paragraph{RQ2. To what extent does the ProSiT simulation reproduce truck
 turnaround time and its response to load, and which components explain the
-discrepancies?} As fitted, it does not: the median turnaround time is 57 instead
+discrepancies?} As fitted, it does not. The median turnaround time is 57 instead
 of 33 minutes, because the learned block choice sends most trucks to one block.
 With the observed trucks and blocks replayed and four changes to the queue and
 the service (an exact count of the trucks at a block, capacity checked at the
@@ -39,20 +39,27 @@ the load as a feature of the service time), it reproduces the median within 5
 minutes, the rise of the waiting with the load of a block, and a convex response
 to the arrival intensity. In-sample, its cycle-time distance (3.9 minutes) lies
 within the change between the two periods. It does not reproduce the slowdown in
-the busiest hours and misses two thresholds of the load-response criterion; part
+the busiest hours and misses two thresholds of the load-response criterion. Part
 of the test error is the slower service of the test period.
 
-\paragraph{RQ3: To what extent can the simulation be used to evaluate a
+\paragraph{RQ3. To what extent can the simulation be used to evaluate a
 load-aware block allocation for deliveries, and what does it indicate about the
 effect on turnaround time?} It can show how such a change acts in the simulated
-system, but not its effect at the terminal. In the model, moving a delivery to a
-block within two block numbers when all lanes of its block are taken about halves
-the share of hours whose mean turnaround time exceeds 35 minutes, mainly through
-less waiting at full blocks, with only a small change at the receiving blocks.
-No hour falls below the corridor. The terminal judged the result plausible. The
-size varies across the robustness runs, the model misses the congestion that the
-rule is meant to relieve, and the costs of a move are judged, not measured. For CTB, the
-result is a hypothesis for a pilot, not a validated improvement.
+system, but not its effect at the terminal. In the model, moving a delivery at
+Gate In away from a block that three trucks are already heading to lowers the
+share of hours whose mean turnaround time exceeds 35 minutes in all six scenarios,
+by 9 to 13 percentage points with the demand of the test period and by 8 to 12 with
+20\,\% more trucks. It works through less waiting at full blocks. The share of
+hours below 25 minutes shows no clear change. A local rule gives most of the
+effect. With 20\,\% more trucks, a choice within two block numbers or among all
+blocks moves part of the waiting to the receiving blocks, while one block number
+of deviation shows no such shift and is the most robust variant, although not
+demonstrably better than two. The terminal judged the result plausible. The size
+varies across the robustness runs, ten seeds do not determine the effect on the
+mean turnaround time under high demand, the model misses part of the congestion
+that the rule is meant to relieve, and the costs of a move are judged, not
+measured. For CTB, the result is a hypothesis for a pilot with a local rule, not a
+validated improvement.
 
 \section{Contributions}
 \label{sec:concl_contributions}
@@ -60,7 +67,7 @@ result is a hypothesis for a pilot, not a validated improvement.
 \paragraph{(C1) A justified simulation model for the CTB case.} The control-flow
 model was chosen by explicit checks on the training log, soundness, acceptance of
 every frequent sequence and the domain rules, and the price of the choice was
-measured: the rare sequences it gives up, the generalisation it lacks, and their
+measured. The rare sequences it gives up, the generalisation it lacks, and their
 small effect on the turnaround time. The learned trees, their parameters and the
 four adaptations to the terminal are documented and interpreted
 (Chapter~\ref{chp:process_discovery_methodology} and
@@ -79,7 +86,7 @@ mechanism, not a forecast.
 \label{sec:concl_limitations}
 
 Four limitations matter most (Chapter~\ref{chp:discussion}). First, the final
-configuration replays the observed arrivals and blocks; without them its error is larger.
+configuration replays the observed arrivals and blocks. Without them its error is larger.
 Second, it underestimates the slowdown in the busiest hours, so the size of a
 scenario effect is not established. Third, the event log records time at the
 block, not the use of lanes and cranes, so waiting and service cannot be fully
@@ -95,7 +102,7 @@ were judged by the terminal, not modelled.
 
 Future work should retain the reproducible discovery-and-validation protocol
 while extending the mechanisms and evidence that currently limit physical and
-counterfactual interpretation:
+counterfactual interpretation.
 
 \begin{itemize}
     \item \textbf{Investigate an object-centric process representation.}

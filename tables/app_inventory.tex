@@ -1,5 +1,5 @@
 \begin{longtable}{L{3.5cm}L{1.5cm}rrL{3.4cm}L{1.6cm}}
-\caption{Every learned model of the simulation model. Leaves: number of leaves; range: smallest and largest mean of the values a leaf gives the simulator (minutes), or firing probability (routing). Every leaf with its distribution, parameters and sample size is listed in \texttt{model\_leaves.csv} of the reproduction package.}\label{tab:app_inventory}\\
+\caption{Every learned model of the simulation model.}\label{tab:app_inventory}\\
 \toprule
 \textbf{Model} & \textbf{Form} & \textbf{Depth} & \textbf{Leaves} & \textbf{Split features} & \textbf{Range} \\
 \midrule
@@ -13,51 +13,51 @@
 \multicolumn{6}{l}{\textit{Arrivals}} \\
 arrivals & tree & 3 & 7 & hour, weekday & 0.65 -- 7.66 \\
 \multicolumn{6}{l}{\textit{Routing}} \\
-n52: Gate In & constant & 0 & 1 &  & 1 \\
-n43: Gate In $\rightarrow$ LL\_delivery & tree & 3 & 8 & deliveries, flow type, full ratio, planned stops, visit complexity & 0 -- 0.864 \\
-n25: Gate In $\rightarrow$ RMG\_mixed & tree & 3 & 7 & flow type, planned stops, visit complexity & 0 -- 0.87 \\
-n36: Gate In $\rightarrow$ HO2\_mixed & tree & 3 & 8 & planned stops, reefer, visit complexity & 0 -- 0.702 \\
-n37: Gate In $\rightarrow$ LL\_mixed & tree & 3 & 5 & containers, full ratio, visit complexity & 0 -- 0.271 \\
-n60: Gate In $\rightarrow$ RMG\_receive & tree & 3 & 7 & flow type, full ratio, planned stops, visit complexity & 0 -- 0.879 \\
-n51: Gate In $\rightarrow$ HO2\_delivery & tree & 3 & 7 & containers, flow type, full ratio, planned stops, visit complexity & 0 -- 1 \\
-n26: Gate In $\rightarrow$ RMG\_delivery & tree & 3 & 7 & flow type, full ratio, planned stops, visit complexity & 0 -- 0.754 \\
-n67: Gate In $\rightarrow$ HO2\_receive & tree & 3 & 7 & flow type, hazardous, planned stops, visit complexity & 0 -- 0.311 \\
-n56: Gate In $\rightarrow$ LL\_receive & tree & 3 & 7 & deliveries, flow type, full ratio, planned stops, receives & 0 -- 0.69 \\
-n65: RMG\_delivery & constant & 0 & 1 &  & 1 \\
-n44: RMG\_delivery $\rightarrow$ Gate Out & tree & 1 & 2 & flow type & 0.012 -- 0.994 \\
-n40: RMG\_delivery $\rightarrow$ LL\_receive & tree & 2 & 3 & flow type, full ratio & 0 -- 0.453 \\
-n32: RMG\_delivery $\rightarrow$ HO2\_receive & tree & 1 & 2 & visit complexity & 0 -- 0.067 \\
-n35: RMG\_delivery $\rightarrow$ RMG\_receive & tree & 2 & 3 & flow type, full ratio & 0 -- 0.959 \\
-n57: RMG\_delivery $\rightarrow$ RMG\_delivery & tree & 3 & 5 & activity done, containers, deliveries, visit complexity & 0 -- 0.571 \\
-n62: Gate Out & constant & 0 & 1 &  & 1 \\
-n27: RMG\_receive & constant & 0 & 1 &  & 1 \\
-n47: RMG\_receive $\rightarrow$ RMG\_receive & tree & 2 & 3 & activity done, receives & 0 -- 0.264 \\
-n38: RMG\_receive $\rightarrow$ Gate Out & tree & 2 & 3 & activity done, receives & 0.736 -- 1 \\
-n33: LL\_delivery & constant & 0 & 1 &  & 1 \\
-n34: LL\_delivery $\rightarrow$ HO2\_mixed & tree & 2 & 3 & full ratio, visit complexity & 0 -- 0.086 \\
-n29: LL\_delivery $\rightarrow$ RMG\_delivery & tree & 3 & 4 & deliveries, planned stops, visit complexity & 0 -- 0.899 \\
-n41: LL\_delivery $\rightarrow$ RMG\_receive & tree & 3 & 5 & flow type, receives, visit complexity & 0 -- 0.96 \\
-n55: LL\_delivery $\rightarrow$ Gate Out & tree & 3 & 4 & full ratio, planned stops, visit complexity & 0.002 -- 1 \\
-n63: LL\_delivery $\rightarrow$ HO2\_receive & tree & 2 & 3 & flow type, visit complexity & 0 -- 0.117 \\
-n50: LL\_delivery $\rightarrow$ RMG\_mixed & tree & 3 & 6 & deliveries, full ratio, planned stops, visit complexity & 0 -- 0.952 \\
-n54: HO2\_delivery & constant & 0 & 1 &  & 1 \\
-n49: HO2\_delivery $\rightarrow$ LL\_receive & tree & 2 & 3 & flow type, full ratio & 0 -- 0.327 \\
-n23: HO2\_delivery $\rightarrow$ RMG\_receive & tree & 1 & 2 & flow type & 0 -- 0.89 \\
-n39: HO2\_delivery $\rightarrow$ Gate Out & tree & 1 & 2 & flow type & 0.011 -- 1 \\
-n24: HO2\_receive & constant & 0 & 1 &  & 1 \\
-n59: HO2\_receive $\rightarrow$ Gate Out & tree & 1 & 2 & receives & 0.667 -- 0.997 \\
-n58: HO2\_receive $\rightarrow$ HO2\_receive & tree & 1 & 2 & receives & 0.003 -- 0.333 \\
-n53: RMG\_mixed & constant & 0 & 1 &  & 1 \\
-n45: RMG\_mixed $\rightarrow$ RMG\_receive & tree & 3 & 4 & deliveries, planned stops, receives & 0 -- 0.895 \\
-n66: RMG\_mixed $\rightarrow$ Gate Out & tree & 3 & 4 & deliveries, planned stops, receives & 0.105 -- 1 \\
-n48: HO2\_mixed & constant & 0 & 1 &  & 1 \\
-n64: HO2\_mixed $\rightarrow$ Gate Out & constant & 0 & 1 &  & 1 \\
-n46: LL\_receive & constant & 0 & 1 &  & 1 \\
-n28: LL\_receive $\rightarrow$ RMG\_receive & tree & 2 & 3 & full ratio, receives & 0 -- 0.908 \\
-n42: LL\_receive $\rightarrow$ Gate Out & tree & 2 & 3 & full ratio, receives & 0.092 -- 1 \\
-n31: LL\_mixed & constant & 0 & 1 &  & 1 \\
-n30: LL\_mixed $\rightarrow$ Gate Out & tree & 1 & 2 & visit complexity & 0 -- 1 \\
-n61: LL\_mixed $\rightarrow$ RMG\_receive & tree & 1 & 2 & visit complexity & 0 -- 1 \\
+Gate In (n52) & constant & 0 & 1 &  & 1 \\
+Gate In $\rightarrow$ LL\_delivery (n43) & tree & 3 & 8 & deliveries, flow type, full ratio, planned stops, visit complexity & 0 -- 0.864 \\
+Gate In $\rightarrow$ RMG\_mixed (n25) & tree & 3 & 7 & flow type, planned stops, visit complexity & 0 -- 0.87 \\
+Gate In $\rightarrow$ HO2\_mixed (n36) & tree & 3 & 8 & planned stops, reefer, visit complexity & 0 -- 0.702 \\
+Gate In $\rightarrow$ LL\_mixed (n37) & tree & 3 & 5 & containers, full ratio, visit complexity & 0 -- 0.271 \\
+Gate In $\rightarrow$ RMG\_receive (n60) & tree & 3 & 7 & flow type, full ratio, planned stops, visit complexity & 0 -- 0.879 \\
+Gate In $\rightarrow$ HO2\_delivery (n51) & tree & 3 & 7 & containers, flow type, full ratio, planned stops, visit complexity & 0 -- 1 \\
+Gate In $\rightarrow$ RMG\_delivery (n26) & tree & 3 & 7 & flow type, full ratio, planned stops, visit complexity & 0 -- 0.754 \\
+Gate In $\rightarrow$ HO2\_receive (n67) & tree & 3 & 7 & flow type, hazardous, planned stops, visit complexity & 0 -- 0.311 \\
+Gate In $\rightarrow$ LL\_receive (n56) & tree & 3 & 7 & deliveries, flow type, full ratio, planned stops, receives & 0 -- 0.69 \\
+RMG\_delivery (n65) & constant & 0 & 1 &  & 1 \\
+RMG\_delivery $\rightarrow$ Gate Out (n44) & tree & 1 & 2 & flow type & 0.012 -- 0.994 \\
+RMG\_delivery $\rightarrow$ LL\_receive (n40) & tree & 2 & 3 & flow type, full ratio & 0 -- 0.453 \\
+RMG\_delivery $\rightarrow$ HO2\_receive (n32) & tree & 1 & 2 & visit complexity & 0 -- 0.067 \\
+RMG\_delivery $\rightarrow$ RMG\_receive (n35) & tree & 2 & 3 & flow type, full ratio & 0 -- 0.959 \\
+RMG\_delivery $\rightarrow$ RMG\_delivery (n57) & tree & 3 & 5 & activity done, containers, deliveries, visit complexity & 0 -- 0.571 \\
+Gate Out (n62) & constant & 0 & 1 &  & 1 \\
+RMG\_receive (n27) & constant & 0 & 1 &  & 1 \\
+RMG\_receive $\rightarrow$ RMG\_receive (n47) & tree & 2 & 3 & activity done, receives & 0 -- 0.264 \\
+RMG\_receive $\rightarrow$ Gate Out (n38) & tree & 2 & 3 & activity done, receives & 0.736 -- 1 \\
+LL\_delivery (n33) & constant & 0 & 1 &  & 1 \\
+LL\_delivery $\rightarrow$ HO2\_mixed (n34) & tree & 2 & 3 & full ratio, visit complexity & 0 -- 0.086 \\
+LL\_delivery $\rightarrow$ RMG\_delivery (n29) & tree & 3 & 4 & deliveries, planned stops, visit complexity & 0 -- 0.899 \\
+LL\_delivery $\rightarrow$ RMG\_receive (n41) & tree & 3 & 5 & flow type, receives, visit complexity & 0 -- 0.96 \\
+LL\_delivery $\rightarrow$ Gate Out (n55) & tree & 3 & 4 & full ratio, planned stops, visit complexity & 0.002 -- 1 \\
+LL\_delivery $\rightarrow$ HO2\_receive (n63) & tree & 2 & 3 & flow type, visit complexity & 0 -- 0.117 \\
+LL\_delivery $\rightarrow$ RMG\_mixed (n50) & tree & 3 & 6 & deliveries, full ratio, planned stops, visit complexity & 0 -- 0.952 \\
+HO2\_delivery (n54) & constant & 0 & 1 &  & 1 \\
+HO2\_delivery $\rightarrow$ LL\_receive (n49) & tree & 2 & 3 & flow type, full ratio & 0 -- 0.327 \\
+HO2\_delivery $\rightarrow$ RMG\_receive (n23) & tree & 1 & 2 & flow type & 0 -- 0.89 \\
+HO2\_delivery $\rightarrow$ Gate Out (n39) & tree & 1 & 2 & flow type & 0.011 -- 1 \\
+HO2\_receive (n24) & constant & 0 & 1 &  & 1 \\
+HO2\_receive $\rightarrow$ Gate Out (n59) & tree & 1 & 2 & receives & 0.667 -- 0.997 \\
+HO2\_receive $\rightarrow$ HO2\_receive (n58) & tree & 1 & 2 & receives & 0.003 -- 0.333 \\
+RMG\_mixed (n53) & constant & 0 & 1 &  & 1 \\
+RMG\_mixed $\rightarrow$ RMG\_receive (n45) & tree & 3 & 4 & deliveries, planned stops, receives & 0 -- 0.895 \\
+RMG\_mixed $\rightarrow$ Gate Out (n66) & tree & 3 & 4 & deliveries, planned stops, receives & 0.105 -- 1 \\
+HO2\_mixed (n48) & constant & 0 & 1 &  & 1 \\
+HO2\_mixed $\rightarrow$ Gate Out (n64) & constant & 0 & 1 &  & 1 \\
+LL\_receive (n46) & constant & 0 & 1 &  & 1 \\
+LL\_receive $\rightarrow$ RMG\_receive (n28) & tree & 2 & 3 & full ratio, receives & 0 -- 0.908 \\
+LL\_receive $\rightarrow$ Gate Out (n42) & tree & 2 & 3 & full ratio, receives & 0.092 -- 1 \\
+LL\_mixed (n31) & constant & 0 & 1 &  & 1 \\
+LL\_mixed $\rightarrow$ Gate Out (n30) & tree & 1 & 2 & visit complexity & 0 -- 1 \\
+LL\_mixed $\rightarrow$ RMG\_receive (n61) & tree & 1 & 2 & visit complexity & 0 -- 1 \\
 \multicolumn{6}{l}{\textit{Block choice (not used in the final configuration)}} \\
 HO2 & tree & 1 & 2 & queue length & 0.222 -- 0.997 \\
 LL & tree & 3 & 5 & deliveries, full ratio, queue length, receives & 0 -- 1 \\

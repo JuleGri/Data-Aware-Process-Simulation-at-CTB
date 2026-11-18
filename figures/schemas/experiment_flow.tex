@@ -8,12 +8,12 @@
   rq/.style={font=\footnotesize\bfseries, align=center},
   arr/.style={-{Stealth[length=2mm]}}]
 \node[exper] (e1) at (0,0) {\textbf{E1 Discovery and checks} (training log)\\
-  19 nets of four families: IMf (5), Heuristics (5), ILP (6), Alpha (3)\\
-  soundness check; coverage check: accepts every sequence above 0.1\,\% of the visits};
+  19 nets of four families, IMf (5), Heuristics (5), ILP (6), Alpha (3)\\
+  soundness check, coverage check (accepts every sequence above 0.1\,\% of the visits)};
 \node[passon, below=2.5mm of e1] (o1) {IM 0.0, HM 0.7, ILP 1.00 pass both checks};
 \node[exper, below=4mm of o1] (e2) {\textbf{E2 Rule audit} on the language of each net\\
-  rule check, rules 3--5: a stop in every visit, no two stops at once, no forbidden combination\\
-  the planned number of stops cannot be written into a net: stop guard in the simulator};
+  rule check of rules 3--5 (a stop in every visit, no two stops at once, no forbidden combination)\\
+  the planned number of stops cannot be written into a net, so a stop guard in the simulator};
 \node[passon, below=2.5mm of e2] (o2) {HM 0.7, used as discovered, with a look-ahead stop guard};
 \node[exper, below=4mm of o2] (e3) {\textbf{E3 Simulation of the selected net} in ProSiT\\
   guard on, off and simple; contrasts IM 0.0, ILP 1.00 (fail the rule check), IMf 0.3, HM 0.8 (fail the coverage check)};
@@ -22,7 +22,7 @@
   demand $\rightarrow$ block allocation $\rightarrow$ queue at the block $\rightarrow$ service\\
   choice of the final configuration on the training log; acceptance criteria};
 \node[passon, below=2.5mm of e4] (o4) {final configuration; E5 admissible only as a what-if demonstration};
-\node[exper, below=4mm of o4] (e5) {\textbf{E5 What-if:} scenario S1, deliveries moved away from full blocks\\
+\node[exper, below=4mm of o4] (e5) {\textbf{E5 What-if.} Scenario S1, deliveries moved away from full blocks\\
   eligible blocks $\pm 1$, $\pm 2$, any; ten paired seeds; four robustness runs};
 \node[passon, below=2.5mm of e5] (o5) {direction and mechanism of the effect within the model, not its size at the terminal};
 \foreach \a/\b in {e1/o1, o1/e2, e2/o2, o2/e3, e3/o3, o3/e4, e4/o4, o4/e5, e5/o5}
@@ -34,7 +34,6 @@
 \draw[decorate, decoration={brace, amplitude=5pt}] ([xshift=3mm]e5.north east) -- ([xshift=3mm]o5.south east)
   node[rq, midway, right=6pt] {RQ3};
 \end{tikzpicture}
-\caption{Flow of the experiments. Every decision uses the training log; the test log
-reports the results. White: experiment; grey: what it passes on.}
+\caption{Flow of the experiments.}
 \label{fig:exp_flow}
 \end{figure}

@@ -1,19 +1,10 @@
 \chapter{Additional Simulation Results}
 \label{app:sim_results}
 
-This appendix gives the tables and figures of E3 to E5 whose key values
+This appendix gives the tables and figures of E4 and E5 whose key values
 Chapter~\ref{chp:results} states in the text. All runs use HM 0.7 as discovered
 with the stop guard; the sources are listed in Appendix~\ref{app:model_inspection}.
 
-\section{Stops per Visit in E3}
-
-Table~\ref{tab:rq1_e3_stopcount} compares the number of stops per visit of the
-training log with the simulation of HM 0.7, with and without the stop guard
-(Section~\ref{sec:res_baseline}).
-
-\input{tables/rq1_e3_stopcount}
-
-\FloatBarrier
 \section{Measures and Configurations of E4}
 
 Table~\ref{tab:exp_e4_measures} lists the measures of operational validity and
@@ -27,16 +18,15 @@ Table~\ref{tab:exp_e4_configs} the configurations of E4
 \toprule
 \textbf{Perspective} & \textbf{Measures} & \textbf{Why} \\
 \midrule
-P1 Turnaround time & TTT median, P90 and mean; cycle-time distance (CTD: Wasserstein-1, or earth mover's, distance between the TTT distributions, in minutes); median TTT by flow type & The KPI of the thesis \cite{Chapela2025SimQuality}. \\
-P2 Where the time is spent & Mean approach (Gate In to first stop), stop time, transfer between stops and exit; the four means add up to the mean TTT & Locates the error in the visit. \\
+P1 Turnaround time & TTT median, P90 and mean, cycle-time distance (CTD, the Wasserstein-1 or earth mover's distance between the TTT distributions, in minutes), median TTT by flow type & The KPI of the thesis \cite{Chapela2025SimQuality}. \\
+P2 Where the time is spent & Mean approach (Gate In to first stop), stop time, transfer between stops and exit, whose four means add up to the mean TTT & Locates the error in the visit. \\
 P3 Physical constraints & Trucks in the terminal; share of RMG stops at the busiest block and correlation of block shares with the observed ones; share of RMG stops that start with three or more other trucks at the block; largest number of trucks at one block at once; visits without stop, overlapping stops, visits with more stops than planned & The constraints that the title refers to. \\
 P4 Response to load & Spearman correlation of hourly arrivals and hourly median TTT; median TTT by trucks in the terminal; median approach to an RMG first stop by the trucks at that block at Gate In; median RMG stop duration by the other trucks at the block at its start; share of delay-peak hours & The property that E5 needs. \\
 Standard BPS measures & 3-gram distance of the activity sequences (NGD-3) and case-arrival distance (CAR) & Comparability with the ProSiT evaluation \cite{Vinci2026prosit,Chapela2025SimQuality}. \\
 \bottomrule
 \end{tabularx}
-\caption{Measures of operational validity in E4. For each load profile in P4,
-the \emph{profile gap} is the mean absolute difference of the simulated medians
-to the observed ones over the bins.}
+\par\smallskip{\footnotesize\raggedright For each load profile in P4, the profile gap is the mean absolute difference between the simulated and the observed medians over the bins.\par}
+\caption{Measures of operational validity in E4.}
 \label{tab:exp_e4_measures}
 \end{table}
 
@@ -74,12 +64,8 @@ T & \multicolumn{5}{l}{the admissible c1x--c3x and d3x on the training period (r
 f0 & \multicolumn{5}{l}{final configuration on the training period} & Model error or change between periods? \\
 \bottomrule
 \end{tabularx}
-\caption{Configurations of E4. ProSiT: component as fitted in E3. No
-self-count: retrained without counting the stop in its own queue. Lane free:
-waiting measured from the moment a lane became free. Whole delay: waiting
-measured from enabling to start. Every configuration from b3 on, and the
-baseline a0, is also run with an exact count of the activities in progress
-(suffix x, see the design decisions).}
+\par\smallskip{\footnotesize\raggedright ProSiT means the parameter as fitted in E3. No self-count means retrained without counting the stop in its own queue. Lane free means waiting measured from the moment a lane became free. Whole delay means waiting measured from enabling to start. Every configuration from b3 on, and the baseline a0, is also run with an exact count of the activities in progress (suffix x).\par}
+\caption{Configurations of E4.}
 \label{tab:exp_e4_configs}
 \end{table}
 
@@ -95,14 +81,6 @@ block allocations, other arrival intensities and without replay.
 \input{tables/rq2_loo}
 
 \FloatBarrier
-\section{Other Nets Under the Final Configuration}
-
-Table~\ref{tab:rq2_nets} gives the nets of the E3 contrasts under the final
-configuration (Section~\ref{sec:res_e4_nets}).
-
-\input{tables/rq2_nets}
-
-\FloatBarrier
 \section{The Final Configuration Against the Observed Logs}
 
 Figure~\ref{fig:sim_ttt_distribution} shows the distribution of the turnaround
@@ -112,26 +90,26 @@ time and Figure~\ref{fig:sim_ttt_decomposition} where the time of a visit is spe
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/simulation_model/sim_ttt_distribution.png}
-\caption{Turnaround time, observed and simulated (final configuration; replayed
-visits and observed blocks; five seeds pooled).}
+\caption{Turnaround time, observed and simulated with the final configuration (five seeds pooled).}
 \label{fig:sim_ttt_distribution}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/simulation_model/sim_ttt_decomposition.png}
-\caption{Where the time of a visit is spent, observed and simulated (means).}
+\caption{Parts of the turnaround time, observed and simulated (means).}
 \label{fig:sim_ttt_decomposition}
 \end{figure}
 
 
 \FloatBarrier
 \section{Further Results of S1}
+\label{app:s1_results}
 
-Table~\ref{tab:rq3_effect} gives the effect of S1 on the turnaround time and on the
-mechanism, and Table~\ref{tab:rq3_robustness} the robustness runs
-(Section~\ref{sec:res_policy}).
+Table~\ref{tab:rq3_grid_visits} gives the effect of S1 per visit for the six
+scenarios of the grid, and Table~\ref{tab:rq3_robustness} the $\pm 2$ variant under
+the robustness runs and the design checks (Section~\ref{sec:res_policy}).
 
-\input{tables/rq3_effect}
+\input{tables/rq3_grid_visits}
 \input{tables/rq3_robustness}
 \FloatBarrier

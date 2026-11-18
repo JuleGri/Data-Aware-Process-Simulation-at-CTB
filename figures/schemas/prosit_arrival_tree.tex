@@ -41,12 +41,6 @@
 \draw[edge] (n6) -- node[yes] {yes} (e);
 \draw[edge] (n6) -- node[yes] {no}  (f);
 \end{tikzpicture}}
-\caption{A real ProSiT tree: the arrival model learned from the CTB training
-partition (ProSiT 1.0.4, Section~\ref{sec:exp_baseline}). The tree predicts the gap
-until the next truck arrives, in open minutes of the arrival calendar, from the
-hour and weekday of the previous arrival. Each leaf holds a fitted distribution.
-The simulator follows the conditions from the top to one leaf and draws the gap
-from that leaf. The means are those of the values the simulator draws. Sunday is
-closed in the arrival calendar, so no gaps are drawn there.}
+\caption{Arrival tree learned by ProSiT from the training log.}
 \label{fig:bg_prosit_arrival_tree}
 \end{figure}

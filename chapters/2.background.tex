@@ -139,8 +139,8 @@ T002 & RMG\_receive & 09:44 & 09:52 & Block T08 \\
 T002 & Gate Out     & 10:03 & 10:03 & Gate \\
 \bottomrule
 \end{tabular}
-\caption{Simplified event log with two truck visits. Case attributes such as the
-number of planned stops are stored once per case and are not shown.}
+\par\smallskip{\footnotesize\raggedright Case attributes, such as the number of planned stops, are stored once per case and are not shown.\par}
+\caption{Simplified event log with two truck visits.}
 \label{tab:eventlogexample}
 \end{table}
 
@@ -205,11 +205,17 @@ output places $t{\bullet}$.
 
 The state of a net is called a \emph{marking}. It says how many tokens lie in
 each place. A transition is \emph{enabled} when each of its input places holds
-a token. Firing it removes one token from each input place and adds one token
-to each output place. A place with several outgoing arcs is a choice, because
-only one of the enabled transitions can take the token. A transition with
-several output places starts parallel branches. It creates one token per
-branch, and the branches can then fire independently of each other.
+a token, that is, when the process has reached a state in which the activity can
+happen. Petri net theory calls the execution of a transition \emph{firing}. The
+word can be misleading, because a transition sounds like a mere passage from one
+state to the next. In this thesis, \emph{a transition fires} simply means that
+\emph{its activity is executed}, for example that the truck passes Gate In or
+completes an RMG receive. Firing removes one token from each input place and adds
+one token to each output place, so the net moves to its next state. A place with
+several outgoing arcs is a choice, because only one of the enabled transitions
+can take the token. A transition with several output places starts parallel
+branches. It creates one token per branch, and the activities of the branches
+can then be executed independently of each other.
 
 A \emph{workflow net} has one source place $i$ and one sink place $o$, and
 every node lies on a path from $i$ to $o$. A run starts with one token in $i$
@@ -223,12 +229,14 @@ transitions). Soundness matters for simulation, because the simulator executes
 the net and must bring every case to the end.
 
 Transitions labelled $\tau$ are \emph{silent}. They fire like other
-transitions but leave no event in the log. They express routing that has no
+transitions, but no activity is executed and no event is left in the log. They express routing that has no
 recorded counterpart, for example skipping an activity, repeating a loop, or
 splitting and joining parallel branches. The net in
 Figure~\ref{fig:bg_petri_silent} accepts both \texttt{Gate In, RMG\_receive,
 Gate Out} and \texttt{Gate In, Gate Out}, because the silent transition skips
-the stop.
+the stop. In the figure, circles are places, white boxes visible transitions and the
+black box the silent transition. The token in the source place $i$ is a truck
+before the gate.
 
 \begin{figure}[htbp]
 \centering
@@ -257,10 +265,7 @@ the stop.
 \draw[arc] (p2) -- (go);
 \draw[arc] (go) -- (o);
 \end{tikzpicture}
-\caption{A workflow net with a silent transition. Circles are places, white
-boxes visible transitions, and the black box a silent transition $\tau$. The
-token in the source place $i$ is a truck before the gate. The silent transition
-skips the yard stop, so the net also accepts a visit without any stop.}
+\caption{Workflow net with a silent transition.}
 \label{fig:bg_petri_silent}
 \end{figure}
 
@@ -465,7 +470,8 @@ An alignment fits an observed trace to the model. It pairs each event of the
 trace with a step of a complete run of the model and marks where the two do not
 match. Alignments are the basis for computing fitness. An alignment is a
 sequence of moves of three types. A \emph{synchronous move} consumes an event
-from the trace and fires the transition with the same label. A \emph{log move}
+from the trace and fires the transition with the same label, so the trace and
+the model execute the same activity. A \emph{log move}
 consumes an event that the model cannot follow at this point. A \emph{model
 move} fires a transition without a matching event. This happens when the model
 requires an activity that the trace does not contain, and also whenever a
@@ -478,11 +484,11 @@ net $N$ is
 \end{equation}
 where $\Gamma(\sigma,N)$ is the set of all alignments and $c$ the total cost
 \cite{aalst2012ConformanceChecking,Adriansyah2011CostFitness}. Optimal
-alignments are usually computed with the A* search algorithm. A* works like a
-route planner. It always extends the most promising partial alignment and
-estimates the cost that is still to come. If this estimate never overestimates
-the remaining cost, the first complete alignment that A* finds is the cheapest
-one \cite{Adriansyah2011CostFitness}.
+alignments are usually computed with the A* search algorithm. A* always extends
+the most promising partial alignment first and estimates the cost that is still
+to come. If this estimate never exceeds the real remaining cost, the first
+complete alignment that A* finds is the cheapest one
+\cite{Adriansyah2011CostFitness}.
 
 \paragraph{Fitness}
 Trace fitness is one minus the cost of the optimal alignment divided by the
@@ -682,7 +688,8 @@ simulation and simulates waiting times better where resources are congested
 \paragraph{Validation}
 \label{sec:simulation_validation_background}
 A simulation model consists of the discovered control flow combined with the
-learned components, such as the routing weights and the time distributions. It
+learned simulation parameters, such as the routing weights and the time
+distributions. It
 is valid only for an intended use \cite{Sargent2013Validation}. Sargent
 separates \emph{conceptual validity} (are the assumptions made by the model
 reasonable for the purpose?), \emph{verification} (is the model implemented
@@ -727,14 +734,25 @@ parameters or of the model structure.
 
 ProSiT (\textit{PROcess SImulation Tool}) discovers a data-aware simulation
 model from a Petri net and an event log \cite{Vinci2026prosit,ProSiTRepository}.
-Every component of the model is learned as a \emph{probabilistic decision tree},
-a decision tree whose leaves hold a probability or a distribution instead of a
-single value. The model is considered a white-box model, because every learned
-rule can be inspected and edited, for example to create controlled what-if
-scenarios. This section describes what ProSiT learns, how a tree is built and
-used, how a simulated case runs, and where the framework stops.
+Vinci et al.\ call this model a decision-aware business process simulation
+model. It consists of the Petri net, \emph{descriptive parameters} such as the
+resource calendars and the set of resources, and \emph{predictive parameters}.
+The predictive parameters are the decisions and durations that the simulator
+draws while it runs, namely the transition weights, the waiting and execution
+times and the gaps between arrivals. Each of them is learned as a
+\emph{probabilistic decision tree}, a decision tree whose leaves hold a
+probability or a distribution instead of a single value. The model is considered
+a white-box model, because every learned rule can be inspected and edited, for
+example to create controlled what-if scenarios. This thesis uses the same
+distinction. Descriptive parameters are read from the log as sets, numbers or
+calendars. Predictive parameters are the trees from which the simulator draws.
+Both together are the \emph{simulation parameters}. The word component is kept
+for the five general components of a BPS model (Section~\ref{sec:bps_models}),
+each of which is described by one or more of these parameters. This section
+describes what ProSiT learns, how a tree is built and used, how a simulated case runs, which
+hyperparameters steer the discovery, and where the framework stops.
 
-\subsection{Inputs and Learned Components}
+\subsection{Inputs and Learned Parameters}
 \label{sec:prosit_components}
 
 ProSiT needs a sound workflow net and an event log with start and complete
@@ -748,15 +766,16 @@ replays each recorded case on the net, step by step. For every event, this
 replay tells which transition fired, which other transitions could have fired at
 that moment, and since when the transition had been possible. This is how
 ProSiT learns about decisions that the log itself does not show, for example
-the choices at silent transitions. From this replay, ProSiT builds one training
-table per component and learns one tree from each table
-(Figure~\ref{fig:bg_prosit_pipeline}). The components roughly follow the BPS
-components of Section~\ref{sec:bps_models}, but every one of them is a
-probabilistic decision tree that can depend on the case and on the state of the
-process. ProSiT offers hyperparameters that steer this discovery, for example
-the largest depth of a tree (Section~\ref{sec:prosit_hyperparameters}).
+the choices at silent transitions. Every decision of the replay, also at a
+silent transition, becomes one training example. From these examples, ProSiT
+builds one training table per predictive parameter and learns one tree from each
+table. The descriptive parameters are read from the log directly.
+The simulator then executes the net and draws every decision and duration from
+these trees (Figure~\ref{fig:bg_prosit_pipeline}). ProSiT offers hyperparameters
+that steer this discovery, for example the largest depth of a tree
+(Section~\ref{sec:prosit_hyperparameters}).
 Table~\ref{tab:prosit_components} in Appendix~\ref{app:prosit_inventory} lists
-every component with its features.
+every parameter with its features.
 
 \begin{figure}[htbp]
 \centering
@@ -769,7 +788,7 @@ every component with its features.
 \node[data] (log) at (0,0.9) {\textbf{Event log}\\start, complete, resource, case attributes};
 \node[data] (net) at (0,-0.9) {\textbf{Petri net}\\sound workflow net};
 \node[box] (align) at (3.9,0) {\textbf{Alignment}\\every recorded case replayed on the net};
-\node[box] (tab) at (7.8,0) {\textbf{Training tables}\\one per component};
+\node[box] (tab) at (7.8,0) {\textbf{Training tables}\\one per predictive parameter};
 \node[box, text width=3.8cm] (trees) at (12.1,0) {\textbf{Probabilistic decision trees}\\arrivals, routing, resource choice, waiting and execution times, plus capacities and calendars};
 \node[box, text width=3.4cm] (sim) at (7.8,-3.1) {\textbf{Simulator}\\executes the net and draws from the trees};
 \node[data] (out) at (12.1,-3.1) {\textbf{Simulated event log}};
@@ -781,53 +800,65 @@ every component with its features.
 \draw[arr] (net.south) |- (sim.west);
 \draw[arr] (sim) -- (out);
 \end{tikzpicture}}
-\caption{How ProSiT discovers and runs a simulation model. The alignment replays
-every recorded case on the net, so that each decision, also at silent
-transitions, becomes a training example. One probabilistic decision tree is
-learned per component, and the simulator executes the net with these trees.}
+\caption{Discovery and execution of a ProSiT simulation model.}
 \label{fig:bg_prosit_pipeline}
 \end{figure}
 
-A few components need a short explanation. The description follows the paper
-and the implementation of version 1.0.4 \cite{Vinci2026prosit,ProSiTRepository}.
+The parameters work as follows. The description follows the paper and the
+implementation of version 1.0.4 \cite{Vinci2026prosit,ProSiTRepository}.
 \begin{itemize}[itemsep=3pt,topsep=4pt]
-\item \textbf{Arrivals.} The gaps between consecutive case starts are
+\item \textbf{Arrivals (predictive).} The gaps between consecutive case starts are
 computed in open minutes of the arrival calendar. The calendar marks a weekday
 and hour as open if enough arrivals fall into it. It decides only \emph{whether}
-cases can arrive, and the tree decides \emph{how often}.
-\item \textbf{Routing.} For every transition, ProSiT collects all moments in
-the replay at which it was enabled. The class is 1 if it fired and 0 if another
-transition fired. The tree then predicts the probability that the transition
-fires, given the case attributes and how often each activity has occurred so
-far. These features describe the case, not the marking of the net. Silent
-transitions get a routing tree like visible ones, and when they fired is known
-only from the alignment. In the simulation, these probabilities act as the
-data-dependent weights of the transitions.
-\item \textbf{Capacity.} By default, every resource handles one activity at a
-time. ProSiT offers a hyperparameter that allows a resource to handle several
-activities at once (multitasking). If it is switched on, a resource whose
-activities overlap in at least a given share of cases receives a capacity equal
-to the largest observed overlap plus one.
-\item \textbf{Waiting time.} The waiting time is the time that a case waits
-before an activity starts, although the control flow already allows it. ProSiT
-measures it from the later of two moments. The first is the moment the previous
-activity ended and the transition became enabled. The second is the moment the
-resource became free. Waiting caused by a busy resource is therefore not part of
-what the tree learns. The simulator produces this waiting itself, through the
-capacity check.
+cases can arrive, and the tree decides \emph{how often}
+(Figure~\ref{fig:bg_prosit_arrival_tree}).
+\item \textbf{Routing (predictive).} For every transition, ProSiT collects all moments in
+the replay at which it was enabled. The class is 1 if it fired, that is, if its
+activity was executed, and 0 if another transition fired. The tree then predicts
+the probability that the transition fires, given the case attributes and how
+often each activity has occurred so far. These features describe the case, not
+the marking of the net. Silent transitions get a routing tree like visible ones,
+and when they fired is known only from the alignment. In the simulation, these
+probabilities act as the data-dependent weights of the transitions.
+\item \textbf{Resource choice (predictive).} For every resource, a tree predicts the
+probability that this resource performs an activity, given the activity, the case
+attributes and how often the case has already used each resource. Only moments at
+which the resource was free are used for training.
+\item \textbf{Capacity (descriptive).} The capacity says how many activities a resource can
+handle at the same time. By default it is one. A hyperparameter allows larger
+capacities (Section~\ref{sec:prosit_hyperparameters}).
+\item \textbf{Waiting time (predictive).} The waiting time is the time that a case waits
+before an activity starts, although the control flow already allows it. One tree
+per resource predicts it. ProSiT measures the waiting time from the later of two
+moments. The first is the moment the previous activity ended and the transition
+became enabled. The second is the moment the resource became free. Waiting caused
+by a busy resource is therefore not part of what the tree learns. The simulator
+produces this waiting itself, through the capacity check during the execution
+(Section~\ref{sec:prosit_execution}). If the workload features are switched on,
+the tree can also react to how busy the resource is
+(Section~\ref{sec:prosit_hyperparameters}).
+\item \textbf{Execution time (predictive).} One tree per activity predicts how long the
+activity takes, given the resource, the hour, the weekday, the case attributes
+and the activities so far.
+\item \textbf{Calendars and case attributes (descriptive).} The arrival calendar
+and one calendar per resource mark the open hours of the week. The case
+attributes of new cases are drawn from the observed ones
+(Section~\ref{sec:prosit_hyperparameters}).
 \end{itemize}
 
 \subsection{Probabilistic Decision Trees}
 \label{sec:prosit_trees}
 
-A decision tree \cite{Vinci2026prosit} splits the training data step by step on
-one feature at a time, for example ``hour $\le$ 21''. Each split is chosen so
-that the groups become as different as possible in the target (CART). The groups
-at the end are the \emph{leaves}. In ProSiT, a routing leaf stores a probability.
-A time leaf stores a distribution. ProSiT fits a fixed value and a normal,
-exponential, lognormal, gamma and uniform distribution to the values in the leaf
-and keeps the one closest to the data in Wasserstein distance. Values drawn from
-it are limited to the smallest and largest observed value.
+A decision tree splits the training data step by step on one feature at a time,
+for example ``hour $\le$ 21'' in the arrival tree of
+Figure~\ref{fig:bg_prosit_arrival_tree}. Each split is chosen so that the
+resulting groups differ as much as possible in the value to be predicted. The
+groups at the end are the \emph{leaves}. In ProSiT, a routing leaf stores a
+probability. A time leaf stores a distribution. ProSiT fits a fixed value and a
+normal, exponential, lognormal, gamma and uniform distribution to the values in
+the leaf and keeps the one closest to the data in Wasserstein distance. Values
+drawn from it are limited to the smallest and largest observed value
+\cite{Vinci2026prosit}.
 
 \paragraph{Model selection}
 A tree is not always better than one distribution for all cases. ProSiT
@@ -843,155 +874,290 @@ distribution $F$,
 \end{equation}
 where $X$ and $X'$ are independent draws from $F$ \cite{Gneiting2007CRPS}. The
 first term rewards distributions close to the observation, and the second term
-rewards spread where the data are spread. A lower score is better. Version 1.0.3
-used the Wasserstein distance between training and test values inside each leaf.
-That criterion measures only how stable a leaf is, so it almost always chose a
-single distribution. In practice, version 1.0.4 keeps a tree wherever splitting
-the cases predicts the values better than one distribution for all of them.
-Version 1.0.3 used one distribution almost everywhere, so that waiting and
-execution times could not depend on the load or the attributes of a case. This
-thesis uses version 1.0.4 (Section~\ref{sec:sim_settings}).
+rewards spread where the data are spread. A lower score is better, because it
+means that the predicted distribution lies closer to the values that were held
+out in the cross-validation. ProSiT keeps the variant with the lowest score. This
+is either a tree, whose leaves then give different distributions for different
+cases, or a single distribution for all cases. Version 1.0.3 used the
+Wasserstein distance between training and test values inside each leaf. That
+criterion measures only how stable a leaf is, so it almost always chose a single
+distribution, and waiting and execution times could not depend on the load or
+the attributes of a case. Version 1.0.4 keeps a tree wherever splitting the cases
+predicts the values better than one distribution for all of them. This thesis
+uses version 1.0.4 (Section~\ref{sec:sim_settings}).
 
 \paragraph{Example}
 Figure~\ref{fig:bg_prosit_arrival_tree} shows the arrival tree that ProSiT
-learned from the training data of this thesis. It is read from the top. If the
-previous truck arrived on a weekday between 5 and 21~h, the gap to the next
-truck is drawn from a normal distribution, and the drawn gaps average 0.65
-minutes, about 90 trucks per hour. At night, the mean gap is about two minutes.
-On Saturday after 10~h, it is 7.7 minutes. The tree has depth three, so it cannot
-separate the morning ramp-up, the daytime plateau and the evening. The leaf from
-5 to 21~h pools them. Whether this is good enough is tested in the validation of
-the simulation model (Section~\ref{sec:exp_e4_runs}).
+learned from the training log of this thesis (Section~\ref{sec:exp_baseline}).
+The tree predicts the gap until the next truck arrives, in open minutes of the
+arrival calendar, from the hour and the weekday of the previous arrival. It is
+read from the top. The simulator follows the conditions to one leaf and draws the
+gap from the distribution of that leaf. If the previous truck arrived on a
+weekday between 5 and 21~h, the gap is drawn from a normal distribution, and the
+drawn gaps average 0.65 minutes, about 90 trucks per hour. At night, the gaps
+average about two minutes. On Saturday after 10~h, they average 7.7 minutes.
+Sunday is closed in the arrival calendar, so no gaps are drawn there. This tree
+has a depth of three, so it cannot separate the morning ramp-up, the daytime
+plateau and the evening. The leaf from 5 to 21~h pools them. Whether a tree of
+this depth represents the observed arrivals well enough is tested in the
+validation of the simulation model (Section~\ref{sec:exp_e4_runs}).
 
 \input{figures/schemas/prosit_arrival_tree}
 
 \subsection{Execution of a Simulated Case}
 \label{sec:prosit_execution}
 
-The simulator processes all cases together and always continues with the case
-whose next step is enabled earliest. A case runs as follows.
+Many cases are in the process at the same time and compete for the same
+resources. The simulator therefore does not run one case from start to end and
+then the next. It keeps all open cases in one list, ordered by the time at which
+their next step can happen. It always takes the case at the top of this list,
+decides this one step, and puts the case back into the list. In this way, the
+steps of all cases are interleaved in the order of time, as in the real process.
+For a single case, the steps are the following.
 \begin{enumerate}[itemsep=2pt,topsep=4pt]
 \item \textbf{Arrival.} The start time is the start of the previous case plus a
 gap drawn from the arrival tree, counted in open minutes of the arrival
 calendar.
-\item \textbf{Attributes.} The case receives its attributes, in empirical mode
-as one complete set of attributes of a randomly drawn training case.
-\item \textbf{Enabled transitions.} The token sits in the source place. A
-transition is enabled if all its input places hold a token. Its enabling time
-is the latest time stamp of these tokens.
-\item \textbf{Routing.} Each enabled transition gets the probability from its
-routing tree, given the case attributes and the activities so far. The
-simulator draws one transition in proportion to these weights. Silent
-transitions are drawn in the same way and take no time.
+\item \textbf{Attributes.} The case receives its attributes, drawn as set by a
+hyperparameter (Section~\ref{sec:prosit_hyperparameters}).
+\item \textbf{Enabled transitions.} The token of the new case lies in the source
+place. A transition is enabled if all its input places hold a token. Every token
+carries a time stamp, and the enabling time of a transition is the latest time
+stamp of its input tokens.
+\item \textbf{Routing.} Each enabled transition gets its probability from its
+routing tree, given the case attributes and the activities so far. The simulator
+draws one transition at random in proportion to these weights, and this
+transition fires. It does not always take the transition with the highest
+probability, so a step with a low probability is also taken from time to time.
+Silent transitions are drawn in the same way. They have no resource and no
+duration, so their output tokens carry the same time stamp as their input
+tokens.
 \item \textbf{Resource.} For a visible transition, the candidate resources are
-those that executed this activity in the log. Of these, the ones with free
-capacity at the enabling time are kept, and one is drawn from the resource
-trees. If none is free, the resource that becomes free first is taken and the
-start moves to that moment.
-\item \textbf{Times.} A waiting time is drawn from the tree of the resource
-(zero for the first activity of a case). The start is the enabling time plus
-the waiting time. The complete time is the start plus an execution time drawn
-from the tree of the activity. Both are counted in open minutes of the
-resource calendar.
-\item \textbf{Token update.} The tokens move to the output places and carry the
-complete time. Steps 3 to 7 repeat until the final marking is reached.
+those that performed this activity in the training log. Of these, the ones with
+free capacity at the enabling time are kept. Each of them receives a probability
+from its resource-choice tree, and one resource is drawn in proportion to these
+probabilities. If no candidate is free, the simulator takes the resource whose
+last scheduled activity ends first. The activity cannot start before that moment,
+so the case waits for the busy resource.
+\item \textbf{Times.} A waiting time is drawn from the waiting-time tree of the
+chosen resource. Its leaves hold time distributions, and its splits use the
+activity, the hour, the weekday, the case attributes, the activities so far and,
+if switched on, the workload features of the resource. The first activity of a
+case gets no waiting time, because the arrival tree already sets its start. The
+start of the activity is the enabling time, or the moment the busy resource
+becomes free, plus the waiting time. The complete time is the start plus an
+execution time drawn from the execution-time tree of the activity. Both times are
+counted in open minutes of the resource calendar.
+\item \textbf{Token update.} The fired transition puts tokens into its output
+places, and these tokens carry its complete time. The output places are the input
+places of the next possible activities, so their enabling time is this complete
+time. Steps 3 to 7 repeat until the case reaches the final marking.
 \end{enumerate}
-The generated log contains, for each event, the case, activity, resource,
-enabling, start and complete time and the case attributes. The firing sequence
-of each case is stored as well.
+Every executed activity is written to the simulated event log with its case,
+activity, resource, enabling, start and complete time and the case attributes.
+In addition, the simulator stores the firing sequence of each case. This is the
+ordered list of all transitions the case fired, including the silent ones, and it
+shows the path that the case took through the net, which the event log alone
+does not show.
+
+The next activity of a case is enabled as soon as the previous one is complete.
+ProSiT has no separate time for moving between two activities. In a physical
+process such as a truck visit, the driving to the next resource lies between the
+end of one activity and the start of the next. In the training data, this time
+is therefore part of the waiting time that the tree learns
+(Section~\ref{sec:timestamp_semantics}). Two things keep the activities of a
+simulated case from following each other immediately. The first is the drawn
+waiting time, which includes the driving. The second is the capacity check, when
+the chosen resource is busy.
 
 \subsection{Hyperparameters}
 \label{sec:prosit_hyperparameters}
-ProSiT offers a few hyperparameters that steer the discovery. They set the
-largest tree depth and the leaf sizes tried in cross-validation, whether
-workload features and multitasking are used, and whether case attributes are
-drawn as complete observed sets or one by one. Their defaults, the values used in
-this thesis and the reasons are listed in Table~\ref{tab:sim_hyperparameters}
-(Section~\ref{sec:sim_settings}).
+ProSiT offers a few hyperparameters that steer the discovery. They decide how
+complex the trees may become, which information the trees may use, how many
+activities a resource may handle at once and how the attributes of a new case are
+drawn. The values used in this thesis and the reasons for them are given in
+Section~\ref{sec:sim_settings}.
 
-\subsection{Evidence and Limitations}
+\paragraph{Tree depth and leaf size}
+The hyperparameter \texttt{max\_depth\_tree} sets the largest depth that a tree
+may reach. The depth is the number of splits on the way from the top of the tree
+to a leaf. A deeper tree can separate more situations, for example the morning
+ramp-up from the daytime plateau in Figure~\ref{fig:bg_prosit_arrival_tree}. Each
+leaf then holds fewer training cases, and its distribution follows these few
+cases more closely. A tree that is too shallow \emph{underfits}, because it pools
+situations that behave differently. A tree that is too deep \emph{overfits},
+because its leaves describe the particular training cases rather than the process.
+The hyperparameter \texttt{min\_samples\_leaf\_cv} lists the smallest numbers of
+training cases that a leaf may hold, by default 50, 100 and 200. A larger minimum
+gives fewer and more stable leaves. In the cross-validation described above,
+ProSiT tries every depth from one to \texttt{max\_depth\_tree} with every leaf
+size of this list, compares them with a single distribution and keeps the variant
+with the lowest score. The largest depth is therefore only an upper bound. The
+depth of each tree, and whether a tree is used at all, is chosen from the data.
+The default largest depth is five.
+
+\paragraph{Case attributes}
+The hyperparameter \texttt{attribute\_mode} decides how a new case receives its
+attributes. In the \emph{empirical} mode, the simulator draws one training case at
+random and copies all of its attributes. The attributes of a simulated case
+therefore always form a combination that was observed, for example a number of
+deliveries and receives that fits the flow type of the visit. In the
+\emph{distribution} mode, which is the default, each attribute is drawn on its
+own. A categorical attribute is drawn from its observed frequencies and a numeric
+attribute from a fitted distribution. Combinations that never occur in the data
+can then arise, such as a delivery visit with two receives.
+
+\paragraph{Workload features}
+The hyperparameter \texttt{use\_workload\_features}, off by default, adds two
+features that describe a resource at the enabling time of an activity. The
+\emph{workload} is the number of activities that the resource is executing at that
+moment. The \emph{queue length} is the number of activities that are enabled, are
+waiting for this resource and have not started yet. Both features enter the trees
+for the resource choice and for the waiting time, so that these can depend on how
+busy a resource is. During the discovery, both are computed from the replayed log.
+During the simulation, the simulator computes them from its own state.
+
+\paragraph{Multitasking}
+By default, every resource handles one activity at a time. If the hyperparameter
+\texttt{enable\_multitasking} is switched on, ProSiT checks for every resource in
+how many of its activities another activity of the same resource was already
+running at the enabling time. If this share reaches a threshold, by default 5\,\%,
+the resource receives a capacity equal to the largest observed number of
+activities running at once plus one.
+
+\paragraph{Calendars and random numbers}
+Further hyperparameters set how many arrivals or activities a weekday and hour
+need to count as open in the arrival calendar and in the resource calendars. The
+random state fixes the random numbers of the discovery, so that the same inputs
+give the same model.
+
+\subsection{Properties and Limitations}
 \label{sec:prosit_limits}
 
 The ProSiT paper evaluates the framework on five case studies with a temporal
-80/20 split and five simulated logs per model. ProSiT reaches an accuracy
-comparable to a black-box baseline while its rules stay readable
-\cite{Vinci2026prosit}. The authors also stress a boundary. The trees capture
-associations in the training data, not causes. A readable rule shows which
-association the simulator uses. Whether it holds after an intervention needs
-other evidence.
+80/20 split and five simulated logs per model \cite{Vinci2026prosit}. Its
+simulated logs are closer to the real logs than those of Simod, another simulator
+with readable models, and about as close as those of two state-of-the-art
+simulators based on deep learning, whose learned weights cannot be read or edited.
+ProSiT reaches this while every rule stays readable. The authors also stress a
+boundary. The trees capture associations in the training data, not causes. A
+readable rule shows which association the simulator uses. Whether it holds after
+an intervention needs other evidence.
 
 For this thesis, seven properties of the implementation of version 1.0.4 matter
 \cite{ProSiTRepository}.
 \begin{enumerate}[itemsep=2pt,topsep=4pt]
-\item \textbf{No hard rules.} A transition can fire whenever its input places
-hold tokens and its weight is above zero. ProSiT has no guards. A rule that
-the net does not encode, such as ``at least one stop'' or ``as many stops as
-planned'', is followed only as often as the routing trees happen to respect it.
-\item \textbf{No look-ahead.} Each routing draw is local. A sequence of likely
-steps can lead to a visit that never occurs in the data.
-\item \textbf{Parallel branches run in parallel.} A silent parallel split
-enables several stops at the same time, and the simulator can start them at
-the same time.
-\item \textbf{Capacity at enabling time.} The capacity of a resource is checked
-when the transition is enabled, not over the interval in which the activity
-actually runs.
-\item \textbf{Load enters through few features.} Workload features act on the
-resource choice and the waiting time only. Execution times do not react to the
-load of the terminal.
-\item \textbf{The queue feature counts the activity itself.} In training, the
-queue length of a resource counts the activities that are enabled and not yet
-started. An activity that waited is therefore counted in the queue of the
-resource that performed it, but not in the queues of the other candidates. In
-the simulation the activity is not yet in any queue when the resource is
-chosen.
-\item \textbf{Waiting is measured against one server.} The waiting time is
-measured from the moment the resource was last completely free, that is, from
-the latest end of all its activities in progress at the enabling time. For a
-resource that serves several cases side by side, a lane may already be free much
-earlier.
+\item \textbf{No guards on data.} A transition can fire whenever its input places
+hold tokens and its weight is above zero. ProSiT does not support guards, that
+is, conditions on the case data that a transition must satisfy. A domain rule
+such as ``at least one stop'' or ``as many stops as planned'' is therefore
+followed only as often as the routing trees happen to respect it, unless the
+Petri net itself encodes the rule.
+\item \textbf{No look-ahead.} Each routing draw is local and random
+(Section~\ref{sec:prosit_execution}). Steps with a low probability are also
+taken, and a sequence of steps that are each plausible on their own can lead to a
+visit that never occurs in reality.
+\item \textbf{Parallel branches run in parallel.} If the net contains a silent
+parallel split, this split enables several activities at the same time, and the
+simulator can start them at the same time.
+\item \textbf{Capacity is checked at the enabling time.} Whether a candidate
+resource has free capacity is checked at the enabling time of the activity, before
+its waiting time is drawn. The check counts the activities running at that
+moment. The activity itself starts only after its waiting time, and by then other
+activities may have started at the same resource. More activities than the
+capacity allows can then run at once.
+\item \textbf{The load does not affect the execution time.} The workload features
+are used only by the trees for the resource choice and the waiting time. The
+execution-time trees do not receive them, so the duration of an activity does not
+react to how many other activities run at its resource.
+\item \textbf{The queue counts differently in discovery and simulation.} During
+the discovery, the queue length of a resource at a moment counts every activity
+of this resource that is enabled at that moment but has not started yet. The
+activity for which the feature is computed is enabled at exactly this moment. If
+it then waited, it is counted in the queue of the resource that performed it,
+but not in the queues of the other candidate resources. During the simulation, the
+queue length counts the activities already scheduled to start later at the
+resource. The activity whose resource is being chosen has no start yet, so it
+never counts itself. The same situation therefore shows one activity more in the
+queue during the discovery than during the simulation.
+\item \textbf{Waiting is measured from a completely free resource.} The waiting
+time that ProSiT learns starts at the moment the resource was last completely
+free. If other activities run at the resource at the enabling time, this is the
+end of the last of them. For a resource with a capacity of one, this is the moment
+at which it can take the next case. A resource with several places, such as a
+block with three handover lanes, may have a free place much earlier. A truck that
+starts at such a free lane while other trucks are still served then gets a
+learned waiting time of zero, even if it drove and waited before. The busier the
+block, the more often this happens, so the learned waiting becomes shorter
+exactly when the real delay grows.
 \end{enumerate}
 The first three properties make the control-flow model more important for a
-simulator than for a descriptive model. The rule check of the discovered nets
-and the first simulation of the selected net address them
-(Sections~\ref{sec:exp_rules} and~\ref{sec:exp_baseline}). Properties four to
-seven concern the physical constraints of the blocks. They are examined in the
-validation of the simulation model (Section~\ref{sec:exp_mechanisms}).
+simulator than for a descriptive model. A descriptive model only has to allow the
+observed sequences. A ProSiT simulator also generates every sequence that the net
+allows and the routing trees do not exclude, because no other rule stops it, and
+it generates such a sequence as often as the local draws lead to it. The effect of
+these properties in a setting with physical constraints and domain rules is
+examined in the rule audit of the discovered nets and in the first simulation run
+of the selected net (Sections~\ref{sec:exp_rules} and~\ref{sec:exp_baseline}).
+Properties four to seven concern the physical constraints of the blocks. They are
+examined in the validation of the simulation model
+(Section~\ref{sec:exp_mechanisms}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Research Gap and Positioning}
 \label{sec:rw_positioning}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The reviewed research leaves three gaps for a terminal like CTB. First, discovered models are usually selected by fitness
-and precision \cite{Buijs2014Quality,DiscoveryBenchmark}. These measures do not
-show what a simulator does with behaviour that the model permits but the log
-never shows, and physical rules are not part of the discovered model. Second,
-data-aware simulation discovery has been evaluated mainly on administrative and
-healthcare processes. Its behaviour in a physical logistics system with shared
-capacity and congestion is largely untested. The assumptions that decide it,
-namely how queues, capacity and load enter the learned models, are exactly those
-that process mining supports least. Third, validation of discovered simulation
-models focuses on similarity to a historical log. Whether the model responds to
-load like the real system, which is needed before a what-if analysis, is rarely
-tested, and the judgement of domain experts is rarely documented.
+The reviewed research leaves three gaps for a case study at a container terminal
+like CTB. First, discovered models are usually selected by fitness and precision
+\cite{Buijs2014Quality,DiscoveryBenchmark}. These measures do not show what a
+simulator does with behaviour that the model permits but the log never shows, and
+physical rules are not part of the discovered model. Second, data-aware simulation
+discovery has been evaluated mainly on administrative and healthcare processes.
+Its behaviour in a physical logistics system with shared capacity and congestion
+is largely untested. In logistics, process mining has so far been applied mostly
+in single case studies, and accurate event data are hard to obtain from
+fragmented or manually maintained systems \cite{Murazzano2026HealthcareLogistics}.
+The assumptions that decide the behaviour of such a simulation, namely how
+queues, capacity and load enter the learned models, are the ones for which
+process mining support is only now being developed. Sulis et al.\ find little
+support for the modelling of queues and resources and name the behaviour of
+resources as a growing topic \cite{Sulis2026SimulationReview}. ProSiT, with its
+workload features and learned capacities, is one attempt to address it.
+Third, the validation of discovered simulation models focuses on the similarity
+to a historical log. Whether the model responds to load like the real system,
+which is needed before a what-if analysis, is rarely tested, and the judgement of
+domain experts is rarely documented.
 
-Queue mining \cite{Senderovich2015QueueMining}, data-driven simulation in
-manufacturing \cite{LugaresiMatta2021} and the validation literature
-\cite{Sargent2013Validation} motivate a combination of learned behaviour,
-explicit domain assumptions and simulation validation. The CTB case examines
-whether this combination provides a model suitable for assessing a proposed
-change in block allocation. The comparison of discovered nets establishes a
-justified model for the case. The performance evaluation determines how well it
-represents the quantities relevant to the decision. The scenario analysis is
+The work on queue mining \cite{Senderovich2015QueueMining}, on the data-driven
+simulation of manufacturing systems \cite{LugaresiMatta2021} and on the
+validation of simulation models \cite{Sargent2013Validation} points to the same
+combination. The behaviour of the process is learned from the data, the physical
+assumptions are stated explicitly, and the simulation is validated before it is
+used for a decision. This thesis examines whether such a combination yields a
+model that can assess a change in the block allocation of truck deliveries at a
+container terminal, namely an allocation that takes into account how many trucks
+are already heading to a block. The comparison of discovered nets under domain
+rules fixed in advance establishes a justified control-flow model for the case.
+The performance evaluation determines how well the simulation model, that is, the
+discovered net together with the learned simulation parameters, represents the
+behaviour and the quantities relevant to the decision. The scenario analysis is
 then interpreted within those limits.
 
-The case provides access to operational records and a concrete decision
-context. It also has limitations. The log does not directly expose every
-resource state, domain assumptions require scrutiny, and the data contain no
-implementation of the proposed intervention. The study therefore contributes
-evidence about this application of ProSiT. Mechanisms identified here are
-candidates for investigation in other settings, rather than demonstrated
-requirements for all capacity-limited processes.
+The case study is based on the complete operational records of two months and on
+a concrete decision context, a turnaround corridor set by the terminal and a
+block allocation that the terminal can change. It also has limitations. The
+records come from several systems, some of which are maintained by hand, and the
+manual equipment of two handling areas is not recorded at all. Some resource
+states, such as the handover lane a truck uses, are not recorded either. During
+the observed period, several blocks were out of use, which changed the behaviour
+of trucks across the whole terminal, as can happen in any study of a running
+system. Finally, the data contain no implementation of the proposed change in
+block allocation. The study therefore contributes evidence on how a data-aware
+simulation discovered with ProSiT behaves in one physically constrained setting.
+The mechanisms and behavioural patterns identified here are candidates for
+investigation in other settings, not demonstrated requirements for all
+capacity-limited processes.
 
 This thesis addresses these gaps in a case study of truck operations at HHLA
 Container Terminal Burchardkai. It does not propose a new discovery algorithm or

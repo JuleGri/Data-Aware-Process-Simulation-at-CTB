@@ -1,99 +1,101 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Results}{61}{chapter.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Results}{69}{chapter.6}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{chp:results}{{6}{61}{Results}{chapter.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Discovery and Checks (E1)}{61}{section.6.1}\protected@file@percent }
-\newlabel{sec:res_discovery}{{6.1}{61}{Discovery and Checks (E1)}{section.6.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{Level 1: quality of the nets.}{61}{table.caption.29}\protected@file@percent }
-\newlabel{sec:res_e1_level1}{{6.1}{61}{Level 1: quality of the nets}{table.caption.29}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces E1 in two levels for the sound nets, training log (59,139 visits, 82 sequences). Level 1: share of fitting visits and escaping-edges precision (ProM 6.15, Section~\ref {sec:exp_discovery_eval}); Gen.: new test sequences accepted, of 16. Level 2: training sequences the net rejects, above the coverage threshold (of 17) and below it (of 65), and the share of the truck-minutes (sum of the turnaround times), of the visits above the training P90 of 64 minutes and of the multi-block visits that the rejected visits make up. Coverage check: accepts every sequence above the coverage threshold. \textsuperscript  {a}\,ETConformance rejects 30 fitting visits of IM 0.0 (Section~\ref {sec:res_e1_level1}). The prefix tree is a reference, not a candidate.}}{62}{table.caption.29}\protected@file@percent }
-\newlabel{tab:rq1_e1_levels}{{6.1}{62}{E1 in two levels for the sound nets, training log (59,139 visits, 82 sequences). Level 1: share of fitting visits and escaping-edges precision (ProM 6.15, Section~\ref {sec:exp_discovery_eval}); Gen.: new test sequences accepted, of 16. Level 2: training sequences the net rejects, above the coverage threshold (of 17) and below it (of 65), and the share of the truck-minutes (sum of the turnaround times), of the visits above the training P90 of 64 minutes and of the multi-block visits that the rejected visits make up. Coverage check: accepts every sequence above the coverage threshold. \textsuperscript {a}\,ETConformance rejects 30 fitting visits of IM 0.0 (Section~\ref {sec:res_e1_level1}). The prefix tree is a reference, not a candidate}{table.caption.29}{}}
-\@writefile{toc}{\contentsline {paragraph}{Level 2: fitness for simulation.}{62}{figure.caption.30}\protected@file@percent }
-\newlabel{sec:res_e1_level2}{{6.1}{62}{Level 2: fitness for simulation}{figure.caption.30}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Share of fitting visits and precision of the discovered nets on the training log (ProM 6.15). Left: all nets. Right: the nets with more than 91\,\% fitting visits and a precision above 0.7. Hollow markers: unsound nets, values for diagnosis only. The prefix tree accepts exactly the training sequences and serves as a reference.}}{63}{figure.caption.30}\protected@file@percent }
-\newlabel{fig:res_e1_tradeoff_train}{{6.1}{63}{Share of fitting visits and precision of the discovered nets on the training log (ProM 6.15). Left: all nets. Right: the nets with more than 91\,\% fitting visits and a precision above 0.7. Hollow markers: unsound nets, values for diagnosis only. The prefix tree accepts exactly the training sequences and serves as a reference}{figure.caption.30}{}}
-\@writefile{toc}{\contentsline {paragraph}{Checks.}{63}{figure.caption.31}\protected@file@percent }
-\newlabel{sec:res_e1_gates}{{6.1}{63}{Checks}{figure.caption.31}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Which training sequences each sound candidate accepts. Top: share of the training visits per sequence (logarithmic scale), from the most to the least frequent sequence. Middle: number of stops of each sequence. Bottom: one row per net; a coloured cell means that the net accepts the complete sequence. The six most frequent sequences cover 88.5\,\% of the visits, so a net that accepts few sequences can still fit most visits.}}{64}{figure.caption.31}\protected@file@percent }
-\newlabel{fig:res_e1_variant_coverage}{{6.2}{64}{Which training sequences each sound candidate accepts. Top: share of the training visits per sequence (logarithmic scale), from the most to the least frequent sequence. Middle: number of stops of each sequence. Bottom: one row per net; a coloured cell means that the net accepts the complete sequence. The six most frequent sequences cover 88.5\,\% of the visits, so a net that accepts few sequences can still fit most visits}{figure.caption.31}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Rule Audit (E2)}{64}{section.6.2}\protected@file@percent }
-\newlabel{sec:res_rules}{{6.2}{64}{Rule Audit (E2)}{section.6.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.3}Simulation of the Selected Net (E3)}{65}{section.6.3}\protected@file@percent }
-\newlabel{sec:res_baseline}{{6.3}{65}{Simulation of the Selected Net (E3)}{section.6.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{The selected net.}{65}{table.caption.32}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Guard off and simple guard.}{65}{table.caption.32}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Nets that failed a check.}{65}{table.caption.32}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces E3, simulated visits against the training log, means over five seeds. Overlap: share of multi-stop visits with overlapping stops. Two RMG blocks: share of the visits with an RMG stop that use two blocks. Unseen: generated visits whose sequence does not occur in training. Guard, per run: draws whose weights the guard changed; draws in which every permitted step had a learned weight of zero, so that the guard chose among the permitted steps; draws it could not decide.}}{66}{table.caption.32}\protected@file@percent }
-\newlabel{tab:rq1_e3_main}{{6.2}{66}{E3, simulated visits against the training log, means over five seeds. Overlap: share of multi-stop visits with overlapping stops. Two RMG blocks: share of the visits with an RMG stop that use two blocks. Unseen: generated visits whose sequence does not occur in training. Guard, per run: draws whose weights the guard changed; draws in which every permitted step had a learned weight of zero, so that the guard chose among the permitted steps; draws it could not decide}{table.caption.32}{}}
-\@writefile{toc}{\contentsline {paragraph}{Turnaround time.}{66}{table.caption.32}\protected@file@percent }
+\newlabel{chp:results}{{6}{69}{Results}{chapter.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Discovery and Checks (E1)}{69}{section.6.1}\protected@file@percent }
+\newlabel{sec:res_discovery}{{6.1}{69}{Discovery and Checks (E1)}{section.6.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Level 1, quality of the nets.}{69}{table.caption.31}\protected@file@percent }
+\newlabel{sec:res_e1_level1}{{6.1}{69}{Level 1, quality of the nets}{table.caption.31}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces Two levels of E1 for the sound nets on the training log.}}{70}{table.caption.31}\protected@file@percent }
+\newlabel{tab:rq1_e1_levels}{{6.1}{70}{Two levels of E1 for the sound nets on the training log}{table.caption.31}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Fitting visits and precision of the discovered nets on the training log, all nets (left) and the most precise and fitting ones (right).}}{71}{figure.caption.32}\protected@file@percent }
+\newlabel{fig:res_e1_tradeoff_train}{{6.1}{71}{Fitting visits and precision of the discovered nets on the training log, all nets (left) and the most precise and fitting ones (right)}{figure.caption.32}{}}
+\@writefile{toc}{\contentsline {paragraph}{Level 2, fitness for simulation.}{71}{figure.caption.32}\protected@file@percent }
+\newlabel{sec:res_e1_level2}{{6.1}{71}{Level 2, fitness for simulation}{figure.caption.32}{}}
+\@writefile{toc}{\contentsline {paragraph}{Checks.}{71}{figure.caption.33}\protected@file@percent }
+\newlabel{sec:res_e1_gates}{{6.1}{71}{Checks}{figure.caption.33}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Training sequences accepted by each sound candidate.}}{72}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:res_e1_variant_coverage}{{6.2}{72}{Training sequences accepted by each sound candidate}{figure.caption.33}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Rule Audit (E2)}{72}{section.6.2}\protected@file@percent }
+\newlabel{sec:res_rules}{{6.2}{72}{Rule Audit (E2)}{section.6.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Simulation of the Selected Net (E3)}{73}{section.6.3}\protected@file@percent }
+\newlabel{sec:res_baseline}{{6.3}{73}{Simulation of the Selected Net (E3)}{section.6.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{The selected net.}{73}{table.caption.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Guard off and simple guard.}{73}{table.caption.34}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces Simulated visits of E3 against the training log.}}{74}{table.caption.34}\protected@file@percent }
+\newlabel{tab:rq1_e3_main}{{6.2}{74}{Simulated visits of E3 against the training log}{table.caption.34}{}}
+\@writefile{toc}{\contentsline {paragraph}{Nets that failed a check.}{74}{table.caption.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Turnaround time.}{74}{table.caption.34}\protected@file@percent }
 \citation{Aalst2016}
-\@writefile{toc}{\contentsline {section}{\numberline {6.4}Answer to RQ1}{67}{section.6.4}\protected@file@percent }
-\newlabel{sec:res_rq1}{{6.4}{67}{Answer to RQ1}{section.6.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{Discovery and rule treatment.}{67}{section.6.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Do conformance metrics anticipate the simulation?}{67}{section.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.4}Answer to RQ1}{75}{section.6.4}\protected@file@percent }
+\newlabel{sec:res_rq1}{{6.4}{75}{Answer to RQ1}{section.6.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Discovery and rule treatment.}{75}{section.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Do conformance metrics anticipate the simulation?}{75}{section.6.4}\protected@file@percent }
 \citation{ProSiTRepository}
-\@writefile{toc}{\contentsline {section}{\numberline {6.5}Mechanism Audit and Simulation Validity (E4)}{68}{section.6.5}\protected@file@percent }
-\newlabel{sec:res_mechanisms}{{6.5}{68}{Mechanism Audit and Simulation Validity (E4)}{section.6.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.1}Verification}{68}{subsection.6.5.1}\protected@file@percent }
-\newlabel{sec:res_e4_verification}{{6.5.1}{68}{Verification}{subsection.6.5.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.2}Conceptual Validity: What the Components Learned}{68}{subsection.6.5.2}\protected@file@percent }
-\newlabel{sec:res_inspection}{{6.5.2}{68}{Conceptual Validity: What the Components Learned}{subsection.6.5.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{Block choice.}{69}{subsection.6.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Waiting time.}{69}{subsection.6.5.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces ProSiT's waiting-time target at the RMG blocks against the observed delay, by the number of other stops in progress at the block when the stop is enabled (training log). The target is measured from the moment the block was last completely free, as if a block had one server.}}{69}{figure.caption.33}\protected@file@percent }
-\newlabel{fig:rq2_waiting_target}{{6.3}{69}{ProSiT's waiting-time target at the RMG blocks against the observed delay, by the number of other stops in progress at the block when the stop is enabled (training log). The target is measured from the moment the block was last completely free, as if a block had one server}{figure.caption.33}{}}
-\@writefile{toc}{\contentsline {paragraph}{Execution time and capacity.}{69}{figure.caption.33}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Enabling times in loops.}{70}{figure.caption.33}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.3}Operational Validity Along the Path of the Truck}{70}{subsection.6.5.3}\protected@file@percent }
-\newlabel{sec:res_e4_chain}{{6.5.3}{70}{Operational Validity Along the Path of the Truck}{subsection.6.5.3}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.3}{\ignorespaces Error attribution along the path of the truck (E4a--E4d), against the test log, means over five seeds. From b3x on, the observed demand and the observed blocks are used, so that only the queue and the service vary. The rows in italics are differences between real periods. Med., P90: median and P90 of the TTT; CTD: cycle-time distance; Appr., Stops: mean approach and stop time per visit (all in minutes). Top bl.: share of the RMG stops at the busiest block in \%. Max: largest number of trucks at one block at once in any seed. Spear.: Spearman correlation of hourly arrivals and hourly median TTT. G-appr., G-stop, G-WIP: profile gaps for the approach by trucks at the block, the RMG stop duration by other trucks at the block and the TTT by trucks in the terminal (minutes).}}{70}{table.caption.34}\protected@file@percent }
-\newlabel{tab:rq2_chain}{{6.3}{70}{Error attribution along the path of the truck (E4a--E4d), against the test log, means over five seeds. From b3x on, the observed demand and the observed blocks are used, so that only the queue and the service vary. The rows in italics are differences between real periods. Med., P90: median and P90 of the TTT; CTD: cycle-time distance; Appr., Stops: mean approach and stop time per visit (all in minutes). Top bl.: share of the RMG stops at the busiest block in \%. Max: largest number of trucks at one block at once in any seed. Spear.: Spearman correlation of hourly arrivals and hourly median TTT. G-appr., G-stop, G-WIP: profile gaps for the approach by trucks at the block, the RMG stop duration by other trucks at the block and the TTT by trucks in the terminal (minutes)}{table.caption.34}{}}
-\@writefile{toc}{\contentsline {paragraph}{Demand (E4a).}{71}{table.caption.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Block allocation (E4b).}{71}{table.caption.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Queue at the block (E4c).}{71}{table.caption.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Service under load (E4d).}{71}{table.caption.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.4}Choice and Necessity of the Changes}{72}{subsection.6.5.4}\protected@file@percent }
-\newlabel{sec:res_e4_selection}{{6.5.4}{72}{Choice and Necessity of the Changes}{subsection.6.5.4}{}}
-\newlabel{sec:res_e4_loo}{{6.5.4}{72}{Choice and Necessity of the Changes}{subsection.6.5.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.5}Mechanism Audit and Simulation Validity (E4)}{76}{section.6.5}\protected@file@percent }
+\newlabel{sec:res_mechanisms}{{6.5}{76}{Mechanism Audit and Simulation Validity (E4)}{section.6.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.1}Verification}{76}{subsection.6.5.1}\protected@file@percent }
+\newlabel{sec:res_e4_verification}{{6.5.1}{76}{Verification}{subsection.6.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.2}Conceptual Validity of the Learned Parameters}{76}{subsection.6.5.2}\protected@file@percent }
+\newlabel{sec:res_inspection}{{6.5.2}{76}{Conceptual Validity of the Learned Parameters}{subsection.6.5.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Block choice.}{77}{subsection.6.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Waiting time.}{77}{subsection.6.5.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Waiting-time target of ProSiT and observed delay at the RMG blocks, by the number of other stops in progress (training log).}}{77}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:rq2_waiting_target}{{6.3}{77}{Waiting-time target of ProSiT and observed delay at the RMG blocks, by the number of other stops in progress (training log)}{figure.caption.35}{}}
+\@writefile{toc}{\contentsline {paragraph}{Execution time and capacity.}{77}{figure.caption.35}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Enabling times in loops.}{78}{figure.caption.35}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.3}Operational Validity Along the Path of the Truck}{78}{subsection.6.5.3}\protected@file@percent }
+\newlabel{sec:res_e4_chain}{{6.5.3}{78}{Operational Validity Along the Path of the Truck}{subsection.6.5.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Demand (E4a).}{78}{table.caption.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Block allocation (E4b).}{78}{table.caption.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Queue at the block (E4c).}{78}{table.caption.36}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.3}{\ignorespaces Error attribution along the path of the truck (E4a to E4d) against the test log.}}{79}{table.caption.36}\protected@file@percent }
+\newlabel{tab:rq2_chain}{{6.3}{79}{Error attribution along the path of the truck (E4a to E4d) against the test log}{table.caption.36}{}}
+\@writefile{toc}{\contentsline {paragraph}{Service under load (E4d).}{79}{table.caption.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.4}Choice and Necessity of the Changes}{80}{subsection.6.5.4}\protected@file@percent }
+\newlabel{sec:res_e4_selection}{{6.5.4}{80}{Choice and Necessity of the Changes}{subsection.6.5.4}{}}
+\newlabel{sec:res_e4_loo}{{6.5.4}{80}{Choice and Necessity of the Changes}{subsection.6.5.4}{}}
 \citation{Oezdemir2025RethinkingBPS}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.5}Does the Net Matter Under the Final Configuration?}{73}{subsection.6.5.5}\protected@file@percent }
-\newlabel{sec:res_e4_nets}{{6.5.5}{73}{Does the Net Matter Under the Final Configuration?}{subsection.6.5.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.6}Where the Remaining Error Lies}{73}{subsection.6.5.6}\protected@file@percent }
-\newlabel{sec:res_e4_remaining}{{6.5.6}{73}{Where the Remaining Error Lies}{subsection.6.5.6}{}}
-\newlabel{sec:res_e4_glance}{{6.5.6}{73}{Where the Remaining Error Lies}{subsection.6.5.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces Median turnaround time per Gate-In hour over the test period, observed and simulated with the same trucks (final configuration, seed 42).}}{73}{figure.caption.35}\protected@file@percent }
-\newlabel{fig:sim_hourly_ttt}{{6.4}{73}{Median turnaround time per Gate-In hour over the test period, observed and simulated with the same trucks (final configuration, seed 42)}{figure.caption.35}{}}
-\@writefile{toc}{\contentsline {paragraph}{In-sample and out-of-sample.}{73}{figure.caption.36}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces Load profiles, observed and simulated, in the test period (solid) and the training period (dotted); medians, means over five seeds. With three lanes, the states ``4+ trucks at the block'' and ``3+ other trucks'' cannot occur in the simulation.}}{74}{figure.caption.36}\protected@file@percent }
-\newlabel{fig:sim_load_profiles}{{6.5}{74}{Load profiles, observed and simulated, in the test period (solid) and the training period (dotted); medians, means over five seeds. With three lanes, the states ``4+ trucks at the block'' and ``3+ other trucks'' cannot occur in the simulation}{figure.caption.36}{}}
-\@writefile{toc}{\contentsline {paragraph}{The model error.}{74}{figure.caption.36}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.7}Acceptance for the Intended Use}{75}{subsection.6.5.7}\protected@file@percent }
-\newlabel{sec:res_e4_acceptance}{{6.5.7}{75}{Acceptance for the Intended Use}{subsection.6.5.7}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.4}{\ignorespaces Acceptance criteria of Section~\ref {sec:exp_e4_runs} for the final configuration. Thresholds from the differences between real periods: Spearman of the weakest test week; profile gaps (approach / stop duration / TTT by trucks in the terminal, minutes) of the largest difference between weeks; CTD within the differences between weeks (3.1 minutes) or between periods (5.5 minutes).}}{75}{table.caption.37}\protected@file@percent }
-\newlabel{tab:rq2_acceptance}{{6.4}{75}{Acceptance criteria of Section~\ref {sec:exp_e4_runs} for the final configuration. Thresholds from the differences between real periods: Spearman of the weakest test week; profile gaps (approach / stop duration / TTT by trucks in the terminal, minutes) of the largest difference between weeks; CTD within the differences between weeks (3.1 minutes) or between periods (5.5 minutes)}{table.caption.37}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.6}Answer to RQ2}{76}{section.6.6}\protected@file@percent }
-\newlabel{sec:res_rq2}{{6.6}{76}{Answer to RQ2}{section.6.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{To what extent.}{76}{section.6.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Which components.}{76}{section.6.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6.7}Improvement Measure: Load-Aware Block Allocation (E5)}{77}{section.6.7}\protected@file@percent }
-\newlabel{sec:res_policy}{{6.7}{77}{Improvement Measure: Load-Aware Block Allocation (E5)}{section.6.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.1}Effect on the Hourly Corridor}{77}{subsection.6.7.1}\protected@file@percent }
-\newlabel{sec:res_s1_kpi}{{6.7.1}{77}{Effect on the Hourly Corridor}{subsection.6.7.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.5}{\ignorespaces Effect of S1 on the hourly corridor. An hour counts with the mean turnaround time of the trucks that leave through Gate Out in it, that is, of all visits completed in that hour. Only hours with at least 20 trucks are counted. Simulated values are means over ten seeds with 95\,\% $t$-intervals. Changes are paired differences against the baseline of the same seed. The robustness runs (a) to (d) have their own baselines.}}{78}{table.caption.38}\protected@file@percent }
-\newlabel{tab:rq3_corridor_hourly}{{6.5}{78}{Effect of S1 on the hourly corridor. An hour counts with the mean turnaround time of the trucks that leave through Gate Out in it, that is, of all visits completed in that hour. Only hours with at least 20 trucks are counted. Simulated values are means over ten seeds with 95\,\% $t$-intervals. Changes are paired differences against the baseline of the same seed. The robustness runs (a) to (d) have their own baselines}{table.caption.38}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.2}Mechanism and Distribution of Effects}{78}{subsection.6.7.2}\protected@file@percent }
-\newlabel{sec:res_s1_mechanism}{{6.7.2}{78}{Mechanism and Distribution of Effects}{subsection.6.7.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.3}Sensitivity}{79}{subsection.6.7.3}\protected@file@percent }
-\newlabel{sec:res_s1_sensitivity}{{6.7.3}{79}{Sensitivity}{subsection.6.7.3}{}}
-\newlabel{sec:res_s1_conclusion}{{6.7.3}{80}{Sensitivity}{subsection.6.7.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.8}Answer to RQ3}{80}{section.6.8}\protected@file@percent }
-\newlabel{sec:res_rq3}{{6.8}{80}{Answer to RQ3}{section.6.8}{}}
-\@writefile{toc}{\contentsline {paragraph}{To what extent.}{80}{section.6.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{What it indicates.}{80}{section.6.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.5}Does the Net Matter Under the Final Configuration?}{81}{subsection.6.5.5}\protected@file@percent }
+\newlabel{sec:res_e4_nets}{{6.5.5}{81}{Does the Net Matter Under the Final Configuration?}{subsection.6.5.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.6}Where the Remaining Error Lies}{81}{subsection.6.5.6}\protected@file@percent }
+\newlabel{sec:res_e4_remaining}{{6.5.6}{81}{Where the Remaining Error Lies}{subsection.6.5.6}{}}
+\newlabel{sec:res_e4_glance}{{6.5.6}{81}{Where the Remaining Error Lies}{subsection.6.5.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces Median turnaround time per Gate-In hour in the test period, observed and simulated (seed 42).}}{81}{figure.caption.37}\protected@file@percent }
+\newlabel{fig:sim_hourly_ttt}{{6.4}{81}{Median turnaround time per Gate-In hour in the test period, observed and simulated (seed 42)}{figure.caption.37}{}}
+\@writefile{toc}{\contentsline {paragraph}{In-sample and out-of-sample.}{81}{figure.caption.38}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces Load profiles in the test period (solid) and the training period (dotted), observed and simulated.}}{82}{figure.caption.38}\protected@file@percent }
+\newlabel{fig:sim_load_profiles}{{6.5}{82}{Load profiles in the test period (solid) and the training period (dotted), observed and simulated}{figure.caption.38}{}}
+\@writefile{toc}{\contentsline {paragraph}{The model error.}{82}{figure.caption.38}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.7}Acceptance for the Intended Use}{83}{subsection.6.5.7}\protected@file@percent }
+\newlabel{sec:res_e4_acceptance}{{6.5.7}{83}{Acceptance for the Intended Use}{subsection.6.5.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.4}{\ignorespaces Acceptance criteria for the final configuration.}}{83}{table.caption.39}\protected@file@percent }
+\newlabel{tab:rq2_acceptance}{{6.4}{83}{Acceptance criteria for the final configuration}{table.caption.39}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.6}Answer to RQ2}{84}{section.6.6}\protected@file@percent }
+\newlabel{sec:res_rq2}{{6.6}{84}{Answer to RQ2}{section.6.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{To what extent.}{84}{section.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Which components.}{84}{section.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.7}Load-Aware Block Allocation (E5)}{85}{section.6.7}\protected@file@percent }
+\newlabel{sec:res_policy}{{6.7}{85}{Load-Aware Block Allocation (E5)}{section.6.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.1}Effect on the Hourly Corridor}{85}{subsection.6.7.1}\protected@file@percent }
+\newlabel{sec:res_s1_kpi}{{6.7.1}{85}{Effect on the Hourly Corridor}{subsection.6.7.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.5}{\ignorespaces Effect of S1 on the hourly corridor, by eligible blocks and demand.}}{86}{table.caption.40}\protected@file@percent }
+\newlabel{tab:rq3_grid_kpi}{{6.5}{86}{Effect of S1 on the hourly corridor, by eligible blocks and demand}{table.caption.40}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.2}Mechanism and Distribution of Effects}{87}{subsection.6.7.2}\protected@file@percent }
+\newlabel{sec:res_s1_mechanism}{{6.7.2}{87}{Mechanism and Distribution of Effects}{subsection.6.7.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.6}{\ignorespaces Mechanism of S1 and change of the turnaround time by group of visits.}}{87}{table.caption.41}\protected@file@percent }
+\newlabel{tab:rq3_grid_mechanism}{{6.6}{87}{Mechanism of S1 and change of the turnaround time by group of visits}{table.caption.41}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.3}Robustness and Design Checks}{88}{subsection.6.7.3}\protected@file@percent }
+\newlabel{sec:res_s1_sensitivity}{{6.7.3}{88}{Robustness and Design Checks}{subsection.6.7.3}{}}
+\newlabel{sec:res_s1_conclusion}{{6.7.3}{88}{Robustness and Design Checks}{subsection.6.7.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.8}Answer to RQ3}{89}{section.6.8}\protected@file@percent }
+\newlabel{sec:res_rq3}{{6.8}{89}{Answer to RQ3}{section.6.8}{}}
+\@writefile{toc}{\contentsline {paragraph}{To what extent.}{89}{section.6.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{What it indicates.}{89}{section.6.8}\protected@file@percent }
 \@setckpt{chapters/7.results}{
-\setcounter{page}{82}
+\setcounter{page}{91}
 \setcounter{equation}{0}
 \setcounter{enumi}{3}
 \setcounter{enumii}{0}
@@ -109,12 +111,12 @@
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
 \setcounter{figure}{5}
-\setcounter{table}{5}
+\setcounter{table}{6}
 \setcounter{section@level}{0}
 \setcounter{Item}{39}
 \setcounter{Hfootnote}{1}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{51}
+\setcounter{bookmark@seq@number}{52}
 \setcounter{DefaultLines}{2}
 \setcounter{DefaultDepth}{0}
 \setcounter{L@lines}{0}

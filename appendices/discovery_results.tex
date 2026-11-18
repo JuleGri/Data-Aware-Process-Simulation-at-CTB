@@ -16,17 +16,13 @@ Table~\ref{tab:exp_grid} lists the discovery configurations of E1
 \textbf{Family} & \textbf{ProM plugin (package)} & \textbf{Settings} & \textbf{Nets} \\
 \midrule
 Inductive Miner & Mine Petri net with Inductive Miner (InductiveMinerDeprecated 6.10.72), variant IMf & noise threshold 0.0, 0.1, 0.2, 0.3, 0.4 & 5 \\
-Heuristics & Interactive Data-aware Heuristic Miner (DataAwareCNetMiner 6.9.193); dependency heuristic: Flexible Heuristics Miner; bindings heuristic: nearest activity (FHM) & frequency 0.0 with dependency 0.7, 0.8, 0.9 and 1.0; frequency 0.1 with dependency 0.9; bindings 0.1; ``accepted connected'' on (default); long-term dependencies and ``all tasks connected'' off; no data attributes; Petri net output & 5 \\
-ILP Miner & ILP-Based Process Discovery (HybridILPMiner 6.10.154), advanced configuration; LP solver LPSolve 5.5 & sequence encoding filter threshold 0.0, 0.25, 0.55, 0.75, 0.95, 1.0; p/t net; objective: Parikh values weighted by absolute frequencies; constraints: theory of regions, empty after completion, no trivial regions; sink place added; two variables per event; one place per causal relation, causal graph from the Midi miner with default settings & 6 \\
+Heuristics & Interactive Data-aware Heuristic Miner (DataAwareCNetMiner 6.9.193), dependency heuristic Flexible Heuristics Miner, bindings heuristic nearest activity (FHM) & frequency 0.0 with dependency 0.7, 0.8, 0.9 and 1.0, frequency 0.1 with dependency 0.9, bindings 0.1, ``accepted connected'' on (default), long-term dependencies and ``all tasks connected'' off, no data attributes, Petri net output & 5 \\
+ILP Miner & ILP-Based Process Discovery (HybridILPMiner 6.10.154), advanced configuration, LP solver LPSolve 5.5 & sequence encoding filter threshold 0.0, 0.25, 0.55, 0.75, 0.95, 1.0, p/t net, objective Parikh values weighted by absolute frequencies, constraints theory of regions, empty after completion and no trivial regions, sink place added, two variables per event, one place per causal relation, causal graph from the Midi miner with default settings & 6 \\
 Alpha & Alpha Miner (AlphaMiner 6.9.78) & variants Alpha, Alpha+, Alpha++ & 3 \\
 \bottomrule
 \end{tabularx}
-\caption{Discovery configurations of E1, all run in ProM Lite 1.4 on the
-training log (59,139 visits). The iDHM frequency threshold is relative to the
-number of visits: at 0.1, only directly-follows relations that occur in at least
-a tenth of the visits are used. Because no data attributes were selected, iDHM discovers no
-conditional dependencies, and the conditional heuristic (C4.5 with F1
-score, condition threshold 0.5) has no effect.}
+\par\smallskip{\footnotesize\raggedright All configurations are run on the training log (59,139 visits). The iDHM frequency threshold is relative to the number of visits. At 0.1, only directly-follows relations that occur in at least a tenth of the visits are used. Because no data attributes were selected, iDHM discovers no conditional dependencies, and the conditional heuristic (C4.5 with F1 score, condition threshold 0.5) has no effect.\par}
+\caption{Discovery configurations of E1 in ProM Lite 1.4.}
 \label{tab:exp_grid}
 \end{table}
 
@@ -38,13 +34,6 @@ Section~\ref{sec:exp_discovery_eval}. The selection used the training values
 only (Section~\ref{sec:res_discovery}).
 
 \input{tables/rq1_e1_conformance}
-
-The precision values depend on how an implementation replays silent
-transitions. Table~\ref{tab:app_precision_tools} compares the values of ProM's
-ETConformance, used in this thesis, with PM4Py's two standard functions on the
-same training log (script \texttt{pm4py\_precision\_check.py}).
-
-\input{tables/app_precision_tools}
 
 \FloatBarrier
 Table~\ref{tab:rq1_e2_audit} gives the rule audit of the three nets that pass the

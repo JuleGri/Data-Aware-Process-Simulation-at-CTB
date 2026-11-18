@@ -9,7 +9,7 @@ time \cite{Vinci2026prosit}. Logistics and transportation are rare among their
 applications, and the modelling of queues and shared resources is the task that
 process mining supports least \cite{Sulis2026SimulationReview}. This thesis examines how far the approach carries over to a
 physical logistics process, using truck handling at HHLA Container Terminal
-Burchardkai (CTB) as a case study: whether a simulation learned with ProSiT from
+Burchardkai (CTB) as a case study. Whether a simulation learned with ProSiT from
 the operational event data of the terminal can support the assessment of a
 different allocation of truck deliveries to the yard blocks.
 
@@ -27,13 +27,13 @@ ProSiT, the framework used in this thesis, combines a Petri net with learned
 probabilistic decision trees, which can be read and changed \cite{Vinci2026prosit}.
 
 A container terminal is a demanding test for such models, because its process has
-physical limits. A truck is one vehicle: its stops happen one after another, never
+physical limits. A truck is one vehicle. Its stops happen one after another, never
 at the same time, and every visit exists to move containers. A storage block has
 three handover lanes, so it can serve at most three trucks at once, and its cranes
 are shared with the waterside and the rail. These limits are not written in the
 event log, and a model learned only from the recorded sequences and durations does
 not know them. A discovered control-flow model may allow a truck to perform two
-stops at once; a learned simulator may send more trucks to a block than it can
+stops at once. A learned simulator may send more trucks to a block than it can
 serve, or let the waiting fall when a block gets busier. A simulation that
 reproduces the common sequences can therefore still fail where the physical
 limits shape the process, and these are exactly the places that a change in the
@@ -68,7 +68,7 @@ the upper bound of the corridor only, by the share of hours whose mean TTT excee
 reported, but it remains a constraint that the model cannot evaluate.
 
 The improvement measure studied is a load-aware allocation of deliveries to the
-yard blocks: a delivery whose block is full goes to a nearby block with a free
+yard blocks. A delivery whose block is full goes to a nearby block with a free
 lane. The yard position of a container is assigned when the truck arrives, so that
 the driver knows where to go. An applicable rule must therefore use information
 available at that point and respect the blocks that may take the container. Today
@@ -90,7 +90,7 @@ study, and the allocation question is the intended use against which the model i
 assessed. The limitations of the simulation are results of this assessment and
 determine the scope of the conclusions for the terminal.
 
-The thesis makes two connected contributions:
+The thesis makes two connected contributions.
 \begin{enumerate}
 \item[(C1)] \textbf{A justified simulation model for the CTB case.} The study
 compares discovered process models with conformance metrics, checks them against
@@ -105,22 +105,22 @@ system from conclusions justified for CTB (Chapters~\ref{chp:results}
 and~\ref{chp:discussion}).
 \end{enumerate}
 
-The case study builds on existing discovery and simulation methods; it does not
+The case study builds on existing discovery and simulation methods. It does not
 propose a new algorithm. Findings from this terminal can motivate further
 investigation in other processes with physical limits, but do not establish general
 limitations of all data-aware simulators.
 
 \section{Research Questions}
 
-The objective is addressed through three research questions:
+The objective is addressed through three research questions.
 \begin{enumerate}
-\item \textbf{RQ1:} Which discovery and rule treatment yields a sound,
+\item \textbf{RQ1} Which discovery and rule treatment yields a sound,
 executable control-flow model that preserves the observed truck-visit
 behaviour, and do conformance metrics anticipate its behaviour in simulation?
-\item \textbf{RQ2:} To what extent does the ProSiT simulation reproduce truck
+\item \textbf{RQ2} To what extent does the ProSiT simulation reproduce truck
 turnaround time and its response to load at the capacity-limited yard blocks,
 and which model components explain the observed discrepancies?
-\item \textbf{RQ3:} To what extent can the simulation be used to evaluate a
+\item \textbf{RQ3} To what extent can the simulation be used to evaluate a
 load-aware block allocation for deliveries under the physical limits of the
 yard blocks, and what does it indicate about the effect on truck turnaround
 time?
@@ -129,7 +129,7 @@ time?
 Experiments E1 to E3 address the selection of the control-flow model and its
 behaviour in the simulator (RQ1). E3 and E4 assess the performance of the
 simulation and investigate its discrepancies (RQ2). E5 evaluates the improvement
-measure (RQ3); its interpretation depends on the evidence from the validation.
+measure (RQ3). Its interpretation depends on the evidence from the validation.
 
 \section{Thesis Outline}
 \label{sec:thesis_outline}

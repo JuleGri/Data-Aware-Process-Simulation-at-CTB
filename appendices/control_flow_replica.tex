@@ -19,8 +19,8 @@ that no truck can perform.
 \section{The Same Language as a State Machine}
 \label{app:rewritten_repair}
 For this control, the languages of IM 0.0 and ILP 1.00 were restricted exactly to
-rules 3 and 5:
-the reachability graph of each net was combined with automata for the rules, and
+rules 3 and 5.
+The reachability graph of each net was combined with automata for the rules, and
 states with the same continuations were merged. Each of the three admissible nets
 was then encoded without silent transitions, with one place for each state of
 the visit and one transition for each activity that can happen in that state. The
@@ -35,7 +35,7 @@ TVD 0.015 to the training log for all three), although their precision ranged
 from 0.825 to 0.998 (Table~\ref{tab:app_rewritten_matrix}). The behaviour that
 precision counts against a net was hardly generated, because the routing is
 learned from the observed visits. The exception is the unrepaired language of
-ILP 1.00: as a state machine, it has a single state for all stops, from which every stop
+ILP 1.00. As a state machine, it has a single state for all stops, from which every stop
 and Gate Out can follow (precision 0.773). It combines the stops wrongly
 (sequence TVD 0.077, 0.36\,\% unseen sequences, against 0.015 and 0.01 to
 0.05\,\%).
@@ -43,7 +43,7 @@ and Gate Out can follow (precision 0.773). It combines the stops wrongly
 \input{tables/app_rewritten_matrix}
 
 \paragraph{The simple guard and silent decisions.} On the discovered HM 0.7, the
-simple guard, which masks only the visible stops and Gate Out, changed no draw: the
+simple guard, which masks only the visible stops and Gate Out, changed no draw. The
 decisions are taken by silent transitions, and when a stop or Gate Out becomes
 enabled it is often the only step left (449 overrides per run). On the state
 machine it changes 3,206 draws per run, but still has to give up 117 times, in
@@ -68,7 +68,7 @@ Petri nets \cite{burke2020stochasticPD,mannhardt2023stochasticProcessesModelling
 The weights are the probability that a transition fires when it is enabled,
 estimated by counting on the aligned training log. Every training visit is
 simulated with its own case attributes, with three seeds. The replica reproduces ProSiT
-on the discovered IM 0.0: 15.7\,\% of its visits have no stop, against 15.1\,\% in
+on the discovered IM 0.0, where 15.7\,\% of its visits have no stop, against 15.1\,\% in
 ProSiT. Table~\ref{tab:app_control_flow_replica} gives the results.
 
 \input{tables/app_control_flow_replica}
@@ -83,7 +83,7 @@ changes nothing.
 
 \paragraph{Silent transitions alone are not the cause.} The discovered HM 0.7 has
 34 silent transitions but no parallel branches, and it generates the same visits
-as its state machine. The silent steps only make the simple guard leak: on the
+as its state machine. The silent steps only make the simple guard leak. On the
 discovered HM 0.7 it has to fall back 1.7 times per 1,000 visits.
 
 \paragraph{A guard has to act where the decision is taken.} On the discovered

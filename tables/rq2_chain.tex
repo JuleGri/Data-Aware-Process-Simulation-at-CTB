@@ -7,8 +7,8 @@
 \textbf{Configuration} & \textbf{Med.} & \textbf{P90} & \textbf{CTD} & \textbf{Appr.} & \textbf{Stops} & \textbf{Top bl.} & \textbf{Max} & \textbf{Spear.} & \textbf{G-appr.} & \textbf{G-stop} & \textbf{G-WIP} \\
 \midrule
 Observed (test log) & 33 & 75 & 0.0 & 12.7 & 14.4 & 6.3 & 4 & 0.55 & 0.0 & 0.0 & 0.0 \\
-\textit{Real: week 2 vs.\ week 1} & 32 & 72 & 3.1 & 13.0 & 14.7 & 6.7 & 4 & 0.54 & 2.0 & 0.5 & 5.8 \\
-\textit{Real: training vs.\ test period} & 29 & 64 & 5.5 & 11.0 & 12.1 & 6.1 & 4 & 0.49 & 1.2 & 1.0 & 2.0 \\
+\textit{Real, week 2 vs.\ week 1} & 32 & 72 & 3.1 & 13.0 & 14.7 & 6.7 & 4 & 0.54 & 2.0 & 0.5 & 5.8 \\
+\textit{Real, training vs.\ test period} & 29 & 64 & 5.5 & 11.0 & 12.1 & 6.1 & 4 & 0.49 & 1.2 & 1.0 & 2.0 \\
 \midrule
 \multicolumn{12}{l}{\textit{E4a Demand}} \\
 a0 E3 baseline & 57 & 137 & 27.8 & 42.1 & 11.7 & 54.4 & 23 & -0.30 & 23.0 & 5.5 & 26.8 \\
@@ -36,6 +36,7 @@ d4x = c4x + load-dependent service & 28 & 58 & 8.0 & 10.8 & 11.0 & 6.0 & 4 & 0.4
 d5x = c5x + load-dependent service & 28 & 57 & 8.1 & 10.7 & 10.9 & 6.0 & 9 & 0.44 & 3.4 & 2.6 & 6.8 \\
 \bottomrule
 \end{tabular}
-\caption{Error attribution along the path of the truck (E4a--E4d), against the test log, means over five seeds. From b3x on, the observed demand and the observed blocks are used, so that only the queue and the service vary. The rows in italics are differences between real periods. Med., P90: median and P90 of the TTT; CTD: cycle-time distance; Appr., Stops: mean approach and stop time per visit (all in minutes). Top bl.: share of the RMG stops at the busiest block in \%. Max: largest number of trucks at one block at once in any seed. Spear.: Spearman correlation of hourly arrivals and hourly median TTT. G-appr., G-stop, G-WIP: profile gaps for the approach by trucks at the block, the RMG stop duration by other trucks at the block and the TTT by trucks in the terminal (minutes).}
+\par\smallskip{\footnotesize\raggedright Means over five seeds. From b3x on, the observed demand and the observed blocks are used, so that only the queue and the service vary. The rows in italics are differences between real periods. Med.\ and P90 are the median and P90 of the TTT, CTD is the cycle-time distance, Appr.\ and Stops are the mean approach and stop time per visit, all in minutes. Top bl.\ is the share of the RMG stops at the busiest block in \%. Max is the largest number of trucks at one block at once in any seed. Spear.\ is the Spearman correlation of hourly arrivals and hourly median TTT. G-appr., G-stop and G-WIP are the profile gaps in minutes for the approach by trucks at the block, the RMG stop duration by other trucks at the block and the TTT by trucks in the terminal.\par}
+\caption{Error attribution along the path of the truck (E4a to E4d) against the test log.}
 \label{tab:rq2_chain}
 \end{table}
