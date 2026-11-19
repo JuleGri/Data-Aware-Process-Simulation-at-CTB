@@ -40,3 +40,44 @@ Table~\ref{tab:rq1_e2_audit} gives the rule audit of the three nets that pass th
 soundness and the coverage criterion (Section~\ref{sec:res_rules}).
 
 \input{tables/rq1_e2_audit}
+
+\FloatBarrier
+\section{Control-Flow Representation}
+\label{app:replica}
+\label{app:rewritten}
+\label{app:rewritten_repair}
+\label{app:replica_token_game}
+% Former Appendix C (appendices/control_flow_replica.tex, no longer included), condensed on 19 Nov 2026.
+% Sources: simulation_e3/runs/split13apr_20261106/{main,noguard,guard_orig,samelang}, runs/hm07_raw_20261111;
+%   replica: process_discovery/ablation_silent_guard.py --reference train -> analysis/ablation_silent_guard_20261113.
+
+Two controls examine how the representation of the control flow affects the
+simulated visits. In the first, the languages of the three admissible nets were
+encoded as state machines without silent transitions, with one place for each state
+of the visit, after the languages of IM 0.0 and ILP 1.00 had been restricted to rules
+3 and 5. Simulated with the settings of E3, the three state machines generate the
+same distribution of sequences (sequence TVD 0.015 to the training log for all
+three), although their precision ranges from 0.825 to 0.998. Behaviour that precision
+counts against a net is hardly generated, because the routing is learned from the
+observed visits. For HM 0.7, the state machine generates the same visits as the
+discovered net. For IM 0.0, the representation decides. With the simple guard, its
+discovered net generates 15.1\,\% visits without a stop and overlapping stops in
+22.7\,\% of the multi-stop visits, while the state machine of the same language
+generates none.
+
+In the second control, ProSiT's routing was rebuilt as a token game without time
+and resources, in which an enabled transition is drawn with a probability
+proportional to its weight, as in stochastic labelled Petri nets
+\cite{burke2020stochasticPD,mannhardt2023stochasticProcessesModelling}. The weights
+were estimated by counting on the aligned training log. The replica reproduces
+ProSiT on the discovered IM 0.0 (15.7 against 15.1\,\% visits without a stop).
+Adding the marking to the state of the weights removes every visit without a stop
+and lowers the sequence TVD from 0.232 to 0.004. Each skip of a parallel branch is
+thus learned on its own, without knowing whether another branch has already produced
+a stop. In a state machine, and in a net without parallel branches such as HM 0.7,
+every decision depends on the state anyway, so silent transitions alone are not the
+cause. For a net with parallel branches, a guard on the number of stops gives every
+truck its planned stops but does not repair how the stops are combined (sequence TVD
+0.167, against 0.006 for the state machine). The counting estimator of the replica
+is more flexible than ProSiT's trees, so the replica shows what the representation
+allows, not what ProSiT learns.

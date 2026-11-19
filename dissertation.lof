@@ -32,14 +32,13 @@
 \contentsline {figure}{\numberline {A.6}{\ignorespaces Turnaround time per visit and the corridor (supplementary to the hourly KPI).}}{123}{figure.caption.55}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {C.1}{\ignorespaces Turnaround time, observed and simulated with the final configuration (five seeds pooled).}}{134}{figure.caption.63}%
+\contentsline {figure}{\numberline {C.2}{\ignorespaces Parts of the turnaround time, observed and simulated (means).}}{135}{figure.caption.64}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {D.1}{\ignorespaces Turnaround time, observed and simulated with the final configuration (five seeds pooled).}}{137}{figure.caption.65}%
-\contentsline {figure}{\numberline {D.2}{\ignorespaces Parts of the turnaround time, observed and simulated (means).}}{138}{figure.caption.66}%
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {E.1}{\ignorespaces Arrival tree with the training values (bars) and the fitted distribution (line) of each leaf.}}{142}{figure.caption.70}%
-\contentsline {figure}{\numberline {E.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{142}{figure.caption.71}%
-\contentsline {figure}{\numberline {E.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{151}{figure.caption.73}%
-\contentsline {figure}{\numberline {E.4}{\ignorespaces ILP 1.00 as discovered (15 places, 11 visible and 2 silent transitions).}}{152}{figure.caption.74}%
-\contentsline {figure}{\numberline {E.5}{\ignorespaces IMf 0.3 as discovered (11 places, 11 visible and 7 silent transitions).}}{152}{figure.caption.75}%
-\contentsline {figure}{\numberline {E.6}{\ignorespaces HM 0.8 as discovered (22 places, 11 visible and 31 silent transitions).}}{153}{figure.caption.76}%
+\contentsline {figure}{\numberline {D.1}{\ignorespaces Arrival tree with the training values (bars) and the fitted distribution (line) of each leaf.}}{139}{figure.caption.68}%
+\contentsline {figure}{\numberline {D.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{139}{figure.caption.69}%
+\contentsline {figure}{\numberline {D.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{148}{figure.caption.71}%
+\contentsline {figure}{\numberline {D.4}{\ignorespaces ILP 1.00 as discovered (15 places, 11 visible and 2 silent transitions).}}{149}{figure.caption.72}%
+\contentsline {figure}{\numberline {D.5}{\ignorespaces IMf 0.3 as discovered (11 places, 11 visible and 7 silent transitions).}}{149}{figure.caption.73}%
+\contentsline {figure}{\numberline {D.6}{\ignorespaces HM 0.8 as discovered (22 places, 11 visible and 31 silent transitions).}}{150}{figure.caption.74}%
 \addvspace {10\p@ }

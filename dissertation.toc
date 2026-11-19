@@ -6,9 +6,10 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Motivation}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Problem Statement}{2}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Research Objective and Contributions}{3}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Research Questions}{4}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Thesis Outline}{5}{section.1.5}%
+\contentsline {section}{\numberline {1.3}Research Objective}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Research Questions}{3}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Contributions}{4}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Thesis Outline}{5}{section.1.6}%
 \contentsline {chapter}{\numberline {2}Background and Related Work}{6}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Container Terminal Truck Operations}{6}{section.2.1}%
 \contentsline {paragraph}{The truck visit}{6}{section.2.1}%
@@ -242,41 +243,31 @@
 \contentsline {section}{\numberline {A.6}Differences between Training and Test Period}{119}{section.A.6}%
 \contentsline {section}{\numberline {A.7}Visits Longer Than 35 Minutes}{121}{section.A.7}%
 \contentsline {chapter}{\numberline {B}Discovered Nets, Conformance and Rule Audit}{124}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Control-Flow Representation}{128}{appendix.C}%
-\contentsline {section}{\numberline {C.1}The Same Language as a State Machine}{128}{section.C.1}%
-\contentsline {paragraph}{Precision and simulation.}{128}{section.C.1}%
-\contentsline {paragraph}{The simple guard and silent decisions.}{129}{table.caption.60}%
-\contentsline {paragraph}{Parallel branches.}{129}{table.caption.60}%
-\contentsline {section}{\numberline {C.2}Control-Flow Replica}{129}{section.C.2}%
-\contentsline {paragraph}{The weights do not see the marking.}{130}{table.caption.61}%
-\contentsline {paragraph}{Silent transitions alone are not the cause.}{130}{table.caption.61}%
-\contentsline {paragraph}{A guard has to act where the decision is taken.}{131}{table.caption.61}%
-\contentsline {paragraph}{The flower needs the history in the weights.}{131}{table.caption.61}%
-\contentsline {paragraph}{Limits.}{131}{table.caption.61}%
-\contentsline {chapter}{\numberline {D}Additional Simulation Results}{132}{appendix.D}%
-\contentsline {section}{\numberline {D.1}Measures and Configurations of E4}{132}{section.D.1}%
-\contentsline {section}{\numberline {D.2}Details of the Verification Tests}{135}{section.D.2}%
-\contentsline {paragraph}{Simulator extensions.}{135}{section.D.2}%
-\contentsline {paragraph}{Retraining.}{135}{section.D.2}%
-\contentsline {paragraph}{Replayed demand.}{135}{section.D.2}%
-\contentsline {paragraph}{Domain rules.}{135}{section.D.2}%
-\contentsline {paragraph}{Count of stops in progress.}{135}{section.D.2}%
-\contentsline {paragraph}{Load feature of the execution time.}{135}{section.D.2}%
-\contentsline {section}{\numberline {D.3}Error Attribution Along the Path of the Truck}{136}{section.D.3}%
-\contentsline {paragraph}{Enabling times in loops.}{137}{table.caption.64}%
-\contentsline {section}{\numberline {D.4}The Final Configuration Against the Observed Logs}{137}{section.D.4}%
-\contentsline {section}{\numberline {D.5}Further Results of the Allocation Rule}{138}{section.D.5}%
-\contentsline {chapter}{\numberline {E}ProSiT Model Inventory}{140}{appendix.E}%
-\contentsline {section}{\numberline {E.1}Parameters of a ProSiT Model}{140}{section.E.1}%
-\contentsline {section}{\numberline {E.2}Settings, Versions and Inputs}{140}{section.E.2}%
-\contentsline {section}{\numberline {E.3}Learned Models}{141}{section.E.3}%
-\contentsline {section}{\numberline {E.4}Calendars and Capacities}{150}{section.E.4}%
-\contentsline {section}{\numberline {E.5}Discovered Models}{151}{section.E.5}%
-\contentsline {chapter}{\numberline {F}Reproduction}{154}{appendix.F}%
-\contentsline {section}{\numberline {F.1}Environments and Inputs}{154}{section.F.1}%
-\contentsline {section}{\numberline {F.2}Fitted Models and Simulation Runs}{155}{section.F.2}%
-\contentsline {section}{\numberline {F.3}Implementation of the Extensions}{155}{section.F.3}%
-\contentsline {paragraph}{Retrained predictive parameters}{155}{section.F.3}%
-\contentsline {paragraph}{Simulator}{156}{section.F.3}%
-\contentsline {section}{\numberline {F.4}Sources of the Tables and Figures}{156}{section.F.4}%
-\contentsline {chapter}{References}{157}{section*.78}%
+\contentsline {section}{\numberline {B.1}Control-Flow Representation}{127}{section.B.1}%
+\contentsline {chapter}{\numberline {C}Additional Simulation Results}{129}{appendix.C}%
+\contentsline {section}{\numberline {C.1}Measures and Configurations of E4}{129}{section.C.1}%
+\contentsline {section}{\numberline {C.2}Details of the Verification Tests}{132}{section.C.2}%
+\contentsline {paragraph}{Simulator extensions.}{132}{section.C.2}%
+\contentsline {paragraph}{Retraining.}{132}{section.C.2}%
+\contentsline {paragraph}{Replayed demand.}{132}{section.C.2}%
+\contentsline {paragraph}{Domain rules.}{132}{section.C.2}%
+\contentsline {paragraph}{Count of stops in progress.}{132}{section.C.2}%
+\contentsline {paragraph}{Load feature of the execution time.}{132}{section.C.2}%
+\contentsline {section}{\numberline {C.3}Error Attribution Along the Path of the Truck}{133}{section.C.3}%
+\contentsline {paragraph}{Enabling times in loops.}{134}{table.caption.62}%
+\contentsline {section}{\numberline {C.4}The Final Configuration Against the Observed Logs}{134}{section.C.4}%
+\contentsline {section}{\numberline {C.5}Further Results of the Allocation Rule}{135}{section.C.5}%
+\contentsline {chapter}{\numberline {D}ProSiT Model Inventory}{137}{appendix.D}%
+\contentsline {section}{\numberline {D.1}Parameters of a ProSiT Model}{137}{section.D.1}%
+\contentsline {section}{\numberline {D.2}Settings, Versions and Inputs}{137}{section.D.2}%
+\contentsline {section}{\numberline {D.3}Learned Models}{138}{section.D.3}%
+\contentsline {section}{\numberline {D.4}Calendars and Capacities}{147}{section.D.4}%
+\contentsline {section}{\numberline {D.5}Discovered Models}{148}{section.D.5}%
+\contentsline {chapter}{\numberline {E}Reproduction}{151}{appendix.E}%
+\contentsline {section}{\numberline {E.1}Environments and Inputs}{151}{section.E.1}%
+\contentsline {section}{\numberline {E.2}Fitted Models and Simulation Runs}{152}{section.E.2}%
+\contentsline {section}{\numberline {E.3}Implementation of the Extensions}{152}{section.E.3}%
+\contentsline {paragraph}{Retrained predictive parameters}{152}{section.E.3}%
+\contentsline {paragraph}{Simulator}{153}{section.E.3}%
+\contentsline {section}{\numberline {E.4}Sources of the Tables and Figures}{153}{section.E.4}%
+\contentsline {chapter}{References}{154}{section*.76}%

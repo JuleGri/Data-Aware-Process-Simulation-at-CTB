@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  19 NOV 2026 19:51
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  19 NOV 2026 22:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2736,8 +2736,7 @@ h' as default language. on input line 99.
 (chapters/5.discovery_prosit.aux) (chapters/7.results.aux)
 (chapters/8.discussion.aux) (chapters/9.conclusion.aux)
 (appendices/observed_behaviour.aux) (appendices/discovery_results.aux)
-(appendices/control_flow_replica.aux) (appendices/simulation_results.aux)
-(appendices/prosit_model_inventory.aux)
+(appendices/simulation_results.aux) (appendices/prosit_model_inventory.aux)
 (appendices/model_inspection_and_reproduction.aux))
 \openout1 = `dissertation.aux'.
 
@@ -2959,24 +2958,21 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 \openout7 = `dissertation.lof'.
 
 
-[12] (dissertation.lot
-Underfull \vbox (badness 1953) has occurred while \output is active []
-
- [13
+[12] (dissertation.lot [13
 
 
 ])
 \tf@lot=\write8
 \openout8 = `dissertation.lot'.
 
-
-[14] (frontmatter/abbr.tex [15
+ [14] (frontmatter/abbr.tex [15
 
 
 ]) [16]
 \openout2 = `chapters/1.introduction.aux'.
 
- (chapters/1.introduction.tex
+
+(chapters/1.introduction.tex
 Chapter 1.
 Package newfloat Info: Setting Plan B file extension to `lof'... on input line 
 1.
@@ -2991,12 +2987,12 @@ Underfull \vbox (badness 1264) has occurred while \output is active []
 
 ]
 [2] [3]
-Overfull \hbox (2.10376pt too wide) in paragraph at lines 118--122
-\TU/EBGaramond12-Regular.otf(2)/m/n/12 The selected model, its learned decision
- trees and parameters and the extensions are documented
+Overfull \hbox (2.94698pt too wide) in paragraph at lines 120--125
+[]\TU/EBGaramond12-Regular.otf(2)/m/n/12 A validation of the components of the 
+simulation model against the observed turnaround
  []
 
-) [4] [5]
+[4]) [5]
 \openout2 = `chapters/2.background.aux'.
 
  (chapters/2.background.tex
@@ -3465,17 +3461,19 @@ Package fontspec Info:
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
 ))
-[127]
-\openout2 = `appendices/control_flow_replica.aux'.
+[127] [128]
+\openout2 = `appendices/simulation_results.aux'.
 
- (appendices/control_flow_replica.tex
+ (appendices/simulation_results.tex
 Appendix C.
-[128
+[129
 
 
 
 
-] (tables/app_rewritten_matrix.tex
+] [130] [131] [132
+
+] (tables/rq2_chain.tex
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
@@ -3484,50 +3482,22 @@ LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/n' will be
 (Font)              scaled to size 8.0pt on input line 5.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/b/n' will be
 (Font)              scaled to size 8.0pt on input line 7.
-) [129]
-(tables/app_control_flow_replica.tex
-
-Package fontspec Info: 
-(fontspec)             EBGaramond12-Regular scale = 1.0.
-
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
-(Font)              scaled to size 8.0pt on input line 9.
-
-Overfull \hbox (23.1399pt too wide) in paragraph at lines 5--31
- [][] 
- []
-
-) [130]) [131]
-\openout2 = `appendices/simulation_results.aux'.
-
- (appendices/simulation_results.tex
-Appendix D.
-[132
-
-
-
-
-] [133] [134] [135
-
-] (tables/rq2_chain.tex
-
-Package fontspec Info: 
-(fontspec)             EBGaramond12-Regular scale = 1.0.
-
-) [136]
+(Font)              scaled to size 8.0pt on input line 10.
+) [133]
 File: figures/simulation_model/sim_ttt_distribution.png Graphic file (type bmp)
 
 <figures/simulation_model/sim_ttt_distribution.png>
 File: figures/simulation_model/sim_ttt_decomposition.png Graphic file (type bmp
 )
 <figures/simulation_model/sim_ttt_decomposition.png>
- [137]
-(tables/rq3_grid_visits.tex) (tables/rq3_robustness.tex) [138]) [139]
+ [134]
+(tables/rq3_grid_visits.tex) (tables/rq3_robustness.tex) [135]) [136]
 \openout2 = `appendices/prosit_model_inventory.aux'.
 
 
 (appendices/prosit_model_inventory.tex
-Appendix E.
+Appendix D.
 
 Overfull \hbox (31.19418pt too wide) in paragraph at lines 51--64
 \TU/SourceCodePro-Regular.ttf(0)/m/it/12 58932826…6cb94b\TU/EBGaramond12-Regula
@@ -3536,26 +3506,26 @@ r.otf(2)/m/n/12 ). The test log has 32,014 visits (13 to 30 April 2026, SHA-256
 ar.otf(2)/m/n/12 ).
  []
 
-[140
+[137
 
 
 
 
-] [141]
+] [138]
 File: figures/simulation_model/sim_tree_arrivals.pdf Graphic file (type pdf)
 <use figures/simulation_model/sim_tree_arrivals.pdf>
 File: figures/simulation_model/sim_routing_first_stop.pdf Graphic file (type pd
 f)
 <use figures/simulation_model/sim_routing_first_stop.pdf>
- (tables/app_inventory.tex [142]
+ (tables/app_inventory.tex [139]
+ignored error: Infinite glue shrinkage found in box being split [140]
+ignored error: Infinite glue shrinkage found in box being split [141]
+ignored error: Infinite glue shrinkage found in box being split [142]
 ignored error: Infinite glue shrinkage found in box being split [143]
 ignored error: Infinite glue shrinkage found in box being split [144]
 ignored error: Infinite glue shrinkage found in box being split [145]
-ignored error: Infinite glue shrinkage found in box being split [146]
-ignored error: Infinite glue shrinkage found in box being split [147]
-ignored error: Infinite glue shrinkage found in box being split [148]
-ignored error: Infinite glue shrinkage found in box being split [149])
-(tables/sim_capacities.tex) [150]
+ignored error: Infinite glue shrinkage found in box being split [146])
+(tables/sim_capacities.tex) [147]
 File: figures/discovery_prom/net_IM_0.0.png Graphic file (type bmp)
 <figures/discovery_prom/net_IM_0.0.png>
 File: figures/discovery_prom/net_ILP_1.00.png Graphic file (type bmp)
@@ -3564,16 +3534,16 @@ File: figures/discovery_prom/net_IMf_0.3.png Graphic file (type bmp)
 <figures/discovery_prom/net_IMf_0.3.png>
 File: figures/discovery_prom/net_HM_0.8.png Graphic file (type bmp)
 <figures/discovery_prom/net_HM_0.8.png>
-) [151] [152] [153]
+) [148] [149] [150]
 \openout2 = `appendices/model_inspection_and_reproduction.aux'.
 
 
 (appendices/model_inspection_and_reproduction.tex
-Appendix F.
+Appendix E.
 
 Underfull \vbox (badness 1264) has occurred while \output is active []
 
- [154
+ [151
 
 
 
@@ -3592,19 +3562,19 @@ ar.otf(2)/m/n/12 The module $[][][][][][][][][][] [] [][] [] [][][] [] [][][][]
 [][] [] [][]$ reads the source code of ProSiT’s
  []
 
-[155]) [156] (dissertation.bbl
+[152]) [153] (dissertation.bbl
 ** WARNING: IEEEtran.bst: No hyphenation pattern has been
 ** loaded for the language `English'. Using the pattern for
 ** the default language instead.
 ** WARNING: IEEEtran.bst: No hyphenation pattern has been
 ** loaded for the language `English'. Using the pattern for
 ** the default language instead.
-[157
+[154
 
 
 
 
-] [158] [159] [160] [161] [162] [163] [164]
+] [155] [156] [157] [158] [159] [160] [161]
 Underfull \hbox (badness 10000) in paragraph at lines 457--462
 []\TU/EBGaramond12-Regular.otf(2)/m/n/12 D. Chapela-Campa, I. Benchekroun, O. B
 aron, M. Dumas, D. Krass, and
@@ -3616,13 +3586,12 @@ Underfull \hbox (badness 2426) in paragraph at lines 457--462
 on model? measuring the quality of
  []
 
-[165]) [166] (dissertation.aux (chapters/1.introduction.aux)
+[162]) [163] (dissertation.aux (chapters/1.introduction.aux)
 (chapters/2.background.aux) (chapters/4.data_prep.aux)
 (chapters/6.experiments.aux) (chapters/5.discovery_prosit.aux)
 (chapters/7.results.aux) (chapters/8.discussion.aux) (chapters/9.conclusion.aux
 ) (appendices/observed_behaviour.aux) (appendices/discovery_results.aux)
-(appendices/control_flow_replica.aux) (appendices/simulation_results.aux)
-(appendices/prosit_model_inventory.aux)
+(appendices/simulation_results.aux) (appendices/prosit_model_inventory.aux)
 (appendices/model_inspection_and_reproduction.aux))
  ***********
 LaTeX2e <2025-11-01>
@@ -3633,15 +3602,15 @@ L3 programming layer <2025-12-24>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: BF0CA078786F6075ADF9FFC808437B70;16147.
+(rerunfilecheck)             Checksum: 9F4AA6B2B2CE39A6579B472436F2AB55;15769.
  ) 
 Here is how much of TeX's memory you used:
- 71883 strings out of 402986
- 1800087 string characters out of 5448710
- 2625940 words of memory out of 5000000
- 99533 multiletter control sequences out of 15000+600000
+ 71840 strings out of 402986
+ 1798311 string characters out of 5448710
+ 2624500 words of memory out of 5000000
+ 99503 multiletter control sequences out of 15000+600000
  636685 words of font info for 162 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  103i,14n,131p,1245b,2961s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on dissertation.xdv (182 pages, 3957904 bytes).
+Output written on dissertation.xdv (179 pages, 3899664 bytes).

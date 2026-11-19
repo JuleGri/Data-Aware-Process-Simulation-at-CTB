@@ -23,8 +23,6 @@ Reallocating 'name_of_file' (item size: 1) to 34 items.
 A level-1 auxiliary file: appendices/observed_behaviour.aux
 Reallocating 'name_of_file' (item size: 1) to 33 items.
 A level-1 auxiliary file: appendices/discovery_results.aux
-Reallocating 'name_of_file' (item size: 1) to 36 items.
-A level-1 auxiliary file: appendices/control_flow_replica.aux
 Reallocating 'name_of_file' (item size: 1) to 34 items.
 A level-1 auxiliary file: appendices/simulation_results.aux
 Reallocating 'name_of_file' (item size: 1) to 38 items.
@@ -49,7 +47,7 @@ Warning--missing publisher in heuristicsMiner2006
 Done.
 You've used 88 entries,
             4087 wiz_defined-function locations,
-            1441 strings with 28231 characters,
+            1440 strings with 28196 characters,
 and the built_in function-call counts, 70363 in all, are:
 = -- 5880
 > -- 1641
