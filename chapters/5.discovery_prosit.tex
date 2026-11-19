@@ -192,9 +192,16 @@ ProSiT was developed and evaluated on event logs of business processes, in which
 a resource typically handles one case at a time \cite{Vinci2026prosit}. A truck visit has physical limits that such a model does not know
 (Section~\ref{sec:bg_terminal}). A truck performs the stops of its visit one after
 another, and a block holds at most three trucks at once in its handover lanes. Five extensions add these
-limits to the simulator (Table~\ref{tab:sim_adaptations}). Each is a switch in
-ProSiT's simulator. With all switches off, it produces exactly the same log as
-ProSiT (Appendix~\ref{app:model_inspection}). E3 and E4 test whether each extension
+limits to the simulator (Table~\ref{tab:sim_adaptations}). The extensions have two
+origins. The stop guard and the capacity of three lanes add domain knowledge that was
+available before the experiments. When the capacity is checked, from when the waiting
+is measured, whether the execution time sees the load of a block and how the trucks
+at a block are counted were revealed by the validation of ProSiT's base model
+(Section~\ref{sec:res_e4_start}). The last two rows of the table concern the inputs of
+the simulator, the block of a stop and the calendars, not its mechanisms. ProSiT
+offers no option for any of these mechanisms, so each extension is designed to
+function as a switch in ProSiT's simulator (Appendix~\ref{app:implementation}). With
+all switches off, the simulator produces exactly the same log as ProSiT. E3 and E4 test whether each extension
 is needed (Chapter~\ref{chp:results}).
 
 \paragraph{The stop guard.} The discovered net allows any number of stops, because
@@ -303,8 +310,8 @@ draws every block from these shares.
 
 The model can be run in two ways. In \emph{replay mode}, it simulates the trucks of
 a recorded period. Every simulated truck arrives at the Gate-In time of one observed
-truck and has its case attributes. The simulator then generates everything else,
-namely the route, the waiting, the stops and the exit. Simulated and observed trucks can
+truck and has its case attributes. The simulator then generates the route, the
+waiting, the stops and the exit. Simulated and observed trucks can
 thus be compared one by one, and an error in the demand cannot hide an error in the
 model. This is how the model is validated on the test period. In \emph{generative
 mode}, it creates its own trucks with the arrival tree and the observed combinations

@@ -1,0 +1,24 @@
+% Behaviour of the base model, its cause and the adaptation (Section 6.2.3). Written by hand, 19 Nov 2026,
+% from Sections 6.2.1 and 6.2.2 and Table tab:sim_adaptations. No new results in this table.
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{YYY}
+\toprule
+\textbf{Behaviour of the base model} & \textbf{Cause in ProSiT 1.0.4} & \textbf{Extension} \\
+\midrule
+The simulator sees fewer trucks at a block than are there & The count assumes that activities end in the order in which they were booked & Exact count \\
+\addlinespace
+54\,\% of the RMG stops go to one block & The queue feature counts the truck itself in training & Observed block of each stop, the self-count removed in a separate run \\
+\addlinespace
+Up to 23 trucks at a block at once & The capacity is checked when a stop becomes possible & Capacity of three lanes, checked at the start of a stop \\
+\addlinespace
+The approach falls as the block gets busier & The waiting is measured from a completely free block & Waiting measured from a free lane \\
+\addlinespace
+A stop takes as long at a busy block as at an empty one & The service time has no load feature & Load in the service time \\
+\bottomrule
+\end{tabularx}
+\caption{Behaviour of the base model, its cause and the extension that addresses it.}
+\label{tab:rq2_causes}
+\end{table}

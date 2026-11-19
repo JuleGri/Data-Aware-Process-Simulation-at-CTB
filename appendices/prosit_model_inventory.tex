@@ -6,9 +6,9 @@
 %   (tables/app_inventory.tex, model_leaves.csv, model_inventory.csv); export_simulation_model.py (Chapter 5 tables);
 %   plot_control_flow.py (net figures); data/processed/CTB/split13apr_20261106/manifest.json (hashes).
 
-This appendix lists everything needed to set up the final simulation model with
-ProSiT, namely the settings and inputs, every learned model, the capacities and
-calendars and the discovered nets. Chapter~\ref{chp:process_discovery_methodology}
+This appendix lists the settings and inputs, every learned model, the capacities
+and calendars and the discovered nets, everything needed to set up the final
+simulation model with ProSiT. Chapter~\ref{chp:process_discovery_methodology}
 shows and interprets the most important trees, and Section~\ref{sec:res_inspection}
 discusses whether their features and targets are plausible for the terminal.
 
@@ -50,14 +50,14 @@ Resource calendars & table per resource & open or closed per weekday and hour & 
 
 The model is discovered with ProSiT~1.0.4 (\texttt{prosit-pm}) on PM4Py
 2.7.22.3 and Python 3.11, with the settings of
-Table~\ref{tab:sim_hyperparameters}, namely trees of depth
+Table~\ref{tab:sim_hyperparameters}. These are trees of depth
 at most three, at least 50, 100 or 200 cases per leaf chosen by five-fold
 cross-validation with the continuous ranked probability score, the
 attributes of the planned visit as case attributes, workload features and multitasking on, and random
 state 42. The inputs are the net HM 0.7 as exported from ProM with its initial and
 final marking, and the training log of 59,139 visits (2 March to 11 April 2026,
 SHA-256 \texttt{58932826\ldots 6cb94b}). The test log has 32,014 visits (13 to 30
-April 2026, SHA-256 \texttt{dee4cb78\ldots 4cda30}). The four adaptations of
+April 2026, SHA-256 \texttt{dee4cb78\ldots 4cda30}). The extensions of
 Table~\ref{tab:sim_adaptations} are switches in the simulator, and the final
 configuration sets all of them. Every configuration of E3 and E4 is run with seeds
 42 to 46, E5 with seeds 42 to 51.
@@ -66,8 +66,8 @@ configuration sets all of them. Every configuration of E3 and E4 is run with see
 \section{Learned Models}
 \label{app:prosit_trees}
 
-Table~\ref{tab:app_inventory} lists every learned model of the simulation model, namely the
-arrival tree, the routing model of every transition of HM 0.7, the waiting-time
+Table~\ref{tab:app_inventory} lists every learned model of the simulation model, from the
+arrival tree and the routing model of every transition of HM 0.7 to the waiting-time
 model of every resource (lane-free target) and the execution-time model of every
 activity (with the trucks at the block as a feature). The learned block choice is
 listed as well, although the final configuration replays the observed blocks. A

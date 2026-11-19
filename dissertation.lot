@@ -10,38 +10,39 @@
 \contentsline {table}{\numberline {4.1}{\ignorespaces Overview of the experiments.}}{41}{table.caption.22}%
 \contentsline {table}{\numberline {4.2}{\ignorespaces What the simulation model learns, what is fixed and what is taken from the log.}}{42}{table.caption.23}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Parameters of the simulation model.}}{64}{table.caption.26}%
-\contentsline {table}{\numberline {5.2}{\ignorespaces Discovery settings of the simulation model.}}{66}{table.caption.30}%
-\contentsline {table}{\numberline {5.3}{\ignorespaces Extensions of the simulation model compared with ProSiT 1.0.4.}}{69}{table.caption.31}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Parameters of the simulation model.}}{63}{table.caption.26}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Discovery settings of the simulation model.}}{65}{table.caption.30}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Extensions of the simulation model compared with ProSiT 1.0.4.}}{68}{table.caption.31}%
 \contentsline {table}{\numberline {5.4}{\ignorespaces One simulated truck in replay mode, step by step (final configuration, seed 42).}}{70}{table.caption.32}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {6.1}{\ignorespaces Two levels of E1 for the sound nets on the training log.}}{73}{table.caption.33}%
-\contentsline {table}{\numberline {6.2}{\ignorespaces Simulated visits of E3 against the training log.}}{78}{table.caption.36}%
-\contentsline {table}{\numberline {6.3}{\ignorespaces Response of the simulated visits to load, step by step.}}{83}{table.caption.38}%
-\contentsline {table}{\numberline {6.4}{\ignorespaces Acceptance criteria for the final configuration.}}{86}{table.caption.40}%
-\contentsline {table}{\numberline {6.5}{\ignorespaces Final configuration with tree depth 3 and 5.}}{89}{table.caption.43}%
-\contentsline {table}{\numberline {6.6}{\ignorespaces Effect of the allocation rule on the hourly corridor, by eligible blocks and demand.}}{93}{table.caption.44}%
-\contentsline {table}{\numberline {6.7}{\ignorespaces Mechanism of the allocation rule and change of the turnaround time by group of visits.}}{94}{table.caption.45}%
+\contentsline {table}{\numberline {6.1}{\ignorespaces Two levels of E1 for the sound nets on the training log.}}{72}{table.caption.33}%
+\contentsline {table}{\numberline {6.2}{\ignorespaces Simulated visits of E3 against the training log.}}{77}{table.caption.36}%
+\contentsline {table}{\numberline {6.3}{\ignorespaces Behaviour of the base model, its cause and the extension that addresses it.}}{83}{table.caption.38}%
+\contentsline {table}{\numberline {6.4}{\ignorespaces Response of the simulated visits to load, step by step.}}{84}{table.caption.39}%
+\contentsline {table}{\numberline {6.5}{\ignorespaces Acceptance criteria for the final configuration.}}{87}{table.caption.41}%
+\contentsline {table}{\numberline {6.6}{\ignorespaces Final configuration with tree depth 3 and 5.}}{90}{table.caption.44}%
+\contentsline {table}{\numberline {6.7}{\ignorespaces Mechanism of the allocation rule and change of the turnaround time by group of visits.}}{94}{table.caption.46}%
 \contentsline {table}{\numberline {6.8}{\ignorespaces Direct comparison of the allocation rules.}}{95}{table.caption.47}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {A.1}{\ignorespaces Operational data sources.}}{115}{table.caption.48}%
-\contentsline {table}{\numberline {A.2}{\ignorespaces Visit structure and turnaround time (TTT) of the event log.}}{120}{table.caption.53}%
-\contentsline {table}{\numberline {A.3}{\ignorespaces Visits below, in and above the corridor of 25 to 35 minutes, observed logs.}}{122}{table.caption.56}%
+\contentsline {table}{\numberline {A.1}{\ignorespaces Operational data sources.}}{110}{table.caption.48}%
+\contentsline {table}{\numberline {A.2}{\ignorespaces Visit structure and turnaround time (TTT) of the event log.}}{115}{table.caption.53}%
+\contentsline {table}{\numberline {A.3}{\ignorespaces Visits below, in and above the corridor of 25 to 35 minutes, observed logs.}}{117}{table.caption.56}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {B.1}{\ignorespaces Discovery configurations of E1 in ProM Lite 1.4.}}{125}{table.caption.57}%
-\contentsline {table}{\numberline {B.2}{\ignorespaces Conformance of all discovered nets on the training and the test log.}}{126}{table.caption.58}%
-\contentsline {table}{\numberline {B.3}{\ignorespaces Rule audit of the three admissible nets as discovered.}}{127}{table.caption.59}%
+\contentsline {table}{\numberline {B.1}{\ignorespaces Discovery configurations of E1 in ProM Lite 1.4.}}{120}{table.caption.57}%
+\contentsline {table}{\numberline {B.2}{\ignorespaces Conformance of all discovered nets on the training and the test log.}}{121}{table.caption.58}%
+\contentsline {table}{\numberline {B.3}{\ignorespaces Rule audit of the three admissible nets as discovered.}}{122}{table.caption.59}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {C.1}{\ignorespaces Measures of operational validity in E4.}}{130}{table.caption.60}%
-\contentsline {table}{\numberline {C.2}{\ignorespaces Configurations of E4.}}{131}{table.caption.61}%
-\contentsline {table}{\numberline {C.3}{\ignorespaces Error attribution along the path of the truck (E4a to E4d) against the test log.}}{133}{table.caption.62}%
-\contentsline {table}{\numberline {C.4}{\ignorespaces Effect of the allocation rule per visit, by eligible blocks and demand.}}{135}{table.caption.65}%
-\contentsline {table}{\numberline {C.5}{\ignorespaces The allocation rule with $\pm 2$ under the robustness runs.}}{136}{table.caption.66}%
+\contentsline {table}{\numberline {C.1}{\ignorespaces Measures of operational validity in E4.}}{125}{table.caption.60}%
+\contentsline {table}{\numberline {C.2}{\ignorespaces Configurations of E4.}}{126}{table.caption.61}%
+\contentsline {table}{\numberline {C.3}{\ignorespaces Error attribution along the path of the truck (E4a to E4d) against the test log.}}{128}{table.caption.62}%
+\contentsline {table}{\numberline {C.4}{\ignorespaces Effect of the allocation rule on the hourly corridor, by eligible blocks and demand.}}{131}{table.caption.65}%
+\contentsline {table}{\numberline {C.5}{\ignorespaces Effect of the allocation rule per visit, by eligible blocks and demand.}}{132}{table.caption.66}%
+\contentsline {table}{\numberline {C.6}{\ignorespaces The allocation rule with $\pm 2$ under the robustness runs.}}{132}{table.caption.67}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {D.1}{\ignorespaces Parameters of a ProSiT simulation model (version 1.0.4).}}{138}{table.caption.67}%
-\contentsline {table}{\numberline {D.2}{\ignorespaces Every learned model of the simulation model.}}{140}{table.D.2}%
-\contentsline {table}{\numberline {D.3}{\ignorespaces Capacities and calendars.}}{147}{table.caption.70}%
+\contentsline {table}{\numberline {D.1}{\ignorespaces Parameters of a ProSiT simulation model (version 1.0.4).}}{134}{table.caption.68}%
+\contentsline {table}{\numberline {D.2}{\ignorespaces Every learned model of the simulation model.}}{136}{table.D.2}%
+\contentsline {table}{\numberline {D.3}{\ignorespaces Capacities and calendars.}}{143}{table.caption.71}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {E.1}{\ignorespaces Scripts behind the tables and figures.}}{153}{table.caption.75}%
+\contentsline {table}{\numberline {E.1}{\ignorespaces Scripts behind the tables and figures.}}{150}{table.caption.76}%

@@ -3,8 +3,8 @@
 \label{app:model_inspection}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This appendix states how the results can be reproduced, namely the environments, the
-inputs, the run folders and the script behind every table and figure. Paths are
+This appendix lists the environments, the inputs, the run folders and the script
+behind every table and figure, so that the results can be reproduced. Paths are
 relative to the project repository \texttt{trucksimulation}.
 
 \section{Environments and Inputs}
@@ -37,7 +37,7 @@ retrained predictive parameters of E4 in \nolinkurl{components/components}. The 
 complete fitted state, including the training samples stored in the leaves.
 Exact numerical reproduction uses them together with the recorded environment
 and the seeds. All simulation runs of E3 to E5 and the controls are in the same
-run folder, namely \texttt{e3} (main condition and contrasts), \nolinkurl{e3_noguard} and
+run folder, with the subfolders \texttt{e3} (main condition and contrasts), \nolinkurl{e3_noguard} and
 \nolinkurl{e3_simpleguard} (guard ablation), \texttt{e4} (all configurations of E4),
 \texttt{netx} (final configuration with the contrast nets), \nolinkurl{stale_final}
 (enabling times reset), \texttt{e5} (scenario runs) and the evaluation folders
@@ -66,12 +66,20 @@ other stops in progress at the block at the start, is added. As a test, every
 parameter is also retrained on the unchanged table and compared with the fitted
 model (\nolinkurl{components/identity_check.json}).
 
-\paragraph{Simulator} The module \nolinkurl{simulation_e3/ctb_engine.py} reads the
+\paragraph{Simulator} The extensions are inserted into ProSiT's simulator at runtime,
+not written as a separate simulator or as a modified copy of the package. ProSiT
+offers no option for these mechanisms, so its simulation loop has to be changed.
+Changing it at runtime keeps the installed package unchanged and every change behind
+a switch. Each difference between two configurations can therefore be traced to one
+switch, and the run with all switches off shows that the insertion itself changes
+nothing. The price is a dependence on version 1.0.4, which is why every replacement is
+checked. The same changes could become options of ProSiT itself
+(Section~\ref{sec:future_work}). The module \nolinkurl{simulation_e3/ctb_engine.py} reads the
 source code of ProSiT's simulation loop (\texttt{SimulatorEngine.apply}) at runtime,
 inserts a few marked lines by exact text replacement and compiles the changed loop
 in ProSiT's own module. Every replacement is checked, so that another version of
-ProSiT stops with an error instead of running a different loop. Each insertion is a
-switch, namely the capacity at the start of a stop, the exact count of the stops in
+ProSiT stops with an error instead of running a different loop. There is one
+switch each for the capacity at the start of a stop, the exact count of the stops in
 progress, the load feature of the execution time, the stop guard, the replay of
 arrivals and blocks, and the allocation rule of E5. With all switches off, the loop
 generates exactly the same log as ProSiT, tested on the base model of HM 0.7 with two

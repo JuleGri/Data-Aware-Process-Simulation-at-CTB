@@ -106,7 +106,7 @@ test.
 \item \textbf{Domain knowledge.} The domain rules, the three lanes, the corridor and the
 decision point were co-designed and confirmed by the terminal, but the review came
 from the company-side co-supervisor and is not independent, and the costs of a move
-were judged by the terminal, not modelled.
+were evaluated by the terminal, not modelled.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -137,6 +137,11 @@ period, which a deeper tree on hour and weekday does not provide
 (Section~\ref{sec:res_e4_depth}), and the block of each container from the yard
 plan. The incremental discovery of ProSiT, which gives more weight to recent cases,
 could follow the drift between periods.
+\item \textbf{External disruptions.} Traffic congestion outside the terminal and
+similar events cannot be learned from normal operations. Specified with the terminal
+as scenario inputs, for example as a reduced outflow at Gate Out for a given period,
+they would allow testing how the terminal and an allocation rule perform under the
+conditions in which the corridor is exceeded most severely.
 \item \textbf{Validation under intervention.} A pilot of the local allocation rule
 at the terminal, with the committed load of the blocks available at Gate In, would
 show whether the simulated direction and mechanism hold when the allocation really

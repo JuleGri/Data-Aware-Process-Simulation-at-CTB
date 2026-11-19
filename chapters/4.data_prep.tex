@@ -54,8 +54,8 @@ schedule, and container properties through the container number.
 \paragraph{Activities and resources}
 \label{sec:activities_order}
 \label{sec:resource_identities}
-The log has eleven activities, namely Gate In, Gate Out and the nine combinations
-of the three handling areas (RMG, LL, HO2) with three kinds of stop. In a
+The log has eleven activities. Besides Gate In and Gate Out, these are the nine
+combinations of the three handling areas (RMG, LL, HO2) with three kinds of stop. In a
 \emph{delivery}, the truck brings a container. In a \emph{receive}, it collects
 one. In a \emph{mixed} stop, it does both at the same handover point and with the
 same resource. Each event names the resource that performed it. The gates are one
@@ -68,8 +68,8 @@ flow independent of the block. The simulator can then learn the choice of the
 block as a separate resource decision, and a block allocation policy, which the
 scenario of this thesis changes, stays a separate decision as well.
 
-Every event of the log has six fields, namely the case, the activity, the
-resource, the start and the complete timestamp, and the case attributes of
+Every event of the log consists of six fields. These are the case, the activity,
+the resource, the start and the complete timestamp, and the case attributes of
 Section~\ref{sec:context_enrichment}. Table~\ref{tab:eventlog_excerpt} shows one
 recorded visit, with its events in the order of their start timestamps. The truck
 delivers a container to block T12 and then receives one from block T07, so the
@@ -285,7 +285,7 @@ of a random training visit, independent of the simulated time
 (Section~\ref{sec:prosit_hyperparameters}). A recorded demand or occupancy would
 then describe another day than the simulated one, and it would not change when a
 scenario changes the load. The load that a truck meets is instead computed by
-the simulator from its own state, namely the trucks at a block and their workload
+the simulator from the trucks at a block and their workload in its own state
 (Section~\ref{sec:prosit_execution}). This is the quantity that a block allocation
 changes.
 \end{enumerate}
@@ -315,7 +315,7 @@ of the mean TTT, while the approach and the exit together account for 64\,\%. By
 design, a stop starts only when the truck is ready in the handover lane, so the
 driving and queueing before that point fall into the approach.
 
-The terminal judges the TTT per hour, by the mean TTT of the trucks that leave
+The terminal evaluates the TTT per hour, by the mean TTT of the trucks that leave
 through Gate Out in that hour, which should lie in the corridor of 25 to 35 minutes
 (Sections~\ref{sec:prob_statement} and~\ref{sec:exp_kpis}).
 Figure~\ref{fig:kpi_corridor} shows this hourly KPI. The hourly mean exceeds
