@@ -444,6 +444,19 @@ the profile gaps rises from 9.6 to 11.4 minutes. Without the load in the service
 time, the stop-duration gap rises from 1.7 to 3.0 minutes. This is the only change
 that costs level (cycle-time distance 7.3 instead of 8.0 minutes without it).
 
+ProSiT with only the correction of version 1.0.5 shows the same. In this run, the
+resource-choice and waiting-time models are retrained without the self-count, and
+everything else is as in the E3 baseline, with ProSiT's arrival tree, its block
+choice, its capacity check at enabling, its waiting target and its count. The
+concentration on one block disappears (busiest block 6\,\% of the RMG stops), and the
+median turnaround time falls from 57 to 24 minutes. The other mismatches remain. Up
+to seven trucks are at a block at once, a truck that finds three others at the block
+reaches its first stop after a median of 0 instead of 16 minutes, an RMG stop takes
+8 minutes at every load, and the turnaround time does not rise with the arrivals
+(Spearman $-0.18$, cycle-time distance 13.5 minutes). With replayed arrivals the
+picture is the same, with up to ten trucks at a block. The correction of version
+1.0.5 is therefore necessary but not sufficient.
+
 If the blocks are not taken from the log, the level stays almost the same (median
 27 minutes), but which block is busy is lost. The learned block choice of ProSiT,
 with the self-count, cannot be used with the real capacity at all. On the first
@@ -570,6 +583,58 @@ block, but underestimates how much the stops slow down at the busiest blocks and
 hours. E5 can therefore show a direction within the examined model variants, not
 the size of the effect at the terminal.
 
+\subsection{Sensitivity to the Tree Depth}
+\label{sec:res_e4_depth}
+% Sources: trucksimulation/simulation_e3/runs/depth5_20261118 (run_depth5.sh, run_depth5_gen.sh, compare_depth5.md);
+%   table: make_depth5_table.py -> tables/rq2_depth5.tex.
+
+\input{tables/rq2_depth5}
+
+With ProSiT's default largest depth of five, the cross-validation chooses deeper
+trees for most predictive parameters (Table~\ref{tab:rq2_depth5}). 52 of the 96
+trees have more than eight leaves, which a depth of three does not allow, among them
+20 of the 26 waiting-time models. The arrival tree grows from 7 to 24 leaves. The
+depth of three therefore limits the trees. In the final configuration and in E5,
+the arrivals and the blocks are replayed, so the depth acts there only through the
+routing, waiting-time and execution-time trees. The arrival tree is used only in the
+base model of E3 and in the generative run with ProSiT's arrivals.
+
+The deeper trees improve the level. The cycle-time distance falls from 8.0 to 6.8
+minutes on the test period and from 3.9 to 3.5 minutes on the training period. The
+exit after the last stop, which no configuration with depth three changes, now
+matches the observed one (12.9 against 12.4 minutes). Under heavy load, however, the
+model with depth five builds up backlogs. With 150 or more trucks in the terminal,
+the median turnaround time is 68.5 minutes against 58 observed, and at an intensity
+of 1.2 the mean rises to 78.4 minutes. The share of hours above 35 minutes is
+21.9\,\%, against 24.4\,\% with depth three and 55.8\,\% observed. A stop at a busy
+block stays as short as with depth three (11 against 14 minutes with two other
+trucks). On the training period, the sum of the profile gaps is 7.5 against 6.9
+minutes, so the rule of Section~\ref{sec:exp_e4_runs} would still choose depth
+three.
+
+The statements of E4 do not change. With depth five, the final configuration misses
+the same two thresholds of the load-response criterion (stop duration 1.7, turnaround
+time by trucks in the terminal 6.5 minutes) and passes the others, so E5 remains a
+what-if demonstration. ProSiT as fitted in E3 still sends half of the RMG stops to a
+single block (49\,\%), and its median turnaround time is 54.5 minutes. Its stop
+structure hardly changes. The sequences are as close to the training log as with
+depth three (TVD 0.013 against 0.015), visits to two RMG blocks remain rarer than
+recorded (1.3 against 2.3\,\%), and every truck performs its planned number of
+stops. The deeper routing trees follow the plan more often on their own, so the
+guard changes about 3,600 instead of 6,700 draws per run. The deeper
+arrival tree generates at most 140 instead of 120 trucks per hour, against up to 255
+observed, and still no arrival peaks. In the fully generative run, the turnaround
+time follows the arrivals more closely than with depth three (Spearman 0.23 against
+0.08), and with hour-of-week arrivals it reaches 0.51. In E5 with depth five, the
+rule lowers the share of hours above the corridor by 7.0, 8.3 and 11.9 percentage
+points for $\pm 1$, $\pm 2$ and any block, from 21.3\,\%. In all three scenarios with
+replayed demand, the visits with a moved delivery are 7.9 to 9.8 minutes shorter,
+with intervals that exclude zero, and the approach to the first RMG stop and the
+share of stops at full blocks fall. The rules for the claims therefore give the same
+direction and mechanism as with depth three. Because of the backlogs, the effect on
+the minutes above 35 per hour is not determined in any of the three scenarios, and
+the effect on the mean turnaround time only with any block ($-2.3$ minutes).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Answer to RQ2}
 \label{sec:res_rq2}
@@ -618,7 +683,9 @@ mechanism that ignores it produces either physically impossible states or no
 waiting at all. The control flow plays a smaller part once these mechanisms are
 corrected. The answer is conditional on the replayed arrivals and blocks (without
 them, the cycle-time distance is 11.2 minutes) and holds for the turnaround time
-and its parts. Other measures, such as the use of the cranes, were not examined.
+and its parts. It does not depend on the largest tree depth of three
+(Section~\ref{sec:res_e4_depth}). Other measures, such as the use of the cranes,
+were not examined.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Load-Aware Block Allocation (E5)}

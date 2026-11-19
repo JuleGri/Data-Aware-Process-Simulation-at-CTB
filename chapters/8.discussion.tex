@@ -98,8 +98,10 @@ arrivals, case attributes and blocks of the test period. Its validity is conditi
 these inputs. Without them, the error is larger (cycle-time distance 11.2 against
 8.0 minutes). For a prospective use, an arrival model with the daily peaks of the
 terminal and the block of each container from the yard plan would have to replace
-the replay. The result also rests on the four changes to ProSiT's queue and
-service (Table~\ref{tab:sim_adaptations}). Each is needed for the load response
+the replay. With ProSiT's default tree depth of five instead of three, the level
+improves, but the model builds up backlogs under heavy load, and the statements stay
+the same (Section~\ref{sec:res_e4_depth}). The result also rests on the four changes
+to ProSiT's queue and service (Table~\ref{tab:sim_adaptations}). Each is needed for the load response
 (Section~\ref{sec:res_e4_loo}). Three implementation details also bound the
 result. The block allocation is replayed only where a simulated stop has an
 observed counterpart, which is the case for 75\,\% of the RMG stops. The load feature of
@@ -198,7 +200,12 @@ ranked probability score chooses trees where a single distribution would hide th
 dependencies (Section~\ref{sec:prosit_trees}). The white-box form was a
 precondition for the mechanism audit. Every finding of E4 started from a tree
 that could be read, for example block-choice trees that send trucks to the block
-with the longer queue.
+with the longer queue. The data-aware parts of the model carry the result. The
+case attributes of the planned visit let the routing trees reproduce the stop
+structure, and 98.7\,\% of the simulated visits have their planned number of stops
+even without the guard (Section~\ref{sec:res_baseline}). The stop guard is a
+condition on the data of the case, and the features of the load at a block produce
+the response to load of normal hours.
 
 \paragraph{What does not transfer out of the box.} The findings of E4 are of four
 kinds, and they carry different weight.
@@ -210,7 +217,9 @@ count of stops in progress is too low for 14 to 15\,\% of the RMG stops. A third
 the enabling time that survives loops in training, had no measurable effect on
 the final configuration. These findings can be corrected in the code and say little about
 the method itself. Version 1.0.5 of ProSiT removes the self-count from the training
-data \cite{ProSiTRepository}.
+data \cite{ProSiTRepository}. On its own, this correction removes the concentration
+on one block but leaves the turnaround time too short and without a response to
+load (Section~\ref{sec:res_e4_loo}).
 \item \textbf{Modelling semantics.} Four findings concern what the learned
 quantities mean. Waiting is measured from the moment the block was completely
 free. Capacity is checked when a stop is enabled rather than when it runs. A stop
@@ -251,6 +260,21 @@ response to load of normal hours (Spearman 0.51 against 0.55), but not the worst
 hours. With 150 or more trucks in the terminal, the simulated median is 38 to 40
 minutes against 58 to 59.
 
+The additions are not a calibration to the observed turnaround times. Every
+predictive parameter is still learned from the training log with ProSiT's own
+functions, the final configuration is chosen on the training period by a rule
+fixed in advance, and each addition is justified by a property of the terminal and
+shown to be needed by reversing it alone (Section~\ref{sec:res_e4_loo}). The
+additions change what a capacity, a waiting time and a service time mean, not their
+values. Extending a discovered simulation model where its assumptions do not fit the
+process is common in business process simulation, for example by delays that the
+resources do not explain \cite{RWChapela2024Delays} or by learned models that are
+evaluated while the simulation runs \cite{runtimeIntegration2024}. With all additions
+switched off, the simulator reproduces ProSiT exactly, so the findings about ProSiT
+itself remain visible in E3 and in the steps of E4. The additions apply to any
+resource with several places. Only the number of three lanes is specific to the
+terminal.
+
 \paragraph{What a case-centric log cannot show.} The remaining gap points to what
 the event log does not record. The cranes of a block also serve the waterside and
 the rail. Containers are restacked. Trucks drive between areas. In the log these
@@ -260,7 +284,12 @@ object-centric event log with trucks, containers, blocks and cranes as objects
 \cite{VanDerAalst2023OCPM} and object-centric simulation models
 \cite{Knopp2023ObjectCentricSimulation} would be a next step, as would operational
 data on equipment, which Grobis and Ihlenfeldt find necessary for queues in
-production logistics \cite{Grobis2025ProductionLogistics}.
+production logistics \cite{Grobis2025ProductionLogistics}. The most direct gain
+would come from one more event per stop. If the log recorded when the crane starts
+to handle a truck, the waiting for the crane would be an ordinary waiting time at a
+resource that handles one truck after another, the case for which ProSiT's waiting
+target and its rule for a busy resource were built. The three lanes would then only
+bound how many trucks wait at the block.
 
 \paragraph{Beyond the terminal.} The findings suggest questions for other
 processes in which several cases share a capacity-limited resource. Whether

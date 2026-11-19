@@ -1,0 +1,32 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\begin{tabularx}{\textwidth}{YL{2.4cm}L{2.7cm}L{2.7cm}}
+\toprule
+\textbf{Measure} & \textbf{Observed} & \textbf{Depth 3} & \textbf{Depth 5} \\
+\midrule
+Trees with more than 8 leaves & -- & 0 of 96 & 52 of 96 \\
+\multicolumn{4}{l}{\textit{Test period}} \\
+CTD [min] & -- & 8.0 & 6.8 \\
+TTT mean / median / P90 [min] & 41.2 / 33 / 75 & 33.1 / 27.8 / 58.2 & 35.3 / 28.2 / 61.0 \\
+Exit [min] & 12.4 & 10.3 & 12.9 \\
+Median TTT, 150 or more trucks [min] & 58 & 39.8 & 68.5 \\
+Median RMG stop, 2 other trucks [min] & 14 & 11 & 11 \\
+Spearman arrivals and TTT & 0.55 & 0.51 & 0.51 \\
+Gaps approach / stop / TTT by trucks [min] & -- & 1.1 / 1.7 / 6.8 & 0.8 / 1.7 / 6.5 \\
+Hours above 35 min [\%] & 55.8 & 24.4 & 21.9 \\
+Mean TTT at intensity 1.2 [min] & -- & 44.5 & 78.4 \\
+\multicolumn{4}{l}{\textit{Training period}} \\
+CTD [min] & -- & 3.9 & 3.5 \\
+Spearman arrivals and TTT & 0.49 & 0.49 & 0.53 \\
+Sum of the profile gaps [min] & -- & 6.9 & 7.5 \\
+\multicolumn{4}{l}{\textit{Allocation rule $\pm 2$, replayed demand}} \\
+Hours above 35 min [pp] & -- & $-$10.5 [$-$14.1, $-$6.8] & $-$8.3 [$-$10.7, $-$5.8] \\
+Visits with a moved delivery [min] & -- & $-$8.4 [$-$9.0, $-$7.7] & $-$8.0 [$-$11.4, $-$4.7] \\
+Mean TTT [min] & -- & $-$1.7 [$-$2.2, $-$1.2] & $-$1.8 [$-$4.0, 0.4] \\
+\bottomrule
+\end{tabularx}
+\par\smallskip{\footnotesize\raggedright Final configuration with the largest tree depth of the thesis (3) and with the default of ProSiT (5), refitted and retrained on the training log with the same settings, five seeds (allocation rule ten paired seeds with 95\,\% $t$-intervals). A tree with more than 8 leaves needs a depth of 4 or 5. The gaps are those of the load profiles of P4, the sum is the rule for the choice of the final configuration.\par}
+\caption{Final configuration with tree depth 3 and 5.}
+\label{tab:rq2_depth5}
+\end{table}

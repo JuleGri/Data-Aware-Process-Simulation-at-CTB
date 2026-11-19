@@ -532,8 +532,13 @@ moment at which the capacity is checked, the point from which the waiting time i
 measured, and whether the execution time depends on the load
 (Table~\ref{tab:sim_adaptations}).
 \end{itemize}
-Table~\ref{tab:exp_e4_configs} in Appendix~\ref{app:sim_results} lists all
-configurations. Their design rests on the following decisions.
+Not every learned model is used in every configuration. With replayed demand, the
+arrival tree and the distribution of the case attributes are replaced by the
+observed visits, and with observed blocks, an RMG stop that has an observed
+counterpart takes its block from the log instead of from the block-choice trees.
+The routing, waiting-time and execution-time trees are used in every
+configuration. Table~\ref{tab:exp_e4_configs} in Appendix~\ref{app:sim_results}
+lists all configurations. Their design rests on the following decisions.
 
 \paragraph{One fitted model} All configurations use the same net and start from the
 same predictive parameters, fitted once on the training log. A configuration
@@ -712,7 +717,20 @@ first, because E5 depends on it and because it is stable between periods. This r
 was fixed before the training runs were evaluated. Configurations with four lanes
 or without a capacity limit exceed the physical limit and are run only as
 sensitivity analyses on the test period. After the choice, each change of the final
-configuration is reversed alone, which shows whether every change is needed.
+configuration is reversed alone, which shows whether every change is needed. A
+further run applies only the correction that version 1.0.5 of ProSiT contains, the
+queue length without the stop itself (Section~\ref{sec:prosit_limits}), and keeps
+ProSiT's simulator otherwise unchanged. It shows how far this correction goes on its
+own.
+
+\paragraph{Sensitivity to the tree depth} All configurations use ProSiT with a
+largest tree depth of three (Section~\ref{sec:sim_settings}). The final
+configuration is also run with ProSiT's default of five. For this run, the base
+model is fitted again, the predictive parameters of the extensions are retrained
+with depths from one to five, and the final configuration is run on both periods
+and at the intensities 0.8 and 1.2. The base model of E3 and the fully generative
+runs are repeated as well. The choice of the final configuration is not repeated.
+The run shows whether the statements of E4 and E5 depend on the largest tree depth.
 
 \paragraph{Acceptance criteria} The criteria for the intended use were fixed before
 the final configuration was run, with thresholds taken from the differences between
@@ -859,7 +877,9 @@ the training shares replace the replayed arrivals and the observed blocks.
 \end{enumerate}
 A further run lifts the two restrictions of the rule. The rule may then move a
 delivery whenever it becomes possible and may use every block, including the closed
-ones. This run shows how much the restrictions change the effect.
+ones. This run shows how much the restrictions change the effect. Finally, the three
+scenarios with replayed demand are repeated on the model with a largest tree depth
+of five (Section~\ref{sec:exp_e4_operational}).
 
 \paragraph{Rules for the claims}
 The following rules were fixed before the runs of E5.

@@ -20,25 +20,25 @@
 \contentsline {figure}{\numberline {6.2}{\ignorespaces Training sequences accepted by each sound candidate.}}{77}{figure.caption.35}%
 \contentsline {figure}{\numberline {6.3}{\ignorespaces Waiting-time target of ProSiT and observed delay at the RMG blocks, by the number of other stops in progress (training log).}}{83}{figure.caption.37}%
 \contentsline {figure}{\numberline {6.4}{\ignorespaces Median turnaround time per Gate-In hour in the test period, observed and simulated (seed 42).}}{87}{figure.caption.39}%
-\contentsline {figure}{\numberline {6.5}{\ignorespaces Load profiles in the test period (solid) and the training period (dotted), observed and simulated.}}{87}{figure.caption.40}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Load profiles in the test period (solid) and the training period (dotted), observed and simulated.}}{88}{figure.caption.40}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {A.1}{\ignorespaces Hourly arrivals (top) and median turnaround time per Gate-In hour (bottom), with the peak thresholds (dashed).}}{113}{figure.caption.45}%
-\contentsline {figure}{\numberline {A.2}{\ignorespaces Mean turnaround time per Gate-In hour split into its parts, training weekdays.}}{114}{figure.caption.46}%
-\contentsline {figure}{\numberline {A.3}{\ignorespaces Median and P90 of the turnaround time by trucks in the terminal at Gate In (training).}}{115}{figure.caption.47}%
-\contentsline {figure}{\numberline {A.4}{\ignorespaces Median stop interval by trucks with an open interval at the same handling unit (training).}}{115}{figure.caption.48}%
-\contentsline {figure}{\numberline {A.5}{\ignorespaces Occupancy of the RMG blocks, recorded every four hours.}}{118}{figure.caption.50}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Hourly arrivals (top) and median turnaround time per Gate-In hour (bottom), with the peak thresholds (dashed).}}{117}{figure.caption.46}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Mean turnaround time per Gate-In hour split into its parts, training weekdays.}}{118}{figure.caption.47}%
+\contentsline {figure}{\numberline {A.3}{\ignorespaces Median and P90 of the turnaround time by trucks in the terminal at Gate In (training).}}{119}{figure.caption.48}%
+\contentsline {figure}{\numberline {A.4}{\ignorespaces Median stop interval by trucks with an open interval at the same handling unit (training).}}{119}{figure.caption.49}%
+\contentsline {figure}{\numberline {A.5}{\ignorespaces Occupancy of the RMG blocks, recorded every four hours.}}{122}{figure.caption.51}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {D.1}{\ignorespaces Turnaround time, observed and simulated with the final configuration (five seeds pooled).}}{131}{figure.caption.59}%
-\contentsline {figure}{\numberline {D.2}{\ignorespaces Parts of the turnaround time, observed and simulated (means).}}{131}{figure.caption.60}%
+\contentsline {figure}{\numberline {D.1}{\ignorespaces Turnaround time, observed and simulated with the final configuration (five seeds pooled).}}{135}{figure.caption.60}%
+\contentsline {figure}{\numberline {D.2}{\ignorespaces Parts of the turnaround time, observed and simulated (means).}}{135}{figure.caption.61}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {E.1}{\ignorespaces Arrival tree with the training values (bars) and the fitted distribution (line) of each leaf.}}{135}{figure.caption.64}%
-\contentsline {figure}{\numberline {E.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{135}{figure.caption.65}%
-\contentsline {figure}{\numberline {E.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{144}{figure.caption.67}%
-\contentsline {figure}{\numberline {E.4}{\ignorespaces ILP 1.00 as discovered (15 places, 11 visible and 2 silent transitions).}}{145}{figure.caption.68}%
-\contentsline {figure}{\numberline {E.5}{\ignorespaces IMf 0.3 as discovered (11 places, 11 visible and 7 silent transitions).}}{145}{figure.caption.69}%
-\contentsline {figure}{\numberline {E.6}{\ignorespaces HM 0.8 as discovered (22 places, 11 visible and 31 silent transitions).}}{146}{figure.caption.70}%
+\contentsline {figure}{\numberline {E.1}{\ignorespaces Arrival tree with the training values (bars) and the fitted distribution (line) of each leaf.}}{139}{figure.caption.65}%
+\contentsline {figure}{\numberline {E.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{139}{figure.caption.66}%
+\contentsline {figure}{\numberline {E.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{148}{figure.caption.68}%
+\contentsline {figure}{\numberline {E.4}{\ignorespaces ILP 1.00 as discovered (15 places, 11 visible and 2 silent transitions).}}{149}{figure.caption.69}%
+\contentsline {figure}{\numberline {E.5}{\ignorespaces IMf 0.3 as discovered (11 places, 11 visible and 7 silent transitions).}}{149}{figure.caption.70}%
+\contentsline {figure}{\numberline {E.6}{\ignorespaces HM 0.8 as discovered (22 places, 11 visible and 31 silent transitions).}}{150}{figure.caption.71}%
 \addvspace {10\p@ }

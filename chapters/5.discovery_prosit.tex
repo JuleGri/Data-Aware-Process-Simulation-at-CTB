@@ -158,9 +158,12 @@ with the values of Table~\ref{tab:sim_hyperparameters}. Each value has a reason.
 whether a tree predicts better than one distribution for all cases
 (Section~\ref{sec:prosit_trees}). Trees are kept where they help, so that waiting
 and execution times can depend on the load and the attributes of a visit.
-\item \textbf{Largest tree depth three.} The default is five. Trees of depth three
-stay readable for the review with the terminal, and the cross-validation still
-chooses the depth of each tree between one and three.
+\item \textbf{Largest tree depth three.} The default is five. The documentation of
+ProSiT calls a depth of three the standard that balances expressiveness and
+overfitting \cite{ProSiTDocs}, and trees of this depth stay readable. The
+cross-validation still chooses the depth of each tree between one and three.
+Because the documentation recommends five for large logs, the final configuration
+is also run with depth five as a sensitivity analysis (Section~\ref{sec:res_e4_depth}).
 \item \textbf{Leaf sizes 50, 100 and 200.} This is the default list. Even the
 smallest leaf holds enough visits for a stable distribution.
 \item \textbf{Empirical attributes.} Every simulated truck receives a combination
@@ -254,6 +257,22 @@ length no longer counts the stop itself.
 receive one more feature, the number of other trucks at the block when the stop
 starts.
 \end{itemize}
+
+\paragraph{Definitions.} Let the stops of a block $b$ each have a start $s$ and an
+end $e$, and let $c=3$ be the number of lanes. A stop is in progress at time $q$ if
+$s<q<e$, and $W_b(q)$ is the number of stops in progress. ProSiT measures the waiting
+of a stop that becomes possible at $q$ from $\rho_b(q)$, which is $q$ if no stop is in
+progress and otherwise the latest end of the stops in progress. The extension
+measures it from $\lambda_b(q)$, which is $q$ if $W_b(q)<c$ and otherwise the
+$(W_b(q)-c+1)$-th earliest end of the stops in progress, the moment at which the
+first lane becomes free. The queue length at $q$ counts the stops of $b$ that are
+possible at or before $q$ and start after $q$, and the extension removes the stop
+itself from this count. The load feature of a stop that starts at $t$ is the number
+of other stops with $s\le t<e$, at most $c-1$. In the simulation, a stop that becomes
+possible at $q$, with a drawn waiting time $w$ and execution time $d$, starts at the
+earliest time $s^{*}\ge q+w$ at which fewer than $c$ stops of $b$ overlap any instant
+of $[s^{*},s^{*}+d)$.
+
 The changed training data are computed from the training log only, and the trees
 are learned with ProSiT's own discovery functions, hyperparameters and random
 state. The installed ProSiT package is not changed. Appendix~\ref{app:implementation}
@@ -268,11 +287,11 @@ mechanism audit (Section~\ref{sec:res_mechanisms}).
 \textbf{Part} & \textbf{ProSiT 1.0.4} & \textbf{Simulation model} & \textbf{Why} \\
 \midrule
 Number of stops & no guard & stop guard that looks ahead on the net, as many stops as planned & ProSiT has no guards, and the decisions sit on silent transitions (E3) \\
-Capacity & discovered 4--5; checked when a stop becomes possible & 3 lanes; checked over the whole stop when it starts & a block holds at most three trucks (E4) \\
+Capacity & discovered 4--5, checked when a stop becomes possible & 3 lanes, checked over the whole stop when it starts & a block holds at most three trucks (E4) \\
 Waiting time & measured from a completely free block, queue counts the stop itself & measured from a free lane, queue without the stop itself & otherwise the learned waiting falls when the block gets busier (E4) \\
 Execution time & no load feature & other trucks at the block as a feature (counted when the stop is scheduled) & stops take longer when the block is busy (E4) \\
 Counting & stops at the first finished stop in its list & every stop counted & 14--15\,\% of the counts are too low (E4) \\
-Resource choice & learned trees & observed block where available, else training shares (replay); training shares (generative) & the learned trees prefer the busiest block (E4) \\
+Resource choice & learned trees & with replay the observed block where available, else training shares, without replay training shares & the learned trees prefer the busiest block (E4) \\
 Resource calendars & discovered (122--128 of 168 hours) & full week for trucks already inside & a stop is not interrupted at the end of a shift \\
 \bottomrule
 \end{tabularx}

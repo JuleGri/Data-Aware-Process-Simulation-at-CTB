@@ -21,7 +21,7 @@ Miner net HM 0.7, used as discovered, with a stop guard in the simulator that
 looks ahead on the net. Of 19 discovered nets, it is the only sound net
 that accepts every sequence above a coverage threshold of 0.1\,\% and whose
 language respects the rules of the truck visit, and the most precise of the three
-nets that pass the coverage check (0.998). It gives up 44 rare sequences, 0.96\,\% of the truck-minutes. Conformance
+nets that meet the coverage criterion (0.998). It gives up 44 rare sequences, 0.96\,\% of the truck-minutes. Conformance
 metrics anticipate the simulation only in part. Coverage of the frequent
 behaviour and the structure of the net, parallel branches and where its decisions
 sit, decided more than precision. A net with parallel branches produced visits
@@ -65,7 +65,7 @@ validated improvement.
 \label{sec:concl_contributions}
 
 \paragraph{(C1) A justified simulation model for the CTB case.} The control-flow
-model was chosen by explicit checks on the training log, soundness, acceptance of
+model was chosen by explicit criteria on the training log, namely soundness, acceptance of
 every frequent sequence and the domain rules, and the price of the choice was
 measured. The rare sequences it gives up, the generalisation it lacks, and their
 small effect on the turnaround time. The learned trees, their parameters and the
@@ -82,67 +82,72 @@ with impossible visits can fit the level better. The scenario analysis then
 stated only what this validation supports, a hypothesis about direction and
 mechanism, not a forecast.
 
+\paragraph{(C3) Findings on data-aware simulation under physical constraints.} The
+thesis shows which parts of a data-aware simulation framework transfer to a
+logistics process with a hard physical capacity. The learning of routing, waiting
+and service from case attributes and from the load of a resource transferred. The
+resource semantics did not. ProSiT treats a resource as one that works through its
+activities one after another, and together with an inconsistency between its
+training data and its simulator, this view prevents the waiting at a block from
+growing with the load. Each mismatch was located by replacing one part of the
+simulator at a time, corrected by a switchable extension and shown to be needed by
+reversing it alone. One of them, the queue that counts the stop itself, is removed
+in the latest version of ProSiT, but this correction alone does not make the
+waiting grow with the load. The thesis also shows that conformance metrics do
+not anticipate how a discovered net behaves in a data-aware simulator, because the
+routing weights depend on the history of a case but not on the marking of the net.
+
 \section{Limitations}
 \label{sec:concl_limitations}
 
-Four limitations matter most (Chapter~\ref{chp:discussion}). First, the final
-configuration replays the observed arrivals and blocks. Without them its error is larger.
-Second, it underestimates the slowdown in the busiest hours, so the size of a
-scenario effect is not established. Third, the event log records time at the
-block, not the use of lanes and cranes, so waiting and service cannot be fully
-separated. Fourth, the domain rules, the three lanes, the corridor and the
+The limitations are of four kinds (Chapter~\ref{chp:discussion}).
+\begin{itemize}
+\item \textbf{Framework.} ProSiT's resource semantics do not fit a resource with
+several places. The simulation model corrects this with four extensions, so its
+results hold for the extended simulator and not for ProSiT as it is
+(Section~\ref{sec:disc_transfer}).
+\item \textbf{Data.} The event log records the time at the block, not the use of
+the lanes and the cranes, so waiting and service cannot be fully separated.
+\item \textbf{Evaluation.} The final configuration replays the observed arrivals
+and blocks, and without them its error is larger. It underestimates the slowdown
+in the busiest hours, so the size of a scenario effect is not established.
+\item \textbf{Domain knowledge.} The domain rules, the three lanes, the corridor and the
 decision point were co-designed and confirmed by the terminal, but the review came
 from the company-side co-supervisor and is not independent, and the costs of a move
 were judged by the terminal, not modelled.
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Future Work}
 \label{sec:future_work}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Future work should retain the reproducible discovery-and-validation protocol
-while extending the mechanisms and evidence that currently limit physical and
-counterfactual interpretation.
-
+Each item takes up one of the limitations above.
 \begin{itemize}
-    \item \textbf{Investigate an object-centric process representation.}
-    Future work could examine whether an object-centric event log is better
-    suited to container-terminal operations than the current truck-visit case
-    representation. In the present model, container characteristics are
-    aggregated to case level, so information such as container type, loading
-    status, reefer status, or hazardous-goods status is combined across all
-    containers handled during one truck visit. An object-centric approach could
-    keep each container as a separate object with its own attributes while
-    linking it to the truck visit, handling activity, yard block, and resource.
-    This would reduce information loss and preserve container-specific information throughout the process
-    and could also support multi-container and multi-block visits without
-    forcing one aggregated context value onto the complete case.
-
-    \item \textbf{Add an explicit spatial and movement representation.}
-    Future work could separate physical movement from the combined
-    pre-service delay by using route, position, or equipment observations.
-    Rather than representing every movement as an additional process activity,
-    a richer simulation formalism could include location directly in the model
-    state, for example through timed or coloured Petri-net tokens and
-    location-dependent transition conditions. This would allow truck or
-    container movement between yard areas to consume time and respect spatial
-    constraints without treating travel as a recorded handling activity.
-    Movement times would then have to be estimated from spatial observations
-    and the remaining access and waiting-time models refitted, so that travel
-    time is not counted twice.
-
-   \item \textbf{Represent physical assignment and queueing explicitly.}
-    Future models could bind trucks and containers to physically feasible
-    yard locations and resources instead of treating resource labels as fully
-    interchangeable. Equipment availability and assignment should be represented
-    as dynamic state, and trucks waiting for handling should enter explicit
-    simulated queues rather than having these effects absorbed into a fitted
-    pre-service-delay distribution. An object-centric representation could
-    preserve the relations between trucks, containers, yard blocks, and
-    equipment, while a corresponding simulation model would still need explicit
-    movement, resource-allocation, and queueing rules
-    \cite{VanDerAalst2023OCPM,Knopp2023ObjectCentricSimulation}.
-
-    
-    
+\item \textbf{Resource semantics in the framework.} The extensions of this thesis
+could become options of ProSiT, namely a capacity that is checked over an activity
+when it starts and filled by the next waiting case, a waiting time measured from the
+first free place, load features for the execution time and a count that does not
+depend on the order of the schedule. Version 1.0.5 already removes the queue that
+counts the activity itself. With these options, the base model of a process with
+multi-place resources could be discovered without changes to the simulator.
+\item \textbf{Events at the level of the equipment.} The start and the end of the
+handling by the crane, and the lane a truck uses, would separate the waiting for
+the crane from the handling. The crane could then be modelled as a resource that
+handles one truck after another, which fits the semantics of ProSiT as it is. An
+object-centric event log with trucks, containers, blocks and cranes as objects
+\cite{VanDerAalst2023OCPM} and an object-centric simulation model
+\cite{Knopp2023ObjectCentricSimulation} would also keep the attributes of each
+container instead of one aggregated value per visit.
+\item \textbf{Generative inputs.} For a prospective use, the replay has to be
+replaced. This needs an arrival model with the daily peaks and the demand of the
+period, which a deeper tree on hour and weekday does not provide
+(Section~\ref{sec:res_e4_depth}), and the block of each container from the yard
+plan. The incremental discovery of ProSiT, which gives more weight to recent cases,
+could follow the drift between periods.
+\item \textbf{Validation under intervention.} A pilot of the local allocation rule
+at the terminal, with the committed load of the blocks available at Gate In, would
+show whether the simulated direction and mechanism hold when the allocation really
+changes. Its results would also give the costs of a move, which the model does not
+contain.
 \end{itemize}

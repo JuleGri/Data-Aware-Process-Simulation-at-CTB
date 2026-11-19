@@ -11,10 +11,10 @@ turnaround time between 25 and 35 minutes. In the test period, the mean exceeds
 35 minutes in 56\,\% of the hours.
 
 From an event log of 91,153 truck visits, nineteen nets of four discovery
-families were compared with checks fixed on the training log, namely soundness,
+families were compared with criteria fixed on the training log, namely soundness,
 acceptance of every sequence above a coverage threshold of 0.1\,\%, and the
 domain rules of the truck visit. The Heuristics Miner net HM 0.7, used as
-discovered, is the only net that passes all checks (precision 0.998). A
+discovered, is the only net that meets all criteria (precision 0.998). A
 look-ahead stop guard makes every simulated truck perform its planned number of
 stops. As fitted, the simulation overestimates the turnaround time strongly
 (median 57 against 33 minutes), because its learned block choice concentrates
@@ -24,7 +24,11 @@ blocks, three lanes per block, a waiting time measured from a free lane and
 load-dependent service, the model reproduces the median within 5 minutes and the
 rise of the waiting with the load of a block. It does not reproduce the slowdown
 in the busiest hours, in either period. Its validity for the intended use is
-therefore partial.
+therefore partial. The data-aware parts of ProSiT transfer, namely the routing
+learned from the attributes of the planned visit and the features of the load at a
+block, while its resource semantics, built for resources that handle one case after
+another, had to be adapted. The results hold with ProSiT's default tree depth of
+five as well.
 
 The allocation rule was evaluated within these limits, in six scenarios that
 combine one, two or any block of deviation with the observed demand and 20\,\%
