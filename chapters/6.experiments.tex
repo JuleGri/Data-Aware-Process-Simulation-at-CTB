@@ -1,19 +1,13 @@
 \chapter{Methodology and Experimental Setup}
 \label{chp:experiments}
 
-This chapter describes the pipeline illustrated in Figure~\ref{fig:exp_flow}. The
-pipeline takes the training and test logs of Chapter~\ref{chp:case_study_and_data}
-and the domain rules of the terminal as input and produces three outputs. These
-are a control-flow model that ProSiT can execute, a simulation model whose validity
-for its intended use is assessed, and the effect of a load-aware block allocation
-on the turnaround time. First, candidate nets are discovered from the training log
-and evaluated with conformance measures (E1). Next, the admissible nets are audited
-against the domain rules (E2), and the discovered nets are simulated in ProSiT to
-test whether they can be used for simulation (E3). The simulation is then validated
-against the observed turnaround time and its response to load (E4). Finally, the
-model is used, within the limits that this assessment establishes, to evaluate a
-redesign of the block allocation in a what-if analysis (E5). The configuration and the adaptations of the simulation model are
-described in Chapter~\ref{chp:process_discovery_methodology}.
+This chapter describes the design of the five experiments of this thesis. They take
+the training and test logs of Chapter~\ref{chp:case_study_and_data} and the domain
+rules of the terminal as input and produce three outputs, a control-flow model that
+ProSiT can execute, a simulation model whose validity for its intended use is
+assessed, and the effect of a load-aware block allocation on the turnaround time.
+The configuration and the adaptations of the simulation model are described in
+Chapter~\ref{chp:process_discovery_methodology}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Overview of the Experiments}
@@ -22,39 +16,29 @@ described in Chapter~\ref{chp:process_discovery_methodology}.
 \label{sec:exp_selection_logic}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Five experiments were designed that build on each other
-(Figure~\ref{fig:exp_flow}). Each has one goal and produces one result that the
-next experiment uses. Every selection is made on the training log, and the test log
-is used for evaluation.
+Five experiments build on each other (Table~\ref{tab:exp_overview}). Each decides
+one question by one decisive comparison and passes its result to the next. E1 to E3
+answer RQ1, E3 and E4 answer RQ2, and E5 answers RQ3.
 
-\input{figures/schemas/experiment_flow}
+% The former pipeline figure figures/schemas/experiment_flow.tex is kept but no longer included.
+\input{tables/exp_overview}
 
-\begin{enumerate}[label=\textbf{E\arabic*}]
-\item \textbf{Control-flow discovery.} Discover candidate nets with four families
-of discovery algorithms and several settings, and evaluate them with conformance
-measures, namely fitness, precision, generalisation and coverage. The result is the
-set of admissible nets, which are sound and accept every frequent sequence.
-\item \textbf{Rule audit.} Audit the admissible nets against the domain rules of
-the truck visit and select the most precise net whose language respects them. The
-result is the control-flow model, used exactly as discovered, together with a stop
-guard for the planned number of stops.
-\item \textbf{Simulation of the discovered nets.} Give the discovered nets to
-ProSiT and test whether ProSiT can learn and run them and whether the simulated
-visits reproduce the observed stop structure. The result is a control-flow model
-that is confirmed for simulation.
-\item \textbf{Mechanism audit and simulation validity.} Assess how well the
-simulation reproduces the turnaround time and its response to load, and which parts
-of the simulator cause the remaining error. The result is the final configuration
-used in E5 and an assessment of its validity.
-\item \textbf{Load-aware block allocation.} Evaluate a redesign of the allocation
-of deliveries to the yard blocks that aims to reduce the hours above the corridor.
-The result is the effect of the redesign on the KPI, the mechanism behind it, its
-costs, and the extent to which the simulation can support it.
-\end{enumerate}
+All experiments share three settings. Every selection is made on the training log,
+and the test log is used for evaluation (Section~\ref{sec:exp_partitions}). E3 and
+E4 simulate every configuration with five seeds and E5 with ten
+(Section~\ref{sec:exp_runs}). Ranges and intervals describe how much the results of
+one fitted model vary between seeds, not the uncertainty of the model itself. The
+experiments do not aim to rank discovery algorithms in general, or to show that the
+simulation is valid for measures other than the turnaround time.
 
-E1 to E3 answer RQ1, E3 and E4 answer RQ2, and E5 answers RQ3. The experiments do
-not aim to rank discovery algorithms in general, or to show that the simulation is
-valid for measures other than the turnaround time.
+The simulation model combines three kinds of parts (Table~\ref{tab:exp_sources}).
+Some are learned from the training log, some are fixed by a physical rule or by the
+terminal, and some are taken from the observed log, so that the simulated trucks are
+the observed ones. This last kind is called conditional evaluation in the following.
+It removes the error of the arrival model and of the block choice from the
+comparison, so that the queue and the service at a block can be judged on their own.
+
+\input{tables/exp_sources}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Setting}
@@ -92,7 +76,7 @@ developed on the training data, not a confirmatory test of a model fixed in adva
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/kpi/drift_daily.pdf}
-\caption{Trucks per day and daily median turnaround time, days with at least 300 visits (training blue, test orange, Easter grey, corridor green).}
+\caption{The test period has more trucks per day and longer turnaround times than the training period. Days with at least 300 visits, training blue, test orange, Easter grey, corridor green.}
 \label{fig:drift_daily}
 \end{figure}
 
@@ -121,18 +105,11 @@ total duration of a case. The terminal judges it per hour. The mean TTT of the
 trucks that leave through Gate Out in an hour, that is, of all visits completed in
 that hour, should lie between 25 and 35 minutes
 (Section~\ref{sec:prob_statement}). Only hours with at least 20 trucks are counted,
-the same minimum as for the delay peaks below. Figure~\ref{fig:kpi_corridor} shows
-the hourly mean TTT. In the test period it exceeds 35 minutes in 56\,\% of the
-hours, and averaged over all hours it lies 5.5 minutes above the corridor. In the
-training log the values are 38\,\% and 3.8 minutes. These hours are the target of
-the improvement measure in E5.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/kpi/kpi_corridor_hourly.pdf}
-\caption{Mean turnaround time per Gate-Out hour in the training and the test log.}
-\label{fig:kpi_corridor}
-\end{figure}
+the same minimum as for the delay peaks below. In the test period, the hourly mean
+TTT exceeds 35 minutes in 56\,\% of the hours, and averaged over all hours it lies
+5.5 minutes above the corridor (Figure~\ref{fig:kpi_corridor}). In the training log
+the values are 38\,\% and 3.8 minutes. These hours are the target of the improvement
+measure in E5.
 
 Visits longer than 35 minutes lose time in every part of the visit, not at a single
 point. They spend longer before the first stop, at the stops and before Gate Out
@@ -519,8 +496,7 @@ The evaluation follows the three levels of validation of Sargent
 (Section~\ref{sec:exp_e4_mechanisms}) and operational validity
 (Section~\ref{sec:exp_e4_operational}). Section~\ref{sec:exp_e4_configs} first
 defines the configurations that are compared. Chapter~\ref{chp:results} reports the
-results in the order in which they build on each other, with the verification tests
-last.
+verification first, because it decides how far the other results can be trusted.
 
 \subsection{Configurations}
 \label{sec:exp_e4_configs}
@@ -567,7 +543,7 @@ week to week, so no model learned on the training period can reproduce the block
 loads of the test period. To evaluate the queue and the service at a block, the
 observed block of each RMG stop is used where the simulated stop has an observed
 counterpart in the same visit, and the training shares otherwise. The error of the
-block choice itself is measured separately (E4b).
+learned block choice itself is measured separately.
 
 \paragraph{Three lanes} A block has three handover lanes and holds at most three
 trucks at once. The crane handles the trucks in the lanes one after another, so a
@@ -593,9 +569,9 @@ by walking backwards through its schedule and stops at the first activity that h
 already ended. This count is exact only if the schedule is sorted by end time. The
 simulator stores activities in the order in which it processes them, so some counts
 are too low, while the counts in training are exact. The verification measures how
-often this happens. The baseline and all configurations from E4b on are also run
-with an exact count, marked by the suffix x, and the final configuration is chosen
-among these runs.
+often this happens. The base model and the configurations with the observed blocks
+are also run with an exact count, and the final configuration is chosen among these
+runs.
 
 \paragraph{Unchanged parts} Routing, stop guard, case attributes, calendars and the
 exit after the last stop are the same in every configuration. The exit does not
@@ -704,8 +680,7 @@ differences define the thresholds of the acceptance criteria below.
 \paragraph{Error along the path of the truck} A truck meets the parts of the
 simulator in a fixed order, namely the demand, the block allocation, the queue at
 the block and the service, followed by the exit. The runs follow this order in four
-steps, E4a to E4d. Each step replaces one part and measures how much of the error
-disappears. A part is replaced in one of two ways. Either it is set to the observed
+steps. Each step replaces one part and measures how much of the error disappears. A part is replaced in one of two ways. Either it is set to the observed
 values of the test period, for example the replayed arrivals or the observed block
 of each RMG stop, which is known as trace-driven simulation
 \cite{Law2015Simulation}. Or it stays learned, but a documented defect of its
@@ -715,8 +690,8 @@ keep a part generative, for example a learned instead of the observed block, are
 reported next to this sequence.
 
 \paragraph{Choice of the final configuration} As in E1 and E2, the choice uses
-training data only. The admissible configurations of E4c and E4d with exact
-counting are run on the replayed training visits with their observed blocks and
+training data only. The admissible configurations of the last two steps, the queue
+and the service, with exact counting are run on the replayed training visits with their observed blocks and
 compared with the training log. A configuration is admissible if it produces no
 rule violation and never more than three trucks at a block at once. Among the
 admissible configurations, the one with the smallest sum of the three profile gaps
@@ -936,15 +911,4 @@ the learned waiting time contains it, but no configuration uses both. Five or te
 seeds show the random variation. Section~\ref{sec:disc_threats} discusses what
 remains of these threats.
 
-\section{Chapter Summary}
-
-E1 and E2 select the control-flow model with criteria fixed on the training log,
-namely soundness, acceptance of every frequent sequence and the domain rules. The
-most precise admissible net is used as discovered, with a stop guard for the
-planned number of stops. E3 shows whether ProSiT can learn and run the discovered
-nets and how well they reproduce the observed stop structure. E4 assesses the
-simulation on the three levels of Sargent, attributes the remaining error to the
-parts of the simulator that a truck meets, chooses the final configuration on the
-training period and tests it against acceptance criteria fixed in advance. E5
-applies one block allocation rule to this model in six scenarios of flexibility and
-demand and states only what the rules for the claims allow.
+% The former Chapter Summary was removed on 19 Nov 2026, because Table tab:exp_overview gives the same overview.

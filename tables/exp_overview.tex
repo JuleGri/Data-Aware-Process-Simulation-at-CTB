@@ -1,0 +1,23 @@
+% Overview of the five experiments (design of Chapter 4). Written by hand, 19 Nov 2026. No results in this table.
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{L{2.9cm}YYL{3.1cm}}
+\toprule
+\textbf{Experiment} & \textbf{What it decides} & \textbf{Decisive comparison} & \textbf{Result passed on} \\
+\midrule
+E1 Control-flow discovery (RQ1) & Which discovered nets are admissible for simulation & 19 nets of four families on the training log, judged by soundness and by the coverage of every sequence above 0.1\,\% of the visits & Admissible nets \\
+\addlinespace
+E2 Rule audit (RQ1) & Which admissible net respects the domain rules & Language of each admissible net against rules 3 to 5, most precise net that meets them & Selected net with the stop guard \\
+\addlinespace
+E3 Simulation of the discovered nets (RQ1, RQ2) & Whether conformance anticipates what a net does in the simulator & Selected net against nets that fail a criterion, with and without the guard, generated visits against the training log & Control-flow model confirmed for simulation \\
+\addlinespace
+E4 Mechanism audit and simulation validity (RQ2) & Whether the simulation reproduces the turnaround time and its response to load, and what causes the error & One part of the simulator corrected at a time along the path of the truck, final configuration against acceptance criteria fixed in advance & Final configuration and its admissibility for E5 \\
+\addlinespace
+E5 Load-aware block allocation (RQ3) & Whether moving deliveries away from full blocks lowers the hours above the corridor, and who gains and who pays & Rule against a baseline with the same trucks and seeds, three sets of eligible blocks and two levels of demand & Direction, mechanism and costs of the rule \\
+\bottomrule
+\end{tabularx}
+\caption{Overview of the experiments.}
+\label{tab:exp_overview}
+\end{table}

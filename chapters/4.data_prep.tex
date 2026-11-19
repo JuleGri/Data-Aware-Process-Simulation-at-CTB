@@ -315,19 +315,21 @@ of the mean TTT, while the approach and the exit together account for 64\,\%. By
 design, a stop starts only when the truck is ready in the handover lane, so the
 driving and queueing before that point fall into the approach.
 
-Figure~\ref{fig:obs_ttt_corridor} shows how the TTT of the single visits is spread
-around the turnaround corridor of 25 to 35 minutes that the terminal aims at
-(Section~\ref{sec:prob_statement}). Most visits take between 15 and 35 minutes,
-and a long tail reaches beyond two hours. In the training log, 25\,\% of the
-visits lie in the corridor, 39\,\% below it and 36\,\% above it. In the test log,
-the share above the corridor rises to 47\,\%. The terminal judges the corridor by
-the mean TTT of each hour, not by single visits (Section~\ref{sec:exp_kpis}).
+The terminal judges the TTT per hour, by the mean TTT of the trucks that leave
+through Gate Out in that hour, which should lie in the corridor of 25 to 35 minutes
+(Sections~\ref{sec:prob_statement} and~\ref{sec:exp_kpis}).
+Figure~\ref{fig:kpi_corridor} shows this hourly KPI. The hourly mean exceeds
+35 minutes in 38\,\% of the training hours and in 56\,\% of the test hours. Per
+visit, the TTT is spread more widely. Most visits take between 15 and 35 minutes, a
+long tail reaches beyond two hours, and 36\,\% of the training visits and 47\,\% of
+the test visits lie above the corridor (Figure~\ref{fig:obs_ttt_corridor} in
+Appendix~\ref{app:observed_behaviour}).
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/observed/ttt_corridor.pdf}
-\caption{Turnaround time per visit and the corridor.}
-\label{fig:obs_ttt_corridor}
+\includegraphics[width=\textwidth]{figures/kpi/kpi_corridor_hourly.pdf}
+\caption{The hourly mean turnaround time exceeds the corridor in 38\,\% of the training hours and in 56\,\% of the test hours. Mean TTT of the trucks leaving in a Gate-Out hour, hours with at least 20 trucks.}
+\label{fig:kpi_corridor}
 \end{figure}
 
 \label{sec:obs_summary}

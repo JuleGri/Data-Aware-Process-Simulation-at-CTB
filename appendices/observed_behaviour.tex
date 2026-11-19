@@ -215,6 +215,18 @@ from a period with fewer closed blocks.
 \section{Visits Longer Than 35 Minutes}
 \label{sec:obs_long_visits}
 
+Figure~\ref{fig:obs_ttt_corridor} complements the hourly KPI with the turnaround
+time of the single visits. In the training log, 25\,\% of the visits lie in the
+corridor, 39\,\% below it and 36\,\% above it. In the test log, the share above the
+corridor rises to 47\,\%.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/observed/ttt_corridor.pdf}
+\caption{Per visit, the turnaround time is spread widely around the corridor, with a long tail beyond two hours. Supplementary to the hourly KPI.}
+\label{fig:obs_ttt_corridor}
+\end{figure}
+
 Table~\ref{tab:kpi_long_visits} compares the visits longer than 35 minutes with the
 other visits. The long visits are longer in every part of the
 visit, before the first stop, at the stops and before Gate Out. Visits with

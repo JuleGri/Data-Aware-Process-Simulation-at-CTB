@@ -71,10 +71,59 @@ f0 & \multicolumn{5}{l}{final configuration on the training period} & Model erro
 \end{table}
 
 \FloatBarrier
+\section{Verification of the Extended Simulator}
+\label{app:verification}
+
+Section~\ref{sec:res_e4_verification} summarises the verification. This section gives
+the results of the five tests of Section~\ref{sec:exp_e4_verification}.
+
+\paragraph{Simulator extensions.} With all switches off, the extended simulator
+generates exactly the same log as ProSiT 1.0.4 for the same seed, checked for the
+seeds 7 and 42 on HM 0.7. This establishes that the extended simulator is compatible
+with ProSiT. It does not show that the extensions work correctly when they are on,
+which the conceptual and operational validity examine.
+
+\paragraph{Retraining.} Retrained on unchanged training data, all 26 waiting-time
+models and all models of the RMG blocks are identical to the fitted ones. Of the 37
+resource-choice and execution-time models, 34 are identical. The other three belong to
+LL and HO2. Two differ in single leaf values in the third decimal (for example 0.968
+against 0.969), and the execution-time model of the HO2 deliveries has one different
+split threshold in a subtree. The retraining therefore reproduces ProSiT's models up
+to these small differences outside the RMG blocks.
+
+\paragraph{Replayed demand.} The simulated arrivals equal the observed Gate-In times
+(case-arrival distance zero).
+
+\paragraph{Domain rules.} No configuration generates a visit without a stop,
+overlapping stops of one truck or more than four stops.
+
+\paragraph{Count of stops in progress.} Recomputed from the generated log, the number
+of stops in progress at a block is larger than the number the simulator used for 14
+to 15\,\% of the RMG stops. ProSiT walks backwards through the schedule of a resource
+and stops at the first activity that has already ended. With multitasking, a later
+entry can end earlier than an earlier one, and the walk then stops too early. The
+configurations with an exact count (suffix x in Table~\ref{tab:exp_e4_configs}) avoid
+this.
+
+\paragraph{Load feature of the execution time.} The feature is counted when a stop is
+scheduled, before the capacity check may shift the stop to a free lane, which happens
+for 8\,\% of the RMG stops. In the log of the final configuration, 46 to 51\,\% of the
+RMG stops start without another truck at the block, against 55\,\% in the recorded
+feature, so the simulated service sees somewhat less load than the log shows. Its
+likely consequence is that stops at busy blocks slow down too little. This
+consequence is separate from the two other reasons for the shortfall in congested
+hours, the missing crane data in the log and the slower service of the test period.
+Counting the load at the final start of a stop leaves the effect of the allocation
+rule on the share of hours above the corridor unchanged ($-10.5$ percentage points
+with $\pm 2$), so this mechanism does not explain that effect, but it may contribute
+to the shortfall.
+
+\FloatBarrier
 \section{Error Attribution Along the Path of the Truck}
 \label{app:e4_chain}
 
-Table~\ref{tab:rq2_chain} gives all configurations of E4a to E4d with their
+Table~\ref{tab:rq2_chain} gives all configurations along the four steps of the path
+of the truck, identified by the codes of Table~\ref{tab:exp_e4_configs}, with their
 measures against the test log, together with the differences between real periods.
 Table~\ref{tab:rq2_responses} in Section~\ref{sec:res_e4_chain} shows the decisive
 steps.

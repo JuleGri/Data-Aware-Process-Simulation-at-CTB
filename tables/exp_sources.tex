@@ -1,0 +1,22 @@
+% Sources of the parts of the simulation model (design of Chapters 4 and 5). Written by hand, 19 Nov 2026.
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{L{3.6cm}YL{2.6cm}}
+\toprule
+\textbf{Source} & \textbf{Parts of the simulation model} & \textbf{Used in} \\
+\midrule
+Learned from the training log & Net, routing trees, waiting-time trees and execution-time trees & All simulation runs \\
+\addlinespace
+Learned, but replaced in the conditional evaluation & Arrival tree, distribution of the case attributes and block-choice trees & E3 and the generative runs \\
+\addlinespace
+Taken from the observed log & Gate-In times and case attributes, block of each RMG stop with an observed counterpart, closed blocks from the yard utilisation data & E4 and E5 \\
+\addlinespace
+Fixed by a physical rule or by the terminal & Domain rules, stop guard for the planned number of stops, three lanes per block with the capacity checked at the start of a stop, allocation rule & E2 to E5 \\
+\bottomrule
+\end{tabularx}
+\par\smallskip{\footnotesize\raggedright The learned trees are fitted by ProSiT. Where a part is corrected, the correction changes its training data or the mechanism that uses it, never the fitted values by hand (Chapter~\ref{chp:process_discovery_methodology}).\par}
+\caption{What the simulation model learns, what is fixed and what is taken from the log.}
+\label{tab:exp_sources}
+\end{table}

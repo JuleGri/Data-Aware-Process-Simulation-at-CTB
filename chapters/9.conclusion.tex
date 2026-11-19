@@ -59,28 +59,33 @@ validated improvement.
 \section{Contributions}
 \label{sec:concl_contributions}
 
-\paragraph{(C1) Conformance does not establish suitability for simulation.} Of the
-three nets that met the criteria based on soundness and coverage, two generated
-visits that no truck can perform. Coverage and the domain rules anticipated these
-failures, precision did not, because the routing weights of ProSiT depend on the
-history of a case but not on the marking of the net. A condition on the data of the
-case had to act on the silent transitions at which the selected net takes its
-decisions.
+\paragraph{(C1) Conformance does not establish suitability for simulation.} On a
+real logistics log, the usual conformance measures did not decide whether a net can
+be simulated. Admissibility for simulation needed three further checks, the coverage
+of the frequent sequences, an audit of the language against the domain rules and a
+test in the simulator. Precision did not anticipate the failures, because the routing
+of ProSiT depends on the history of a case but not on the marking of the net. In a
+net that takes its decisions on silent transitions, a condition on the data of the
+case has to look ahead on the reachability graph.
 
 \paragraph{(C2) An improved aggregate timing does not establish suitability for
-congestion-sensitive decisions.} Replacing one part of the simulator at a time
-separated defects of ProSiT 1.0.4, one of which version 1.0.5 removes, from a
-mismatch between its resource semantics and a block with three lanes, from limits of
-the event data and from the change between the periods. The extensions that address
-the first two let the waiting grow with the load of a block, but the congested hours
-remain underestimated, and their magnitude depends on the depth of the learned
-trees.
+congestion-sensitive decisions.} The thesis diagnoses a learned simulation model by
+correcting one part of the simulator at a time along the path of a case and by judging
+each step on its response to load rather than on a single distance. This separates
+defects of one software version from a mismatch between the resource semantics of
+the framework and a resource with several places, from limits of the event data and
+from the change between the periods. The case also shows that a model can match the
+level of the turnaround time while missing the congested hours, and that the
+magnitude of its congestion can depend on a hyperparameter that the data do not
+decide.
 
-\paragraph{(C3) A conditional assessment of a load-aware block allocation.} In the
-resulting model, the allocation lowers the frequency of hours above the corridor,
-while its effect on their severity and on other trucks depends on the demand and on
-the flexibility of the rule. The assessment states what the model supports,
-hypotheses for a pilot, and what it leaves open.
+\paragraph{(C3) A conditional assessment of a load-aware block allocation.} The
+thesis shows how a what-if analysis can be reported when the model is only partly
+valid, with rules for the claims fixed before the runs, outcomes read from the whole
+system to groups of visits and to the mechanism, and the frequency and the severity
+of the violations reported separately. Under this design, the allocation appears as a
+trade-off rather than a single effect, which a pilot at the terminal would have to
+resolve.
 
 The selected model, its learned trees and parameters and the extensions are
 documented in full (Chapter~\ref{chp:process_discovery_methodology} and

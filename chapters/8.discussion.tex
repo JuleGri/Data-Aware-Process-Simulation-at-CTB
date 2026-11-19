@@ -21,28 +21,24 @@ must respond to load as strongly as the terminal. The final configuration meets 
 third only in part.
 
 \paragraph{What the model supports.} Every simulated visit satisfies the
-checked rules. No visit without a stop, no overlapping stops, the planned number
-of stops, never more than three trucks at a block
+checked rules, with no visit without a stop, no overlapping stops, the planned number
+of stops and never more than three trucks at a block
 (Sections~\ref{sec:res_baseline} and~\ref{sec:res_mechanisms}). The stop guard
 enforces the number of stops, not the planned itinerary itself, and truck
 capacity, driving and the yard plan are not checked. The waiting before
 a stop arises in the simulation when all three lanes of a block are taken, and the
-approach to the first stop grows with the load of the block as observed. The
-turnaround time rises with the arrivals and, convexly, with the arrival
-intensity. These are the properties a block allocation acts on. The model can
-therefore show how moving deliveries away from full blocks acts in principle,
-which visits gain, and whether the waiting is reduced or only moved. Within the
-examined model variants, the rule lowers how often the hourly mean exceeds the
-corridor in all six scenarios, through less waiting at full blocks. How far these
-hours exceed the corridor, and whether other trucks pay, depends on the demand. With
-the demand of the test period, every whole-system measure improves, and a wider
-choice of blocks gives somewhat more. With more demand, the severity becomes
-uncertain, a wider choice moves part of the waiting to the receiving blocks, and the
-narrowest rule ends with a lower severity than the wider ones
-(Section~\ref{sec:res_s1_contrasts}). The result is therefore not a single effect but
-a trade-off between how often and how badly the corridor is exceeded, and between
-the trucks that gain and those that pay. These are statements about the simulated
-system. For CTB they are hypotheses.
+approach to the first stop grows with the load of the block as observed. These are
+the properties a block allocation acts on. The model can therefore show how moving
+deliveries away from full blocks acts in principle, which visits gain, and whether
+the waiting is reduced or only moved. Its result for the allocation rule is not a
+single effect but a trade-off, between how often and how badly the corridor is
+exceeded and between the trucks that gain and those that pay
+(Section~\ref{sec:res_s1_contrasts}). That the trade-off appears only under higher
+demand fits the mechanism. With moderate congestion, a moved delivery finds a free
+lane, and the trucks at the receiving block hardly notice it. Under heavy
+congestion, the receiving blocks fill as well, and a wider choice moves more
+deliveries into them. These are statements about the simulated system. For CTB
+they are hypotheses.
 
 \paragraph{What the model does not support.} It does not give the size of the
 effect at the terminal. The simulated stops slow down less than the recorded ones
@@ -50,10 +46,8 @@ at the busiest blocks and hours, the simulated terminal holds fewer trucks, and 
 has almost no delay-peak hours. It produces less than half of the hours that the
 terminal counts as too long, the decision measure itself, and how strongly it
 congests depends on the depth of its trees (Section~\ref{sec:res_e4_depth}). The size
-of the simulated effect depends on exactly these properties. Across the robustness runs, the effect on the mean
-turnaround time lies between $+0.2$ and $-4.0$ minutes. With 20\,\% more trucks,
-single runs build up backlogs that are longer than any observed hour, and ten
-seeds do not determine the effect on the mean. The model also leaves out what
+of the simulated effect depends on exactly these properties, as the robustness runs
+show (Section~\ref{sec:res_s1_sensitivity}). The model also leaves out what
 a move costs at the terminal, namely the driving to another block, a later rehandling of
 the container and the constraints of the yard plan. These can make the real effect
 smaller. A stronger slowdown under load, as recorded, can make it larger. The
@@ -93,34 +87,25 @@ slowdown in the busiest hours is a limitation of the model, not of the test peri
 and it lies exactly in the congestion that the allocation rule is meant to relieve.
 
 \paragraph{Conditions of the result.} The final configuration replays the observed
-arrivals, case attributes and blocks of the test period. Its validity is conditional on
-these inputs. Without them, the error is larger (cycle-time distance 11.2 against
-8.0 minutes). For a prospective use, an arrival model with the daily peaks of the
-terminal and the block of each container from the yard plan would have to replace
-the replay. With ProSiT's default tree depth of five instead of three, the
-validation verdict and the direction of the allocation effects persist, but the
-magnitude of the congestion changes strongly (Section~\ref{sec:res_e4_depth}). The
-congestion that the allocation question depends on is therefore not robustly
-identified by the learned models. The result also rests on the four changes to
-ProSiT's queue and service (Table~\ref{tab:sim_adaptations}). Within the tested
-configurations, reversing any of them alone makes the load response worse
-(Section~\ref{sec:res_e4_loo}). Three implementation details also bound the
-result. The block allocation is replayed only where a simulated stop has an
-observed counterpart, which is the case for 75\,\% of the RMG stops. The load feature of
-the service time is counted when a stop is scheduled, and it sees somewhat less
-load than the final log shows. This mechanism of the extensions remains unresolved.
-Its likely consequence is that the simulated stops slow down too little under load,
-which adds to the shortfall in the busiest hours together with the missing crane data
-and the slower test period, but it does not change the effect of the allocation rule
-on the frequency of hours above the corridor (Section~\ref{sec:res_e4_verification}). And the rule uses only blocks that the yard utilisation data show in use,
-which excludes the blocks closed for maintenance. Without this restriction and
-without the decision at Gate In, the effect is slightly larger, but 25\,\% of the
-moves would go to blocks that were empty
-(Section~\ref{sec:res_s1_sensitivity}). Today's assignment does not use
-the committed load of the blocks (Section~\ref{sec:disc_stakeholders}). The rule would
-therefore add new information to the decision. In principle it is available at
-Gate In, because the blocks of the trucks already in the terminal were assigned
-when they passed the gate.
+arrivals, case attributes and blocks of the test period, and its validity is
+conditional on these inputs. Without them, the error is larger (cycle-time distance
+11.2 against 8.0 minutes). For a prospective use, an arrival model with the daily
+peaks of the terminal and the block of each container from the yard plan would have
+to replace the replay. The result also rests on the four changes to ProSiT's queue
+and service (Table~\ref{tab:sim_adaptations}), each of which the load response needs
+(Section~\ref{sec:res_e4_loo}). Three details of the implementation bound it
+further. The block is replayed only where a simulated stop has an observed
+counterpart, which is the case for 75\,\% of the RMG stops. The load that the service
+time sees is counted before a stop may move to a free lane, which may make the
+simulated stops slow down too little, without changing the effect of the rule on the
+frequency of hours above the corridor (Appendix~\ref{app:verification}). And the rule
+uses only blocks that the yard utilisation data show in use. Without this restriction
+and without the decision at Gate In, the effect is slightly larger, but 25\,\% of the
+moves would go to blocks that were empty (Section~\ref{sec:res_s1_sensitivity}).
+Today's assignment does not use the committed load of the blocks
+(Section~\ref{sec:disc_stakeholders}). The rule would therefore add new information
+to the decision, which is in principle available at Gate In, because the blocks of the
+trucks already in the terminal were assigned when they passed the gate.
 
 \section{Discovery Metrics and Simulation Behaviour}
 \label{sec:disc_metrics}
@@ -212,7 +197,11 @@ condition on the data of the case, and the features of the load at a block produ
 the response to load of normal hours.
 
 \paragraph{What does not transfer out of the box.} The findings of E4 are of four
-kinds, and they carry different weight.
+kinds, and they carry different weight. The first three are the causes of the
+discrepancies named in Section~\ref{sec:res_rq2}. The fourth cause named there, the
+change between the periods, belongs to this data set and does not transfer. When the
+question is what transfers to other settings, a different fourth limit appears, the
+validity under an intervention.
 \begin{itemize}
 \item \textbf{Implementation.} Two findings are inconsistencies between how
 ProSiT builds its training data and how its simulator works. The queue
@@ -224,7 +213,7 @@ the method itself. Version 1.0.5 of ProSiT removes the self-count from the train
 data \cite{ProSiTRepository}. On its own, this correction removes the concentration
 on one block but leaves the turnaround time too short and without a response to
 load (Section~\ref{sec:res_e4_loo}).
-\item \textbf{Modelling semantics.} Four findings concern what the learned
+\item \textbf{Resource semantics.} Four findings concern what the learned
 quantities mean. Waiting is measured from the moment the block was completely
 free. Capacity is checked when a stop is enabled rather than when it runs. A stop
 that finds the block full waits until the stop booked last has ended and then for
@@ -490,20 +479,19 @@ Gate Out, against 7, 8 and 8 minutes for the other visits
 when three trucks are already at a block. This locates two levers, namely the load of the
 blocks at the moment a truck arrives, and the waiting before Gate Out.
 
-\paragraph{What a block allocation can do.} Within the model, sending a delivery
-at Gate In to a nearby block when three trucks are already heading to its block
-lowers how often the hourly mean exceeds the corridor. A local rule moves 16 to
-22\,\% of the deliveries by one or two block numbers with the demand of the test
-period. With more demand, the terminal would have to choose between a wider choice
-of blocks, which lowers the frequency most but moves waiting to the trucks at the
-receiving blocks, and the narrowest rule, which ends with a lower severity and no
-clear penalty for other trucks in these runs. The
-decision fits the moment at which the terminal assigns the yard position, and the
-terminal expects no rehandling and no long additional driving for such moves.
-Whether the rule is worth a pilot depends on what the model cannot show, namely
-how strongly the busiest hours would respond. The information the rule needs, the
-trucks already heading to each block, is not used in today's assignment, so a
-pilot would also show whether the yard planning can use it at the gate.
+\paragraph{What a block allocation can do.} The model points to a lever that
+today's assignment does not use, the trucks already heading to each block when a
+delivery passes Gate In. A local rule that uses it acts at the moment at which the
+terminal assigns the yard position and moves a minority of the deliveries by one or
+two block numbers, and the terminal expects no rehandling and no long additional
+driving for such moves. Which variant deserves a pilot depends on what the terminal
+values. A wider choice of blocks removes more hours above the corridor, but under
+high demand it shifts waiting to the trucks that collect containers at the receiving
+blocks, while the narrowest rule is the more cautious candidate
+(Section~\ref{sec:res_s1_contrasts}). Whether the rule is worth a pilot at all depends
+on what the model cannot show, namely how strongly the busiest hours would respond,
+and a pilot would also show whether the yard planning can use the committed load at
+the gate.
 
 \paragraph{What would be needed before acting.} A decision to change the
 allocation would need three things. The first is data on the occupancy of the
