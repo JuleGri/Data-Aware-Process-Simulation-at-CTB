@@ -87,8 +87,10 @@ minutes. The yard utilisation data, which record every four hours how full each
 block is, show one concrete difference. Blocks T26, T18 and T15 were emptied in
 April and stayed empty for up to three weeks, so that on average 2.4 of the 22
 blocks were empty in the test period, against 1.1 in the training period
-(Figure~\ref{fig:obs_block_occupancy}). According to the terminal, these closures
-were planned for maintenance. With fewer blocks in use, the same trucks meet fully
+(Figure~\ref{fig:obs_block_occupancy}). Each of these blocks was emptied over several
+days before it stayed empty, and its deliveries stopped while its receives continued,
+which indicates a planned closure, for example for maintenance, rather than a sudden
+failure. With fewer blocks in use, the same trucks meet fully
 loaded blocks more often. A second plausible reason is the Easter holidays at the
 end of the training period. Cargo that was delayed then may have been moved into
 the following weeks and concentrated there. A model learned on the training period
@@ -165,7 +167,12 @@ statements about sequences, times and loads. The literature provides the methods
 and the concepts against which the model is designed and evaluated. The terminal
 contributes knowledge that the records do not contain, such as the physical limits
 of the blocks, the domain rules, the definition of the KPI corridor and the way in
-which the yard position of a delivery is assigned.
+which the yard position of a delivery is assigned. This knowledge comes from the
+discussions with terminal development and the data warehouse and business
+intelligence team during the development of the model in summer 2026, and from the
+six years that the author worked at the terminal. The domain rules, the three lanes,
+the assignment of the yard position and the definition of the corridor were confirmed
+by the terminal.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Control-Flow Discovery (E1)}
@@ -704,9 +711,8 @@ container is. When a truck arrives at Gate In with a delivery container for the
 storage blocks, the yard planning system decides on a specific block. If the target
 vessel and its berth are known, it chooses a block near the berth. Otherwise the
 container goes to the centre of the yard, usually to block T13 by default
-(M.~Petersen, project manager for the cross-terminal KPI dashboard, data warehouse
-and business intelligence, HHLA, personal communication, 12 November 2026). The
-assignment does not consider the demand that the block will be facing.
+(Section~\ref{sec:exp_review}). The assignment does not consider the demand that the
+block will be facing.
 
 \paragraph{The allocation rule}
 The scenario changes the default block allocation at the moment a truck passes Gate

@@ -16,75 +16,51 @@ applied one allocation rule within the limits that this validation established.
 
 \paragraph{RQ1. Which discovery and rule treatment yields a sound, executable
 control-flow model that preserves the observed truck-visit behaviour, and do
-conformance metrics anticipate its behaviour in simulation?} The Heuristics Miner
-net HM 0.7, used as discovered, with a stop guard that enforces the planned number of
-stops, a condition on the data of the case. Of 19 discovered nets, it is the only
-sound net that accepts every frequent sequence and respects the rules of the truck
-visit, and the most precise of the admissible ones. It covers almost all held-out
-visits, while its generalisation to unseen sequences is limited. Conformance metrics
-anticipated the simulation only in part. Coverage and the domain rules anticipated
-specific failures, the missing multi-block visits and the visits that no truck can
-perform. Precision did not, because the simulator learns its routing from the
-observed visits, and how a net expresses its decisions mattered more than how much
-behaviour it allows.
+conformance metrics anticipate its behaviour in simulation?} The Heuristics Miner net
+HM 0.7, used as discovered, with a stop guard on the planned number of stops. Of 19
+discovered nets, it is the only sound net that accepts every frequent sequence and
+respects the domain rules, and it covers almost all held-out visits. Conformance
+metrics anticipated the simulation only in part. Coverage and the domain rules
+anticipated the failures of the other nets, precision did not, because the structure
+of a net mattered more than how much behaviour it allows.
 
 \paragraph{RQ2. To what extent does the ProSiT simulation reproduce truck
 turnaround time and its response to load, and which components explain the
 discrepancies?} As fitted, it does not reproduce the turnaround time, because its
-learned block choice concentrates the trucks on one block. Two defects of the
-software version and three semantic choices for resources that serve one case after
-another explain this and the missing waiting under load. With them corrected and the
-observed trucks and blocks replayed, the simulation reproduces the turnaround time of
-normal hours and the rise of the waiting with the load of a block. It does not
-reproduce the congested hours, which the allocation question is about. The event
-log does not show the work of the crane, and the test period was slower than the
-training period. How strongly the model congests depends on the depth of its trees,
-while the verdict of the validation does not.
+learned block choice concentrates the trucks on one block. Two defects of the software
+version and three resource semantics designed for resources that serve one case after
+another explain this. With them extended and the observed trucks and blocks replayed,
+the simulation reproduces normal hours and the rise of the waiting with the load of a
+block, but not the congested hours, and how strongly it congests depends on the depth
+of its trees.
 
 \paragraph{RQ3. To what extent can the simulation be used to evaluate a
 load-aware block allocation for deliveries, and what does it indicate about the
 effect on turnaround time?} It can show how such a change acts in the simulated
-system, but not its effect at the terminal. In the model, moving a delivery at Gate
-In away from a full block lowers how often the hourly mean turnaround time exceeds
-35 minutes in every scenario, through less waiting at full blocks. Whether it also
-lowers the severity of these hours and spares the other trucks depends on the demand
-and on the flexibility of the rule. Under higher demand, a wider choice of blocks
-lowers the frequency most but moves waiting to the trucks at the receiving blocks,
-while the rule with one block number of deviation ends with a lower severity and
-mean turnaround time than the rule with two. This narrow rule is a promising
-candidate, without a clear penalty for other trucks in these runs, but not an
-established best rule. For CTB, the result is a hypothesis for a pilot, not a
+system, but not its effect at the terminal. In the model, the rule lowers how often the
+hourly mean exceeds 35 minutes in every scenario, while its effect on the severity of
+these hours and on the trucks at the receiving blocks depends on the demand and on the
+flexibility of the rule. For CTB, the result is a hypothesis for a pilot, not a
 validated improvement.
 
 \section{Contributions}
 \label{sec:concl_contributions}
 
-\paragraph{(C1) A domain-constrained simulation model of CTB truck visits.} The
-thesis provides a simulation model whose control flow was selected by soundness,
-coverage and the domain rules and tested in the simulator, together with a stop guard
-that looks ahead on the reachability graph of the net. The comparison of the
-candidates shows that two sound nets that replay every training visit generate
-overlapping stops of one truck, and that the filtered nets lose the multi-block
-visits.
-
-\paragraph{(C2) An empirical analysis of simulation errors and congestion
-sensitivity.} The thesis attributes the error of the simulation to the implementation
-of one ProSiT version, to resource semantics designed for resources that serve one
-case after another, to the missing crane data and to the change between the periods.
-It shows that the corrected model matches normal hours but not severe congestion, and
-that the magnitude of its congestion depends on the depth of the learned trees. The
-analysis concerns one terminal and one version of ProSiT.
-
-\paragraph{(C3) A conditional evaluation of load-aware block allocation.} The thesis
-evaluates one allocation rule in six scenarios of flexibility and demand. Under the
-model assumptions, it finds a trade-off between the frequency of hours above the
-corridor, their severity and the distribution of the delays among the trucks. Because
-the model underestimates severe congestion, the result gives hypotheses for a pilot,
-not an estimate for the terminal.
-
-The selected model, its learned trees and parameters and the extensions are
-documented in full (Chapter~\ref{chp:process_discovery_methodology} and
+\paragraph{(C1) A domain-constrained simulation model of CTB truck handling.} A model
+that combines what ProSiT learns from the event log with domain knowledge that the log
+does not contain, documented in full so that it can be inspected
+(Chapter~\ref{chp:process_discovery_methodology} and
 Appendices~\ref{app:prosit_inventory} and~\ref{app:model_inspection}).
+
+\paragraph{(C2) An analysis of simulation errors and congestion sensitivity.} A
+component-wise validation that separates defects of the implementation, mismatches of
+the resource semantics, limits of the event data and the change between periods, and
+that shows how sensitive the simulated congestion is to the learned trees.
+
+\paragraph{(C3) A conditional evaluation of a load-aware block allocation.} An
+evaluation in six scenarios with rules for the claims fixed in advance, which shows
+under the model assumptions a trade-off between the frequency, the severity and the
+distribution of the delays.
 
 \section{Limitations}
 \label{sec:concl_limitations}
@@ -104,9 +80,11 @@ the learned trees, so the size of a scenario effect is not established. The stud
 is an iterative model development with a limited evaluation, not a confirmatory
 test.
 \item \textbf{Domain knowledge.} The domain rules, the three lanes, the corridor and the
-decision point were co-designed and confirmed by the terminal, but the review came
-from the company-side co-supervisor and is not independent, and the costs of a move
-were evaluated by the terminal, not modelled.
+decision point come from the discussions with the terminal during the development of
+the model and from the operational knowledge of the author, and they were confirmed by
+the terminal within the project, so the confirmation is not independent. The
+plausibility of the results was assessed by the author, and the costs of a move were
+assessed, not modelled.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

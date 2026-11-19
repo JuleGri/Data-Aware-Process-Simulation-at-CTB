@@ -13,111 +13,91 @@ knowledge entered the study, and what the terminal can take from it.
 \label{sec:disc_adequacy}
 
 Three properties decide whether a simulation can support the comparison of a block
-allocation rule with the current allocation. It must generate only visits that
-trucks can perform, it must produce the waiting at a busy block by the mechanism that
-the allocation changes, and it must respond to load as strongly as the terminal. The
-final configuration meets the first two and the third only in part.
+allocation rule with the current allocation. It must generate only visits that trucks
+can perform, produce the waiting at a busy block by the mechanism that the allocation
+changes, and respond to load as strongly as the terminal. The final configuration
+meets the first two and the third only in part (Section~\ref{sec:res_rq2}). This
+section discusses what follows for the use of the model.
 
-\paragraph{What the model supports.} Every simulated visit satisfies the checked
-rules, and the waiting before a stop arises when all three lanes of a block are
-taken. The model can therefore show how moving deliveries away from full blocks acts
-in principle, which visits gain, and whether the waiting is reduced or only moved.
-Its result for the allocation rule is a trade-off between how often and how badly
-the corridor is exceeded, and between the trucks that gain and those that pay
-(Section~\ref{sec:res_s1_contrasts}). A plausible explanation for why the trade-off
-appears only under higher demand lies in the mechanism. With moderate congestion, a
-moved delivery finds a free lane, and the trucks at the receiving block hardly notice
-it. Under heavy congestion, the receiving blocks fill as well, and a wider choice
-moves more deliveries into them.
+\paragraph{A mechanism, not a magnitude.} Because the waiting arises in the model
+where it arises at the terminal, the model can show how moving deliveries away from
+full blocks acts, which visits gain and whether the waiting is reduced or only moved.
+Because it underestimates the slowdown in the busiest hours, it cannot show how much
+the terminal would gain. The trade-off between how often and how badly the corridor is
+exceeded (Section~\ref{sec:res_s1_contrasts}) is consistent with this mechanism. With
+moderate congestion, a moved delivery finds a free lane, and the trucks at the
+receiving block hardly notice it. Under heavy congestion, the receiving blocks fill as
+well, and a wider choice moves more deliveries into them. This explanation is
+plausible, but the runs do not test it directly.
 
-\paragraph{What the model does not support.} It does not give the size of the effect
-at the terminal. It produces less than half of the hours that the terminal counts as
-too long, its stops slow down less than the recorded ones at the busiest blocks, and
-how strongly it congests depends on the depth of its trees
-(Section~\ref{sec:res_e4_depth}). The size of the simulated effect depends on exactly
-these properties (Section~\ref{sec:res_s1_sensitivity}). The model also leaves out
-what a move costs at the terminal, namely the driving to another block, a later
-rehandling of the container and the constraints of the yard plan. These can make the
-real effect smaller, while a stronger slowdown under load can make it larger. The
-supported statement is therefore conditional. If the waiting at a full block arises
-as in the model, if eligible blocks exist and if a move costs little, then moving
-deliveries away from blocks that three trucks are already heading to shortens the
-long visits and lowers the share of hours above the corridor. Because the model does
-not reproduce the severe congestion that motivates the rule, even the direction of
-the effect at CTB remains a hypothesis that a pilot would have to test. Only the
-upper bound of the corridor is evaluated, because the shift of equipment from HO2 to
-the waterside that the lower bound allows is not recorded
-(Section~\ref{sec:prob_statement}).
+\paragraph{What the model leaves out.} The model does not contain what a move costs
+at the terminal, namely the driving to another block, a later rehandling of the
+container and the constraints of the yard plan, which can make the real effect
+smaller. A stronger slowdown under load, as recorded, can make it larger. The supported
+statement is therefore conditional. If the waiting at a full block arises as in the
+model, if eligible blocks exist and if a move costs little, then moving deliveries away
+from blocks that three trucks are already heading to shortens the long visits and
+lowers the share of hours above the corridor. Even the direction of this effect at CTB
+remains a hypothesis that a pilot would have to test. Only the upper bound of the
+corridor can be evaluated, because the shift of equipment from HO2 to the waterside
+that the lower bound allows is not recorded (Section~\ref{sec:prob_statement}).
 
-\paragraph{Model error and drift.} Part of the shortfall comes from the change
-between the periods. The stops of the test period took longer at every load, and more
-blocks were closed (Sections~\ref{sec:res_e4_remaining} and~\ref{sec:obs_drift}). One
-weakness, however, appears in both periods. The model produces about half of the hours
-above the corridor even in-sample. The missing slowdown in the busiest hours is
-therefore a limitation of the model, not of the test period, and it lies in the
-congestion that the allocation rule is meant to relieve.
+\paragraph{Model error and drift.} Part of the shortfall comes from the change between
+the periods (Section~\ref{sec:res_e4_remaining}). That the model produces only about
+half of the hours above the corridor even in-sample shows, however, that the missing
+slowdown in the busiest hours is a limitation of the model, not of the test period. It
+lies in the congestion that the allocation rule is meant to relieve.
 
-\paragraph{Congestion outside the terminal.} The highest observed peaks are not
-driven by the load at the blocks. In the test period they occur at the usual number
-of arrivals, and the additional time lies in the exit after the last stop
+\paragraph{Delays after the last stop.} Not all of the missing peaks lie at the
+blocks. The three highest peaks of the test period occur at the usual number of
+arrivals, and their additional time lies in the exit after the last stop
 (Section~\ref{sec:res_e4_remaining}). In discussions with the terminal during the
-development of the model, these peaks were attributed to traffic congestion outside
-the terminal, which delays the trucks on their way out and which the terminal cannot
-influence. Such episodes need not be simulated as individual events, but they recur,
-and how the terminal copes with them is of particular operational interest. The
-simulation cannot generate them, because they are rare and their cause is not
-recorded in the event log. The three episodes of the test period contain only
-11\,\% of the hours above the corridor, but 36\,\% of the minutes by which these hours
-exceed it. They therefore explain a large part of the missing severity, but little of
-the missing frequency, and they count against the corridor although the terminal
-cannot influence them. A different allocation of deliveries cannot relieve congestion
-outside the terminal, and the model cannot show how the operation, or a rule,
-performs during such an episode.
+development of the model, such peaks were attributed to traffic congestion outside the
+terminal, which the terminal cannot influence. The normal arrivals and the long exits
+are consistent with this explanation, but they do not prove an external cause.
+
+The diagnosis suggests that part of the extreme peaks has causes outside the handling
+at the blocks, which a model learned from the recorded visits cannot generate and
+which a block allocation cannot relieve. These windows hold 36\,\% of the observed
+minutes above the corridor, but this share is not the share of the simulation error,
+and it does not change the limited validity of the model for the congestion at the
+blocks. How the terminal copes with such episodes remains of operational interest,
+and the model cannot evaluate it.
 
 \paragraph{Conditions of the result.} The result is conditional on the replayed
-arrivals, case attributes and blocks. Without them, the cycle-time distance rises from
-8.0 to 11.2 minutes, and a prospective use would need an arrival model with the daily
-peaks and the block of each container from the yard plan. It also rests on the
-extensions of the simulator, each of which the load response needs
-(Section~\ref{sec:res_e4_loo}). Two details of the implementation bound it further.
-The block is replayed only for the 75\,\% of the RMG stops that have an observed
-counterpart, and the load that the service time sees is counted before a stop may
-move to a free lane (Appendix~\ref{app:verification}).
+arrivals, case attributes and blocks, and a prospective use would need an arrival
+model with the daily peaks and the block of each container from the yard plan. It also
+rests on the extensions of the simulator and on two details of their implementation,
+the replay of the block for 75\,\% of the RMG stops and the moment at which the load of
+the service time is counted (Appendix~\ref{app:verification}).
 
 \section{Discovery Metrics and Simulation Behaviour}
 \label{sec:disc_metrics}
 
-Good discovery metrics predicted a usable simulation only in part. First, what a net
-permits is not what the simulator generates. ProSiT learns its routing from the
-observed visits \cite{Vinci2026prosit}, so behaviour that a net permits but the log
-never shows is generated rarely, and precision separated the nets mainly where they
-are very permissive. Second, coverage of the frequent behaviour mattered throughout,
-because a sequence that a net rejects is never generated. IMf 0.3 loses almost all
-visits to two RMG blocks, which are long visits and the ones a block allocation
-affects most. Third, no measure on the language shows how a net is built, and the
-structure decided what the simulator does. IM 0.0 has parallel branches that silent
-transitions can skip, and in the simulation 12 to 21\,\% of its multi-stop visits have
-overlapping stops, because ProSiT learns each routing weight from the case attributes
-and the history of the case, not from the marking of the net
-(Appendix~\ref{app:replica}). The same holds for the stochastic labelled data Petri
-nets on which ProSiT builds
-\cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}. Under the
-final configuration, these impossible visits even bring IM 0.0 closest to the observed
-turnaround time (Section~\ref{sec:res_e4_nets}), so a selection by the simulated
-turnaround time alone would have chosen a net that no truck can follow. In HM 0.7,
-every decision sits on a silent transition, and a data rule has to look ahead on the
-net. Conformance metrics evaluate the control flow, not the resource mechanisms, so
-the two strongest effects in the simulation, the self-count in the queue feature and
-the count of trucks at a block, could only be found by validating the simulator
-component by component.
+Conformance metrics anticipated the simulation only in part
+(Section~\ref{sec:res_rq1}). The reason lies in how ProSiT uses a net. It learns its
+routing from the observed visits \cite{Vinci2026prosit}, so behaviour that a net
+permits but the log never shows is rarely generated, and precision matters mainly for
+very permissive nets. A sequence that a net rejects, in contrast, is never generated,
+which is why coverage mattered throughout.
 
-\paragraph{What the discovered control flow contributes.} The control flow decides
-which sequences the simulator can generate at all, whether impossible visits arise,
-where a data rule has to act and at which decision points ProSiT learns its routing.
-Once the resource mechanisms are extended, however, nets without parallel branches
-give nearly the same turnaround time, and the net explains at most 1.5 of the
-8.0 minutes of cycle-time distance (Section~\ref{sec:res_e4_nets}). The discovered
-control flow is therefore a necessary basis of the simulation, but not the source of
+The structure of a net matters in a way that no measure on its language shows. ProSiT
+learns each routing weight from the case attributes and the history of the case, not
+from the marking of the net (Appendix~\ref{app:replica}), as do the stochastic labelled
+data Petri nets on which it builds
+\cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}. Parallel
+branches that silent transitions can skip, as in IM 0.0, therefore produce visits that
+no truck can perform. Under the final configuration, these visits even bring IM 0.0
+closest to the observed turnaround time (Section~\ref{sec:res_e4_nets}), so a selection
+by the simulated turnaround time alone would have chosen a net that no truck can
+follow.
+
+Conformance metrics evaluate the control flow, not the resource mechanisms. The two
+strongest effects in the simulation, the self-count in the queue feature and the count
+of trucks at a block, could therefore only be found by validating the simulator
+component by component. Once these mechanisms are extended, nets without parallel
+branches give nearly the same turnaround time (Section~\ref{sec:res_e4_nets}). The
+discovered control flow is a necessary basis of the simulation, but not the source of
 its remaining error.
 
 \paragraph{Simplicity and the analyst.} Simplicity was not used for the selection,
@@ -288,32 +268,31 @@ uncertain. The what-if analysis assumes that the learned associations between lo
 waiting and service hold when the allocation changes, which the data cannot confirm
 \cite{Vinci2026prosit}.
 
-\section{Domain Knowledge and Stakeholder Review}
+\section{Domain Knowledge}
 \label{sec:disc_stakeholders}
 
-The terminal took part in the study in two ways. Its data warehouse and business
-intelligence team and terminal development co-designed the use case in every phase,
-from the data and the cleaning to the domain rules and the improvement measure. In
-addition, the completed model and its results were reviewed by e-mail on 12 November
-2026 by the project manager responsible for the cross-terminal KPI dashboard, who is
-also the company-side co-supervisor of this thesis, so the review is not independent
-of the study.
+Knowledge that the event log does not contain entered the study from two sources.
+Terminal development and the data warehouse and business intelligence team of HHLA
+co-designed the use case during the development of the model in summer 2026, from the
+data and the cleaning to the domain rules and the improvement measure. In addition,
+the author worked at the terminal for six years, and this operational knowledge
+informed the domain rules, the interpretation of the records and the assessment of
+the results.
 
-The review confirmed the domain rules, the three lanes per block and that all
-sequences of the event log are real operational variants. It confirmed that the yard
-position of a delivery is assigned at Gate In, near the berth of the target vessel if
-it is known and in block T13 otherwise, without considering how many trucks are
-already heading to a block. This is the decision that the improvement measure changes.
-The review corrected the corridor, which applies to the mean turnaround time of the
-trucks that leave in an hour, and pointed out that below the corridor the terminal can
-move manual equipment from HO2 to the waterside. It evaluated the result of the
-improvement measure as plausible, because moves within one or two blocks need no
-rehandling and no long additional driving, and it named a completely free block
-choice as an open question. It did not find the missing peak hours of the simulation
-plausible, which agrees with the main limitation found in E4. These statements are an
-expert assessment, not a measured cost. An assumption that the modeller and the
-terminal put into the model cannot be confirmed by the same model. The records can
-only show that they do not contradict it, as they do for rules 1 to 5.
+The terminal confirmed the domain rules, the three lanes per block, that all
+sequences of the event log are real operational variants, and the way in which the
+yard position of a delivery is assigned at Gate In. It also specified the corridor as the mean
+turnaround time of the trucks that leave in an hour and pointed out that below the
+corridor manual equipment can be moved from HO2 to the waterside. The results of the
+simulation were not part of this confirmation.
+
+The plausibility of the results was assessed by the author. That moves within one or
+two blocks need no rehandling and no long additional driving is an operational
+assessment as well, not a measured cost. None of this knowledge is independent of the
+study, because the confirmation came from within the project and the assessment from
+the author. An assumption that the modeller puts into the model cannot be confirmed by
+the same model. The records can only show that they do not contradict it, as they do
+for rules 1 to 5.
 
 \section{Implications for Practice}
 \label{sec:disc_practice}
@@ -323,7 +302,7 @@ part of the visit, before the first stop, at the stops and before Gate Out
 (Table~\ref{tab:kpi_long_visits}), and the waiting before the first stop grows
 sharply when three trucks are already at a block. This locates two levers, the load
 of the blocks at the moment a truck arrives and the waiting before Gate Out, part of
-which comes from congestion outside the terminal.
+which may come from congestion outside the terminal.
 
 \paragraph{What a block allocation can do.} The model points to a lever that
 today's assignment does not use, the trucks already heading to each block when a

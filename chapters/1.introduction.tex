@@ -112,21 +112,22 @@ second.
 
 The main contributions of this thesis are as follows.
 \begin{enumerate}
-\item[(C1)] A domain-constrained simulation model of truck handling at CTB, combining
-a discovered control flow and simulation parameters learned from the event log with
-domain knowledge of the terminal in the form of the domain rules of the truck visit, a
-data-aware stop guard and the capacity of the yard blocks, providing a data-driven
-simulation that respects physical limits the event log does not record.
-\item[(C2)] A validation of the components of the simulation model against the observed
-turnaround times, evaluating its response to load rather than only its similarity to the
-recorded log and correcting one part of the simulator at a time, providing evidence of
-how the implementation, the resource semantics and the event data shape the simulated
-congestion at resources that serve several cases at once.
-\item[(C3)] An empirical evaluation of a load-aware block allocation at CTB in six
-scenarios of flexibility and demand, using paired simulation runs and rules for the
-claims fixed in advance, providing conditional evidence of how such an allocation
-affects the frequency and the severity of hours above the turnaround corridor and the
-distribution of delays among the trucks.
+\item[(C1)] \textbf{A domain-constrained simulation model of CTB truck handling.} The
+model combines a discovered control flow and simulation parameters learned from the
+event log with domain knowledge that the log does not contain, in the form of the
+domain rules of the truck visit, a data-aware stop guard and the capacity of the yard
+blocks. It thereby provides a data-driven simulation that respects the physical limits
+of the terminal.
+\item[(C2)] \textbf{An analysis of simulation errors and congestion sensitivity.} The
+simulation is validated component by component by its response to load rather than
+only by its similarity to the recorded log. The analysis shows how the implementation,
+the resource semantics and the event data shape the simulated congestion at resources
+that serve several cases at once.
+\item[(C3)] \textbf{A conditional evaluation of a load-aware block allocation.} An
+allocation rule is evaluated at CTB in six scenarios of flexibility and demand, with
+paired runs and rules for the claims fixed in advance. The evaluation provides
+conditional evidence of how such a rule affects the frequency and the severity of hours
+above the corridor and the distribution of delays among the trucks.
 \end{enumerate}
 
 
@@ -147,19 +148,17 @@ limitations of all data-aware simulators.
 \section{Thesis Outline}
 \label{sec:thesis_outline}
 
-Chapter~\ref{chp:background} introduces the case studies setting, as well as the process-mining and simulation
-concepts and positions the study in the literature.
+Chapter~\ref{chp:background} introduces the setting of the case study and the
+process-mining and simulation concepts, and positions the study in the literature.
 Chapter~\ref{chp:case_study_and_data} describes the data sources, the preprocessing and cleaning and
-the event log construction. Itdescribes the performance measure and explains the given domain rules. 
+the event log construction. It describes the performance measure and explains the given domain rules. 
 Chapter~\ref{chp:experiments} explains the design of the five experiments that answer
 the research questions. It introduces the split into a training and a test log, and the number of simulation runs, and then describes for each
 experiment its goal, its conditions and the criteria by which its results are evaluated.
 Chapter~\ref{chp:process_discovery_methodology} describes the simulation model and its parameters and their construction, the
 settings with which it is fitted, and the extensions that add the physical limits of the yard blocks.
 Chapter~\ref{chp:results} reports the results and answers the research questions.
-Chapter~\ref{chp:discussion} assesses what they mean for CTB and where the
-conclusions stop, how domain knowledge entered the study, and what the terminal can
-take from it. Chapter~\ref{chp:discussion} assesses what the results mean for the intended use and
+Chapter~\ref{chp:discussion} assesses what the results mean for the intended use and
 for CTB. It discusses what conformance measures reveal about a model for simulation,
 which parts of data-aware simulation transfer to a physical logistics process, the
 threats to validity, how domain knowledge entered the study, and what the terminal can
@@ -173,5 +172,5 @@ discovered nets with their conformance values, the rule audit and a comparison o
 control-flow representations (Appendix~\ref{app:discovery_results}), report
 additional simulation results
 (Appendix~\ref{app:sim_results}), document the complete ProSiT model
-(Appendix~\ref{app:prosit_inventory}) and list what is needed to reproduce the
-experiments (Appendix~\ref{app:model_inspection}).
+(Appendix~\ref{app:prosit_inventory}) and describe the implementation and the source of every result
+(Appendix~\ref{app:model_inspection}).

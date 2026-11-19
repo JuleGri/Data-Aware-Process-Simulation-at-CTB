@@ -274,20 +274,21 @@ mechanism audit (Section~\ref{sec:res_mechanisms}).
 
 \begin{table}[htbp]
 \centering
-\scriptsize
-\begin{tabularx}{\textwidth}{L{2.0cm}L{3.2cm}L{3.6cm}Y}
+\footnotesize
+\begin{tabularx}{\textwidth}{L{2.1cm}L{3.4cm}YL{2.4cm}}
 \toprule
-\textbf{Part} & \textbf{ProSiT 1.0.4} & \textbf{Simulation model} & \textbf{Why} \\
+\textbf{Part} & \textbf{ProSiT 1.0.4} & \textbf{Simulation model} & \textbf{Reason} \\
 \midrule
-Number of stops & no guard & stop guard that looks ahead on the net, as many stops as planned & ProSiT has no guards, and the decisions sit on silent transitions (E3) \\
-Capacity & discovered 4--5, checked when a stop becomes possible & 3 lanes, checked over the whole stop when it starts & a block holds at most three trucks (E4) \\
-Waiting time & measured from a completely free block, queue counts the stop itself & measured from a free lane, queue without the stop itself & otherwise the learned waiting falls when the block gets busier (E4) \\
-Execution time & no load feature & other trucks at the block as a feature (counted when the stop is scheduled) & stops take longer when the block is busy (E4) \\
-Counting & stops at the first finished stop in its list & every stop counted & 14--15\,\% of the counts are too low (E4) \\
-Resource choice & learned trees & with replay the observed block where available, else training shares, without replay training shares & the learned trees prefer the busiest block (E4) \\
-Resource calendars & discovered (122--128 of 168 hours) & full week for trucks already inside & a stop is not interrupted at the end of a shift \\
+Number of stops & no guard & stop guard that looks ahead on the net, as many stops as planned & no guards in ProSiT (E3) \\
+Capacity & discovered 4--5, checked when a stop becomes possible & 3 lanes, checked over the whole stop when it starts & physical limit (E4) \\
+Waiting time & measured from a completely free block, queue counts the stop itself & measured from a free lane, queue without the stop itself & learned waiting falls with load (E4) \\
+Execution time & no load feature & other trucks at the block as a feature (counted when the stop is scheduled) & stops slow down under load (E4) \\
+Counting & stops at the first finished stop in its list & every stop counted & count too low (E4) \\
+Resource choice & learned trees & with replay the observed block where available, else training shares, without replay training shares & learned choice concentrates trucks (E4) \\
+Resource calendars & discovered (122--128 of 168 hours) & full week for trucks already inside & no interruption at the end of a shift \\
 \bottomrule
 \end{tabularx}
+\par\smallskip{\footnotesize\raggedright The empirical evidence for each extension is given in Table~\ref{tab:rq2_causes}.\par}
 \caption{Extensions of the simulation model compared with ProSiT 1.0.4.}
 \label{tab:sim_adaptations}
 \label{tab:sim_learned_added}
@@ -328,6 +329,7 @@ simulated truck in replay mode through these steps, with the values the simulato
 used and the leaf of each tree that produced them.
 
 \input{tables/sim_worked_example}
+\FloatBarrier
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Chapter Summary}

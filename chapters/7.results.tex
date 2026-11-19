@@ -558,8 +558,8 @@ minutes, and busy hours no longer have longer visits. With
 the capacity checked at enabling, up to eight trucks are at a block again. With
 ProSiT's count, the sum of the profile gaps rises from 9.6 to 11.4 minutes. Without
 the load in the service time, the stop-duration gap rises from 1.7 to 3.0 minutes.
-This is the only extension that costs level (cycle-time distance 7.3 instead of 8.0
-minutes without it).
+This is the only extension that costs level, with a cycle-time distance of
+7.3 minutes without it and 8.0 minutes with it.
 
 \paragraph{The correction of version 1.0.5 alone.} In this run, the resource-choice
 and waiting-time models are retrained without the self-count, and everything else is
@@ -632,8 +632,8 @@ afternoons of 13, 15 and 29 April, occur at the usual number of arrivals for the
 weekday and hour, and the additional time lies almost entirely in the exit after the
 last stop, with a median of 33 to 54 minutes against 7 minutes in a typical hour
 (Appendix~\ref{sec:obs_episodes}). These three windows contain 20 of the 179 test
-hours above 35 minutes, but 36\,\% of the minutes by which the hourly mean exceeds
-the corridor (Section~\ref{sec:disc_adequacy}). Under load, the approach to the
+hours above 35 minutes and 36\,\% of the observed minutes by which the hourly mean
+exceeds the corridor (Section~\ref{sec:disc_adequacy}). Under load, the approach to the
 first stop rises as observed, the stop duration rises less than observed, and the
 turnaround time falls behind when more than 100 trucks are in the terminal
 (Figure~\ref{fig:sim_load_profiles}, medians averaged over five seeds). With three
@@ -674,7 +674,7 @@ test period is therefore not only model error.
 too short. The count of stops per area explains about 0.2 minutes of the error per
 visit, the durations the rest. With three lanes, the simulation never has a fourth
 truck at a block, while the training log records one at 5.6\,\% of the RMG stops, with
-a mean duration of 21 minutes. These recorded stops include the waiting for a lane
+a mean duration of 21 minutes. These recorded stops may include the waiting for a lane
 (Section~\ref{sec:exp_e4_configs}). The simulated stops are also shorter in the load
 states they share with the log (median 8 against 9 minutes with one other truck at the
 block, 11 against 13 with two, training period). Shorter stops mean fewer trucks in
@@ -801,10 +801,7 @@ the replayed arrivals and blocks and holds for the turnaround time and its parts
 In the model, moving deliveries away from full blocks at Gate In lowers how often the
 hourly mean turnaround time exceeds 35 minutes, in every scenario. Whether it also
 lowers how far these hours exceed it, and whether other trucks pay for the gain,
-depends on the demand and on how far a delivery may move. Under higher
-demand, the widest rule lowers the frequency most but moves waiting to the trucks at
-the receiving blocks, while the narrowest rule ends with a lower severity and mean
-turnaround time than the rule with two block numbers. All effects are values of a
+depends on the demand and on how far a delivery may move. All effects are values of a
 model that reproduces less than half of the hours above the corridor
 (Section~\ref{sec:res_e4_acceptance}). They are hypotheses for the terminal, not
 estimates of its gain.
@@ -862,8 +859,9 @@ hours.
 The trucks with a moved delivery gain most, 8 to 10 minutes with replayed demand and
 12 to 16 minutes with 20\,\% more trucks (Table~\ref{tab:rq3_grid_mechanism}). With
 replayed demand, the other trucks gain as well, because shorter visits leave fewer
-trucks in the terminal, and the trucks at the receiving blocks do not lose. The
-waiting is reduced, not moved. With 20\,\% more trucks, the two wider rules move more
+trucks in the terminal, and no clear disadvantage for the trucks at the receiving
+blocks is detected, although the intervals do not exclude a small one. The waiting is
+reduced rather than moved. With 20\,\% more trucks, the two wider rules move more
 deliveries, and the trucks at the receiving blocks lose about 3.5 minutes, because
 their receives cannot avoid the added deliveries. These rules therefore partly move
 the waiting to other trucks. For the narrowest rule, the change at the receiving
@@ -928,19 +926,12 @@ fall after Gate In, when the yard position is already assigned. The restrictions
 therefore make the effect slightly smaller, not larger.
 
 \label{sec:res_s1_conclusion}
-\paragraph{Interpretation.} The rules for the claims, fixed before the runs, hold.
-The interval for the visits with a moved delivery excludes zero in the three
+\paragraph{Rules for the claims.} The rules for the claims, fixed before the runs,
+hold. The interval for the visits with a moved delivery excludes zero in the three
 scenarios with replayed demand, the sign holds in all four robustness runs, and the
-approach and the share of stops at full blocks fall. These rules establish a
-direction for the trucks whose delivery is moved and the mechanism behind it. They do
-not establish a benefit for the terminal as a whole, which the whole-system outcomes
-decide. Those support a gain in the frequency of hours above the corridor in every
-scenario, and with replayed demand also in their severity and in the mean turnaround
-time. With 20\,\% more trucks, the severity and the mean are not determined, and the
-wider rules move waiting to other trucks. The robustness runs vary the model, not the
-conditions that decide the benefit at the terminal, namely how often an alternative
-block is really eligible, what a move costs and whether the committed load of the
-blocks is known when the yard position is assigned.
+approach and the share of stops at full blocks fall. The rules thereby establish a
+direction for the trucks whose delivery is moved and the mechanism behind it, but not a
+benefit for the terminal as a whole, which the whole-system outcomes decide.
 
 \subsection{Answer to RQ3}
 \label{sec:res_rq3}

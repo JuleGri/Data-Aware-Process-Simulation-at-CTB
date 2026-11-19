@@ -168,8 +168,9 @@ arrivals stay at the usual number for the weekday and hour, while the median
 exit after the last stop rises to 33 to 54 minutes, against 7 minutes in a
 typical hour. In discussions with the terminal during the development of the
 model, such exit peaks were attributed to traffic congestion outside the
-terminal, which delays the trucks on their way out and which the terminal
-cannot influence. Such episodes are not driven by the demand at the terminal. A simulation learned from normal
+terminal, which the terminal cannot influence. The normal arrivals and the long
+exits are consistent with this explanation, although the data cannot confirm
+the cause. These episodes do not follow the demand at the terminal. A simulation learned from normal
 operations cannot be expected to reproduce them. They remain in the logs and in
 every evaluation.
 
@@ -205,7 +206,8 @@ each, on average 1.1 blocks at a time. In the test period, T26 was empty from
 from 28 April. On average 2.4 of the 22 blocks were empty, and for 87\,\% of the
 time at least two, against 37\,\% in the training period. The event log shows the
 same pattern. Before a block falls empty, its deliveries stop while its receives
-continue. According to the terminal, these closures were planned for maintenance. The replayed blocks of the
+continue. This gradual emptying indicates a planned closure, for example for
+maintenance, rather than a sudden failure. The replayed blocks of the
 simulation contain these closures, but the learned waiting and service times come
 from a period with fewer closed blocks.
 

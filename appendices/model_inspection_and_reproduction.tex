@@ -1,11 +1,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Reproduction}
+\chapter{Implementation and Traceability}
 \label{app:model_inspection}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This appendix lists the environments, the inputs, the run folders and the script
-behind every table and figure, so that the results can be reproduced. Paths are
-relative to the project repository \texttt{trucksimulation}.
+This appendix documents the environments, the inputs, the run folders and the script
+behind every table and figure, so that each result can be traced to the run that
+produced it. The event data of HHLA are confidential, and the code is not published.
+The code is available from the author on request. Paths are relative to the project
+repository \texttt{trucksimulation}.
 
 \section{Environments and Inputs}
 
@@ -35,8 +37,8 @@ The fitted ProSiT models are stored as Python pickles, the model of each net in
 \nolinkurl{simulation_e3/runs/hm07orig_20261115/e3/<net>/prosit_params.pkl}, and the
 retrained predictive parameters of E4 in \nolinkurl{components/components}. The pickles keep the
 complete fitted state, including the training samples stored in the leaves.
-Exact numerical reproduction uses them together with the recorded environment
-and the seeds. All simulation runs of E3 to E5 and the controls are in the same
+Together with the recorded environment and the seeds, they determine every run
+exactly. All simulation runs of E3 to E5 and the controls are in the same
 run folder, with the subfolders \texttt{e3} (main condition and contrasts), \nolinkurl{e3_noguard} and
 \nolinkurl{e3_simpleguard} (guard ablation), \texttt{e4} (all configurations of E4),
 \texttt{netx} (final configuration with the contrast nets), \nolinkurl{stale_final}
