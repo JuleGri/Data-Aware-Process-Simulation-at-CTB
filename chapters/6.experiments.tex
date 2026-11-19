@@ -310,7 +310,8 @@ ranks the admissible nets in E2.
 net accepts, from the same replay on the test log. Reported only. Token-based
 generalisation \cite{Buijs2014Quality} is not used, because it depends on the
 representation of the net.
-\item \textbf{Structure.} Places, visible and silent transitions.
+\item \textbf{Simplicity.} The size of the net, measured by its places and its
+visible and silent transitions. Reported only.
 \end{itemize}
 
 \paragraph{Fitness for simulation}
@@ -342,8 +343,7 @@ the visit types at the bottleneck from the simulation.
 \paragraph{Tools}
 Fitness, fitting visits, accepted sequences and precision are computed in ProM
 6.15 \cite{vanDongen2005ProM} on the PNML files exported from ProM Lite, and
-soundness with WOFLAN in ProM \cite{Verbeek2001Woflan}. As a cross-check, precision
-is also computed with the two precision functions of PM4Py \cite{Berti2023PM4Py}.
+soundness with WOFLAN in ProM \cite{Verbeek2001Woflan}.
 
 \paragraph{Admissibility}
 A net of the discovery grid (Table~\ref{tab:exp_grid}) is \emph{admissible} if it
@@ -416,7 +416,10 @@ Section~\ref{sec:sim_adaptations}.
 The routing trees of ProSiT can use the planned number of stops as a feature. A
 tree, however, only changes the probabilities of the next step and cannot exclude a
 visit with more or fewer stops than planned. The guard excludes such visits, and the
-learned probabilities decide among the steps that remain.
+learned probabilities decide among the steps that remain. The guard does not change
+ProSiT's discovery. It is a switch inserted into ProSiT's simulation loop, which sets
+the weights of the excluded transitions to zero before each routing draw
+(Appendix~\ref{app:implementation}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation of the Discovered Nets (E3)}
@@ -439,10 +442,13 @@ on the net and are evaluated in E4.
 \label{sec:mc_ctb_adaptations}
 
 To ensure comparability, all nets are simulated under the same conditions. For each
-net, ProSiT is fitted on the training log with the settings of
-Section~\ref{sec:sim_settings} and runs with its own simulator, including its
-learned block choice and its capacity check. Each fitted model simulates the 32,014
-visits of the test period with five seeds. Because ProSiT learns its parameters
+net, ProSiT learns its parameters from the training log (59,139 visits) with the
+settings of Section~\ref{sec:sim_settings}. Each fitted model then generates new
+visits with ProSiT's own simulator, including its arrival tree, its distribution of
+the case attributes, its learned block choice and its capacity check. To give every
+run the same horizon, the generation starts at the first Gate In of the test period
+and produces as many visits as the test period has (32,014), with five seeds. No
+other information of the test log is used. Because ProSiT learns its parameters
 separately for each net, the comparison is one between complete fitted simulators.
 
 \paragraph{Nets} The selected net of E2 is the main case. In addition, four nets
@@ -461,8 +467,10 @@ activities.
 
 \subsection{Measures}
 \label{sec:exp_e3_measures}
-The generated visits are compared with the training log, on which the nets were
-discovered and ProSiT was fitted. Five measures are used.
+Because E3 asks whether the simulation reproduces the behaviour that it learned, the
+generated visits are compared with the training log, on which the nets were
+discovered and ProSiT was fitted. A comparison with the test log would mix this
+question with the change between the periods. Five measures are used.
 \begin{enumerate}
 \item \textbf{Executability.} ProSiT can fit its parameters on the net, and every
 simulated visit reaches Gate Out.
@@ -514,7 +522,9 @@ The evaluation follows the three levels of validation of Sargent
 (Section~\ref{sec:exp_e4_verification}), conceptual validity
 (Section~\ref{sec:exp_e4_mechanisms}) and operational validity
 (Section~\ref{sec:exp_e4_operational}). Section~\ref{sec:exp_e4_configs} first
-defines the configurations that are compared.
+defines the configurations that are compared. Chapter~\ref{chp:results} reports the
+results in the order in which they build on each other, with the verification tests
+last.
 
 \subsection{Configurations}
 \label{sec:exp_e4_configs}
