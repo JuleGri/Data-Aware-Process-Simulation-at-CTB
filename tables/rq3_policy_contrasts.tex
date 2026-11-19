@@ -1,0 +1,22 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{L{2.8cm}YYYY}
+\toprule
+\textbf{Contrast} & \textbf{Hours above 35\,min [pp]} & \textbf{Minutes above 35 per hour} & \textbf{Mean TTT [min]} & \textbf{Extra time at the receiving blocks [truck-hours]} \\
+\midrule
+\multicolumn{5}{l}{\textit{Replayed demand of the test period}} \\
+$\pm 1$ minus $\pm 2$ & 1.4\newline [$-$2.0, 4.7] & 0.06\newline [$-$0.16, 0.28] & 0.3\newline [$-$0.1, 0.7] & 6\newline [$-$42, 55] \\
+$\pm 1$ minus any block & 3.9\newline [2.2, 5.6] & 0.19\newline [0.05, 0.32] & 0.8\newline [0.5, 1.0] & 37\newline [$-$9, 83] \\
+$\pm 2$ minus any block & 2.5\newline [$-$0.3, 5.4] & 0.13\newline [$-$0.09, 0.34] & 0.5\newline [0.1, 0.8] & 31\newline [$-$14, 76] \\
+\multicolumn{5}{l}{\textit{20\,\% more trucks}} \\
+$\pm 1$ minus $\pm 2$ & 1.1\newline [$-$0.8, 3.0] & $-$4.45\newline [$-$6.77, $-$2.14] & $-$3.2\newline [$-$5.3, $-$1.2] & $-$157\newline [$-$316, 2] \\
+$\pm 1$ minus any block & 4.2\newline [1.4, 7.0] & $-$3.86\newline [$-$7.07, $-$0.66] & $-$2.0\newline [$-$5.0, 0.9] & $-$126\newline [$-$285, 33] \\
+$\pm 2$ minus any block & 3.1\newline [0.7, 5.5] & 0.59\newline [$-$2.99, 4.17] & 1.2\newline [$-$1.6, 4.0] & 31\newline [$-$99, 161] \\
+\bottomrule
+\end{tabularx}
+\par\smallskip{\footnotesize\raggedright Paired differences between two rules over the same ten seeds, means with 95\,\% $t$-intervals. A negative value means a better outcome with the first rule. The extra time at the receiving blocks is the change of the turnaround time of the visits at the blocks that received deliveries, summed over these visits, because the set of these visits differs between the rules.\par}
+\caption{Direct comparison of the allocation rules.}
+\label{tab:rq3_policy_contrasts}
+\end{table}

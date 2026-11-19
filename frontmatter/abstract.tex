@@ -1,47 +1,37 @@
 %!TEX root = ../dissertation.tex
 
-Container terminals use simulation to assess operational changes before they
-are made. Data-aware process simulation promises to learn such models from event
-logs. It has rarely been applied in logistics, and the modelling of queues and
-shared resources is the task that process mining supports least. This thesis
-examines whether a simulation learned with ProSiT from the operational data of
-HHLA Container Terminal Burchardkai can support the assessment of a load-aware
-allocation of truck deliveries to yard blocks. The terminal aims at an hourly mean
-turnaround time between 25 and 35 minutes. In the test period, the mean exceeds
-35 minutes in 56\,\% of the hours.
+Container terminals use simulation to assess operational changes before they are
+made. Data-aware process simulation promises to learn such models from event logs,
+but it has rarely been applied in logistics, where queues and shared resources
+dominate. This thesis examines whether a simulation learned with ProSiT from the
+operational data of HHLA Container Terminal Burchardkai can support the assessment
+of a load-aware allocation of truck deliveries to yard blocks. The terminal aims at
+an hourly mean turnaround time between 25 and 35 minutes. In the test period, the
+mean exceeds 35 minutes in more than half of the hours.
 
-From an event log of 91,153 truck visits, nineteen nets of four discovery
-families were compared with criteria fixed on the training log, namely soundness,
-acceptance of every sequence above a coverage threshold of 0.1\,\%, and the
-domain rules of the truck visit. The Heuristics Miner net HM 0.7, used as
-discovered, is the only net that meets all criteria (precision 0.998). A
-look-ahead stop guard makes every simulated truck perform its planned number of
-stops. As fitted, the simulation overestimates the turnaround time strongly
-(median 57 against 33 minutes), because its learned block choice concentrates
-the trucks. A component-wise audit traces this to how ProSiT counts queues and
-workload and to a single-server view of the blocks. With replayed trucks and
-blocks, three lanes per block, a waiting time measured from a free lane and
-load-dependent service, the model reproduces the median within 5 minutes and the
-rise of the waiting with the load of a block. It does not reproduce the slowdown
-in the busiest hours, in either period. Its validity for the intended use is
-therefore partial. The data-aware parts of ProSiT transfer, namely the routing
-learned from the attributes of the planned visit and the features of the load at a
-block, while its resource semantics, built for resources that handle one case after
-another, had to be adapted. The results hold with ProSiT's default tree depth of
-five as well.
-
-The allocation rule was evaluated within these limits, in six scenarios that
-combine one, two or any block of deviation with the observed demand and 20\,\%
-more trucks. In the model, moving deliveries at the gate away from blocks that
-three trucks are already heading to lowers the share of hours whose mean
-turnaround time exceeds 35 minutes by 8 to 13 percentage points in every
-scenario, through less waiting at full blocks. A local rule gives most of the
-effect, and under high demand a wider choice of blocks moves part of the waiting
-to other trucks. The share of hours below 25 minutes shows no clear change. The terminal confirmed the
-rules and the decision point and found the result plausible, but not the missing
-peak hours. Because the model misses the congestion that the rule is meant to
-relieve, the result is a hypothesis for the terminal, not an estimate of its
-effect. The case shows that a satisfactory control flow can coexist with
-inadequate congestion behaviour, and that the mechanism an intervention acts on
-has to be validated in the simulator itself before a what-if result can be
-trusted.
+The thesis reaches three findings for this case. First, high conformance did not
+establish suitability for simulation. Nineteen nets of four discovery families were
+compared with criteria fixed on the training log. Of the three nets that are sound
+and accept every frequent sequence, two generate visits that no truck can perform.
+Coverage and the domain rules anticipated these failures, precision did not. The
+selected Heuristics Miner net, used as discovered, reproduces the stop structure once
+a guard on the planned number of stops, a data attribute of the case, is added.
+Second, an improved aggregate timing did not establish suitability for
+congestion-sensitive decisions. As fitted, the simulation overestimates the
+turnaround time strongly, because its learned block choice concentrates the trucks.
+A component-wise analysis separates defects of the software version, a mismatch
+between its resource semantics and a block with three lanes, missing data on the
+cranes and a slower test period. With the first two corrected and the observed trucks
+and blocks replayed, the model reproduces normal hours and the rise of the waiting
+with the load of a block. It produces, however, less than half of the hours above the
+corridor, and the magnitude of its congestion depends strongly on the depth of the
+learned trees. Third, the effect of the allocation depends on the outcome considered.
+In the model, moving deliveries at the gate away from blocks that three trucks are
+already heading to lowers how often the hourly mean exceeds 35 minutes in every
+scenario, through less waiting at full blocks. Under higher demand, the change in the
+severity of these hours becomes uncertain, a wider choice of blocks moves waiting to
+other trucks, and a rule restricted to neighbouring blocks is a promising candidate
+rather than an established best rule. The terminal confirmed the rules and the
+decision point and found the result plausible, but not the missing peak hours. The
+result is a set of hypotheses for a pilot at the terminal, not a validated
+improvement.

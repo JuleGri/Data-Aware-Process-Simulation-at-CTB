@@ -198,24 +198,19 @@ ProSiT (Appendix~\ref{app:model_inspection}). E3 and E4 test whether each extens
 is needed (Chapter~\ref{chp:results}).
 
 \paragraph{The stop guard.} The discovered net allows any number of stops, because
-its loops can be repeated. In a data Petri net, the number of stops would be
-controlled by guards. Conditions on case variables that a transition must satisfy
-before it may fire \cite{Mannhardt2016Precision}. Two variables suffice for the
-truck visit. The planned number of stops $n$, a case attribute of the pre-advised
+its loops can be repeated. Section~\ref{sec:exp_guard} motivates the guard, a
+condition on the data of the case as in a data Petri net
+\cite{Mannhardt2016Precision}. Two variables suffice for the truck visit. The planned number of stops $n$, a case attribute of the pre-advised
 visit that is known at Gate In (Section~\ref{sec:entry_known_attributes}), and the
 number of stops done $c$, which every stop increases by one. A step towards another
 stop then requires $c < n$, the step towards Gate Out $c = n$. With such guards,
 soundness depends on the data. Every case must still be able to complete under
 them \cite{FelliDeLeoniMontali2021}.
 
-ProSiT builds on stochastic Petri nets whose transition weights depend on the data
-of the case \cite{mannhardt2023stochasticProcessesModelling,Vinci2026prosit}. A
-weight of zero would act like a guard, but ProSiT learns every weight from the log
-and offers no way to state a condition \cite{Vinci2026prosit,ProSiTRepository}. Its
-routing trees learn the planned number of stops only as a tendency. The stop guard
-adds the condition to the simulator. Because the decisions of HM 0.7 sit on silent
-transitions, it cannot wait until a stop or Gate Out is enabled. It looks ahead.
-Before the simulation, it computes from the reachability graph of the net, for
+ProSiT learns every transition weight from the log and offers no way to state a
+condition \cite{Vinci2026prosit,ProSiTRepository}, so the guard is added to the
+simulator. Because the decisions of HM 0.7 sit on silent transitions, it looks
+ahead. Before the simulation, it computes from the reachability graph of the net, for
 every state and every value of $c$, the numbers of stops with which a visit can
 still end. Before every routing draw, each enabled transition, silent or visible,
 whose firing would make it impossible to end with exactly $n$ stops gets the
@@ -229,17 +224,8 @@ no truck can enter a state from which it cannot complete its plan. The net with
 these guards is sound with respect to the data. If all permitted transitions have a
 learned weight of zero, the guard draws among the permitted ones.
 
-\paragraph{Without the planned number of stops.} If the stops were not
-pre-advised, the same mechanism could still enforce the physical bound of rule~6.
-With $n$ replaced by the upper limit of eight stops and the condition $c \le 8$,
-the guard would mask every step after which a visit would exceed the bound, and
-the number of stops below it would be left to the learned routing, whose trees use
-the activities done so far as features (Section~\ref{sec:prosit_components}). The
-results of E3 indicate what this would give. Without any guard, the learned routing
-already reproduces the distribution of stops per visit closely (total-variation
-distance 0.0053 to the training log, Section~\ref{sec:res_baseline}). A bound would
-remove only visits beyond it, and the observed maximum of four stops would be the
-stricter bound to choose.
+If the stops were not pre-advised, the same mechanism could still enforce the
+physical bound of rule~6, with $n$ replaced by the upper limit of eight stops.
 
 \paragraph{The other extensions.} The remaining four concern the blocks. Two of them
 change the simulator and two change the training data of a predictive parameter.

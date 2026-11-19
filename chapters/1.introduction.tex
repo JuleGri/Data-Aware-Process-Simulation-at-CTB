@@ -9,8 +9,8 @@ time \cite{Vinci2026prosit}. Logistics and transportation are rare among their
 applications, and the modelling of queues and shared resources is the task that
 process mining supports least \cite{Sulis2026SimulationReview}. This thesis examines how far the approach carries over to a
 physical logistics process, using truck handling at HHLA Container Terminal
-Burchardkai (CTB) as a case study. Whether a simulation learned with ProSiT from
-the operational event data of the terminal can support the assessment of a
+Burchardkai (CTB) as a case study. It asks whether a simulation learned with ProSiT
+from the operational event data of the terminal can support the assessment of a
 different allocation of truck deliveries to the yard blocks.
 
 \section{Motivation}
@@ -91,20 +91,32 @@ study, and the allocation question is the intended use against which the model i
 assessed. The limitations of the simulation are results of this assessment and
 determine the scope of the conclusions for the terminal.
 
-The thesis makes two connected contributions.
+The thesis makes three connected contributions, all for the CTB case.
 \begin{enumerate}
-\item[(C1)] \textbf{A justified simulation model for the CTB case.} The study
-compares discovered process models with conformance metrics, checks them against
-the domain rules of the truck visit, and documents the selected model, its learned
-decision trees and parameters, and the extensions that the physical limits require
-(Chapters~\ref{chp:experiments}--\ref{chp:results}).
-\item[(C2)] \textbf{An empirical assessment of validity and decision-support
-potential.} The study compares observed and simulated performance, locates the
-causes of the discrepancies component by component, and evaluates the improvement
-measure within the resulting limits. It distinguishes findings about the simulated
-system from conclusions justified for CTB (Chapters~\ref{chp:results}
-and~\ref{chp:discussion}).
+\item[(C1)] \textbf{Conformance does not establish suitability for simulation.}
+The study compares discovered process models by conformance metrics, by the domain
+rules of the truck visit and by their behaviour in the simulator. It shows that nets
+with high fitness and precision can generate visits that no truck can perform, while
+the coverage of the frequent sequences and the domain rules anticipate specific
+failures.
+\item[(C2)] \textbf{An improved aggregate timing does not establish suitability for
+congestion-sensitive decisions.} The study locates the discrepancies between
+observed and simulated turnaround times component by component. It separates
+defects of one software version, a mismatch between the resource semantics of the
+simulator and a block with several lanes, limits of the event data and the change
+between periods, and shows which of them targeted extensions remove and which
+remain.
+\item[(C3)] \textbf{A conditional assessment of a load-aware block allocation.} The
+study evaluates the allocation in the resulting model and shows that its effect
+depends on the outcome considered. The frequency of hours above the corridor falls,
+while their severity and the waiting of other trucks depend on the flexibility of the
+rule and on the demand. The result is a set of hypotheses for the terminal, not a
+validated improvement.
 \end{enumerate}
+The selected model, its learned decision trees and parameters and the extensions are
+documented in full, so that the model can be inspected and reproduced
+(Chapter~\ref{chp:process_discovery_methodology} and
+Appendices~\ref{app:prosit_inventory} and~\ref{app:model_inspection}).
 
 The case study builds on existing discovery and simulation methods. It does not
 propose a new algorithm. Findings from this terminal can motivate further
@@ -127,10 +139,11 @@ yard blocks, and what does it indicate about the effect on truck turnaround
 time?
 \end{enumerate}
 
-Experiments E1 to E3 address the selection of the control-flow model and its
-behaviour in the simulator (RQ1). E3 and E4 assess the performance of the
-simulation and investigate its discrepancies (RQ2). E5 evaluates the improvement
-measure (RQ3). Its interpretation depends on the evidence from the validation.
+A first group of experiments selects the control-flow model and examines its
+behaviour in the simulator (RQ1). A second group assesses the performance of the
+simulation and investigates its discrepancies (RQ2). A third evaluates the
+improvement measure (RQ3), and its interpretation depends on the evidence of the
+second.
 
 \section{Thesis Outline}
 \label{sec:thesis_outline}

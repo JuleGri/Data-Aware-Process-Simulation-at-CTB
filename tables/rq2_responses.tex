@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{L{4.6cm}YYYYY}
+\toprule
+\textbf{Configuration} & \textbf{Median / P90 TTT [min]} & \textbf{Approach, empty / full block [min]} & \textbf{RMG stop, alone / two others [min]} & \textbf{Most trucks at a block} & \textbf{Busy hours longer (Spearman)} \\
+\midrule
+Observed (test log) & 33 / 75 & 6 / 16 & 6 / 14 & 4 & 0.55 \\
+\midrule
+E3 base model & 57 / 137 & 8 / 39 & 8 / 7 & 22 & $-$0.30 \\
++ replayed arrivals & 54 / 133 & 9 / 37 & 7 / 7 & 25 & $-$0.57 \\
+\midrule
+E3 base model, exact count & 33 / 104 & 8 / 4 & 7 / 8 & 15 & 0.05 \\
++ replayed arrivals and observed blocks & 23 / 47 & 6 / 0 & 8 / 8 & 7 & $-$0.28 \\
++ capacity of three lanes at the start & 23 / 48 & 6 / 4 & 8 / 8 & 3 & $-$0.17 \\
++ waiting measured from a free lane & 29 / 59 & 7 / 12 & 8 / 8 & 3 & 0.41 \\
++ load in the service time (final) & 28 / 58 & 7 / 14 & 5 / 11 & 3 & 0.51 \\
+\bottomrule
+\end{tabularx}
+\par\smallskip{\footnotesize\raggedright Test period, means over five seeds. A full block has three trucks at Gate In. Most trucks at a block is the largest number at one block at once, averaged over the seeds. The Spearman rank correlation of hourly arrivals and hourly median TTT shows whether busy hours have longer visits. Within each group, each row adds one change to the row above, and the rows from the exact count also count exactly. Table~\ref{tab:rq2_chain} in Appendix~\ref{app:sim_results} gives all configurations and measures.\par}
+\caption{Response of the simulated visits to load, step by step.}
+\label{tab:rq2_responses}
+\end{table}

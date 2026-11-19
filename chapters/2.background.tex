@@ -339,9 +339,10 @@ transition between them. The result is not guaranteed to be sound.
 behaviour never violates. Such a place can be read as a rule on the order of
 the activities, for example that a stop can only happen after Gate In. The ILP
 Miner searches for these places with integer linear programming, a standard
-optimisation method. Because it keeps only the rules that all observed
-sequences respect, it tends to allow many orders that were never observed, so
-its nets are often permissive. A filter controls how much infrequent behaviour
+optimisation method. In simple terms, it looks for places that never block an
+observed sequence and, among these, prefers the places that restrict the behaviour
+most. Because it keeps only the rules that all observed sequences respect, it tends
+to allow many orders that were never observed, so its nets are often permissive. A filter controls how much infrequent behaviour
 is taken into account \cite{RWVanZelst2018ILP}.
 \item \textbf{Alpha family.} The Alpha Miner, the oldest of the four, derives
 ordering relations between pairs of activities from the log. It records which
@@ -349,7 +350,10 @@ activity directly follows which, and whether two activities are causally
 related, parallel or alternatives. From these relations it builds the places
 \cite{vanderAalst2004AlphaMiner}. Alpha+ and Alpha++ add short loops and
 long-distance dependencies \cite{deMedeiros2004AlphaPlus,Wen2007AlphaPlusPlus}.
-The algorithms do not handle noise and do not guarantee a sound net.
+If two activities directly follow each other in both orders somewhere in the log,
+the Alpha algorithms treat them as parallel. Because they do not handle noise, a
+single visit with an unusual order is enough for this, and the resulting net may
+allow many more orders than observed or may not be sound.
 \end{itemize}
 
 In the literature, benchmarks show that no algorithm is best on every log and
@@ -1067,90 +1071,43 @@ boundary. The trees capture associations in the training data, not causes. A
 readable rule shows which association the simulator uses. Whether it holds after
 an intervention needs other evidence.
 
-For this thesis, eight properties of the implementation of version 1.0.4 matter
-\cite{ProSiTRepository}.
+For this thesis, four properties of the design of ProSiT matter
+\cite{Vinci2026prosit,ProSiTRepository}.
 \begin{enumerate}[itemsep=2pt,topsep=4pt]
 \item \textbf{No guards on data.} A transition can fire whenever its input places
-hold tokens and its weight is above zero. ProSiT does not support guards, that
-is, conditions on the case data that a transition must satisfy. A domain rule
-such as ``at least one stop'' or ``as many stops as planned'' is therefore
-followed only as often as the routing trees happen to respect it, unless the
-Petri net itself encodes the rule.
+hold tokens and its weight is above zero. ProSiT does not support guards, that is,
+conditions on the case data that a transition must satisfy. A domain rule such as
+``as many stops as planned'' is therefore followed only as often as the routing
+trees happen to respect it, unless the Petri net itself encodes the rule.
 \item \textbf{No look-ahead.} Each routing draw is local and random
-(Section~\ref{sec:prosit_execution}). Steps with a low probability are also
-taken, and a sequence of steps that are each plausible on their own can lead to a
-visit that never occurs in reality.
+(Section~\ref{sec:prosit_execution}). A sequence of steps that are each plausible
+on their own can lead to a visit that never occurs in reality.
 \item \textbf{Parallel branches run in parallel.} If the net contains a silent
 parallel split, this split enables several activities at the same time, and the
 simulator can start them at the same time.
-\item \textbf{Capacity is checked at the enabling time.} Whether a candidate
-resource has free capacity is checked at the enabling time of the activity, before
-its waiting time is drawn. The check counts the activities running at that
-moment. Activities that are already scheduled but have not started yet are not
-counted. The activity itself starts only after its waiting time, and by then other
-activities may have started at the same resource. More activities than the
-capacity allows can then run at once. If no candidate is free, the case waits until
-the activity scheduled last at a resource has ended, not until the first place of
-this resource becomes free. For a resource with a capacity of one, which handles
-its activities one after another, the end of the last scheduled activity is exactly
-the moment at which it can take the next one. For a resource with several places it
-is not.
-\item \textbf{The load does not affect the execution time.} The workload features
-are used only by the trees for the resource choice and the waiting time. The
-execution-time trees do not receive them, so the duration of an activity does not
-react to how many other activities run at its resource.
-\item \textbf{The queue counts differently in discovery and simulation.} During
-the discovery, the queue length of a resource at a moment counts every activity
-of this resource that is enabled at that moment but has not started yet. The
-activity for which the feature is computed is enabled at exactly this moment. If
-it then waited, it is counted in the queue of the resource that performed it,
-but not in the queues of the other candidate resources. During the simulation, the
-queue length counts the activities already scheduled to start later at the
-resource. The activity whose resource is being chosen has no start yet, so it
-never counts itself. The same situation therefore shows one activity more in the
-queue during the discovery than during the simulation.
-\item \textbf{Waiting is measured from a completely free resource.} The waiting
-time that ProSiT learns starts at the moment the resource was last completely
-free (Section~\ref{sec:prosit_components}). If other activities run at the resource at the enabling time, this is the
-end of the last of them. For a resource with a capacity of one, this is the moment
-at which it can take the next case. A resource with several places, such as a
-block with three handover lanes, may have a free place much earlier. A truck that
-starts at such a free lane while other trucks are still served then gets a
-learned waiting time of zero, even if it drove and waited before. The busier the
-block, the more often this happens, so the learned waiting becomes shorter
-exactly when the real delay grows.
-\item \textbf{Running activities are counted under an ordering assumption.} To
-count the activities running at a resource, the simulator walks backwards through
-the list of activities scheduled at this resource and stops at the first one that
-has already ended. This count is exact only if the list is sorted by end time. The
-simulator appends the activities in the order in which it processes them, so a
-later entry can end earlier than an earlier one, and the count can be too low. The
-capacity check and the workload features then see less load than there is. During
-the discovery, the same quantities are computed exactly.
+\item \textbf{Resources work through their activities one after another.} The
+resource model is designed for business processes, in which a resource is
+typically a person or an information system that handles one case at a time or
+several cases without a fixed number of places. Three choices follow from this. The
+capacity of a resource is checked when an activity becomes possible, not when it
+starts. The waiting time is measured from the moment the resource was last
+completely free, which the documentation describes as the queue delay after a
+resource becomes free. And the execution time does not depend on how many other
+activities run at the resource. For such resources these choices are reasonable.
+For a resource with a fixed number of places and a queue in front of it, such as an
+RMG block whose three handover lanes hold the trucks while the crane handles them,
+they may not be.
 \end{enumerate}
 The first three properties make the control-flow model more important for a
 simulator than for a descriptive model. A descriptive model only has to allow the
 observed sequences. A ProSiT simulator also generates every sequence that the net
-allows and the routing trees do not exclude, because no other rule stops it, and
-it generates such a sequence as often as the local draws lead to it. The effect of
-these properties in a setting with physical constraints and domain rules is
-examined in the rule audit of the discovered nets and in the first simulation run
-of the selected net (Sections~\ref{sec:exp_rules} and~\ref{sec:exp_baseline}).
-
-Properties four to eight concern the physical constraints of the blocks. Properties
-four, five and seven follow from the purpose of ProSiT. It was developed for
-business processes, in which a resource is typically a person or an information
-system that handles one case at a time or several cases without a fixed number of
-places \cite{Vinci2026prosit}. For such resources these choices are reasonable.
-They become limitations where a resource is a physical place with a fixed number of
-places and a queue in front of it, such as an RMG block whose three handover lanes
-hold the trucks while the crane handles them one after another. In the log, each
-truck occupies a lane for its whole stop, so up to three stops of a block overlap. Properties six and eight concern the implementation. Version 1.0.5,
-released on 17 November 2026, removes the activity itself from the queue during the
-discovery, so that discovery and simulation count the queue in the same way. The
-count of property eight is unchanged in this version \cite{ProSiTRepository}. This
-thesis uses version 1.0.4. Properties four to eight are examined in the validation
-of the simulation model (Section~\ref{sec:exp_mechanisms}).
+allows and the routing trees do not exclude, because no other rule stops it. Their
+effect is examined in the rule audit of the discovered nets and in the first
+simulation of the nets (Sections~\ref{sec:exp_rules} and~\ref{sec:exp_baseline}).
+Whether the resource choices fit the blocks is examined in the validation of the
+simulation model (Section~\ref{sec:exp_mechanisms}), which also reports two
+inconsistencies between the training data and the simulator of version 1.0.4 that
+this study found (Section~\ref{sec:res_inspection}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Research Gap and Positioning}

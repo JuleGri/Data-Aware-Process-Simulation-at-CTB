@@ -1,15 +1,34 @@
 \chapter{Results}
 \label{chp:results}
 
-This chapter reports the results in the order of the experiments in
-Chapter~\ref{chp:experiments}. Each section presents its main table, reads the
-values that decide the experiment, and states what follows from them. The answers
-to the research questions follow the experiments they rest on, namely RQ1 after E3, RQ2
-after E4 and RQ3 after E5. Selections use the training log only, and the values on
-the test log are reported for evaluation. Further tables and figures are given in Appendix~\ref{app:sim_results}.
+This chapter reports the results as three findings, each resting on experiments of
+Chapter~\ref{chp:experiments}. The first is that high conformance does not establish
+that a net is suitable for simulation (E1 to E3). The second is that correcting
+identifiable mechanisms improves the fit of the simulation but leaves the congestion
+inadequately reproduced (E4). The third is that the effect of the allocation rule
+depends on the outcome considered and remains conditional on the model (E5). Each
+section leads with its finding, presents the decisive evidence and its
+qualifications, and ends with the answer to its research question. Selections use
+the training log only, and the values on the test log are reported for evaluation.
+Further tables and figures are given in Appendix~\ref{app:sim_results}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Control-Flow Discovery (E1)}
+\section{Conformance Does Not Establish Suitability for Simulation (E1 to E3)}
+\label{sec:res_part_controlflow}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The first finding is that a net with high conformance values is not necessarily a
+usable simulation model. All discovered nets that replay most visits are highly
+precise, because the visits are short and repetitive. Of the three nets that are
+sound and accept every frequent sequence, two allow visits that no truck can
+perform, and the simulator generates them. The criteria that anticipated these
+failures were the coverage of the frequent sequences and the domain rules, not
+precision. The selected net, used as discovered, reproduces the stop structure once
+a condition on the planned number of stops, a data attribute of the case, is added.
+It covers almost all held-out visits, while its generalisation to sequences that do
+not occur in training is limited.
+
+\subsection{Control-Flow Discovery (E1)}
 \label{sec:res_discovery}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sources (trucksimulation repository, split at Monday 13 April 2026):
@@ -115,7 +134,7 @@ frequent behaviour. The filtered Inductive Miner nets reject the multi-block
 visits, which are long and directly affected by the block allocation of E5.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Rule Audit (E2)}
+\subsection{Rule Audit (E2)}
 \label{sec:res_rules}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sources: process_discovery/outputs/runs/e2_split13apr_20261106/audit/model_rule_checks.csv (language audit);
@@ -156,7 +175,7 @@ generates the same visits (Appendix~\ref{app:replica}). The net is therefore kep
 discovered, and the stop guard is built to act on its silent transitions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Simulation of the Discovered Nets (E3)}
+\subsection{Simulation of the Discovered Nets (E3)}
 \label{sec:res_baseline}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sources: simulation_e3/runs/hm07orig_20261115: e3/ (HM 0.7 and the contrasts, look-ahead guard),
@@ -264,7 +283,7 @@ the checked rules and have their planned number of stops, without rewriting the
 net. The guard enforces the number of stops, not the planned itinerary itself.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Answer to RQ1}
+\subsection{Answer to RQ1}
 \label{sec:res_rq1}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -278,11 +297,12 @@ in the simulator that makes every truck perform its planned number of stops. Of
 the 19 nets, it is one of three sound nets that accept every sequence above the
 coverage threshold, the only one whose language respects the rules of the truck
 visit, and the most precise. Its trade-off effect is small, as the 44 rare
-sequences it gives up are 0.96\,\% of the truck-minutes. It accepts only 2 of the 16
-new test sequences, but it does not overfit in the sense of failing on new behaviour
-\cite{Aalst2016}. Its test precision is 0.995, it fits 99.1\,\% of the test visits,
-and the test visits it accepts have a mean turnaround time of 40.9 minutes, against
-41.2 for all test visits. The answer holds for the tested configurations of four
+sequences it gives up are 0.96\,\% of the truck-minutes. It retains a high coverage
+of the held-out visits. It fits 99.1\,\% of the test visits at a test precision of
+0.995, and the test visits it accepts have nearly the same mean turnaround time as
+all test visits (40.9 against 41.2 minutes). Its generalisation to sequences that do
+not occur in training is limited, because it accepts only 2 of the 16 new test
+sequences \cite{Aalst2016}. The answer holds for the tested configurations of four
 miner families, the coverage threshold of 0.1\,\% and the domain rules of
 Table~\ref{tab:domain_rules}.
 
@@ -302,7 +322,7 @@ the net. Section~\ref{sec:disc_metrics} discusses what this means for the select
 of a net for simulation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Mechanism Audit and Simulation Validity (E4)}
+\section{Corrected Mechanisms Improve the Fit but Not the Congestion (E4)}
 \label{sec:res_mechanisms}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sources: trucksimulation/simulation_e3/runs/hm07orig_20261115 (HM 0.7 as discovered, look-ahead guard)
@@ -310,6 +330,21 @@ of a net for simulation.
 %   decompose_rq2.py (stop_decomposition), verify_rq2_counts.py (count_check); components/ (rq2_components.py);
 %   netx/ (final configuration with the other nets); stale_final/ (enabling times reset).
 %   Tables: make_rq2_tables.py --run simulation_e3/runs/hm07orig_20261115/e4 --final d3x --final-train f0.
+
+The second finding is that a better aggregate timing does not make the simulation
+suitable for congestion-sensitive decisions. As fitted, the simulation overestimates
+the turnaround time strongly. Its discrepancies have four kinds of causes, which
+support different conclusions. Two are defects of the implementation of ProSiT
+1.0.4, a queue that counts the truck itself and a count that assumes a sorted
+schedule. Three concern the meaning of the learned quantities, a waiting time, a
+capacity check and a service time designed for resources that serve one case after
+another. The event log adds limits of its own, because it records the time at the
+block but not the work of the crane, and the change between the two periods adds
+error that no model of the training period can avoid. Correcting the first two kinds
+lets the waiting grow with the load of a block, and the turnaround time comes close
+to the observed one in normal hours. The congested hours, which the allocation
+question is about, remain underestimated, and how strongly the model congests
+depends on the depth of its trees.
 
 E4 examines how far a data-aware simulation can reproduce the turnaround time of the
 trucks and its response to load at the capacity-limited blocks. The aim is not to
@@ -337,7 +372,7 @@ RMG stops to a single block, the approach to the first stop takes 42 instead of 
 minutes on average, and the simulation places up to 23 trucks at one block at the
 same time, although a block holds at most three. The busy hours do not have longer
 visits (Spearman $-0.30$). Replaying the exact observed arrivals and case attributes
-(a2 in Table~\ref{tab:rq2_chain}) hardly changes this (median 54 and P90 133
+(Table~\ref{tab:rq2_responses}) hardly changes this (median 54 and P90 133
 minutes), so the demand is not the cause. The causes lie in the learned models and
 in how the simulator uses them.
 
@@ -405,19 +440,15 @@ one after another, but can leave a lane unused at a block with three lanes
 (Section~\ref{sec:prosit_limits}). This is how the simulation of E3 places up to 23
 trucks at one block.
 
-\paragraph{Enabling times in loops.} ProSiT's feature extraction keeps the
-enabling time of a transition until the transition fires, also when it was
-disabled in between. This affects mainly the waiting before Gate Out of visits
-that repeat a stop through one of the three loops of HM 0.7. Retrained with the
-enabling time reset whenever its token is consumed, the final configuration
-changes no measure beyond the range of the seeds (cycle-time distance 8.2 against
-8.0 minutes on the test period, 4.1 against 3.9 on the training period), so
-ProSiT's training is kept as it is.
+\paragraph{Enabling times in loops.} ProSiT's training keeps the enabling time of a
+transition in a loop longer than its simulator does. Correcting it changes no measure
+of the final configuration beyond the range of the seeds, so the training is kept as
+it is (Appendix~\ref{app:e4_chain}).
 
 \subsection{Operational Validity Along the Path of the Truck}
 \label{sec:res_e4_chain}
 
-\input{tables/rq2_chain}
+\input{tables/rq2_responses}
 
 \paragraph{Demand and counting (E4a).} Counting the trucks at a block exactly (a0x)
 weakens the concentration, from 54 to 28\,\% of the RMG stops at one block, and the
@@ -473,8 +504,8 @@ period also shows the price of the load-dependent service. The cycle-time distan
 of c3x is smaller (3.0 against 3.9 minutes). The rule puts the load response
 first, because E5 depends on it.
 
-Every change is needed. Reversing any one of them alone makes the load response
-worse. The largest single effect is the single-server
+Within the tested configurations, reversing any one change alone makes the load
+response worse. The largest single effect is the single-server
 waiting target, with which the approach falls to 5 minutes and the turnaround time
 no longer follows the arrivals (Spearman 0.13). With the capacity checked at
 enabling, up to eight trucks are at a block again. With ProSiT's count, the sum of
@@ -650,28 +681,35 @@ trucks). On the training period, the sum of the profile gaps is 7.5 against 6.9
 minutes, so the rule of Section~\ref{sec:exp_e4_runs} would still choose depth
 three.
 
-The statements of E4 do not change. With depth five, the final configuration misses
-the same two thresholds of the load-response criterion (stop duration 1.7, turnaround
-time by trucks in the terminal 6.5 minutes) and passes the others, so E5 remains a
-what-if demonstration. ProSiT as fitted in E3 still sends half of the RMG stops to a
-single block (49\,\%), and its median turnaround time is 54.5 minutes. Its stop
-structure hardly changes. The sequences are as close to the training log as with
-depth three (TVD 0.013 against 0.015), visits to two RMG blocks remain rarer than
-recorded (1.3 against 2.3\,\%), and every truck performs its planned number of
-stops. The deeper routing trees follow the plan more often on their own, so the
-guard changes about 3,600 instead of 6,700 draws per run. The deeper
-arrival tree generates at most 140 instead of 120 trucks per hour, against up to 255
-observed, and still no arrival peaks. In the fully generative run, the turnaround
-time follows the arrivals more closely than with depth three (Spearman 0.23 against
-0.08), and with hour-of-week arrivals it reaches 0.51. In E5 with depth five, the
-rule lowers the share of hours above the corridor by 7.0, 8.3 and 11.9 percentage
-points for $\pm 1$, $\pm 2$ and any block, from 21.3\,\%. In all three scenarios with
-replayed demand, the visits with a moved delivery are 7.9 to 9.8 minutes shorter,
-with intervals that exclude zero, and the approach to the first RMG stop and the
-share of stops at full blocks fall. The rules for the claims therefore give the same
-direction and mechanism as with depth three. Because of the backlogs, the effect on
-the minutes above 35 per hour is not determined in any of the three scenarios, and
-the effect on the mean turnaround time only with any block ($-2.3$ minutes).
+What persists with depth five is the validation verdict and the direction of the
+allocation effects. The final configuration misses the same two thresholds of the
+load-response criterion (stop duration 1.7, turnaround time by trucks in the terminal
+6.5 minutes) and passes the others, so E5 remains a what-if demonstration. In E5, the
+rule lowers the share of hours above the corridor in all three scenarios with
+replayed demand, by 7.0, 8.3 and 11.9 percentage points from 21.3\,\%, the visits with
+a moved delivery are 7.9 to 9.8 minutes shorter, and the approach to the first RMG
+stop and the share of stops at full blocks fall. Because of the backlogs, the effect
+on the minutes above 35 per hour is not determined in any of the three scenarios, and
+the effect on the mean turnaround time only with any block.
+
+What does not persist is the magnitude of the congestion. With 150 or more trucks in
+the terminal, the median turnaround time rises from 40 to 69 minutes, against 58
+observed, and at an intensity of 1.2 the mean rises from 45 to 78 minutes. How
+strongly the model congests therefore depends on how finely its waiting and service
+trees split, which the training data do not decide. The congestion behaviour on which
+the allocation question depends is not robustly identified by the learned models.
+This is a finding of its own, not only a check of the chosen depth.
+
+The other parts of the model respond little to the depth. ProSiT as fitted in E3
+still sends half of the RMG stops to a single block (49\,\%), with a median turnaround
+time of 54.5 minutes. Its stop structure hardly changes (TVD 0.013 against 0.015),
+every truck performs its planned number of stops, and the deeper routing trees follow
+the plan more often on their own, so the guard changes about 3,600 instead of 6,700
+draws per run. The deeper arrival tree generates at most 140 instead of 120 trucks
+per hour, against up to 255 observed, and still no arrival peaks. In the fully
+generative run, busy hours have somewhat longer visits than with depth three
+(Spearman 0.23 against 0.08), and with hour-of-week arrivals the Spearman reaches
+0.51.
 
 \subsection{Verification}
 \label{sec:res_e4_verification}
@@ -681,8 +719,10 @@ intended (Section~\ref{sec:exp_e4_verification}). Three of the five designed tes
 pass.
 \begin{itemize}
 \item The test of the simulator extensions passes. With all switches off, the
-extended simulator generates exactly the same log as ProSiT, so the extensions
-change nothing beyond what they are meant to change.
+extended simulator generates exactly the same log as ProSiT. This establishes that
+the extended simulator is compatible with ProSiT. It does not show that the
+extensions work correctly when they are on, which the conceptual and operational
+validity examine.
 \item The test of the replayed demand passes. The simulated arrivals equal the
 observed Gate-In times (case-arrival distance zero).
 \item The test of the domain rules on the generated logs passes. No configuration
@@ -706,15 +746,22 @@ simulator used for 14 to 15\,\% of the RMG stops, for the reason described in
 Section~\ref{sec:res_inspection}. The configurations marked x therefore count
 exactly.
 
-A further comparison, which concerns the load feature of the execution time, shows a
-smaller deviation that remains. The feature is counted when a stop is scheduled,
-before the capacity check may shift the stop to a free lane (8\,\% of the RMG
-stops). In the log of the final configuration, 46 to 51\,\% of the RMG stops start
-without another truck at the block, against 55\,\% in the recorded feature, so the
-simulated service sees somewhat less load than the log shows.
+One mechanism of the extensions remains unresolved. It concerns the load feature of
+the execution time, which is central to the response to load. The feature is counted
+when a stop is scheduled, before the capacity check may shift the stop to a free lane
+(8\,\% of the RMG stops). In the log of the final configuration, 46 to 51\,\% of the
+RMG stops start without another truck at the block, against 55\,\% in the recorded
+feature, so the simulated service sees somewhat less load than the log shows. Its
+likely consequence is that stops at busy blocks slow down too little. This
+consequence is separate from the two other reasons for the shortfall in congested
+hours, the missing crane data in the log and the slower service of the test period.
+Counting the load at the final start of a stop leaves the effect of the allocation
+rule on the share of hours above the corridor unchanged ($-10.5$ percentage points
+with $\pm 2$), so this mechanism does not explain that effect, but it may contribute
+to the shortfall.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Answer to RQ2}
+\subsection{Answer to RQ2}
 \label{sec:res_rq2}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -722,66 +769,66 @@ RQ2 asks to what extent the ProSiT simulation reproduces the turnaround time and
 its response to load at the capacity-limited yard blocks, and which model
 components explain the observed discrepancies.
 
-\paragraph{To what extent.} As fitted in E3, the simulation does not reproduce the
-turnaround time. The median is 57 instead of 33 minutes. With the observed trucks
-and blocks replayed and four changes to the queue and the service, it does in
-part. Under normal load it comes close. On the training period, the median is 27
-against 29 minutes, and the cycle-time distance (3.9 minutes) lies within the
-change between the periods. The waiting before a stop rises with the number of
-trucks at the block, as at the terminal, and the turnaround time rises with the
-arrivals and, convexly, with the arrival intensity. In congested conditions it
-falls short. On the test period, the mean is 33.1 against 41.2 minutes, the P90 58
-against 75 minutes, and only 0.8\,\% of the simulated hours are delay peaks,
-against 25.7\,\% observed. Measured with the hourly KPI of the terminal, it
-produces 52\,\% of the observed hours above 35 minutes in the training period and
-44\,\% in the test period.
+\paragraph{To what extent.} As fitted, the simulation does not reproduce the
+turnaround time, because its learned block choice concentrates the trucks. With the
+observed trucks and blocks replayed and four changes to the queue and the service, it
+reproduces the turnaround time of normal hours and the rise of the waiting with the
+load of a block. It does not reproduce the congested hours. It produces less than
+half of the hours above the corridor, and how strongly it congests depends on the
+depth of its trees. Its validity for the allocation question is therefore partial.
 
-\paragraph{Which components.} In the order in which a truck meets them. Each
-replacement shows what changes once the components before it are fixed, not an
-additive share of the error.
+\paragraph{Which components.} The discrepancies have four kinds of causes, which
+support different conclusions.
 \begin{itemize}
-\item \textbf{Demand.} Not a cause of the E3 error. ProSiT's arrival model has no
-daily peaks, which matters when the simulation runs without replay.
-\item \textbf{Block choice.} The main cause of the E3 error. The queue feature
-counts the stop itself in training, so the learned rule sends trucks to the
-longest queue. ProSiT's too low count of the activities in progress makes this
-stronger. The tested models and inputs could not learn the block loads of a later
-period.
-\item \textbf{Queue at the block.} The capacity check at enabling and the
-single-server waiting target prevent waiting under load. With the capacity checked
-at the start and the waiting measured from a free lane, the waiting arises where it
-arises at the terminal.
-\item \textbf{Service.} The execution time does not depend on the load. A load
-feature reproduces most of the observed slowdown, but not the slowest states. Part
-of the test error is the slower service of the test period.
-\item \textbf{Exit.} About 2 minutes too short, the same in both periods.
+\item \textbf{Implementation of ProSiT 1.0.4.} The queue counts the truck itself in
+training, which makes the learned block choice concentrate the trucks, and the count
+of trucks at a block assumes a sorted schedule. These are defects of one software
+version, and version 1.0.5 removes the first. They say little about data-aware
+simulation as such.
+\item \textbf{Resource semantics.} The waiting is measured from a completely free
+block, the capacity is checked when a stop becomes possible, and the service time has
+no load feature. These choices fit a resource that serves one case after another,
+not a block with three lanes. Replacing them lets the waiting arise where it arises
+at the terminal.
+\item \textbf{Data.} The log records the time at the block, not the work of the
+crane, so the waiting for the crane stays inside the learned service time, and the
+slowest states are not reproduced.
+\item \textbf{Change between the periods.} The stops of the test period took longer
+at every load, which no model learned on the training period can know.
 \end{itemize}
-The physical limit of three trucks per block connects these findings. Every
-mechanism that ignores it produces either physically impossible states or no
-waiting at all. The control flow plays a smaller part once these mechanisms are
-corrected. The answer is conditional on the replayed arrivals and blocks (without
-them, the cycle-time distance is 11.2 minutes) and holds for the turnaround time
-and its parts. It does not depend on the largest tree depth of three
-(Section~\ref{sec:res_e4_depth}). Other measures, such as the use of the cranes,
-were not examined.
+The demand and the control flow play a smaller part. The answer is conditional on
+the replayed arrivals and blocks and holds for the turnaround time and its parts.
+Other measures, such as the use of the cranes, were not examined.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Load-Aware Block Allocation (E5)}
+\section{Allocation Effects Depend on the Outcome Considered (E5)}
 \label{sec:res_policy}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sources: trucksimulation/simulation_e3/runs/hm07orig_20261115/e5 (run_rq2.py, switch s1); grid evaluations
-%   eval_e5_grid, eval_e5_kpi35_grid, extras/e5_grid_hourly_summary.csv (e5_grid_hourly.py); robustness and
-%   checks eval_e5_v2, eval_e5 (check 1), eval_e5_fa (check 2), eval_e5_fix (check 3), extras/e5_hourly_kpi_summary.csv;
-%   route check extras/e5_v2_checks.csv; tables make_rq3_grid_tables.py. Backlog hours (hourly mean above 60 min) at
-%   intensity 1.2 from the saved logs (s0i 8.6 % of the hours, max 174.6 min; observed test 5.0 %, max 85.2 min).
-%   The baseline s0 equals the E4 log d3x for every common seed.
+%   eval_e5_grid, eval_e5_kpi35_grid, extras/e5_grid_hourly_summary.csv (e5_grid_hourly.py); robustness
+%   eval_e5_v2, eval_e5 (without restrictions), extras/e5_hourly_kpi_summary.csv; route check extras/e5_v2_checks.csv;
+%   tables make_rq3_grid_tables.py; direct contrasts e5_policy_contrasts.py -> extras/e5_policy_contrasts.csv and
+%   tables/rq3_policy_contrasts.tex. Backlog hours (hourly mean above 60 min) at intensity 1.2 from the saved logs
+%   (s0i 8.6 % of the hours, max 174.6 min; observed test 5.0 %, max 85.2 min). The baseline s0 equals the E4 log d3x
+%   for every common seed.
 
-E5 is a what-if demonstration (Section~\ref{sec:exp_policy}), because the final
-configuration of E4 misses two thresholds of the load-response criterion. The
-values below are values of the model under the conditions of E4, each measured
-against the simulated baseline of the same seed and demand. They are not
-estimates for the terminal. The rule is judged against the upper bound of the
-corridor (Section~\ref{sec:prob_statement}). As a verification, the baseline with
+The third finding is that the effect of the allocation rule depends on the outcome
+considered. In the model, moving deliveries away from full blocks lowers how often
+the hourly mean turnaround time exceeds 35 minutes, in every scenario. Whether it
+also lowers how far these hours exceed it, and whether other trucks pay for the
+gain, depends on the demand and on how far a delivery may move. Under higher
+demand, the widest rule lowers the frequency most but moves waiting to the trucks at
+the receiving blocks, while the narrowest rule ends with a lower severity and mean
+turnaround time than the rule with two block numbers. All effects are values of a
+model that reproduces less than half of the hours above the corridor
+(Section~\ref{sec:res_e4_acceptance}). They are hypotheses for the terminal, not
+estimates of its gain.
+
+The outcomes are read in the order of Section~\ref{sec:exp_policy}. The
+whole-system outcomes of the corridor decide whether the terminal as a whole would
+gain. The outcomes of groups of visits show who gains and who pays, and the
+mechanism measures show how the change works. Each change is measured against the
+simulated baseline of the same seed and demand. As a verification, the baseline with
 replayed demand generates the same log as the final configuration of E4 for every
 common seed.
 
@@ -790,153 +837,151 @@ common seed.
 
 \input{tables/rq3_grid_kpi}
 
-The rule reduces the share of hours above the corridor in all six scenarios, by 8 to 13
-percentage points (Table~\ref{tab:rq3_grid_kpi}). With the replayed demand of the
-test period, the mean turnaround time exceeds 35 minutes in 23.6\,\% of the
-simulated hours. The rule lowers this share by 9.1 percentage points when a delivery may
-move by one block number, by 10.5 with two block numbers and by 13.0 with any
-block. The minutes above 35 per hour fall from 0.90 by 0.32 to 0.51, and the mean
-turnaround time by 1.4 to 2.2 minutes. The hours that leave the upper side move
-into the corridor. The share of hours below 25 minutes shows no clear change, and
-its interval includes zero in five of the six scenarios. The exception is the
-narrowest set with 20\,\% more trucks, whose interval just reaches zero
-(1.2 [0.0, 2.3] percentage points).
+With the replayed demand of the test period, the rule improves every whole-system
+measure of the corridor. Fewer hours exceed 35 minutes, the hours above it exceed it
+by less, and the mean turnaround time falls (Table~\ref{tab:rq3_grid_kpi}). The
+baseline has 23.6\,\% of its hours above 35 minutes, and the rule removes 9 to 13
+percentage points of them, the more the wider the choice of blocks. The hours that
+leave the upper side move into the corridor, and the share of hours below 25
+minutes does not change clearly.
 
-With 20\,\% more trucks, the simulated baseline reaches the level of the terminal.
-The mean turnaround time exceeds 35 minutes in 56.1\,\% of the hours, against
-55.8\,\% in the observed test period. The rule lowers this share by 8.2, 9.3 and 12.4
-percentage points. The minutes above 35 per hour and the mean turnaround time,
-however, show no clear change. Only the narrowest set lowers the mean, by 3.0
-minutes with an interval that just excludes zero, while the intervals of $\pm 2$
-and any block include zero. At this demand, single runs of the model build up a
-backlog. In 8.6\,\% of the baseline hours the mean turnaround time exceeds 60
-minutes, against 5.0\,\% in the observed test period, and the longest hourly mean
-reaches 175 minutes, against 85 observed. Whether such a backlog occurs differs
-between the seeds, so that with $\pm 2$ the change of the mean turnaround time ranges from $-9$
-to $+6$ minutes between them. Ten seeds therefore do not determine the effect of
-the rule on the mean turnaround time at this demand. They do determine the effect on
-the share of hours above the corridor, which falls in every scenario.
+With 20\,\% more trucks, the simulated baseline reaches the level of the terminal,
+with 56\,\% of the hours above 35 minutes. Here the outcomes part. The frequency of
+hours above 35 minutes still falls in every scenario, by 8 to 12 percentage points.
+The severity of these hours and the mean turnaround time, however, do not fall
+clearly with the two wider rules, and only the narrowest rule lowers the mean
+turnaround time, by 3.0 minutes with an interval that just excludes zero. At this
+demand, single runs build up backlogs, with hourly means far above any observed
+hour, and whether such a backlog occurs differs between the seeds. Ten seeds
+therefore determine the effect on the frequency, but not on the severity or the
+mean. Reducing how often the corridor is exceeded can thus coexist with an uncertain
+change in how far it is exceeded.
 
-Per visit, the share of visits longer than 35 minutes falls by 2.5 to 3.9
-percentage points with replayed demand, from 33.5\,\%, and by 2.6 to 4.7 with
-20\,\% more trucks, from 47.3\,\% (Table~\ref{tab:rq3_grid_visits} in
-Appendix~\ref{app:sim_results}). The share of delay-peak hours is not interpreted,
-because the model produces almost no such hours.
+Per visit, the share of visits longer than 35 minutes falls in all six scenarios
+(Table~\ref{tab:rq3_grid_visits} in Appendix~\ref{app:sim_results}). The share of
+delay-peak hours is not interpreted, because the model produces almost no such
+hours.
 
-\subsection{Mechanism and Distribution of Effects}
+\subsection{Who Gains and Who Pays}
 \label{sec:res_s1_mechanism}
-
-The effect comes from the mechanism that the rule acts on (Table~\ref{tab:rq3_grid_mechanism}).
-In every scenario, the trucks reach their first RMG stop sooner, by 1.9 to 2.6
-minutes with replayed demand and by 3.3 to 5.7 minutes with 20\,\% more trucks.
-Fewer RMG stops start at a full block, 3.3 to 8.6 percentage points fewer, and the
-waiting for a free lane falls. No block ever has more than three trucks, and no
-rule is violated. The rule moves 16 to 22\,\% of the RMG deliveries with replayed demand
-and 19 to 33\,\% with 20\,\% more trucks, on average by 1.0 block numbers with
-$\pm 1$, 1.4 with $\pm 2$ and about five with any block.
 
 \input{tables/rq3_grid_mechanism}
 
-With replayed demand, the waiting is reduced, not moved. The visits with a moved
-delivery are 7.9 to 10.3 minutes shorter, 24 to 31\,\% of their baseline time
-of 33 minutes. The other visits at the blocks that gave deliveries away gain 1.0
-to 1.7 minutes, and all other visits 1.3 to 1.7 minutes, because with shorter
-visits fewer trucks are in the terminal at a time. The visits at the receiving
-blocks change by $-0.1$ to $-0.6$ minutes. Each moved visit is compared with the
-same observed visit in the baseline. After the first move, baseline and scenario
-use different random numbers, so a moved visit may follow a different sequence of
-stops in the two runs. Restricted to the moved visits with the same sequence in
-both runs and an RMG delivery in the baseline (1,264 of 1,991 per seed for
-$\pm 2$), the change is $-8.4$ minutes, the same as for all moved visits. The
-effect is therefore not an artefact of different routes.
+The trucks with a moved delivery gain most, 8 to 10 minutes with replayed demand and
+12 to 16 minutes with 20\,\% more trucks (Table~\ref{tab:rq3_grid_mechanism}). With
+replayed demand, the other trucks gain as well, because shorter visits leave fewer
+trucks in the terminal, and the trucks at the receiving blocks do not lose. The
+waiting is reduced, not moved. With 20\,\% more trucks, the two wider rules move more
+deliveries, and the trucks at the receiving blocks lose about 3.5 minutes, because
+their receives cannot avoid the added deliveries. These rules therefore partly move
+the waiting to other trucks. For the narrowest rule, the change at the receiving
+blocks is $+0.8$ minutes with an interval from $-2.0$ to $3.6$. No clear penalty is
+detected in these runs, but an absence of harm is not shown either.
 
-With 20\,\% more trucks, the picture depends on the eligible blocks. The visits
-with a moved delivery gain 12 to 16 minutes in all three scenarios. With $\pm 2$
-and any block, however, the visits at the receiving blocks lose 3.5 [0.2, 6.8] and
-3.3 [0.0, 6.5] minutes. More flexibility moves more deliveries, 26 and 33\,\%
-instead of 19\,\%, and the receives at the receiving blocks cannot avoid them.
-At this demand, the rule with these two sets therefore partly moves the waiting to other
-trucks. With $\pm 1$, the interval for the receiving blocks includes zero (0.8
-[$-2.0$, 3.6] minutes), and the other visits gain 4.1 minutes. Whether $\pm 1$ is
-better than $\pm 2$ cannot be said, because their intervals overlap.
+Each moved visit is compared with the same observed visit in the baseline. Because
+baseline and scenario use different random numbers after the first move, a moved
+visit may follow a different sequence of stops in the two runs. Restricted to the
+moved visits with the same sequence in both runs, the gain is the same, so it is not
+an artefact of different routes.
+
+\paragraph{Mechanism.} The changes come from the mechanism that the rule acts on. In
+every scenario, the trucks reach their first RMG stop sooner, fewer RMG stops start
+at a full block, and the waiting for a free lane falls. No block ever has more than
+three trucks, and no rule is violated. The rule moves 16 to 22\,\% of the RMG
+deliveries with replayed demand and 19 to 33\,\% with 20\,\% more trucks, on average by
+about one block number with $\pm 1$, 1.4 with $\pm 2$ and five with any block.
+
+\subsection{Comparing the Rules}
+\label{sec:res_s1_contrasts}
+
+\input{tables/rq3_policy_contrasts}
+
+Whether one rule is better than another cannot be read from the overlap of their
+intervals. Because the rules of one demand share their seeds, they are compared
+directly, seed by seed (Table~\ref{tab:rq3_policy_contrasts}). This comparison is an
+exploratory analysis of the same runs. With replayed demand, the choice among all
+blocks improves every whole-system measure more than the narrowest rule, by 3.9
+percentage points of hours above 35 minutes and by 0.8 minutes of mean turnaround
+time, while the rules with one and two block numbers cannot be told apart. With
+20\,\% more trucks, the rules trade off. The choice among all blocks lowers the
+frequency of hours above 35 minutes more than the two local rules, by 3 to 4
+percentage points. The narrowest rule ends with a lower severity than both wider
+rules, by about 4 minutes above 35 per hour, and with a lower mean turnaround time
+than the rule with two block numbers, by 3.2 minutes. Its total extra time at the
+receiving blocks is also lower than with two block numbers, but that interval just
+reaches zero. Which rule is preferable therefore depends on whether the terminal
+values the frequency of hours above the corridor, or their severity and the waiting
+of the trucks that receive the moved deliveries.
 
 \subsection{Robustness}
 \label{sec:res_s1_sensitivity}
 
 The $\pm 2$ variant was repeated under the four changes of
-Section~\ref{sec:exp_policy}, each against its own baseline (Table~\ref{tab:rq3_robustness} in Appendix~\ref{app:sim_results}). The
-sign is the same in all four, for the visits with a moved delivery and for the
-share of hours above the corridor. This share falls by 11.3 percentage points
-without load in the service time (a), by 14.7 with a stronger slowdown (b), by
-9.3 with 20\,\% more trucks (c) and by 2.6 with fully generative arrivals and blocks
-(d), where the baseline has only 4.5\,\% such hours. The visits with a moved
-delivery gain 6.7 to 12.7 minutes. The change of the mean turnaround time ranges
-from $+0.2$ minutes, with an interval that includes zero (c), to $-4.0$ minutes (b).
-The size of the effect thus depends on how strongly the service slows down under
-load and on how congested the terminal is, the two properties that E4 found the
-model to reproduce least well.
+Section~\ref{sec:exp_policy}, each against its own baseline
+(Table~\ref{tab:rq3_robustness} in Appendix~\ref{app:sim_results}). The direction
+holds in all four, for the visits with a moved delivery and for the frequency of
+hours above the corridor. The size does not. The reduction of the frequency ranges
+from 2.6 percentage points with fully generative arrivals and blocks, whose baseline
+has few such hours, to 14.7 with a stronger slowdown under load, and the change of
+the mean turnaround time from $+0.2$ to $-4.0$ minutes. The size of the effect thus
+depends on how strongly the service slows down under load and on how congested the
+terminal is, the two properties that E4 found the model to reproduce least well.
+With trees of depth five, the frequency of hours above the corridor also falls in all
+three scenarios with replayed demand, while the effect on their severity is not
+determined (Section~\ref{sec:res_e4_depth}).
 
-Without its two restrictions, the rule lowers the share of hours above the
-corridor by 11.6 percentage points instead of 10.5. In this case, however,
-25\,\% of the moves go to empty blocks, and 6.5\,\% of
-the decisions fall after Gate In, when the yard position is already assigned. The
-restrictions therefore make the effect slightly smaller, not larger.
+Without its two restrictions, the rule lowers the frequency slightly more. In this
+case, however, 25\,\% of the moves go to empty blocks, and 6.5\,\% of the decisions
+fall after Gate In, when the yard position is already assigned. The restrictions
+therefore make the effect slightly smaller, not larger.
 
 \label{sec:res_s1_conclusion}
-By the rules for the claims (Section~\ref{sec:exp_policy}), a direction and a
-mechanism can be stated for the simulated system. The interval for the visits
-with a moved delivery excludes zero in all three variants with replayed demand,
-the sign holds in all four robustness runs, and the approach and the share of
-stops at full blocks fall. A local rule is enough in the model. With replayed
-demand, $\pm 1$ gives 70\,\% of the reduction of any block (9.1 of 13.0
-percentage points). With 20\,\% more trucks, $\pm 2$ and any block shift part of
-the waiting to the receiving blocks, which the third rule counts as a shift, not a
-reduction. The narrowest set $\pm 1$ shows no such shift and is therefore the most
-robust variant in the model, although it is not demonstrably better than $\pm 2$.
-The robustness runs vary the model, not the conditions that decide the benefit at
-the terminal, namely how often an alternative block is really eligible, what a
-move costs and whether the committed load of the blocks is known when the yard
-position is assigned. The result is therefore a hypothesis for CTB, not an
-estimate of its effect.
+\paragraph{Interpretation.} The rules for the claims, fixed before the runs, hold.
+The interval for the visits with a moved delivery excludes zero in the three
+scenarios with replayed demand, the sign holds in all four robustness runs, and the
+approach and the share of stops at full blocks fall. These rules establish a
+direction for the trucks whose delivery is moved and the mechanism behind it. They do
+not establish a benefit for the terminal as a whole, which the whole-system outcomes
+decide. Those support a gain in the frequency of hours above the corridor in every
+scenario, and with replayed demand also in their severity and in the mean turnaround
+time. With 20\,\% more trucks, the severity and the mean are not determined, and the
+wider rules move waiting to other trucks. The robustness runs vary the model, not the
+conditions that decide the benefit at the terminal, namely how often an alternative
+block is really eligible, what a move costs and whether the committed load of the
+blocks is known when the yard position is assigned.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Answer to RQ3}
+\subsection{Answer to RQ3}
 \label{sec:res_rq3}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 RQ3 asks to what extent the simulation can be used to evaluate a load-aware block
 allocation for deliveries under the physical limits of the yard blocks, and what
 it indicates about the effect on the turnaround time.
 
-\paragraph{To what extent.} The simulation can show the direction and the
-mechanism of such a change within the examined model variants, but not its size.
-It can, because it reproduces the mechanism that the change acts on, the waiting
-when all three lanes of a block are busy, and respects the physical limit in every
-run. It cannot give the size, because it misses two thresholds of the
-load-response criterion, the effect on the mean turnaround time ranges from $+0.2$
-to $-4.0$ minutes across the robustness runs, and at 20\,\% more trucks ten seeds
-do not determine it.
+\paragraph{To what extent.} The simulation can show how such a change acts in the
+simulated system, its mechanism and its direction for the trucks concerned, but not
+the size of its effect at the terminal. It can, because it reproduces the mechanism
+that the change acts on, the waiting when all three lanes of a block are busy, and
+respects the physical limit in every run. It cannot give the size, because the model
+reproduces less than half of the hours above the corridor, the size varies across
+the robustness runs, and the congestion of the model depends on the depth of its
+trees.
 
 \paragraph{What it indicates.} In the model, moving a delivery at Gate In away from
-a block that three trucks are already heading to lowers the share of hours whose
-mean turnaround time exceeds 35 minutes. With the replayed demand of the test
-period, the share falls by 9 to 13 percentage points from 23.6\,\%. With 20\,\%
-more trucks, where the simulated share matches the observed 56\,\%, it falls by 8
-to 12 percentage points. The share of hours below 25 minutes shows no clear
-change. The rule works through less waiting. The trucks reach their first stop
-sooner and meet fewer full blocks, and the visits with a moved delivery are 8 to
-16 minutes shorter. A local rule gives most of the effect. With 20\,\% more
-trucks, a wider choice of blocks shifts part of the waiting to the trucks at the
-receiving blocks, while one block number of deviation shows no such shift. The
-rule moves 16 to 33\,\% of the RMG deliveries to another block than planned,
-which the yard plan would have to allow, and it needs the committed load of each
-block when the yard position is assigned, information that today's assignment
-does not use. The terminal judged the result plausible and expects no rehandling
-and no long additional driving for moves within one or two blocks
-(Section~\ref{sec:disc_stakeholders}). The lower bound of the corridor, below which
-the terminal could move equipment from HO2 to the waterside, cannot be evaluated,
-because the data do not record the assignment of equipment. The model misses part
-of the congestion that the rule is meant to relieve, and the costs of a move are
-judged, not measured. These values therefore describe the simulated system. For
-CTB they form a hypothesis that a pilot with a local rule would have to test, not
-a validated improvement.
+a block that three trucks are already heading to lowers how often the hourly mean
+turnaround time exceeds 35 minutes, through less waiting at full blocks. With the
+demand of the test period, it also lowers how far these hours exceed it and the mean
+turnaround time, and a wider choice of blocks gives more. With more demand, the gain
+in frequency remains, but the change in severity becomes uncertain, and a wider
+choice moves part of the waiting to the trucks at the receiving blocks. The rule
+with one block number of deviation is a promising, more restricted candidate. With
+more demand, it ends with a lower severity and mean turnaround time than the rule
+with two block numbers, and no clear penalty at the receiving blocks is detected,
+although its absence is not shown. The rule needs the committed load of each block
+when the yard position is assigned, information that today's assignment does not
+use, and the yard plan would have to allow the moves. The terminal judged the result
+plausible and expects no rehandling and no long additional driving for moves within
+one or two blocks (Section~\ref{sec:disc_stakeholders}). The lower bound of the
+corridor, below which the terminal could move equipment from HO2 to the waterside,
+cannot be evaluated, because the data do not record the assignment of equipment.
+These values describe the simulated system. For CTB they form hypotheses that a
+pilot with a local rule would have to test, not a validated improvement.

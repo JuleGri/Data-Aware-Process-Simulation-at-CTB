@@ -7,7 +7,7 @@ This thesis built a simulation of truck handling at HHLA Container Terminal
 Burchardkai from two months of operational event data and examined whether it
 can support the assessment of a load-aware allocation of truck deliveries to
 yard blocks. It selected the control-flow model from a grid of discovered nets,
-fitted ProSiT with the attributes of the planned visit, validated the simulation layer by
+fitted ProSiT with the attributes of the planned visit, assessed the simulation layer by
 layer against the recorded turnaround times and their response to load, and
 applied one allocation rule within the limits that this validation established.
 
@@ -16,85 +16,75 @@ applied one allocation rule within the limits that this validation established.
 
 \paragraph{RQ1. Which discovery and rule treatment yields a sound, executable
 control-flow model that preserves the observed truck-visit behaviour, and do
-conformance metrics anticipate its behaviour in simulation?} The Heuristics
-Miner net HM 0.7, used as discovered, with a stop guard in the simulator that
-looks ahead on the net. Of 19 discovered nets, it is the only sound net
-that accepts every sequence above a coverage threshold of 0.1\,\% and whose
-language respects the rules of the truck visit, and the most precise of the three
-nets that meet the coverage criterion (0.998). It gives up 44 rare sequences, 0.96\,\% of the truck-minutes. Conformance
-metrics anticipate the simulation only in part. Coverage of the frequent
-behaviour and the structure of the net, parallel branches and where its decisions
-sit, decided more than precision. A net with parallel branches produced visits
-that no truck can perform.
+conformance metrics anticipate its behaviour in simulation?} The Heuristics Miner
+net HM 0.7, used as discovered, with a stop guard that enforces the planned number of
+stops, a condition on the data of the case. Of 19 discovered nets, it is the only
+sound net that accepts every frequent sequence and respects the rules of the truck
+visit, and the most precise of the admissible ones. It covers almost all held-out
+visits, while its generalisation to unseen sequences is limited. Conformance metrics
+anticipated the simulation only in part. Coverage and the domain rules anticipated
+specific failures, the missing multi-block visits and the visits that no truck can
+perform. Precision did not, because the simulator learns its routing from the
+observed visits, and how a net expresses its decisions mattered more than how much
+behaviour it allows.
 
 \paragraph{RQ2. To what extent does the ProSiT simulation reproduce truck
 turnaround time and its response to load, and which components explain the
-discrepancies?} As fitted, it does not. The median turnaround time is 57 instead
-of 33 minutes, because the learned block choice sends most trucks to one block.
-With the observed trucks and blocks replayed and four changes to the queue and
-the service (an exact count of the trucks at a block, capacity checked at the
-start of a stop with three lanes, a waiting time measured from a free lane, and
-the load as a feature of the service time), it reproduces the median within 5
-minutes, the rise of the waiting with the load of a block, and a convex response
-to the arrival intensity. In-sample, its cycle-time distance (3.9 minutes) lies
-within the change between the two periods. It does not reproduce the slowdown in
-the busiest hours and misses two thresholds of the load-response criterion. Part
-of the test error is the slower service of the test period.
+discrepancies?} As fitted, it does not reproduce the turnaround time, because its
+learned block choice concentrates the trucks on one block. Two defects of the
+software version and three semantic choices for resources that serve one case after
+another explain this and the missing waiting under load. With them corrected and the
+observed trucks and blocks replayed, the simulation reproduces the turnaround time of
+normal hours and the rise of the waiting with the load of a block. It does not
+reproduce the congested hours, which the allocation question is about. The event
+log does not show the work of the crane, and the test period was slower than the
+training period. How strongly the model congests depends on the depth of its trees,
+while the verdict of the validation does not.
 
 \paragraph{RQ3. To what extent can the simulation be used to evaluate a
 load-aware block allocation for deliveries, and what does it indicate about the
 effect on turnaround time?} It can show how such a change acts in the simulated
-system, but not its effect at the terminal. In the model, moving a delivery at
-Gate In away from a block that three trucks are already heading to lowers the
-share of hours whose mean turnaround time exceeds 35 minutes in all six scenarios,
-by 9 to 13 percentage points with the demand of the test period and by 8 to 12 with
-20\,\% more trucks. It works through less waiting at full blocks. The share of
-hours below 25 minutes shows no clear change. A local rule gives most of the
-effect. With 20\,\% more trucks, a choice within two block numbers or among all
-blocks moves part of the waiting to the receiving blocks, while one block number
-of deviation shows no such shift and is the most robust variant, although not
-demonstrably better than two. The terminal judged the result plausible. The size
-varies across the robustness runs, ten seeds do not determine the effect on the
-mean turnaround time under high demand, the model misses part of the congestion
-that the rule is meant to relieve, and the costs of a move are judged, not
-measured. For CTB, the result is a hypothesis for a pilot with a local rule, not a
+system, but not its effect at the terminal. In the model, moving a delivery at Gate
+In away from a full block lowers how often the hourly mean turnaround time exceeds
+35 minutes in every scenario, through less waiting at full blocks. Whether it also
+lowers the severity of these hours and spares the other trucks depends on the demand
+and on the flexibility of the rule. Under higher demand, a wider choice of blocks
+lowers the frequency most but moves waiting to the trucks at the receiving blocks,
+while the rule with one block number of deviation ends with a lower severity and
+mean turnaround time than the rule with two. This narrow rule is a promising
+candidate, without a clear penalty for other trucks in these runs, but not an
+established best rule. For CTB, the result is a hypothesis for a pilot, not a
 validated improvement.
 
 \section{Contributions}
 \label{sec:concl_contributions}
 
-\paragraph{(C1) A justified simulation model for the CTB case.} The control-flow
-model was chosen by explicit criteria on the training log, namely soundness, acceptance of
-every frequent sequence and the domain rules, and the price of the choice was
-measured. The rare sequences it gives up, the generalisation it lacks, and their
-small effect on the turnaround time. The learned trees, their parameters and the
-four adaptations to the terminal are documented and interpreted
-(Chapter~\ref{chp:process_discovery_methodology} and
-Appendix~\ref{app:prosit_inventory}).
+\paragraph{(C1) Conformance does not establish suitability for simulation.} Of the
+three nets that met the criteria based on soundness and coverage, two generated
+visits that no truck can perform. Coverage and the domain rules anticipated these
+failures, precision did not, because the routing weights of ProSiT depend on the
+history of a case but not on the marking of the net. A condition on the data of the
+case had to act on the silent transitions at which the selected net takes its
+decisions.
 
-\paragraph{(C2) An empirical assessment of validity and decision-support
-potential.} The validation separated the components a truck meets, located the
-causes of the error in the block choice, the queue and the service, and judged
-the final configuration against criteria fixed in advance. It showed that a model with a
-plausible level can still lack the mechanism a scenario needs, and that a net
-with impossible visits can fit the level better. The scenario analysis then
-stated only what this validation supports, a hypothesis about direction and
-mechanism, not a forecast.
+\paragraph{(C2) An improved aggregate timing does not establish suitability for
+congestion-sensitive decisions.} Replacing one part of the simulator at a time
+separated defects of ProSiT 1.0.4, one of which version 1.0.5 removes, from a
+mismatch between its resource semantics and a block with three lanes, from limits of
+the event data and from the change between the periods. The extensions that address
+the first two let the waiting grow with the load of a block, but the congested hours
+remain underestimated, and their magnitude depends on the depth of the learned
+trees.
 
-\paragraph{(C3) Findings on data-aware simulation under physical constraints.} The
-thesis shows which parts of a data-aware simulation framework transfer to a
-logistics process with a hard physical capacity. The learning of routing, waiting
-and service from case attributes and from the load of a resource transferred. The
-resource semantics did not. ProSiT treats a resource as one that works through its
-activities one after another, and together with an inconsistency between its
-training data and its simulator, this view prevents the waiting at a block from
-growing with the load. Each mismatch was located by replacing one part of the
-simulator at a time, corrected by a switchable extension and shown to be needed by
-reversing it alone. One of them, the queue that counts the stop itself, is removed
-in the latest version of ProSiT, but this correction alone does not make the
-waiting grow with the load. The thesis also shows that conformance metrics do
-not anticipate how a discovered net behaves in a data-aware simulator, because the
-routing weights depend on the history of a case but not on the marking of the net.
+\paragraph{(C3) A conditional assessment of a load-aware block allocation.} In the
+resulting model, the allocation lowers the frequency of hours above the corridor,
+while its effect on their severity and on other trucks depends on the demand and on
+the flexibility of the rule. The assessment states what the model supports,
+hypotheses for a pilot, and what it leaves open.
+
+The selected model, its learned trees and parameters and the extensions are
+documented in full (Chapter~\ref{chp:process_discovery_methodology} and
+Appendices~\ref{app:prosit_inventory} and~\ref{app:model_inspection}).
 
 \section{Limitations}
 \label{sec:concl_limitations}
@@ -109,7 +99,10 @@ results hold for the extended simulator and not for ProSiT as it is
 the lanes and the cranes, so waiting and service cannot be fully separated.
 \item \textbf{Evaluation.} The final configuration replays the observed arrivals
 and blocks, and without them its error is larger. It underestimates the slowdown
-in the busiest hours, so the size of a scenario effect is not established.
+in the busiest hours, and the magnitude of its congestion depends on the depth of
+the learned trees, so the size of a scenario effect is not established. The study
+is an iterative model development with a limited evaluation, not a confirmatory
+test.
 \item \textbf{Domain knowledge.} The domain rules, the three lanes, the corridor and the
 decision point were co-designed and confirmed by the terminal, but the review came
 from the company-side co-supervisor and is not independent, and the costs of a move

@@ -71,6 +71,25 @@ f0 & \multicolumn{5}{l}{final configuration on the training period} & Model erro
 \end{table}
 
 \FloatBarrier
+\section{Error Attribution Along the Path of the Truck}
+\label{app:e4_chain}
+
+Table~\ref{tab:rq2_chain} gives all configurations of E4a to E4d with their
+measures against the test log, together with the differences between real periods.
+Table~\ref{tab:rq2_responses} in Section~\ref{sec:res_e4_chain} shows the decisive
+steps.
+
+\input{tables/rq2_chain}
+
+\paragraph{Enabling times in loops.} ProSiT's feature extraction keeps the enabling
+time of a transition until the transition fires, also when it was disabled in
+between. This affects mainly the waiting before Gate Out of visits that repeat a stop
+through one of the three loops of HM 0.7. Retrained with the enabling time reset
+whenever its token is consumed, the final configuration changes no measure beyond
+the range of the seeds (cycle-time distance 8.2 against 8.0 minutes on the test
+period, 4.1 against 3.9 on the training period).
+
+\FloatBarrier
 \section{The Final Configuration Against the Observed Logs}
 
 Figure~\ref{fig:sim_ttt_distribution} shows the distribution of the turnaround

@@ -11,8 +11,8 @@ and evaluated with conformance measures (E1). Next, the admissible nets are audi
 against the domain rules (E2), and the discovered nets are simulated in ProSiT to
 test whether they can be used for simulation (E3). The simulation is then validated
 against the observed turnaround time and its response to load (E4). Finally, the
-validated model is used to evaluate a redesign of the block allocation in a what-if
-analysis (E5). The configuration and the adaptations of the simulation model are
+model is used, within the limits that this assessment establishes, to evaluate a
+redesign of the block allocation in a what-if analysis (E5). The configuration and the adaptations of the simulation model are
 described in Chapter~\ref{chp:process_discovery_methodology}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,6 +81,13 @@ between real periods, and this variation is measured partly between the weeks of
 the test period. The thresholds use only observed data, never simulated results,
 and they were fixed before the final configuration was run. The evaluation of E4
 is nevertheless not fully independent of the test period.
+
+The study as a whole is an iterative model development followed by an explicitly
+limited evaluation. E1 to E4 selected and adapted the model on the training log. The
+rule for the choice of the final configuration, the acceptance criteria and the
+rules for the claims of E5 were fixed before the runs they decide, but after earlier
+configurations had been examined. The results are therefore an assessment of a model
+developed on the training data, not a confirmatory test of a model fixed in advance.
 
 \begin{figure}[htbp]
 \centering
@@ -235,30 +242,19 @@ as possible (precision). The four families build a net in different ways and tre
 rare behaviour differently, so they reach different balances between these two
 goals \cite{DiscoveryBenchmark}.
 
-The Inductive Miner recursively splits the log into sequence, choice, parallel and
-loop operators and guarantees a sound, block-structured net. Its variant Inductive
-Miner, infrequent (IMf) filters behaviour below a noise threshold at each split. At
-threshold 0.0 nothing is filtered and every training visit fits the net
-\cite{Leemans2014InductiveMiner}. This configuration is called IM 0.0 in the
-following. The interactive Data-aware Heuristic Miner (iDHM) builds a causal net
-from dependency measures on directly-follows frequencies and converts it into a
-Petri net \cite{Mannhardt2017DHM,Mannhardt2017iDHM}. It was used with the
-dependency and binding heuristics of the Flexible Heuristics Miner
-\cite{Weijters2011FHM}. The Alpha algorithm and its extensions Alpha+ and Alpha++
-derive places directly from the ordering relations of the log
-\cite{vanderAalst2004AlphaMiner,deMedeiros2004AlphaPlus,Wen2007AlphaPlusPlus}. If
-two activities directly follow each other in both orders somewhere in the log, the
-Alpha algorithms treat them as parallel. Because they have no noise handling, a
-single visit with an unusual order is enough for this, and the resulting net may
-allow many more orders than observed or may not be sound. The ILP Miner constructs
-places as solutions of integer linear programmes over the prefix-closed log, based
-on the theory of regions \cite{RWVanZelst2018ILP}. In simple terms, it searches for
-places that never block an observed sequence and, among these, prefers the places
-that restrict the behaviour most. Its sequence encoding filter removes infrequent
-branches of the prefix tree. A branch is kept only if its frequency reaches at
-least $(1-t)$ times that of its most frequent sibling, where $t$ is the filter
-threshold. Unlike the noise threshold of IMf, a higher threshold therefore filters
-less, and $t = 1$ keeps all behaviour. Split Miner was not part of the comparison.
+The principles of the four families are explained in Section~\ref{sec:bg_algorithms}.
+For the Inductive Miner, the variant with filtering (IMf) was run with several noise
+thresholds. At threshold 0.0 nothing is filtered and every training visit fits the
+net \cite{Leemans2014InductiveMiner}. This configuration is called IM 0.0 in the
+following. The interactive Data-aware Heuristic Miner (iDHM) was used with the
+dependency and binding heuristics of the Flexible Heuristics Miner and several
+dependency thresholds \cite{Weijters2011FHM,Mannhardt2017iDHM}. The Alpha algorithm
+was run with its extensions Alpha+ and Alpha++. The ILP Miner was run with several
+thresholds $t$ of its sequence encoding filter, which keeps a branch of the prefix
+tree only if its frequency reaches at least $(1-t)$ times that of its most frequent
+sibling \cite{RWVanZelst2018ILP}. Unlike the noise threshold of IMf, a higher
+threshold therefore filters less, and $t = 1$ keeps all behaviour. Split Miner was
+not part of the comparison.
 
 All nets were discovered in ProM Lite 1.4 \cite{vanDongen2005ProM} on the complete
 training log, with the activity label (\texttt{concept:name}) as classifier, and
@@ -619,8 +615,10 @@ Five tests were fixed in advance.
 \begin{enumerate}
 \item The extensions of the simulation model are switches in ProSiT's simulator
 (Section~\ref{sec:sim_adaptations}). With all switches off, the extended simulator
-must generate exactly the same log as ProSiT 1.0.4 for the same seed. This shows
-that the extensions change nothing beyond what they are meant to change.
+must generate exactly the same log as ProSiT 1.0.4 for the same seed. This
+establishes that the extended simulator is compatible with ProSiT. It does not test
+the extensions when they are on, which the conceptual and operational validity
+examine.
 \item A predictive parameter retrained on unchanged training data must be identical
 to the fitted one. This shows that the retraining itself causes no difference.
 \item The replayed arrivals must equal the observed ones.
@@ -729,7 +727,7 @@ or without a capacity limit exceed the physical limit and are run only as
 sensitivity analyses on the test period. After the choice, each change of the final
 configuration is reversed alone, which shows whether every change is needed. A
 further run applies only the correction that version 1.0.5 of ProSiT contains, the
-queue length without the stop itself (Section~\ref{sec:prosit_limits}), and keeps
+queue length without the stop itself (Table~\ref{tab:sim_adaptations}), and keeps
 ProSiT's simulator otherwise unchanged. It shows how far this correction goes on its
 own.
 
@@ -846,8 +844,8 @@ and then averaged.
 \paragraph{Primary measure}
 The rule is judged by its effect on the upper bound of the corridor
 (Section~\ref{sec:exp_kpis}). The primary measure is the change of the share of
-hours whose mean TTT lies above 35 minutes, together with the change of the minutes
-above 35 per hour. Each change is the difference between the scenario and its
+hours whose mean TTT lies above 35 minutes, the frequency of the violations, together
+with the change of the minutes above 35 per hour, their severity. Each change is the difference between the scenario and its
 baseline for the same seed, averaged over the ten seeds and reported with a
 95\,\% $t$-interval. A simulated difference is a property of the model and is
 never added to an observed value.
@@ -892,7 +890,12 @@ scenarios with replayed demand are repeated on the model with a largest tree dep
 of five (Section~\ref{sec:exp_e4_operational}).
 
 \paragraph{Rules for the claims}
-The following rules were fixed before the runs of E5.
+The outcomes are interpreted in a fixed order. The whole-system outcomes of the
+corridor and the mean turnaround time decide whether the terminal as a whole would
+gain. The outcomes of groups of visits identify who gains and who pays, and the
+mechanism measures explain how the change works. Two rules are also compared
+directly, by their paired differences over the same seeds, as an exploratory
+analysis of the same runs. The following rules were fixed before the runs of E5.
 \begin{enumerate}
 \item A direction is stated only if the 95\,\% interval of the paired difference
 for the visits with a moved delivery excludes zero in the three scenarios with
@@ -902,6 +905,9 @@ sign changes, the finding is that the simulation is not adequate for this questi
 that is, if the trucks reach their first RMG stop sooner and fewer RMG stops start
 at a full block.
 \end{enumerate}
+These rules establish a direction for the trucks with a moved delivery and a
+mechanism. They do not establish a benefit for the terminal as a whole, which is
+judged on the whole-system outcomes.
 
 \paragraph{Interpretation of the variants} An effect already at $\pm 1$ or $\pm 2$
 means that a local rule is enough in the model. An effect only with any block means
