@@ -76,7 +76,7 @@ developed on the training data, not a confirmatory test of a model fixed in adva
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/kpi/drift_daily.pdf}
-\caption{The test period has more trucks per day and longer turnaround times than the training period. Days with at least 300 visits, training blue, test orange, Easter grey, corridor green.}
+\caption{Trucks per day and daily median turnaround time, days with at least 300 visits (training blue, test orange, Easter grey, corridor green).}
 \label{fig:drift_daily}
 \end{figure}
 
@@ -496,7 +496,8 @@ The evaluation follows the three levels of validation of Sargent
 (Section~\ref{sec:exp_e4_mechanisms}) and operational validity
 (Section~\ref{sec:exp_e4_operational}). Section~\ref{sec:exp_e4_configs} first
 defines the configurations that are compared. Chapter~\ref{chp:results} reports the
-verification first, because it decides how far the other results can be trusted.
+verification first, because the comparisons that follow rely on the extended
+simulator.
 
 \subsection{Configurations}
 \label{sec:exp_e4_configs}

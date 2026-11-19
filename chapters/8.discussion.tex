@@ -33,8 +33,8 @@ deliveries away from full blocks acts in principle, which visits gain, and wheth
 the waiting is reduced or only moved. Its result for the allocation rule is not a
 single effect but a trade-off, between how often and how badly the corridor is
 exceeded and between the trucks that gain and those that pay
-(Section~\ref{sec:res_s1_contrasts}). That the trade-off appears only under higher
-demand fits the mechanism. With moderate congestion, a moved delivery finds a free
+(Section~\ref{sec:res_s1_contrasts}). A plausible explanation for why the trade-off
+appears only under higher demand lies in the mechanism. With moderate congestion, a moved delivery finds a free
 lane, and the trucks at the receiving block hardly notice it. Under heavy
 congestion, the receiving blocks fill as well, and a wider choice moves more
 deliveries into them. These are statements about the simulated system. For CTB
@@ -76,7 +76,7 @@ The model cannot settle this trade-off.
 
 \paragraph{Model error and drift.} Part of the shortfall is the drift between the
 periods (Section~\ref{sec:exp_partitions}). On the training period, the same
-configuration is clearly closer to the log than on the test period, because the stops
+configuration is closer to the log than on the test period, because the stops
 of the test period took longer at every load and more blocks were closed, so that the
 remaining blocks carried more of the load (Sections~\ref{sec:res_e4_remaining}
 and~\ref{sec:obs_drift}). The in-sample run cannot separate the two cleanly
@@ -189,7 +189,7 @@ ranked probability score chooses trees where a single distribution would hide th
 dependencies (Section~\ref{sec:prosit_trees}). The white-box form was a
 precondition for the mechanism audit. Every finding of E4 started from a tree
 that could be read, for example block-choice trees that send trucks to the block
-with the longer queue. The data-aware parts of the model carry the result. The
+with the longer queue. The
 case attributes of the planned visit let the routing trees reproduce the stop
 structure, and 98.7\,\% of the simulated visits have their planned number of stops
 even without the guard (Section~\ref{sec:res_baseline}). The stop guard is a

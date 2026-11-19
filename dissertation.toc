@@ -8,7 +8,7 @@
 \contentsline {section}{\numberline {1.2}Problem Statement}{2}{section.1.2}%
 \contentsline {section}{\numberline {1.3}Research Objective and Contributions}{3}{section.1.3}%
 \contentsline {section}{\numberline {1.4}Research Questions}{4}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Thesis Outline}{4}{section.1.5}%
+\contentsline {section}{\numberline {1.5}Thesis Outline}{5}{section.1.5}%
 \contentsline {chapter}{\numberline {2}Background and Related Work}{6}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Container Terminal Truck Operations}{6}{section.2.1}%
 \contentsline {paragraph}{The truck visit}{6}{section.2.1}%
@@ -140,13 +140,13 @@
 \contentsline {section}{\numberline {5.5}Replay and Generative Mode}{70}{section.5.5}%
 \contentsline {section}{\numberline {5.6}Chapter Summary}{71}{section.5.6}%
 \contentsline {chapter}{\numberline {6}Results}{72}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Conformance Does Not Establish Suitability for Simulation (E1 to E3)}{72}{section.6.1}%
-\contentsline {subsection}{\numberline {6.1.1}Control-Flow Discovery (E1)}{73}{subsection.6.1.1}%
+\contentsline {section}{\numberline {6.1}Control-Flow Model Selection and Evaluation}{72}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Discovery Results}{73}{subsection.6.1.1}%
 \contentsline {paragraph}{Quality of the nets.}{73}{table.caption.33}%
 \contentsline {paragraph}{Fitness for simulation.}{74}{figure.caption.34}%
 \contentsline {paragraph}{Admissibility.}{75}{figure.caption.35}%
-\contentsline {subsection}{\numberline {6.1.2}Rule Audit (E2)}{75}{subsection.6.1.2}%
-\contentsline {subsection}{\numberline {6.1.3}Simulation of the Discovered Nets (E3)}{77}{subsection.6.1.3}%
+\contentsline {subsection}{\numberline {6.1.2}Domain-Rule Compliance and Model Selection}{75}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}Simulated Behaviour and the Stop Guard}{77}{subsection.6.1.3}%
 \contentsline {paragraph}{The selected net without a guard.}{77}{table.caption.36}%
 \contentsline {paragraph}{The simple guard.}{77}{table.caption.36}%
 \contentsline {paragraph}{The look-ahead stop guard.}{78}{table.caption.36}%
@@ -155,37 +155,37 @@
 \contentsline {subsection}{\numberline {6.1.4}Answer to RQ1}{79}{subsection.6.1.4}%
 \contentsline {paragraph}{Discovery and rule treatment.}{79}{subsection.6.1.4}%
 \contentsline {paragraph}{Conformance metrics and simulation.}{80}{subsection.6.1.4}%
-\contentsline {section}{\numberline {6.2}Mechanism Corrections Improve the Fit, but Severe Congestion Remains Inadequately Reproduced (E4)}{80}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Verification Status}{81}{subsection.6.2.1}%
-\contentsline {subsection}{\numberline {6.2.2}Implausible Behaviour of the Base Model}{82}{subsection.6.2.2}%
+\contentsline {section}{\numberline {6.2}Simulation Validation and Error Analysis}{80}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Verification of the Extended Simulator}{80}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Baseline Performance and Sources of Error}{81}{subsection.6.2.2}%
 \contentsline {paragraph}{Block choice.}{82}{subsection.6.2.2}%
 \contentsline {paragraph}{Waiting time.}{82}{subsection.6.2.2}%
-\contentsline {paragraph}{Execution time and capacity.}{83}{figure.caption.37}%
-\contentsline {subsection}{\numberline {6.2.3}Targeted Corrections Along the Path of the Truck}{83}{subsection.6.2.3}%
-\contentsline {paragraph}{Counting.}{83}{table.caption.38}%
+\contentsline {paragraph}{Execution time and capacity.}{82}{figure.caption.37}%
+\contentsline {subsection}{\numberline {6.2.3}Effects of Model Adaptations}{84}{subsection.6.2.3}%
+\contentsline {paragraph}{Counting.}{84}{table.caption.38}%
 \contentsline {paragraph}{Block allocation.}{84}{table.caption.38}%
 \contentsline {paragraph}{Queue at the block.}{84}{table.caption.38}%
-\contentsline {paragraph}{Service under load.}{85}{table.caption.38}%
+\contentsline {paragraph}{Service under load.}{84}{table.caption.38}%
 \contentsline {paragraph}{Choice of the final configuration.}{85}{table.caption.38}%
 \contentsline {paragraph}{Necessity of each change.}{85}{table.caption.38}%
 \contentsline {paragraph}{The correction of version 1.0.5 alone.}{85}{table.caption.38}%
-\contentsline {subsection}{\numberline {6.2.4}Fitness for the Intended Use}{86}{subsection.6.2.4}%
+\contentsline {subsection}{\numberline {6.2.4}Validation for the Intended Use}{85}{subsection.6.2.4}%
 \contentsline {paragraph}{Where the remaining error lies.}{87}{table.caption.40}%
-\contentsline {paragraph}{In-sample and out-of-sample.}{88}{figure.caption.42}%
-\contentsline {paragraph}{The model error.}{89}{figure.caption.42}%
-\contentsline {subsection}{\numberline {6.2.5}Sensitivity to Alternative Assumptions}{89}{subsection.6.2.5}%
+\contentsline {paragraph}{In-sample and out-of-sample.}{87}{figure.caption.42}%
+\contentsline {paragraph}{The model error.}{88}{figure.caption.42}%
+\contentsline {subsection}{\numberline {6.2.5}Sensitivity Analysis}{89}{subsection.6.2.5}%
 \contentsline {paragraph}{Tree depth.}{89}{table.caption.43}%
 \contentsline {paragraph}{Other nets.}{90}{table.caption.43}%
-\contentsline {paragraph}{Generated inputs.}{91}{table.caption.43}%
+\contentsline {paragraph}{Generated inputs.}{90}{table.caption.43}%
 \contentsline {subsection}{\numberline {6.2.6}Answer to RQ2}{91}{subsection.6.2.6}%
-\contentsline {section}{\numberline {6.3}Allocation Effects Depend on the Outcome Considered (E5)}{92}{section.6.3}%
-\contentsline {subsection}{\numberline {6.3.1}Effect on the Hourly Corridor}{92}{subsection.6.3.1}%
-\contentsline {subsection}{\numberline {6.3.2}Who Gains and Who Pays}{94}{subsection.6.3.2}%
-\contentsline {paragraph}{Mechanism.}{95}{table.caption.45}%
-\contentsline {subsection}{\numberline {6.3.3}Comparing the Rules}{95}{subsection.6.3.3}%
-\contentsline {subsection}{\numberline {6.3.4}Robustness}{96}{subsection.6.3.4}%
+\contentsline {section}{\numberline {6.3}Evaluation of Load-Aware Block Allocation}{91}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}Effects on Terminal-Level Performance}{92}{subsection.6.3.1}%
+\contentsline {subsection}{\numberline {6.3.2}Effects Across Truck Groups}{92}{subsection.6.3.2}%
+\contentsline {paragraph}{Mechanism.}{94}{table.caption.45}%
+\contentsline {subsection}{\numberline {6.3.3}Comparison of Allocation Rules}{94}{subsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.3.4}Sensitivity of Scenario Results}{96}{subsection.6.3.4}%
 \contentsline {paragraph}{Interpretation.}{96}{subsection.6.3.4}%
-\contentsline {subsection}{\numberline {6.3.5}Answer to RQ3}{97}{subsection.6.3.5}%
+\contentsline {subsection}{\numberline {6.3.5}Answer to RQ3}{96}{subsection.6.3.5}%
 \contentsline {paragraph}{To what extent.}{97}{subsection.6.3.5}%
 \contentsline {paragraph}{What it indicates.}{97}{subsection.6.3.5}%
 \contentsline {chapter}{\numberline {7}Discussion}{98}{chapter.7}%
@@ -228,9 +228,9 @@
 \contentsline {paragraph}{RQ2. To what extent does the ProSiT simulation reproduce truck turnaround time and its response to load, and which components explain the discrepancies?}{112}{section.8.1}%
 \contentsline {paragraph}{RQ3. To what extent can the simulation be used to evaluate a load-aware block allocation for deliveries, and what does it indicate about the effect on turnaround time?}{112}{section.8.1}%
 \contentsline {section}{\numberline {8.2}Contributions}{112}{section.8.2}%
-\contentsline {paragraph}{(C1) Conformance does not establish suitability for simulation.}{112}{section.8.2}%
-\contentsline {paragraph}{(C2) An improved aggregate timing does not establish suitability for congestion-sensitive decisions.}{113}{section.8.2}%
-\contentsline {paragraph}{(C3) A conditional assessment of a load-aware block allocation.}{113}{section.8.2}%
+\contentsline {paragraph}{(C1) A domain-constrained simulation model of CTB truck visits.}{112}{section.8.2}%
+\contentsline {paragraph}{(C2) An empirical analysis of simulation errors and congestion sensitivity.}{113}{section.8.2}%
+\contentsline {paragraph}{(C3) A conditional evaluation of load-aware block allocation.}{113}{section.8.2}%
 \contentsline {section}{\numberline {8.3}Limitations}{113}{section.8.3}%
 \contentsline {section}{\numberline {8.4}Future Work}{114}{section.8.4}%
 \contentsline {chapter}{\numberline {A}Observed Truck-Visit Behaviour}{115}{appendix.A}%
@@ -255,7 +255,7 @@
 \contentsline {paragraph}{Limits.}{131}{table.caption.61}%
 \contentsline {chapter}{\numberline {D}Additional Simulation Results}{132}{appendix.D}%
 \contentsline {section}{\numberline {D.1}Measures and Configurations of E4}{132}{section.D.1}%
-\contentsline {section}{\numberline {D.2}Verification of the Extended Simulator}{135}{section.D.2}%
+\contentsline {section}{\numberline {D.2}Details of the Verification Tests}{135}{section.D.2}%
 \contentsline {paragraph}{Simulator extensions.}{135}{section.D.2}%
 \contentsline {paragraph}{Retraining.}{135}{section.D.2}%
 \contentsline {paragraph}{Replayed demand.}{135}{section.D.2}%

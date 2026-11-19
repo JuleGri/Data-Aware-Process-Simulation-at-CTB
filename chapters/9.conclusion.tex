@@ -59,33 +59,28 @@ validated improvement.
 \section{Contributions}
 \label{sec:concl_contributions}
 
-\paragraph{(C1) Conformance does not establish suitability for simulation.} On a
-real logistics log, the usual conformance measures did not decide whether a net can
-be simulated. Admissibility for simulation needed three further checks, the coverage
-of the frequent sequences, an audit of the language against the domain rules and a
-test in the simulator. Precision did not anticipate the failures, because the routing
-of ProSiT depends on the history of a case but not on the marking of the net. In a
-net that takes its decisions on silent transitions, a condition on the data of the
-case has to look ahead on the reachability graph.
+\paragraph{(C1) A domain-constrained simulation model of CTB truck visits.} The
+thesis provides a simulation model whose control flow was selected by soundness,
+coverage and the domain rules and tested in the simulator, together with a stop guard
+that looks ahead on the reachability graph of the net. The comparison of the
+candidates shows that two sound nets that replay every training visit generate
+overlapping stops of one truck, and that the filtered nets lose the multi-block
+visits.
 
-\paragraph{(C2) An improved aggregate timing does not establish suitability for
-congestion-sensitive decisions.} The thesis diagnoses a learned simulation model by
-correcting one part of the simulator at a time along the path of a case and by judging
-each step on its response to load rather than on a single distance. This separates
-defects of one software version from a mismatch between the resource semantics of
-the framework and a resource with several places, from limits of the event data and
-from the change between the periods. The case also shows that a model can match the
-level of the turnaround time while missing the congested hours, and that the
-magnitude of its congestion can depend on a hyperparameter that the data do not
-decide.
+\paragraph{(C2) An empirical analysis of simulation errors and congestion
+sensitivity.} The thesis attributes the error of the simulation to the implementation
+of one ProSiT version, to resource semantics designed for resources that serve one
+case after another, to the missing crane data and to the change between the periods.
+It shows that the corrected model matches normal hours but not severe congestion, and
+that the magnitude of its congestion depends on the depth of the learned trees. The
+analysis concerns one terminal and one version of ProSiT.
 
-\paragraph{(C3) A conditional assessment of a load-aware block allocation.} The
-thesis shows how a what-if analysis can be reported when the model is only partly
-valid, with rules for the claims fixed before the runs, outcomes read from the whole
-system to groups of visits and to the mechanism, and the frequency and the severity
-of the violations reported separately. Under this design, the allocation appears as a
-trade-off rather than a single effect, which a pilot at the terminal would have to
-resolve.
+\paragraph{(C3) A conditional evaluation of load-aware block allocation.} The thesis
+evaluates one allocation rule in six scenarios of flexibility and demand. Under the
+model assumptions, it finds a trade-off between the frequency of hours above the
+corridor, their severity and the distribution of the delays among the trucks. Because
+the model underestimates severe congestion, the result gives hypotheses for a pilot,
+not an estimate for the terminal.
 
 The selected model, its learned trees and parameters and the extensions are
 documented in full (Chapter~\ref{chp:process_discovery_methodology} and

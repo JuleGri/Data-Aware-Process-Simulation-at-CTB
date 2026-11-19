@@ -93,23 +93,25 @@ determine the scope of the conclusions for the terminal.
 
 The thesis makes three connected contributions, all for the CTB case.
 \begin{enumerate}
-\item[(C1)] \textbf{Conformance does not establish suitability for simulation.}
-The study compares discovered process models by conformance metrics, by the domain
-rules of the truck visit and by their behaviour in the simulator. It shows that nets
-with high fitness and precision can generate visits that no truck can perform, while
-the coverage of the frequent sequences and the domain rules anticipate specific
-failures.
-\item[(C2)] \textbf{An improved aggregate timing does not establish suitability for
-congestion-sensitive decisions.} The study locates the discrepancies between
-observed and simulated turnaround times component by component. It separates
-defects of one software version, a mismatch between the resource semantics of the
-simulator and a block with several lanes, limits of the event data and the change
-between periods, and shows which of them targeted extensions remove and which
-remain.
-\item[(C3)] \textbf{A conditional assessment of a load-aware block allocation.} The
-study evaluates the allocation in the resulting model and shows that its effect
-depends on the outcome considered. The frequency of hours above the corridor falls,
-while their severity and the waiting of other trucks depend on the flexibility of the
+\item[(C1)] \textbf{A domain-constrained simulation model of CTB truck visits.} The
+study selects a control-flow model from 19 discovered nets by soundness, by the
+coverage of the frequent sequences and by the domain rules of the truck visit, and
+tests the candidates in the simulator. The selected net is used as discovered, with a
+guard on the planned number of stops that acts on its silent transitions. The
+comparison shows which nets lose the multi-block visits and which generate visits
+that no truck can perform, and that precision anticipated neither.
+\item[(C2)] \textbf{An empirical analysis of simulation errors and congestion
+sensitivity.} The study traces the discrepancies between observed and simulated
+turnaround times along the path of a truck. It separates defects of one software
+version, a mismatch between the resource semantics of the simulator and a block with
+three lanes, limits of the event data and the change between periods. With targeted
+extensions, the model reproduces normal hours and the rise of the waiting with the
+load of a block, but it underestimates severe congestion, and the magnitude of its
+congestion depends on the depth of the learned trees.
+\item[(C3)] \textbf{A conditional evaluation of load-aware block allocation.} The study
+evaluates an allocation rule in the resulting model. Under the model assumptions, the
+rule lowers the frequency of hours above the corridor, while its effect on their
+severity and on the trucks at the receiving blocks depends on the flexibility of the
 rule and on the demand. The result is a set of hypotheses for the terminal, not a
 validated improvement.
 \end{enumerate}

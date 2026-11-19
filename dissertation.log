@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  19 NOV 2026 18:55
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  19 NOV 2026 19:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2950,24 +2950,16 @@ LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/b/n' will be
  [9] [10
 
 ] (dissertation.lof
-Overfull \hbox (0.80783pt too wide) in paragraph at lines 21--21
- [][] [][][]\TU/EBGaramond12-Regular.otf(2)/m/n/12 The simulated hourly median 
-follows the observed pattern but misses its peaks. 
- []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-Overfull \hbox (2.84384pt too wide) in paragraph at lines 23--23
- \TU/EBGaramond12-Regular.otf(2)/m/n/12 trucks their effect on the severity is 
-not determined and the wider rules lengthen 
- []
-
-[11
+ [11
 
 ])
 \tf@lof=\write7
 \openout7 = `dissertation.lof'.
 
- [12] (dissertation.lot
+
+[12] (dissertation.lot
 Underfull \vbox (badness 1953) has occurred while \output is active []
 
  [13
@@ -2998,21 +2990,8 @@ Underfull \vbox (badness 1264) has occurred while \output is active []
 
 
 ]
-[2]
-Overfull \hbox (3.77571pt too wide) in paragraph at lines 103--109
-[]\TU/EBGaramond12-Regular.otf(2)/b/n/12 An improved aggregate timing does not 
-establish suitability for congestion-sensitive
- []
-
-
-Overfull \hbox (13.20108pt too wide) in paragraph at lines 103--109
-\TU/EBGaramond12-Regular.otf(2)/b/n/12 decisions. \TU/EBGaramond12-Regular.otf(
-2)/m/n/12 The study locates the discrepancies between observed and simulated tu
-rnaround
- []
-
-[3]
-Overfull \hbox (2.10376pt too wide) in paragraph at lines 116--120
+[2] [3]
+Overfull \hbox (2.10376pt too wide) in paragraph at lines 118--122
 \TU/EBGaramond12-Regular.otf(2)/m/n/12 The selected model, its learned decision
  trees and parameters and the extensions are documented
  []
@@ -3267,13 +3246,13 @@ LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
 (Font)              scaled to size 9.10002pt on input line 280.
 
 [47] [48] [49] [50] [51] [52] [53]
-Overfull \hbox (0.96779pt too wide) in paragraph at lines 592--598
+Overfull \hbox (0.96779pt too wide) in paragraph at lines 593--599
 \TU/EBGaramond12-Regular.otf(2)/m/n/12 With all switches off, the extended simu
 lator must generate exactly the same log as ProSiT
  []
 
 [54] [55]
-Overfull \hbox (1.44688pt too wide) in paragraph at lines 673--679
+Overfull \hbox (1.44688pt too wide) in paragraph at lines 674--680
 [] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Reference values[] \TU/EBGaramond1
 2-Regular.otf(2)/m/n/12 A distance between a simulated and an observed log is i
 nterpreted against
@@ -3317,12 +3296,16 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  (chapters/7.results.tex
 Chapter 6.
-[72
+
+Underfull \vbox (badness 1264) has occurred while \output is active []
+
+ [72
 
 
 
 
-] (tables/rq1_e1_levels.tex
+]
+(tables/rq1_e1_levels.tex
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
@@ -3339,30 +3322,15 @@ file (type pdf)
 File: figures/discovery_prom/e1_split13apr_variant_coverage.pdf Graphic file (t
 ype pdf)
 <use figures/discovery_prom/e1_split13apr_variant_coverage.pdf>
- [75]
-Underfull \vbox (badness 1270) has occurred while \output is active []
-
- [76]
-[77] [78] [79]
-Overfull \hbox (22.28781pt too wide) in paragraph at lines 325--325
-\TU/EBGaramond12-Regular.otf(2)/m/sc/17.28 vere Congestion Remains Inadequately
- Reproduced
- []
-
-[80]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [81]
+ [75] [76] [77] [78] [79] [80] [81]
 File: figures/simulation_model/sim_waiting_target.pdf Graphic file (type pdf)
 <use figures/simulation_model/sim_waiting_target.pdf>
 
 [82] (tables/rq2_responses.tex)
-Overfull \hbox (1.42381pt too wide) in paragraph at lines 468--471
-\TU/EBGaramond12-Regular.otf(2)/m/n/12 Table [][]6.3[][] corrects one part afte
-r another, in the order in which a truck meets them (Section [][]4.6.4[][]).
- []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[83] [84] [85]
+ [83]
+[84] [85]
 File: figures/simulation_model/sim_kpi_gap.pdf Graphic file (type pdf)
 <use figures/simulation_model/sim_kpi_gap.pdf>
  (tables/rq2_acceptance.tex) [86]
@@ -3370,26 +3338,26 @@ File: figures/simulation_model/sim_hourly_ttt.png Graphic file (type bmp)
 <figures/simulation_model/sim_hourly_ttt.png>
 File: figures/simulation_model/sim_load_profiles.png Graphic file (type bmp)
 <figures/simulation_model/sim_load_profiles.png>
+ [87] (tables/rq2_depth5.tex
+Underfull \vbox (badness 7133) has occurred while \output is active []
 
-Underfull \vbox (badness 3058) has occurred while \output is active []
-
- [87]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [88]
-(tables/rq2_depth5.tex) [89]
-Underfull \vbox (badness 2359) has occurred while \output is active []
-
- [90]
-[91] (tables/rq3_grid_kpi.tex) [92]
+ [88])
+[89] [90] [91] (tables/rq3_grid_kpi.tex) (tables/rq3_grid_mechanism.tex)
+[92]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [93]
-(tables/rq3_grid_mechanism.tex) [94]
 File: figures/simulation_model/e5_tradeoff.pdf Graphic file (type pdf)
 <use figures/simulation_model/e5_tradeoff.pdf>
- (tables/rq3_policy_contrasts.tex) [95]
-[96]) [97]
+
+(tables/rq3_policy_contrasts.tex) [94]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [95]
+Underfull \vbox (badness 2221) has occurred while \output is active []
+
+ [96])
+[97]
 \openout2 = `chapters/8.discussion.aux'.
 
  (chapters/8.discussion.tex
@@ -3665,15 +3633,15 @@ L3 programming layer <2025-12-24>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: 3C906F11EAF99E926CBF250C555DFDA9;16720.
+(rerunfilecheck)             Checksum: BF0CA078786F6075ADF9FFC808437B70;16147.
  ) 
 Here is how much of TeX's memory you used:
  71883 strings out of 402986
  1800087 string characters out of 5448710
- 2627360 words of memory out of 5000000
+ 2625940 words of memory out of 5000000
  99533 multiletter control sequences out of 15000+600000
  636685 words of font info for 162 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  103i,14n,131p,1245b,2961s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on dissertation.xdv (182 pages, 3984916 bytes).
+Output written on dissertation.xdv (182 pages, 3957904 bytes).

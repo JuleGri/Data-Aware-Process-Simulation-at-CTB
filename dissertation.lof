@@ -5,22 +5,22 @@
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Arrival tree learned by ProSiT from the training log.}}{25}{figure.caption.15}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Recorded (filled) and unrecorded (open) points of a single-stop visit.}}{33}{figure.caption.17}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces The hourly mean turnaround time exceeds the corridor in 38\,\% of the training hours and in 56\,\% of the test hours. Mean TTT of the trucks leaving in a Gate-Out hour, hours with at least 20 trucks.}}{37}{figure.caption.20}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Mean turnaround time per Gate-Out hour in the training and the test log (hours with at least 20 trucks).}}{37}{figure.caption.20}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces The test period has more trucks per day and longer turnaround times than the training period. Days with at least 300 visits, training blue, test orange, Easter grey, corridor green.}}{43}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Trucks per day and daily median turnaround time, days with at least 300 visits (training blue, test orange, Easter grey, corridor green).}}{43}{figure.caption.24}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {5.1}{\ignorespaces Control flow of the simulation model, HM 0.7 as discovered in ProM (silent transitions as black bars).}}{63}{figure.caption.25}%
 \contentsline {figure}{\numberline {5.2}{\ignorespaces Routing tree of the silent transition from Gate In to RMG receive.}}{64}{figure.caption.27}%
 \contentsline {figure}{\numberline {5.3}{\ignorespaces Waiting-time tree of block T13.}}{65}{figure.caption.28}%
 \contentsline {figure}{\numberline {5.4}{\ignorespaces Execution-time tree of RMG receives.}}{65}{figure.caption.29}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces HM 0.7 is the most precise of the three admissible nets and the only one whose language respects the domain rules. Fitting visits and precision on the training log, all nets (left) and the most precise and fitting ones (right).}}{75}{figure.caption.34}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Only IM 0.0, HM 0.7 and ILP 1.00 accept every frequent training sequence, while the filtered Inductive Miner nets reject the multi-block visits. Training sequences accepted by each sound candidate.}}{76}{figure.caption.35}%
-\contentsline {figure}{\numberline {6.3}{\ignorespaces The waiting time that ProSiT learns falls with the load of a block, while the observed delay rises. RMG blocks, training log, by the number of other stops in progress.}}{83}{figure.caption.37}%
-\contentsline {figure}{\numberline {6.4}{\ignorespaces The simulation produces about half of the observed hours above the corridor. Mean turnaround time per Gate-Out hour, hours with at least 20 visits, final configuration over five seeds.}}{86}{figure.caption.39}%
-\contentsline {figure}{\numberline {6.5}{\ignorespaces The simulated hourly median follows the observed pattern but misses its peaks. Supplementary diagnostic, median turnaround time per Gate-In hour in the test period (seed 42).}}{88}{figure.caption.41}%
-\contentsline {figure}{\numberline {6.6}{\ignorespaces Under load, the simulated approach rises as observed, while the stops and the turnaround time rise too little. Test period solid, training period dotted.}}{88}{figure.caption.42}%
-\contentsline {figure}{\numberline {6.7}{\ignorespaces All rules lower the frequency of hours above the corridor, but with 20\,\% more trucks their effect on the severity is not determined and the wider rules lengthen the visits at the receiving blocks. Changes against the baseline of the same seed and demand, means over ten seeds with 95\,\% $t$-intervals.}}{95}{figure.caption.46}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Fitting visits and precision of the discovered nets on the training log, all nets (left) and the most precise and fitting ones (right), with the admissible and the selected nets marked.}}{75}{figure.caption.34}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Training sequences accepted by each sound candidate.}}{76}{figure.caption.35}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Waiting-time target of ProSiT and observed delay at the RMG blocks, by the number of other stops in progress (training log).}}{83}{figure.caption.37}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Mean turnaround time per Gate-Out hour, observed and simulated with the final configuration, training and test period (five seeds).}}{86}{figure.caption.39}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Median turnaround time per Gate-In hour in the test period, observed and simulated (seed 42, supplementary diagnostic).}}{87}{figure.caption.41}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Load profiles in the test period (solid) and the training period (dotted), observed and simulated.}}{88}{figure.caption.42}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Effects of the allocation rules on three outcomes, by eligible blocks and demand (paired differences over ten seeds with 95\,\% $t$-intervals).}}{95}{figure.caption.46}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
@@ -29,7 +29,7 @@
 \contentsline {figure}{\numberline {A.3}{\ignorespaces Median and P90 of the turnaround time by trucks in the terminal at Gate In (training).}}{118}{figure.caption.51}%
 \contentsline {figure}{\numberline {A.4}{\ignorespaces Median stop interval by trucks with an open interval at the same handling unit (training).}}{118}{figure.caption.52}%
 \contentsline {figure}{\numberline {A.5}{\ignorespaces Occupancy of the RMG blocks, recorded every four hours.}}{121}{figure.caption.54}%
-\contentsline {figure}{\numberline {A.6}{\ignorespaces Per visit, the turnaround time is spread widely around the corridor, with a long tail beyond two hours. Supplementary to the hourly KPI.}}{123}{figure.caption.55}%
+\contentsline {figure}{\numberline {A.6}{\ignorespaces Turnaround time per visit and the corridor (supplementary to the hourly KPI).}}{123}{figure.caption.55}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

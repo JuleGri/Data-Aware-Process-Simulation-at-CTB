@@ -71,7 +71,7 @@ f0 & \multicolumn{5}{l}{final configuration on the training period} & Model erro
 \end{table}
 
 \FloatBarrier
-\section{Verification of the Extended Simulator}
+\section{Details of the Verification Tests}
 \label{app:verification}
 
 Section~\ref{sec:res_e4_verification} summarises the verification. This section gives
@@ -94,8 +94,9 @@ to these small differences outside the RMG blocks.
 \paragraph{Replayed demand.} The simulated arrivals equal the observed Gate-In times
 (case-arrival distance zero).
 
-\paragraph{Domain rules.} No configuration generates a visit without a stop,
-overlapping stops of one truck or more than four stops.
+\paragraph{Domain rules.} No configuration of E4, all of which use HM 0.7 with the
+stop guard, generates a visit without a stop, overlapping stops of one truck or more
+than four stops. The contrast nets of E3 are not part of this test.
 
 \paragraph{Count of stops in progress.} Recomputed from the generated log, the number
 of stops in progress at a block is larger than the number the simulator used for 14
