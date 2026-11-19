@@ -17,7 +17,7 @@ different allocation of truck deliveries to the yard blocks.
 
 Simulation allows terminal operators to investigate changes before implementing
 them in live operations. Conventional terminal simulation models are constructed
-and calibrated manually, drawing on operational data and domain knowledge
+and calibrated manually, based on operational data and domain knowledge
 \cite{CTSteenken2004,OptimizingCTs2023}. Process mining offers a way to derive such
 models from event logs, including the control flow, activity durations, arrival
 patterns and resource assignments \cite{PMRozinat2009}. Data-aware approaches
@@ -27,103 +27,64 @@ ProSiT, the framework used in this thesis, combines a Petri net with learned
 probabilistic decision trees, which can be read and changed \cite{Vinci2026prosit}.
 
 A container terminal is a demanding test for such models, because its process has
-physical limits. A truck is one vehicle. Its stops happen one after another, never
-at the same time, and every visit exists to move containers. A storage block has
+physical limits. A truck is one vehicle with stops, that happen one after another, never
+at the same time, and every visit includes container handling. A storage block has
 three handover lanes, so it can hold at most three trucks at once, its crane
 handles them one after another, and its cranes are shared with the waterside and
 the rail. These limits are not written in the
 event log, and a model learned only from the recorded sequences and durations does
 not know them. A discovered control-flow model may allow a truck to perform two
 stops at once. A learned simulator may send more trucks to a block than it can
-serve, or let the waiting fall when a block gets busier. A simulation that
-reproduces the common sequences can therefore still fail where the physical
-limits shape the process, and these are exactly the places that a change in the
-allocation of trucks to blocks affects. The model has to be checked for the
-decision it is meant to support.
+serve, or let the waiting fall when a block gets busier. A simulation that reproduces the common sequences can therefore still fail where the physical limits shape the process. These are the important places, when a simulation is used to evaluate an operational change, for example a different allocation of trucks to the storage blocks. A simulation model therefore has to be validated for the decision it is meant to support.
 
 \section{Problem Statement}
 \label{sec:prob_statement}
 
-The primary performance measure in this study is truck turnaround time (TTT),
-defined as the time between Gate In and Gate Out. In the test period, the
-observed median is 33 minutes, the mean 41 minutes and the 90th percentile
-75 minutes. The data and performance measures are described in
-Chapters~\ref{chp:case_study_and_data} and~\ref{chp:experiments}.
+The primary performance measure in this study is the truck turnaround time (TTT),
+defined as the time between the time a Truck enters the Terminal, until its exit. Over the whole event log of 91,153 visits, the observed median is 30
+minutes, the mean 38 minutes and the 90th percentile 69 minutes. The data and
+performance measures are described in Chapters~\ref{chp:case_study_and_data}
+and~\ref{chp:experiments}.
 
-The terminal judges the TTT per hour. The mean TTT of the trucks that leave
-through Gate Out in an hour, that is, of all visits completed in that hour, should
-lie between 25 and 35 minutes (M.~Petersen, project manager for the cross-terminal KPI dashboard, data warehouse and business intelligence, HHLA, personal communication, 12 November 2026).
-Both bounds matter. In an hour whose trucks take longer than 35 minutes on
-average, the trucks wait too long from the customers' point of view. An hour
-below 25 minutes means that truck handling is faster than needed. If such an hour
-can be foreseen, the terminal can move manual equipment from the handling area
-HO2 to the waterside, so that HO2 serves trucks more slowly while the waterside
-gains capacity. In the test period, the mean TTT exceeds 35 minutes in 56\,\% of
-the hours with at least 20 trucks (Section~\ref{sec:exp_kpis}). This thesis asks
-why the trucks take longer in these hours and whether a different allocation of
-deliveries to the yard blocks can shorten them. The data do not record how
-equipment is assigned to the handling areas, so the shift of equipment to the
-waterside cannot be modelled. The improvement measure is therefore judged against
-the upper bound of the corridor only, by the share of hours whose mean TTT exceeds
-35 minutes and by the minutes by which it exceeds them. The lower bound is
-reported, but it remains a constraint that the model cannot evaluate.
+The terminal reports the TTT per hour. The mean TTT of the trucks that leave
+through the gate within an hour should lie between 25 and 35 minutes, a corridor
+that balances the efficiency of the terminal and the satisfaction of its customers.
+If an hour with a mean below the corridor can be foreseen, the terminal can move
+manual equipment from the truck handling area to the waterside, so that trucks are
+served more slowly while the waterside, the operational focus of a terminal, gains
+capacity. Over the whole event log, the mean TTT exceeds 35 minutes in 44\,\% of
+the hours with at least 20 trucks, 38\,\% in the training period and 56\,\% in the
+test period (Section~\ref{sec:exp_kpis}). This thesis asks why the trucks take
+longer in these hours and whether a different allocation of deliveries to the yard
+blocks can shorten them. The data do not record how equipment is assigned to the
+handling areas, so the shift of equipment to the waterside cannot be modelled. The improvement measure is judged against the upper bound of the corridor, because
+most hours that leave the corridor lie above it, 56\,\% against 8\,\% below it in
+the test period. The share of hours below 25 minutes is reported. What the terminal
+would gain from such hours, the shift of manual equipment to the waterside, lies
+outside the model, because the data do not record how equipment is assigned to the
+handling areas and the waterside is not modelled.
 
 The improvement measure studied is a load-aware allocation of deliveries to the
-yard blocks. A delivery whose block is full goes to a nearby block with a free
-lane. The yard position of a container is assigned when the truck arrives, so that
+yard blocks. When a truck with a delivery arrives and three or more trucks are
+already at its planned block or heading to it, the delivery is moved to the block
+with the fewest such trucks. The yard position of a container is assigned when the truck arrives, so that
 the driver knows where to go. An applicable rule must therefore use information
 available at that point and respect the blocks that may take the container. Today
-the assignment does not consider how many trucks are already heading to a block,
-so the measure adds this information to the decision.
+the terminals block assignment does not consider how many trucks are already heading to a block,
+so the suggested measure adds this information to the decision.
 
 This leads to two connected problems. First, the simulation must reproduce the
 relevant truck behaviour, the TTT and its response to load, within the physical
 limits of the terminal. Second, an improvement found in a simulated scenario must
 be interpreted in light of the validation of the model and of the operational
 feasibility of the measure.
-
-\section{Research Objective and Contributions}
-
+\section{Research Objective}
 The objective is to develop and evaluate a simulation of truck handling at CTB that
 is learned from event data, and to determine what it can support about the effect
-of a load-aware block allocation on the turnaround time. CTB is the case under
+of a load-aware block allocation on the turnaround time. The Container Terminal Burchardkai is the case under
 study, and the allocation question is the intended use against which the model is
 assessed. The limitations of the simulation are results of this assessment and
 determine the scope of the conclusions for the terminal.
-
-The thesis makes three connected contributions, all for the CTB case.
-\begin{enumerate}
-\item[(C1)] \textbf{A domain-constrained simulation model of CTB truck visits.} The
-study selects a control-flow model from 19 discovered nets by soundness, by the
-coverage of the frequent sequences and by the domain rules of the truck visit, and
-tests the candidates in the simulator. The selected net is used as discovered, with a
-guard on the planned number of stops that acts on its silent transitions. The
-comparison shows which nets lose the multi-block visits and which generate visits
-that no truck can perform, and that precision anticipated neither.
-\item[(C2)] \textbf{An empirical analysis of simulation errors and congestion
-sensitivity.} The study traces the discrepancies between observed and simulated
-turnaround times along the path of a truck. It separates defects of one software
-version, a mismatch between the resource semantics of the simulator and a block with
-three lanes, limits of the event data and the change between periods. With targeted
-extensions, the model reproduces normal hours and the rise of the waiting with the
-load of a block, but it underestimates severe congestion, and the magnitude of its
-congestion depends on the depth of the learned trees.
-\item[(C3)] \textbf{A conditional evaluation of load-aware block allocation.} The study
-evaluates an allocation rule in the resulting model. Under the model assumptions, the
-rule lowers the frequency of hours above the corridor, while its effect on their
-severity and on the trucks at the receiving blocks depends on the flexibility of the
-rule and on the demand. The result is a set of hypotheses for the terminal, not a
-validated improvement.
-\end{enumerate}
-The selected model, its learned decision trees and parameters and the extensions are
-documented in full, so that the model can be inspected and reproduced
-(Chapter~\ref{chp:process_discovery_methodology} and
-Appendices~\ref{app:prosit_inventory} and~\ref{app:model_inspection}).
-
-The case study builds on existing discovery and simulation methods. It does not
-propose a new algorithm. Findings from this terminal can motivate further
-investigation in other processes with physical limits, but do not establish general
-limitations of all data-aware simulators.
 
 \section{Research Questions}
 
@@ -131,7 +92,7 @@ The objective is addressed through three research questions.
 \begin{enumerate}
 \item \textbf{RQ1} Which discovery and rule treatment yields a sound,
 executable control-flow model that preserves the observed truck-visit
-behaviour, and do conformance metrics anticipate its behaviour in simulation?
+behaviour, and do the conformance metrics anticipate its behaviour in simulation?
 \item \textbf{RQ2} To what extent does the ProSiT simulation reproduce truck
 turnaround time and its response to load at the capacity-limited yard blocks,
 and which model components explain the observed discrepancies?
@@ -144,20 +105,73 @@ time?
 A first group of experiments selects the control-flow model and examines its
 behaviour in the simulator (RQ1). A second group assesses the performance of the
 simulation and investigates its discrepancies (RQ2). A third evaluates the
-improvement measure (RQ3), and its interpretation depends on the evidence of the
+improvement measure (RQ3), with the interpretation depending on the delivered evidence of the
 second.
+
+\section{Contributions}
+
+The main contributions of this thesis are as follows.
+\begin{enumerate}
+\item[(C1)] A domain-constrained simulation model of truck handling at CTB, combining
+a discovered control flow and simulation parameters learned from the event log with
+domain knowledge of the terminal, namely the domain rules of the truck visit, a
+data-aware stop guard and the capacity of the yard blocks, providing a data-driven
+simulation that respects physical limits the event log does not record.
+\item[(C2)] A validation of the components of the simulation model against the observed
+turnaround times, evaluating its response to load rather than only its similarity to the
+recorded log and correcting one part of the simulator at a time, providing evidence of
+how the implementation, the resource semantics and the event data shape the simulated
+congestion at resources that serve several cases at once.
+\item[(C3)] An empirical evaluation of a load-aware block allocation at CTB in six
+scenarios of flexibility and demand, using paired simulation runs and rules for the
+claims fixed in advance, providing conditional evidence of how such an allocation
+affects the frequency and the severity of hours above the turnaround corridor and the
+distribution of delays among the trucks.
+\end{enumerate}
+
+
+The selected model, its learned decision trees and parameters and the extensions are
+documented in full, so that the model can be inspected
+(Chapter~\ref{chp:process_discovery_methodology} and
+Appendices~\ref{app:prosit_inventory} and~\ref{app:model_inspection}).
+
+
+
+
+The case study builds on existing discovery and simulation methods. It does not
+propose a new algorithm. Findings from this terminal can motivate further
+investigation in other processes with physical limits, but do not establish general
+limitations of all data-aware simulators.
+
 
 \section{Thesis Outline}
 \label{sec:thesis_outline}
 
-Chapter~\ref{chp:background} introduces the process-mining and simulation
+Chapter~\ref{chp:background} introduces the case studies setting, as well as the process-mining and simulation
 concepts and positions the study in the literature.
-Chapter~\ref{chp:case_study_and_data} describes CTB, the operational records and
-the event log. Chapter~\ref{chp:experiments} explains the experiments, the data
-setting and the measures, and Chapter~\ref{chp:process_discovery_methodology}
-describes the simulation model on which they operate.
+Chapter~\ref{chp:case_study_and_data} describes the data sources, the preprocessing and cleaning and
+the event log construction. Itdescribes the performance measure and explains the given domain rules. 
+Chapter~\ref{chp:experiments} explains the design of the five experiments that answer
+the research questions. It introduces the split into a training and a test log, and the number of simulation runs, and then describes for each
+experiment its goal, its conditions and the criteria by which its results are evaluated.
+Chapter~\ref{chp:process_discovery_methodology} describes the simulation model and its parameters and their construction, the
+settings with which it is fitted, and the extensions that add the physical limits of the yard blocks.
 Chapter~\ref{chp:results} reports the results and answers the research questions.
 Chapter~\ref{chp:discussion} assesses what they mean for CTB and where the
-conclusions stop, and Chapter~\ref{chp:conclusion} summarises the findings. The
-appendices provide additional results, the complete model inventory and the
-reproduction details.
+conclusions stop, how domain knowledge entered the study, and what the terminal can
+take from it. Chapter~\ref{chp:discussion} assesses what the results mean for the intended use and
+for CTB. It discusses what conformance measures reveal about a model for simulation,
+which parts of data-aware simulation transfer to a physical logistics process, the
+threats to validity, how domain knowledge entered the study, and what the terminal can
+take from it. Chapter~\ref{chp:conclusion} summarises the answers to the research
+questions and the contributions, and names the limitations and directions for future
+work.
+
+The appendices provide the material behind the main text. They describe the observed
+truck-visit behaviour in more detail (Appendix~\ref{app:observed_behaviour}), give all
+discovered nets with their conformance values and the rule audit
+(Appendix~\ref{app:discovery_results}), compare control-flow representations of the
+same language (Appendix~\ref{app:replica}), report additional simulation results
+(Appendix~\ref{app:sim_results}), document the complete ProSiT model
+(Appendix~\ref{app:prosit_inventory}) and list what is needed to reproduce the
+experiments (Appendix~\ref{app:model_inspection}).
