@@ -41,8 +41,9 @@
 \contentsline {table}{\numberline {C.5}{\ignorespaces Effect of the allocation rule per visit, by eligible blocks and demand.}}{128}{table.caption.58}%
 \contentsline {table}{\numberline {C.6}{\ignorespaces The allocation rule with $\pm 2$ under the robustness runs.}}{128}{table.caption.59}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {D.1}{\ignorespaces Parameters of a ProSiT simulation model (version 1.0.4).}}{130}{table.caption.60}%
-\contentsline {table}{\numberline {D.2}{\ignorespaces Every learned model of the simulation model.}}{132}{table.D.2}%
-\contentsline {table}{\numberline {D.3}{\ignorespaces Capacities and calendars.}}{139}{table.caption.63}%
+\contentsline {table}{\numberline {D.1}{\ignorespaces Settings, versions and inputs of the simulation model.}}{130}{table.caption.60}%
+\contentsline {table}{\numberline {D.2}{\ignorespaces Parameters of a ProSiT simulation model (version 1.0.4).}}{131}{table.caption.61}%
+\contentsline {table}{\numberline {D.3}{\ignorespaces Every learned model of the simulation model.}}{133}{table.D.3}%
+\contentsline {table}{\numberline {D.4}{\ignorespaces Capacities and calendars.}}{141}{table.caption.64}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {E.1}{\ignorespaces Scripts behind the tables and figures.}}{144}{table.caption.65}%
+\contentsline {table}{\numberline {E.1}{\ignorespaces Scripts behind the tables and figures.}}{145}{table.caption.66}%

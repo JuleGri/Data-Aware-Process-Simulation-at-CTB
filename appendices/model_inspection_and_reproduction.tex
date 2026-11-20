@@ -5,7 +5,8 @@
 
 This appendix documents the environments, the inputs, the run folders and the script
 behind every table and figure, so that each result can be traced to the run that
-produced it. The event data of HHLA are confidential, and the code is not published.
+produced it. The event data of HHLA and the event logs derived from them are
+confidential, and the code is not published.
 The code is available from the author on request. Paths are relative to the project
 repository \texttt{trucksimulation}.
 
@@ -29,14 +30,14 @@ of the file and PM4Py would otherwise sort them by the complete timestamp alone.
 The truck schedule numbers the stops of a visit as well. This numbering agrees
 with the time order in every visit of both logs and is not used
 (\nolinkurl{analysis/verify_timestamp_order.py}).
-\todo{State the availability of the operational data and of the derived event logs.}
 
 \section{Fitted Models and Simulation Runs}
 
 The fitted ProSiT models are stored as Python pickles, the model of each net in
 \nolinkurl{simulation_e3/runs/hm07orig_20261115/e3/<net>/prosit_params.pkl}, and the
 retrained predictive parameters of E4 in \nolinkurl{components/components}. The pickles keep the
-complete fitted state, including the training samples stored in the leaves.
+complete fitted state, including the sample of every leaf from which the simulator
+draws.
 Together with the recorded environment and the seeds, they determine every run
 exactly. All simulation runs of E3 to E5 and the controls are in the same
 run folder, with the subfolders \texttt{e3} (main condition and contrasts), \nolinkurl{e3_noguard} and

@@ -4,21 +4,67 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sources (trucksimulation): simulation_e3/runs/hm07orig_20261115/make_inventory_appendix.py
 %   (tables/app_inventory.tex, model_leaves.csv, model_inventory.csv); export_simulation_model.py (Chapter 5 tables);
-%   plot_control_flow.py (net figures); data/processed/CTB/split13apr_20261106/manifest.json (hashes).
+%   plot_control_flow.py (net figures); data/processed/CTB/split13apr_20261106/manifest.json (hashes);
+%   versions from runs/hm07orig_20261115/e3/run_summary.json.
+% Restructured on 20 Nov 2026: settings first, then the parameters of a ProSiT model, the learned models,
+%   capacities and calendars, and the discovered nets.
 
-This appendix lists the settings and inputs, every learned model, the capacities
-and calendars and the discovered nets, everything needed to set up the final
-simulation model with ProSiT. Chapter~\ref{chp:process_discovery_methodology}
-shows and interprets the most important trees, and Section~\ref{sec:res_inspection}
-discusses whether their features and targets are plausible for the terminal.
+This appendix documents the final simulation model in one place. It gives the
+settings and inputs of the discovery, the parameters of a ProSiT model, every
+learned model, the capacities and calendars, and the discovered nets.
+Chapter~\ref{chp:process_discovery_methodology} shows and interprets the most
+important trees, and Section~\ref{sec:res_inspection} discusses whether their
+features and targets are plausible for the terminal.
 
+\section{Settings, Versions and Inputs}
+\label{app:prosit_settings}
+
+Table~\ref{tab:app_settings} collects the settings, versions and inputs with which
+the simulation model is discovered and run. Most of them are introduced in
+Chapter~\ref{chp:process_discovery_methodology} and are repeated here so that the
+model is documented in one place.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{L{4.4cm}Y}
+\toprule
+\textbf{Setting} & \textbf{Value} \\
+\midrule
+\multicolumn{2}{l}{\textit{Software}} \\
+Simulation framework & ProSiT 1.0.4 (\texttt{prosit-pm}) \\
+Environment & Python 3.11, PM4Py 2.7.22.3, scikit-learn 1.8.0, SciPy 1.17.0, pandas 2.3.3, NumPy 1.26.4 \\
+\multicolumn{2}{l}{\textit{Inputs}} \\
+Control-flow model & HM 0.7 as exported from ProM, with initial and final marking (22 places, 45 transitions, 34 of them silent) \\
+Training log & 59,139 visits, 2 March to 11 April 2026, SHA-256 \texttt{58932826\ldots 6cb94b} \\
+Test log & 32,014 visits, 13 to 30 April 2026, SHA-256 \texttt{dee4cb78\ldots 4cda30} \\
+Case attributes & flow type, containers, planned stops, deliveries, receives, hazardous, reefer, full ratio, visit complexity \\
+\multicolumn{2}{l}{\textit{Discovery}} \\
+\texttt{max\_depth\_tree} & 3 (default 5), depth chosen between 1 and 3 \\
+\texttt{min\_samples\_leaf\_cv} & 50, 100, 200 (default) \\
+Model selection & five-fold cross-validation, log loss for routing and resource choice, continuous ranked probability score for times \\
+\texttt{attribute\_mode} & empirical (default distribution) \\
+\texttt{use\_workload\_features} & on (default off) \\
+\texttt{enable\_multitasking}, threshold & on (default off), 0.05 (default) \\
+\texttt{random\_state} & 42 \\
+\multicolumn{2}{l}{\textit{Simulation}} \\
+Extensions & all switches of Table~\ref{tab:sim_adaptations} on in the final configuration \\
+Replications & seeds 42 to 46 for E3 and E4, 42 to 51 for E5 \\
+\bottomrule
+\end{tabularx}
+\caption{Settings, versions and inputs of the simulation model.}
+\label{tab:app_settings}
+\end{table}
+
+\FloatBarrier
 \section{Parameters of a ProSiT Model}
 \label{app:prosit_components}
 
 Table~\ref{tab:prosit_components} lists the descriptive and predictive parameters
-of a ProSiT model in general, with the features each tree can use (Section~\ref{sec:prosit_components}).
-Table~\ref{tab:sim_overview} in Chapter~\ref{chp:process_discovery_methodology}
-shows what each parameter decides in the simulation model of this thesis.
+of a ProSiT model in general, with the features each tree can use
+(Section~\ref{sec:prosit_components}). Table~\ref{tab:sim_overview} in
+Chapter~\ref{chp:process_discovery_methodology} shows what each parameter decides in
+the simulation model of this thesis.
 
 \begin{table}[htbp]
 \centering
@@ -45,52 +91,40 @@ Resource calendars & table per resource & open or closed per weekday and hour & 
 \label{tab:prosit_components}
 \end{table}
 
-\section{Settings, Versions and Inputs}
-\label{app:prosit_settings}
-
-The model is discovered with ProSiT~1.0.4 (\texttt{prosit-pm}) on PM4Py
-2.7.22.3 and Python 3.11, with the settings of
-Table~\ref{tab:sim_hyperparameters}. These are trees of depth
-at most three, at least 50, 100 or 200 cases per leaf chosen by five-fold
-cross-validation with the continuous ranked probability score, the
-attributes of the planned visit as case attributes, workload features and multitasking on, and random
-state 42. The inputs are the net HM 0.7 as exported from ProM with its initial and
-final marking, and the training log of 59,139 visits (2 March to 11 April 2026,
-SHA-256 \texttt{58932826\ldots 6cb94b}). The test log has 32,014 visits (13 to 30
-April 2026, SHA-256 \texttt{dee4cb78\ldots 4cda30}). The extensions of
-Table~\ref{tab:sim_adaptations} are switches in the simulator, and the final
-configuration sets all of them. Every configuration of E3 and E4 is run with seeds
-42 to 46, E5 with seeds 42 to 51.
-
 \FloatBarrier
 \section{Learned Models}
 \label{app:prosit_trees}
 
-Table~\ref{tab:app_inventory} lists every learned model of the simulation model, from the
-arrival tree and the routing model of every transition of HM 0.7 to the waiting-time
-model of every resource (lane-free target) and the execution-time model of every
-activity (with the trucks at the block as a feature). The learned block choice is
-listed as well, although the final configuration replays the observed blocks. A
-routing transition is named by its identifier in the PNML file and, for a silent
+Table~\ref{tab:app_inventory} lists every learned model of the final simulation
+model. It covers the arrival tree, the routing model of every transition of HM 0.7,
+the block choice, the waiting-time model of every resource and the execution-time
+model of every activity. The waiting-time models are those retrained with the
+waiting measured from a free lane, and the execution-time models those retrained
+with the number of other trucks at the block as a feature. The block choice is
+listed as well, although the final configuration replays the observed blocks. The
+column Range gives the smallest and the largest mean of the values that a leaf gives
+the simulator, in minutes for the arrivals and the times and as a probability for
+the routing and the block choice. A routing transition is named by its identifier in the PNML file and, for a silent
 transition, by the step it stands for. The file \texttt{model\_leaves.csv} of the
-project files gives every one of the 481 leaves with its path of splits,
-its fitted distribution and parameters, its mean or firing probability and its
-sample size.
+project files gives each of the 481 leaves with its path of splits, its fitted
+distribution and parameters, its mean or firing probability and its sample size.
 
-Figure~\ref{fig:sim_tree_arrivals} shows the arrival tree with the fitted
-distribution and the training values of every leaf (the same tree as
-Figure~\ref{fig:bg_prosit_arrival_tree}). It gives the minutes to the next Gate In by the
-weekday (0 is Monday) and the hour of the last arrival, each leaf on its own scale.
-Figure~\ref{fig:sim_routing_first} checks the routing. The first stop that the learned
-trees choose, as normalised weights of the enabled transitions averaged over 8,000
-training visits, agrees with the training log within one percentage point for
-every flow type.
-
+Figure~\ref{fig:sim_tree_arrivals} shows the arrival tree, the same tree as
+Figure~\ref{fig:bg_prosit_arrival_tree}. It gives the minutes to the next Gate In by
+the weekday (0 is Monday) and the hour of the last arrival. Each leaf, drawn on its
+own scale, shows the mean and the number of its training values, the fitted
+distribution and the values that the simulator draws from it, limited to the
+observed range. The mean of the drawn values can differ from the training mean, for example
+0.65 against 0.53 minutes in the largest leaf (Section~\ref{sec:prosit_trees}).
+Figure~\ref{fig:sim_routing_first} shows the routing at the first decision of a
+visit. The first stop that the learned trees choose, as normalised weights of the
+enabled transitions averaged over 8,000 training visits, agrees with the training
+log within one percentage point for every flow type.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/simulation_model/sim_tree_arrivals.pdf}
-\caption{Arrival tree with the training values (bars) and the fitted distribution (line) of each leaf.}
+\caption{Arrival tree with the fitted distribution (line) and the values drawn by the simulator (bars) in each leaf.}
 \label{fig:sim_tree_arrivals}
 \end{figure}
 
@@ -101,17 +135,18 @@ every flow type.
 \label{fig:sim_routing_first}
 \end{figure}
 
+\FloatBarrier
 \input{tables/app_inventory}
 
+\FloatBarrier
 \section{Calendars and Capacities}
 \label{app:prosit_calendars}
 
-The capacities and calendars are given in Table~\ref{tab:sim_capacities}. The
-capacities of LL and HO2 are discovered by ProSiT from the number of trucks served
-at the same time. The RMG blocks have three lanes, a physical limit that replaces
-the discovered values of four or five. The discovered resource calendars cover
-122 to 128 of the 168 hours of a week. They are set to the full week so that a
-truck already inside is served to completion.
+Table~\ref{tab:sim_capacities} gives the capacities and calendars. The capacities of
+LL and HO2 are discovered by ProSiT from the number of trucks served at the same
+time. The RMG blocks have three lanes, a physical limit that replaces the discovered
+values of four or five. The resource calendars are set to the full week, so that a
+truck already inside the terminal is served to completion.
 
 \input{tables/sim_capacities}
 
@@ -121,8 +156,8 @@ truck already inside is served to completion.
 
 Figure~\ref{fig:sim_controlflow} shows the selected net. Figure~\ref{fig:app_net_im}
 shows IM 0.0, drawn in the same way. Its parallel branches let several stops be
-enabled at once, and its silent transitions skip the branches. All nets of the discovery grid are part of the project files as PNML
-files with their markings.
+enabled at once, and its silent transitions skip the branches. All nets of the
+discovery grid are part of the project files as PNML files with their markings.
 
 \begin{figure}[htbp]
 \centering

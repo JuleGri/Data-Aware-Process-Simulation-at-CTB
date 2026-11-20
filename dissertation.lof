@@ -29,7 +29,7 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {D.1}{\ignorespaces Arrival tree with the training values (bars) and the fitted distribution (line) of each leaf.}}{131}{figure.caption.61}%
-\contentsline {figure}{\numberline {D.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{131}{figure.caption.62}%
-\contentsline {figure}{\numberline {D.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{140}{figure.caption.64}%
+\contentsline {figure}{\numberline {D.1}{\ignorespaces Arrival tree with the fitted distribution (line) and the values drawn by the simulator (bars) in each leaf.}}{132}{figure.caption.62}%
+\contentsline {figure}{\numberline {D.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{133}{figure.caption.63}%
+\contentsline {figure}{\numberline {D.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{141}{figure.caption.65}%
 \addvspace {10\p@ }

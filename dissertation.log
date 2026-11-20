@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  20 NOV 2026 02:28
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  20 NOV 2026 10:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2985,7 +2985,11 @@ Underfull \vbox (badness 1264) has occurred while \output is active []
 
 
 ]
-[2] [3] [4]) [5]
+[2] [3]
+Underfull \vbox (badness 5133) has occurred while \output is active []
+
+ [4])
+[5]
 \openout2 = `chapters/2.background.aux'.
 
  (chapters/2.background.tex
@@ -3333,7 +3337,7 @@ File: figures/simulation_model/e5_tradeoff.pdf Graphic file (type pdf)
 Underfull \vbox (badness 1824) has occurred while \output is active []
 
  [94]
-(tables/rq3_policy_contrasts.tex) [95]) [96] [97]
+(tables/rq3_policy_contrasts.tex) [95] [96]) [97]
 \openout2 = `chapters/8.discussion.aux'.
 
  (chapters/8.discussion.tex
@@ -3351,14 +3355,14 @@ erved turnaround
  []
 
 [99]
-Overfull \hbox (2.55568pt too wide) in paragraph at lines 78--84
+Overfull \hbox (2.55568pt too wide) in paragraph at lines 78--85
 [] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Conditions of the result.[] \TU/EB
 Garamond12-Regular.otf(2)/m/n/12 The result is conditional on the replayed arri
 vals, case attributes
  []
 
 [100]
-Overfull \hbox (11.43027pt too wide) in paragraph at lines 138--138
+Overfull \hbox (11.43027pt too wide) in paragraph at lines 139--139
 |[]\TU/EBGaramond12-Regular.otf(2)/m/sc/17.28 Data-Aware Simulation in a Physic
 al Logistics Pro-
  []
@@ -3380,13 +3384,6 @@ Underfull \vbox (badness 1264) has occurred while \output is active []
 Overfull \hbox (7.40428pt too wide) in paragraph at lines 31--39
 [] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 RQ2. To what extent does the ProSi
 T simulation reproduce truck turnaround
- []
-
-
-Overfull \hbox (2.0109pt too wide) in paragraph at lines 58--63
-[] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 (C2) An analysis of simulation err
-ors and congestion sensitivity.[] \TU/EBGaramond12-Regular.otf(2)/m/n/12 A comp
-onent-
  []
 
 [108] [109]) [110]
@@ -3463,14 +3460,6 @@ LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
 
 (appendices/prosit_model_inventory.tex
 Appendix D.
-
-Overfull \hbox (31.19418pt too wide) in paragraph at lines 51--64
-\TU/SourceCodePro-Regular.ttf(0)/m/it/12 58932826…6cb94b\TU/EBGaramond12-Regula
-r.otf(2)/m/n/12 ). The test log has 32,014 visits (13 to 30 April 2026, SHA-256
- \TU/SourceCodePro-Regular.ttf(0)/m/it/12 dee4cb78…4cda30\TU/EBGaramond12-Regul
-ar.otf(2)/m/n/12 ).
- []
-
 [129
 
 
@@ -3478,23 +3467,27 @@ ar.otf(2)/m/n/12 ).
 
 
 ] [130]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [131]
 File: figures/simulation_model/sim_tree_arrivals.pdf Graphic file (type pdf)
 <use figures/simulation_model/sim_tree_arrivals.pdf>
 File: figures/simulation_model/sim_routing_first_stop.pdf Graphic file (type pd
 f)
 <use figures/simulation_model/sim_routing_first_stop.pdf>
- (tables/app_inventory.tex [131]
-ignored error: Infinite glue shrinkage found in box being split [132]
+
+[132] (tables/app_inventory.tex
 ignored error: Infinite glue shrinkage found in box being split [133]
 ignored error: Infinite glue shrinkage found in box being split [134]
 ignored error: Infinite glue shrinkage found in box being split [135]
 ignored error: Infinite glue shrinkage found in box being split [136]
 ignored error: Infinite glue shrinkage found in box being split [137]
-ignored error: Infinite glue shrinkage found in box being split [138])
-(tables/sim_capacities.tex) [139]
+ignored error: Infinite glue shrinkage found in box being split [138]
+ignored error: Infinite glue shrinkage found in box being split [139])
+(tables/sim_capacities.tex) [140]
 File: figures/discovery_prom/net_IM_0.0.png Graphic file (type bmp)
 <figures/discovery_prom/net_IM_0.0.png>
-) [140]
+) [141]
 \openout2 = `appendices/model_inspection_and_reproduction.aux'.
 
 
@@ -3503,37 +3496,37 @@ Appendix E.
 
 Underfull \vbox (badness 1264) has occurred while \output is active []
 
- [141
+ [142
 
 
 
 
 ]
-Overfull \hbox (1.13928pt too wide) in paragraph at lines 59--70
+Overfull \hbox (1.13928pt too wide) in paragraph at lines 60--71
 [] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Retrained predictive parameters[] 
 \TU/EBGaramond12-Regular.otf(2)/m/n/12 The script $[][][][][][][][][][] [] [][]
  [] [][][] [] [][][][][][][][][][] [] [][]$
  []
 
-[142]) [143] [144] (dissertation.bbl
+[143]) [144] [145] (dissertation.bbl
 ** WARNING: IEEEtran.bst: No hyphenation pattern has been
 ** loaded for the language `English'. Using the pattern for
 ** the default language instead.
 ** WARNING: IEEEtran.bst: No hyphenation pattern has been
 ** loaded for the language `English'. Using the pattern for
 ** the default language instead.
-[145
+[146
 
 
 
 
-] [146] [147] [148] [149] [150] [151]
+] [147] [148] [149] [150] [151] [152]
 Underfull \hbox (badness 10000) in paragraph at lines 422--426
 []\TU/EBGaramond12-Regular.otf(2)/m/n/12 D. Chapela-Campa, I. Benchekroun, O. B
 aron, M. Dumas, D. Krass, and
  []
 
-[152]) [153] (dissertation.aux (chapters/1.introduction.aux)
+[153]) [154] (dissertation.aux (chapters/1.introduction.aux)
 (chapters/2.background.aux) (chapters/4.data_prep.aux)
 (chapters/6.experiments.aux) (chapters/5.discovery_prosit.aux)
 (chapters/7.results.aux) (chapters/8.discussion.aux) (chapters/9.conclusion.aux
@@ -3549,15 +3542,15 @@ L3 programming layer <2025-12-24>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: F6D571721A099C72081586009CF2C87C;14839.
+(rerunfilecheck)             Checksum: 35E9711D2E47B50B959E4ACFCD295A63;14839.
  ) 
 Here is how much of TeX's memory you used:
- 71727 strings out of 402986
- 1793995 string characters out of 5448710
- 2622319 words of memory out of 5000000
- 99399 multiletter control sequences out of 15000+600000
+ 71728 strings out of 402986
+ 1794013 string characters out of 5448710
+ 2622421 words of memory out of 5000000
+ 99400 multiletter control sequences out of 15000+600000
  636685 words of font info for 162 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  103i,14n,131p,1245b,2925s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on dissertation.xdv (167 pages, 3689264 bytes).
+Output written on dissertation.pdf (168 pages).
