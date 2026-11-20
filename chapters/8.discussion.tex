@@ -22,9 +22,9 @@ section discusses what follows for the use of the model.
 
 \paragraph{Mechanism, not size of the effect.} Because the waiting arises in the model
 where it arises at the terminal, the model can show how moving deliveries away from
-full blocks acts, which visits gain and whether the waiting is reduced or only moved.
+full blocks act, which visits gain and whether the waiting is reduced or only moved.
 Because it underestimates the slowdown in the busiest hours, it cannot show how much
-the terminal would gain. The trade-off between how often and how badly the corridor is
+the terminal would actually gain. The trade-off between how often and how badly the corridor is
 exceeded (Section~\ref{sec:res_s1_contrasts}) is consistent with this mechanism, and
 the mechanism measures support it. With the demand of the test period, a moved
 delivery finds a free lane at the receiving block, and the trucks there show no clear
@@ -91,7 +91,7 @@ which is why coverage mattered throughout.
 
 The structure of a net matters in a way that no measure on its language shows. ProSiT
 learns each routing weight from the case attributes and the history of the case, not
-from the marking of the net (Appendix~\ref{app:replica}), as do the stochastic labelled
+from the marking of the net (Appendix~\ref{app:replica}), just like the stochastic labelled
 data Petri nets on which it builds
 \cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}. Parallel
 branches that silent transitions can skip, as in IM 0.0 (Figure~\ref{fig:app_net_im}), therefore produce visits that
@@ -135,7 +135,7 @@ the simulation, not how often they do.
 \section{Data-Aware Simulation in a Physical Logistics Process}
 \label{sec:disc_transfer}
 
-\paragraph{What transfers.} Much of ProSiT transferred without change. The routing
+\paragraph{What transfers.} Most of the algorithmic structure provided by ProSiT transferred without change. The routing
 trees split on the case attributes and reproduce the stop structure, and 98.7\,\% of
 the simulated visits have their planned number of stops even without the guard
 (Section~\ref{sec:res_baseline}). The waiting and execution trees use plausible
