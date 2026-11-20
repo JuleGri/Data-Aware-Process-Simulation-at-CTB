@@ -112,22 +112,19 @@ second.
 
 The main contributions of this thesis are as follows.
 \begin{enumerate}
-\item[(C1)] \textbf{A domain-constrained simulation model of CTB truck handling.} The
-model combines a discovered control flow and simulation parameters learned from the
-event log with domain knowledge that the log does not contain, in the form of the
-domain rules of the truck visit, a data-aware stop guard and the capacity of the yard
-blocks. It thereby provides a data-driven simulation that respects the physical limits
-of the terminal.
-\item[(C2)] \textbf{An analysis of simulation errors and congestion sensitivity.} The
-simulation is validated component by component by its response to load rather than
-only by its similarity to the recorded log. The analysis shows how the implementation,
-the resource semantics and the event data shape the simulated congestion at resources
-that serve several cases at once.
-\item[(C3)] \textbf{A conditional evaluation of a load-aware block allocation.} An
-allocation rule is evaluated at CTB in six scenarios of flexibility and demand, with
-paired runs and rules for the claims fixed in advance. The evaluation provides
-conditional evidence of how such a rule affects the frequency and the severity of hours
-above the corridor and the distribution of delays among the trucks.
+\item \textbf{A domain-constrained simulation model of CTB truck handling.} The
+model adds domain rules, a data-aware stop guard and the capacity of the yard blocks, knowledge
+that the event log does not contain, to a discovered control flow and data-aware
+parameters learned from the log. The simulation thereby respects the physical limits of the terminal.
+\item \textbf{An analysis of simulation errors and congestion sensitivity.} The
+simulation is validated per component and by its response to load, not only by its
+similarity to the log. This shows how the implementation, the resource semantics and
+the event data shape congestion at resources that serve several cases at once.
+\item \textbf{A conditional evaluation of a load-aware block allocation.} The
+allocation rule is evaluated in six scenarios of flexibility and demand under rules
+for the claims fixed in advance. This gives conditional evidence of how such a rule
+changes the frequency and severity of hours above the corridor and which trucks bear
+the delays.
 \end{enumerate}
 
 
