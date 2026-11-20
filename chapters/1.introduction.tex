@@ -49,20 +49,20 @@ and~\ref{chp:experiments}.
 The terminal reports the TTT per hour. The mean TTT of the trucks that leave
 through the gate within an hour should lie between 25 and 35 minutes, a corridor
 that balances the efficiency of the terminal and the satisfaction of its customers.
-If an hour with a mean below the corridor can be foreseen, the terminal can move
-manual equipment from the truck handling area to the waterside, so that trucks are
-served more slowly while the waterside, the operational focus of a terminal, gains
-capacity. Over the whole event log, the mean TTT exceeds 35 minutes in 44\,\% of
+If an hour with a mean below the corridor can be foreseen, the terminal can shift
+capacity from the trucks to the waterside, so that trucks are served more slowly while
+the waterside, the operational focus of a terminal, gains capacity. This trade-off
+exists in every handling area, because the trucks share the cranes and the equipment
+with the waterside. Over the whole event log, the mean TTT exceeds 35 minutes in 44\,\% of
 the hours with at least 20 trucks, 38\,\% in the training period and 56\,\% in the
 test period (Section~\ref{sec:exp_kpis}). This thesis asks why the trucks take
 longer in these hours and whether a different allocation of deliveries to the yard
-blocks can shorten them. The data do not record how equipment is assigned to the
-handling areas, so the shift of equipment to the waterside cannot be modelled. The improvement measure is evaluated against the upper bound of the corridor, because
+blocks can shorten them. The improvement measure is evaluated against the upper bound of the corridor, because
 most hours that leave the corridor lie above it, 56\,\% against 8\,\% below it in
 the test period. The share of hours below 25 minutes is reported. What the terminal
-would gain from such hours, the shift of manual equipment to the waterside, lies
-outside the model, because the data do not record how equipment is assigned to the
-handling areas and the waterside is not modelled.
+would gain from such hours lies outside the model, because the model does not contain
+the waterside or the allocation of cranes and equipment between the waterside and the
+trucks.
 
 The improvement measure studied is a load-aware allocation of deliveries to the
 yard blocks. When a truck with a delivery arrives and three or more trucks are

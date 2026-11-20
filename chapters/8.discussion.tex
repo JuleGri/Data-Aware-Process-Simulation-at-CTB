@@ -14,21 +14,25 @@ knowledge entered the study, and what the terminal can take from it.
 
 Three properties decide whether a simulation can support the comparison of a block
 allocation rule with the current allocation. It must generate only visits that trucks
-can perform, produce the waiting at a busy block by the mechanism that the allocation
-changes, and respond to load as strongly as the terminal. The final configuration
+can perform and produce the waiting at a busy block by the mechanism that the
+allocation changes, and its waiting, stop durations and turnaround time must grow with
+the load of a block and of the terminal as much as at the terminal. The final configuration
 meets the first two and the third only in part (Section~\ref{sec:res_rq2}). This
 section discusses what follows for the use of the model.
 
-\paragraph{A mechanism, not a magnitude.} Because the waiting arises in the model
+\paragraph{Mechanism, not size of the effect.} Because the waiting arises in the model
 where it arises at the terminal, the model can show how moving deliveries away from
 full blocks acts, which visits gain and whether the waiting is reduced or only moved.
 Because it underestimates the slowdown in the busiest hours, it cannot show how much
 the terminal would gain. The trade-off between how often and how badly the corridor is
-exceeded (Section~\ref{sec:res_s1_contrasts}) is consistent with this mechanism. With
-moderate congestion, a moved delivery finds a free lane, and the trucks at the
-receiving block hardly notice it. Under heavy congestion, the receiving blocks fill as
-well, and a wider choice moves more deliveries into them. This explanation is
-plausible, but the runs do not test it directly.
+exceeded (Section~\ref{sec:res_s1_contrasts}) is consistent with this mechanism, and
+the mechanism measures support it. With the demand of the test period, a moved
+delivery finds a free lane at the receiving block, and the trucks there show no clear
+delay. With 20\,\% more trucks, the two wider rules move more deliveries, 26 and
+33\,\% instead of 21 and 22\,\%, and the visits at the receiving blocks become about
+3.5 minutes longer, while the narrowest rule moves fewer deliveries and shows no clear
+penalty (Table~\ref{tab:rq3_grid_mechanism}). Under heavy congestion, the receiving
+blocks thus take on part of the load that they relieve elsewhere.
 
 \paragraph{What the model leaves out.} The model does not contain what a move costs
 at the terminal, namely the driving to another block, a later rehandling of the
@@ -37,14 +41,18 @@ smaller. A stronger slowdown under load, as recorded, can make it larger. The su
 statement is therefore conditional. If the waiting at a full block arises as in the
 model, if eligible blocks exist and if a move costs little, then moving deliveries away
 from blocks that three trucks are already heading to shortens the long visits and
-lowers the share of hours above the corridor. Even the direction of this effect at CTB
-remains a hypothesis that a pilot would have to test. Only the upper bound of the
-corridor can be evaluated, because the shift of equipment from HO2 to the waterside
-that the lower bound allows is not recorded (Section~\ref{sec:prob_statement}).
+lowers the share of hours above the corridor. Whether these conditions hold at CTB
+would have to be shown by a pilot. Only the upper bound of the corridor can be
+evaluated, because the model does not contain the waterside, with which the trucks
+share the cranes and the equipment of every handling area
+(Section~\ref{sec:prob_statement}).
 
-\paragraph{Model error and drift.} Part of the shortfall comes from the change between
-the periods (Section~\ref{sec:res_e4_remaining}). That the model produces only about
-half of the hours above the corridor even in-sample shows, however, that the missing
+\paragraph{Model error and drift.} Part of the gap between the simulated and the
+observed turnaround times of the test period comes from the change of the terminal
+between the training period and the test period, in which the stops took longer at
+every load and more blocks were closed (Section~\ref{sec:res_e4_remaining}). That the
+model produces only about half of the hours above the corridor also on the training
+period shows, however, that the missing
 slowdown in the busiest hours is a limitation of the model, not of the test period. It
 lies in the congestion that the allocation rule is meant to relieve.
 
@@ -86,7 +94,7 @@ learns each routing weight from the case attributes and the history of the case,
 from the marking of the net (Appendix~\ref{app:replica}), as do the stochastic labelled
 data Petri nets on which it builds
 \cite{mannhardt2023stochasticProcessesModelling,Vinci2023Inf.Activ.Prob}. Parallel
-branches that silent transitions can skip, as in IM 0.0, therefore produce visits that
+branches that silent transitions can skip, as in IM 0.0 (Figure~\ref{fig:app_net_im}), therefore produce visits that
 no truck can perform. Under the final configuration, these visits even bring IM 0.0
 closest to the observed turnaround time (Section~\ref{sec:res_e4_nets}), so a selection
 by the simulated turnaround time alone would have chosen a net that no truck can
@@ -211,8 +219,8 @@ delayed completion record. The three lanes of the model are therefore an
 approximation of the physical limit. Part of the waiting in the recorded stops stays
 in the learned service time, which may be one reason why the simulated stops grow too
 little at the busiest blocks. A truck that had to queue for a lane also loses the
-learned remainder of its waiting, which may contribute to the shortfall of the
-approach at a full block.
+learned remainder of its waiting, which may contribute to the approach at a full
+block being shorter in the simulation than observed.
 
 \paragraph{Cleaning and thresholds.} The cleaning removed 1.4\,\% of the visits as
 recording errors, and the coverage threshold of E1 leaves about 1\,\% of the training
@@ -242,8 +250,9 @@ data had been explored, and the acceptance thresholds draw partly on the weekly
 variation of the test period (Section~\ref{sec:exp_partitions}). The extensions rest
 on mechanisms that the training data show, not on parameters fitted to the test
 period, but the test error may still be somewhat optimistic. The error on the
-congested test period mixes the error of the model with the change of the terminal,
-and the in-sample run helps to distinguish the two without separating them cleanly.
+test period, which was more congested than the training period, mixes the error of
+the model with the change of the terminal between the two periods, and the run on the
+training period helps to distinguish the two without separating them cleanly.
 
 \paragraph{Own code.} The extensions are switches in ProSiT's simulator, and with all
 of them switched off the simulator reproduces ProSiT's log exactly
@@ -283,7 +292,7 @@ The terminal confirmed the domain rules, the three lanes per block, that all
 sequences of the event log are real operational variants, and the way in which the
 yard position of a delivery is assigned at Gate In. It also specified the corridor as the mean
 turnaround time of the trucks that leave in an hour and pointed out that below the
-corridor manual equipment can be moved from HO2 to the waterside. The results of the
+corridor capacity can be shifted from the trucks to the waterside. The results of the
 simulation were not part of this confirmation.
 
 The plausibility of the results was assessed by the author. That moves within one or

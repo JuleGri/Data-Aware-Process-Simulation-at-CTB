@@ -20,25 +20,16 @@
 \contentsline {figure}{\numberline {6.4}{\ignorespaces Mean turnaround time per Gate-Out hour, observed and simulated with the final configuration, training and test period (five seeds).}}{86}{figure.caption.40}%
 \contentsline {figure}{\numberline {6.5}{\ignorespaces Median turnaround time per Gate-In hour in the test period, observed and simulated (seed 42, supplementary diagnostic).}}{88}{figure.caption.42}%
 \contentsline {figure}{\numberline {6.6}{\ignorespaces Load profiles in the test period (solid) and the training period (dotted), observed and simulated.}}{88}{figure.caption.43}%
-\contentsline {figure}{\numberline {6.7}{\ignorespaces Effects of the allocation rules on three outcomes, by eligible blocks and demand (paired differences over ten seeds with 95\,\% $t$-intervals).}}{92}{figure.caption.45}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Effects of the allocation rules on three outcomes, by eligible blocks and demand (paired differences over ten seeds with 95\,\% $t$-intervals).}}{93}{figure.caption.45}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {A.1}{\ignorespaces Hourly arrivals (top) and median turnaround time per Gate-In hour (bottom), with the peak thresholds (dashed).}}{110}{figure.caption.49}%
-\contentsline {figure}{\numberline {A.2}{\ignorespaces Mean turnaround time per Gate-In hour split into its parts, training weekdays.}}{111}{figure.caption.50}%
-\contentsline {figure}{\numberline {A.3}{\ignorespaces Median and P90 of the turnaround time by trucks in the terminal at Gate In (training).}}{112}{figure.caption.51}%
-\contentsline {figure}{\numberline {A.4}{\ignorespaces Median stop interval by trucks with an open interval at the same handling unit (training).}}{112}{figure.caption.52}%
-\contentsline {figure}{\numberline {A.5}{\ignorespaces Occupancy of the RMG blocks, recorded every four hours.}}{115}{figure.caption.54}%
-\contentsline {figure}{\numberline {A.6}{\ignorespaces Turnaround time per visit and the corridor (supplementary to the hourly KPI).}}{116}{figure.caption.55}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Occupancy of the RMG blocks, recorded every four hours.}}{114}{figure.caption.50}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Turnaround time per visit and the corridor (supplementary to the hourly KPI).}}{114}{figure.caption.51}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {C.1}{\ignorespaces Turnaround time, observed and simulated with the final configuration (five seeds pooled).}}{128}{figure.caption.63}%
-\contentsline {figure}{\numberline {C.2}{\ignorespaces Parts of the turnaround time, observed and simulated (means).}}{129}{figure.caption.64}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {D.1}{\ignorespaces Arrival tree with the training values (bars) and the fitted distribution (line) of each leaf.}}{134}{figure.caption.69}%
-\contentsline {figure}{\numberline {D.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{134}{figure.caption.70}%
-\contentsline {figure}{\numberline {D.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{143}{figure.caption.72}%
-\contentsline {figure}{\numberline {D.4}{\ignorespaces ILP 1.00 as discovered (15 places, 11 visible and 2 silent transitions).}}{144}{figure.caption.73}%
-\contentsline {figure}{\numberline {D.5}{\ignorespaces IMf 0.3 as discovered (11 places, 11 visible and 7 silent transitions).}}{144}{figure.caption.74}%
-\contentsline {figure}{\numberline {D.6}{\ignorespaces HM 0.8 as discovered (22 places, 11 visible and 31 silent transitions).}}{145}{figure.caption.75}%
+\contentsline {figure}{\numberline {D.1}{\ignorespaces Arrival tree with the training values (bars) and the fitted distribution (line) of each leaf.}}{131}{figure.caption.63}%
+\contentsline {figure}{\numberline {D.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{131}{figure.caption.64}%
+\contentsline {figure}{\numberline {D.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{140}{figure.caption.66}%
 \addvspace {10\p@ }

@@ -588,8 +588,9 @@ terminal counts as too long in the test period and 52\,\% in the training period
 The severity is reproduced even less. The simulated hours exceed 35 minutes by 0.9
 minutes on average, against 5.5 observed in the test period and 3.8 in the training
 period, because the simulated hours above the corridor stay close to it, while the
-observed ones reach 60 minutes and more. Because the shortfall appears in both
-periods, the change between them is not its only cause.
+observed ones reach 60 minutes and more. Because the simulation falls short in the
+training period as well as in the test period, the change between the two periods is
+not the only cause.
 
 \begin{figure}[htbp]
 \centering
@@ -616,7 +617,9 @@ two thresholds of the load-response criterion. The stop-duration gap is 1.7 minu
 (threshold 1.0), and the gap of the turnaround time by trucks in the terminal is 6.8
 minutes (threshold 5.75). On the training period, both gaps lie within their
 thresholds, and the rank correlation lies just below its threshold. The level
-criterion holds only on the training period, within the change between periods.
+criterion holds only on the training period, and there only in its weaker form, with
+a cycle-time distance within the difference between the training and the test log but
+not within the variation between weeks.
 
 By the rule of Section~\ref{sec:exp_e4_runs}, E5 is admissible for a quantitative
 estimate only if criteria 1 to 3 hold under replay, and criterion 2 does not hold.
@@ -638,8 +641,7 @@ first stop rises as observed, the stop duration rises less than observed, and th
 turnaround time falls behind when more than 100 trucks are in the terminal
 (Figure~\ref{fig:sim_load_profiles}, medians averaged over five seeds). With three
 lanes, the states with four or more trucks at the block and with three or more other
-trucks cannot occur in the simulation. Appendix~\ref{app:sim_results} shows the
-distribution and the parts of the turnaround time.
+trucks cannot occur in the simulation.
 
 \begin{figure}[htbp]
 \centering
@@ -655,23 +657,24 @@ distribution and the parts of the turnaround time.
 \label{fig:sim_load_profiles}
 \end{figure}
 
-\paragraph{In-sample and out-of-sample.} On the training period, the final
+\paragraph{Training and test period.} On the training period, the final
 configuration is close to the log. The median is 27 against 29 minutes and the P90 57
 against 64 minutes. The approach and stop-duration profiles are reproduced within the
 variation between weeks (gaps 0.8 and 1.0 minutes), and the cycle-time distance of
-3.9 minutes lies within the change between the two periods, though not within the
-variation between two real weeks. On the test period, the cycle-time distance is 8.0
+3.9 minutes lies within the difference between the training and the test log
+(5.5 minutes), though not within the variation between two real weeks (at most
+3.1 minutes). On the test period, the cycle-time distance is 8.0
 minutes. The error grows mainly in the approach and in the stop durations, the parts
-in which the terminal changed between the periods. From training to test, the
-approach grew by 1.8 minutes, and the stops took 2.0 minutes longer per visit with
+in which the terminal changed from the training to the test period. In the observed
+logs, the approach grew by 1.8 minutes, and the stops took 2.0 minutes longer per visit with
 nearly the same routing. They took longer at every load. An RMG stop with no other
 truck at the block took 8.2 instead of 7.5 minutes on average, one with two others
 17.7 instead of 15.9 minutes. A model learned on the training period cannot know
 this. Following Özdemir et al.\ \cite{Oezdemir2025RethinkingBPS}, the error on the
 test period is therefore not only model error.
 
-\paragraph{The model error.} In both periods the routing is right and the stops are
-too short. The count of stops per area explains about 0.2 minutes of the error per
+\paragraph{The model error.} In the training and in the test period, the routing is
+right and the stops are too short. The count of stops per area explains about 0.2 minutes of the error per
 visit, the durations the rest. With three lanes, the simulation never has a fourth
 truck at a block, while the training log records one at 5.6\,\% of the RMG stops, with
 a mean duration of 21 minutes. These recorded stops may include the waiting for a lane
@@ -681,8 +684,8 @@ block, 11 against 13 with two, training period). Shorter stops mean fewer trucks
 the terminal (66 against 74 on average in training), and again less load at the
 blocks. Up to 100 trucks in the terminal, the simulated median turnaround time is
 within 3 minutes of the observed one. With 150 or more trucks, it is 38 to 40 minutes
-against 58 to 59, in both periods. The exit is about 2 minutes too short in both
-periods, and no configuration with the depth of three changes it. The longest waits
+against 58 to 59, in the training and in the test period. The exit is about 2 minutes
+too short in both, and no configuration with the depth of three changes it. The longest waits
 before Gate Out belong to states with many trucks waiting, which the simulation, with
 its shorter stops and fewer trucks, rarely reaches, and to the episodes of congestion
 outside the terminal described above, which it cannot reproduce.
@@ -719,7 +722,7 @@ criterion and passes the others, and the share of hours above 35 minutes is 21.9
 all three scenarios with replayed demand, by 7.0, 8.3 and 11.9 percentage points from
 21.3\,\%, and the visits with a moved delivery become shorter.
 
-What does not persist is the magnitude of the congestion. With 150 or more trucks in
+What does not persist is how strongly the model congests. With 150 or more trucks in
 the terminal, the median turnaround time rises from 40 to 69 minutes, against 58
 observed, and at an intensity of 1.2 the mean rises from 45 to 78 minutes. The model
 builds up backlogs, although a stop at a busy block stays as short as with depth
@@ -780,7 +783,8 @@ no load feature. These choices fit a resource that serves one case after another
 a block with three lanes.
 \item \textbf{Data.} The log records the time at the block, not the work of the
 crane, so the slowest states are not reproduced.
-\item \textbf{Change between the periods.} The stops of the test period took longer
+\item \textbf{Change between the training and the test period.} The stops of the
+test period took longer
 at every load, which no model learned on the training period can know.
 \end{itemize}
 The demand and the control flow play a smaller part. The answer is conditional on

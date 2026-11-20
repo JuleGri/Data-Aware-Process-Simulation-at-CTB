@@ -54,7 +54,8 @@ Appendices~\ref{app:prosit_inventory} and~\ref{app:model_inspection}).
 
 \paragraph{(C2) An analysis of simulation errors and congestion sensitivity.} A
 component-wise validation that separates defects of the implementation, mismatches of
-the resource semantics, limits of the event data and the change between periods, and
+the resource semantics, limits of the event data and the change between the training
+and the test period, and
 that shows how sensitive the simulated congestion is to the learned trees.
 
 \paragraph{(C3) A conditional evaluation of a load-aware block allocation.} An
@@ -75,7 +76,7 @@ results hold for the extended simulator and not for ProSiT as it is
 the lanes and the cranes, so waiting and service cannot be fully separated.
 \item \textbf{Evaluation.} The final configuration replays the observed arrivals
 and blocks, and without them its error is larger. It underestimates the slowdown
-in the busiest hours, and the magnitude of its congestion depends on the depth of
+in the busiest hours, and how strongly it congests depends on the depth of
 the learned trees, so the size of a scenario effect is not established. The study
 is an iterative model development with a limited evaluation, not a confirmatory
 test.
@@ -114,7 +115,7 @@ replaced. This needs an arrival model with the daily peaks and the demand of the
 period, which a deeper tree on hour and weekday does not provide
 (Section~\ref{sec:res_e4_depth}), and the block of each container from the yard
 plan. The incremental discovery of ProSiT, which gives more weight to recent cases,
-could follow the drift between periods.
+could follow changes of the terminal over time.
 \item \textbf{External disruptions.} Traffic congestion outside the terminal and
 similar events cannot be learned from normal operations. Specified with the terminal
 as scenario inputs, for example as a reduced outflow at Gate Out for a given period,
