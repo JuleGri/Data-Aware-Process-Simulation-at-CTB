@@ -143,7 +143,7 @@ features such as the queue, the workload, the hour and reefer containers. The
 white-box form was a precondition for the mechanism audit, because every finding of
 E4 started from a tree that could be read.
 
-\paragraph{What does not transfer out of the box.} The findings of E4 are of four
+\paragraph{What does not transfer directly.} The findings of E4 are of four
 kinds. The first three are causes of the discrepancies named in
 Section~\ref{sec:res_rq2}. The fourth cause named there, the change between the
 periods, belongs to this data set, and in its place a limit appears that concerns
@@ -151,7 +151,7 @@ every setting, the validity under an intervention.
 \begin{itemize}
 \item \textbf{Implementation.} The queue feature counts the stop itself in training
 but not in the simulation, and the count of stops in progress is too low for 14 to
-15\,\% of the RMG stops. These defects can be corrected in the code and say little
+15\,\% of the RMG stops. These defects can be are ProSiT specific and are not dominant
 about the method. Version 1.0.5 removes the self-count \cite{ProSiTRepository}, but
 on its own this leaves the turnaround time without a response to load
 (Section~\ref{sec:res_e4_loo}).
