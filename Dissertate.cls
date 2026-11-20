@@ -251,8 +251,6 @@
 	\cleardoublepage
 	\abstractpage
 	\cleardoublepage
-	\aiusepage
-	\cleardoublepage
 	\tableofcontents
 	\cleardoublepage
 

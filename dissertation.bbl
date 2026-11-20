@@ -21,13 +21,6 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{Anthropic2026Claude}
-\BIBentryALTinterwordspacing
-{Anthropic}, ``Claude opus 5.5,'' Large language model, used through Claude
-  Code, 2026, used in 2026. [Online]. Available:
-  \url{https://www.anthropic.com/claude}
-\BIBentrySTDinterwordspacing
-
 \bibitem{Vinci2026prosit}
 F.~Vinci, G.~Park, W.~M.~P. van~der Aalst, and M.~de~Leoni, ``Reliable and
   configurable process simulations via probabilistic white-box models,'' in
@@ -89,15 +82,6 @@ M.~Gracia, J.~Mar-Ortiz, C.~Caballini, and S.~Sacone, ``A combined data mining
   with the use of a tas: Application to an italian and a mexican port,''
   \emph{Transportation Research Part E Logistics and Transportation Review},
   vol. 142, 08 2020.
-
-\bibitem{YUN1999DESSimulation}
-\BIBentryALTinterwordspacing
-W.~Y. Yun and Y.~S. Choi, ``A simulation model for container-terminal operation
-  analysis using an object-oriented approach,'' \emph{International Journal of
-  Production Economics}, vol.~59, no.~1, pp. 221--230, 1999. [Online].
-  Available:
-  \url{https://www.sciencedirect.com/science/article/pii/S0925527398002138}
-\BIBentrySTDinterwordspacing
 
 \bibitem{Carboni2025}
 \BIBentryALTinterwordspacing
@@ -170,12 +154,6 @@ B.~F. van Dongen, A.~K.~A. de~Medeiros, H.~M.~W. Verbeek, A.~J. M.~M. Weijters,
 A.~Berti, S.~van Zelst, and D.~Schuster, ``{PM4Py}: A process mining library
   for {Python},'' \emph{Software Impacts}, vol.~17, p. 100556, 2023.
 
-\bibitem{Aalst2022Foundations}
-W.~M.~P. van~der Aalst, ``Foundations of process discovery,'' in \emph{Process
-  Mining Handbook}, ser. Lecture Notes in Business Information Processing,
-  W.~M.~P. van~der Aalst and J.~Carmona, Eds.\hskip 1em plus 0.5em minus
-  0.4em\relax Cham: Springer, 2022, vol. 448, pp. 37--75.
-
 \bibitem{Leemans2014InductiveMiner}
 S.~J.~J. Leemans, D.~Fahland, and W.~M.~P. van~der Aalst, ``Discovering
   block-structured process models from event logs containing infrequent
@@ -192,13 +170,6 @@ A.~J. M.~M. Weijters and J.~T.~S. Ribeiro, ``Flexible heuristics miner
   ({FHM}),'' in \emph{2011 IEEE Symposium on Computational Intelligence and
   Data Mining (CIDM)}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2011, pp.
   310--317.
-
-\bibitem{Mannhardt2017DHM}
-F.~Mannhardt, M.~de~Leoni, H.~A. Reijers, and W.~M.~P. van~der Aalst,
-  ``Data-driven process discovery -- revealing conditional infrequent behavior
-  from event logs,'' in \emph{Advanced Information Systems Engineering (CAiSE
-  2017)}, ser. Lecture Notes in Computer Science, vol. 10253.\hskip 1em plus
-  0.5em minus 0.4em\relax Springer, 2017, pp. 545--560.
 
 \bibitem{Mannhardt2017iDHM}
 F.~Mannhardt, M.~de~Leoni, and H.~A. Reijers, ``Heuristic mining revamped: An
@@ -437,12 +408,6 @@ G.~Lugaresi and A.~Matta, ``Automated manufacturing system discovery and
   digital twin generation,'' \emph{Journal of Manufacturing Systems}, vol.~59,
   pp. 51--66, 2021.
 
-\bibitem{Cimino2025ASMGReview}
-A.~Cimino, M.~Elbasheer, F.~Longo, G.~Mirabelli, V.~Solina, and P.~Veltri,
-  ``Automatic simulation models generation in industrial systems: A systematic
-  literature review and outlook towards simulation technology in the industry
-  5.0,'' \emph{Journal of Manufacturing Systems}, vol.~80, pp. 859--882, 2025.
-
 \bibitem{runtimeIntegration2024}
 F.~Meneghello, C.~Di~Francescomarino, C.~Ghidini, and M.~Ronzani, ``Runtime
   integration of machine learning and simulation for business processes: Time
@@ -453,16 +418,11 @@ F.~Meneghello, C.~Di~Francescomarino, C.~Ghidini, and M.~Ronzani, ``Runtime
 R.~G. Sargent, ``Verification and validation of simulation models,''
   \emph{Journal of Simulation}, vol.~7, no.~1, pp. 12--24, 2013.
 
-\bibitem{ChapelaCampa2023Trust}
-D.~Chapela-Campa, I.~Benchekroun, O.~Baron, M.~Dumas, D.~Krass, and
-  A.~Senderovich, ``Can i trust my simulation model? measuring the quality of
-  business process simulation models,'' in \emph{Business Process Management},
-  ser. Lecture Notes in Computer Science, vol. 14159.\hskip 1em plus 0.5em
-  minus 0.4em\relax Cham: Springer, 2023, pp. 20--37.
-
 \bibitem{Chapela2025SimQuality}
-------, ``A framework for measuring the quality of business process simulation
-  models,'' \emph{Information Systems}, vol. 127, p. 102447, 01 2025.
+D.~Chapela-Campa, I.~Benchekroun, O.~Baron, M.~Dumas, D.~Krass, and
+  A.~Senderovich, ``A framework for measuring the quality of business process
+  simulation models,'' \emph{Information Systems}, vol. 127, p. 102447, 01
+  2025.
 
 \bibitem{Oezdemir2025RethinkingBPS}
 K.~{\"O}zdemir, L.~Kirchdorfer, K.~Amiri~Elyasi, H.~van~der Aa, and
@@ -548,10 +508,5 @@ A.~Augusto, R.~Conforti, M.~Dumas, M.~La~Rosa, and A.~Polyvyanyy, ``Split
   miner: Automated discovery of accurate and simple business process models
   from event logs,'' \emph{Knowledge and Information Systems}, vol.~59, pp.
   251--284, 2019.
-
-\bibitem{burke2020stochasticPD}
-A.~Burke, S.~Leemans, and M.~Wynn, ``Stochastic process discovery by weight
-  estimation,'' in \emph{Business Process Management Workshops}, ser. Lecture
-  Notes in Business Information Processing, vol. 406, 2021, pp. 260--272.
 
 \end{thebibliography}

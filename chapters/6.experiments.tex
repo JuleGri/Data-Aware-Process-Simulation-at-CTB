@@ -131,8 +131,8 @@ the robust central value.
 \item \textbf{Parts of the visit.} The approach to the first stop, the stops, the
 transfer between stops and the exit after the last stop. They add up to the TTT
 (Section~\ref{sec:timestamp_semantics}) and show where the time is spent.
-\item \textbf{Delay peaks.} Hours in which at least 20 trucks arrive and their
-median TTT is at least 37 minutes, the 90th percentile of the hours of the training
+\item \textbf{Delay peaks.} Gate-In hours in which at least 20 trucks arrive and
+their median TTT is at least 37 minutes, the 90th percentile of the hours of the training
 log. The threshold of 37 minutes is computed once and then kept for every run, so
 that a measure that shortens the visits also reduces the number of delay peaks
 instead of moving the threshold.
@@ -143,8 +143,9 @@ waterside are outside the model.
 \subsection{Simulation Runs and Replications}
 \label{sec:exp_runs}
 
-Every run simulates the 32,014 visits of the test period from its first Gate In,
-starting with an empty terminal, as the real test period does after the weekend.
+Every run simulates the test period from its first Gate In, with as many visits as
+it has (32,014), starting with an empty terminal, as the real test period does after
+the weekend.
 Runs on the training period simulate its 59,139 visits in the same way. Every visit
 is completed, so no visit is cut at the end of the period. E3 and E4 use five
 seeds (42--46) per configuration, E5 ten seeds (42--51). A scenario of E5 and its
@@ -453,7 +454,8 @@ activities.
 Because E3 asks whether the simulation reproduces the behaviour that it learned, the
 generated visits are compared with the training log, on which the nets were
 discovered and ProSiT was fitted. A comparison with the test log would mix this
-question with the change between the periods. Five measures are used.
+question with the change between the training and the test period. Five measures
+are used.
 \begin{enumerate}
 \item \textbf{Executability.} ProSiT can fit its parameters on the net, and every
 simulated visit reaches Gate Out.
@@ -723,10 +725,11 @@ position at Gate In, the rule can move only a delivery that is the first stop of
 visit. A delivery later in the visit keeps its block. At Gate In, the simulator
 counts the committed load of the planned block, which is the number of stops in
 progress there plus the stops already scheduled to start there. If this number is
-three or more, the block counts as full, and the delivery is moved to the available
-block with the lowest committed load below three. Ties go to the nearest block. A
+three or more, the block counts as full, and the delivery is moved to the eligible
+and available block with the lowest committed load below three (see the scenarios
+below). Ties go to the nearest block. A
 block counts as available unless the yard utilisation data show it as empty, with a
-utilisation below 5\,\%, which marks the blocks that were closed for maintenance
+utilisation below 5\,\%, which marks the closed blocks
 (Section~\ref{sec:obs_drift}). If no block qualifies, the delivery stays at its
 block. The rule is deterministic. It chooses the new block only from the committed
 loads and the distances and draws no random numbers.
@@ -801,8 +804,8 @@ This run is identical to the scenario $\pm 2$ with 20\,\% more trucks.
 the training shares replace the replayed arrivals and the observed blocks.
 \end{enumerate}
 A further run lifts the two restrictions of the rule. The rule may then move a
-delivery whenever it becomes possible and may use every block, including the closed
-ones. This run shows how much the restrictions change the effect. Finally, the three
+delivery at any point of the visit, not only at Gate In, and may use every block,
+including the closed ones. This run shows how much the restrictions change the effect. Finally, the three
 scenarios with replayed demand are repeated on the model with a largest tree depth
 of five (Section~\ref{sec:exp_e4_operational}).
 
@@ -829,8 +832,8 @@ evaluated on the whole-system outcomes.
 \paragraph{Interpretation of the variants} An effect already at $\pm 1$ or $\pm 2$
 means that a local rule is enough in the model. An effect only with any block means
 that it needs unlimited flexibility. No effect means that the model shows no lever.
-Better affected visits but worse other visits mean a shift of waiting, not a
-reduction.
+Shorter visits for the trucks with a moved delivery but longer visits for other
+trucks mean a shift of waiting, not a reduction.
 
 % ======================================================================
 \section{Threats Addressed by the Design}
@@ -845,7 +848,7 @@ tested for violations of the domain rules. Leakage is limited, because only the
 attributes of the planned visit are used, which are known at Gate In. Whether a
 schedule was changed after Gate In is not recorded
 (Section~\ref{sec:disc_threats}). Every selection uses the training log, and its
-criteria were fixed before the runs they decide. The change between the periods is
+criteria were fixed before the runs they decide. The change between the training and the test period is
 addressed by comparing variants on the same period and by running the final
 configuration on the training period as well. The waiting at a block is counted
 only once. Either the simulator creates it, when a stop waits for a free lane, or

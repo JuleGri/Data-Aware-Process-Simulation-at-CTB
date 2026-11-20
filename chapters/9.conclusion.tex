@@ -7,8 +7,8 @@ This thesis built a simulation of truck handling at HHLA Container Terminal
 Burchardkai from two months of operational event data and examined whether it
 can support the assessment of a load-aware allocation of truck deliveries to
 yard blocks. It selected the control-flow model from a grid of discovered nets,
-fitted ProSiT with the attributes of the planned visit, assessed the simulation layer by
-layer against the recorded turnaround times and their response to load, and
+fitted ProSiT with the attributes of the planned visit, assessed the simulation
+component by component against the recorded turnaround times and their response to load, and
 applied one allocation rule within the limits that this validation established.
 
 \section{Answers to the Research Questions}
@@ -17,28 +17,31 @@ applied one allocation rule within the limits that this validation established.
 \paragraph{RQ1. Which discovery and rule treatment yields a sound, executable
 control-flow model that preserves the observed truck-visit behaviour, and do
 conformance metrics anticipate its behaviour in simulation?} The Heuristics Miner net
-HM 0.7, used as discovered, with a stop guard on the planned number of stops. Of 19
+HM 0.7, used as discovered and combined with a stop guard on the planned number of
+stops, yields such a model. Of 19
 discovered nets, it is the only sound net that accepts every frequent sequence and
 respects the domain rules, and it covers almost all held-out visits. Conformance
 metrics anticipated the simulation only in part. Coverage and the domain rules
-anticipated the failures of the other nets, precision did not, because the structure
-of a net mattered more than how much behaviour it allows.
+anticipated the failures of the other nets. Precision did not, because ProSiT rarely
+generates behaviour that the log does not show, and the structure of a net mattered
+more than how much behaviour it allows.
 
 \paragraph{RQ2. To what extent does the ProSiT simulation reproduce truck
 turnaround time and its response to load, and which components explain the
 discrepancies?} As fitted, it does not reproduce the turnaround time, because its
 learned block choice concentrates the trucks on one block. Two defects of the software
-version and three resource semantics designed for resources that serve one case after
-another explain this. With them extended and the observed trucks and blocks replayed,
-the simulation reproduces normal hours and the rise of the waiting with the load of a
-block, but not the congested hours, and how strongly it congests depends on the depth
+version and three assumptions designed for resources that serve one case after another
+explain this and the missing response to load. With the defects corrected, the
+assumptions adapted to a block with three lanes and the observed trucks and blocks
+replayed, the simulation reproduces the turnaround time of normal hours and the rise
+of the waiting with the load of a block, but not the congested hours, and how strongly it congests depends on the depth
 of its trees.
 
 \paragraph{RQ3. To what extent can the simulation be used to evaluate a
 load-aware block allocation for deliveries, and what does it indicate about the
 effect on turnaround time?} It can show how such a change acts in the simulated
-system, but not its effect at the terminal. In the model, the rule lowers how often the
-hourly mean exceeds 35 minutes in every scenario, while its effect on the severity of
+system, but not the size of its effect at the terminal. In the model, the rule lowers
+how often the hourly mean turnaround time exceeds 35 minutes in every scenario, while its effect on the severity of
 these hours and on the trucks at the receiving blocks depends on the demand and on the
 flexibility of the rule. For CTB, the result is a hypothesis for a pilot, not a
 validated improvement.
@@ -55,13 +58,13 @@ Appendices~\ref{app:prosit_inventory} and~\ref{app:model_inspection}).
 \paragraph{(C2) An analysis of simulation errors and congestion sensitivity.} A
 component-wise validation that separates defects of the implementation, mismatches of
 the resource semantics, limits of the event data and the change between the training
-and the test period, and
-that shows how sensitive the simulated congestion is to the learned trees.
+and the test period, and that shows how sensitive the simulated congestion is to the
+depth of the learned trees.
 
 \paragraph{(C3) A conditional evaluation of a load-aware block allocation.} An
 evaluation in six scenarios with rules for the claims fixed in advance, which shows
-under the model assumptions a trade-off between the frequency, the severity and the
-distribution of the delays.
+under the model assumptions a trade-off between the frequency and the severity of the
+hours above the corridor and the distribution of the delays among the trucks.
 
 \section{Limitations}
 \label{sec:concl_limitations}
@@ -69,8 +72,9 @@ distribution of the delays.
 The limitations are of four kinds (Chapter~\ref{chp:discussion}).
 \begin{itemize}
 \item \textbf{Framework.} ProSiT's resource semantics do not fit a resource with
-several places. The simulation model corrects this with four extensions, so its
-results hold for the extended simulator and not for ProSiT as it is
+several places. The simulation model adds extensions for the blocks
+(Section~\ref{sec:sim_adaptations}), so its results hold for the extended simulator
+and not for ProSiT as it is
 (Section~\ref{sec:disc_transfer}).
 \item \textbf{Data.} The event log records the time at the block, not the use of
 the lanes and the cranes, so waiting and service cannot be fully separated.
@@ -99,9 +103,9 @@ Each item takes up one of the limitations above.
 could become options of ProSiT, namely a capacity that is checked over an activity
 when it starts and filled by the next waiting case, a waiting time measured from the
 first free place, load features for the execution time and a count that does not
-depend on the order of the schedule. Version 1.0.5 already removes the queue that
-counts the activity itself. With these options, the base model of a process with
-multi-place resources could be discovered without changes to the simulator.
+depend on the order of the schedule. Version 1.0.5 already removes the self-count
+in the queue feature. With these options, the base model of a process with
+resources that have several places could be discovered without changes to the simulator.
 \item \textbf{Events at the level of the equipment.} The start and the end of the
 handling by the crane, and the lane a truck uses, would separate the waiting for
 the crane from the handling. The crane could then be modelled as a resource that

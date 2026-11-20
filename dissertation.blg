@@ -45,45 +45,45 @@ Warning--missing publisher in Aalst2016
 Warning--missing publisher in heuristicsMiner2006
 
 Done.
-You've used 88 entries,
+You've used 81 entries,
             4087 wiz_defined-function locations,
-            1440 strings with 28196 characters,
-and the built_in function-call counts, 70363 in all, are:
-= -- 5880
-> -- 1641
-< -- 541
-+ -- 859
-- -- 293
-* -- 3428
-:= -- 10581
-add.period$ -- 202
-call.type$ -- 88
-change.case$ -- 112
-chr.to.int$ -- 1164
-cite$ -- 90
-duplicate$ -- 5160
-empty$ -- 5626
-format.name$ -- 374
-if$ -- 16480
+            1399 strings with 26867 characters,
+and the built_in function-call counts, 63990 in all, are:
+= -- 5353
+> -- 1492
+< -- 485
++ -- 778
+- -- 268
+* -- 3108
+:= -- 9636
+add.period$ -- 185
+call.type$ -- 81
+change.case$ -- 102
+chr.to.int$ -- 1035
+cite$ -- 83
+duplicate$ -- 4719
+empty$ -- 5117
+format.name$ -- 343
+if$ -- 14985
 int.to.chr$ -- 0
-int.to.str$ -- 88
-missing$ -- 925
-newline$ -- 313
-num.names$ -- 108
-pop$ -- 2052
+int.to.str$ -- 81
+missing$ -- 843
+newline$ -- 288
+num.names$ -- 99
+pop$ -- 1875
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 5527
+skip$ -- 5031
 stack$ -- 0
-substring$ -- 2971
-swap$ -- 4246
-text.length$ -- 153
+substring$ -- 2661
+swap$ -- 3867
+text.length$ -- 140
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 88
+type$ -- 81
 warning$ -- 2
-while$ -- 320
-width$ -- 90
-write$ -- 953
+while$ -- 289
+width$ -- 83
+write$ -- 872
 (There were 2 warnings)

@@ -60,8 +60,9 @@ measure of service quality for truck handling, because it is the time that
 trucking companies and cargo owners experience. It is one of the four main
 KPIs of the HHLA container terminals \cite{Bett2024,CTprocessMiningTAS2020}.
 The mean alone hides the long waits that cause complaints. This thesis
-therefore also reports the 90th percentile (P90) of TTT and the number of hours
-in which TTT is unusually high (Section~\ref{sec:exp_kpis}).
+therefore also reports the 90th percentile (P90) of TTT and evaluates the share of
+hours whose mean TTT lies above the corridor of the terminal
+(Section~\ref{sec:exp_kpis}).
 
 \paragraph{Simulation in container terminals}
 Terminal managers decide about truck appointments, equipment, staff and yard
@@ -70,7 +71,7 @@ connected, a local change can affect waiting times and service elsewhere.
 Simulation allows such changes to be tested without disturbing live
 operations. In the literature, discrete-event simulation is the most common
 approach, because a terminal can be described by events such as arrivals, gate
-passages and container moves \cite{YUN1999DESSimulation,Carboni2025}. Studies
+passages and container moves \cite{Carboni2025}. Studies
 use simulation to compare equipment numbers and operating policies
 \cite{Kastner2021}, to generate scenarios \cite{Hartmann2005cenariosforCTSimulation},
 and to evaluate truck appointment systems and double cycles
@@ -95,13 +96,13 @@ process mining, Sulis et al.\ found one in logistics and one in transportation.
 Most of the studies concern healthcare and manufacturing
 \cite{Sulis2026SimulationReview}. In a hospital, Vinci et al.\ discover a
 simulation model from an event log, check it against observed behaviour and only
-then use it to compare resource configurations \cite{Hospital2026Vinci}. This
-thesis follows the same order. The authors argue that queueing models suit
-capacity problems of a single activity, whereas processes with several
-activities and several resource pools need simulation. Their method assumes that
-delays arise only from limited resources, and the simulation was evaluated in
-discussions with the staff rather than by a structured procedure. The authors
-name both as limitations.
+then use it to compare resource configurations \cite{Hospital2026Vinci}. They argue
+that queueing models suit capacity problems of a single activity, whereas processes
+with several activities and several resource pools need simulation. Their method
+assumes that delays arise only from limited resources, and the simulation was
+evaluated in discussions with the staff rather than by a structured procedure. The
+authors name both as limitations. This thesis follows the same order of discovery,
+validation and use.
 
 An adequate simulation of the truck process must therefore reproduce TTT, its
 tail and its growth under load. It must also respect the physical constraints
@@ -175,7 +176,7 @@ PM4Py \cite{Berti2023PM4Py}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Process discovery builds a process model from an event log
-\cite{Aalst2016,Aalst2022Foundations}. The model describes the
+\cite{Aalst2016}. The model describes the
 \emph{control flow} of the process, that is, which activities occur and in
 which order they can follow each other. In this thesis, the terms process
 model and control-flow model mean the same thing, a Petri net discovered from
@@ -332,7 +333,7 @@ when this order is frequent and mostly one-directional, measured against a
 dependency threshold \cite{heuristicsMiner2006,Weijters2011FHM}. The interactive
 data-aware variant (iDHM) can also keep infrequent dependencies that depend on
 data, and converts the result into a Petri net
-\cite{Mannhardt2017DHM,Mannhardt2017iDHM}. In this Petri net every activity
+\cite{Mannhardt2017iDHM}. In this Petri net every activity
 appears once, and every dependency between two activities becomes a silent
 transition between them. The result is not guaranteed to be sound.
 \item \textbf{ILP Miner.} Region-based miners look for places that the observed
@@ -364,8 +365,8 @@ that the later stages work with. This means that every algorithm receives the
 same input log and that every quality measure is computed with the same
 implementation \cite{RWRehse2024Experimentation}. The process discovery in this
 thesis therefore follows an experiment protocol that is defined beforehand and
-used to select the most fitting control flow for the later simulation. Time is
-a further point. Two activities that occur in either order are not necessarily
+used to select the most fitting control flow for the later simulation. Timestamps
+add a further aspect. Two activities that occur in either order are not necessarily
 parallel. They may simply be ordered freely. Lifecycle-aware discovery uses
 start and complete timestamps to make this distinction
 \cite{RWLeemans2016Lifecycle}. For trucks this matters, because two stops may
@@ -465,7 +466,7 @@ dimensions are commonly used in the literature \cite{Buijs2014Quality}.
 show. \emph{Generalisation} rewards a model that is likely to accept new, unseen
 traces of the same process. \emph{Simplicity} prefers small models. The
 dimensions pull in different directions. This creates a trade-off that has to be
-balanced when the best model is searched. A model that accepts every sequence
+balanced when a model is selected. A model that accepts every sequence
 has perfect fitness but poor precision. A model that lists every observed trace
 has perfect precision but poor generalisation.
 
@@ -538,9 +539,10 @@ the same language can then receive different precision values
 \cite{Tax2018Imprecisions}. This contradicts a basic requirement on quality
 measures, which van der Aalst formulates as the proposition BehPro+. A measure
 should depend only on the behaviour of the model, its language, and not on how
-the model is drawn \cite{vanderAalst2018Propositions}. This thesis reports the
-values of ProM and checks them against implementations that follow every state
-after a prefix (Section~\ref{sec:exp_discovery_eval}).
+the model is drawn \cite{vanderAalst2018Propositions}. This thesis computes precision
+with the same implementation and settings for every net
+(Section~\ref{sec:exp_discovery_eval}), and Appendix~\ref{app:replica} shows how much
+the representation of a net matters in the simulation.
 
 \paragraph{Generalisation}
 Generalisation rewards a model that is likely to accept new behaviour of the
@@ -683,7 +685,7 @@ event logs and predicts the delay of a case from the congestion it meets
 \cite{Senderovich2015QueueMining}. In manufacturing, simulation models are
 generated from event logs of the material flow. The structure is discovered from
 the data, while physical elements such as buffers and capacities are added and
-calibrated explicitly \cite{LugaresiMatta2021,Cimino2025ASMGReview}. Grobis and
+calibrated explicitly \cite{LugaresiMatta2021}. Grobis and
 Ihlenfeldt note that logs at the business level are usually too coarse for
 queues, which need data from the operational level
 \cite{Grobis2025ProductionLogistics}. RIMS computes queue features during the
@@ -705,7 +707,7 @@ validity is usually checked by comparing logs generated by the model with a real
 log that was not used for discovery. Chapela-Campa et al.\ recommend separate
 measures for the control flow, the timing and the congestion of the generated
 logs, because one aggregate score hides which component of the model is wrong
-\cite{ChapelaCampa2023Trust,Chapela2025SimQuality}. One of their timing measures, the
+\cite{Chapela2025SimQuality}. One of their timing measures, the
 cycle-time distance, compares the distributions of the case durations in the two
 logs. It is the Wasserstein distance between them, the average amount of time by
 which the durations of one log would have to be shifted to obtain the other. A value
@@ -852,7 +854,7 @@ documentation describes it as the queue delay after a resource becomes free
 waiting time as the time from the enabling of the transition to the start of the
 activity \cite{Vinci2026prosit}. The implementation measures it from the later of two
 moments. The first is the moment the previous activity ended and the transition
-became enabled. The second is the moment the resource became free. Waiting caused
+became enabled. The second is the moment the resource became completely free. Waiting caused
 by a busy resource is therefore not part of what the tree learns. The simulator
 produces this waiting itself, through the capacity check during the execution
 (Section~\ref{sec:prosit_execution}). If the workload features are switched on,
@@ -1150,7 +1152,7 @@ model that can assess a change in the block allocation of truck deliveries at a
 container terminal, an allocation that takes into account how many trucks
 are already heading to a block. The comparison of discovered nets under domain
 rules fixed in advance selects the control-flow model for the case.
-The performance evaluation determines how well the simulation model, that is, the
+The validation determines how well the simulation model, that is, the
 discovered net together with the learned simulation parameters, represents the
 behaviour and the quantities relevant to the decision. The scenario analysis is
 then interpreted within those limits.

@@ -1,37 +1,40 @@
 %!TEX root = ../dissertation.tex
 
 Container terminals use simulation to assess operational changes before they are
-made. Data-aware process simulation promises to learn such models from event logs,
-but it has rarely been applied in logistics, where queues and shared resources
+made. Data-aware process simulation learns such models from event logs, with decisions and
+durations that depend on the attributes of a case and the state of the process, but
+it has rarely been applied in logistics, where queues and shared resources
 dominate. This thesis examines whether a simulation learned with ProSiT from the
 operational data of HHLA Container Terminal Burchardkai can support the assessment
 of a load-aware allocation of truck deliveries to yard blocks. The study uses
 91,153 truck visits recorded in March and April 2026, split in time into a training
 log of six weeks and a test log of the following 18 days. The terminal aims at
-an hourly mean turnaround time between 25 and 35 minutes. In the test period, the
-mean exceeds 35 minutes in more than half of the hours.
+an hourly mean turnaround time between 25 and 35 minutes, a corridor that the mean
+exceeds in more than half of the hours of the test period.
 
-Nineteen nets of four discovery families were compared with criteria fixed on the
-training log. Of the three nets that are sound and accept every frequent sequence,
-two generate visits that no truck can perform. Coverage and the domain rules
-anticipated these failures, precision did not. The selected Heuristics Miner net,
+Nineteen Petri nets, discovered with four families of algorithms, were compared with
+criteria fixed on the training log. Of the three nets that are sound and accept every
+frequent sequence, two generate visits that no truck can perform. The coverage of the
+frequent sequences and an audit against the domain rules anticipated these failures.
+Precision did not. The selected Heuristics Miner net,
 used as discovered, reproduces the stop structure once a guard on the planned number
 of stops, a data attribute of the case, is added.
 
 As fitted, the simulation overestimates the turnaround time strongly, because its
-learned block choice concentrates the trucks. An analysis along the path of a truck
-separates defects of the software version, a mismatch between its resource semantics
-and a block with three lanes, missing data on the cranes and a slower test period.
-With the first two corrected and the observed trucks and blocks replayed, the model
-reproduces normal hours and the rise of the waiting with the load of a block. It
+learned block choice concentrates the trucks on a single block. An analysis along the
+path of a truck separates defects of ProSiT 1.0.4, a mismatch between its resource
+assumptions and a block with three lanes, missing data on the work of the cranes and a
+test period in which the stops took longer. With the first two corrected and the
+observed trucks and blocks replayed, the model reproduces the turnaround time of
+normal hours and the rise of the waiting with the load of a block. It
 produces, however, less than half of the hours above the corridor, and how strongly
 it congests depends on the depth of the learned trees.
 
-In this model, moving deliveries at the gate away from blocks that three trucks are
-already heading to lowers how often the hourly mean exceeds 35 minutes in every
-scenario, through less waiting at full blocks. Under higher demand, the change in the
-severity of these hours becomes uncertain, a wider choice of blocks moves waiting to
-other trucks, and a rule restricted to neighbouring blocks is a promising candidate
+In this model, moving deliveries at the entry gate away from blocks that three trucks
+are already heading to lowers how often the hourly mean turnaround time exceeds
+35 minutes in every scenario, through less waiting at full blocks. With 20\,\% more
+trucks, the change in the severity of these hours becomes uncertain, a wider choice of
+blocks moves waiting to the trucks at the receiving blocks, and a rule restricted to neighbouring blocks is a promising candidate
 rather than an established best rule. The terminal confirmed the domain rules and the
-decision point. The result is a set of hypotheses for a pilot at the terminal, not a validated
+decision point of the allocation. The result is a set of hypotheses for a pilot at the terminal, not a validated
 improvement.

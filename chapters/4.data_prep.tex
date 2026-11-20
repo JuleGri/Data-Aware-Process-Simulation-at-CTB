@@ -73,7 +73,7 @@ the resource, the start and the complete timestamp, and the case attributes of
 Section~\ref{sec:context_enrichment}. Table~\ref{tab:eventlog_excerpt} shows one
 recorded visit, with its events in the order of their start timestamps. The truck
 delivers a container to block T12 and then receives one from block T07, so the
-visit is a mixed visit with two planned stops. Its turnaround time is 35 minutes.
+flow type of the visit is mixed, although neither of its two stops is a mixed stop. Its turnaround time is 35 minutes.
 
 \begin{table}[htbp]
 \centering
@@ -133,7 +133,7 @@ show which of the three lanes a truck uses or when the crane starts to handle it
 \label{fig:timestamps}
 \end{figure}
 
-The model places a free lane at the start of the recorded stop. The data cannot
+The simulation model assumes that a lane is free when a recorded stop starts. The data cannot
 show whether a truck sometimes reports ready before a lane is free. Gate events
 are instantaneous, so the turnaround time (TTT) splits exactly into the approach
 to the first stop, the stops, the transfers between stops and the time to the
@@ -230,8 +230,8 @@ Section~\ref{sec:exp_partitions} describes how the experiments use the two logs.
 \label{sec:entry_known_attributes}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-A data-aware simulation learns its decisions and durations from the case
-attributes provided in the event log. This thesis gives the simulation the
+A data-aware simulation lets its decisions and durations depend on data, among
+them the case attributes provided in the event log. This thesis gives the simulation the
 attributes of the planned visit and nothing else
 (Table~\ref{tab:manifest_attributes}). ProSiT needs attributes that describe the
 case as a whole (Section~\ref{sec:prosit_components}). They are therefore
@@ -293,7 +293,7 @@ changes.
 The yard utilisation data of Table~\ref{tab:ctb_data_sources}, which record every four
 hours how full each block is, are therefore not used as case attributes. They
 serve to describe the occupancy of the blocks and to mark the blocks that were
-closed for maintenance (Section~\ref{sec:obs_drift}). Two of the
+closed (Section~\ref{sec:obs_drift}). Two of the
 attributes are also used to keep the simulated visits physically possible. The
 planned number of stops limits how many stops a simulated truck performs
 (Section~\ref{sec:sim_adaptations}), and the flow type decides in the routing
@@ -338,7 +338,7 @@ linear. In the training log, the median TTT is 24 minutes with fewer than 50
 trucks in the terminal at Gate In, 28 and 34 minutes with 50 to 99 and 100 to
 149 trucks, and 56 minutes with 150 or more. Trucks arrive on weekdays and, in
 smaller numbers, on Saturdays. On weekdays between 7 and 16~h, 126 to 152 trucks
-arrive per hour in training. Hours with a median TTT of at least 37 minutes, the
+arrive per hour in training. Gate-In hours with at least 20 trucks whose median TTT is at least 37 minutes, the
 90th percentile of the training hours, are identified as \emph{delay peaks} in the
 design of the experiments (Section~\ref{sec:exp_kpis}). The test period is more
 congested than the training period, with 95 instead of 77 trucks in the terminal
