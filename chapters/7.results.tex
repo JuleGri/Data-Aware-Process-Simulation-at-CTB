@@ -7,8 +7,7 @@ Section~\ref{sec:res_part_controlflow} covers the selection of the control-flow 
 and its behaviour in the simulator (E1 to E3, RQ1), Section~\ref{sec:res_mechanisms}
 the validation of the simulation and the analysis of its errors (E4, RQ2), and
 Section~\ref{sec:res_policy} the evaluation of the load-aware block allocation (E5,
-RQ3). Each section begins with a short summary of its results and ends with the
-answer to its research question. Selections use the training log only, and the
+RQ3). Selections use the training log only, and the
 values on the test log are reported for evaluation. Further tables and figures are
 given in Appendix~\ref{app:sim_results}.
 
@@ -812,14 +811,10 @@ hourly mean turnaround time exceeds 35 minutes, in every scenario. Whether it al
 lowers how far these hours exceed it, and whether other trucks pay for the gain,
 depends on the demand and on how far a delivery may move. All effects are values of a
 model that reproduces less than half of the hours above the corridor
-(Section~\ref{sec:res_e4_acceptance}). They are hypotheses for the terminal, not
-estimates of its gain.
+(Section~\ref{sec:res_e4_acceptance}).
 
-The outcomes of E5 are read in the order of Section~\ref{sec:exp_policy}. The
-whole-system outcomes of the corridor decide whether the terminal as a whole would
-gain. The outcomes of groups of visits show who gains and who pays, and the
-mechanism measures show how the change works. Each change is measured against the
-simulated baseline of the same seed and demand. As a verification, the baseline with
+Each scenario is compared with the simulated baseline of the same seed and demand.
+As a verification, the baseline with
 replayed demand generates the same log as the final configuration of E4 for every
 common seed.
 
@@ -918,10 +913,9 @@ of the trucks that receive the moved deliveries.
 
 The $\pm 2$ variant was repeated under the four changes of the model of
 Section~\ref{sec:exp_policy}, each against its own baseline
-(Table~\ref{tab:rq3_robustness} in Appendix~\ref{app:sim_results}). The direction
-holds in all four, for the visits with a moved delivery and for the frequency of
-hours above the corridor. The size does not. The reduction of the frequency ranges
-from 2.6 percentage points with fully generative arrivals and blocks, whose baseline
+(Table~\ref{tab:rq3_robustness} in Appendix~\ref{app:sim_results}). In all four
+runs, the rule shortens the visits with a moved delivery and lowers the share of hours
+above 35 minutes. The reduction of this share ranges from 2.6 percentage points with fully generative arrivals and blocks, whose baseline
 has few such hours, to 14.7 with a stronger slowdown under load, and the change of
 the mean turnaround time from $+0.2$ to $-4.0$ minutes. The size of the effect thus
 depends on how strongly the service slows down under load and on how congested the
@@ -937,12 +931,10 @@ fall after Gate In, when the yard position is already assigned. The restrictions
 therefore make the effect slightly smaller, not larger.
 
 \label{sec:res_s1_conclusion}
-\paragraph{Rules for the claims.} The rules for the claims, fixed before the runs,
-hold. The interval for the visits with a moved delivery excludes zero in the three
-scenarios with replayed demand, the sign holds in all four robustness runs, and the
-approach and the share of stops at full blocks fall. The rules thereby establish a
-direction for the trucks whose delivery is moved and the mechanism behind it, but not a
-benefit for the terminal as a whole, which the whole-system outcomes decide.
+For the visits with a moved delivery, the 95\,\% interval of the change in turnaround
+time excludes zero in all three scenarios with replayed demand, and the change remains
+negative in all four robustness runs. Shorter approaches and fewer stops that start at
+full blocks support the mechanism behind it.
 
 \subsection{Answer to RQ3}
 \label{sec:res_rq3}
@@ -951,14 +943,12 @@ RQ3 asks to what extent the simulation can be used to evaluate a load-aware bloc
 allocation for deliveries under the physical limits of the yard blocks, and what
 it indicates about the effect on the turnaround time.
 
-The simulation can show how a change like that acts in the
-simulated system, as well as its mechanism and its direction for the trucks concerned, but not
-the size of its effect at the terminal. It reproduces the mechanism that the change
-acts on, the waiting when all three lanes of a block are busy, and it respects the
-physical limit in every run. It cannot indicate the size, because it reproduces less
-than half of the hours above the corridor, the size varies across the robustness runs,
-and
-its congestion depends on the depth of its trees.
+The simulation supports an analysis of how a reallocation of deliveries changes the
+waiting at capacity-limited blocks. It reproduces the waiting when all three lanes of a
+block are busy, which the rule acts on, and it respects the physical limit in every run.
+It does not provide a reliable estimate of the effect at CTB, because it reproduces less
+than half of the hours above the corridor, and the estimated benefits depend on how
+strongly the service slows down under load and on the depth of the trees.
 
 When a delivery is moved at Gate In away from a block that three trucks are already
 heading to, the hourly mean turnaround time in the model exceeds 35 minutes less often,
@@ -968,6 +958,4 @@ turnaround time, and a wider choice of blocks gives more. With more demand, the 
 in frequency remains, the change in severity becomes uncertain, and a wider choice
 moves part of the waiting to the trucks at the receiving blocks. The rule with one
 block number of deviation is a promising, more restricted candidate, but not an
-established best rule. These values describe the simulated system. For CTB they form
-hypotheses that a pilot with a local rule would have to test, not a validated
-improvement.
+established best rule.

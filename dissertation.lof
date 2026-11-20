@@ -24,12 +24,12 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {A.1}{\ignorespaces Occupancy of the RMG blocks, recorded every four hours.}}{114}{figure.caption.48}%
-\contentsline {figure}{\numberline {A.2}{\ignorespaces Turnaround time per visit and the corridor (supplementary to the hourly KPI).}}{114}{figure.caption.49}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Occupancy of the RMG blocks, recorded every four hours.}}{113}{figure.caption.48}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Turnaround time per visit and the corridor (supplementary to the hourly KPI).}}{113}{figure.caption.49}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {D.1}{\ignorespaces Arrival tree with the fitted distribution (line) and the values drawn by the simulator (bars) in each leaf.}}{132}{figure.caption.62}%
-\contentsline {figure}{\numberline {D.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{133}{figure.caption.63}%
-\contentsline {figure}{\numberline {D.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{141}{figure.caption.65}%
+\contentsline {figure}{\numberline {D.1}{\ignorespaces Arrival tree with the fitted distribution (line) and the values drawn by the simulator (bars) in each leaf.}}{131}{figure.caption.62}%
+\contentsline {figure}{\numberline {D.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{132}{figure.caption.63}%
+\contentsline {figure}{\numberline {D.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{140}{figure.caption.65}%
 \addvspace {10\p@ }

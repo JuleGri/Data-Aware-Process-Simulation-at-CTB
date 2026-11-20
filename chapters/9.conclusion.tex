@@ -4,131 +4,77 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 This thesis built a simulation of truck handling at HHLA Container Terminal
-Burchardkai from two months of operational event data and examined whether it
-can support the assessment of a load-aware allocation of truck deliveries to
-yard blocks. It selected the control-flow model from a grid of discovered nets,
-fitted ProSiT with the attributes of the planned visit, assessed the simulation
-component by component against the recorded turnaround times and their response to load, and
-applied one allocation rule within the limits that this validation established.
+Burchardkai from operational event data and examined whether it can support the
+assessment of a load-aware allocation of truck deliveries to yard blocks. The
+discussion in Chapter~\ref{chp:discussion} interprets the results in detail. In short,
+data-aware simulation carries over to the terminal where the event data describe the
+process, and it needs domain knowledge where the physical limits of the terminal are
+not in the data.
 
 \section{Answers to the Research Questions}
 \label{sec:concl_rq}
 
-\paragraph{RQ1. Which discovery and rule treatment yields a sound, executable
-control-flow model that preserves the observed truck-visit behaviour, and do
-conformance metrics anticipate its behaviour in simulation?} The Heuristics Miner net
-HM 0.7, used as discovered and combined with a stop guard on the planned number of
-stops, yields such a model. Of 19
-discovered nets, it is the only sound net that accepts every frequent sequence and
-respects the domain rules, and it covers almost all held-out visits. Conformance
-metrics anticipated the simulation only in part. Coverage and the domain rules
-anticipated the failures of the other nets. Precision did not, because ProSiT rarely
-generates behaviour that the log does not show, and the structure of a net mattered
-more than how much behaviour it allows.
+RQ1 asked which control-flow model is suitable for the simulation and whether the
+usual conformance metrics anticipate its behaviour. A discovered net is suitable only
+if it covers the frequent truck visits and respects the rules of a visit, and the
+Heuristics Miner net HM 0.7 with a stop guard on the planned number of stops does
+both. These two properties predicted how a net behaves in the simulation better than
+its precision, so the metrics alone are not enough to choose the model.
 
-\paragraph{RQ2. To what extent does the ProSiT simulation reproduce truck
-turnaround time and its response to load, and which components explain the
-discrepancies?} As fitted, it does not reproduce the turnaround time, because its
-learned block choice concentrates the trucks on one block. Two defects of the software
-version and three assumptions designed for resources that serve one case after another
-explain this and the missing response to load. With the defects corrected, the
-assumptions adapted to a block with three lanes and the observed trucks and blocks
-replayed, the simulation reproduces the turnaround time of normal hours and the rise
-of the waiting with the load of a block, but not the congested hours, and how strongly it congests depends on the depth
-of its trees.
+RQ2 asked how well the simulation reproduces the turnaround time and its response to
+load. Data awareness is what makes such a response possible. The routing learned from
+the attributes of the planned visit reproduces the stops of each visit, and waiting
+and handling times that depend on the current state of a block can grow when the block
+gets busier, which a model with one fixed distribution per activity cannot express.
+This works only if the state of a block is described as it is at the terminal, with
+three lanes and a queue in front of them. As fitted, the simulation described it as
+for a resource that serves one case after another, partly because of two defects of
+the software version, and its learned block choice sent most trucks to a single block.
+With the state of a block computed for three lanes and the observed trucks and blocks
+replayed, it reproduces normal operations and the rise of the waiting with the load of
+a block. What the data do not record cannot be learned. The event log shows how long a
+truck stays at a block, but not how the lanes and cranes are used, so the slowdown in
+the most congested hours remains underestimated.
 
-\paragraph{RQ3. To what extent can the simulation be used to evaluate a
-load-aware block allocation for deliveries, and what does it indicate about the
-effect on turnaround time?} It can show how such a change acts in the simulated
-system, but not the size of its effect at the terminal. In the model, the rule lowers
-how often the hourly mean turnaround time exceeds 35 minutes in every scenario, while its effect on the severity of
-these hours and on the trucks at the receiving blocks depends on the demand and on the
-flexibility of the rule. For CTB, the result is a hypothesis for a pilot, not a
-validated improvement.
+RQ3 asked what the simulation can say about a load-aware block allocation. It can show
+how such a rule acts, but not how large its effect at the terminal would be. In the
+model, moving a delivery at Gate In from a block that already expects many trucks to a
+nearby block with fewer reduces how often the turnaround time exceeds the corridor.
+With high demand and a wide choice of blocks, part of the waiting moves to the trucks
+at the receiving blocks. A pilot at the terminal is needed to establish whether these simulated benefits occur
+in practice.
 
 \section{Contributions}
 \label{sec:concl_contributions}
 
-\paragraph{1. A domain-constrained simulation model of CTB truck handling.} A model
-that combines what ProSiT learns from the event log with domain knowledge that the log
-does not contain, documented in full so that it can be inspected
-(Chapter~\ref{chp:process_discovery_methodology} and
-Appendices~\ref{app:prosit_inventory} and~\ref{app:model_inspection}).
-
-\paragraph{2. An analysis of simulation errors and congestion sensitivity.} A
-component-wise validation that separates defects of the implementation, mismatches of
-the resource semantics, limits of the event data and the change between the training
-and the test period, and that shows how sensitive the simulated congestion is to the
-depth of the learned trees.
-
-\paragraph{3. A conditional evaluation of a load-aware block allocation.} An
-evaluation in six scenarios with rules for the claims fixed in advance, which shows
-under the model assumptions a trade-off between the frequency and the severity of the
-hours above the corridor and the distribution of the delays among the trucks.
+The thesis contributes a domain-constrained simulation model of CTB truck handling, an
+analysis of simulation errors and congestion sensitivity, and a conditional evaluation
+of a load-aware block allocation. The model is documented in full, so that it can be
+inspected and extended (Appendices~\ref{app:prosit_inventory}
+and~\ref{app:model_inspection}).
 
 \section{Limitations}
 \label{sec:concl_limitations}
 
-The limitations are of four kinds (Chapter~\ref{chp:discussion}).
-\begin{itemize}
-\item \textbf{Framework.} ProSiT's resource semantics do not fit a resource with
-several places. The simulation model adds extensions for the blocks
-(Section~\ref{sec:sim_adaptations}), so its results hold for the extended simulator
-and not for ProSiT as it is
-(Section~\ref{sec:disc_transfer}).
-\item \textbf{Data.} The event log records the time at the block, not the use of
-the lanes and the cranes, so waiting and service cannot be fully separated.
-\item \textbf{Evaluation.} The final configuration replays the observed arrivals
-and blocks, and without them its error is larger. It underestimates the slowdown
-in the busiest hours, and how strongly it congests depends on the depth of
-the learned trees, so the size of a scenario effect is not established. The study
-is an iterative model development with a limited evaluation, not a confirmatory
-test.
-\item \textbf{Domain knowledge.} The domain rules, the three lanes, the corridor and the
-decision point come from the discussions with the terminal during the development of
-the model and from the operational knowledge of the author, and they were confirmed by
-the terminal within the project, so the confirmation is not independent. The
-plausibility of the results was assessed by the author, and the costs of a move were
-assessed, not modelled.
-\end{itemize}
+The results hold for the extended simulator, not for ProSiT as it is, and for a
+retrospective evaluation in which the observed arrivals and blocks are replayed. The
+event log records the time a truck spends at a block, not the use of its lanes and
+cranes, so waiting and handling cannot be fully separated. The domain knowledge was
+confirmed within the project and the plausibility of the results was assessed by the
+author, so neither is an independent validation (Section~\ref{sec:disc_threats}).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Future Work}
 \label{sec:future_work}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Each item takes up one of the limitations above.
-\begin{itemize}
-\item \textbf{Resource semantics in the framework.} The extensions of this thesis
-could become options of ProSiT, namely a capacity that is checked over an activity
-when it starts and filled by the next waiting case, a waiting time measured from the
-first free place, load features for the execution time and a count that does not
-depend on the order of the schedule. Version 1.0.5 already removes the self-count
-in the queue feature. With these options, the base model of a process with
-resources that have several places could be discovered without changes to the simulator.
-\item \textbf{Events at the level of the equipment.} The start and the end of the
-handling by the crane, and the lane a truck uses, would separate the waiting for
-the crane from the handling. The crane could then be modelled as a resource that
-handles one truck after another, which fits the semantics of ProSiT as it is. An
-object-centric event log with trucks, containers, blocks and cranes as objects
-\cite{VanDerAalst2023OCPM} and an object-centric simulation model
-\cite{Knopp2023ObjectCentricSimulation} would also keep the attributes of each
-container instead of one aggregated value per visit.
-\item \textbf{Generative inputs.} For a prospective use, the replay has to be
-replaced. This needs an arrival model with the busy hours of particular days and
-the demand of the period, not only the average week, which a deeper tree on hour
-and weekday does not provide
-(Section~\ref{sec:res_e4_depth}), and the block of each container from the yard
-plan. The incremental discovery of ProSiT, which gives more weight to recent cases,
-could follow changes of the terminal over time.
-\item \textbf{External disruptions.} Traffic congestion outside the terminal and
-similar events cannot be learned from normal operations. Specified with the terminal
-as scenario inputs, for example as a reduced outflow at Gate Out for a given period,
-they would allow testing how the terminal and an allocation rule perform under the
-conditions in which the corridor is exceeded most severely.
-\item \textbf{Validation under intervention.} A pilot of the local allocation rule
-at the terminal, with the committed load of the blocks available at Gate In, would
-show whether the simulated direction and mechanism hold when the allocation really
-changes. Its results would also give the costs of a move, which the model does not
-contain.
-\end{itemize}
+Four directions follow from these limitations. First, the extensions could become
+options of ProSiT, so that processes whose resources serve several cases at once can be
+simulated without changes to the simulator. Version 1.0.5 already removes one of the
+defects. Second, events at the level of the equipment, such as the start and the end of
+the crane handling and the lane a truck uses, would separate the waiting from the
+handling. Third, a prospective use needs an arrival model that reproduces the busy
+hours of particular days, not only the average week, and the block of each container
+from the yard plan instead of the replay (Section~\ref{sec:res_e4_depth}).
+Disruptions outside the terminal, such as traffic congestion, could then be added as
+scenarios. Fourth, a pilot of the allocation rule at the terminal would show whether
+the simulated direction holds when the allocation really changes and what a move
+costs.

@@ -7,14 +7,9 @@
 %   of train.csv. The 184 visits removed with an activity outside the eleven labels are visits with a stop of
 %   unknown direction (eventlog_building/03, derive_stop_flow), so they are counted with the unmatched containers.
 
-This chapter describes the data of the case and their preparation, which results
-in an event log that is ready for both the discovery of the process model and the
-discovery of the simulation parameters. It introduces the terminal and its
-operational systems, defines the cases, activities, resources and timestamps of
-the event log, and explains how the raw records are cleaned and split. It then
-describes the case attributes that the simulation may use, what the log shows
-about the truck turnaround, and the domain rules that every truck visit must
-satisfy.
+This chapter explains how the operational records were transformed into an event
+log for process discovery and simulation, and characterises the observed truck
+visits and the domain rules that every visit must satisfy.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Case and Data Sources}

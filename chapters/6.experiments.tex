@@ -16,8 +16,8 @@ Chapter~\ref{chp:process_discovery_methodology}.
 \label{sec:exp_selection_logic}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Five experiments build on each other (Table~\ref{tab:exp_overview}). Each decides
-one question by one decisive comparison and passes its result to the next. E1 to E3
+Five experiments build on each other. Table~\ref{tab:exp_overview} links each
+experiment to its research question, comparison and output. E1 to E3
 answer RQ1, E3 and E4 answer RQ2, and E5 answers RQ3.
 
 % The former pipeline figure figures/schemas/experiment_flow.tex is kept but no longer included.
@@ -69,7 +69,7 @@ is nevertheless not fully independent of the test period.
 The study as a whole is an iterative model development followed by an explicitly
 limited evaluation. E1 to E4 selected and adapted the model on the training log. The
 rule for the choice of the final configuration, the acceptance criteria and the
-rules for the claims of E5 were fixed before the runs they decide, but after earlier
+criteria for interpreting the scenario results of E5 were fixed before the runs they decide, but after earlier
 configurations had been examined. The results are therefore an assessment of a model
 developed on the training data, not a confirmatory test of a model fixed in advance.
 
@@ -809,13 +809,13 @@ including the closed ones. This run shows how much the restrictions change the e
 scenarios with replayed demand are repeated on the model with a largest tree depth
 of five (Section~\ref{sec:exp_e4_operational}).
 
-\paragraph{Rules for the claims}
-The outcomes are interpreted in a fixed order. The whole-system outcomes of the
-corridor and the mean turnaround time decide whether the terminal as a whole would
-gain. The outcomes of groups of visits identify who gains and who pays, and the
-mechanism measures explain how the change works. Two rules are also compared
-directly, by their paired differences over the same seeds, as an exploratory
-analysis of the same runs. The following rules were fixed before the runs of E5.
+\paragraph{Criteria for interpreting scenario results}
+Changes in the hours above the corridor and in the mean turnaround time are used to
+assess the overall performance within the simulation. The results by group of visits
+show how these changes are distributed, and the mechanism measures explain how the
+change works. Two rules are also compared directly, by their paired differences over
+the same seeds, as an exploratory analysis of the same runs. The following criteria
+were fixed before the runs of E5.
 \begin{enumerate}
 \item A direction is stated only if the 95\,\% interval of the paired difference
 for the visits with a moved delivery excludes zero in the three scenarios with
@@ -825,9 +825,8 @@ sign changes, the finding is that the simulation is not adequate for this questi
 that is, if the trucks reach their first RMG stop sooner and fewer RMG stops start
 at a full block.
 \end{enumerate}
-These rules establish a direction for the trucks with a moved delivery and a
-mechanism. They do not establish a benefit for the terminal as a whole, which is
-evaluated on the whole-system outcomes.
+These criteria establish a direction for the trucks with a moved delivery and a
+mechanism, not a benefit for the terminal as a whole.
 
 \paragraph{Interpretation of the variants} An effect already at $\pm 1$ or $\pm 2$
 means that a local rule is enough in the model. An effect only with any block means

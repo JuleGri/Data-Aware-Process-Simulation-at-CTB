@@ -53,9 +53,17 @@ ProSiT 1.0.5 are in \nolinkurl{simulation_e3/runs/night_20261119}.
 \section{Implementation of the Extensions}
 \label{app:implementation}
 
-The extensions of Table~\ref{tab:sim_adaptations} consist of two parts. Neither
-changes the installed ProSiT package, whose files match the hashes recorded at its
-installation.
+The extensions of Table~\ref{tab:sim_adaptations} are implemented in three ways.
+Two descriptive parameters are set in the fitted model, predictive parameters are
+retrained, and the simulation loop is changed at runtime. Table~\ref{tab:app_patches}
+lists for each extension where it acts, how it is implemented and how it is set in
+the final configuration. None of the three ways changes the installed ProSiT package,
+whose files match the hashes recorded at its installation.
+
+\paragraph{Settings in the fitted model} After the discovery, the capacity of every
+RMG block is set to the smaller of the discovered value and three
+(\nolinkurl{simulation_e3/run_e3.py}), and every resource calendar to the full week
+(\nolinkurl{simulation_e3/_prosit_ctb_calibration.py}).
 
 \paragraph{Retrained predictive parameters} The script
 \nolinkurl{simulation_e3/rq2_components.py} builds ProSiT's own training table with
@@ -65,9 +73,13 @@ The function \texttt{fix\_queue} removes the stop itself from the queue length. 
 function \texttt{multi\_lane\_free} recomputes the moment from which the waiting is
 measured as the moment at which a lane of the block became free, with three lanes per
 block. For the execution time, the column \texttt{start\_workload}, the number of
-other stops in progress at the block at the start, is added. As a test, every
-parameter is also retrained on the unchanged table and compared with the fitted
-model (\nolinkurl{components/identity_check.json}).
+other stops in progress at the block at the start, is added. The final configuration
+uses the waiting-time models retrained with both changes and three lanes
+(\texttt{waiting\_M3}) and the execution-time models with \texttt{start\_workload}
+(\texttt{exec\_L}). The block choice retrained without the self-count is used only in
+the analysis of E4, because the final configuration replays the observed blocks. As a
+test, every parameter is also retrained on the unchanged table and compared with the
+fitted model (\nolinkurl{components/identity_check.json}).
 
 \paragraph{Simulator} The extensions are inserted into ProSiT's simulator at runtime,
 not written as a separate simulator or as a modified copy of the package. ProSiT
@@ -87,6 +99,29 @@ progress, the load feature of the execution time, the stop guard, the replay of
 arrivals and blocks, and the allocation rule of E5. With all switches off, the loop
 generates exactly the same log as ProSiT, tested on the base model of HM 0.7 with two
 seeds of 600 visits (\nolinkurl{runs/hm07orig_20261115/regression_check_hm07.py}).
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\begin{tabularx}{\textwidth}{L{2.5cm}L{2.5cm}YL{2.7cm}}
+\toprule
+\textbf{Extension} & \textbf{Acts on} & \textbf{Implementation} & \textbf{Final configuration} \\
+\midrule
+Stop guard & simulation loop, routing & weight 0 for every enabled transition after which the final marking can no longer be reached with the planned number of yard stops (reachability graph of the net) & \texttt{stop\_guard = lookahead} \\
+Capacity at the start & simulation loop, start of a stop & after the waiting and execution times are drawn, the stop is shifted to the earliest time at which fewer than three stops overlap it & \texttt{cap\_at\_start} on, three lanes \\
+Exact counting & simulation loop, every count of stops in progress & every stop of the schedule is checked instead of stopping at the first finished one & \texttt{exact\_workload} on \\
+Waiting from a free lane & training table of the waiting time & \texttt{fix\_queue} and \texttt{multi\_lane\_free}, retrained with ProSiT's discovery functions & \texttt{waiting\_M3} \\
+Load in the execution time & training table and simulation loop & column \texttt{start\_workload} in training, counted in the simulation when the stop is scheduled & \texttt{exec\_L}, \texttt{exec\_workload} on \\
+Block choice & simulation loop, resource choice & observed block of the stop, training shares otherwise & \texttt{block\_choice = replay} \\
+Arrivals & input of the simulation & observed Gate-In times and case attributes of the period & replay \\
+Capacity value & fitted model & \texttt{max\_concurrency} of every RMG block set to the smaller of the discovered value and three & 3 \\
+Resource calendars & fitted model & every resource calendar set to the full week & full week \\
+Allocation rule & simulation loop, after the block choice & rule of E5 with its variants & \texttt{s1}, only in E5 \\
+\bottomrule
+\end{tabularx}
+\caption{Implementation of the extensions.}
+\label{tab:app_patches}
+\end{table}
 
 \section{Sources of the Tables and Figures}
 

@@ -27,21 +27,21 @@ ProSiT, the framework used in this thesis, combines a Petri net with learned
 probabilistic decision trees, which can be read and changed \cite{Vinci2026prosit}.
 
 A container terminal is a demanding test for such models, because its process has
-physical limits. A truck is one vehicle with stops, that happen one after another, never
-at the same time, and every visit includes container handling. A storage block has
+physical limits. A truck is one vehicle, so its stops happen one after another and
+never at the same time, and every visit includes container handling. A storage block has
 three handover lanes, so it can hold at most three trucks at once, its crane
 handles them one after another, and its cranes are shared with the waterside and
 the rail. These limits are not written in the
 event log, and a model learned only from the recorded sequences and durations does
 not know them. A discovered control-flow model may allow a truck to perform two
 stops at once. A learned simulator may send more trucks to a block than it can
-serve, or let the waiting fall when a block gets busier. A simulation that reproduces the common sequences can therefore still fail where the physical limits shape the process. These are the important places, when a simulation is used to evaluate an operational change, for example a different allocation of trucks to the storage blocks. A simulation model therefore has to be validated for the decision it is meant to support.
+serve, or let the waiting fall when a block gets busier. A simulation that reproduces the common sequences can therefore still fail where the physical limits shape the process. These places matter most when a simulation is used to evaluate an operational change, for example a different allocation of trucks to the storage blocks. A simulation model therefore has to be validated for the decision it is meant to support.
 
 \section{Problem Statement}
 \label{sec:prob_statement}
 
 The primary performance measure in this study is the truck turnaround time (TTT),
-defined as the time between the time a Truck enters the Terminal, until its exit. Over the whole event log of 91,153 visits, the observed median is 30
+defined as the time from the moment a truck enters the terminal until it leaves. Over the whole event log of 91,153 visits, the observed median is 30
 minutes, the mean 38 minutes and the 90th percentile 69 minutes. The data and
 performance measures are described in Chapters~\ref{chp:case_study_and_data}
 and~\ref{chp:experiments}.
@@ -67,10 +67,10 @@ trucks.
 The improvement measure studied is a load-aware allocation of deliveries to the
 yard blocks. When a truck with a delivery arrives and three or more trucks are
 already at its planned block or heading to it, the delivery is moved to the block
-with the fewest such trucks. The yard position of a container is assigned when the truck arrives, so that
+with the fewest such trucks among those that may take the container. The yard position of a container is assigned when the truck arrives, so that
 the driver knows where to go. An applicable rule must therefore use information
-available at that point and respect the blocks that may take the container. Today
-the terminals block assignment does not consider how many trucks are already heading to a block,
+available at that point and respect the blocks that may take the container. Today,
+the block assignment of the terminal does not consider how many trucks are already heading to a block,
 so the suggested measure adds this information to the decision.
 
 This leads to two connected problems. First, the simulation must reproduce the
@@ -121,8 +121,8 @@ simulation is validated per component and by its response to load, not only by i
 similarity to the log. This shows how the implementation, the resource semantics and
 the event data shape congestion at resources that serve several cases at once.
 \item \textbf{A conditional evaluation of a load-aware block allocation.} The
-allocation rule is evaluated in six scenarios of flexibility and demand under rules
-for the claims fixed in advance. This gives conditional evidence of how such a rule
+allocation rule is evaluated in six scenarios of flexibility and demand, with criteria
+for interpreting the results fixed in advance. This gives conditional evidence of how such a rule
 changes the frequency and severity of hours above the corridor and which trucks bear
 the delays.
 \end{enumerate}
