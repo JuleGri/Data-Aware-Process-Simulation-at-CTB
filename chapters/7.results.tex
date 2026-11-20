@@ -757,9 +757,10 @@ ProSiT, with the self-count, cannot be used with the real capacity at all. On th
 day of the test period, a very busy Monday, it sends every RMG stop to a single block,
 and the median turnaround time reaches 55 hours, against 49 minutes observed. Without
 replay, with arrivals by hour of the week and blocks drawn from the training shares,
-the median is 26 and the P90 52 minutes (cycle-time distance 11.2 minutes). With
-ProSiT's arrival model, which has no daily peaks, busy hours no longer have
-longer visits.
+the median is 26 and the P90 52 minutes (cycle-time distance 11.2 minutes).
+ProSiT's arrival model depends only on the weekday and the hour, so it can describe
+the average week but not the busy hours of particular days, and busy hours no longer
+have longer visits.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Answer to RQ2}

@@ -115,8 +115,9 @@ object-centric event log with trucks, containers, blocks and cranes as objects
 \cite{Knopp2023ObjectCentricSimulation} would also keep the attributes of each
 container instead of one aggregated value per visit.
 \item \textbf{Generative inputs.} For a prospective use, the replay has to be
-replaced. This needs an arrival model with the daily peaks and the demand of the
-period, which a deeper tree on hour and weekday does not provide
+replaced. This needs an arrival model with the busy hours of particular days and
+the demand of the period, not only the average week, which a deeper tree on hour
+and weekday does not provide
 (Section~\ref{sec:res_e4_depth}), and the block of each container from the yard
 plan. The incremental discovery of ProSiT, which gives more weight to recent cases,
 could follow changes of the terminal over time.
