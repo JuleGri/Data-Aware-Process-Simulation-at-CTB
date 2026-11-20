@@ -171,15 +171,15 @@
 \contentsline {paragraph}{The model error.}{89}{figure.caption.43}%
 \contentsline {subsection}{\numberline {6.2.5}Sensitivity Analysis}{89}{subsection.6.2.5}%
 \contentsline {paragraph}{Tree depth.}{89}{table.caption.44}%
-\contentsline {paragraph}{Other nets.}{90}{table.caption.44}%
+\contentsline {paragraph}{Other nets.}{91}{table.caption.44}%
 \contentsline {paragraph}{Generated inputs.}{91}{table.caption.44}%
 \contentsline {subsection}{\numberline {6.2.6}Answer to RQ2}{91}{subsection.6.2.6}%
 \contentsline {section}{\numberline {6.3}Evaluation of Load-Aware Block Allocation}{92}{section.6.3}%
 \contentsline {subsection}{\numberline {6.3.1}Effects on Terminal-Level Performance}{92}{subsection.6.3.1}%
 \contentsline {subsection}{\numberline {6.3.2}Effects Across Truck Groups}{93}{subsection.6.3.2}%
 \contentsline {paragraph}{Mechanism.}{94}{table.caption.46}%
-\contentsline {subsection}{\numberline {6.3.3}Comparison of Allocation Rules}{94}{subsection.6.3.3}%
-\contentsline {subsection}{\numberline {6.3.4}Sensitivity of Scenario Results}{95}{subsection.6.3.4}%
+\contentsline {subsection}{\numberline {6.3.3}Comparison of Allocation Rules}{95}{subsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.3.4}Sensitivity of Scenario Results}{96}{subsection.6.3.4}%
 \contentsline {paragraph}{Rules for the claims.}{96}{subsection.6.3.4}%
 \contentsline {subsection}{\numberline {6.3.5}Answer to RQ3}{96}{subsection.6.3.5}%
 \contentsline {chapter}{\numberline {7}Discussion}{98}{chapter.7}%
@@ -193,25 +193,25 @@
 \contentsline {paragraph}{Simplicity and the analyst.}{100}{section.7.2}%
 \contentsline {section}{\numberline {7.3}Data-Aware Simulation in a Physical Logistics Process}{101}{section.7.3}%
 \contentsline {paragraph}{What transfers.}{101}{section.7.3}%
-\contentsline {paragraph}{What does not transfer out of the box.}{101}{section.7.3}%
+\contentsline {paragraph}{What does not transfer directly.}{101}{section.7.3}%
 \contentsline {paragraph}{What had to be added.}{102}{section.7.3}%
-\contentsline {paragraph}{What a case-centric log cannot show.}{102}{section.7.3}%
-\contentsline {paragraph}{Beyond the terminal.}{102}{section.7.3}%
+\contentsline {paragraph}{What a case-centric log cannot show.}{103}{section.7.3}%
+\contentsline {paragraph}{Beyond the terminal.}{103}{section.7.3}%
 \contentsline {section}{\numberline {7.4}Threats to Validity}{103}{section.7.4}%
 \contentsline {subsection}{\numberline {7.4.1}Construct Validity}{103}{subsection.7.4.1}%
 \contentsline {paragraph}{What a stop measures.}{103}{subsection.7.4.1}%
 \contentsline {paragraph}{Cleaning and thresholds.}{103}{subsection.7.4.1}%
-\contentsline {paragraph}{The KPI.}{103}{subsection.7.4.1}%
-\contentsline {paragraph}{The case attributes.}{103}{subsection.7.4.1}%
+\contentsline {paragraph}{The KPI.}{104}{subsection.7.4.1}%
+\contentsline {paragraph}{The case attributes.}{104}{subsection.7.4.1}%
 \contentsline {subsection}{\numberline {7.4.2}Internal Validity}{104}{subsection.7.4.2}%
 \contentsline {paragraph}{Retrospective hold-out.}{104}{subsection.7.4.2}%
 \contentsline {paragraph}{Own code.}{104}{subsection.7.4.2}%
 \contentsline {subsection}{\numberline {7.4.3}External Validity}{104}{subsection.7.4.3}%
-\contentsline {subsection}{\numberline {7.4.4}Conclusion Validity}{104}{subsection.7.4.4}%
+\contentsline {subsection}{\numberline {7.4.4}Conclusion Validity}{105}{subsection.7.4.4}%
 \contentsline {section}{\numberline {7.5}Domain Knowledge}{105}{section.7.5}%
 \contentsline {section}{\numberline {7.6}Implications for Practice}{105}{section.7.6}%
 \contentsline {paragraph}{Where the time is lost.}{105}{section.7.6}%
-\contentsline {paragraph}{What a block allocation can do.}{105}{section.7.6}%
+\contentsline {paragraph}{What a block allocation can do.}{106}{section.7.6}%
 \contentsline {paragraph}{What would be needed before acting.}{106}{section.7.6}%
 \contentsline {chapter}{\numberline {8}Conclusion}{107}{chapter.8}%
 \contentsline {section}{\numberline {8.1}Answers to the Research Questions}{107}{section.8.1}%
@@ -224,7 +224,7 @@
 \contentsline {paragraph}{(C3) A conditional evaluation of a load-aware block allocation.}{108}{section.8.2}%
 \contentsline {section}{\numberline {8.3}Limitations}{108}{section.8.3}%
 \contentsline {section}{\numberline {8.4}Future Work}{109}{section.8.4}%
-\contentsline {chapter}{\numberline {A}Observed Truck-Visit Behaviour}{111}{appendix.A}%
+\contentsline {chapter}{\numberline {A}Observed Truck-Visit Behavior}{111}{appendix.A}%
 \contentsline {section}{\numberline {A.1}Data Sources}{111}{section.A.1}%
 \contentsline {section}{\numberline {A.2}Disruption Episodes}{112}{section.A.2}%
 \contentsline {section}{\numberline {A.3}Differences between Training and Test Period}{112}{section.A.3}%

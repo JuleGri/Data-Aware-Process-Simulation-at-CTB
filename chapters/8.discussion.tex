@@ -22,11 +22,12 @@ section discusses what follows for the use of the model.
 
 \paragraph{Mechanism, not size of the effect.} Because the waiting arises in the model
 where it arises at the terminal, the model can show how moving deliveries away from
-full blocks act, which visits gain and whether the waiting is reduced or only moved.
+full blocks acts, which visits gain and whether the waiting is reduced or only moved.
 Because it underestimates the slowdown in the busiest hours, it cannot show how much
 the terminal would actually gain. The trade-off between how often and how badly the corridor is
 exceeded (Section~\ref{sec:res_s1_contrasts}) is consistent with this mechanism, and
-the mechanism measures support it. With the demand of the test period, a moved
+the measures of the mechanism support it. With the replayed demand of the test period,
+a moved
 delivery finds a free lane at the receiving block, and the trucks there show no clear
 delay. With 20\,\% more trucks, the two wider rules move more deliveries, 26 and
 33\,\% instead of 21 and 22\,\%, and the visits at the receiving blocks become about
@@ -37,7 +38,8 @@ blocks thus take on part of the load that they relieve elsewhere.
 \paragraph{What the model leaves out.} The model does not contain what a move costs
 at the terminal, namely the driving to another block, a later rehandling of the
 container and the constraints of the yard plan, which can make the real effect
-smaller. A stronger slowdown under load, as recorded, can make it larger. The supported
+smaller. A stronger slowdown of the stops under load, as recorded in the log, can make
+it larger. The supported
 statement is therefore conditional. If the waiting at a full block arises as in the
 model, if eligible blocks exist and if a move costs little, then moving deliveries away
 from blocks that three trucks are already heading to shortens the long visits and
@@ -64,9 +66,10 @@ development of the model, such peaks were attributed to traffic congestion outsi
 terminal, which the terminal cannot influence. The normal arrivals and the long exits
 are consistent with this explanation, but they do not prove an external cause.
 
-The diagnosis suggests that part of the extreme peaks has causes outside the handling
+This pattern suggests that part of the extreme peaks has causes outside the handling
 at the blocks, which a model learned from the recorded visits cannot generate and
-which a block allocation cannot relieve. These windows hold 36\,\% of the observed
+which a block allocation cannot relieve. The time windows of the three peaks hold
+36\,\% of the observed
 minutes above the corridor, but this share is not the share of the simulation error,
 and it does not change the limited validity of the model for the congestion at the
 blocks. How the terminal copes with such episodes remains of operational interest,
@@ -101,8 +104,8 @@ by the simulated turnaround time alone would have chosen a net that no truck can
 follow.
 
 Conformance metrics evaluate the control flow, not the resource mechanisms. The two
-strongest effects in the simulation, the self-count in the queue feature and the count
-of trucks at a block, could therefore only be found by validating the simulator
+implementation defects with the strongest effect on the simulation, the self-count in
+the queue feature and the count of trucks at a block, could therefore only be found by validating the simulator
 component by component. Once these mechanisms are extended, nets without parallel
 branches give nearly the same turnaround time (Section~\ref{sec:res_e4_nets}). The
 discovered control flow is a necessary basis of the simulation, but not the source of
@@ -123,8 +126,8 @@ already cover the frequent behaviour and respect the domain rules.
 
 For model selection in simulation studies, this suggests an order. First the coverage
 of the frequent behaviour, then the domain rules and precision, then a check of how
-the net expresses its decisions, and finally a validation layer by layer in the
-simulator itself. This agrees with calls for validation procedures that draw on
+the net expresses its decisions, and finally a validation component by component in
+the simulator itself. This agrees with calls for validation procedures that draw on
 simulation methodology rather than on conformance measures alone
 \cite{Sulis2026SimulationReview}, and with the critique of precision measures
 \cite{Tax2018Imprecisions} and of log-similarity evaluation
@@ -135,34 +138,41 @@ the simulation, not how often they do.
 \section{Data-Aware Simulation in a Physical Logistics Process}
 \label{sec:disc_transfer}
 
-\paragraph{What transfers.} Most of the algorithmic structure provided by ProSiT transferred without change. The routing
-trees split on the case attributes and reproduce the stop structure, and 98.7\,\% of
-the simulated visits have their planned number of stops even without the guard
-(Section~\ref{sec:res_baseline}). The waiting and execution trees use plausible
-features such as the queue, the workload, the hour and reefer containers. The
-white-box form was a precondition for the mechanism audit, because every finding of
-E4 started from a tree that could be read.
+\paragraph{What transfers.} The data-aware parts of ProSiT carry the model. The
+routing trees condition on the case attributes of the planned visit and reproduce the
+stop structure, so that 98.7\,\% of the simulated visits have their planned number of
+stops even without the guard (Section~\ref{sec:res_baseline}), and the stop guard is
+itself a condition on the data of the case. The waiting-time trees condition on the
+state of a block, its queue and its workload, which a simulation with one distribution
+per activity could not express, and this dependence lets the waiting grow with the
+load once the features are computed for a block with three lanes. The problems found
+in E4 lie in how these data-aware features are computed, not in the idea of
+conditioning on them. The white-box form was a precondition for finding them, because
+every finding of E4 started from a tree that could be read.
 
 \paragraph{What does not transfer directly.} The findings of E4 are of four
 kinds. The first three are causes of the discrepancies named in
 Section~\ref{sec:res_rq2}. The fourth cause named there, the change between the
-periods, belongs to this data set, and in its place a limit appears that concerns
+training and the test period, belongs to this data set, and in its place a limit appears that concerns
 every setting, the validity under an intervention.
 \begin{itemize}
-\item \textbf{Implementation.} The queue feature counts the stop itself in training
-but not in the simulation, and the count of stops in progress is too low for 14 to
-15\,\% of the RMG stops. These defects can be are ProSiT specific and are not dominant
-about the method. Version 1.0.5 removes the self-count \cite{ProSiTRepository}, but
-on its own this leaves the turnaround time without a response to load
+\item \textbf{Implementation.} The queue feature counts the stop itself in the
+training data but not in the simulation, and the count of stops in progress is too low for 14 to
+15\,\% of the RMG stops. These defects are specific to the implementation of ProSiT
+and say little about the method itself. Version 1.0.5 removes the self-count
+\cite{ProSiTRepository}. On its own, this correction removes the concentration on one
+block, but the visits stay too short, the waiting and the stop durations do not grow
+with the load of a block, and up to seven trucks are at a block at once
 (Section~\ref{sec:res_e4_loo}).
 \item \textbf{Resource semantics.} The waiting is measured from a completely free
-block, the capacity is checked when a stop becomes possible, a full block makes a
-stop wait for the stop booked last, and the service time has no load feature. These
+block, the capacity is checked when a stop becomes possible, a stop that finds the
+block full waits until the stop booked last has ended, and the service time has no
+load feature. These
 choices fit a resource that works through its bookings one after another, not a
-block with three lanes. They match the known risks of business process simulation,
-the neglected context and the working speed that depends on the workload
+block with three lanes. They match known risks of business process simulation, such as
+ignoring the context of a case and a working speed that depends on the workload
 \cite{Aalst2015}, and the gap for queues and resources that Sulis et al.\ find
-\cite{Sulis2026SimulationReview}. Queue mining asks these questions from the start
+\cite{Sulis2026SimulationReview}. Queue mining considers such questions from the outset
 \cite{Senderovich2015QueueMining}.
 \item \textbf{Data.} The log does not record the use of the cranes, their competition
 with the waterside and the rail, or the waiting for a lane within the recorded stop.
@@ -174,9 +184,10 @@ allocation changes cannot be checked with these data.
 \paragraph{What had to be added.} The simulation model keeps learned everything that
 the log can express and adds what it cannot (Table~\ref{tab:sim_adaptations}). The
 number of lanes, the domain rules and the decision point of the allocation come from
-the terminal. The waiting target, the load feature and the exact count change how
-the training data are computed, while the trees are still learned with ProSiT's own
-functions, settings and random state. The values of the predictive parameters are
+the terminal. The waiting target and the load feature change how the training data
+are computed, and the exact count changes how the simulator counts the trucks at a
+block, while the trees are still learned with ProSiT's own functions, settings and
+random state. The values of the predictive parameters are
 therefore learned, and only their meaning was chosen to match the physical process.
 This is the split that data-driven simulation in manufacturing uses, where the
 structure is discovered and buffers and capacities are added
@@ -231,8 +242,9 @@ discovery sees and the simulation learns (Section~\ref{sec:cleaning_population})
 \paragraph{The KPI.} The corridor applies to the mean turnaround time of the trucks
 that leave in an hour (Section~\ref{sec:prob_statement}), and only hours with at least
 20 trucks count. Without this minimum, the shares of hours above 35 minutes change by
-at most 2.4 percentage points, but the lowest weekly rank correlation of the test
-period rises to 0.54, which the final configuration would miss. The approach mixes
+at most 2.4 percentage points, but the threshold for the rank correlation, the lowest
+weekly value of the test period, would rise from 0.49 to 0.54, which the final
+configuration would miss. The approach mixes
 driving and waiting, timestamps are floored to the minute, and the validity of the
 model is evaluated for the turnaround time and its parts only, not for the use of
 cranes or lanes.

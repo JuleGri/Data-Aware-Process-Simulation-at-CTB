@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  20 NOV 2026 01:13
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  20 NOV 2026 01:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -3318,24 +3318,21 @@ File: figures/simulation_model/sim_kpi_gap.pdf Graphic file (type pdf)
 (tables/rq2_acceptance.tex) [86]
 File: figures/simulation_model/sim_hourly_ttt.png Graphic file (type bmp)
 <figures/simulation_model/sim_hourly_ttt.png>
-File: figures/simulation_model/sim_load_profiles.png Graphic file (type bmp)
-<figures/simulation_model/sim_load_profiles.png>
 
 Underfull \vbox (badness 3058) has occurred while \output is active []
 
  [87]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+File: figures/simulation_model/sim_load_profiles.png Graphic file (type bmp)
+<figures/simulation_model/sim_load_profiles.png>
 
- [88]
-(tables/rq2_depth5.tex) [89]
-Underfull \vbox (badness 2359) has occurred while \output is active []
-
- [90]
-[91]
+[88] (tables/rq2_depth5.tex) [89] [90] [91]
 File: figures/simulation_model/e5_tradeoff.pdf Graphic file (type pdf)
 <use figures/simulation_model/e5_tradeoff.pdf>
- [92] (tables/rq3_grid_mechanism.tex) [93] (tables/rq3_policy_contrasts.tex) [9
-4] [95]) [96] [97]
+ [92] (tables/rq3_grid_mechanism.tex) [93]
+Underfull \vbox (badness 1824) has occurred while \output is active []
+
+ [94]
+(tables/rq3_policy_contrasts.tex) [95]) [96] [97]
 \openout2 = `chapters/8.discussion.aux'.
 
  (chapters/8.discussion.tex
@@ -3346,30 +3343,26 @@ Chapter 7.
 
 
 ]
-Overfull \hbox (8.9517pt too wide) in paragraph at lines 50--58
+Overfull \hbox (8.9517pt too wide) in paragraph at lines 52--60
 [] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Model error and drift.[] \TU/EBGar
 amond12-Regular.otf(2)/m/n/12 Part of the gap between the simulated and the obs
 erved turnaround
  []
 
 [99]
-Overfull \hbox (2.55568pt too wide) in paragraph at lines 75--81
+Overfull \hbox (2.55568pt too wide) in paragraph at lines 78--84
 [] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Conditions of the result.[] \TU/EB
 Garamond12-Regular.otf(2)/m/n/12 The result is conditional on the replayed arri
 vals, case attributes
  []
 
 [100]
-Overfull \hbox (11.43027pt too wide) in paragraph at lines 135--135
+Overfull \hbox (11.43027pt too wide) in paragraph at lines 138--138
 |[]\TU/EBGaramond12-Regular.otf(2)/m/sc/17.28 Data-Aware Simulation in a Physic
 al Logistics Pro-
  []
 
-[101] [102] [103]
-Underfull \vbox (badness 1728) has occurred while \output is active []
-
- [104])
-[105] [106]
+[101] [102] [103] [104] [105]) [106]
 \openout2 = `chapters/9.conclusion.aux'.
 
  (chapters/9.conclusion.tex
@@ -3400,29 +3393,25 @@ onent-
 
  (appendices/observed_behaviour.tex
 Appendix A.
-
-Underfull \vbox (badness 1565) has occurred while \output is active []
-
- [111
+[111
 
 
 
 
-]
-(tables/obs_descriptives.tex) [112]
+] (tables/obs_descriptives.tex) [112]
 File: figures/observed/block_occupancy.png Graphic file (type bmp)
 <figures/observed/block_occupancy.png>
 File: figures/observed/ttt_corridor.pdf Graphic file (type pdf)
 <use figures/observed/ttt_corridor.pdf>
- [113] [114] (tables/kpi_long_visits.tex
+ [113] [114]
+(tables/kpi_long_visits.tex
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
 (Font)              scaled to size 10.95pt on input line 8.
-))
-[115]
+)) [115]
 \openout2 = `appendices/discovery_results.aux'.
 
  (appendices/discovery_results.tex
@@ -3565,15 +3554,15 @@ L3 programming layer <2025-12-24>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: C393E18903B0949EBBA714BADC2630CF;14999.
+(rerunfilecheck)             Checksum: 44A460BFAF39C28E61FFBF5C79249A51;14994.
  ) 
 Here is how much of TeX's memory you used:
  71756 strings out of 402986
  1794776 string characters out of 5448710
- 2622614 words of memory out of 5000000
+ 2622608 words of memory out of 5000000
  99425 multiletter control sequences out of 15000+600000
  636685 words of font info for 162 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  103i,14n,131p,1245b,2961s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on dissertation.xdv (170 pages, 3696232 bytes).
+Output written on dissertation.xdv (170 pages, 3710924 bytes).
