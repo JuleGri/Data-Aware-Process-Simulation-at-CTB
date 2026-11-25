@@ -12,7 +12,7 @@
 This appendix documents the final simulation model in one place. It gives the
 settings and inputs of the discovery, the parameters of a ProSiT model, every
 learned model, the capacities and calendars, and the discovered nets.
-Chapter~\ref{chp:process_discovery_methodology} shows and interprets the most
+Chapter~\ref{chp:process_discovery_methodology} shows and interpretets the most
 important trees, and Section~\ref{sec:res_inspection} discusses whether their
 features and targets are plausible for the terminal.
 
@@ -36,8 +36,8 @@ Simulation framework & ProSiT 1.0.4 (\texttt{prosit-pm}) \\
 Environment & Python 3.11, PM4Py 2.7.22.3, scikit-learn 1.8.0, SciPy 1.17.0, pandas 2.3.3, NumPy 1.26.4 \\
 \multicolumn{2}{l}{\textit{Inputs}} \\
 Control-flow model & HM 0.7 as exported from ProM, with initial and final marking (22 places, 45 transitions, 34 of them silent) \\
-Training log & 59,139 visits, 2 March to 11 April 2026, SHA-256 \texttt{58932826\ldots 6cb94b} \\
-Test log & 32,014 visits, 13 to 30 April 2026, SHA-256 \texttt{dee4cb78\ldots 4cda30} \\
+Training log & 59,139 visits, 2 March to 11 April 2026, \\
+Test log & 32,014 visits, 13 to 30 April 2026 \\
 Case attributes & flow type, containers, planned stops, deliveries, receives, hazardous, reefer, full ratio, visit complexity \\
 \multicolumn{2}{l}{\textit{Discovery}} \\
 \texttt{max\_depth\_tree} & 3 (default 5), depth chosen between 1 and 3 \\
