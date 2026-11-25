@@ -18,33 +18,33 @@
 \contentsline {table}{\numberline {6.1}{\ignorespaces \rev {Two phases} of E1 for the sound nets on the training log.}}{73}{table.caption.31}%
 \contentsline {table}{\numberline {6.2}{\ignorespaces Simulated visits of E3 against the training log.}}{78}{table.caption.34}%
 \contentsline {table}{\numberline {6.3}{\ignorespaces Behaviour of the base model, its cause and the extension that addresses it.}}{85}{table.caption.36}%
-\contentsline {table}{\numberline {6.4}{\ignorespaces Response of the simulated visits to load, step by step.}}{85}{table.caption.37}%
+\contentsline {table}{\numberline {6.4}{\ignorespaces Response of the simulated visits to load, step by step.}}{86}{table.caption.37}%
 \contentsline {table}{\numberline {6.5}{\ignorespaces Acceptance criteria for the final configuration.}}{88}{table.caption.39}%
 \contentsline {table}{\numberline {6.6}{\ignorespaces Final configuration with tree depth 3 and 5.}}{91}{table.caption.42}%
 \contentsline {table}{\numberline {6.7}{\ignorespaces Mechanism of the allocation rule and change of the turnaround time by group of visits.}}{95}{table.caption.44}%
-\contentsline {table}{\numberline {6.8}{\ignorespaces Direct comparison of the allocation rules.}}{96}{table.caption.45}%
+\contentsline {table}{\numberline {6.8}{\ignorespaces Direct comparison of the allocation rules.}}{97}{table.caption.45}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {A.1}{\ignorespaces Operational data sources.}}{111}{table.caption.46}%
-\contentsline {table}{\numberline {A.2}{\ignorespaces Visit structure and turnaround time (TTT) of the event log.}}{113}{table.caption.47}%
-\contentsline {table}{\numberline {A.3}{\ignorespaces Visits below, in and above the corridor of 25 to 35 minutes, observed logs.}}{115}{table.caption.50}%
+\contentsline {table}{\numberline {A.1}{\ignorespaces Operational data sources.}}{112}{table.caption.46}%
+\contentsline {table}{\numberline {A.2}{\ignorespaces Visit structure and turnaround time (TTT) of the event log.}}{114}{table.caption.47}%
+\contentsline {table}{\numberline {A.3}{\ignorespaces Visits below, in and above the corridor of 25 to 35 minutes, observed logs.}}{116}{table.caption.50}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {B.1}{\ignorespaces Discovery configurations of E1 in ProM Lite 1.4.}}{117}{table.caption.51}%
-\contentsline {table}{\numberline {B.2}{\ignorespaces Conformance of all discovered nets on the training and the test log.}}{118}{table.caption.52}%
-\contentsline {table}{\numberline {B.3}{\ignorespaces Rule audit of the three admissible nets as discovered.}}{119}{table.caption.53}%
+\contentsline {table}{\numberline {B.1}{\ignorespaces Discovery configurations of E1 in ProM Lite 1.4.}}{118}{table.caption.51}%
+\contentsline {table}{\numberline {B.2}{\ignorespaces Conformance of all discovered nets on the training and the test log.}}{119}{table.caption.52}%
+\contentsline {table}{\numberline {B.3}{\ignorespaces Rule audit of the three admissible nets as discovered.}}{120}{table.caption.53}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {C.1}{\ignorespaces Measures of operational validity in E4.}}{122}{table.caption.54}%
-\contentsline {table}{\numberline {C.2}{\ignorespaces Configurations of E4.}}{123}{table.caption.55}%
-\contentsline {table}{\numberline {C.3}{\ignorespaces Error attribution along the path of the truck (E4a to E4d) against the test log.}}{125}{table.caption.56}%
-\contentsline {table}{\numberline {C.4}{\ignorespaces Effect of the allocation rule on the hourly corridor, by eligible blocks and demand.}}{127}{table.caption.57}%
-\contentsline {table}{\numberline {C.5}{\ignorespaces Effect of the allocation rule per visit, by eligible blocks and demand.}}{128}{table.caption.58}%
-\contentsline {table}{\numberline {C.6}{\ignorespaces The allocation rule with $\pm 2$ under the robustness runs.}}{128}{table.caption.59}%
+\contentsline {table}{\numberline {C.1}{\ignorespaces Measures of operational validity in E4.}}{123}{table.caption.54}%
+\contentsline {table}{\numberline {C.2}{\ignorespaces Configurations of E4.}}{124}{table.caption.55}%
+\contentsline {table}{\numberline {C.3}{\ignorespaces Error attribution along the path of the truck (E4a to E4d) against the test log.}}{126}{table.caption.56}%
+\contentsline {table}{\numberline {C.4}{\ignorespaces Effect of the allocation rule on the hourly corridor, by eligible blocks and demand.}}{128}{table.caption.57}%
+\contentsline {table}{\numberline {C.5}{\ignorespaces Effect of the allocation rule per visit, by eligible blocks and demand.}}{129}{table.caption.58}%
+\contentsline {table}{\numberline {C.6}{\ignorespaces The allocation rule with $\pm 2$ under the robustness runs.}}{129}{table.caption.59}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {D.1}{\ignorespaces Settings, versions and inputs of the simulation model.}}{130}{table.caption.60}%
-\contentsline {table}{\numberline {D.2}{\ignorespaces Parameters of a ProSiT simulation model (version 1.0.4).}}{131}{table.caption.61}%
-\contentsline {table}{\numberline {D.3}{\ignorespaces Every learned model of the simulation model.}}{133}{table.D.3}%
-\contentsline {table}{\numberline {D.4}{\ignorespaces Capacities and calendars.}}{141}{table.caption.64}%
+\contentsline {table}{\numberline {D.1}{\ignorespaces Settings, versions and inputs of the simulation model.}}{131}{table.caption.60}%
+\contentsline {table}{\numberline {D.2}{\ignorespaces Parameters of a ProSiT simulation model (version 1.0.4).}}{132}{table.caption.61}%
+\contentsline {table}{\numberline {D.3}{\ignorespaces Every learned model of the simulation model.}}{134}{table.D.3}%
+\contentsline {table}{\numberline {D.4}{\ignorespaces Capacities and calendars.}}{142}{table.caption.64}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {E.1}{\ignorespaces Implementation of the extensions.}}{145}{table.caption.66}%
-\contentsline {table}{\numberline {E.2}{\ignorespaces Scripts behind the tables and figures.}}{146}{table.caption.67}%
+\contentsline {table}{\numberline {E.1}{\ignorespaces Implementation of the extensions.}}{146}{table.caption.66}%
+\contentsline {table}{\numberline {E.2}{\ignorespaces Scripts behind the tables and figures.}}{147}{table.caption.67}%

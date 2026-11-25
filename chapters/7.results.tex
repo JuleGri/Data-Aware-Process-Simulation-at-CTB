@@ -16,8 +16,8 @@ given in Appendix~\ref{app:sim_results}.
 \label{sec:res_part_controlflow}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Of the 19 discovered nets, \rev{six sound nets lie on the front of fitness,
-precision and generalisation, and three of these} accept every frequent sequence, IM
+Of the 19 discovered nets, \rev{five sound nets lie on the front of fitness and
+precision, and three sound nets} accept every frequent sequence, IM
 0.0, HM 0.7 and ILP 1.00. All nets that replay most visits are highly precise,
 because the visits are short and repetitive. The other sound nets reject frequent
 sequences, the filtered Inductive Miner nets among them the most frequent
@@ -83,13 +83,15 @@ the 16 new test sequences, ILP 1.00 accepts all, IM 0.0 13, and the Heuristics n
 at most 2. On the test log, the precision of the nets that replay more than 90\,\% of
 the visits changes by at most 0.015.
 
-\rev{Six sound nets lie on the front of the three measures
-(Table~\ref{tab:rq1_e1_levels}). IM 0.0 and ILP 1.00 have the highest fitness and
-generalisation, and HM 0.7, HM 0.8 and HM 0.9 an almost perfect precision. HM 0.9 /
+\rev{Five sound nets lie on the front of fitness and precision
+(Table~\ref{tab:rq1_e1_levels}). IM 0.0 has the highest fitness, and HM 0.7, HM 0.8
+and HM 0.9 combine an almost perfect precision with a fitness above 0.997. HM 0.9 /
 f0.1 reaches the front only through a precision of 1.000 against 0.9996, while it
-rejects 28\,\% of the visits. Which of the six is best depends on how fitness,
-precision and generalisation are weighted, so phase 1 alone does not choose among
-them.}
+rejects 28\,\% of the visits. ILP 1.00 has the same fitness as IM 0.0 at a lower
+precision and lies off the front, although it accepts all 16 new test sequences.
+Generalisation is reported, but it is not part of the front, because it is measured
+on the test log. Which net on the front is best depends on how fitness and precision
+are weighted, so phase 1 alone does not choose among them.}
 
 \begin{figure}[htbp]
 \centering
@@ -131,10 +133,12 @@ is 0.991 to 0.994}.
 \label{sec:res_e1_gates}
 The soundness criterion removes the three Alpha nets. The coverage criterion is met
 by IM 0.0, HM 0.7 and ILP 1.00. ILP 0.95, HM 0.8 and HM 0.9 fail it by one to three
-frequent sequences. \rev{All three admissible nets lie on the front, so applying
-phase 2 only to the front would give the same result. Of the six nets on the front,
-the coverage criterion removes HM 0.8, HM 0.9 and HM 0.9 / f0.1, and the rule audit
-of E2 removes IM 0.0 and ILP 1.00 (Section~\ref{sec:res_rules}).} With a coverage threshold of 0.5 instead of 0.1\,\%, the admissible set stays the
+frequent sequences. \rev{Two of the three admissible nets, IM 0.0 and HM 0.7, lie
+on the front. ILP 1.00 is admissible but lies off the front, because IM 0.0 reaches
+the same fitness at a higher precision. Of the five nets on the front, the coverage
+criterion removes HM 0.8, HM 0.9 and HM 0.9 / f0.1, and the rule audit of E2 removes
+IM 0.0, as it removes ILP 1.00 (Section~\ref{sec:res_rules}). Applying phase 2 only
+to the front would therefore select the same net.} With a coverage threshold of 0.5 instead of 0.1\,\%, the admissible set stays the
 same. With 1\,\%, HM 0.8, HM 0.9 and ILP 0.95 would be admitted as well. If the kept sequences
 must cover 99.5\,\% of the visits, only IM 0.0 and ILP 1.00 remain.
 
@@ -169,9 +173,10 @@ receive at the same area (for example
 at once. None of these sequences occurs in the training log.
 
 HM 0.7 is therefore the only net that meets the rule criterion. It is selected
-because it is the only admissible net, not because of a ranking among several. Its
-precision, the highest of the three (0.998, against 0.842 and 0.773), corroborates
-the choice. No repair of the net is needed for it to comply with the domain rules,
+because it is the only \rev{net that meets all three criteria, soundness, coverage and
+the domain rules,} not because of a ranking among several. Its
+precision, the highest of the three \rev{admissible nets} (0.998, against 0.842 and
+0.773), corroborates the choice. No repair of the net is needed for it to comply with the domain rules,
 and it is used exactly as discovered. The planned number of stops is the one rule
 that the net cannot express. E3 shows how the guard enforces it.
 
@@ -183,8 +188,8 @@ net, HM 0.7 is not the simplest of the three. It has 22 places and 45 transition
 their size by rejecting frequent behaviour. ILP 0.00, for example, has six places and
 fits 40.8\,\% of the training visits. The smallest admissible net, ILP 1.00, is small
 because a single state for all stops allows every sequence of stops, including
-visits that no truck can perform. A selection by simplicity would therefore have
-given up coverage or the domain rules. The silent transitions of HM 0.7 come from the
+visits that no truck can perform. \rev{Within the discovery grid, a} selection by
+simplicity would therefore have given up coverage or the domain rules. The silent transitions of HM 0.7 come from the
 conversion of the causal net of the Heuristics Miner into a Petri net, in which the
 splits and joins become silent transitions. They do not change the language of the
 net. The same language encoded as a state machine without silent transitions

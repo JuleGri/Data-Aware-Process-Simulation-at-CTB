@@ -174,7 +174,8 @@ intelligence team during the development of the model in summer 2026, and from t
 six years that the author worked at the terminal. The domain rules, the three lanes,
 \rev{that all sequences of the event log are real operational variants,}
 the assignment of the yard position and the definition of the corridor were confirmed
-by the terminal.
+by the terminal. \rev{The results were discussed with the terminal in an interview
+after the experiments (Section~\ref{sec:disc_stakeholders}).}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Control-Flow Discovery (E1)}
@@ -287,14 +288,16 @@ follows. The same plugin settings are used for every net (``Lazy Invisibles'' an
 replay IM 0.0.} A non-fitting visit counts only up to its first deviation. Precision
 ranks the admissible nets in E2.
 \item \textbf{Generalisation.} The number of new test sequences, of 16, that the
-net accepts, from the same replay on the test log. Reported only. Token-based
+net accepts, from the same replay on the test log. Reported only\rev{, because it is
+the only measure of E1 that uses the test log}. Token-based
 generalisation \cite{Buijs2014Quality} is not used, because it depends on the
 representation of the net.
 \item \rev{\textbf{Front.} A sound net lies on the front if no other sound net is at
-least as good in fitness, precision and generalisation and better in one of them.
-The nets on the front are the best trade-offs between the three measures. The
-measures alone do not choose among them, because which of them is best depends on
-how the three measures are weighted.}
+least as good in fitness and precision on the training log and better in one of
+them. The nets on the front are the best trade-offs between the two measures.
+Generalisation is not part of the front, because it is measured on the test log.
+The measures alone do not choose among the nets on the front, because which of them
+is best depends on how fitness and precision are weighted.}
 \item \textbf{Simplicity.} The size of the net, measured by its places and its
 visible and silent transitions. Reported only, because a net that is small but
 rejects frequent sequences or allows visits that no truck can perform is of little
@@ -358,6 +361,8 @@ serves as a reference only. \rev{Phase 2 is applied to every net of the grid, an
 the results report which admissible nets lie on the front.}
 The admissible nets go to E2, \rev{which adds the rule criterion. Among the nets
 that meet all three criteria, the most precise one is selected.}
+\rev{Admissibility is a screening criterion for the control flow. It does not
+establish the validity of the simulation, which E3 and E4 test.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Rule Audit (E2)}

@@ -44,6 +44,11 @@ With high demand and a wide choice of blocks, part of the waiting moves to the t
 at the receiving blocks. A pilot at the terminal is needed to establish whether these simulated benefits occur
 in practice.
 
+\rev{The objective of the thesis is thus reached with a clear limit. The simulation was
+developed and evaluated against its intended use, and the evaluation determines what
+it can support. It supports conclusions about how a load-aware block allocation acts,
+but not about the size of its effect at the terminal.}
+
 \section{Contributions}
 \label{sec:concl_contributions}
 
@@ -60,8 +65,10 @@ The results hold for the extended simulator, not for ProSiT as it is, and for a
 retrospective evaluation in which the observed arrivals and blocks are replayed. The
 event log records the time a truck spends at a block, not the use of its lanes and
 cranes, so waiting and handling cannot be fully separated. The domain knowledge was
-confirmed within the project and the plausibility of the results was assessed by the
-author, so neither is an independent validation (Section~\ref{sec:disc_threats}).
+confirmed within the project\rev{, and the terminal judged the results plausible from
+its operational experience without comparing them with its own data}, so neither is
+an independent validation (Section\rev{s}~\ref{sec:disc_threats}\rev{
+and~\ref{sec:disc_stakeholders}}).
 
 \section{Future Work}
 \label{sec:future_work}
@@ -73,7 +80,8 @@ defects. Second, events at the level of the equipment, such as the start and the
 the crane handling and the lane a truck uses, would separate the waiting from the
 handling. Third, a prospective use needs an arrival model that reproduces the busy
 hours of particular days, not only the average week, and the block of each container
-from the yard plan instead of the replay (Section~\ref{sec:res_e4_depth}).
+from the yard plan instead of the replay (Section~\ref{sec:res_e4_depth}). \rev{The terminal also
+named the drivers of the peak days as a question for such a model.}
 Disruptions outside the terminal, such as traffic congestion, could then be added as
 scenarios. Fourth, a pilot of the allocation rule at the terminal would show whether
 the simulated direction holds when the allocation really changes and what a move

@@ -63,7 +63,9 @@ blocks. The three highest peaks of the test period occur at the usual number of
 arrivals, and their additional time lies in the exit after the last stop
 (Section~\ref{sec:res_e4_remaining}). In discussions with the terminal during the
 development of the model, such peaks were attributed to traffic congestion outside the
-terminal, which the terminal cannot influence. The normal arrivals and the long exits
+terminal, which the terminal cannot influence. \rev{When the results were discussed,
+the terminal confirmed this explanation for long exits during the day, in particular
+in the rush hours, when traffic jams outside the terminal back up to the exit gate.} The normal arrivals and the long exits
 are consistent with this explanation, but they do not prove an external cause.
 
 This pattern suggests that part of the extreme peaks has causes outside the handling
@@ -126,8 +128,9 @@ the size of the net is a criterion of its own, but one to weigh only among nets 
 already cover the frequent behaviour and respect the domain rules.
 
 For model selection in simulation studies, this suggests an order. \rev{The usual
-trade-off of fitness, precision and generalisation narrows the candidates to the nets
-on the front, but it does not choose among them. The choice then follows} the coverage
+trade-off of fitness and precision shows which nets are the best compromises, but it
+does not choose among them, and an admissible net need not be one of them. The choice
+then follows} the coverage
 of the frequent behaviour, then the domain rules and precision, then a check of how
 the net expresses its decisions, and finally a validation component by component in
 the simulator itself. This agrees with calls for validation procedures that draw on
@@ -232,7 +235,9 @@ block for 5.6\,\% of the training stops, which may be a truck waiting for a lane
 delayed completion record. The three lanes of the model are therefore an
 approximation of the physical limit. Part of the waiting in the recorded stops stays
 in the learned service time, which may be one reason why the simulated stops grow too
-little at the busiest blocks. A truck that had to queue for a lane also loses the
+little at the busiest blocks. \rev{The terminal named a further possible cause, other
+landside requests that the cranes serve between the trucks
+(Section~\ref{sec:disc_stakeholders}).} A truck that had to queue for a lane also loses the
 learned remainder of its waiting, which may contribute to the approach at a full
 block being shorter in the simulation than observed.
 
@@ -292,7 +297,7 @@ uncertain. The what-if analysis assumes that the learned associations between lo
 waiting and service hold when the allocation changes, which the data cannot confirm
 \cite{Vinci2026prosit}.
 
-\section{Domain Knowledge}
+\section{Domain Knowledge \rev{and Assessment of the Results}}
 \label{sec:disc_stakeholders}
 
 Knowledge that the event log does not contain entered the study from two sources.
@@ -310,11 +315,55 @@ turnaround time of the trucks that leave in an hour and pointed out that below t
 corridor capacity can be shifted from the trucks to the waterside. The results of the
 simulation were not part of this confirmation.
 
-The plausibility of the results was assessed by the author. That moves within one or
+\begin{revision}
+The results were discussed with the terminal in an interview along a prepared set of
+questions. The terminal found the KPI suitable. The corridor is a management target
+that balances the efficiency of the terminal with the satisfaction of its customers.
+Operations usually report by shift or by day, but the terminal considered the hourly
+breakdown appropriate for the analysis. It judged the coverage threshold of 0.1\,\% a
+reasonable cut-off, because the visits at the RMG blocks, including the visits to two
+blocks, are well represented among the 17 required sequences. It noted that every
+recorded sequence occurred in reality, although not every one follows an optimal
+routing. It found the net not intuitive at first sight, but saw that it permits every
+activity and, through its loops, the visits to two blocks that drive the queueing at
+the blocks. It found the behaviour of the final configuration plausible, in the use of
+the blocks, their capacity, the relation between arrivals and turnaround time and the
+level of the turnaround time.
+
+For the weak rise of the stop duration with the load of a block, the terminal named a
+possible cause that the event log does not record. Of the three cranes of a block, one
+serves only the waterside, one only the landside, and a larger one supports either
+side. The landside handling has been observed to serve two trucks and then another
+landside request, for example from the rail, so as to balance the landside requests.
+This could explain the longer stops when two other trucks are at the block. The
+terminal considered this pattern important, because the allocation rule moves trucks
+from the queue in front of a block into its lanes, where this slowdown acts.
+
+On the allocation rule, the terminal noted that the yard position is assigned at Gate
+In by the berth of the vessel and the fill of the blocks, not by the trucks that are
+heading to a block, and that a load-aware assignment would need an additional
+calculation of the current and planned load of each block. It found it plausible that
+spreading the trucks over the blocks reduces the queueing, and it saw a benefit for
+the traffic on the terminal already in moving the queue from the road in front of a
+full block into the lanes of the blocks, where the trucks no longer obstruct other
+landside traffic. It judged even the widest rule operationally acceptable, because the
+storage planning spreads the containers of a vessel over several blocks anyway, so
+that the loading of a vessel does not depend on a single block. On the trustworthiness
+of the results, the terminal considered the direction of the effect more relevant than
+its size, which has no direct economic impact. It expected that the weak slowdown of
+the stops could make the shift of hours into the corridor look more favourable than it
+would be at the terminal, which agrees with the limits that the evaluation sets
+(Section~\ref{sec:disc_adequacy}).
+\end{revision}
+
+\rev{This assessment is a face validation. The terminal judged the results from its
+operational experience and did not compare them with its own data.} The plausibility
+of the results was \rev{also} assessed by the author. That moves within one or
 two blocks need no rehandling and no long additional driving is an operational
 assessment as well, not a measured cost. None of this knowledge is independent of the
-study, because the confirmation came from within the project and the assessment from
-the author. An assumption that the modeller puts into the model cannot be confirmed by
+study, because the confirmation \rev{and the assessment of the results came from
+within the project, and the operational knowledge of the author informed the model as
+well as its assessment}. An assumption that the modeller puts into the model cannot be confirmed by
 the same model. The records can only show that they do not contradict it, as they do
 for rules 1 to 5.
 

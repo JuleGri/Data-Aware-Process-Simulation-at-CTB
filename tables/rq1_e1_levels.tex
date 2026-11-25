@@ -1,6 +1,7 @@
 % Revised 23 Nov 2026 (blue): alignment-based fitness and the Pareto front added to phase 1, the share of fitting
 % visits moved to phase 2. Fitness and precision from analysis/reproducible_e1_20261110/prom_etc_all_nets.csv,
 % front from process_discovery/plot_e1_alignment.py (unrounded values).
+% 25 Nov 2026: front on training fitness and precision only, generalisation (test log) reported; ILP 1.00 off the front.
 \begin{table}[htbp]
 \centering
 \footnotesize
@@ -26,12 +27,12 @@ ILP 0.25 & \rev{0.814} & 1.000 & 0 & \rev{no} & 40.82 & 16 & 65 & 59.66 & 62.94 
 ILP 0.55 & \rev{0.894} & 1.000 & 0 & \rev{no} & 63.85 & 15 & 65 & 40.90 & 50.22 & 100.00 & no \\
 ILP 0.75 & \rev{0.956} & 0.855 & 2 & \rev{no} & 78.02 & 9 & 52 & 26.22 & 32.93 & 2.52 & no \\
 ILP 0.95 & \rev{0.998} & 0.838 & 10 & \rev{no} & 99.03 & 1 & 6 & 1.56 & 2.79 & 0.00 & no \\
-ILP 1.00 & \rev{1.000} & 0.773 & 16 & \rev{yes} & 100.00 & 0 & 0 & 0.00 & 0.00 & 0.00 & yes \\
+ILP 1.00 & \rev{1.000} & 0.773 & 16 & \rev{no} & 100.00 & 0 & 0 & 0.00 & 0.00 & 0.00 & yes \\
 \midrule
 Prefix tree & \rev{1.000} & 1.000 & 0 & \rev{--} & 100.00 & 0 & 0 & 0.00 & 0.00 & 0.00 & yes \\
 \bottomrule
 \end{tabular}
-\par\smallskip{\footnotesize\raggedright The training log has 59,139 visits and 82 sequences. \rev{Phase 1 gives the alignment-based fitness averaged over the visits, the escaping-edges precision (ProM 6.15, Section~\ref{sec:exp_discovery_eval}) and the number of new test sequences accepted, of 16 (Gen.). Front marks the nets for which no other sound net is at least as good in all three measures and better in one, on unrounded values. Phase 2 gives the share of fitting visits,} the training sequences that the net rejects, above the coverage threshold (of 17) and below it (of 65), and the share of the truck-minutes (sum of the turnaround times), of the visits above the training P90 of 64 minutes and of the multi-block visits that the rejected visits make up. \rev{Cov.\ marks the nets that meet the coverage criterion, which requires} that a net accepts every sequence above the coverage threshold. \textsuperscript{a}\,ETConformance rejects 30 fitting visits of IM 0.0 (Section~\ref{sec:res_e1_level1}). The prefix tree is a reference, not a candidate.\par}
+\par\smallskip{\footnotesize\raggedright The training log has 59,139 visits and 82 sequences. \rev{Phase 1 gives the alignment-based fitness averaged over the visits, the escaping-edges precision (ProM 6.15, Section~\ref{sec:exp_discovery_eval}) and the number of new test sequences accepted, of 16 (Gen.). Front marks the nets for which no other sound net is at least as good in fitness and precision and better in one of them, on unrounded values. Gen.\ is measured on the test log and is not part of the front. Phase 2 gives the share of fitting visits,} the training sequences that the net rejects, above the coverage threshold (of 17) and below it (of 65), and the share of the truck-minutes (sum of the turnaround times), of the visits above the training P90 of 64 minutes and of the multi-block visits that the rejected visits make up. \rev{Cov.\ marks the nets that meet the coverage criterion, which requires} that a net accepts every sequence above the coverage threshold. \textsuperscript{a}\,ETConformance rejects 30 fitting visits of IM 0.0 (Section~\ref{sec:res_e1_level1}). The prefix tree is a reference, not a candidate.\par}
 \caption{\rev{Two phases} of E1 for the sound nets on the training log.}
 \label{tab:rq1_e1_levels}
 \end{table}
