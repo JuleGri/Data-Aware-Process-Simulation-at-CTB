@@ -9,27 +9,27 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Trucks per day and daily median turnaround time, days with at least 300 visits (training blue, test orange, Easter grey, corridor green).}}{43}{figure.caption.22}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Control flow of the simulation model, HM 0.7 as discovered in ProM (silent transitions as black bars).}}{62}{figure.caption.23}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Routing tree of the silent transition from Gate In to RMG receive.}}{63}{figure.caption.25}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Waiting-time tree of block T13.}}{64}{figure.caption.26}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Execution-time tree of RMG receives.}}{64}{figure.caption.27}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Control flow of the simulation model, HM 0.7 as discovered in ProM (silent transitions as black bars).}}{63}{figure.caption.23}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Routing tree of the silent transition from Gate In to RMG receive.}}{64}{figure.caption.25}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Waiting-time tree of block T13.}}{65}{figure.caption.26}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Execution-time tree of RMG receives.}}{65}{figure.caption.27}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Fitting visits and precision of the discovered nets on the training log, all nets (left) and the most precise and fitting ones (right), with the admissible and the selected nets marked.}}{74}{figure.caption.32}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Training sequences accepted by each sound candidate.}}{75}{figure.caption.33}%
-\contentsline {figure}{\numberline {6.3}{\ignorespaces Waiting-time target of ProSiT and observed delay at the RMG blocks, by the number of other stops in progress (training log).}}{82}{figure.caption.35}%
-\contentsline {figure}{\numberline {6.4}{\ignorespaces Mean turnaround time per Gate-Out hour, observed and simulated with the final configuration, training and test period (five seeds).}}{86}{figure.caption.38}%
-\contentsline {figure}{\numberline {6.5}{\ignorespaces Median turnaround time per Gate-In hour in the test period, observed and simulated (seed 42, supplementary diagnostic).}}{88}{figure.caption.40}%
-\contentsline {figure}{\numberline {6.6}{\ignorespaces Load profiles in the test period (solid) and the training period (dotted), observed and simulated.}}{88}{figure.caption.41}%
-\contentsline {figure}{\numberline {6.7}{\ignorespaces Effects of the allocation rules on three outcomes, by eligible blocks and demand (paired differences over ten seeds with 95\,\% $t$-intervals).}}{93}{figure.caption.43}%
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {A.1}{\ignorespaces Occupancy of the RMG blocks, recorded every four hours.}}{113}{figure.caption.48}%
-\contentsline {figure}{\numberline {A.2}{\ignorespaces Turnaround time per visit and the corridor (supplementary to the hourly KPI).}}{113}{figure.caption.49}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces \rev {Fitness and precision of the discovered nets on the training log, all nets (left) and the best trade-offs (right), with the nets on the front, the admissible nets and the selected net marked.}}}{75}{figure.caption.32}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Training sequences accepted by each sound candidate.}}{76}{figure.caption.33}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Waiting-time target of ProSiT and observed delay at the RMG blocks, by the number of other stops in progress (training log).}}{83}{figure.caption.35}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Mean turnaround time per Gate-Out hour, observed and simulated with the final configuration, training and test period (five seeds).}}{87}{figure.caption.38}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Median turnaround time per Gate-In hour in the test period, observed and simulated (seed 42, supplementary diagnostic).}}{89}{figure.caption.40}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Load profiles in the test period (solid) and the training period (dotted), observed and simulated.}}{89}{figure.caption.41}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Effects of the allocation rules on three outcomes, by eligible blocks and demand (paired differences over ten seeds with 95\,\% $t$-intervals).}}{94}{figure.caption.43}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {D.1}{\ignorespaces Arrival tree with the fitted distribution (line) and the values drawn by the simulator (bars) in each leaf.}}{131}{figure.caption.62}%
-\contentsline {figure}{\numberline {D.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{132}{figure.caption.63}%
-\contentsline {figure}{\numberline {D.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{140}{figure.caption.65}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Occupancy of the RMG blocks, recorded every four hours.}}{114}{figure.caption.48}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Turnaround time per visit and the corridor (supplementary to the hourly KPI).}}{114}{figure.caption.49}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {D.1}{\ignorespaces Arrival tree with the fitted distribution (line) and the values drawn by the simulator (bars) in each leaf.}}{132}{figure.caption.62}%
+\contentsline {figure}{\numberline {D.2}{\ignorespaces First stop of a visit by flow type, observed and under the learned routing.}}{133}{figure.caption.63}%
+\contentsline {figure}{\numberline {D.3}{\ignorespaces IM 0.0 as discovered (28 places, 11 visible and 27 silent transitions).}}{141}{figure.caption.65}%
 \addvspace {10\p@ }

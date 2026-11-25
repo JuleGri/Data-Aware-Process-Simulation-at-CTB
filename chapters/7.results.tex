@@ -16,7 +16,8 @@ given in Appendix~\ref{app:sim_results}.
 \label{sec:res_part_controlflow}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Of the 19 discovered nets, three are sound and accept every frequent sequence, IM
+Of the 19 discovered nets, \rev{six sound nets lie on the front of fitness,
+precision and generalisation, and three of these} accept every frequent sequence, IM
 0.0, HM 0.7 and ILP 1.00. All nets that replay most visits are highly precise,
 because the visits are short and repetitive. The other sound nets reject frequent
 sequences, the filtered Inductive Miner nets among them the most frequent
@@ -43,12 +44,12 @@ The 19 nets of the discovery grid (Table~\ref{tab:exp_grid}) were evaluated on t
 training log (59,139 visits, 82 sequences) and the test log (32,014 visits, 75
 sequences, 16 of them new). The prefix tree, which accepts exactly the training
 sequences, serves as a reference for what memorising the log achieves.
-Table~\ref{tab:rq1_e1_levels} gives both aspects of the evaluation for the sound
+Table~\ref{tab:rq1_e1_levels} gives both \rev{phases} of the evaluation for the sound
 nets, and Table~\ref{tab:app_e1_conformance} gives all values on both logs.
 
 \input{tables/rq1_e1_levels}
 
-\paragraph{Quality of the nets.}
+\paragraph{\rev{Phase 1, quality of the nets.}}
 \label{sec:res_e1_level1}
 Compared with traditional process mining studies, all sound nets in this use case reach a high precision.
 The reason lies in the recorded sequences, as truck visits are relatively short and repetitive. A visit has one
@@ -60,13 +61,12 @@ rare sequences.
 
 In process mining, a net is first evaluated by the trade-off between fitness and
 precision. A net that allows more behaviour can replay more of the log, but it is
-less precise. Fitness is reported in two forms (Table~\ref{tab:app_e1_conformance}),
-the alignment-based fitness averaged over the visits and the share of fitting
-visits, the visits whose complete sequence the net can replay. Both tell the same
-story. The share of fitting visits is the one that matters for simulation, because a
-visit that a net cannot replay is a visit that the simulator never generates.
-Figure~\ref{fig:res_e1_tradeoff_train} therefore plots precision against the share
-of fitting visits.
+less precise. \rev{Phase 1 uses the alignment-based fitness averaged over the
+visits, which gives partial credit to a visit with small deviations, and
+Figure~\ref{fig:res_e1_tradeoff_train} plots precision against it. The share of
+fitting visits, the visits whose complete sequence the net can replay, belongs to
+phase 2, because a visit that a net cannot replay is a visit that the simulator never
+generates. Table~\ref{tab:app_e1_conformance} gives both forms on both logs.}
 
 The sound nets fall into three groups. The Heuristics nets with thresholds of 0.7 to
 0.9 are almost perfectly precise and still replay nearly every visit. IM 0.0 and
@@ -83,16 +83,24 @@ the 16 new test sequences, ILP 1.00 accepts all, IM 0.0 13, and the Heuristics n
 at most 2. On the test log, the precision of the nets that replay more than 90\,\% of
 the visits changes by at most 0.015.
 
+\rev{Six sound nets lie on the front of the three measures
+(Table~\ref{tab:rq1_e1_levels}). IM 0.0 and ILP 1.00 have the highest fitness and
+generalisation, and HM 0.7, HM 0.8 and HM 0.9 an almost perfect precision. HM 0.9 /
+f0.1 reaches the front only through a precision of 1.000 against 0.9996, while it
+rejects 28\,\% of the visits. Which of the six is best depends on how fitness,
+precision and generalisation are weighted, so phase 1 alone does not choose among
+them.}
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/discovery_prom/e1_split13apr_fitness_precision_train.pdf}
-\caption{Fitting visits and precision of the discovered nets on the training log, all nets (left) and the most precise and fitting ones (right), with the admissible and the selected nets marked.}
+\includegraphics[width=\textwidth]{figures/discovery_prom/e1_split13apr_alignment_precision_train.pdf}
+\caption{\rev{Fitness and precision of the discovered nets on the training log, all nets (left) and the best trade-offs (right), with the nets on the front, the admissible nets and the selected net marked.}}
 \label{fig:res_e1_tradeoff_train}
 \end{figure}
 
-\paragraph{Fitness for simulation.}
+\paragraph{\rev{Phase 2, fitness for simulation.}}
 \label{sec:res_e1_level2}
-A high share of fitting visits can hide which visits a net rejects. Most nets
+A high \rev{fitness, and even a high} share of fitting visits\rev{,} can hide which visits a net rejects. Most nets
 reject frequent sequences, and some reject exactly the multi-block visits that the
 block allocation of E5 acts on. Because the six most frequent sequences cover
 88.5\,\% of the visits, a net can reject most sequences and still replay more than
@@ -109,7 +117,8 @@ the P90 turnaround time of 64 minutes. All other nets reject frequent sequences.
 ILP 0.95 the single-stop visit \texttt{HO2\_mixed} (506 visits). The filtered
 Inductive Miner nets reject the most frequent multi-block sequence,
 \texttt{RMG\_delivery > RMG\_receive} (814 visits), and with it 98.8 to 100\,\% of the
-multi-block visits and 5.5 to 8.0\,\% of the truck-minutes.
+multi-block visits and 5.5 to 8.0\,\% of the truck-minutes\rev{, although their fitness
+is 0.991 to 0.994}.
 
 \begin{figure}[htbp]
 \centering
@@ -122,7 +131,10 @@ multi-block visits and 5.5 to 8.0\,\% of the truck-minutes.
 \label{sec:res_e1_gates}
 The soundness criterion removes the three Alpha nets. The coverage criterion is met
 by IM 0.0, HM 0.7 and ILP 1.00. ILP 0.95, HM 0.8 and HM 0.9 fail it by one to three
-frequent sequences. With a coverage threshold of 0.5 instead of 0.1\,\%, the admissible set stays the
+frequent sequences. \rev{All three admissible nets lie on the front, so applying
+phase 2 only to the front would give the same result. Of the six nets on the front,
+the coverage criterion removes HM 0.8, HM 0.9 and HM 0.9 / f0.1, and the rule audit
+of E2 removes IM 0.0 and ILP 1.00 (Section~\ref{sec:res_rules}).} With a coverage threshold of 0.5 instead of 0.1\,\%, the admissible set stays the
 same. With 1\,\%, HM 0.8, HM 0.9 and ILP 0.95 would be admitted as well. If the kept sequences
 must cover 99.5\,\% of the visits, only IM 0.0 and ILP 1.00 remain.
 

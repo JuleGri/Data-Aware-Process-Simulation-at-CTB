@@ -125,7 +125,9 @@ an analyst may find easier to read. For a model that analysts are meant to maint
 the size of the net is a criterion of its own, but one to weigh only among nets that
 already cover the frequent behaviour and respect the domain rules.
 
-For model selection in simulation studies, this suggests an order. First the coverage
+For model selection in simulation studies, this suggests an order. \rev{The usual
+trade-off of fitness, precision and generalisation narrows the candidates to the nets
+on the front, but it does not choose among them. The choice then follows} the coverage
 of the frequent behaviour, then the domain rules and precision, then a check of how
 the net expresses its decisions, and finally a validation component by component in
 the simulator itself. This agrees with calls for validation procedures that draw on

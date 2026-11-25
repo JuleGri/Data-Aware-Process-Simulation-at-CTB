@@ -95,6 +95,23 @@
   \let\endhints=\endcomment
   \newcommand{\todo}[1]{}
 \fi
+
+% ---- Revision marks ------------------------------------------------------
+% Every change made after the submitted version (20 Nov 2026) is set in blue,
+% so that the revisions can be compared with that version.
+%   \rev{...}                 text within a paragraph, a table cell or a caption
+%   \begin{revision} ... \end{revision}   whole paragraphs, lists or table bodies
+% Replace \showrevisionstrue by \showrevisionsfalse for a version without colour.
+\newif\ifshowrevisions
+\showrevisionstrue
+\definecolor{revisionblue}{rgb}{0.0, 0.25, 0.85}
+\ifshowrevisions
+  \DeclareRobustCommand{\rev}[1]{\textcolor{revisionblue}{#1}}
+  \newenvironment{revision}{\color{revisionblue}}{}
+\else
+  \DeclareRobustCommand{\rev}[1]{#1}
+  \newenvironment{revision}{}{}
+\fi
 %------------------------------------------------------------------------%
 \begin{document}
     % the front matter

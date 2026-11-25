@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  20 NOV 2026 11:17
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.11.6)  23 NOV 2026 16:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2729,7 +2729,7 @@ Package footmisc Info: Declaring symbol style lamport*-robust on input line 618
 .
 )
 Package translations Info: No language package found. I am going to use `englis
-h' as default language. on input line 99.
+h' as default language. on input line 116.
 
 (dissertation.aux (chapters/1.introduction.aux) (chapters/2.background.aux)
 (chapters/4.data_prep.aux) (chapters/6.experiments.aux)
@@ -2740,27 +2740,27 @@ h' as default language. on input line 99.
 (appendices/model_inspection_and_reproduction.aux))
 \openout1 = `dissertation.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-Package hyperref Info: Link coloring ON on input line 99.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+Package hyperref Info: Link coloring ON on input line 116.
  (dissertation.out)
 (dissertation.out)
 \@outlinefile=\write5
@@ -2808,7 +2808,7 @@ File: translations-basic-dictionary-english.trsl (english translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 99.
+or `english'. on input line 116.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: longtable package is loaded.
@@ -2823,16 +2823,16 @@ Package newfloat Info: Trying Plan B...
 Package newfloat Info: `float' package detected.
 Package newfloat Info: `rotating' package detected.
 Package newfloat Info: `wrapfig' package detected.
-LaTeX Info: Redefining \microtypecontext on input line 99.
-Package microtype Info: Applying patch `item' on input line 99.
-Package microtype Info: Applying patch `toc' on input line 99.
-Package microtype Info: Applying patch `eqnum' on input line 99.
+LaTeX Info: Redefining \microtypecontext on input line 116.
+Package microtype Info: Applying patch `item' on input line 116.
+Package microtype Info: Applying patch `toc' on input line 116.
+Package microtype Info: Applying patch `eqnum' on input line 116.
 
 
-Package microtype Warning: Unable to apply patch `footnote' on input line 99.
+Package microtype Warning: Unable to apply patch `footnote' on input line 116.
 
-Package microtype Info: Applying patch `verbatim' on input line 99.
-LaTeX Info: Redefining \microtypesetup on input line 99.
+Package microtype Info: Applying patch `verbatim' on input line 116.
+LaTeX Info: Redefining \microtypesetup on input line 116.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: No adjustment of tracking.
@@ -2851,27 +2851,27 @@ File: resources/unipd-light.jpg Graphic file (type bmp)
 File: resources/unipd-bn.png Graphic file (type bmp)
 <resources/unipd-bn.png>
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 24.88pt on input line 102.
+(Font)              scaled to size 24.88pt on input line 119.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/b/n' will be
-(Font)              scaled to size 24.88pt on input line 102.
+(Font)              scaled to size 24.88pt on input line 119.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/b/sc' will be
-(Font)              scaled to size 24.88pt on input line 102.
+(Font)              scaled to size 24.88pt on input line 119.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 14.4pt on input line 102.
+(Font)              scaled to size 14.4pt on input line 119.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/sc' will be
-(Font)              scaled to size 14.4pt on input line 102.
+(Font)              scaled to size 14.4pt on input line 119.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/it' will be
-(Font)              scaled to size 14.4pt on input line 102.
+(Font)              scaled to size 14.4pt on input line 119.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 17.5pt on input line 102.
+(Font)              scaled to size 17.5pt on input line 119.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/b/n' will be
-(Font)              scaled to size 17.5pt on input line 102.
+(Font)              scaled to size 17.5pt on input line 119.
 
 (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 102
+LaTeX Font Info:    Trying to load font information for U+msa on input line 119
 .
 
 (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
@@ -2880,7 +2880,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 102
+LaTeX Font Info:    Trying to load font information for U+msb on input line 119
 .
 
 (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -2892,25 +2892,25 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 
 LaTeX Font Warning: Font shape `TU/EBGaramond12-Regular.otf(0)/m/it' undefined
 (Font)              using `TU/EBGaramond12-Regular.otf(0)/m/n' instead on input
- line 102.
+ line 119.
 
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 10.95pt on input line 102.
+(Font)              scaled to size 10.95pt on input line 119.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/it' will be
-(Font)              scaled to size 10.95pt on input line 102.
+(Font)              scaled to size 10.95pt on input line 119.
 [1
 
 ] [2
 
 
 ]
-LaTeX Font Info:    Trying to load font information for TU+ppl on input line 10
-2.
-LaTeX Font Info:    No file TUppl.fd. on input line 102.
+LaTeX Font Info:    Trying to load font information for TU+ppl on input line 11
+9.
+LaTeX Font Info:    No file TUppl.fd. on input line 119.
 
 
 LaTeX Font Warning: Font shape `TU/ppl/b/n' undefined
-(Font)              using `TU/lmr/m/n' instead on input line 102.
+(Font)              using `TU/lmr/m/n' instead on input line 119.
 
 
 (C:\Users\Jule\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-LatinModern
@@ -3257,22 +3257,22 @@ Underfull \vbox (badness 1082) has occurred while \output is active []
  [43]
 [44] [45] [46]
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 10.40002pt on input line 284.
+(Font)              scaled to size 10.40002pt on input line 283.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(2)/m/n' will be
-(Font)              scaled to size 9.10002pt on input line 288.
+(Font)              scaled to size 9.10002pt on input line 287.
  [47] [48] [49] [50] [51] [52] [53] [54]
-Overfull \hbox (1.44688pt too wide) in paragraph at lines 634--641
+Overfull \hbox (1.44688pt too wide) in paragraph at lines 657--664
 [] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Reference values[] \TU/EBGaramond1
 2-Regular.otf(2)/m/n/12 A distance between a simulated and an observed log is i
 nterpreted against
  []
 
-[55] [56] [57] [58] [59]) [60]
+[55] [56] [57] [58] [59] [60]) [61]
 \openout2 = `chapters/5.discovery_prosit.aux'.
 
  (chapters/5.discovery_prosit.tex
 Chapter 5.
-[61
+[62
 
 
 
@@ -3283,28 +3283,28 @@ File: figures/simulation_model/sim_control_flow.pdf Graphic file (type pdf)
 File: figures/simulation_model/sim_tree_routing_first_rmg_receive.pdf Graphic f
 ile (type pdf)
 <use figures/simulation_model/sim_tree_routing_first_rmg_receive.pdf>
- [62] [63]
+ [63] [64]
 File: figures/simulation_model/sim_tree_waiting_block.pdf Graphic file (type pd
 f)
 <use figures/simulation_model/sim_tree_waiting_block.pdf>
 File: figures/simulation_model/sim_tree_exec_rmg_receive.pdf Graphic file (type
  pdf)
 <use figures/simulation_model/sim_tree_exec_rmg_receive.pdf>
- [64] (tables/sim_hyperparameters.tex) [65] [66] [67]
+ [65] (tables/sim_hyperparameters.tex) [66] [67] [68]
 Overfull \hbox (7.38907pt too wide) in paragraph at lines 269--274
 \TU/EBGaramond12-Regular.otf(2)/m/n/12 with ProSiT’s own discovery functions, h
 yperparameters and random state. The installed ProSiT
  []
 
-[68] (tables/sim_worked_example.tex) [69]) [70]
+[69] (tables/sim_worked_example.tex) [70]) [71]
 \openout2 = `chapters/7.results.aux'.
 
  (chapters/7.results.tex
 Chapter 6.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1264) has occurred while \output is active []
 
- [71
+ [72
 
 
 
@@ -3316,51 +3316,59 @@ Package fontspec Info:
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/b/n' will be
-(Font)              scaled to size 10.0pt on input line 7.
+(Font)              scaled to size 10.0pt on input line 10.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/n' will be
-(Font)              scaled to size 7.0pt on input line 11.
-) [72]
-File: figures/discovery_prom/e1_split13apr_fitness_precision_train.pdf Graphic 
-file (type pdf)
-<use figures/discovery_prom/e1_split13apr_fitness_precision_train.pdf>
- [73]
+(Font)              scaled to size 7.0pt on input line 14.
+
+Overfull \hbox (4.94048pt too wide) in paragraph at lines 8--34
+ [][] 
+ []
+
+)
+Overfull \hbox (2.0077pt too wide) in paragraph at lines 54--61
+[] [][]\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Phase 1, quality of the nets.[][
+] \TU/EBGaramond12-Regular.otf(2)/m/n/12 Compared with traditional process mini
+ng studies, all sound
+ []
+
+[73]
+File: figures/discovery_prom/e1_split13apr_alignment_precision_train.pdf Graphi
+c file (type pdf)
+<use figures/discovery_prom/e1_split13apr_alignment_precision_train.pdf>
+ [74]
 File: figures/discovery_prom/e1_split13apr_variant_coverage.pdf Graphic file (t
 ype pdf)
 <use figures/discovery_prom/e1_split13apr_variant_coverage.pdf>
- [74] [75] [76] [77] [78] [79] [80]
-[81]
+ [75] [76] [77] [78] [79] [80] [81] [82]
 File: figures/simulation_model/sim_waiting_target.pdf Graphic file (type pdf)
 <use figures/simulation_model/sim_waiting_target.pdf>
- [82] (tables/rq2_causes.tex) (tables/rq2_responses.tex) [83] [84] [85]
+ [83] (tables/rq2_causes.tex)
+(tables/rq2_responses.tex) [84] [85] [86]
 File: figures/simulation_model/sim_kpi_gap.pdf Graphic file (type pdf)
 <use figures/simulation_model/sim_kpi_gap.pdf>
+ (tables/rq2_acceptance.tex) [87]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-(tables/rq2_acceptance.tex) [86]
+ [88]
 File: figures/simulation_model/sim_hourly_ttt.png Graphic file (type bmp)
 <figures/simulation_model/sim_hourly_ttt.png>
-
-Underfull \vbox (badness 3058) has occurred while \output is active []
-
- [87]
 File: figures/simulation_model/sim_load_profiles.png Graphic file (type bmp)
 <figures/simulation_model/sim_load_profiles.png>
 
-[88] (tables/rq2_depth5.tex) [89] [90] [91]
+[89] (tables/rq2_depth5.tex)
+Underfull \vbox (badness 6995) has occurred while \output is active []
+
+ [90]
+[91] [92]
 File: figures/simulation_model/e5_tradeoff.pdf Graphic file (type pdf)
 <use figures/simulation_model/e5_tradeoff.pdf>
- [92] (tables/rq3_grid_mechanism.tex) [93] (tables/rq3_policy_contrasts.tex)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [94]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [95])
-[96] [97]
+ [93] (tables/rq3_grid_mechanism.tex [94]) [95]
+(tables/rq3_policy_contrasts.tex) [96] [97]) [98]
 \openout2 = `chapters/8.discussion.aux'.
 
  (chapters/8.discussion.tex
 Chapter 7.
-[98
+[99
 
 
 
@@ -3372,20 +3380,24 @@ amond12-Regular.otf(2)/m/n/12 Part of the gap between the simulated and the obs
 erved turnaround
  []
 
-[99]
+[100]
 Overfull \hbox (2.55568pt too wide) in paragraph at lines 78--85
 [] []\TU/EBGaramond12-Regular.otf(2)/m/sc/12 Conditions of the result.[] \TU/EB
 Garamond12-Regular.otf(2)/m/n/12 The result is conditional on the replayed arri
 vals, case attributes
  []
 
-[100]
-Overfull \hbox (11.43027pt too wide) in paragraph at lines 139--139
+[101]
+Overfull \hbox (11.43027pt too wide) in paragraph at lines 141--141
 |[]\TU/EBGaramond12-Regular.otf(2)/m/sc/17.28 Data-Aware Simulation in a Physic
 al Logistics Pro-
  []
 
-[101] [102] [103] [104] [105]) [106]
+[102] [103] [104] [105]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [106])
+[107]
 \openout2 = `chapters/9.conclusion.aux'.
 
  (chapters/9.conclusion.tex
@@ -3393,7 +3405,7 @@ Chapter 8.
 
 Underfull \vbox (badness 1158) has occurred while \output is active []
 
- [107
+ [108
 
 
 
@@ -3401,23 +3413,23 @@ Underfull \vbox (badness 1158) has occurred while \output is active []
 ])
 Underfull \vbox (badness 6708) has occurred while \output is active []
 
- [108]
-[109]
+ [109]
+[110]
 \openout2 = `appendices/observed_behaviour.aux'.
 
  (appendices/observed_behaviour.tex
 Appendix A.
-[110
+[111
 
 
 
 
-] (tables/obs_descriptives.tex) [111]
+] (tables/obs_descriptives.tex) [112]
 File: figures/observed/block_occupancy.png Graphic file (type bmp)
 <figures/observed/block_occupancy.png>
 File: figures/observed/ttt_corridor.pdf Graphic file (type pdf)
 <use figures/observed/ttt_corridor.pdf>
- [112] [113]
+ [113] [114]
 (tables/kpi_long_visits.tex
 
 Package fontspec Info: 
@@ -3425,12 +3437,12 @@ Package fontspec Info:
 
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
 (Font)              scaled to size 10.95pt on input line 8.
-)) [114]
+)) [115]
 \openout2 = `appendices/discovery_results.aux'.
 
  (appendices/discovery_results.tex
 Appendix B.
-[115
+[116
 
 
 
@@ -3440,23 +3452,23 @@ Appendix B.
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
-) [116] [117] (tables/rq1_e2_audit.tex
+) [117] [118] (tables/rq1_e2_audit.tex
 
 Package fontspec Info: 
 (fontspec)             EBGaramond12-Regular scale = 1.0.
 
 ))
-[118] [119]
+[119] [120]
 \openout2 = `appendices/simulation_results.aux'.
 
  (appendices/simulation_results.tex
 Appendix C.
-[120
+[121
 
 
 
 
-] [121] [122] [123
+] [122] [123] [124
 
 ] (tables/rq2_chain.tex
 
@@ -3469,41 +3481,41 @@ LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/b/n' will be
 (Font)              scaled to size 8.0pt on input line 7.
 LaTeX Font Info:    Font shape `TU/EBGaramond12-Regular.otf(4)/m/it' will be
 (Font)              scaled to size 8.0pt on input line 10.
-) [124] (tables/rq3_grid_kpi.tex)
-(tables/rq3_grid_visits.tex) (tables/rq3_robustness.tex) [125] [126] [127])
+) [125] (tables/rq3_grid_kpi.tex)
+(tables/rq3_grid_visits.tex) (tables/rq3_robustness.tex) [126] [127] [128])
 \openout2 = `appendices/prosit_model_inventory.aux'.
 
 
 (appendices/prosit_model_inventory.tex
 Appendix D.
-[128
+[129
 
 
 
 
 
-] [129]
+] [130]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [130]
+ [131]
 File: figures/simulation_model/sim_tree_arrivals.pdf Graphic file (type pdf)
 <use figures/simulation_model/sim_tree_arrivals.pdf>
 File: figures/simulation_model/sim_routing_first_stop.pdf Graphic file (type pd
 f)
 <use figures/simulation_model/sim_routing_first_stop.pdf>
 
-[131] (tables/app_inventory.tex
-ignored error: Infinite glue shrinkage found in box being split [132]
+[132] (tables/app_inventory.tex
 ignored error: Infinite glue shrinkage found in box being split [133]
 ignored error: Infinite glue shrinkage found in box being split [134]
 ignored error: Infinite glue shrinkage found in box being split [135]
 ignored error: Infinite glue shrinkage found in box being split [136]
 ignored error: Infinite glue shrinkage found in box being split [137]
-ignored error: Infinite glue shrinkage found in box being split [138])
-(tables/sim_capacities.tex) [139]
+ignored error: Infinite glue shrinkage found in box being split [138]
+ignored error: Infinite glue shrinkage found in box being split [139])
+(tables/sim_capacities.tex) [140]
 File: figures/discovery_prom/net_IM_0.0.png Graphic file (type bmp)
 <figures/discovery_prom/net_IM_0.0.png>
-) [140]
+) [141]
 \openout2 = `appendices/model_inspection_and_reproduction.aux'.
 
 
@@ -3512,7 +3524,7 @@ Appendix E.
 
 Underfull \vbox (badness 1264) has occurred while \output is active []
 
- [141
+ [142
 
 
 
@@ -3524,25 +3536,25 @@ Overfull \hbox (1.13928pt too wide) in paragraph at lines 68--83
  [] [][][] [] [][][][][][][][][][] [] [][]$
  []
 
-[142]) [143] [144] [145] (dissertation.bbl
+[143]) [144] [145] [146] (dissertation.bbl
 ** WARNING: IEEEtran.bst: No hyphenation pattern has been
 ** loaded for the language `English'. Using the pattern for
 ** the default language instead.
 ** WARNING: IEEEtran.bst: No hyphenation pattern has been
 ** loaded for the language `English'. Using the pattern for
 ** the default language instead.
-[146
+[147
 
 
 
 
-] [147] [148] [149] [150] [151] [152]
+] [148] [149] [150] [151] [152] [153]
 Underfull \hbox (badness 10000) in paragraph at lines 422--426
 []\TU/EBGaramond12-Regular.otf(2)/m/n/12 D. Chapela-Campa, I. Benchekroun, O. B
 aron, M. Dumas, D. Krass, and
  []
 
-[153]) [154] (dissertation.aux (chapters/1.introduction.aux)
+[154]) [155] (dissertation.aux (chapters/1.introduction.aux)
 (chapters/2.background.aux) (chapters/4.data_prep.aux)
 (chapters/6.experiments.aux) (chapters/5.discovery_prosit.aux)
 (chapters/7.results.aux) (chapters/8.discussion.aux) (chapters/9.conclusion.aux
@@ -3561,12 +3573,12 @@ Package rerunfilecheck Info: File `dissertation.out' has not changed.
 (rerunfilecheck)             Checksum: 4A2AE55263600B1C8E650D58D7227628;14839.
  ) 
 Here is how much of TeX's memory you used:
- 71729 strings out of 402986
- 1794030 string characters out of 5448710
- 2622486 words of memory out of 5000000
- 99401 multiletter control sequences out of 15000+600000
+ 71737 strings out of 402986
+ 1794143 string characters out of 5448710
+ 2622619 words of memory out of 5000000
+ 99409 multiletter control sequences out of 15000+600000
  636685 words of font info for 162 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  103i,14n,131p,1245b,2925s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on dissertation.pdf (168 pages).
+Output written on dissertation.pdf (169 pages).
